@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "779722368629",
+    "project_id": "kanji-for-n5",
+    "storage_bucket": "kanji-for-n5.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:779722368629:android:4fb34cea4483d53dcaba3c",
+        "android_client_info": {
+          "package_name": "com.example.kanji_for_n5_level_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAcBe5bERSrVXg2bQXQ3vORoNQc405NR80"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

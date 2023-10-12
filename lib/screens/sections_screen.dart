@@ -10,6 +10,11 @@ class Sections extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text("Welcome Juan"),
+        actions: [
+          CircleAvatar(
+            child: ,
+          ),
+        ],
       ),
       body: GridView(
         padding: const EdgeInsets.all(24),
