@@ -1,4 +1,3 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:kanji_for_n5_level_app/models/secction_model.dart';
@@ -11,37 +10,18 @@ class Sections extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text("Welcome Juan"),
-        actions: [
-          Padding(
-            padding: const EdgeInsets.only(top: 3, bottom: 3, right: 3),
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(10000.0),
-              child: CachedNetworkImage(
-                imageUrl: temporalAvatar,
-                placeholder: (context, url) =>
-                    const CircularProgressIndicator(),
-                errorWidget: (context, url, error) => const Icon(Icons.error),
-              ),
-            ),
-          ),
-        ],
+    return GridView(
+      padding: const EdgeInsets.all(24),
+      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+        crossAxisCount: 2,
+        childAspectRatio: 3 / 2,
+        crossAxisSpacing: 20,
+        mainAxisSpacing: 20,
       ),
-      body: GridView(
-        padding: const EdgeInsets.all(24),
-        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 2,
-          childAspectRatio: 3 / 2,
-          crossAxisSpacing: 20,
-          mainAxisSpacing: 20,
-        ),
-        children: [
-          for (final sectionData in listSections)
-            Section(sectionData: sectionData)
-        ],
-      ),
+      children: [
+        for (final sectionData in listSections)
+          Section(sectionData: sectionData)
+      ],
     );
   }
 }
@@ -96,3 +76,49 @@ class Section extends StatelessWidget {
     );
   }
 }
+
+const sectionsKanjis = {
+  "section1": ['山', '川', '天', '気', '田', '雨'],
+  "section2": ['一', '二', '三', '四', '五', '六', '七', '八', '九', '十'],
+  "section3": ['百', '千', '万', '円', '前', '後', '左', '右', '上', '下'],
+  "section4": ['目', '口', '耳', '手', '足', '力', '父', '母', '男', '女', '子', '人', '名'],
+  "section5": ['月', '火', '水', '木', '金', '土', '日', '先', '生', '学', '校', '本', '友'],
+  "section6": ['年', '毎', '時', '分', '午', '間', '今', '半', '週', '朝', '昼', '夕', '夜'],
+  "section7": ['高', '大', '中', '小', '長', '白', '安', '新', '古', '多', '少', '早'],
+  "section8": [
+    '言',
+    '話',
+    '語',
+    '読',
+    '書',
+    '見',
+    '聞',
+    '行',
+    '来',
+    '出',
+    '入',
+    '食',
+    '飲',
+    '立',
+    '休',
+    '買'
+  ],
+  "section9": [
+    '電',
+    '車',
+    '門',
+    '馬',
+    '魚',
+    '道',
+    '会',
+    '社',
+    '店',
+    '駅',
+    '花',
+    '家',
+    '外',
+    '国',
+    '方',
+    '英'
+  ]
+};

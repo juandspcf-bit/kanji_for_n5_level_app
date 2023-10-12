@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:kanji_for_n5_level_app/screens/sections_screen.dart';
+import 'package:kanji_for_n5_level_app/screens/main_content.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
 
@@ -51,7 +51,7 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
       ),
       themeMode: ThemeMode.dark,
-      home: const Sections(),
+      home: const MainContent(),
     );
   }
 }
