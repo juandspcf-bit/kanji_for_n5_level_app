@@ -37,6 +37,8 @@ class _KanjiItemState extends State<KanjiItemWrapper> {
   String? kanjiCharacter;
   String? englishMeaning;
   String? kankiImageLink;
+  String? katakanaMeaning;
+  String? hiraganaMeaning;
 
   void getKanjiData() async {
     final kanji = widget.kanji;
@@ -61,14 +63,16 @@ class _KanjiItemState extends State<KanjiItemWrapper> {
 
     final Map<String, dynamic> kanjiStrokes = kanjiInfo["strokes"];
     final List<dynamic> kanjiImages = kanjiStrokes["images"];
+    final kanjiImageFromAPI = kanjiImages.last as String;
 
     final Map<String, dynamic> kanjiMeaning = kanjiInfo["meaning"];
-    final String englishMeaning = kanjiMeaning['english'];
+    final String englishMeaningFromAPI = kanjiMeaning['english'];
 
-    print(kanjiCharacterFromAPI);
-    print(kanjiImages.last);
+    final Map<String, dynamic> kanjiOnyomi = kanjiInfo["onyomi"];
+    final String katakanaMeaningFromAPI = kanjiOnyomi['katakana'];
 
-    final kanjiImageFromAPI = kanjiImages.last as String;
+    final Map<String, dynamic> kanjiKunyomi = kanjiInfo['kunyomi'];
+    final String hiraganaMeaningFromAPI = kanjiKunyomi['hiragana'];
 
     if (body.isNotEmpty && kanjiInformation.statusCode > 400) return;
 
@@ -76,6 +80,9 @@ class _KanjiItemState extends State<KanjiItemWrapper> {
     setState(() {
       kanjiCharacter = kanjiCharacterFromAPI;
       kankiImageLink = kanjiImageFromAPI;
+      englishMeaning = englishMeaningFromAPI;
+      katakanaMeaning = katakanaMeaningFromAPI;
+      hiraganaMeaning = hiraganaMeaningFromAPI;
     });
   }
 
@@ -105,7 +112,40 @@ class _KanjiItemState extends State<KanjiItemWrapper> {
               child: const CircularProgressIndicator()),
         ),
       ]),
-      title: Text(kanjiCharacter ?? "no kanji"),
+      title: Container(
+        padding: const EdgeInsets.all(10),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(20),
+          gradient: const LinearGradient(colors: [
+            Color.fromARGB(180, 250, 8, 8),
+            Color.fromARGB(180, 192, 20, 20),
+            Color.fromARGB(70, 121, 21, 21)
+          ], begin: Alignment.topLeft, end: Alignment.bottomRight),
+        ),
+        child: Container(
+          decoration: const BoxDecoration(
+            border: Border(
+              bottom:
+                  BorderSide(style: BorderStyle.solid, color: Colors.white70),
+            ),
+          ),
+          child: Column(
+            children: [
+              Text(
+                englishMeaning ?? "no kanji",
+                style: Theme.of(context).textTheme.titleLarge!.copyWith(
+                    color: Theme.of(context).colorScheme.onSecondaryContainer,
+                    fontWeight: FontWeight.bold),
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              Text("Onyomi: ${katakanaMeaning ?? '??'}"),
+              Text("Kunyomi: ${hiraganaMeaning ?? '??'}"),
+            ],
+          ),
+        ),
+      ),
     ); //
   }
 }
