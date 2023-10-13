@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:kanji_for_n5_level_app/models/secction_model.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
@@ -17,23 +18,25 @@ class KanjiSecctionList extends StatelessWidget {
       body: ListView(
         children: [
           for (final kanjiItem in sectionModel.kanjis)
-            KanjiItem(kanji: kanjiItem)
+            KanjiItemWrapper(kanji: kanjiItem)
         ],
       ),
     );
   }
 }
 
-class KanjiItem extends StatefulWidget {
-  const KanjiItem({super.key, required this.kanji});
+class KanjiItemWrapper extends StatefulWidget {
+  const KanjiItemWrapper({super.key, required this.kanji});
 
   final String kanji;
   @override
-  State<KanjiItem> createState() => _KanjiItemState();
+  State<KanjiItemWrapper> createState() => _KanjiItemState();
 }
 
-class _KanjiItemState extends State<KanjiItem> {
+class _KanjiItemState extends State<KanjiItemWrapper> {
   String? kanjiCharacter;
+  String? englishMeaning;
+  String? kankiImageLink;
 
   void getKanjiData() async {
     final kanji = widget.kanji;
@@ -52,12 +55,27 @@ class _KanjiItemState extends State<KanjiItem> {
     );
 
     final Map<String, dynamic> body = json.decode(kanjiInformation.body);
-    final Map<String, dynamic> radical = body['radical'];
-    final kanjiCharacterFromAPI = radical["character"];
+    final Map<String, dynamic> kanjiInfo = body['kanji'];
+
+    final kanjiCharacterFromAPI = kanjiInfo['character'];
+
+    final Map<String, dynamic> kanjiStrokes = kanjiInfo["strokes"];
+    final List<dynamic> kanjiImages = kanjiStrokes["images"];
+
+    final Map<String, dynamic> kanjiMeaning = kanjiInfo["meaning"];
+    final String englishMeaning = kanjiMeaning['english'];
+
+    print(kanjiCharacterFromAPI);
+    print(kanjiImages.last);
+
+    final kanjiImageFromAPI = kanjiImages.last as String;
+
+    if (body.isNotEmpty && kanjiInformation.statusCode > 400) return;
 
     if (kanjiCharacterFromAPI == null) return;
     setState(() {
       kanjiCharacter = kanjiCharacterFromAPI;
+      kankiImageLink = kanjiImageFromAPI;
     });
   }
 
@@ -69,6 +87,25 @@ class _KanjiItemState extends State<KanjiItem> {
 
   @override
   Widget build(BuildContext context) {
-    return Text(kanjiCharacter ?? "no kanji");
+    return ListTile(
+      contentPadding: const EdgeInsets.symmetric(vertical: 5, horizontal: 15),
+      leading: Stack(alignment: Alignment.center, children: [
+        Container(
+          color: Colors.white70,
+          height: 64,
+          width: 128,
+        ),
+        SvgPicture.network(
+          kankiImageLink ?? "",
+          height: 64,
+          width: 128,
+          semanticsLabel: 'A shark?!',
+          placeholderBuilder: (BuildContext context) => Container(
+              padding: const EdgeInsets.all(30.0),
+              child: const CircularProgressIndicator()),
+        ),
+      ]),
+      title: Text(kanjiCharacter ?? "no kanji"),
+    ); //
   }
 }
