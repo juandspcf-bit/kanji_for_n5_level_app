@@ -39,6 +39,7 @@ class _KanjiItemState extends State<KanjiItemWrapper> {
   String? kankiImageLink;
   String? katakanaMeaning;
   String? hiraganaMeaning;
+  String? videoLink;
 
   void getKanjiData() async {
     final kanji = widget.kanji;
@@ -74,6 +75,11 @@ class _KanjiItemState extends State<KanjiItemWrapper> {
     final Map<String, dynamic> kanjiKunyomi = kanjiInfo['kunyomi'];
     final String hiraganaMeaningFromAPI = kanjiKunyomi['hiragana'];
 
+    final Map<String, dynamic> kanjiVideo = kanjiInfo['video'];
+    final String videoLinkFromAPI = kanjiVideo['mp4'];
+
+    final List<dynamic> examplesFromAPI = body['examples'];
+
     if (body.isNotEmpty && kanjiInformation.statusCode > 400) return;
 
     if (kanjiCharacterFromAPI == null) return;
@@ -83,6 +89,7 @@ class _KanjiItemState extends State<KanjiItemWrapper> {
       englishMeaning = englishMeaningFromAPI;
       katakanaMeaning = katakanaMeaningFromAPI;
       hiraganaMeaning = hiraganaMeaningFromAPI;
+      videoLink = videoLinkFromAPI;
     });
   }
 
@@ -148,4 +155,34 @@ class _KanjiItemState extends State<KanjiItemWrapper> {
       ),
     ); //
   }
+}
+
+class Example {
+  final String japanese;
+  final Meaning meaning;
+  final Audio audio;
+
+  Example({
+    required this.japanese,
+    required this.meaning,
+    required this.audio,
+  });
+}
+
+class Meaning {
+  final String meaning;
+  Meaning({required this.meaning});
+}
+
+class Audio {
+  final String opus;
+  final String aac;
+  final String ogg;
+  final String mp3;
+
+  Audio(
+      {required this.opus,
+      required this.aac,
+      required this.ogg,
+      required this.mp3});
 }
