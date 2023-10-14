@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:kanji_for_n5_level_app/API_Files/key_file_api.dart';
+import 'package:kanji_for_n5_level_app/models/kanji_from_api.dart';
 import 'package:kanji_for_n5_level_app/models/secction_model.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+
+import 'package:kanji_for_n5_level_app/screens/kaji_details.dart';
 
 class KanjiSecctionList extends StatelessWidget {
   const KanjiSecctionList({super.key, required this.sectionModel});
@@ -34,12 +38,7 @@ class KanjiItemWrapper extends StatefulWidget {
 }
 
 class _KanjiItemState extends State<KanjiItemWrapper> {
-  String? kanjiCharacter;
-  String? englishMeaning;
-  String? kankiImageLink;
-  String? katakanaMeaning;
-  String? hiraganaMeaning;
-  String? videoLink;
+  KanjiFromApi? _kanjiFromApi;
 
   void getKanjiData() async {
     final kanji = widget.kanji;
@@ -52,7 +51,7 @@ class _KanjiItemState extends State<KanjiItemWrapper> {
     final kanjiInformation = await http.get(
       url,
       headers: {
-        'X-RapidAPI-Key': '6e8768aba0mshd012d160ea864d6p18a6ccjsn40b2889eeaf9',
+        'X-RapidAPI-Key': xRapidAPIKey,
         'X-RapidAPI-Host': 'kanjialive-api.p.rapidapi.com'
       },
     );
@@ -60,11 +59,11 @@ class _KanjiItemState extends State<KanjiItemWrapper> {
     final Map<String, dynamic> body = json.decode(kanjiInformation.body);
     final Map<String, dynamic> kanjiInfo = body['kanji'];
 
-    final kanjiCharacterFromAPI = kanjiInfo['character'];
+    final String kanjiCharacterFromAPI = kanjiInfo['character'];
 
     final Map<String, dynamic> kanjiStrokes = kanjiInfo["strokes"];
     final List<dynamic> kanjiImages = kanjiStrokes["images"];
-    final kanjiImageFromAPI = kanjiImages.last as String;
+    final String kanjiImageFromAPI = kanjiImages.last;
 
     final Map<String, dynamic> kanjiMeaning = kanjiInfo["meaning"];
     final String englishMeaningFromAPI = kanjiMeaning['english'];
@@ -80,16 +79,37 @@ class _KanjiItemState extends State<KanjiItemWrapper> {
 
     final List<dynamic> examplesFromAPI = body['examples'];
 
+    List<Examples> examples = examplesFromAPI.map((e) {
+      //
+      final String japanese = e["japanese"];
+      final Map<String, dynamic> meaningMap = e['meaning'];
+      final meaning = Meaning(meaning: meaningMap['english'] as String);
+      final Map<String, dynamic> audioMap = e['audio'];
+      final audio = Audio(
+          opus: audioMap['opus'],
+          aac: audioMap['aac'],
+          ogg: audioMap['ogg'],
+          mp3: audioMap['mp3']);
+
+      return Examples(
+        japanese: japanese,
+        meaning: meaning,
+        audio: audio,
+      );
+    }).toList();
+
     if (body.isNotEmpty && kanjiInformation.statusCode > 400) return;
 
     if (kanjiCharacterFromAPI == null) return;
     setState(() {
-      kanjiCharacter = kanjiCharacterFromAPI;
-      kankiImageLink = kanjiImageFromAPI;
-      englishMeaning = englishMeaningFromAPI;
-      katakanaMeaning = katakanaMeaningFromAPI;
-      hiraganaMeaning = hiraganaMeaningFromAPI;
-      videoLink = videoLinkFromAPI;
+      _kanjiFromApi = KanjiFromApi(
+          kanjiCharacter: kanjiCharacterFromAPI,
+          englishMeaning: englishMeaningFromAPI,
+          kankiImageLink: kanjiImageFromAPI,
+          katakanaMeaning: katakanaMeaningFromAPI,
+          hiraganaMeaning: hiraganaMeaningFromAPI,
+          videoLink: videoLinkFromAPI,
+          example: examples);
     });
   }
 
@@ -102,21 +122,33 @@ class _KanjiItemState extends State<KanjiItemWrapper> {
   @override
   Widget build(BuildContext context) {
     return ListTile(
+      onTap: () {
+        if (_kanjiFromApi == null) return;
+        Navigator.of(context).push(
+          MaterialPageRoute(builder: (ctx) {
+            return KanjiDetails(kanjiFromApi: _kanjiFromApi!);
+          }),
+        );
+      },
       contentPadding: const EdgeInsets.symmetric(vertical: 5, horizontal: 15),
       leading: Stack(alignment: Alignment.center, children: [
         Container(
           color: Colors.white70,
-          height: 64,
-          width: 128,
+          height: 80,
+          width: 80,
         ),
         SvgPicture.network(
-          kankiImageLink ?? "",
-          height: 64,
-          width: 128,
-          semanticsLabel: 'A shark?!',
+          _kanjiFromApi?.kankiImageLink ?? "",
+          height: 80,
+          width: 80,
+          semanticsLabel: _kanjiFromApi?.kanjiCharacter ?? "no kanji",
           placeholderBuilder: (BuildContext context) => Container(
-              padding: const EdgeInsets.all(30.0),
-              child: const CircularProgressIndicator()),
+              color: Colors.transparent,
+              height: 40,
+              width: 40,
+              child: const CircularProgressIndicator(
+                backgroundColor: Color.fromARGB(179, 5, 16, 51),
+              )),
         ),
       ]),
       title: Container(
@@ -139,50 +171,22 @@ class _KanjiItemState extends State<KanjiItemWrapper> {
           child: Column(
             children: [
               Text(
-                englishMeaning ?? "no kanji",
+                _kanjiFromApi?.englishMeaning ?? "no kanji",
                 style: Theme.of(context).textTheme.titleLarge!.copyWith(
-                    color: Theme.of(context).colorScheme.onSecondaryContainer,
-                    fontWeight: FontWeight.bold),
+                      color: Theme.of(context).colorScheme.onSecondaryContainer,
+                      fontWeight: FontWeight.bold,
+                    ),
+                textAlign: TextAlign.center,
               ),
               const SizedBox(
                 height: 10,
               ),
-              Text("Onyomi: ${katakanaMeaning ?? '??'}"),
-              Text("Kunyomi: ${hiraganaMeaning ?? '??'}"),
+              Text("Onyomi: ${_kanjiFromApi?.katakanaMeaning ?? '??'}"),
+              Text("Kunyomi: ${_kanjiFromApi?.hiraganaMeaning ?? '??'}"),
             ],
           ),
         ),
       ),
     ); //
   }
-}
-
-class Example {
-  final String japanese;
-  final Meaning meaning;
-  final Audio audio;
-
-  Example({
-    required this.japanese,
-    required this.meaning,
-    required this.audio,
-  });
-}
-
-class Meaning {
-  final String meaning;
-  Meaning({required this.meaning});
-}
-
-class Audio {
-  final String opus;
-  final String aac;
-  final String ogg;
-  final String mp3;
-
-  Audio(
-      {required this.opus,
-      required this.aac,
-      required this.ogg,
-      required this.mp3});
 }
