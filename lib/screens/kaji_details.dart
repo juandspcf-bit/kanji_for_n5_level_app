@@ -14,20 +14,30 @@ class KanjiDetails extends StatefulWidget {
 class KanjiDetailsState extends State<KanjiDetails> {
   late VideoPlayerController _controller;
 
+  String capitalizeString(String text) {
+    var firstLetter = text[0];
+    firstLetter = firstLetter.toUpperCase();
+    return firstLetter + text.substring(1);
+  }
+
   @override
   void initState() {
     super.initState();
-    _controller = VideoPlayerController.networkUrl(Uri.parse(
-        'https://flutter.github.io/assets-for-api-docs/assets/videos/bee.mp4'))
+    _controller = VideoPlayerController.networkUrl(
+        Uri.parse(widget.kanjiFromApi.videoLink))
       ..initialize().then((_) {
         // Ensure the first frame is shown after the video is initialized, even before the play button has been pressed.
-        setState(() {});
+        setState(() {
+          _controller.setLooping(true);
+          _controller.play();
+        });
       });
   }
 
   @override
   void dispose() {
     super.dispose();
+    _controller.pause();
     _controller.dispose();
   }
 
@@ -37,13 +47,42 @@ class KanjiDetailsState extends State<KanjiDetails> {
       appBar: AppBar(
         title: Text(widget.kanjiFromApi.kanjiCharacter),
       ),
-      body: Center(
-        child: _controller.value.isInitialized
-            ? AspectRatio(
-                aspectRatio: _controller.value.aspectRatio,
-                child: VideoPlayer(_controller),
-              )
-            : Container(),
+      body: Column(
+        children: [
+          const SizedBox(
+            height: 20,
+          ),
+          _controller.value.isInitialized
+              ? Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    SizedBox(
+                      height: 128 * _controller.value.aspectRatio,
+                      width: 128,
+                      child: AspectRatio(
+                        aspectRatio: _controller.value.aspectRatio,
+                        child: VideoPlayer(_controller),
+                      ),
+                    ),
+                  ],
+                )
+              : const Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    CircularProgressIndicator(),
+                  ],
+                ),
+          const SizedBox(
+            height: 20,
+          ),
+          Text(
+            capitalizeString(widget.kanjiFromApi.englishMeaning),
+            style: Theme.of(context)
+                .textTheme
+                .titleLarge!
+                .copyWith(fontWeight: FontWeight.bold),
+          )
+        ],
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
