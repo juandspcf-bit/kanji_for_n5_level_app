@@ -66,10 +66,16 @@ class KanjiDetailsState extends State<KanjiDetails> {
                     ),
                   ],
                 )
-              : const Row(
+              : Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    CircularProgressIndicator(),
+                    SizedBox(
+                        height: 128 * _controller.value.aspectRatio,
+                        width: 128,
+                        child: const Padding(
+                          padding: EdgeInsets.all(40.0),
+                          child: CircularProgressIndicator(),
+                        )),
                   ],
                 ),
           const SizedBox(
