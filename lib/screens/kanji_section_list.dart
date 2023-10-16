@@ -105,7 +105,7 @@ class _KanjiItemState extends State<KanjiItemWrapper> {
       _kanjiFromApi = KanjiFromApi(
           kanjiCharacter: kanjiCharacterFromAPI,
           englishMeaning: englishMeaningFromAPI,
-          kankiImageLink: kanjiImageFromAPI,
+          kanjiImageLink: kanjiImageFromAPI,
           katakanaMeaning: katakanaMeaningFromAPI,
           hiraganaMeaning: hiraganaMeaningFromAPI,
           videoLink: videoLinkFromAPI,
@@ -138,7 +138,7 @@ class _KanjiItemState extends State<KanjiItemWrapper> {
           width: 80,
         ),
         SvgPicture.network(
-          _kanjiFromApi?.kankiImageLink ?? "",
+          _kanjiFromApi?.kanjiImageLink ?? "",
           height: 80,
           width: 80,
           semanticsLabel: _kanjiFromApi?.kanjiCharacter ?? "no kanji",
@@ -181,8 +181,8 @@ class _KanjiItemState extends State<KanjiItemWrapper> {
               const SizedBox(
                 height: 10,
               ),
-              Text("Onyomi: ${_kanjiFromApi?.katakanaMeaning ?? '??'}"),
               Text("Kunyomi: ${_kanjiFromApi?.hiraganaMeaning ?? '??'}"),
+              Text("Onyomi: ${_kanjiFromApi?.katakanaMeaning ?? '??'}"),
             ],
           ),
         ),

@@ -1,7 +1,7 @@
 class KanjiFromApi {
   final String kanjiCharacter;
   final String englishMeaning;
-  final String kankiImageLink;
+  final String kanjiImageLink;
   final String katakanaMeaning;
   final String hiraganaMeaning;
   final String videoLink;
@@ -10,7 +10,7 @@ class KanjiFromApi {
   KanjiFromApi({
     required this.kanjiCharacter,
     required this.englishMeaning,
-    required this.kankiImageLink,
+    required this.kanjiImageLink,
     required this.katakanaMeaning,
     required this.hiraganaMeaning,
     required this.videoLink,
