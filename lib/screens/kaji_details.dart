@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:kanji_for_n5_level_app/models/kanji_from_api.dart';
 import 'package:video_player/video_player.dart';
 
@@ -18,6 +19,47 @@ class KanjiDetailsState extends State<KanjiDetails> {
     var firstLetter = text[0];
     firstLetter = firstLetter.toUpperCase();
     return firstLetter + text.substring(1);
+  }
+
+  List<Widget> getListStrokes(List<String> images) {
+    List<Widget> strokes = [];
+    for (int i = 0; i < images.length; i++) {
+      Widget stroke = Row(
+        children: [
+          const SizedBox(
+            width: 20,
+          ),
+          Container(
+            color: Colors.white70,
+            height: 80,
+            width: 80,
+            child: SvgPicture.network(
+              images[i],
+              height: 80,
+              width: 80,
+              semanticsLabel: widget.kanjiFromApi.kanjiCharacter,
+              placeholderBuilder: (BuildContext context) => Container(
+                  color: Colors.transparent,
+                  height: 40,
+                  width: 40,
+                  child: const CircularProgressIndicator(
+                    backgroundColor: Color.fromARGB(179, 5, 16, 51),
+                  )),
+            ),
+          ),
+          i != images.length - 1
+              ? const SizedBox(
+                  width: 10,
+                  child: Icon(Icons.arrow_circle_right_outlined),
+                )
+              : const SizedBox(
+                  width: 20,
+                ),
+        ],
+      );
+      strokes.add(stroke);
+    }
+    return strokes;
   }
 
   @override
@@ -81,12 +123,47 @@ class KanjiDetailsState extends State<KanjiDetails> {
           const SizedBox(
             height: 20,
           ),
+          SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [...getListStrokes(widget.kanjiFromApi.strokes.images)],
+            ),
+          ),
+          const SizedBox(
+            height: 20,
+          ),
           Text(
             capitalizeString(widget.kanjiFromApi.englishMeaning),
             style: Theme.of(context)
                 .textTheme
                 .titleLarge!
                 .copyWith(fontWeight: FontWeight.bold),
+          ),
+          const SizedBox(
+            height: 20,
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              const SizedBox(
+                width: 20,
+              ),
+              Text("Kunyomi: ${widget.kanjiFromApi.hiraganaMeaning}"),
+            ],
+          ),
+          const SizedBox(
+            height: 10,
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              const SizedBox(
+                width: 20,
+              ),
+              Text("Kunyomi: ${widget.kanjiFromApi.katakanaMeaning}"),
+            ],
           )
         ],
       ),

@@ -6,16 +6,17 @@ class KanjiFromApi {
   final String hiraganaMeaning;
   final String videoLink;
   final List<Examples> example;
+  final Strokes strokes;
 
-  KanjiFromApi({
-    required this.kanjiCharacter,
-    required this.englishMeaning,
-    required this.kanjiImageLink,
-    required this.katakanaMeaning,
-    required this.hiraganaMeaning,
-    required this.videoLink,
-    required this.example,
-  });
+  KanjiFromApi(
+      {required this.kanjiCharacter,
+      required this.englishMeaning,
+      required this.kanjiImageLink,
+      required this.katakanaMeaning,
+      required this.hiraganaMeaning,
+      required this.videoLink,
+      required this.example,
+      required this.strokes});
 }
 
 class Examples {
@@ -46,4 +47,14 @@ class Audio {
       required this.aac,
       required this.ogg,
       required this.mp3});
+}
+
+class Strokes {
+  final int count;
+  final List<String> images;
+
+  Strokes({
+    required this.count,
+    required this.images,
+  });
 }

@@ -62,8 +62,17 @@ class _KanjiItemState extends State<KanjiItemWrapper> {
     final String kanjiCharacterFromAPI = kanjiInfo['character'];
 
     final Map<String, dynamic> kanjiStrokes = kanjiInfo["strokes"];
-    final List<dynamic> kanjiImages = kanjiStrokes["images"];
+    //final List<dynamic> kanjiTimingsFromApis = kanjiStrokes["timings"];
+    //final kanjiTimings = kanjiTimingsFromApis.map((e) => e as int).toList();
+
+    final List<dynamic> kanjiImagesFromApis = kanjiStrokes["images"];
+    final kanjiImages = kanjiImagesFromApis.map((e) => e as String).toList();
+
     final String kanjiImageFromAPI = kanjiImages.last;
+    final strokesInfo = Strokes(
+      count: kanjiStrokes['count'],
+      images: kanjiImages,
+    );
 
     final Map<String, dynamic> kanjiMeaning = kanjiInfo["meaning"];
     final String englishMeaningFromAPI = kanjiMeaning['english'];
@@ -109,7 +118,8 @@ class _KanjiItemState extends State<KanjiItemWrapper> {
           katakanaMeaning: katakanaMeaningFromAPI,
           hiraganaMeaning: hiraganaMeaningFromAPI,
           videoLink: videoLinkFromAPI,
-          example: examples);
+          example: examples,
+          strokes: strokesInfo);
     });
   }
 
