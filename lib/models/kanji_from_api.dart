@@ -22,7 +22,7 @@ class KanjiFromApi {
 class Examples {
   final String japanese;
   final Meaning meaning;
-  final Audio audio;
+  final AudioExamples audio;
 
   Examples({
     required this.japanese,
@@ -32,17 +32,17 @@ class Examples {
 }
 
 class Meaning {
-  final String meaning;
-  Meaning({required this.meaning});
+  final String english;
+  Meaning({required this.english});
 }
 
-class Audio {
+class AudioExamples {
   final String opus;
   final String aac;
   final String ogg;
   final String mp3;
 
-  Audio(
+  AudioExamples(
       {required this.opus,
       required this.aac,
       required this.ogg,

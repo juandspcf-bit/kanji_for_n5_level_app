@@ -92,9 +92,9 @@ class _KanjiItemState extends State<KanjiItemWrapper> {
       //
       final String japanese = e["japanese"];
       final Map<String, dynamic> meaningMap = e['meaning'];
-      final meaning = Meaning(meaning: meaningMap['english'] as String);
+      final meaning = Meaning(english: meaningMap['english'] as String);
       final Map<String, dynamic> audioMap = e['audio'];
-      final audio = Audio(
+      final audio = AudioExamples(
           opus: audioMap['opus'],
           aac: audioMap['aac'],
           ogg: audioMap['ogg'],

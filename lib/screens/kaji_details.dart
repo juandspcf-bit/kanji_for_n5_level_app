@@ -1,3 +1,4 @@
+import 'package:assets_audio_player/assets_audio_player.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:kanji_for_n5_level_app/models/kanji_from_api.dart';
@@ -14,6 +15,7 @@ class KanjiDetails extends StatefulWidget {
 
 class KanjiDetailsState extends State<KanjiDetails> {
   late VideoPlayerController _controller;
+  final assetsAudioPlayer = AssetsAudioPlayer();
 
   String capitalizeString(String text) {
     var firstLetter = text[0];
@@ -164,7 +166,11 @@ class KanjiDetailsState extends State<KanjiDetails> {
               ),
               Text("Kunyomi: ${widget.kanjiFromApi.katakanaMeaning}"),
             ],
-          )
+          ),
+          const SizedBox(
+            height: 20,
+          ),
+          ExamplesAndInfo(widget: widget),
         ],
       ),
       floatingActionButton: FloatingActionButton(
@@ -178,6 +184,59 @@ class KanjiDetailsState extends State<KanjiDetails> {
         child: Icon(
           _controller.value.isPlaying ? Icons.pause : Icons.play_arrow,
         ),
+      ),
+    );
+  }
+}
+
+class ExamplesAndInfo extends StatelessWidget {
+  const ExamplesAndInfo({
+    super.key,
+    required this.widget,
+  });
+
+  final KanjiDetails widget;
+  @override
+  Widget build(BuildContext context) {
+    return Expanded(
+      child: SingleChildScrollView(
+        child: Column(children: [
+          for (final example in widget.kanjiFromApi.example)
+            ListTile(
+              title: Column(
+                children: [
+                  Text(example.japanese),
+                  const SizedBox(
+                    height: 7,
+                  ),
+                  Text(example.meaning.english),
+                  const SizedBox(
+                    height: 7,
+                  ),
+                ],
+              ),
+              trailing: Container(
+                decoration: BoxDecoration(
+                    color: Theme.of(context).colorScheme.primary,
+                    borderRadius: BorderRadius.circular(30)),
+                child: IconButton(
+                  color: Theme.of(context).colorScheme.onPrimary,
+                  onPressed: () async {
+                    final assetsAudioPlayer = AssetsAudioPlayer();
+
+                    try {
+                      await assetsAudioPlayer.open(
+                        Audio.network(example.audio.mp3),
+                      );
+                    } catch (t) {
+                      //mp3 unreachable
+                    }
+                  },
+                  icon: const Icon(Icons.play_arrow_rounded),
+                ),
+              ),
+            )
+        ]),
       ),
     );
   }
