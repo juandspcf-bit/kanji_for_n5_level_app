@@ -131,72 +131,98 @@ class _KanjiItemState extends State<KanjiItemWrapper> {
 
   @override
   Widget build(BuildContext context) {
-    return ListTile(
+    return RowMainList(
+      kanjiFromApi: _kanjiFromApi,
+    );
+  }
+}
+
+class RowMainList extends StatelessWidget {
+  const RowMainList({super.key, this.kanjiFromApi});
+  final KanjiFromApi? kanjiFromApi;
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
       onTap: () {
-        if (_kanjiFromApi == null) return;
+        if (kanjiFromApi == null) return;
         Navigator.of(context).push(
           MaterialPageRoute(builder: (ctx) {
-            return KanjiDetails(kanjiFromApi: _kanjiFromApi!);
+            return KanjiDetails(kanjiFromApi: kanjiFromApi!);
           }),
         );
       },
-      contentPadding: const EdgeInsets.symmetric(vertical: 5, horizontal: 15),
-      leading: Stack(alignment: Alignment.center, children: [
-        Container(
-          color: Colors.white70,
-          height: 80,
-          width: 80,
-        ),
-        SvgPicture.network(
-          _kanjiFromApi?.kanjiImageLink ?? "",
-          height: 80,
-          width: 80,
-          semanticsLabel: _kanjiFromApi?.kanjiCharacter ?? "no kanji",
-          placeholderBuilder: (BuildContext context) => Container(
-              color: Colors.transparent,
-              height: 40,
-              width: 40,
-              child: const CircularProgressIndicator(
-                backgroundColor: Color.fromARGB(179, 5, 16, 51),
-              )),
-        ),
-      ]),
-      title: Container(
-        padding: const EdgeInsets.all(10),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(20),
-          gradient: const LinearGradient(colors: [
-            Color.fromARGB(180, 250, 8, 8),
-            Color.fromARGB(180, 192, 20, 20),
-            Color.fromARGB(70, 121, 21, 21)
-          ], begin: Alignment.topLeft, end: Alignment.bottomRight),
-        ),
-        child: Container(
-          decoration: const BoxDecoration(
-            border: Border(
-              bottom:
-                  BorderSide(style: BorderStyle.solid, color: Colors.white70),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 8),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Container(
+              height: 90,
+              width: 90,
+              decoration: BoxDecoration(
+                  color: Theme.of(context).colorScheme.onPrimaryContainer,
+                  borderRadius: const BorderRadius.all(Radius.circular(10))),
+              child: SvgPicture.network(
+                kanjiFromApi?.kanjiImageLink ?? "",
+                height: 80,
+                width: 80,
+                semanticsLabel: kanjiFromApi?.kanjiCharacter ?? "no kanji",
+                placeholderBuilder: (BuildContext context) => Container(
+                    color: Colors.transparent,
+                    height: 40,
+                    width: 40,
+                    child: const CircularProgressIndicator(
+                      backgroundColor: Color.fromARGB(179, 5, 16, 51),
+                    )),
+              ),
             ),
-          ),
-          child: Column(
-            children: [
-              Text(
-                _kanjiFromApi?.englishMeaning ?? "no kanji",
-                style: Theme.of(context).textTheme.titleLarge!.copyWith(
-                      color: Theme.of(context).colorScheme.onSecondaryContainer,
-                      fontWeight: FontWeight.bold,
+            const SizedBox(
+              width: 15,
+            ),
+            Expanded(
+              child: Container(
+                padding: const EdgeInsets.all(10),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(20),
+                  gradient: const LinearGradient(colors: [
+                    Color.fromARGB(180, 250, 8, 8),
+                    Color.fromARGB(180, 192, 20, 20),
+                    Color.fromARGB(70, 121, 21, 21)
+                  ], begin: Alignment.topLeft, end: Alignment.bottomRight),
+                ),
+                child: Container(
+                  decoration: const BoxDecoration(
+                    border: Border(
+                      bottom: BorderSide(
+                          style: BorderStyle.solid, color: Colors.white70),
                     ),
-                textAlign: TextAlign.center,
+                  ),
+                  child: Column(
+                    children: [
+                      Text(
+                        kanjiFromApi?.englishMeaning ?? "no kanji",
+                        style: Theme.of(context).textTheme.titleLarge!.copyWith(
+                              color: Theme.of(context)
+                                  .colorScheme
+                                  .onSecondaryContainer,
+                              fontWeight: FontWeight.bold,
+                            ),
+                        textAlign: TextAlign.center,
+                      ),
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      Text("Kunyomi: ${kanjiFromApi?.hiraganaMeaning ?? '??'}"),
+                      Text("Onyomi: ${kanjiFromApi?.katakanaMeaning ?? '??'}"),
+                    ],
+                  ),
+                ),
               ),
-              const SizedBox(
-                height: 10,
-              ),
-              Text("Kunyomi: ${_kanjiFromApi?.hiraganaMeaning ?? '??'}"),
-              Text("Onyomi: ${_kanjiFromApi?.katakanaMeaning ?? '??'}"),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
-    ); //
+    );
   }
 }
