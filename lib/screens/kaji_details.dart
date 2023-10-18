@@ -5,7 +5,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:kanji_for_n5_level_app/main.dart';
 import 'package:kanji_for_n5_level_app/models/kanji_from_api.dart';
-import 'package:kanji_for_n5_level_app/providers/favorites_kanjis_providers.dart';
 import 'package:video_player/video_player.dart';
 
 class KanjiDetails extends ConsumerStatefulWidget {

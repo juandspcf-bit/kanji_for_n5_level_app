@@ -6,19 +6,14 @@ class FavoritesKanjis extends Notifier<List<String>> {
     return [];
   }
 
-  void toggleFavorite(String kanjiCharacter) {
-    final kanjiInList = state.firstWhere((element) => element == kanjiCharacter,
-        orElse: () => "");
+  void toggleFavorite(String kanjiCharacter) {}
 
-    var copy = state;
-    if (kanjiInList == "") {
-      copy.add(kanjiCharacter);
-    } else {
-      copy.remove(kanjiCharacter);
-    }
-    state = copy;
+  void initState(List<String> favoriteKanjis) {
+    state = favoriteKanjis;
   }
 }
 
 final favoritesKanjisProvider =
     NotifierProvider<FavoritesKanjis, List<String>>(FavoritesKanjis.new);
+
+List<String> myFavoritesCached = [];
