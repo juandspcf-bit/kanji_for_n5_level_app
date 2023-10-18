@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:kanji_for_n5_level_app/screens/favorites_kanjis_screen.dart';
 import 'package:kanji_for_n5_level_app/screens/sections_screen.dart';
 
 class MainContent extends StatefulWidget {
@@ -18,11 +19,34 @@ class _MainContentState extends State<MainContent> {
     });
   }
 
+  Widget selectScreen(int selectedPageIndex) {
+    switch (selectedPageIndex) {
+      case 0:
+        return const Column(
+          children: [
+            Expanded(
+              child: Sections(),
+            ),
+          ],
+        );
+      case 1:
+        return const FavoritesKanjisScreen();
+
+      default:
+        return const Center(
+          child: Text("no screen"),
+        );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+    String scaffoldTitle = "Welcome juan";
+    if (_selectedPageIndex == 1) scaffoldTitle = "Favorites";
+
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Welcome Juan"),
+        title: Text(scaffoldTitle),
         actions: [
           Padding(
             padding: const EdgeInsets.only(top: 3, bottom: 3, right: 3),
@@ -38,13 +62,7 @@ class _MainContentState extends State<MainContent> {
           ),
         ],
       ),
-      body: const Column(
-        children: [
-          Expanded(
-            child: Sections(),
-          ),
-        ],
-      ),
+      body: selectScreen(_selectedPageIndex),
       bottomNavigationBar: BottomNavigationBar(
         backgroundColor: Theme.of(context).colorScheme.secondaryContainer,
         selectedItemColor: Theme.of(context).colorScheme.onSecondaryContainer,
@@ -54,8 +72,8 @@ class _MainContentState extends State<MainContent> {
         currentIndex: _selectedPageIndex,
         items: const [
           BottomNavigationBarItem(
-            icon: Icon(Icons.set_meal),
-            label: "Categories",
+            icon: Icon(Icons.book),
+            label: "Sections",
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.star),

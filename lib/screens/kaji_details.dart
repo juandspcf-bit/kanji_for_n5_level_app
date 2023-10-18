@@ -1,19 +1,23 @@
 import 'package:assets_audio_player/assets_audio_player.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:kanji_for_n5_level_app/main.dart';
 import 'package:kanji_for_n5_level_app/models/kanji_from_api.dart';
+import 'package:kanji_for_n5_level_app/providers/favorites_kanjis_providers.dart';
 import 'package:video_player/video_player.dart';
 
-class KanjiDetails extends StatefulWidget {
+class KanjiDetails extends ConsumerStatefulWidget {
   const KanjiDetails({super.key, required this.kanjiFromApi});
 
   final KanjiFromApi kanjiFromApi;
 
   @override
-  State<KanjiDetails> createState() => KanjiDetailsState();
+  ConsumerState<KanjiDetails> createState() => KanjiDetailsState();
 }
 
-class KanjiDetailsState extends State<KanjiDetails> {
+class KanjiDetailsState extends ConsumerState<KanjiDetails> {
   late VideoPlayerController _videoController;
   final assetsAudioPlayer = AssetsAudioPlayer();
 
@@ -199,6 +203,18 @@ class KanjiDetailsState extends State<KanjiDetails> {
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.kanjiFromApi.kanjiCharacter),
+        actions: [
+          IconButton(
+              onPressed: () {
+                final favoriteKanji = <String, dynamic>{
+                  "kanjiCharacter": widget.kanjiFromApi.kanjiCharacter,
+                };
+                dbFirebase.collection("favorites").add(favoriteKanji).then(
+                    (DocumentReference doc) =>
+                        print('DocumentSnapshot added with ID: ${doc.id}'));
+              },
+              icon: const Icon(Icons.favorite))
+        ],
       ),
       body: Column(
         children: [
