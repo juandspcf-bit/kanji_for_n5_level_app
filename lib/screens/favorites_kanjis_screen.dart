@@ -40,7 +40,11 @@ class FavoritesKanjisScreenState extends ConsumerState<FavoritesKanjisScreen> {
                 myFavoritesCached = querySnapshot!.docs.map(
                   (e) {
                     Map<String, dynamic> data = e.data();
-                    return data['kanjiCharacter'] as String;
+                    return (
+                      e.id,
+                      'kanjiCharacter',
+                      data['kanjiCharacter'] as String
+                    );
                   },
                 ).toList();
 

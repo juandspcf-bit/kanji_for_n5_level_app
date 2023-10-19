@@ -109,6 +109,7 @@ class _KanjiItemState extends State<KanjiItemWrapper> {
 
     if (body.isNotEmpty && kanjiInformation.statusCode > 400) return;
 
+    // ignore: unnecessary_null_comparison
     if (kanjiCharacterFromAPI == null) return;
     setState(() {
       _kanjiFromApi = KanjiFromApi(

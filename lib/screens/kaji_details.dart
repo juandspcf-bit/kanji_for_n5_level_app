@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:kanji_for_n5_level_app/main.dart';
 import 'package:kanji_for_n5_level_app/models/kanji_from_api.dart';
+import 'package:kanji_for_n5_level_app/providers/favorites_kanjis_providers.dart';
 import 'package:video_player/video_player.dart';
 
 class KanjiDetails extends ConsumerStatefulWidget {
@@ -205,14 +206,45 @@ class KanjiDetailsState extends ConsumerState<KanjiDetails> {
         actions: [
           IconButton(
               onPressed: () {
-                final favoriteKanji = <String, dynamic>{
-                  "kanjiCharacter": widget.kanjiFromApi.kanjiCharacter,
-                };
-                dbFirebase.collection("favorites").add(favoriteKanji).then(
-                    (DocumentReference doc) =>
-                        print('DocumentSnapshot added with ID: ${doc.id}'));
+                var queryKanji = myFavoritesCached.firstWhere(
+                    (element) =>
+                        element.$3 == widget.kanjiFromApi.kanjiCharacter,
+                    orElse: () => ("", "", ""));
+
+                if (queryKanji.$3 == "") {
+                  final favoriteKanji = <String, dynamic>{
+                    "kanjiCharacter": widget.kanjiFromApi.kanjiCharacter,
+                  };
+                  dbFirebase
+                      .collection("favorites")
+                      .add(favoriteKanji)
+                      .then((DocumentReference doc) {
+                    myFavoritesCached.add((
+                      doc.id,
+                      "kanjiCharacter",
+                      widget.kanjiFromApi.kanjiCharacter
+                    ));
+                  });
+                } else {
+                  dbFirebase
+                      .collection("favorites")
+                      .doc(queryKanji.$1)
+                      .delete()
+                      .then(
+                    (doc) {
+                      myFavoritesCached.remove(queryKanji);
+                    },
+                    onError: (e) => print("Error updating document $e"),
+                  );
+                }
+
+                ref.read(favoritesKanjisProvider.notifier).toggleFavorite(
+                      widget.kanjiFromApi.kanjiCharacter,
+                    );
               },
-              icon: const Icon(Icons.favorite))
+              icon: Icon(ref.watch(favoritesKanjisProvider) == true
+                  ? Icons.favorite
+                  : Icons.favorite_border_outlined))
         ],
       ),
       body: Column(

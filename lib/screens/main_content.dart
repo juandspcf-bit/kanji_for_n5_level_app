@@ -1,5 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:kanji_for_n5_level_app/main.dart';
+import 'package:kanji_for_n5_level_app/providers/favorites_kanjis_providers.dart';
 import 'package:kanji_for_n5_level_app/screens/favorites_kanjis_screen.dart';
 import 'package:kanji_for_n5_level_app/screens/sections_screen.dart';
 
@@ -17,6 +19,22 @@ class _MainContentState extends State<MainContent> {
     setState(() {
       _selectedPageIndex = index;
     });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    getListOfFavorites();
+  }
+
+  void getListOfFavorites() async {
+    final querySnapshot = await dbFirebase.collection("favorites").get();
+    myFavoritesCached = querySnapshot.docs.map(
+      (e) {
+        Map<String, dynamic> data = e.data();
+        return (e.id, 'kanjiCharacter', data['kanjiCharacter'] as String);
+      },
+    ).toList();
   }
 
   Widget selectScreen(int selectedPageIndex) {
