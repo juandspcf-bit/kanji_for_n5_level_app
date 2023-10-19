@@ -1,9 +1,14 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:kanji_for_n5_level_app/main.dart';
+import 'package:kanji_for_n5_level_app/models/secction_model.dart';
 import 'package:kanji_for_n5_level_app/providers/favorites_kanjis_providers.dart';
-import 'package:kanji_for_n5_level_app/screens/favorites_kanjis_screen.dart';
+import 'package:kanji_for_n5_level_app/screens/favorite_screen.dart';
+import 'package:kanji_for_n5_level_app/screens/kanji_section_list.dart';
 import 'package:kanji_for_n5_level_app/screens/sections_screen.dart';
+
+const temporalAvatar =
+    "https://firebasestorage.googleapis.com/v0/b/kanji-for-n5.appspot.com/o/unnamed.jpg?alt=media&token=38275fec-42f3-4d95-b1fd-785e82d4086f&_gl=1*19p8v1f*_ga*MjAyNTg0OTcyOS4xNjk2NDEwODIz*_ga_CW55HF8NVT*MTY5NzEwMTY3NC45LjEuMTY5NzEwMzExMy4zMy4wLjA.";
 
 class MainContent extends StatefulWidget {
   const MainContent({super.key});
@@ -48,9 +53,7 @@ class _MainContentState extends State<MainContent> {
           ],
         );
       case 1:
-        return const FavoritesKanjisScreen(
-          isFromTabNav: true,
-        );
+        return const FavoriteScreen(isFromTabNav: true);
 
       default:
         return const Center(

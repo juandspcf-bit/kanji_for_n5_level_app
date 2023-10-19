@@ -212,6 +212,8 @@ class KanjiDetailsState extends ConsumerState<KanjiDetails> {
 
   @override
   Widget build(BuildContext context) {
+    var myList = ref.watch(favoritesKanjisProvider);
+
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.kanjiFromApi.kanjiCharacter),

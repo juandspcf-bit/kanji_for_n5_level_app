@@ -1,22 +1,26 @@
+import 'dart:async';
+
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:kanji_for_n5_level_app/main.dart';
 
-class FavoritesKanjis extends Notifier<bool> {
+class FavoritesKanjis extends AsyncNotifier<List<(String, String, String)>> {
   @override
-  bool build() {
-    return false;
+  FutureOr<List<(String, String, String)>> build() async {
+    final querySnapshot = await dbFirebase.collection("favorites").get();
+    final myFavorites = querySnapshot.docs.map(
+      (e) {
+        Map<String, dynamic> data = e.data();
+        return (e.id, 'kanjiCharacter', data['kanjiCharacter'] as String);
+      },
+    ).toList();
+    return myFavorites;
   }
 
-  bool toggleFavorite(String kanjiCharacter) {
-    final queryKanji = myFavoritesCached.firstWhere(
-        (element) => element.$3 == kanjiCharacter,
-        orElse: () => ("", "", ""));
-    final isFavorite = queryKanji.$3 != "";
-    state = isFavorite;
-    return isFavorite;
-  }
+  void addFavoriteOrRemove(List<(String, String, String)> kanji) {}
 }
 
 final favoritesKanjisProvider =
-    NotifierProvider<FavoritesKanjis, bool>(FavoritesKanjis.new);
+    AsyncNotifierProvider<FavoritesKanjis, List<(String, String, String)>>(
+        FavoritesKanjis.new);
 
 List<(String, String, String)> myFavoritesCached = [];
