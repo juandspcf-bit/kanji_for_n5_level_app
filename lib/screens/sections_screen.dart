@@ -42,7 +42,10 @@ class Section extends StatelessWidget {
         Navigator.of(context).push(
           MaterialPageRoute(
             builder: (ctx) {
-              return KanjiSecctionList(sectionModel: sectionData);
+              return KanjiList(
+                sectionModel: sectionData,
+                isFromTabNav: false,
+              );
             },
           ),
         );

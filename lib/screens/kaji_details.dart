@@ -20,6 +20,7 @@ class KanjiDetails extends ConsumerStatefulWidget {
 class KanjiDetailsState extends ConsumerState<KanjiDetails> {
   late VideoPlayerController _videoController;
   final assetsAudioPlayer = AssetsAudioPlayer();
+  late bool _favoriteStatus;
 
   String capitalizeString(String text) {
     var firstLetter = text[0];
@@ -177,9 +178,20 @@ class KanjiDetailsState extends ConsumerState<KanjiDetails> {
     );
   }
 
+  (String, String, String) searchKanjiInFavorites(String kanji) {
+    var queryKanji = myFavoritesCached.firstWhere(
+        (element) => element.$3 == kanji,
+        orElse: () => ("", "", ""));
+    return queryKanji;
+  }
+
   @override
   void initState() {
     super.initState();
+
+    var queryKanji = searchKanjiInFavorites(widget.kanjiFromApi.kanjiCharacter);
+    _favoriteStatus = queryKanji != ("", "", "");
+
     _videoController = VideoPlayerController.networkUrl(
         Uri.parse(widget.kanjiFromApi.videoLink))
       ..initialize().then((_) {
@@ -206,10 +218,8 @@ class KanjiDetailsState extends ConsumerState<KanjiDetails> {
         actions: [
           IconButton(
               onPressed: () {
-                var queryKanji = myFavoritesCached.firstWhere(
-                    (element) =>
-                        element.$3 == widget.kanjiFromApi.kanjiCharacter,
-                    orElse: () => ("", "", ""));
+                var queryKanji =
+                    searchKanjiInFavorites(widget.kanjiFromApi.kanjiCharacter);
 
                 if (queryKanji.$3 == "") {
                   final favoriteKanji = <String, dynamic>{
@@ -238,11 +248,11 @@ class KanjiDetailsState extends ConsumerState<KanjiDetails> {
                   );
                 }
 
-                ref.read(favoritesKanjisProvider.notifier).toggleFavorite(
-                      widget.kanjiFromApi.kanjiCharacter,
-                    );
+                setState(() {
+                  _favoriteStatus = queryKanji == ("", "", "");
+                });
               },
-              icon: Icon(ref.watch(favoritesKanjisProvider) == true
+              icon: Icon(_favoriteStatus
                   ? Icons.favorite
                   : Icons.favorite_border_outlined))
         ],

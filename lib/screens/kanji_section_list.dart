@@ -8,24 +8,38 @@ import 'dart:convert';
 
 import 'package:kanji_for_n5_level_app/screens/kaji_details.dart';
 
-class KanjiSecctionList extends StatelessWidget {
-  const KanjiSecctionList({super.key, required this.sectionModel});
+class KanjiList extends StatelessWidget {
+  const KanjiList({
+    super.key,
+    required this.sectionModel,
+    required this.isFromTabNav,
+  });
+  final bool isFromTabNav;
 
   final SectionModel sectionModel;
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(sectionModel.title),
-      ),
-      body: ListView(
-        children: [
-          for (final kanjiItem in sectionModel.kanjis)
-            KanjiItemWrapper(kanji: kanjiItem)
-        ],
-      ),
-    );
+    return isFromTabNav
+        ? Scaffold(
+            body: ListView(
+              children: [
+                for (final kanjiItem in sectionModel.kanjis)
+                  KanjiItemWrapper(kanji: kanjiItem)
+              ],
+            ),
+          )
+        : Scaffold(
+            appBar: AppBar(
+              title: Text(sectionModel.title),
+            ),
+            body: ListView(
+              children: [
+                for (final kanjiItem in sectionModel.kanjis)
+                  KanjiItemWrapper(kanji: kanjiItem)
+              ],
+            ),
+          );
   }
 }
 

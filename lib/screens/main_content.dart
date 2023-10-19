@@ -21,12 +21,6 @@ class _MainContentState extends State<MainContent> {
     });
   }
 
-  @override
-  void initState() {
-    super.initState();
-    getListOfFavorites();
-  }
-
   void getListOfFavorites() async {
     final querySnapshot = await dbFirebase.collection("favorites").get();
     myFavoritesCached = querySnapshot.docs.map(
@@ -35,6 +29,12 @@ class _MainContentState extends State<MainContent> {
         return (e.id, 'kanjiCharacter', data['kanjiCharacter'] as String);
       },
     ).toList();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    getListOfFavorites();
   }
 
   Widget selectScreen(int selectedPageIndex) {
@@ -48,7 +48,9 @@ class _MainContentState extends State<MainContent> {
           ],
         );
       case 1:
-        return const FavoritesKanjisScreen();
+        return const FavoritesKanjisScreen(
+          isFromTabNav: true,
+        );
 
       default:
         return const Center(
