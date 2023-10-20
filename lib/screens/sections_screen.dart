@@ -32,6 +32,8 @@ class Section extends StatelessWidget {
 
   final SectionModel sectionData;
 
+  void updateList() {}
+
   @override
   Widget build(BuildContext context) {
     return InkWell(
@@ -42,6 +44,7 @@ class Section extends StatelessWidget {
               return KanjiList(
                 sectionModel: sectionData,
                 isFromTabNav: false,
+                updateList: updateList,
               );
             },
           ),

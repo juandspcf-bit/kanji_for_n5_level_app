@@ -9,9 +9,12 @@ import 'package:kanji_for_n5_level_app/providers/favorites_kanjis_providers.dart
 import 'package:video_player/video_player.dart';
 
 class KanjiDetails extends ConsumerStatefulWidget {
-  const KanjiDetails({super.key, required this.kanjiFromApi});
+  const KanjiDetails(
+      {super.key, required this.kanjiFromApi, required this.updateList});
 
   final KanjiFromApi kanjiFromApi;
+
+  final void Function() updateList;
 
   @override
   ConsumerState<KanjiDetails> createState() => KanjiDetailsState();
@@ -253,6 +256,8 @@ class KanjiDetailsState extends ConsumerState<KanjiDetails> {
                 setState(() {
                   _favoriteStatus = queryKanji == ("", "", "");
                 });
+
+                widget.updateList();
               },
               icon: Icon(_favoriteStatus
                   ? Icons.favorite
