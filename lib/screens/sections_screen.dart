@@ -44,7 +44,6 @@ class Section extends StatelessWidget {
               return KanjiList(
                 sectionModel: sectionData,
                 isFromTabNav: false,
-                updateList: updateList,
               );
             },
           ),

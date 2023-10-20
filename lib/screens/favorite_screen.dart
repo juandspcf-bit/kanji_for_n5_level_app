@@ -12,8 +12,8 @@ class FavoriteScreen extends ConsumerWidget {
 
   final bool isFromTabNav;
 
-  Widget buildScreen(List<(String, String, String)> myFavoritesRecord) {
-    final myFavorites = myFavoritesRecord.map((e) => e.$3).toList();
+  Widget buildScreen() {
+    final myFavorites = myFavoritesCached.map((e) => e.$3).toList();
 
     final sectionModel = SectionModel(
       title: "Favorites",
@@ -29,14 +29,7 @@ class FavoriteScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    AsyncValue<List<(String, String, String)>> myList =
-        ref.watch(favoritesKanjisProvider);
 
-    return myList.when(
-      loading: () => const CircularProgressIndicator(),
-      error: (error, stack) =>
-          const Text('Oops, something unexpected happened'),
-      data: (data) => buildScreen(data),
-    );
+    return buildScreen();
   }
 }

@@ -13,11 +13,10 @@ class KanjiList extends StatelessWidget {
     super.key,
     required this.sectionModel,
     required this.isFromTabNav,
-    required this.updateList,
+
   });
   final bool isFromTabNav;
 
-  final void Function() updateList;
 
   final SectionModel sectionModel;
 
@@ -30,7 +29,6 @@ class KanjiList extends StatelessWidget {
                 for (final kanjiItem in sectionModel.kanjis)
                   KanjiItemWrapper(
                     kanji: kanjiItem,
-                    updateList: updateList,
                   )
               ],
             ),
@@ -44,7 +42,7 @@ class KanjiList extends StatelessWidget {
                 for (final kanjiItem in sectionModel.kanjis)
                   KanjiItemWrapper(
                     kanji: kanjiItem,
-                    updateList: updateList,
+
                   )
               ],
             ),
@@ -54,10 +52,10 @@ class KanjiList extends StatelessWidget {
 
 class KanjiItemWrapper extends StatefulWidget {
   const KanjiItemWrapper(
-      {super.key, required this.kanji, required this.updateList});
+      {super.key, required this.kanji,});
 
   final String kanji;
-  final void Function() updateList;
+
   @override
   State<KanjiItemWrapper> createState() => _KanjiItemState();
 }
@@ -85,12 +83,10 @@ class _KanjiItemState extends State<KanjiItemWrapper> {
 
     if (body.isNotEmpty && kanjiInformation.statusCode > 400) return;
 
-    // ignore: unnecessary_null_comparison
-    //if (kanjiCharacterFromAPI == null) return;
     setState(() {
       _kanjiFromApi = builKanjiInfoFromApi(body);
     });
-  }
+  } 
 
   @override
   void initState() {
@@ -100,32 +96,14 @@ class _KanjiItemState extends State<KanjiItemWrapper> {
 
   @override
   Widget build(BuildContext context) {
-    return RowMainList(
-      kanjiFromApi: _kanjiFromApi,
-      updateList: widget.updateList,
-    );
-  }
-}
-
-class RowMainList extends StatelessWidget {
-  const RowMainList({
-    super.key,
-    required this.kanjiFromApi,
-    required this.updateList,
-  });
-  final KanjiFromApi? kanjiFromApi;
-  final void Function() updateList;
-
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
+    return  GestureDetector(
       onTap: () {
-        if (kanjiFromApi == null) return;
+        if (_kanjiFromApi == null) return;
         Navigator.of(context).push(
           MaterialPageRoute(builder: (ctx) {
             return KanjiDetails(
-              kanjiFromApi: kanjiFromApi!,
-              updateList: updateList,
+              kanjiFromApi: _kanjiFromApi!,
+
             );
           }),
         );
@@ -142,10 +120,10 @@ class RowMainList extends StatelessWidget {
                   color: Theme.of(context).colorScheme.onPrimaryContainer,
                   borderRadius: const BorderRadius.all(Radius.circular(10))),
               child: SvgPicture.network(
-                kanjiFromApi?.kanjiImageLink ?? "",
+                _kanjiFromApi?.kanjiImageLink ?? "",
                 height: 80,
                 width: 80,
-                semanticsLabel: kanjiFromApi?.kanjiCharacter ?? "no kanji",
+                semanticsLabel: _kanjiFromApi?.kanjiCharacter ?? "no kanji",
                 placeholderBuilder: (BuildContext context) => Container(
                     color: Colors.transparent,
                     height: 40,
@@ -179,7 +157,7 @@ class RowMainList extends StatelessWidget {
                   child: Column(
                     children: [
                       Text(
-                        kanjiFromApi?.englishMeaning ?? "no kanji",
+                        _kanjiFromApi?.englishMeaning ?? "no kanji",
                         style: Theme.of(context).textTheme.titleLarge!.copyWith(
                               color: Theme.of(context)
                                   .colorScheme
@@ -191,8 +169,8 @@ class RowMainList extends StatelessWidget {
                       const SizedBox(
                         height: 10,
                       ),
-                      Text("Kunyomi: ${kanjiFromApi?.hiraganaMeaning ?? '??'}"),
-                      Text("Onyomi: ${kanjiFromApi?.katakanaMeaning ?? '??'}"),
+                      Text("Kunyomi: ${_kanjiFromApi?.hiraganaMeaning ?? '??'}"),
+                      Text("Onyomi: ${_kanjiFromApi?.katakanaMeaning ?? '??'}"),
                     ],
                   ),
                 ),

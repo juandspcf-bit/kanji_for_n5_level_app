@@ -1,10 +1,8 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:kanji_for_n5_level_app/main.dart';
-import 'package:kanji_for_n5_level_app/models/secction_model.dart';
 import 'package:kanji_for_n5_level_app/providers/favorites_kanjis_providers.dart';
 import 'package:kanji_for_n5_level_app/screens/favorite_screen.dart';
-import 'package:kanji_for_n5_level_app/screens/kanji_section_list.dart';
 import 'package:kanji_for_n5_level_app/screens/sections_screen.dart';
 
 const temporalAvatar =
