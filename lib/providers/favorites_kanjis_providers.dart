@@ -1,22 +1,18 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class FavoritesKanjis extends Notifier<bool> {
+class FavoritesKanjis extends Notifier<List<(String, String, String)>> {
   @override
-  bool build() {
-    return false;
+  List<(String, String, String)> build() {
+    return [];
   }
 
-  bool toggleFavorite(String kanjiCharacter) {
-    final queryKanji = myFavoritesCached.firstWhere(
-        (element) => element.$3 == kanjiCharacter,
-        orElse: () => ("", "", ""));
-    final isFavorite = queryKanji.$3 != "";
-    state = isFavorite;
-    return isFavorite;
+  void setInitialState(List<(String, String, String)> initial) {
+    state = initial;
   }
 }
 
 final favoritesKanjisProvider =
-    NotifierProvider<FavoritesKanjis, bool>(FavoritesKanjis.new);
+    NotifierProvider<FavoritesKanjis, List<(String, String, String)>>(
+        FavoritesKanjis.new);
 
 List<(String, String, String)> myFavoritesCached = [];
