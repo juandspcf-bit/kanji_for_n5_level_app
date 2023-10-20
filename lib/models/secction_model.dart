@@ -1,13 +1,13 @@
 class SectionModel {
-  const SectionModel({
+  SectionModel({
     required this.title,
     required this.sectionNumber,
-    required this.kanjis,
+    this.kanjis = const [],
   });
 
   final String title;
   final int sectionNumber;
-  final List<String> kanjis;
+  List<String> kanjis;
 }
 
 final listSections = [

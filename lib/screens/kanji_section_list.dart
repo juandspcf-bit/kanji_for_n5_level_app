@@ -1,48 +1,80 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:kanji_for_n5_level_app/API_Files/key_file_api.dart';
 import 'package:kanji_for_n5_level_app/models/kanji_from_api.dart';
 import 'package:kanji_for_n5_level_app/models/secction_model.dart';
 import 'package:http/http.dart' as http;
+import 'package:kanji_for_n5_level_app/providers/favorites_kanjis_providers.dart';
 import 'dart:convert';
 
 import 'package:kanji_for_n5_level_app/screens/kaji_details.dart';
 
-class KanjiList extends StatelessWidget {
+class KanjiList extends StatefulWidget {
   const KanjiList({
     super.key,
     required this.sectionModel,
     required this.isFromTabNav,
-
   });
   final bool isFromTabNav;
-
 
   final SectionModel sectionModel;
 
   @override
+  State<KanjiList> createState() => _KanjiListState();
+}
+
+class _KanjiListState extends State<KanjiList> {
+  FutureOr onGoBack(dynamic value) {
+    refreshData();
+  }
+
+  void refreshData() {
+    if (!widget.isFromTabNav) return;
+    setState(() {
+      widget.sectionModel.kanjis = myFavoritesCached.map((e) => e.$3).toList();
+    });
+  }
+
+  void navigateToKanjiDetails(
+    BuildContext context,
+    KanjiFromApi? kanjiFromApi,
+  ) {
+    if (kanjiFromApi == null) return;
+    Navigator.of(context).push(
+      MaterialPageRoute(builder: (ctx) {
+        return KanjiDetails(
+          kanjiFromApi: kanjiFromApi,
+        );
+      }),
+    ).then(onGoBack);
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return isFromTabNav
+    return widget.isFromTabNav
         ? Scaffold(
             body: ListView(
               children: [
-                for (final kanjiItem in sectionModel.kanjis)
+                for (final kanjiItem in widget.sectionModel.kanjis)
                   KanjiItemWrapper(
                     kanji: kanjiItem,
+                    navigateToKanjiDetails: navigateToKanjiDetails,
                   )
               ],
             ),
           )
         : Scaffold(
             appBar: AppBar(
-              title: Text(sectionModel.title),
+              title: Text(widget.sectionModel.title),
             ),
             body: ListView(
               children: [
-                for (final kanjiItem in sectionModel.kanjis)
+                for (final kanjiItem in widget.sectionModel.kanjis)
                   KanjiItemWrapper(
                     kanji: kanjiItem,
-
+                    navigateToKanjiDetails: navigateToKanjiDetails,
                   )
               ],
             ),
@@ -51,10 +83,15 @@ class KanjiList extends StatelessWidget {
 }
 
 class KanjiItemWrapper extends StatefulWidget {
-  const KanjiItemWrapper(
-      {super.key, required this.kanji,});
+  const KanjiItemWrapper({
+    super.key,
+    required this.kanji,
+    required this.navigateToKanjiDetails,
+  });
 
   final String kanji;
+  final void Function(BuildContext context, KanjiFromApi? kanjiFromApi)
+      navigateToKanjiDetails;
 
   @override
   State<KanjiItemWrapper> createState() => _KanjiItemState();
@@ -86,7 +123,7 @@ class _KanjiItemState extends State<KanjiItemWrapper> {
     setState(() {
       _kanjiFromApi = builKanjiInfoFromApi(body);
     });
-  } 
+  }
 
   @override
   void initState() {
@@ -96,17 +133,9 @@ class _KanjiItemState extends State<KanjiItemWrapper> {
 
   @override
   Widget build(BuildContext context) {
-    return  GestureDetector(
+    return GestureDetector(
       onTap: () {
-        if (_kanjiFromApi == null) return;
-        Navigator.of(context).push(
-          MaterialPageRoute(builder: (ctx) {
-            return KanjiDetails(
-              kanjiFromApi: _kanjiFromApi!,
-
-            );
-          }),
-        );
+        widget.navigateToKanjiDetails(context, _kanjiFromApi);
       },
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 8),
@@ -169,7 +198,8 @@ class _KanjiItemState extends State<KanjiItemWrapper> {
                       const SizedBox(
                         height: 10,
                       ),
-                      Text("Kunyomi: ${_kanjiFromApi?.hiraganaMeaning ?? '??'}"),
+                      Text(
+                          "Kunyomi: ${_kanjiFromApi?.hiraganaMeaning ?? '??'}"),
                       Text("Onyomi: ${_kanjiFromApi?.katakanaMeaning ?? '??'}"),
                     ],
                   ),
