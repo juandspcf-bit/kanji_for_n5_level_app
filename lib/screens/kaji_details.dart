@@ -234,7 +234,6 @@ class KanjiDetailsState extends ConsumerState<KanjiDetails> {
                       "kanjiCharacter",
                       widget.kanjiFromApi.kanjiCharacter
                     ));
-                    print("what kanjis are after added $myFavoritesCached");
                   });
                 } else {
                   dbFirebase
@@ -244,7 +243,6 @@ class KanjiDetailsState extends ConsumerState<KanjiDetails> {
                       .then(
                     (doc) {
                       myFavoritesCached.remove(queryKanji);
-                      print("what kanjis are after delete $myFavoritesCached");
                     },
                     onError: (e) => print("Error updating document $e"),
                   );

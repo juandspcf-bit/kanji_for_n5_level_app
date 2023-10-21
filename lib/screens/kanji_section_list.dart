@@ -1,7 +1,9 @@
 import 'dart:async';
 
+import 'package:async/async.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:http/http.dart';
 import 'package:kanji_for_n5_level_app/API_Files/key_file_api.dart';
 import 'package:kanji_for_n5_level_app/models/kanji_from_api.dart';
 import 'package:kanji_for_n5_level_app/models/secction_model.dart';
@@ -26,17 +28,8 @@ class KanjiList extends StatefulWidget {
 }
 
 class _KanjiListState extends State<KanjiList> {
-  FutureOr onGoBack(dynamic value) {
-    refreshData();
-  }
-
-  void refreshData() {
-    if (!widget.isFromTabNav) return;
-    print("what kanjis are $myFavoritesCached");
-    setState(() {
-      widget.sectionModel.kanjis = myFavoritesCached.map((e) => e.$3).toList();
-    });
-  }
+  List<KanjiFromApi> _kanjisModel = [];
+  int statusResponse = 0;
 
   void navigateToKanjiDetails(
     BuildContext context,
@@ -52,94 +45,118 @@ class _KanjiListState extends State<KanjiList> {
     ).then(onGoBack);
   }
 
-  @override
-  Widget build(BuildContext context) {
-    print("what kanjis are in build $myFavoritesCached");
-    return widget.isFromTabNav
-        ? Scaffold(
-            body: ListView.builder(
-              itemCount: widget.sectionModel.kanjis.length,
-              itemBuilder: (context, index) {
-                return KanjiItem(
-                  key: ValueKey(widget.sectionModel.kanjis[index]),
-                  kanji: widget.sectionModel.kanjis[index],
-                  navigateToKanjiDetails: navigateToKanjiDetails,
-                );
-              },
-            ),
-          )
-        : Scaffold(
-            appBar: AppBar(
-              title: Text(widget.sectionModel.title),
-            ),
-            body: ListView.builder(
-              itemCount: widget.sectionModel.kanjis.length,
-              itemBuilder: (context, index) {
-                return KanjiItem(
-                  key: ValueKey(widget.sectionModel.kanjis[index]),
-                  kanji: widget.sectionModel.kanjis[index],
-                  navigateToKanjiDetails: navigateToKanjiDetails,
-                );
-              },
-            ),
-          );
+  FutureOr onGoBack(dynamic value) {
+    refreshData();
   }
-}
 
-class KanjiItem extends StatefulWidget {
-  const KanjiItem({
-    super.key,
-    required this.kanji,
-    required this.navigateToKanjiDetails,
-  });
+  void refreshData() {
+    if (!widget.isFromTabNav) return;
+    setState(() {
+      statusResponse = 0;
+    });
+    getKanjis(myFavoritesCached.map((e) => e.$3).toList());
+  }
 
-  final String kanji;
-  final void Function(BuildContext context, KanjiFromApi? kanjiFromApi)
-      navigateToKanjiDetails;
+  void getKanjis(List<String> kanjis) {
+    FutureGroup<Response> group = FutureGroup<Response>();
 
-  @override
-  State<KanjiItem> createState() => _KanjiItemState();
-}
+    for (final kanji in kanjis) {
+      group.add(getKanjiData(kanji));
+    }
 
-class _KanjiItemState extends State<KanjiItem> {
-  KanjiFromApi? _kanjiFromApi;
+    group.close();
 
-  void getKanjiData() async {
-    final kanji = widget.kanji;
+    List<Map<String, dynamic>> bodies = [];
+    List<KanjiFromApi> kanjisFromApi = [];
+    group.future.then((List<Response> kanjiInformationList) {
+      for (final kanjiInformation in kanjiInformationList) {
+        bodies.add(json.decode(kanjiInformation.body));
+      }
 
+      for (final body in bodies) {
+        kanjisFromApi.add(builKanjiInfoFromApi(body));
+      }
+
+      setState(() {
+        _kanjisModel = kanjisFromApi;
+        statusResponse = 1;
+      });
+    }).catchError((onError) {
+      setState(() {
+        statusResponse = 2;
+      });
+    });
+  }
+
+  Future<Response> getKanjiData(String kanji) async {
     final url = Uri.https(
       "kanjialive-api.p.rapidapi.com",
       "api/public/kanji/$kanji",
     );
 
-    final kanjiInformation = await http.get(
+    return http.get(
       url,
       headers: {
         'X-RapidAPI-Key': xRapidAPIKey,
         'X-RapidAPI-Host': 'kanjialive-api.p.rapidapi.com'
       },
     );
-
-    final Map<String, dynamic> body = json.decode(kanjiInformation.body);
-
-    if (body.isNotEmpty && kanjiInformation.statusCode > 400) return;
-
-    setState(() {
-      _kanjiFromApi = builKanjiInfoFromApi(body);
-    });
   }
 
   @override
   void initState() {
     super.initState();
-    getKanjiData();
+    getKanjis(widget.sectionModel.kanjis);
   }
+
+  @override
+  Widget build(BuildContext context) {
+    return widget.isFromTabNav
+        ? Scaffold(body: buildTree(statusResponse, _kanjisModel))
+        : Scaffold(
+            appBar: AppBar(
+              title: Text(widget.sectionModel.title),
+            ),
+            body: buildTree(statusResponse, _kanjisModel));
+  }
+
+  Widget buildTree(int statusResponse, List<KanjiFromApi> kanjisModel) {
+    if (statusResponse == 0) {
+      return const Center(child: CircularProgressIndicator());
+    } else if (statusResponse == 1) {
+      return ListView.builder(
+          itemCount: kanjisModel.length,
+          itemBuilder: (ctx, index) {
+            return KanjiItem(
+              key: ValueKey(kanjisModel[index].kanjiCharacter),
+              kanjiFromApi: kanjisModel[index],
+              navigateToKanjiDetails: navigateToKanjiDetails,
+            ); //Text('${kanjisModel[index].kanjiCharacter} : ${kanjisModel[index].englishMeaning}');
+          });
+    } else {
+      return const Text('An error has occurr');
+    }
+  }
+}
+
+class KanjiItem extends StatelessWidget {
+  const KanjiItem({
+    super.key,
+    required this.kanjiFromApi,
+    required this.navigateToKanjiDetails,
+  });
+
+  final KanjiFromApi kanjiFromApi;
+  final void Function(
+    BuildContext context,
+    KanjiFromApi? kanjiFromApi,
+  ) navigateToKanjiDetails;
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        widget.navigateToKanjiDetails(context, _kanjiFromApi);
+        navigateToKanjiDetails(context, kanjiFromApi);
       },
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 8),
@@ -153,10 +170,10 @@ class _KanjiItemState extends State<KanjiItem> {
                   color: Theme.of(context).colorScheme.onPrimaryContainer,
                   borderRadius: const BorderRadius.all(Radius.circular(10))),
               child: SvgPicture.network(
-                _kanjiFromApi?.kanjiImageLink ?? "",
+                kanjiFromApi.kanjiImageLink,
                 height: 80,
                 width: 80,
-                semanticsLabel: _kanjiFromApi?.kanjiCharacter ?? "no kanji",
+                semanticsLabel: kanjiFromApi.kanjiCharacter,
                 placeholderBuilder: (BuildContext context) => Container(
                     color: Colors.transparent,
                     height: 40,
@@ -190,7 +207,7 @@ class _KanjiItemState extends State<KanjiItem> {
                   child: Column(
                     children: [
                       Text(
-                        _kanjiFromApi?.englishMeaning ?? "no kanji",
+                        kanjiFromApi.englishMeaning,
                         style: Theme.of(context).textTheme.titleLarge!.copyWith(
                               color: Theme.of(context)
                                   .colorScheme
@@ -202,9 +219,8 @@ class _KanjiItemState extends State<KanjiItem> {
                       const SizedBox(
                         height: 10,
                       ),
-                      Text(
-                          "Kunyomi: ${_kanjiFromApi?.hiraganaMeaning ?? '??'}"),
-                      Text("Onyomi: ${_kanjiFromApi?.katakanaMeaning ?? '??'}"),
+                      Text("Kunyomi: ${kanjiFromApi.hiraganaMeaning}"),
+                      Text("Onyomi: ${kanjiFromApi.katakanaMeaning}"),
                     ],
                   ),
                 ),
