@@ -32,6 +32,7 @@ class _KanjiListState extends State<KanjiList> {
 
   void refreshData() {
     if (!widget.isFromTabNav) return;
+    print("what kanjis are $myFavoritesCached");
     setState(() {
       widget.sectionModel.kanjis = myFavoritesCached.map((e) => e.$3).toList();
     });
@@ -53,37 +54,40 @@ class _KanjiListState extends State<KanjiList> {
 
   @override
   Widget build(BuildContext context) {
+    print("what kanjis are in build $myFavoritesCached");
     return widget.isFromTabNav
         ? Scaffold(
-            body: ListView(
-              children: [
-                for (final kanjiItem in widget.sectionModel.kanjis)
-                  KanjiItemWrapper(
-                    kanji: kanjiItem,
-                    navigateToKanjiDetails: navigateToKanjiDetails,
-                  )
-              ],
+            body: ListView.builder(
+              itemCount: widget.sectionModel.kanjis.length,
+              itemBuilder: (context, index) {
+                return KanjiItem(
+                  key: ValueKey(widget.sectionModel.kanjis[index]),
+                  kanji: widget.sectionModel.kanjis[index],
+                  navigateToKanjiDetails: navigateToKanjiDetails,
+                );
+              },
             ),
           )
         : Scaffold(
             appBar: AppBar(
               title: Text(widget.sectionModel.title),
             ),
-            body: ListView(
-              children: [
-                for (final kanjiItem in widget.sectionModel.kanjis)
-                  KanjiItemWrapper(
-                    kanji: kanjiItem,
-                    navigateToKanjiDetails: navigateToKanjiDetails,
-                  )
-              ],
+            body: ListView.builder(
+              itemCount: widget.sectionModel.kanjis.length,
+              itemBuilder: (context, index) {
+                return KanjiItem(
+                  key: ValueKey(widget.sectionModel.kanjis[index]),
+                  kanji: widget.sectionModel.kanjis[index],
+                  navigateToKanjiDetails: navigateToKanjiDetails,
+                );
+              },
             ),
           );
   }
 }
 
-class KanjiItemWrapper extends StatefulWidget {
-  const KanjiItemWrapper({
+class KanjiItem extends StatefulWidget {
+  const KanjiItem({
     super.key,
     required this.kanji,
     required this.navigateToKanjiDetails,
@@ -94,10 +98,10 @@ class KanjiItemWrapper extends StatefulWidget {
       navigateToKanjiDetails;
 
   @override
-  State<KanjiItemWrapper> createState() => _KanjiItemState();
+  State<KanjiItem> createState() => _KanjiItemState();
 }
 
-class _KanjiItemState extends State<KanjiItemWrapper> {
+class _KanjiItemState extends State<KanjiItem> {
   KanjiFromApi? _kanjiFromApi;
 
   void getKanjiData() async {

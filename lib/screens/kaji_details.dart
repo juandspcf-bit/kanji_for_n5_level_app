@@ -9,11 +9,9 @@ import 'package:kanji_for_n5_level_app/providers/favorites_kanjis_providers.dart
 import 'package:video_player/video_player.dart';
 
 class KanjiDetails extends ConsumerStatefulWidget {
-  const KanjiDetails(
-      {super.key, required this.kanjiFromApi});
+  const KanjiDetails({super.key, required this.kanjiFromApi});
 
   final KanjiFromApi kanjiFromApi;
-
 
   @override
   ConsumerState<KanjiDetails> createState() => KanjiDetailsState();
@@ -214,7 +212,6 @@ class KanjiDetailsState extends ConsumerState<KanjiDetails> {
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.kanjiFromApi.kanjiCharacter),
@@ -237,6 +234,7 @@ class KanjiDetailsState extends ConsumerState<KanjiDetails> {
                       "kanjiCharacter",
                       widget.kanjiFromApi.kanjiCharacter
                     ));
+                    print("what kanjis are after added $myFavoritesCached");
                   });
                 } else {
                   dbFirebase
@@ -246,6 +244,7 @@ class KanjiDetailsState extends ConsumerState<KanjiDetails> {
                       .then(
                     (doc) {
                       myFavoritesCached.remove(queryKanji);
+                      print("what kanjis are after delete $myFavoritesCached");
                     },
                     onError: (e) => print("Error updating document $e"),
                   );
@@ -254,7 +253,6 @@ class KanjiDetailsState extends ConsumerState<KanjiDetails> {
                 setState(() {
                   _favoriteStatus = queryKanji == ("", "", "");
                 });
-
               },
               icon: Icon(_favoriteStatus
                   ? Icons.favorite
