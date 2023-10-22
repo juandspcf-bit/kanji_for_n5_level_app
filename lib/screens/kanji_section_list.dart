@@ -116,6 +116,9 @@ class _KanjiListState extends State<KanjiList> {
         : Scaffold(
             appBar: AppBar(
               title: Text(widget.sectionModel.title),
+              actions: [
+                IconButton(onPressed: () {}, icon: const Icon(Icons.quiz))
+              ],
             ),
             body: buildTree(statusResponse, _kanjisModel));
   }
