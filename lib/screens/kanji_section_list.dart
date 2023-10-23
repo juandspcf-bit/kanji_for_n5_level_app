@@ -118,11 +118,19 @@ class _KanjiListState extends State<KanjiList> {
             appBar: AppBar(
               title: Text(widget.sectionModel.title),
               actions: [
-                IconButton(onPressed: () {
-                  Navigator.of(context).push(MaterialPageRoute(builder: (ctx){
-                    return QuizScreen(kanjisModel: _kanjisModel);
-                  }));
-                }, icon: const Icon(Icons.quiz))
+                IconButton(
+                    onPressed: statusResponse == 1
+                        ? () {
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (ctx) {
+                                  return QuizScreen(kanjisModel: _kanjisModel);
+                                },
+                              ),
+                            );
+                          }
+                        : null,
+                    icon: const Icon(Icons.quiz))
               ],
             ),
             body: buildTree(statusResponse, _kanjisModel));
