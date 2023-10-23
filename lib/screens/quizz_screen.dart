@@ -18,20 +18,23 @@ class _QuizScreenState extends State<QuizScreen> {
   late List<String> kanjiImageLinksDrag;
   late List<double> initialOpacities;
   late List<bool> isDraggeInitialList;
-  late List<KanjiFromApi> randomData;
+  late List<bool> isCorrectAnswer;
+  late List<KanjiFromApi> randomKanjisToAskMeaning;
   late List<KanjiFromApi> randomSolutions;
   late int index;
 
-  (List<String>, List<double>, List<bool>) initLinks(int lenght) {
+  (List<String>, List<double>, List<bool>, List<bool>) initLinks(int lenght) {
     final initialLinks = <String>[];
     final initialOpacities = <double>[];
     final isDraggedList = <bool>[];
+    final isCorrectAnswerList = <bool>[];
     for (int i = 0; i < lenght; i++) {
       initialLinks.add("");
       initialOpacities.add(0.0);
       isDraggedList.add(false);
+      isCorrectAnswerList.add(false);
     }
-    return (initialLinks, initialOpacities, isDraggedList);
+    return (initialLinks, initialOpacities, isDraggedList, isCorrectAnswerList);
   }
 
   List<KanjiFromApi> suffleData() {
@@ -41,23 +44,35 @@ class _QuizScreenState extends State<QuizScreen> {
   }
 
   List<KanjiFromApi> getPosibleSolutions(KanjiFromApi kanjiToRemove) {
-    final copy1 = [...randomData];
+    final copy1 = [...randomKanjisToAskMeaning];
     copy1.remove(kanjiToRemove);
     final copy2 = [kanjiToRemove, ...copy1.sublist(0, 2)];
     copy2.shuffle();
     return copy2;
   }
 
+  void showSnackBarQuizz(String message, int duration) {
+    ScaffoldMessenger.of(context).clearSnackBars();
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        duration: Duration(seconds: duration),
+        content: Text(message),
+      ),
+    );
+  }
+
   @override
   void initState() {
     super.initState();
+
+    randomKanjisToAskMeaning = suffleData();
+    index = 0;
+    randomSolutions = getPosibleSolutions(randomKanjisToAskMeaning[index]);
     final initValues = initLinks(widget.kanjisModel.length);
     kanjiImageLinksDrag = initValues.$1;
     initialOpacities = initValues.$2;
     isDraggeInitialList = initValues.$3;
-    randomData = suffleData();
-    index = 0;
-    randomSolutions = getPosibleSolutions(randomData[0]);
+    isCorrectAnswer = initValues.$4;
   }
 
   @override
@@ -96,8 +111,9 @@ class _QuizScreenState extends State<QuizScreen> {
                         ),
                       )
                     : Draggable<KanjiFromApi>(
-                        data: randomData[index],
-                        feedback: Text(randomData[index].kanjiCharacter),
+                        data: randomKanjisToAskMeaning[index],
+                        feedback: Text(
+                            randomKanjisToAskMeaning[index].kanjiCharacter),
                         childWhenDragging: Container(
                           width: 70,
                           height: 70,
@@ -124,10 +140,11 @@ class _QuizScreenState extends State<QuizScreen> {
                             ),
                           ),
                           child: SvgPicture.network(
-                            randomData[index].kanjiImageLink,
+                            randomKanjisToAskMeaning[index].kanjiImageLink,
                             height: 70,
                             width: 70,
-                            semanticsLabel: randomData[index].kanjiCharacter,
+                            semanticsLabel:
+                                randomKanjisToAskMeaning[index].kanjiCharacter,
                             placeholderBuilder: (BuildContext context) =>
                                 Container(
                                     color: Colors.transparent,
@@ -150,6 +167,9 @@ class _QuizScreenState extends State<QuizScreen> {
                           kanjiImageLinksDrag[i] = data.kanjiImageLink;
                           initialOpacities[i] = 1.0;
                           isDraggeInitialList[index] = true;
+                          isCorrectAnswer[index] = randomSolutions[i]
+                                  .kanjiCharacter ==
+                              randomKanjisToAskMeaning[index].kanjiCharacter;
                         });
                       }, builder: (ctx, _, __) {
                         return Column(
@@ -167,19 +187,21 @@ class _QuizScreenState extends State<QuizScreen> {
                                 ),
                                 border: Border.all(color: Colors.white),
                               ),
-                              child: SvgPicture.network(
-                                kanjiImageLinksDrag[i],
-                                height: 70,
-                                width: 70,
-                                semanticsLabel:
-                                    randomSolutions[i].kanjiCharacter,
-                                placeholderBuilder: (BuildContext context) =>
-                                    Container(
-                                  color: Colors.transparent,
-                                  height: 40,
-                                  width: 40,
-                                ),
-                              ),
+                              child: kanjiImageLinksDrag[i] == ''
+                                  ? null
+                                  : SvgPicture.network(
+                                      kanjiImageLinksDrag[i],
+                                      height: 70,
+                                      width: 70,
+                                      semanticsLabel:
+                                          randomSolutions[i].kanjiCharacter,
+                                      placeholderBuilder:
+                                          (BuildContext context) => Container(
+                                        color: Colors.transparent,
+                                        height: 70,
+                                        width: 70,
+                                      ),
+                                    ),
                             ),
                             const SizedBox(
                               height: 5,
@@ -188,7 +210,10 @@ class _QuizScreenState extends State<QuizScreen> {
                             const SizedBox(
                               height: 2,
                             ),
-                            Text(randomSolutions[i].hiraganaMeaning)
+                            Text(randomSolutions[i].hiraganaMeaning),
+                            const SizedBox(
+                              height: 10,
+                            ),
                           ],
                         );
                       }),
@@ -199,20 +224,128 @@ class _QuizScreenState extends State<QuizScreen> {
             const SizedBox(
               height: 50,
             ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
+            Column(
               children: [
-                ElevatedButton.icon(
-                  onPressed: () {},
-                  icon: const Icon(Icons.arrow_circle_left),
-                  label: const Text('previous'),
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 5),
+                  child: ElevatedButton(
+                    onPressed: () {
+                      final isDraggedList = <bool>[];
+                      final isDraggegImageLink = <String>[];
+                      final opacityValues = <double>[];
+                      for (int i = 0; i < widget.kanjisModel.length; i++) {
+                        isDraggedList.add(false);
+                        isDraggegImageLink.add("");
+                        opacityValues.add(0.0);
+                      }
+                      setState(() {
+                        isDraggeInitialList = [...isDraggedList];
+                        isCorrectAnswer = [...isDraggedList];
+                        kanjiImageLinksDrag = [...isDraggegImageLink];
+                        initialOpacities = [...opacityValues];
+                      });
+                    },
+                    style: ElevatedButton.styleFrom(
+                      textStyle: Theme.of(context).textTheme.bodyLarge,
+                      minimumSize: Size.fromHeight(
+                          (Theme.of(context).textTheme.bodyLarge!.height ?? 30) +
+                              10),
+                    ),
+                    child: const Text("Reset question"),
+                  ),
                 ),
-                ElevatedButton.icon(
-                  onPressed: () {},
-                  icon: const Icon(Icons.arrow_circle_right),
-                  label: const Text('next'),
-                  //style: ElevatedButtonTheme.of(context).style!.copyWith(minimumSize: 150),
-                )
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 5),
+                  child: ElevatedButton(
+                    onPressed: () {
+                      if (!isDraggeInitialList[index]) {
+                        showSnackBarQuizz(
+                            "Please drag to one of the posible solutions", 3);
+                        return;
+                      } else if (isCorrectAnswer[index]) {
+                        showSnackBarQuizz("Correct answer", 3);
+                      } else {
+                        showSnackBarQuizz("Incorrect answer", 3);
+                      }
+                    },
+                    style: ElevatedButton.styleFrom(
+                      textStyle: Theme.of(context).textTheme.bodyLarge,
+                      minimumSize: Size.fromHeight(
+                          (Theme.of(context).textTheme.bodyLarge!.height ?? 30) +
+                              10),
+                    ),
+                    child: const Text('Check Result'),
+                  ),
+                ),
+                if (index == widget.kanjisModel.length - 1)
+                  Column(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 5),
+                        child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            textStyle: Theme.of(context).textTheme.bodyLarge,
+                            minimumSize: Size.fromHeight(
+                                (Theme.of(context).textTheme.bodyLarge!.height ??
+                                        30) +
+                                    10),
+                          ),
+                          onPressed: () {
+                            setState(() {
+                              randomKanjisToAskMeaning = suffleData();
+                              index = 0;
+                              randomSolutions = getPosibleSolutions(
+                                  randomKanjisToAskMeaning[index]);
+                              final initValues =
+                                  initLinks(widget.kanjisModel.length);
+                              kanjiImageLinksDrag = initValues.$1;
+                              initialOpacities = initValues.$2;
+                              isDraggeInitialList = initValues.$3;
+                              isCorrectAnswer = initValues.$4;
+                            });
+                          },
+                          child: const Text('Restart Quiz'),
+                        ),
+                      ),
+
+                    ],
+                  )
+                else
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 5),
+                    child: ElevatedButton.icon(
+                      onPressed: () {
+                        if (!isDraggeInitialList[index]) {
+                          showSnackBarQuizz(
+                              "Try to answer the question firts", 3);
+                          return;
+                        } else if (isCorrectAnswer[index]) {
+                          showSnackBarQuizz("Correct answer", 3);
+                        } else {
+                          showSnackBarQuizz("Incorrect answer", 3);
+                          return;
+                        }
+                        setState(() {
+                          index++;
+                          randomSolutions = getPosibleSolutions(
+                              randomKanjisToAskMeaning[index]);
+                          final initValues = initLinks(widget.kanjisModel.length);
+                          kanjiImageLinksDrag = initValues.$1;
+                          initialOpacities = initValues.$2;
+                          isDraggeInitialList = initValues.$3;
+                        });
+                      },
+                      style: ElevatedButton.styleFrom(
+                        textStyle: Theme.of(context).textTheme.bodyLarge,
+                        minimumSize: Size.fromHeight(
+                            (Theme.of(context).textTheme.bodyLarge!.height ??
+                                    30) +
+                                10),
+                      ),
+                      icon: const Icon(Icons.arrow_circle_right),
+                      label: const Text('next'),
+                    ),
+                  ),
               ],
             )
           ],
