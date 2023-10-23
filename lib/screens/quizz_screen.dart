@@ -53,17 +53,22 @@ class _QuizScreenState extends State<QuizScreen> {
     return Scaffold(
       appBar: AppBar(title: const Text("Test your knowledge")),
       body: SingleChildScrollView(
-        child: Row(
+        child: Column(
           children: [
-            Column(
-              children: [
-                for (final randomDataItem1 in randomData.$1)
-                  Padding(
-                    padding:
-                        const EdgeInsets.symmetric(vertical: 50, horizontal: 30),
-                    child: Draggable<KanjiFromApi>(
-                      data: randomDataItem1,
-                      feedback: Text(randomDataItem1.kanjiCharacter),
+            for (int i = 0; i < randomData.$1.length; i++)
+              Padding(
+                padding: EdgeInsets.only(
+                  top: i == 0 ? 50 : 20,
+                  bottom: 0,
+                  right: 30,
+                  left: 30,
+                ),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Draggable<KanjiFromApi>(
+                      data: randomData.$1[i],
+                      feedback: Text(randomData.$1[i].kanjiCharacter),
                       childWhenDragging: Container(
                         width: 70,
                         height: 70,
@@ -81,37 +86,31 @@ class _QuizScreenState extends State<QuizScreen> {
                         width: 70,
                         height: 70,
                         decoration: BoxDecoration(
-                          color: Theme.of(context).colorScheme.onPrimaryContainer,
+                          color:
+                              Theme.of(context).colorScheme.onPrimaryContainer,
                           borderRadius: const BorderRadius.all(
                             Radius.circular(10),
                           ),
                         ),
                         child: SvgPicture.network(
-                          randomDataItem1.kanjiImageLink,
+                          randomData.$1[i].kanjiImageLink,
                           height: 70,
                           width: 70,
-                          semanticsLabel: randomDataItem1.kanjiCharacter,
-                          placeholderBuilder: (BuildContext context) => Container(
-                              color: Colors.transparent,
-                              height: 40,
-                              width: 40,
-                              child: const CircularProgressIndicator(
-                                backgroundColor: Color.fromARGB(179, 5, 16, 51),
-                              )),
+                          semanticsLabel: randomData.$1[i].kanjiCharacter,
+                          placeholderBuilder: (BuildContext context) =>
+                              Container(
+                                  color: Colors.transparent,
+                                  height: 40,
+                                  width: 40,
+                                  child: const CircularProgressIndicator(
+                                    backgroundColor:
+                                        Color.fromARGB(179, 5, 16, 51),
+                                  )),
                         ),
                       ),
                     ),
-                  ),
-              ],
-            ),
-            const Spacer(),
-            Column(
-              children: [
-                for (int i = 0; i < randomData.$2.length; i++)
-                  Padding(
-                    padding:
-                        const EdgeInsets.symmetric(vertical: 50, horizontal: 30),
-                    child: DragTarget<KanjiFromApi>(onAccept: (data) {
+                    const Spacer(),
+                    DragTarget<KanjiFromApi>(onAccept: (data) {
                       setState(() {
                         kanjiImageLinksDrag[i] = data.kanjiImageLink;
                         initialOpacities[i] = 1.0;
@@ -123,14 +122,14 @@ class _QuizScreenState extends State<QuizScreen> {
                             width: 70,
                             height: 70,
                             decoration: BoxDecoration(
-                              color: Theme.of(context)
-                                  .colorScheme
-                                  .onPrimaryContainer
-                                  .withOpacity(initialOpacities[i]),
-                              borderRadius: const BorderRadius.all(
-                                Radius.circular(10),
-                              ),
-                            ),
+                                color: Theme.of(context)
+                                    .colorScheme
+                                    .onPrimaryContainer
+                                    .withOpacity(initialOpacities[i]),
+                                borderRadius: const BorderRadius.all(
+                                  Radius.circular(10),
+                                ),
+                                border: Border.all(color: Colors.white)),
                             child: SvgPicture.network(
                               kanjiImageLinksDrag[i],
                               height: 70,
@@ -147,25 +146,17 @@ class _QuizScreenState extends State<QuizScreen> {
                           const SizedBox(
                             height: 5,
                           ),
-                          const Divider(
-                            thickness: 10.5,
-                            height: 5,
-                            color: Colors.white,
-                          ),
-                          const SizedBox(
-                            height: 5,
-                          ),
                           Text(randomData.$2[i].englishMeaning),
                           const SizedBox(
-                            height: 5,
+                            height: 2,
                           ),
                           Text(randomData.$2[i].hiraganaMeaning)
                         ],
                       );
                     }),
-                  ),
-              ],
-            ),
+                  ],
+                ),
+              ),
           ],
         ),
       ),
