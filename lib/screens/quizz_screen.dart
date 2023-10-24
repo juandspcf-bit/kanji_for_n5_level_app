@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:kanji_for_n5_level_app/main.dart';
 import 'package:kanji_for_n5_level_app/models/kanji_from_api.dart';
 
 class QuizScreen extends StatefulWidget {
@@ -15,26 +16,36 @@ class QuizScreen extends StatefulWidget {
 }
 
 class _QuizScreenState extends State<QuizScreen> {
-  late List<String> kanjiImageLinksDrag;
+  late List<String> imageLinksFromDraggedItems;
   late List<double> initialOpacities;
   late List<bool> isDraggeInitialList;
   late List<bool> isCorrectAnswer;
+  late List<bool> isOmittedAnswer;
   late List<KanjiFromApi> randomKanjisToAskMeaning;
   late List<KanjiFromApi> randomSolutions;
   late int index;
 
-  (List<String>, List<double>, List<bool>, List<bool>) initLinks(int lenght) {
+  (List<String>, List<double>, List<bool>, List<bool>, List<bool>) initLinks(
+      int lenght) {
     final initialLinks = <String>[];
     final initialOpacities = <double>[];
     final isDraggedList = <bool>[];
     final isCorrectAnswerList = <bool>[];
+    final isOmittedList = <bool>[];
     for (int i = 0; i < lenght; i++) {
       initialLinks.add("");
       initialOpacities.add(0.0);
       isDraggedList.add(false);
       isCorrectAnswerList.add(false);
+      isOmittedList.add(false);
     }
-    return (initialLinks, initialOpacities, isDraggedList, isCorrectAnswerList);
+    return (
+      initialLinks,
+      initialOpacities,
+      isDraggedList,
+      isCorrectAnswerList,
+      isOmittedList
+    );
   }
 
   List<KanjiFromApi> suffleData() {
@@ -69,10 +80,11 @@ class _QuizScreenState extends State<QuizScreen> {
     index = 0;
     randomSolutions = getPosibleSolutions(randomKanjisToAskMeaning[index]);
     final initValues = initLinks(widget.kanjisModel.length);
-    kanjiImageLinksDrag = initValues.$1;
+    imageLinksFromDraggedItems = initValues.$1;
     initialOpacities = initValues.$2;
     isDraggeInitialList = initValues.$3;
     isCorrectAnswer = initValues.$4;
+    isOmittedAnswer = initValues.$5;
   }
 
   @override
@@ -164,7 +176,7 @@ class _QuizScreenState extends State<QuizScreen> {
                     for (int i = 0; i < randomSolutions.length; i++)
                       DragTarget<KanjiFromApi>(onAccept: (data) {
                         setState(() {
-                          kanjiImageLinksDrag[i] = data.kanjiImageLink;
+                          imageLinksFromDraggedItems[i] = data.kanjiImageLink;
                           initialOpacities[i] = 1.0;
                           isDraggeInitialList[index] = true;
                           isCorrectAnswer[index] = randomSolutions[i]
@@ -187,10 +199,10 @@ class _QuizScreenState extends State<QuizScreen> {
                                 ),
                                 border: Border.all(color: Colors.white),
                               ),
-                              child: kanjiImageLinksDrag[i] == ''
+                              child: imageLinksFromDraggedItems[i] == ''
                                   ? null
                                   : SvgPicture.network(
-                                      kanjiImageLinksDrag[i],
+                                      imageLinksFromDraggedItems[i],
                                       height: 70,
                                       width: 70,
                                       semanticsLabel:
@@ -210,7 +222,13 @@ class _QuizScreenState extends State<QuizScreen> {
                             const SizedBox(
                               height: 2,
                             ),
-                            Text(randomSolutions[i].hiraganaMeaning),
+                            Text(
+                                'kunyomi: ${randomSolutions[i].hiraganaMeaning}'),
+                            const SizedBox(
+                              height: 2,
+                            ),
+                            Text(
+                                'Onyomi: ${randomSolutions[i].katakanaMeaning}'),
                             const SizedBox(
                               height: 10,
                             ),
@@ -222,7 +240,7 @@ class _QuizScreenState extends State<QuizScreen> {
               ],
             ),
             const SizedBox(
-              height: 50,
+              height: 15,
             ),
             Column(
               children: [
@@ -241,14 +259,15 @@ class _QuizScreenState extends State<QuizScreen> {
                       setState(() {
                         isDraggeInitialList = [...isDraggedList];
                         isCorrectAnswer = [...isDraggedList];
-                        kanjiImageLinksDrag = [...isDraggegImageLink];
+                        imageLinksFromDraggedItems = [...isDraggegImageLink];
                         initialOpacities = [...opacityValues];
                       });
                     },
                     style: ElevatedButton.styleFrom(
                       textStyle: Theme.of(context).textTheme.bodyLarge,
                       minimumSize: Size.fromHeight(
-                          (Theme.of(context).textTheme.bodyLarge!.height ?? 30) +
+                          (Theme.of(context).textTheme.bodyLarge!.height ??
+                                  30) +
                               10),
                     ),
                     child: const Text("Reset question"),
@@ -271,7 +290,8 @@ class _QuizScreenState extends State<QuizScreen> {
                     style: ElevatedButton.styleFrom(
                       textStyle: Theme.of(context).textTheme.bodyLarge,
                       minimumSize: Size.fromHeight(
-                          (Theme.of(context).textTheme.bodyLarge!.height ?? 30) +
+                          (Theme.of(context).textTheme.bodyLarge!.height ??
+                                  30) +
                               10),
                     ),
                     child: const Text('Check Result'),
@@ -285,10 +305,12 @@ class _QuizScreenState extends State<QuizScreen> {
                         child: ElevatedButton(
                           style: ElevatedButton.styleFrom(
                             textStyle: Theme.of(context).textTheme.bodyLarge,
-                            minimumSize: Size.fromHeight(
-                                (Theme.of(context).textTheme.bodyLarge!.height ??
-                                        30) +
-                                    10),
+                            minimumSize: Size.fromHeight((Theme.of(context)
+                                        .textTheme
+                                        .bodyLarge!
+                                        .height ??
+                                    30) +
+                                10),
                           ),
                           onPressed: () {
                             setState(() {
@@ -298,7 +320,7 @@ class _QuizScreenState extends State<QuizScreen> {
                                   randomKanjisToAskMeaning[index]);
                               final initValues =
                                   initLinks(widget.kanjisModel.length);
-                              kanjiImageLinksDrag = initValues.$1;
+                              imageLinksFromDraggedItems = initValues.$1;
                               initialOpacities = initValues.$2;
                               isDraggeInitialList = initValues.$3;
                               isCorrectAnswer = initValues.$4;
@@ -307,7 +329,6 @@ class _QuizScreenState extends State<QuizScreen> {
                           child: const Text('Restart Quiz'),
                         ),
                       ),
-
                     ],
                   )
                 else
@@ -316,21 +337,15 @@ class _QuizScreenState extends State<QuizScreen> {
                     child: ElevatedButton.icon(
                       onPressed: () {
                         if (!isDraggeInitialList[index]) {
-                          showSnackBarQuizz(
-                              "Try to answer the question firts", 3);
-                          return;
-                        } else if (isCorrectAnswer[index]) {
-                          showSnackBarQuizz("Correct answer", 3);
-                        } else {
-                          showSnackBarQuizz("Incorrect answer", 3);
-                          return;
+                          isOmittedAnswer[index] = true;
                         }
                         setState(() {
                           index++;
                           randomSolutions = getPosibleSolutions(
                               randomKanjisToAskMeaning[index]);
-                          final initValues = initLinks(widget.kanjisModel.length);
-                          kanjiImageLinksDrag = initValues.$1;
+                          final initValues =
+                              initLinks(widget.kanjisModel.length);
+                          imageLinksFromDraggedItems = initValues.$1;
                           initialOpacities = initValues.$2;
                           isDraggeInitialList = initValues.$3;
                         });
@@ -343,7 +358,7 @@ class _QuizScreenState extends State<QuizScreen> {
                                 10),
                       ),
                       icon: const Icon(Icons.arrow_circle_right),
-                      label: const Text('next'),
+                      label: const Text('Omit'),
                     ),
                   ),
               ],
