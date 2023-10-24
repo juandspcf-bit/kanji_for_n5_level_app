@@ -12,7 +12,7 @@ import 'package:kanji_for_n5_level_app/providers/favorites_kanjis_providers.dart
 import 'dart:convert';
 
 import 'package:kanji_for_n5_level_app/screens/kaji_details.dart';
-import 'package:kanji_for_n5_level_app/screens/quizz_screen.dart';
+import 'package:kanji_for_n5_level_app/screens/quiz_screen/quizz_screen.dart';
 
 class KanjiList extends StatefulWidget {
   const KanjiList({
