@@ -20,31 +20,35 @@ class _QuizScreenState extends State<QuizScreen> {
   late List<double> initialOpacities;
   late List<bool> isDraggeInitialList;
   late List<bool> isCorrectAnswer;
+  late List<bool> isChecked;
   late List<bool> isOmittedAnswer;
   late List<KanjiFromApi> randomKanjisToAskMeaning;
   late List<KanjiFromApi> randomSolutions;
   late int index;
 
-  (List<String>, List<double>, List<bool>, List<bool>, List<bool>) initLinks(
-      int lenght) {
+  (List<String>, List<double>, List<bool>, List<bool>, List<bool>, List<bool>)
+      initLinks(int lenght) {
     final initialLinks = <String>[];
     final initialOpacities = <double>[];
     final isDraggedList = <bool>[];
     final isCorrectAnswerList = <bool>[];
     final isOmittedList = <bool>[];
+    final isCheckedList = <bool>[];
     for (int i = 0; i < lenght; i++) {
       initialLinks.add("");
       initialOpacities.add(0.0);
       isDraggedList.add(false);
       isCorrectAnswerList.add(false);
       isOmittedList.add(false);
+      isCheckedList.add(false);
     }
     return (
       initialLinks,
       initialOpacities,
       isDraggedList,
       isCorrectAnswerList,
-      isOmittedList
+      isOmittedList,
+      isCheckedList
     );
   }
 
@@ -85,6 +89,7 @@ class _QuizScreenState extends State<QuizScreen> {
     isDraggeInitialList = initValues.$3;
     isCorrectAnswer = initValues.$4;
     isOmittedAnswer = initValues.$5;
+    isChecked = initValues.$6;
   }
 
   @override
@@ -102,7 +107,14 @@ class _QuizScreenState extends State<QuizScreen> {
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
             const SizedBox(
-              height: 40,
+              height: 20,
+            ),
+            Text(
+              'Question ${index + 1} of ${randomKanjisToAskMeaning.length}',
+              style: Theme.of(context).textTheme.titleLarge,
+            ),
+            const SizedBox(
+              height: 20,
             ),
             Row(
               crossAxisAlignment: CrossAxisAlignment.center,
@@ -174,67 +186,74 @@ class _QuizScreenState extends State<QuizScreen> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     for (int i = 0; i < randomSolutions.length; i++)
-                      DragTarget<KanjiFromApi>(onAccept: (data) {
-                        setState(() {
-                          imageLinksFromDraggedItems[i] = data.kanjiImageLink;
-                          initialOpacities[i] = 1.0;
-                          isDraggeInitialList[index] = true;
-                          isCorrectAnswer[index] = randomSolutions[i]
-                                  .kanjiCharacter ==
-                              randomKanjisToAskMeaning[index].kanjiCharacter;
-                        });
-                      }, builder: (ctx, _, __) {
-                        return Column(
-                          children: [
-                            Container(
-                              width: 70,
-                              height: 70,
-                              decoration: BoxDecoration(
-                                color: Theme.of(context)
-                                    .colorScheme
-                                    .onPrimaryContainer
-                                    .withOpacity(initialOpacities[i]),
-                                borderRadius: const BorderRadius.all(
-                                  Radius.circular(10),
-                                ),
-                                border: Border.all(color: Colors.white),
-                              ),
-                              child: imageLinksFromDraggedItems[i] == ''
-                                  ? null
-                                  : SvgPicture.network(
-                                      imageLinksFromDraggedItems[i],
-                                      height: 70,
-                                      width: 70,
-                                      semanticsLabel:
-                                          randomSolutions[i].kanjiCharacter,
-                                      placeholderBuilder:
-                                          (BuildContext context) => Container(
-                                        color: Colors.transparent,
-                                        height: 70,
-                                        width: 70,
-                                      ),
+                      Row(
+                        children: [
+                          DragTarget<KanjiFromApi>(onAccept: (data) {
+                            setState(() {
+                              imageLinksFromDraggedItems[i] =
+                                  data.kanjiImageLink;
+                              initialOpacities[i] = 1.0;
+                              isDraggeInitialList[index] = true;
+                              isCorrectAnswer[index] =
+                                  randomSolutions[i].kanjiCharacter ==
+                                      randomKanjisToAskMeaning[index]
+                                          .kanjiCharacter;
+                            });
+                          }, builder: (ctx, _, __) {
+                            return Column(
+                              children: [
+                                Container(
+                                  width: 70,
+                                  height: 70,
+                                  decoration: BoxDecoration(
+                                    color: Theme.of(context)
+                                        .colorScheme
+                                        .onPrimaryContainer
+                                        .withOpacity(initialOpacities[i]),
+                                    borderRadius: const BorderRadius.all(
+                                      Radius.circular(10),
                                     ),
-                            ),
-                            const SizedBox(
-                              height: 5,
-                            ),
-                            Text(randomSolutions[i].englishMeaning),
-                            const SizedBox(
-                              height: 2,
-                            ),
-                            Text(
-                                'kunyomi: ${randomSolutions[i].hiraganaMeaning}'),
-                            const SizedBox(
-                              height: 2,
-                            ),
-                            Text(
-                                'Onyomi: ${randomSolutions[i].katakanaMeaning}'),
-                            const SizedBox(
-                              height: 10,
-                            ),
-                          ],
-                        );
-                      }),
+                                    border: Border.all(color: Colors.white),
+                                  ),
+                                  child: imageLinksFromDraggedItems[i] == ''
+                                      ? null
+                                      : SvgPicture.network(
+                                          imageLinksFromDraggedItems[i],
+                                          height: 70,
+                                          width: 70,
+                                          semanticsLabel:
+                                              randomSolutions[i].kanjiCharacter,
+                                          placeholderBuilder:
+                                              (BuildContext context) =>
+                                                  Container(
+                                            color: Colors.transparent,
+                                            height: 70,
+                                            width: 70,
+                                          ),
+                                        ),
+                                ),
+                                const SizedBox(
+                                  height: 5,
+                                ),
+                                Text(randomSolutions[i].englishMeaning),
+                                const SizedBox(
+                                  height: 2,
+                                ),
+                                Text(
+                                    'kunyomi: ${randomSolutions[i].hiraganaMeaning}'),
+                                const SizedBox(
+                                  height: 2,
+                                ),
+                                Text(
+                                    'Onyomi: ${randomSolutions[i].katakanaMeaning}'),
+                                const SizedBox(
+                                  height: 10,
+                                ),
+                              ],
+                            );
+                          }),
+                        ],
+                      ),
                   ],
                 ),
               ],
@@ -242,7 +261,8 @@ class _QuizScreenState extends State<QuizScreen> {
             const SizedBox(
               height: 15,
             ),
-            Column(
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 5),
@@ -261,14 +281,15 @@ class _QuizScreenState extends State<QuizScreen> {
                         isCorrectAnswer = [...isDraggedList];
                         imageLinksFromDraggedItems = [...isDraggegImageLink];
                         initialOpacities = [...opacityValues];
+                        isChecked[index] = false;
                       });
                     },
                     style: ElevatedButton.styleFrom(
                       textStyle: Theme.of(context).textTheme.bodyLarge,
-                      minimumSize: Size.fromHeight(
+/*                       minimumSize: Size.fromHeight(
                           (Theme.of(context).textTheme.bodyLarge!.height ??
                                   30) +
-                              10),
+                              10), */
                     ),
                     child: const Text("Reset question"),
                   ),
@@ -286,61 +307,41 @@ class _QuizScreenState extends State<QuizScreen> {
                       } else {
                         showSnackBarQuizz("Incorrect answer", 3);
                       }
+                      setState(() {
+                        isChecked[index] = true;
+                      });
                     },
                     style: ElevatedButton.styleFrom(
                       textStyle: Theme.of(context).textTheme.bodyLarge,
-                      minimumSize: Size.fromHeight(
+/*                       minimumSize: Size.fromHeight(
                           (Theme.of(context).textTheme.bodyLarge!.height ??
                                   30) +
-                              10),
+                              10), */
                     ),
                     child: const Text('Check Result'),
                   ),
                 ),
-                if (index == widget.kanjisModel.length - 1)
-                  Column(
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 5),
-                        child: ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            textStyle: Theme.of(context).textTheme.bodyLarge,
-                            minimumSize: Size.fromHeight((Theme.of(context)
-                                        .textTheme
-                                        .bodyLarge!
-                                        .height ??
-                                    30) +
-                                10),
-                          ),
-                          onPressed: () {
-                            setState(() {
-                              randomKanjisToAskMeaning = suffleData();
-                              index = 0;
-                              randomSolutions = getPosibleSolutions(
-                                  randomKanjisToAskMeaning[index]);
-                              final initValues =
-                                  initLinks(widget.kanjisModel.length);
-                              imageLinksFromDraggedItems = initValues.$1;
-                              initialOpacities = initValues.$2;
-                              isDraggeInitialList = initValues.$3;
-                              isCorrectAnswer = initValues.$4;
-                            });
-                          },
-                          child: const Text('Restart Quiz'),
-                        ),
-                      ),
-                    ],
-                  )
-                else
+                /* ,*/
+              ],
+            ),
+            if (index == widget.kanjisModel.length - 1)
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
                   Padding(
                     padding: const EdgeInsets.symmetric(vertical: 5),
-                    child: ElevatedButton.icon(
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        textStyle: Theme.of(context).textTheme.bodyLarge,
+/*                         minimumSize: Size.fromHeight(
+                            (Theme.of(context).textTheme.bodyLarge!.height ??
+                                    30) +
+                                10), */
+                      ),
                       onPressed: () {
-                        if (!isDraggeInitialList[index]) {
-                          isOmittedAnswer[index] = true;
-                        }
                         setState(() {
-                          index++;
+                          randomKanjisToAskMeaning = suffleData();
+                          index = 0;
                           randomSolutions = getPosibleSolutions(
                               randomKanjisToAskMeaning[index]);
                           final initValues =
@@ -348,21 +349,76 @@ class _QuizScreenState extends State<QuizScreen> {
                           imageLinksFromDraggedItems = initValues.$1;
                           initialOpacities = initValues.$2;
                           isDraggeInitialList = initValues.$3;
+                          isCorrectAnswer = initValues.$4;
+                          isOmittedAnswer = initValues.$5;
+                          isChecked = initValues.$6;
                         });
                       },
-                      style: ElevatedButton.styleFrom(
-                        textStyle: Theme.of(context).textTheme.bodyLarge,
-                        minimumSize: Size.fromHeight(
-                            (Theme.of(context).textTheme.bodyLarge!.height ??
-                                    30) +
-                                10),
-                      ),
-                      icon: const Icon(Icons.arrow_circle_right),
-                      label: const Text('Omit'),
+                      child: const Text('Restart Quiz'),
                     ),
                   ),
-              ],
-            )
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 5),
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        textStyle: Theme.of(context).textTheme.bodyLarge,
+                        /* minimumSize: Size.fromHeight(
+                            (Theme.of(context).textTheme.bodyLarge!.height ??
+                                    30) +
+                                10), */
+                      ),
+                      onPressed: () {
+                        setState(() {
+                          /* randomKanjisToAskMeaning = suffleData();
+                          index = 0;
+                          randomSolutions = getPosibleSolutions(
+                              randomKanjisToAskMeaning[index]);
+                          final initValues =
+                              initLinks(widget.kanjisModel.length);
+                          imageLinksFromDraggedItems = initValues.$1;
+                          initialOpacities = initValues.$2;
+                          isDraggeInitialList = initValues.$3;
+                          isCorrectAnswer = initValues.$4;
+                          isOmittedAnswer = initValues.$5;
+                          isChecked = initValues.$6; */
+                        });
+                      },
+                      child: const Text('Check your score'),
+                    ),
+                  ),
+                ],
+              )
+            else
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 5),
+                child: ElevatedButton.icon(
+                  onPressed: () {
+                    if (!isDraggeInitialList[index]) {
+                      isOmittedAnswer[index] = true;
+                    }
+                    setState(() {
+                      index++;
+                      randomSolutions =
+                          getPosibleSolutions(randomKanjisToAskMeaning[index]);
+                      final initValues = initLinks(widget.kanjisModel.length);
+                      imageLinksFromDraggedItems = initValues.$1;
+                      initialOpacities = initValues.$2;
+                      isDraggeInitialList = initValues.$3;
+                    });
+                  },
+                  style: ElevatedButton.styleFrom(
+                    textStyle: Theme.of(context).textTheme.bodyLarge,
+/*                         minimumSize: Size.fromHeight(
+                            (Theme.of(context).textTheme.bodyLarge!.height ??
+                                    30) +
+                                10), */
+                  ),
+                  icon: const Icon(Icons.arrow_circle_right),
+                  label: isChecked[index]
+                      ? const Text('Next')
+                      : const Text('Omit'),
+                ),
+              )
           ],
         ),
       ),
