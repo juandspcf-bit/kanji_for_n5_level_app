@@ -22,12 +22,12 @@ class _QuizScreenState extends State<QuizScreen> {
   late List<double> initialOpacities;
   late List<bool> isDraggeInitialList;
   late List<bool> isCorrectAnswer;
-  late List<bool> isChecked;
   late List<bool> isOmittedAnswer;
+  late List<bool> isChecked;
   late List<KanjiFromApi> randomKanjisToAskMeaning;
-  late List<KanjiFromApi> randomSolutions;
   late int index;
-  var currentScreenType = Screens.quiz;
+  late List<KanjiFromApi> randomSolutions;
+  late Screens currentScreenType;
 
   (List<String>, List<double>, List<bool>, List<bool>, List<bool>, List<bool>)
       initLinks(int lenght) {
@@ -79,10 +79,8 @@ class _QuizScreenState extends State<QuizScreen> {
     );
   }
 
-  @override
-  void initState() {
-    super.initState();
-
+  void initTheQuiz() {
+    currentScreenType = Screens.quiz;
     randomKanjisToAskMeaning = suffleData();
     index = 0;
     randomSolutions = getPosibleSolutions(randomKanjisToAskMeaning[index]);
@@ -93,6 +91,18 @@ class _QuizScreenState extends State<QuizScreen> {
     isCorrectAnswer = initValues.$4;
     isOmittedAnswer = initValues.$5;
     isChecked = initValues.$6;
+  }
+
+  void resetTheQuiz() {
+    setState(() {
+      initTheQuiz();
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    initTheQuiz();
   }
 
   @override
@@ -110,6 +120,7 @@ class _QuizScreenState extends State<QuizScreen> {
             ? ScoreBody(
                 isCorrectAnswer: isCorrectAnswer,
                 isOmittedAnswer: isOmittedAnswer,
+                resetTheQuiz: resetTheQuiz,
               )
             : SingleChildScrollView(
                 child: Column(
