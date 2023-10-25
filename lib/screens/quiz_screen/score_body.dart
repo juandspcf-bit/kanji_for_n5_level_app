@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:kanji_for_n5_level_app/screens/quiz_screen/screen_chart.dart';
 
 class ScoreBody extends StatefulWidget {
   const ScoreBody(
@@ -14,8 +15,6 @@ class ScoreBody extends StatefulWidget {
 }
 
 class _ScoreBodyState extends State<ScoreBody> {
-  
-  
   (int, int, int) getCounts() {
     int countCorrects = widget.isCorrectAnswer.map((e) {
       if (e == true) {
@@ -43,8 +42,20 @@ class _ScoreBodyState extends State<ScoreBody> {
 
   @override
   Widget build(BuildContext context) {
-    return const Center(
-      child: Text("score"),
+    return Column(
+      children: [
+        const SizedBox(
+          height: 20,
+        ),
+        Text(
+          "This is the stats of your quiz",
+          style: Theme.of(context).textTheme.titleMedium,
+        ),
+        const SizedBox(
+          height: 20,
+        ),
+        Expanded(child: ScreenChart()),
+      ],
     );
   }
 }

@@ -45,6 +45,7 @@ dependencies:
   flutter_riverpod: ^2.4.4
   cloud_firestore: ^4.10.0
   async: ^2.11.0
+  fl_chart: ^0.64.0
 
 dev_dependencies:
   flutter_test:

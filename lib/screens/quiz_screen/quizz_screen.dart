@@ -111,42 +111,25 @@ class _QuizScreenState extends State<QuizScreen> {
                 isCorrectAnswer: isCorrectAnswer,
                 isOmittedAnswer: isOmittedAnswer,
               )
-            : Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  Text(
-                    'Question ${index + 1} of ${randomKanjisToAskMeaning.length}',
-                    style: Theme.of(context).textTheme.titleLarge,
-                  ),
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      isDraggeInitialList[index] == true
-                          ? Container(
-                              width: 70,
-                              height: 70,
-                              decoration: BoxDecoration(
-                                color: Theme.of(context)
-                                    .colorScheme
-                                    .onPrimaryContainer
-                                    .withOpacity(0),
-                                borderRadius: const BorderRadius.all(
-                                  Radius.circular(10),
-                                ),
-                                border: Border.all(color: Colors.white),
-                              ),
-                            )
-                          : Draggable<KanjiFromApi>(
-                              data: randomKanjisToAskMeaning[index],
-                              feedback: Text(randomKanjisToAskMeaning[index]
-                                  .kanjiCharacter),
-                              childWhenDragging: Container(
+            : SingleChildScrollView(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    Text(
+                      'Question ${index + 1} of ${randomKanjisToAskMeaning.length}',
+                      style: Theme.of(context).textTheme.titleLarge,
+                    ),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        isDraggeInitialList[index] == true
+                            ? Container(
                                 width: 70,
                                 height: 70,
                                 decoration: BoxDecoration(
@@ -159,210 +142,230 @@ class _QuizScreenState extends State<QuizScreen> {
                                   ),
                                   border: Border.all(color: Colors.white),
                                 ),
-                              ),
-                              child: Container(
-                                width: 70,
-                                height: 70,
-                                decoration: BoxDecoration(
-                                  color: Theme.of(context)
-                                      .colorScheme
-                                      .onPrimaryContainer,
-                                  borderRadius: const BorderRadius.all(
-                                    Radius.circular(10),
-                                  ),
-                                ),
-                                child: SvgPicture.network(
-                                  randomKanjisToAskMeaning[index]
-                                      .kanjiImageLink,
-                                  height: 70,
+                              )
+                            : Draggable<KanjiFromApi>(
+                                data: randomKanjisToAskMeaning[index],
+                                feedback: Text(randomKanjisToAskMeaning[index]
+                                    .kanjiCharacter),
+                                childWhenDragging: Container(
                                   width: 70,
-                                  semanticsLabel:
-                                      randomKanjisToAskMeaning[index]
-                                          .kanjiCharacter,
-                                  placeholderBuilder: (BuildContext context) =>
-                                      Container(
-                                          color: Colors.transparent,
-                                          height: 40,
-                                          width: 40,
-                                          child:
-                                              const CircularProgressIndicator(
-                                            backgroundColor:
-                                                Color.fromARGB(179, 5, 16, 51),
-                                          )),
+                                  height: 70,
+                                  decoration: BoxDecoration(
+                                    color: Theme.of(context)
+                                        .colorScheme
+                                        .onPrimaryContainer
+                                        .withOpacity(0),
+                                    borderRadius: const BorderRadius.all(
+                                      Radius.circular(10),
+                                    ),
+                                    border: Border.all(color: Colors.white),
+                                  ),
+                                ),
+                                child: Container(
+                                  width: 70,
+                                  height: 70,
+                                  decoration: BoxDecoration(
+                                    color: Theme.of(context)
+                                        .colorScheme
+                                        .onPrimaryContainer,
+                                    borderRadius: const BorderRadius.all(
+                                      Radius.circular(10),
+                                    ),
+                                  ),
+                                  child: SvgPicture.network(
+                                    randomKanjisToAskMeaning[index]
+                                        .kanjiImageLink,
+                                    height: 70,
+                                    width: 70,
+                                    semanticsLabel:
+                                        randomKanjisToAskMeaning[index]
+                                            .kanjiCharacter,
+                                    placeholderBuilder:
+                                        (BuildContext context) => Container(
+                                            color: Colors.transparent,
+                                            height: 40,
+                                            width: 40,
+                                            child:
+                                                const CircularProgressIndicator(
+                                              backgroundColor: Color.fromARGB(
+                                                  179, 5, 16, 51),
+                                            )),
+                                  ),
                                 ),
                               ),
-                            ),
-                      Column(
-                        children: [
-                          for (int i = 0; i < randomSolutions.length; i++)
-                            Column(
-                              children: [
-                                if (isDraggeInitialList[index] == true &&
-                                    randomSolutions[i].kanjiCharacter ==
-                                        randomKanjisToAskMeaning[index]
-                                            .kanjiCharacter &&
-                                    imageLinksFromDraggedItems[i] != "")
-                                  const Icon(
-                                    Icons.done,
-                                    color: Colors.amberAccent,
-                                    size: 40,
-                                  )
-                                else if (isDraggeInitialList[index] == true &&
-                                    randomSolutions[i].kanjiCharacter !=
-                                        randomKanjisToAskMeaning[index]
-                                            .kanjiCharacter &&
-                                    imageLinksFromDraggedItems[i] != "")
-                                  const Icon(
-                                    Icons.close,
-                                    color: Colors.amberAccent,
-                                    size: 40,
-                                  ),
-                                DragTarget<KanjiFromApi>(onAccept: (data) {
-                                  setState(() {
-                                    imageLinksFromDraggedItems[i] =
-                                        data.kanjiImageLink;
-                                    initialOpacities[i] = 1.0;
-                                    isDraggeInitialList[index] = true;
-                                    isCorrectAnswer[index] =
-                                        randomSolutions[i].kanjiCharacter ==
-                                            randomKanjisToAskMeaning[index]
-                                                .kanjiCharacter;
-                                  });
-                                }, builder: (ctx, _, __) {
-                                  return Column(
-                                    children: [
-                                      Container(
-                                        width: 70,
-                                        height: 70,
-                                        decoration: BoxDecoration(
-                                          color: Theme.of(context)
-                                              .colorScheme
-                                              .onPrimaryContainer
-                                              .withOpacity(initialOpacities[i]),
-                                          borderRadius: const BorderRadius.all(
-                                            Radius.circular(10),
+                        Column(
+                          children: [
+                            for (int i = 0; i < randomSolutions.length; i++)
+                              Column(
+                                children: [
+                                  if (isDraggeInitialList[index] == true &&
+                                      randomSolutions[i].kanjiCharacter ==
+                                          randomKanjisToAskMeaning[index]
+                                              .kanjiCharacter &&
+                                      imageLinksFromDraggedItems[i] != "")
+                                    const Icon(
+                                      Icons.done,
+                                      color: Colors.amberAccent,
+                                      size: 40,
+                                    )
+                                  else if (isDraggeInitialList[index] == true &&
+                                      randomSolutions[i].kanjiCharacter !=
+                                          randomKanjisToAskMeaning[index]
+                                              .kanjiCharacter &&
+                                      imageLinksFromDraggedItems[i] != "")
+                                    const Icon(
+                                      Icons.close,
+                                      color: Colors.amberAccent,
+                                      size: 40,
+                                    ),
+                                  DragTarget<KanjiFromApi>(onAccept: (data) {
+                                    setState(() {
+                                      imageLinksFromDraggedItems[i] =
+                                          data.kanjiImageLink;
+                                      initialOpacities[i] = 1.0;
+                                      isDraggeInitialList[index] = true;
+                                      isCorrectAnswer[index] =
+                                          randomSolutions[i].kanjiCharacter ==
+                                              randomKanjisToAskMeaning[index]
+                                                  .kanjiCharacter;
+                                    });
+                                  }, builder: (ctx, _, __) {
+                                    return Column(
+                                      children: [
+                                        Container(
+                                          width: 70,
+                                          height: 70,
+                                          decoration: BoxDecoration(
+                                            color: Theme.of(context)
+                                                .colorScheme
+                                                .onPrimaryContainer
+                                                .withOpacity(
+                                                    initialOpacities[i]),
+                                            borderRadius:
+                                                const BorderRadius.all(
+                                              Radius.circular(10),
+                                            ),
+                                            border:
+                                                Border.all(color: Colors.white),
                                           ),
-                                          border:
-                                              Border.all(color: Colors.white),
-                                        ),
-                                        child: imageLinksFromDraggedItems[i] ==
-                                                ''
-                                            ? null
-                                            : SvgPicture.network(
-                                                imageLinksFromDraggedItems[i],
-                                                height: 70,
-                                                width: 70,
-                                                semanticsLabel:
-                                                    randomSolutions[i]
-                                                        .kanjiCharacter,
-                                                placeholderBuilder:
-                                                    (BuildContext context) =>
-                                                        Container(
-                                                  color: Colors.transparent,
+                                          child: imageLinksFromDraggedItems[
+                                                      i] ==
+                                                  ''
+                                              ? null
+                                              : SvgPicture.network(
+                                                  imageLinksFromDraggedItems[i],
                                                   height: 70,
                                                   width: 70,
+                                                  semanticsLabel:
+                                                      randomSolutions[i]
+                                                          .kanjiCharacter,
+                                                  placeholderBuilder:
+                                                      (BuildContext context) =>
+                                                          Container(
+                                                    color: Colors.transparent,
+                                                    height: 70,
+                                                    width: 70,
+                                                  ),
                                                 ),
-                                              ),
-                                      ),
-                                      const SizedBox(
-                                        height: 5,
-                                      ),
-                                      Text(randomSolutions[i].englishMeaning),
-                                      const SizedBox(
-                                        height: 2,
-                                      ),
-                                      Text(
-                                          'kunyomi: ${randomSolutions[i].hiraganaMeaning}'),
-                                      const SizedBox(
-                                        height: 2,
-                                      ),
-                                      Text(
-                                          'Onyomi: ${randomSolutions[i].katakanaMeaning}'),
-                                      const SizedBox(
-                                        height: 10,
-                                      ),
-                                    ],
-                                  );
-                                }),
-                              ],
-                            ),
-                        ],
-                      ),
-                    ],
-                  ),
-                  const SizedBox(
-                    height: 15,
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 5),
-                    child: ElevatedButton(
-                      onPressed: () {
-                        final isDraggedList = <bool>[];
-                        final isDraggegImageLink = <String>[];
-                        final opacityValues = <double>[];
-                        for (int i = 0;
-                            i < widget.kanjisModel.length;
-                            i++) {
-                          isDraggedList.add(false);
-                          isDraggegImageLink.add("");
-                          opacityValues.add(0.0);
-                        }
-                        setState(() {
-                          isDraggeInitialList = [...isDraggedList];
-                          isCorrectAnswer = [...isDraggedList];
-                          imageLinksFromDraggedItems = [
-                            ...isDraggegImageLink
-                          ];
-                          initialOpacities = [...opacityValues];
-                          isChecked[index] = false;
-                        });
-                      },
-                      style: ElevatedButton.styleFrom(
-                        textStyle: Theme.of(context).textTheme.bodyLarge,
-                   minimumSize: Size.fromHeight(
-                      (Theme.of(context).textTheme.bodyLarge!.height ??
-                              30) +
-                          10), 
-                      ),
-                      child: const Text("Reset question"),
+                                        ),
+                                        const SizedBox(
+                                          height: 5,
+                                        ),
+                                        Text(randomSolutions[i].englishMeaning),
+                                        const SizedBox(
+                                          height: 2,
+                                        ),
+                                        Text(
+                                            'kunyomi: ${randomSolutions[i].hiraganaMeaning}'),
+                                        const SizedBox(
+                                          height: 2,
+                                        ),
+                                        Text(
+                                            'Onyomi: ${randomSolutions[i].katakanaMeaning}'),
+                                        const SizedBox(
+                                          height: 10,
+                                        ),
+                                      ],
+                                    );
+                                  }),
+                                ],
+                              ),
+                          ],
+                        ),
+                      ],
                     ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 5),
-                    child: ElevatedButton.icon(
-                      onPressed: () {
-                        if (!isDraggeInitialList[index]) {
-                          isOmittedAnswer[index] = true;
-                        }
-                        if (index < widget.kanjisModel.length - 1) {
-                          setState(() {
-                            index++;
-                            randomSolutions = getPosibleSolutions(
-                                randomKanjisToAskMeaning[index]);
-                            final initValues =
-                                initLinks(widget.kanjisModel.length);
-                            imageLinksFromDraggedItems = initValues.$1;
-                            initialOpacities = initValues.$2;
-                            isDraggeInitialList = initValues.$3;
-                          });
-                        } else {
-                          setState(() {
-                            currentScreenType = Screens.score;
-                          });
-                        }
-                      },
-                      style: ElevatedButton.styleFrom(
-                        textStyle: Theme.of(context).textTheme.bodyLarge,
-                         minimumSize: Size.fromHeight(
-                            (Theme.of(context).textTheme.bodyLarge!.height ??
-                                    30) +
-                                10),
-                      ),
-                      icon: const Icon(Icons.arrow_circle_right),
-                      label: const Text('Next'),
+                    const SizedBox(
+                      height: 15,
                     ),
-                  )
-                ],
+                    Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 5),
+                      child: ElevatedButton(
+                        onPressed: () {
+                          final isDraggedList = <bool>[];
+                          final isDraggegImageLink = <String>[];
+                          final opacityValues = <double>[];
+                          for (int i = 0; i < widget.kanjisModel.length; i++) {
+                            isDraggedList.add(false);
+                            isDraggegImageLink.add("");
+                            opacityValues.add(0.0);
+                          }
+                          setState(() {
+                            isDraggeInitialList = [...isDraggedList];
+                            isCorrectAnswer = [...isDraggedList];
+                            imageLinksFromDraggedItems = [
+                              ...isDraggegImageLink
+                            ];
+                            initialOpacities = [...opacityValues];
+                            isChecked[index] = false;
+                          });
+                        },
+                        style: ElevatedButton.styleFrom(
+                          textStyle: Theme.of(context).textTheme.bodyLarge,
+                          minimumSize: Size.fromHeight(
+                              (Theme.of(context).textTheme.bodyLarge!.height ??
+                                      30) +
+                                  10),
+                        ),
+                        child: const Text("Reset question"),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 5),
+                      child: ElevatedButton.icon(
+                        onPressed: () {
+                          if (!isDraggeInitialList[index]) {
+                            isOmittedAnswer[index] = true;
+                          }
+                          if (index < widget.kanjisModel.length - 1) {
+                            setState(() {
+                              index++;
+                              randomSolutions = getPosibleSolutions(
+                                  randomKanjisToAskMeaning[index]);
+                              final initValues =
+                                  initLinks(widget.kanjisModel.length);
+                              imageLinksFromDraggedItems = initValues.$1;
+                              initialOpacities = initValues.$2;
+                              isDraggeInitialList = initValues.$3;
+                            });
+                          } else {
+                            setState(() {
+                              currentScreenType = Screens.score;
+                            });
+                          }
+                        },
+                        style: ElevatedButton.styleFrom(
+                          textStyle: Theme.of(context).textTheme.bodyLarge,
+                          minimumSize: Size.fromHeight(
+                              (Theme.of(context).textTheme.bodyLarge!.height ??
+                                      30) +
+                                  10),
+                        ),
+                        icon: const Icon(Icons.arrow_circle_right),
+                        label: const Text('Next'),
+                      ),
+                    )
+                  ],
+                ),
               ),
       ),
     );
