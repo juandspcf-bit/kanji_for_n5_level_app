@@ -103,6 +103,7 @@ class KanjiDetailsState extends ConsumerState<KanjiDetails> {
               borderRadius: BorderRadius.circular(30)),
           child: IconButton(
             color: Theme.of(context).colorScheme.onPrimary,
+            splashColor: Colors.black,
             onPressed: () async {
               stopAnimation();
 
@@ -397,7 +398,7 @@ class KanjiDetailsState extends ConsumerState<KanjiDetails> {
               const SizedBox(
                 width: 20,
               ),
-              Text("Kunyomi: ${widget.kanjiFromApi.katakanaMeaning}"),
+              Text("Onyomi: ${widget.kanjiFromApi.katakanaMeaning}"),
             ],
           ),
           const SizedBox(
