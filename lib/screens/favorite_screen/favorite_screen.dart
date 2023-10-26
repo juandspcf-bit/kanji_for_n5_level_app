@@ -1,13 +1,15 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kanji_for_n5_level_app/models/kanji_from_api.dart';
 import 'package:kanji_for_n5_level_app/networking/request_api.dart';
+import 'package:kanji_for_n5_level_app/providers/favorites_cached_provider.dart';
 import 'package:kanji_for_n5_level_app/providers/favorites_kanjis_providers.dart';
 import 'package:kanji_for_n5_level_app/screens/favorite_screen/body_list.dart';
 import 'package:kanji_for_n5_level_app/screens/kaji_details.dart';
 
-class FavoriteScreen extends StatefulWidget {
+class FavoriteScreen extends ConsumerStatefulWidget {
   const FavoriteScreen({
     super.key,
     //required this.isFromTabNav,
@@ -16,10 +18,10 @@ class FavoriteScreen extends StatefulWidget {
   //final bool isFromTabNav;
 
   @override
-  State<FavoriteScreen> createState() => _FavoriteScreenState();
+  ConsumerState<FavoriteScreen> createState() => _FavoriteScreenState();
 }
 
-class _FavoriteScreenState extends State<FavoriteScreen> {
+class _FavoriteScreenState extends ConsumerState<FavoriteScreen> {
   List<KanjiFromApi> _kanjisModel = [];
   int statusResponse = 0;
 
@@ -66,15 +68,18 @@ class _FavoriteScreenState extends State<FavoriteScreen> {
   @override
   void initState() {
     super.initState();
-    RequestApi.getKanjis(myFavoritesCached.map((e) => e.$3).toList(),
-        onSuccesRequest, onErrorRequest);
   }
 
   @override
   Widget build(BuildContext context) {
+    final kanjis = ref.watch(favoritesCachedProvider);
+    int status = 0;
+    if (kanjis.isNotEmpty) {
+      status = 1;
+    }
     return BodyKanjisList(
-      statusResponse: statusResponse,
-      kanjisModel: _kanjisModel,
+      statusResponse: status,
+      kanjisModel: kanjis,
       navigateToKanjiDetails: navigateToKanjiDetails,
     );
   }

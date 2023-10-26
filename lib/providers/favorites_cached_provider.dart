@@ -1,16 +1,28 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:kanji_for_n5_level_app/models/kanji_from_api.dart';
+import 'package:kanji_for_n5_level_app/networking/request_api.dart';
 
-class FavoritesCached extends Notifier<List<(String, String, String)>> {
+class FavoritesCached extends Notifier<List<KanjiFromApi>> {
   @override
-  List<(String, String, String)> build() {
+  List<KanjiFromApi> build() {
     return [];
   }
 
   void setInitState(List<(String, String, String)> myFavoritesCached) {
-    state = myFavoritesCached;
+    RequestApi.getKanjis(myFavoritesCached.map((e) => e.$3).toList(),
+        onSuccesRequest, onErrorRequest);
+    //state = myFavoritesCached;
   }
 
-  void addItem((String, String, String) item) {
+  void onSuccesRequest(List<KanjiFromApi> kanjisFromApi) {
+    state = kanjisFromApi;
+  }
+
+  void onErrorRequest() {
+    print('error');
+  }
+
+/*   void addItem((String, String, String) item) {
     state = [...state, item];
   }
 
@@ -25,9 +37,8 @@ class FavoritesCached extends Notifier<List<(String, String, String)>> {
     var queryKanji = copyState.firstWhere((element) => element.$3 == kanji,
         orElse: () => ("", "", ""));
     return queryKanji;
-  }
+  } */
 }
 
 final favoritesCachedProvider =
-    NotifierProvider<FavoritesCached, List<(String, String, String)>>(
-        FavoritesCached.new);
+    NotifierProvider<FavoritesCached, List<KanjiFromApi>>(FavoritesCached.new);

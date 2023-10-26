@@ -1,6 +1,8 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kanji_for_n5_level_app/main.dart';
+import 'package:kanji_for_n5_level_app/providers/favorites_cached_provider.dart';
 import 'package:kanji_for_n5_level_app/providers/favorites_kanjis_providers.dart';
 import 'package:kanji_for_n5_level_app/screens/favorite_screen/favorite_screen.dart';
 import 'package:kanji_for_n5_level_app/screens/sections_screen.dart';
@@ -8,14 +10,14 @@ import 'package:kanji_for_n5_level_app/screens/sections_screen.dart';
 const temporalAvatar =
     "https://firebasestorage.googleapis.com/v0/b/kanji-for-n5.appspot.com/o/unnamed.jpg?alt=media&token=38275fec-42f3-4d95-b1fd-785e82d4086f&_gl=1*19p8v1f*_ga*MjAyNTg0OTcyOS4xNjk2NDEwODIz*_ga_CW55HF8NVT*MTY5NzEwMTY3NC45LjEuMTY5NzEwMzExMy4zMy4wLjA.";
 
-class MainContent extends StatefulWidget {
+class MainContent extends ConsumerStatefulWidget {
   const MainContent({super.key});
 
   @override
-  State<MainContent> createState() => _MainContentState();
+  ConsumerState<MainContent> createState() => _MainContentState();
 }
 
-class _MainContentState extends State<MainContent> {
+class _MainContentState extends ConsumerState<MainContent> {
   int _selectedPageIndex = 0;
 
   void _selectPage(int index) {
@@ -32,6 +34,15 @@ class _MainContentState extends State<MainContent> {
         return (e.id, 'kanjiCharacter', data['kanjiCharacter'] as String);
       },
     ).toList();
+
+    ref
+        .read(favoritesCachedProvider.notifier)
+        .setInitState(querySnapshot.docs.map(
+          (e) {
+            Map<String, dynamic> data = e.data();
+            return (e.id, 'kanjiCharacter', data['kanjiCharacter'] as String);
+          },
+        ).toList());
   }
 
   @override
