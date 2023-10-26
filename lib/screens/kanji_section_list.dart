@@ -47,15 +47,15 @@ class _KanjiListState extends State<KanjiList> {
   }
 
   FutureOr onGoBack(dynamic value) {
-    refreshData();
+    //refreshData();
   }
 
   void refreshData() {
     if (!widget.isFromTabNav) return;
     setState(() {
       statusResponse = 0;
+      getKanjis(myFavoritesCached.map((e) => e.$3).toList());
     });
-    getKanjis(myFavoritesCached.map((e) => e.$3).toList());
   }
 
   void getKanjis(List<String> kanjis) {
@@ -113,7 +113,9 @@ class _KanjiListState extends State<KanjiList> {
   @override
   Widget build(BuildContext context) {
     return widget.isFromTabNav
-        ? Scaffold(body: buildTree(statusResponse, _kanjisModel))
+        ? Scaffold(
+            body: buildTree(statusResponse, _kanjisModel),
+          )
         : Scaffold(
             appBar: AppBar(
               title: Text(widget.sectionModel.title),
@@ -133,7 +135,8 @@ class _KanjiListState extends State<KanjiList> {
                     icon: const Icon(Icons.quiz))
               ],
             ),
-            body: buildTree(statusResponse, _kanjisModel));
+            body: buildTree(statusResponse, _kanjisModel),
+          );
   }
 
   Widget buildTree(int statusResponse, List<KanjiFromApi> kanjisModel) {
@@ -247,68 +250,4 @@ class KanjiItem extends StatelessWidget {
       ),
     );
   }
-}
-
-KanjiFromApi builKanjiInfoFromApi(Map<String, dynamic> body) {
-  final Map<String, dynamic> kanjiInfo = body['kanji'];
-
-  final String kanjiCharacterFromAPI = kanjiInfo['character'];
-
-  final Map<String, dynamic> kanjiStrokes = kanjiInfo["strokes"];
-  //final List<dynamic> kanjiTimingsFromApis = kanjiStrokes["timings"];
-  //final kanjiTimings = kanjiTimingsFromApis.map((e) => e as int).toList();
-
-  final List<dynamic> kanjiImagesFromApis = kanjiStrokes["images"];
-  final kanjiImages = kanjiImagesFromApis.map((e) => e as String).toList();
-
-  final String kanjiImageFromAPI = kanjiImages.last;
-  final strokesInfo = Strokes(
-    count: kanjiStrokes['count'],
-    images: kanjiImages,
-  );
-
-  final Map<String, dynamic> kanjiMeaning = kanjiInfo["meaning"];
-  final String englishMeaningFromAPI = kanjiMeaning['english'];
-
-  final Map<String, dynamic> kanjiOnyomi = kanjiInfo["onyomi"];
-  final String katakanaMeaningFromAPI = kanjiOnyomi['katakana'];
-
-  final Map<String, dynamic> kanjiKunyomi = kanjiInfo['kunyomi'];
-  final String hiraganaMeaningFromAPI = kanjiKunyomi['hiragana'];
-
-  final Map<String, dynamic> kanjiVideo = kanjiInfo['video'];
-  final String videoLinkFromAPI = kanjiVideo['mp4'];
-
-  final List<dynamic> examplesFromAPI = body['examples'];
-
-  List<Examples> examples = examplesFromAPI.map((e) {
-    //
-    final String japanese = e["japanese"];
-    final Map<String, dynamic> meaningMap = e['meaning'];
-    final meaning = Meaning(english: meaningMap['english'] as String);
-    final Map<String, dynamic> audioMap = e['audio'];
-    final audio = AudioExamples(
-        opus: audioMap['opus'],
-        aac: audioMap['aac'],
-        ogg: audioMap['ogg'],
-        mp3: audioMap['mp3']);
-
-    return Examples(
-      japanese: japanese,
-      meaning: meaning,
-      audio: audio,
-    );
-  }).toList();
-
-  final kanjiFromApi = KanjiFromApi(
-      kanjiCharacter: kanjiCharacterFromAPI,
-      englishMeaning: englishMeaningFromAPI,
-      kanjiImageLink: kanjiImageFromAPI,
-      katakanaMeaning: katakanaMeaningFromAPI,
-      hiraganaMeaning: hiraganaMeaningFromAPI,
-      videoLink: videoLinkFromAPI,
-      example: examples,
-      strokes: strokesInfo);
-
-  return kanjiFromApi;
 }
