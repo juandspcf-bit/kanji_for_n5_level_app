@@ -22,7 +22,6 @@ class KanjiDetailsState extends ConsumerState<KanjiDetails> {
   late VideoPlayerController _videoController;
   final assetsAudioPlayer = AssetsAudioPlayer();
   late bool _favoriteStatus;
-  bool disableBackButton = false;
 
   String capitalizeString(String text) {
     var firstLetter = text[0];
@@ -222,24 +221,15 @@ class KanjiDetailsState extends ConsumerState<KanjiDetails> {
       child: Scaffold(
         appBar: AppBar(
           leading: IconButton(
-            onPressed: disableBackButton
-                ? null
-                : () {
-                    Navigator.of(context).pop();
-                  },
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
             icon: const Icon(Icons.arrow_back_sharp),
           ),
           title: Text(widget.kanjiFromApi.kanjiCharacter),
           actions: [
             IconButton(
                 onPressed: () {
-                  setState(() {
-                    disableBackButton = true;
-                  });
-
-                  // var queryKanji = searchKanjiInFavorites(
-                  //     widget.kanjiFromApi.kanjiCharacter);
-
                   var queryKanji = ref
                       .read(favoritesCachedProvider.notifier)
                       .searchInFavorites(widget.kanjiFromApi.kanjiCharacter);
@@ -250,14 +240,6 @@ class KanjiDetailsState extends ConsumerState<KanjiDetails> {
                     };
                     dbFirebase.collection("favorites").add(favoriteKanji).then(
                       (DocumentReference doc) {
-/*                         myFavoritesCached.add(
-                          (
-                            doc.id,
-                            "kanjiCharacter",
-                            widget.kanjiFromApi.kanjiCharacter
-                          ),
-                        ); */
-
                         ref.read(favoritesCachedProvider.notifier).addItem(
                           (
                             doc.id,
@@ -265,16 +247,8 @@ class KanjiDetailsState extends ConsumerState<KanjiDetails> {
                             widget.kanjiFromApi.kanjiCharacter
                           ),
                         );
-
-                        setState(() {
-                          disableBackButton = false;
-                        });
                       },
-                      onError: (e) {
-                        setState(() {
-                          disableBackButton = false;
-                        });
-                      },
+                      onError: (e) {},
                     );
                   } else {
                     dbFirebase
@@ -287,15 +261,8 @@ class KanjiDetailsState extends ConsumerState<KanjiDetails> {
                         ref
                             .read(favoritesCachedProvider.notifier)
                             .removeItem(queryKanji);
-                        setState(() {
-                          disableBackButton = false;
-                        });
                       },
-                      onError: (e) {
-                        setState(() {
-                          disableBackButton = false;
-                        });
-                      },
+                      onError: (e) {},
                     );
                   }
 
