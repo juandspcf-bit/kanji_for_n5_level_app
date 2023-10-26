@@ -2,7 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:kanji_for_n5_level_app/main.dart';
 import 'package:kanji_for_n5_level_app/providers/favorites_kanjis_providers.dart';
-import 'package:kanji_for_n5_level_app/screens/favorite_screen.dart';
+import 'package:kanji_for_n5_level_app/screens/favorite_screen/favorite_screen.dart';
 import 'package:kanji_for_n5_level_app/screens/sections_screen.dart';
 
 const temporalAvatar =
@@ -51,7 +51,7 @@ class _MainContentState extends State<MainContent> {
           ],
         );
       case 1:
-        return const FavoriteScreen(isFromTabNav: true);
+        return const FavoriteScreen();
 
       default:
         return const Center(
