@@ -8,9 +8,8 @@ class FavoritesCached extends Notifier<List<KanjiFromApi>> {
     return [];
   }
 
-  void setInitState(List<(String, String, String)> myFavoritesCached) {
-    RequestApi.getKanjis(myFavoritesCached.map((e) => e.$3).toList(),
-        onSuccesRequest, onErrorRequest);
+  void setInitState(List<String> myFavoritesCached) {
+    RequestApi.getKanjis(myFavoritesCached, onSuccesRequest, onErrorRequest);
     //state = myFavoritesCached;
   }
 
@@ -18,26 +17,34 @@ class FavoritesCached extends Notifier<List<KanjiFromApi>> {
     state = kanjisFromApi;
   }
 
+  void onSuccesAddRequest(List<KanjiFromApi> kanjisFromApi) {
+    state = [...state, ...kanjisFromApi];
+  }
+
   void onErrorRequest() {
     print('error');
   }
 
-/*   void addItem((String, String, String) item) {
-    state = [...state, item];
+  void addItem(String item) {
+    RequestApi.getKanjis([item], onSuccesAddRequest, onErrorRequest);
   }
 
-  void removeItem((String, String, String) item) {
+  void removeItem(String item) {
     final copyState = [...state];
-    copyState.remove(item);
+    int index =
+        copyState.indexWhere((element) => element.kanjiCharacter == item);
+    copyState.removeAt(index);
     state = [...copyState];
   }
 
-  (String, String, String) searchInFavorites(String kanji) {
+  String searchInFavorites(String kanji) {
     final copyState = [...state];
-    var queryKanji = copyState.firstWhere((element) => element.$3 == kanji,
-        orElse: () => ("", "", ""));
-    return queryKanji;
-  } */
+    final mappedCopyState = copyState.map((e) => e.kanjiCharacter).toList();
+    return mappedCopyState.firstWhere(
+      (element) => element == kanji,
+      orElse: () => '',
+    );
+  }
 }
 
 final favoritesCachedProvider =

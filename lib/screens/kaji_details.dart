@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:kanji_for_n5_level_app/main.dart';
 import 'package:kanji_for_n5_level_app/models/kanji_from_api.dart';
+import 'package:kanji_for_n5_level_app/providers/favorites_cached_provider.dart';
 import 'package:kanji_for_n5_level_app/providers/favorites_kanjis_providers.dart';
 import 'package:video_player/video_player.dart';
 
@@ -219,38 +220,64 @@ class KanjiDetailsState extends ConsumerState<KanjiDetails> {
         actions: [
           IconButton(
               onPressed: () {
-                var queryKanji =
-                    searchKanjiInFavorites(widget.kanjiFromApi.kanjiCharacter);
+                var queryKanji = ref
+                    .read(favoritesCachedProvider.notifier)
+                    .searchInFavorites(widget.kanjiFromApi.kanjiCharacter);
+                //searchKanjiInFavorites(widget.kanjiFromApi.kanjiCharacter);
 
-                if (queryKanji.$3 == "") {
+                if (queryKanji == "") {
                   final favoriteKanji = <String, dynamic>{
                     "kanjiCharacter": widget.kanjiFromApi.kanjiCharacter,
                   };
-                  dbFirebase
-                      .collection("favorites")
-                      .add(favoriteKanji)
-                      .then((DocumentReference doc) {
-                    myFavoritesCached.add((
-                      doc.id,
-                      "kanjiCharacter",
-                      widget.kanjiFromApi.kanjiCharacter
-                    ));
-                  });
+                  dbFirebase.collection("favorites").add(favoriteKanji).then(
+                    (DocumentReference doc) {
+                      myFavoritesCached.add((
+                        doc.id,
+                        "kanjiCharacter",
+                        widget.kanjiFromApi.kanjiCharacter
+                      ));
+
+                      ref
+                          .read(favoritesCachedProvider.notifier)
+                          .addItem(widget.kanjiFromApi.kanjiCharacter);
+                    },
+                  );
                 } else {
                   dbFirebase
                       .collection("favorites")
-                      .doc(queryKanji.$1)
-                      .delete()
+                      .where("kanjiCharacter",
+                          isEqualTo: widget.kanjiFromApi.kanjiCharacter)
+                      .get()
                       .then(
-                    (doc) {
-                      myFavoritesCached.remove(queryKanji);
+                    (querySnapshot) {
+/*                       print("Successfully completed");
+                      for (var docSnapshot in querySnapshot.docs) {
+                        print('${docSnapshot.id} => ${docSnapshot.data()}');
+                      } */
+
+                      String id = querySnapshot.docs[0].id;
+
+                      dbFirebase.collection("favorites").doc(id).delete().then(
+                        (doc) {
+                          ref
+                              .read(favoritesCachedProvider.notifier)
+                              .removeItem(queryKanji);
+                        },
+                        onError: (e) => print("Error deleting document $e"),
+                      );
+
+                      final map = querySnapshot.docs[0].data();
+                      final data = map['kanjiCharacter'];
+                      print('data data $data');
                     },
-                    onError: (e) => print("Error updating document $e"),
+                    onError: (e) => print("Error completing: $e"),
                   );
+/*                   
+                       */
                 }
 
                 setState(() {
-                  _favoriteStatus = queryKanji == ("", "", "");
+                  _favoriteStatus = queryKanji == "";
                 });
               },
               icon: Icon(_favoriteStatus

@@ -40,7 +40,7 @@ class _MainContentState extends ConsumerState<MainContent> {
         .setInitState(querySnapshot.docs.map(
           (e) {
             Map<String, dynamic> data = e.data();
-            return (e.id, 'kanjiCharacter', data['kanjiCharacter'] as String);
+            return data['kanjiCharacter'] as String;
           },
         ).toList());
   }
