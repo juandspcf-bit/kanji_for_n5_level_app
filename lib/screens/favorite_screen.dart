@@ -25,6 +25,7 @@ class FavoriteScreen extends ConsumerStatefulWidget {
 class FavoriteScreenState extends ConsumerState<FavoriteScreen> {
   List<KanjiFromApi> _kanjisModel = [];
   int statusResponse = 0;
+  int dummyFile = 0;
 
   void getKanjis(List<String> kanjis) {
     FutureGroup<Response> group = FutureGroup<Response>();
