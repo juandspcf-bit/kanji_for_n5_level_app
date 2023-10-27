@@ -1,7 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:kanji_for_n5_level_app/main.dart';
+import 'package:kanji_for_n5_level_app/Databases/favorites_db_utils.dart';
 import 'package:kanji_for_n5_level_app/providers/favorites_cached_provider.dart';
 import 'package:kanji_for_n5_level_app/screens/favorite_screen/favorite_screen.dart';
 import 'package:kanji_for_n5_level_app/screens/sections_screen.dart';
@@ -26,16 +26,18 @@ class _MainContentState extends ConsumerState<MainContent> {
   }
 
   void getListOfFavorites() async {
-    final querySnapshot = await dbFirebase.collection("favorites").get();
+    //final querySnapshot = await dbFirebase.collection("favorites").get();
+    final favoritesKanjis = await loadFavorites();
 
-    ref
-        .read(favoritesCachedProvider.notifier)
-        .setInitState(querySnapshot.docs.map(
-          (e) {
-            Map<String, dynamic> data = e.data();
-            return data['kanjiCharacter'] as String;
-          },
-        ).toList());
+    ref.read(favoritesCachedProvider.notifier).setInitState(favoritesKanjis);
+    // ref
+    //     .read(favoritesCachedProvider.notifier)
+    //     .setInitState(querySnapshot.docs.map(
+    //       (e) {
+    //         Map<String, dynamic> data = e.data();
+    //         return data['kanjiCharacter'] as String;
+    //       },
+    //     ).toList());
   }
 
   @override

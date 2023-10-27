@@ -1,9 +1,8 @@
 import 'package:assets_audio_player/assets_audio_player.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:kanji_for_n5_level_app/main.dart';
+import 'package:kanji_for_n5_level_app/Databases/favorites_db_utils.dart';
 import 'package:kanji_for_n5_level_app/models/kanji_from_api.dart';
 import 'package:kanji_for_n5_level_app/providers/favorites_cached_provider.dart';
 import 'package:video_player/video_player.dart';
@@ -217,9 +216,24 @@ class KanjiDetailsState extends ConsumerState<KanjiDetails> {
                 final queryKanji = ref
                     .read(favoritesCachedProvider.notifier)
                     .searchInFavorites(widget.kanjiFromApi.kanjiCharacter);
-                //searchKanjiInFavorites(widget.kanjiFromApi.kanjiCharacter);
 
                 if (queryKanji == "") {
+                  insertFavorite(widget.kanjiFromApi.kanjiCharacter)
+                      .then((value) {
+                    ref
+                        .read(favoritesCachedProvider.notifier)
+                        .addItem(widget.kanjiFromApi.kanjiCharacter);
+                  });
+                } else {
+                  deleteFavorite(widget.kanjiFromApi.kanjiCharacter)
+                      .then((value) {
+                    ref
+                        .read(favoritesCachedProvider.notifier)
+                        .removeItem(widget.kanjiFromApi.kanjiCharacter);
+                  });
+                }
+
+/*                 if (queryKanji == "") {
                   final favoriteKanji = <String, dynamic>{
                     "kanjiCharacter": widget.kanjiFromApi.kanjiCharacter,
                   };
@@ -262,7 +276,7 @@ class KanjiDetailsState extends ConsumerState<KanjiDetails> {
                   );
 /*                   
                        */
-                }
+                } */
 
                 setState(() {
                   _favoriteStatus = queryKanji == "";

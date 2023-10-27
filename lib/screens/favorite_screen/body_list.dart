@@ -14,7 +14,8 @@ class BodyKanjisList extends StatelessWidget {
   final List<KanjiFromApi> kanjisModel;
   final void Function(BuildContext, KanjiFromApi?) navigateToKanjiDetails;
 
-  Widget buildTree(int statusResponse, List<KanjiFromApi> kanjisModel) {
+  Widget buildTree(BuildContext context, int statusResponse,
+      List<KanjiFromApi> kanjisModel) {
     if (statusResponse == 0) {
       return const Center(child: CircularProgressIndicator());
     } else if (statusResponse == 1) {
@@ -27,14 +28,68 @@ class BodyKanjisList extends StatelessWidget {
               navigateToKanjiDetails: navigateToKanjiDetails,
             ); //Text('${kanjisModel[index].kanjiCharacter} : ${kanjisModel[index].englishMeaning}');
           });
+    } else if (statusResponse == 2) {
+      return Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                'An error has occurr',
+                style: Theme.of(context).textTheme.titleLarge,
+              ),
+            ],
+          ),
+          const SizedBox(
+            height: 25,
+          ),
+          const Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(
+                Icons.error_outline,
+                color: Colors.amber,
+                size: 80,
+              ),
+            ],
+          )
+        ],
+      );
     } else {
-      return const Text('An error has occurr');
+      return Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                'No data to show',
+                style: Theme.of(context).textTheme.titleLarge,
+              ),
+            ],
+          ),
+          const SizedBox(
+            height: 25,
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(
+                Icons.data_usage,
+                color: Theme.of(context).colorScheme.primary,
+                size: 80,
+              ),
+            ],
+          )
+        ],
+      );
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    return buildTree(statusResponse, kanjisModel);
+    return buildTree(context, statusResponse, kanjisModel);
   }
 }
 
