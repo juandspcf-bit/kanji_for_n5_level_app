@@ -22,22 +22,6 @@ class FavoriteScreen extends ConsumerStatefulWidget {
 }
 
 class _FavoriteScreenState extends ConsumerState<FavoriteScreen> {
-  List<KanjiFromApi> _kanjisModel = [];
-  int statusResponse = 0;
-
-  void onSuccesRequest(List<KanjiFromApi> kanjisFromApi) {
-    setState(() {
-      _kanjisModel = kanjisFromApi;
-      statusResponse = 1;
-    });
-  }
-
-  void onErrorRequest() {
-    setState(() {
-      statusResponse = 2;
-    });
-  }
-
   void navigateToKanjiDetails(
     BuildContext context,
     KanjiFromApi? kanjiFromApi,
@@ -49,25 +33,7 @@ class _FavoriteScreenState extends ConsumerState<FavoriteScreen> {
           kanjiFromApi: kanjiFromApi,
         );
       }),
-    ).then(onGoBack);
-  }
-
-  FutureOr onGoBack(dynamic value) {
-    refreshData();
-  }
-
-  void refreshData() {
-    //if (!widget.isFromTabNav) return;
-    setState(() {
-      statusResponse = 0;
-    });
-    RequestApi.getKanjis(myFavoritesCached.map((e) => e.$3).toList(),
-        onSuccesRequest, onErrorRequest);
-  }
-
-  @override
-  void initState() {
-    super.initState();
+    );
   }
 
   @override
