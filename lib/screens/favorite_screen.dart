@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kanji_for_n5_level_app/models/kanji_from_api.dart';
 import 'package:kanji_for_n5_level_app/providers/favorites_cached_provider.dart';
-import 'package:kanji_for_n5_level_app/screens/favorite_screen/body_list.dart';
+import 'package:kanji_for_n5_level_app/screens/body_list/body_list.dart';
 import 'package:kanji_for_n5_level_app/screens/kaji_details.dart';
 
 class FavoriteScreen extends ConsumerStatefulWidget {
