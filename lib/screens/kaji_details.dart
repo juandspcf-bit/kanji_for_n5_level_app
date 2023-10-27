@@ -76,7 +76,9 @@ class KanjiDetailsState extends ConsumerState<KanjiDetails> {
   }
 
   List<Widget> getIndexedExamples(
-      List<Examples> examples, Function() stopAnimation) {
+    List<Examples> examples,
+    Function() stopAnimation,
+  ) {
     List<Widget> indexedExamples = [];
     for (int index = 0; index < examples.length; index++) {
       final tileWidget = ListTile(
@@ -96,27 +98,40 @@ class KanjiDetailsState extends ConsumerState<KanjiDetails> {
             ),
           ],
         ),
-        trailing: Container(
-          decoration: BoxDecoration(
-              color: Theme.of(context).colorScheme.primary,
-              borderRadius: BorderRadius.circular(30)),
-          child: IconButton(
-            color: Theme.of(context).colorScheme.onPrimary,
-            splashColor: Colors.black,
-            onPressed: () async {
-              stopAnimation();
+        trailing: Material(
+          child: Ink(
+            decoration: BoxDecoration(
+                color: Theme.of(context).colorScheme.primary,
+                borderRadius: BorderRadius.circular(30)),
+/*             onTap: () {},
+            highlightColor: Theme.of(context).colorScheme.primary,
+            radius: 50, */
+            child: InkWell(
+              highlightColor: Colors.blue.withOpacity(0.4),
+              splashColor: Colors.green.withOpacity(0.5),
+              onTap: () {},
+/*               decoration: BoxDecoration(
+                  color: Theme.of(context).colorScheme.primary,
+                  borderRadius: BorderRadius.circular(30)), */
+              child: IconButton(
+                color: Theme.of(context).colorScheme.onPrimary,
+                splashColor: Colors.deepOrange,
+                onPressed: () async {
+                  stopAnimation();
 
-              final assetsAudioPlayer = AssetsAudioPlayer();
+                  final assetsAudioPlayer = AssetsAudioPlayer();
 
-              try {
-                await assetsAudioPlayer.open(
-                  Audio.network(examples[index].audio.mp3),
-                );
-              } catch (t) {
-                //mp3 unreachable
-              }
-            },
-            icon: const Icon(Icons.play_arrow_rounded),
+                  try {
+                    await assetsAudioPlayer.open(
+                      Audio.network(examples[index].audio.mp3),
+                    );
+                  } catch (t) {
+                    //mp3 unreachable
+                  }
+                },
+                icon: const Icon(Icons.play_arrow_rounded),
+              ),
+            ),
           ),
         ),
       );
@@ -141,7 +156,6 @@ class KanjiDetailsState extends ConsumerState<KanjiDetails> {
         height: 120,
         width: 120,
         colorFilter: const ColorFilter.mode(Colors.white, BlendMode.srcIn),
-        //color: Colors.white,
         semanticsLabel: widget.kanjiFromApi.kanjiCharacter,
         placeholderBuilder: (BuildContext context) => Container(
             color: Colors.transparent,
@@ -232,51 +246,6 @@ class KanjiDetailsState extends ConsumerState<KanjiDetails> {
                         .removeItem(widget.kanjiFromApi.kanjiCharacter);
                   });
                 }
-
-/*                 if (queryKanji == "") {
-                  final favoriteKanji = <String, dynamic>{
-                    "kanjiCharacter": widget.kanjiFromApi.kanjiCharacter,
-                  };
-                  dbFirebase.collection("favorites").add(favoriteKanji).then(
-                    (DocumentReference doc) {
-                      ref
-                          .read(favoritesCachedProvider.notifier)
-                          .addItem(widget.kanjiFromApi.kanjiCharacter);
-                    },
-                  );
-                } else {
-                  dbFirebase
-                      .collection("favorites")
-                      .where("kanjiCharacter",
-                          isEqualTo: widget.kanjiFromApi.kanjiCharacter)
-                      .get()
-                      .then(
-                    (querySnapshot) {
-/*                       print("Successfully completed");
-                      for (var docSnapshot in querySnapshot.docs) {
-                        print('${docSnapshot.id} => ${docSnapshot.data()}');
-                      } */
-
-                      String id = querySnapshot.docs[0].id;
-
-                      dbFirebase.collection("favorites").doc(id).delete().then(
-                        (doc) {
-                          ref
-                              .read(favoritesCachedProvider.notifier)
-                              .removeItem(queryKanji);
-                        },
-                        onError: (e) => print("Error deleting document $e"),
-                      );
-
-                      final map = querySnapshot.docs[0].data();
-                      final data = map['kanjiCharacter'];
-                      print('data data $data');
-                    },
-                    onError: (e) => print("Error completing: $e"),
-                  );
-/*                   
-                       */
-                } */
 
                 setState(() {
                   _favoriteStatus = queryKanji == "";
