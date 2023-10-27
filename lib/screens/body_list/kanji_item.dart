@@ -22,6 +22,12 @@ class KanjiItem extends StatelessWidget {
     return '${splitText[0]}, ${splitText[1]}';
   }
 
+  String cutEnglishMeaning(String text) {
+    final splitText = text.split(', ');
+    if (splitText.length == 1) return text;
+    return '${splitText[0]}, ${splitText[1]}';
+  }
+
   @override
   Widget build(BuildContext context) {
     return InkWell(
@@ -77,7 +83,7 @@ class KanjiItem extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              kanjiFromApi.englishMeaning,
+                              cutEnglishMeaning(kanjiFromApi.englishMeaning),
                               style: Theme.of(context)
                                   .textTheme
                                   .titleLarge!
