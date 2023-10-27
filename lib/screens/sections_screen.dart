@@ -43,7 +43,6 @@ class Section extends StatelessWidget {
             builder: (ctx) {
               return KanjiList(
                 sectionModel: sectionData,
-                isFromTabNav: false,
               );
             },
           ),

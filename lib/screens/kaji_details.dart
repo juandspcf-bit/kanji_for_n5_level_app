@@ -6,7 +6,6 @@ import 'package:flutter_svg/svg.dart';
 import 'package:kanji_for_n5_level_app/main.dart';
 import 'package:kanji_for_n5_level_app/models/kanji_from_api.dart';
 import 'package:kanji_for_n5_level_app/providers/favorites_cached_provider.dart';
-import 'package:kanji_for_n5_level_app/providers/favorites_kanjis_providers.dart';
 import 'package:video_player/video_player.dart';
 
 class KanjiDetails extends ConsumerStatefulWidget {
@@ -180,19 +179,14 @@ class KanjiDetailsState extends ConsumerState<KanjiDetails> {
     );
   }
 
-  (String, String, String) searchKanjiInFavorites(String kanji) {
-    var queryKanji = myFavoritesCached.firstWhere(
-        (element) => element.$3 == kanji,
-        orElse: () => ("", "", ""));
-    return queryKanji;
-  }
-
   @override
   void initState() {
     super.initState();
 
-    var queryKanji = searchKanjiInFavorites(widget.kanjiFromApi.kanjiCharacter);
-    _favoriteStatus = queryKanji != ("", "", "");
+    var queryKanji = ref
+        .read(favoritesCachedProvider.notifier)
+        .searchInFavorites(widget.kanjiFromApi.kanjiCharacter);
+    _favoriteStatus = queryKanji != "";
 
     _videoController = VideoPlayerController.networkUrl(
         Uri.parse(widget.kanjiFromApi.videoLink))
@@ -214,241 +208,244 @@ class KanjiDetailsState extends ConsumerState<KanjiDetails> {
 
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
-      onWillPop: () async {
-        return false;
-      },
-      child: Scaffold(
-        appBar: AppBar(
-          leading: IconButton(
-            onPressed: () {
-              Navigator.of(context).pop();
-            },
-            icon: const Icon(Icons.arrow_back_sharp),
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(widget.kanjiFromApi.kanjiCharacter),
+        actions: [
+          IconButton(
+              onPressed: () {
+                final queryKanji = ref
+                    .read(favoritesCachedProvider.notifier)
+                    .searchInFavorites(widget.kanjiFromApi.kanjiCharacter);
+                //searchKanjiInFavorites(widget.kanjiFromApi.kanjiCharacter);
+
+                if (queryKanji == "") {
+                  final favoriteKanji = <String, dynamic>{
+                    "kanjiCharacter": widget.kanjiFromApi.kanjiCharacter,
+                  };
+                  dbFirebase.collection("favorites").add(favoriteKanji).then(
+                    (DocumentReference doc) {
+                      ref
+                          .read(favoritesCachedProvider.notifier)
+                          .addItem(widget.kanjiFromApi.kanjiCharacter);
+                    },
+                  );
+                } else {
+                  dbFirebase
+                      .collection("favorites")
+                      .where("kanjiCharacter",
+                          isEqualTo: widget.kanjiFromApi.kanjiCharacter)
+                      .get()
+                      .then(
+                    (querySnapshot) {
+/*                       print("Successfully completed");
+                      for (var docSnapshot in querySnapshot.docs) {
+                        print('${docSnapshot.id} => ${docSnapshot.data()}');
+                      } */
+
+                      String id = querySnapshot.docs[0].id;
+
+                      dbFirebase.collection("favorites").doc(id).delete().then(
+                        (doc) {
+                          ref
+                              .read(favoritesCachedProvider.notifier)
+                              .removeItem(queryKanji);
+                        },
+                        onError: (e) => print("Error deleting document $e"),
+                      );
+
+                      final map = querySnapshot.docs[0].data();
+                      final data = map['kanjiCharacter'];
+                      print('data data $data');
+                    },
+                    onError: (e) => print("Error completing: $e"),
+                  );
+/*                   
+                       */
+                }
+
+                setState(() {
+                  _favoriteStatus = queryKanji == "";
+                });
+              },
+              icon: Icon(_favoriteStatus
+                  ? Icons.favorite
+                  : Icons.favorite_border_outlined))
+        ],
+      ),
+      body: Column(
+        children: [
+          const SizedBox(
+            height: 20,
           ),
-          title: Text(widget.kanjiFromApi.kanjiCharacter),
-          actions: [
-            IconButton(
-                onPressed: () {
-                  var queryKanji = ref
-                      .read(favoritesCachedProvider.notifier)
-                      .searchInFavorites(widget.kanjiFromApi.kanjiCharacter);
-
-                  if (queryKanji.$3 == "") {
-                    final favoriteKanji = <String, dynamic>{
-                      "kanjiCharacter": widget.kanjiFromApi.kanjiCharacter,
-                    };
-                    dbFirebase.collection("favorites").add(favoriteKanji).then(
-                      (DocumentReference doc) {
-                        ref.read(favoritesCachedProvider.notifier).addItem(
-                          (
-                            doc.id,
-                            "kanjiCharacter",
-                            widget.kanjiFromApi.kanjiCharacter
-                          ),
-                        );
-                      },
-                      onError: (e) {},
-                    );
-                  } else {
-                    dbFirebase
-                        .collection("favorites")
-                        .doc(queryKanji.$1)
-                        .delete()
-                        .then(
-                      (doc) {
-                        //myFavoritesCached.remove(queryKanji);
-                        ref
-                            .read(favoritesCachedProvider.notifier)
-                            .removeItem(queryKanji);
-                      },
-                      onError: (e) {},
-                    );
-                  }
-
-                  setState(() {
-                    _favoriteStatus = queryKanji == ("", "", "");
-                  });
-                },
-                icon: Icon(_favoriteStatus
-                    ? Icons.favorite
-                    : Icons.favorite_border_outlined))
-          ],
-        ),
-        body: Column(
-          children: [
-            const SizedBox(
-              height: 20,
-            ),
-            _videoController.value.isInitialized
-                ? Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      const SizedBox(
-                        height: 20,
-                      ),
-                      SizedBox(
-                        height: 100 * _videoController.value.aspectRatio,
-                        width: 100,
-                        child: AspectRatio(
-                          aspectRatio: _videoController.value.aspectRatio,
-                          child: VideoPlayer(_videoController),
-                        ),
-                      ),
-                      Container(
-                        decoration: BoxDecoration(
-                            color: Theme.of(context).colorScheme.primary,
-                            borderRadius: BorderRadius.circular(30)),
-                        child: IconButton(
-                          color: Theme.of(context).colorScheme.onPrimary,
-                          onPressed: () {
-                            setState(() {
-                              _videoController.value.isPlaying
-                                  ? _videoController.pause()
-                                  : _videoController.play();
-                            });
-                          },
-                          icon: Icon(
-                            _videoController.value.isPlaying
-                                ? Icons.pause
-                                : Icons.play_arrow,
-                          ),
-                        ),
-                      ),
-                      const SizedBox(
-                        height: 20,
-                      ),
-                    ],
-                  )
-                : Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      SizedBox(
-                          height: 128 * _videoController.value.aspectRatio,
-                          width: 128,
-                          child: const Padding(
-                            padding: EdgeInsets.all(40.0),
-                            child: CircularProgressIndicator(),
-                          )),
-                    ],
-                  ),
-            const SizedBox(
-              height: 10,
-            ),
-            const Divider(
-              height: 4,
-            ),
-            const SizedBox(
-              height: 10,
-            ),
-            Text(
-              "Strokes",
-              style: Theme.of(context)
-                  .textTheme
-                  .titleLarge!
-                  .copyWith(fontWeight: FontWeight.bold),
-            ),
-            SingleChildScrollView(
-              scrollDirection: Axis.horizontal,
-              child: Card(
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      ...getListStrokes(widget.kanjiFromApi.strokes.images)
-                    ],
-                  ),
-                ),
-              ),
-            ),
-            const SizedBox(
-              height: 10,
-            ),
-            const Divider(
-              height: 4,
-            ),
-            const SizedBox(
-              height: 10,
-            ),
-            Text(
-              "Meaning and definition",
-              style: Theme.of(context)
-                  .textTheme
-                  .titleLarge!
-                  .copyWith(fontWeight: FontWeight.bold),
-            ),
-            const SizedBox(
-              height: 10,
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                const SizedBox(
-                  width: 20,
-                ),
-                Text(
-                  capitalizeString(
-                      'Meaning: ${widget.kanjiFromApi.englishMeaning}'),
-                ),
-              ],
-            ),
-            const SizedBox(
-              height: 10,
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                const SizedBox(
-                  width: 20,
-                ),
-                Text("Kunyomi: ${widget.kanjiFromApi.hiraganaMeaning}"),
-              ],
-            ),
-            const SizedBox(
-              height: 10,
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                const SizedBox(
-                  width: 20,
-                ),
-                Text("Onyomi: ${widget.kanjiFromApi.katakanaMeaning}"),
-              ],
-            ),
-            const SizedBox(
-              height: 10,
-            ),
-            const Divider(
-              height: 4,
-            ),
-            const SizedBox(
-              height: 10,
-            ),
-            Text(
-              "Examples",
-              style: Theme.of(context)
-                  .textTheme
-                  .titleLarge!
-                  .copyWith(fontWeight: FontWeight.bold),
-            ),
-            const SizedBox(
-              height: 10,
-            ),
-            Expanded(
-              child: SingleChildScrollView(
-                child: Column(
+          _videoController.value.isInitialized
+              ? Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    ...getIndexedExamples(
-                        widget.kanjiFromApi.example, stopAnimation)
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    SizedBox(
+                      height: 100 * _videoController.value.aspectRatio,
+                      width: 100,
+                      child: AspectRatio(
+                        aspectRatio: _videoController.value.aspectRatio,
+                        child: VideoPlayer(_videoController),
+                      ),
+                    ),
+                    Container(
+                      decoration: BoxDecoration(
+                          color: Theme.of(context).colorScheme.primary,
+                          borderRadius: BorderRadius.circular(30)),
+                      child: IconButton(
+                        color: Theme.of(context).colorScheme.onPrimary,
+                        onPressed: () {
+                          setState(() {
+                            _videoController.value.isPlaying
+                                ? _videoController.pause()
+                                : _videoController.play();
+                          });
+                        },
+                        icon: Icon(
+                          _videoController.value.isPlaying
+                              ? Icons.pause
+                              : Icons.play_arrow,
+                        ),
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                  ],
+                )
+              : Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    SizedBox(
+                        height: 128 * _videoController.value.aspectRatio,
+                        width: 128,
+                        child: const Padding(
+                          padding: EdgeInsets.all(40.0),
+                          child: CircularProgressIndicator(),
+                        )),
+                  ],
+                ),
+          const SizedBox(
+            height: 10,
+          ),
+          const Divider(
+            height: 4,
+          ),
+          const SizedBox(
+            height: 10,
+          ),
+          Text(
+            "Strokes",
+            style: Theme.of(context)
+                .textTheme
+                .titleLarge!
+                .copyWith(fontWeight: FontWeight.bold),
+          ),
+          SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: Card(
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    ...getListStrokes(widget.kanjiFromApi.strokes.images)
                   ],
                 ),
               ),
-            )
-          ],
-        ),
+            ),
+          ),
+          const SizedBox(
+            height: 10,
+          ),
+          const Divider(
+            height: 4,
+          ),
+          const SizedBox(
+            height: 10,
+          ),
+          Text(
+            "Meaning and definition",
+            style: Theme.of(context)
+                .textTheme
+                .titleLarge!
+                .copyWith(fontWeight: FontWeight.bold),
+          ),
+          const SizedBox(
+            height: 10,
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              const SizedBox(
+                width: 20,
+              ),
+              Text(
+                capitalizeString(
+                    'Meaning: ${widget.kanjiFromApi.englishMeaning}'),
+              ),
+            ],
+          ),
+          const SizedBox(
+            height: 10,
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              const SizedBox(
+                width: 20,
+              ),
+              Text("Kunyomi: ${widget.kanjiFromApi.hiraganaMeaning}"),
+            ],
+          ),
+          const SizedBox(
+            height: 10,
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              const SizedBox(
+                width: 20,
+              ),
+              Text("Onyomi: ${widget.kanjiFromApi.katakanaMeaning}"),
+            ],
+          ),
+          const SizedBox(
+            height: 10,
+          ),
+          const Divider(
+            height: 4,
+          ),
+          const SizedBox(
+            height: 10,
+          ),
+          Text(
+            "Examples",
+            style: Theme.of(context)
+                .textTheme
+                .titleLarge!
+                .copyWith(fontWeight: FontWeight.bold),
+          ),
+          const SizedBox(
+            height: 10,
+          ),
+          Expanded(
+            child: SingleChildScrollView(
+              child: Column(
+                children: [
+                  ...getIndexedExamples(
+                      widget.kanjiFromApi.example, stopAnimation)
+                ],
+              ),
+            ),
+          )
+        ],
       ),
     );
   }

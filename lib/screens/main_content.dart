@@ -3,8 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kanji_for_n5_level_app/main.dart';
 import 'package:kanji_for_n5_level_app/providers/favorites_cached_provider.dart';
-import 'package:kanji_for_n5_level_app/providers/favorites_kanjis_providers.dart';
-import 'package:kanji_for_n5_level_app/screens/favorite_screen.dart';
+import 'package:kanji_for_n5_level_app/screens/favorite_screen/favorite_screen.dart';
 import 'package:kanji_for_n5_level_app/screens/sections_screen.dart';
 
 const temporalAvatar =
@@ -34,7 +33,6 @@ class _MainContentState extends ConsumerState<MainContent> {
         return (e.id, 'kanjiCharacter', data['kanjiCharacter'] as String);
       },
     ).toList();
-    ref.read(favoritesCachedProvider.notifier).setInitState(myFavoritesCached);
   }
 
   @override
@@ -54,7 +52,7 @@ class _MainContentState extends ConsumerState<MainContent> {
           ],
         );
       case 1:
-        return const FavoriteScreen(isFromTabNav: true);
+        return const FavoriteScreen();
 
       default:
         return const Center(
