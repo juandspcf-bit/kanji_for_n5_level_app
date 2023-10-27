@@ -61,37 +61,55 @@ class KanjiItem extends StatelessWidget {
                     Color.fromARGB(70, 121, 21, 21)
                   ], begin: Alignment.topLeft, end: Alignment.bottomRight),
                 ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
+                child: LayoutBuilder(
+                  builder: (context, constraints) {
+                    return Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text(
-                          kanjiFromApi.englishMeaning,
-                          style:
-                              Theme.of(context).textTheme.titleLarge!.copyWith(
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              kanjiFromApi.englishMeaning,
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .titleLarge!
+                                  .copyWith(
                                     color: Theme.of(context)
                                         .colorScheme
                                         .onSecondaryContainer,
                                     fontWeight: FontWeight.bold,
                                   ),
-                          //textAlign: TextAlign.start,
+                              //textAlign: TextAlign.start,
+                            ),
+                            const SizedBox(
+                              height: 10,
+                            ),
+                            Text("Kunyomi: ${kanjiFromApi.hiraganaMeaning}"),
+                            Text("Onyomi: ${kanjiFromApi.katakanaMeaning}"),
+/*                             Container(
+                              height: 2,
+                              width: constraints.maxWidth * 0.9,
+                              color: Colors.amber,
+                            ) */
+                          ],
                         ),
-                        const SizedBox(
-                          height: 10,
-                        ),
-                        Text("Kunyomi: ${kanjiFromApi.hiraganaMeaning}"),
-                        Text("Onyomi: ${kanjiFromApi.katakanaMeaning}"),
-                        Container(
-                          height: 10,
-                          width: 30,
-                          color: Colors.amber,
+                        GestureDetector(
+                          onTap: () {},
+                          child: Container(
+                            decoration:
+                                const BoxDecoration(shape: BoxShape.circle),
+                            padding: const EdgeInsets.only(
+                                left: 30, top: 30, bottom: 30),
+                            child: const Icon(
+                              Icons.download_for_offline,
+                              size: 50,
+                            ),
+                          ),
                         )
                       ],
-                    ),
-                    const Icon(Icons.download_for_offline)
-                  ],
+                    );
+                  },
                 ),
               ),
             ),
