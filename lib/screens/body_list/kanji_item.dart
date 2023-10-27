@@ -15,6 +15,13 @@ class KanjiItem extends StatelessWidget {
     KanjiFromApi? kanjiFromApi,
   ) navigateToKanjiDetails;
 
+  void downloadKanji(KanjiFromApi kanjiFromApi) {}
+  String cutWords(String text) {
+    final splitText = text.split('、');
+    if (splitText.length == 1) return text;
+    return '${splitText[0]}, ${splitText[1]}';
+  }
+
   @override
   Widget build(BuildContext context) {
     return InkWell(
@@ -85,8 +92,12 @@ class KanjiItem extends StatelessWidget {
                             const SizedBox(
                               height: 10,
                             ),
-                            Text("Kunyomi: ${kanjiFromApi.hiraganaMeaning}"),
-                            Text("Onyomi: ${kanjiFromApi.katakanaMeaning}"),
+                            Text(
+                              "Kunyomi: ${cutWords(kanjiFromApi.hiraganaMeaning)}",
+                            ),
+                            Text(
+                              "Onyomi:${cutWords(kanjiFromApi.katakanaMeaning)}",
+                            ),
 /*                             Container(
                               height: 2,
                               width: constraints.maxWidth * 0.9,
