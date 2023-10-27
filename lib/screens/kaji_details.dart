@@ -103,16 +103,10 @@ class KanjiDetailsState extends ConsumerState<KanjiDetails> {
             decoration: BoxDecoration(
                 color: Theme.of(context).colorScheme.primary,
                 borderRadius: BorderRadius.circular(30)),
-/*             onTap: () {},
-            highlightColor: Theme.of(context).colorScheme.primary,
-            radius: 50, */
             child: InkWell(
               highlightColor: Colors.blue.withOpacity(0.4),
               splashColor: Colors.green.withOpacity(0.5),
               onTap: () {},
-/*               decoration: BoxDecoration(
-                  color: Theme.of(context).colorScheme.primary,
-                  borderRadius: BorderRadius.circular(30)), */
               child: IconButton(
                 color: Theme.of(context).colorScheme.onPrimary,
                 splashColor: Colors.deepOrange,
@@ -276,23 +270,31 @@ class KanjiDetailsState extends ConsumerState<KanjiDetails> {
                         child: VideoPlayer(_videoController),
                       ),
                     ),
-                    Container(
-                      decoration: BoxDecoration(
-                          color: Theme.of(context).colorScheme.primary,
-                          borderRadius: BorderRadius.circular(30)),
-                      child: IconButton(
-                        color: Theme.of(context).colorScheme.onPrimary,
-                        onPressed: () {
-                          setState(() {
-                            _videoController.value.isPlaying
-                                ? _videoController.pause()
-                                : _videoController.play();
-                          });
-                        },
-                        icon: Icon(
-                          _videoController.value.isPlaying
-                              ? Icons.pause
-                              : Icons.play_arrow,
+                    Material(
+                      child: Ink(
+                        decoration: BoxDecoration(
+                            color: Theme.of(context).colorScheme.primary,
+                            borderRadius: BorderRadius.circular(30)),
+                        child: InkWell(
+                          highlightColor: Colors.blue.withOpacity(0.4),
+                          splashColor: Colors.green.withOpacity(0.5),
+                          onTap: () {},
+                          child: IconButton(
+                            color: Theme.of(context).colorScheme.onPrimary,
+                            splashColor: Colors.deepOrange,
+                            onPressed: () async {
+                              setState(() {
+                                _videoController.value.isPlaying
+                                    ? _videoController.pause()
+                                    : _videoController.play();
+                              });
+                            },
+                            icon: Icon(
+                              _videoController.value.isPlaying
+                                  ? Icons.pause
+                                  : Icons.play_arrow,
+                            ),
+                          ),
                         ),
                       ),
                     ),
