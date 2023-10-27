@@ -6,7 +6,6 @@ import 'package:flutter_svg/svg.dart';
 import 'package:kanji_for_n5_level_app/main.dart';
 import 'package:kanji_for_n5_level_app/models/kanji_from_api.dart';
 import 'package:kanji_for_n5_level_app/providers/favorites_cached_provider.dart';
-import 'package:kanji_for_n5_level_app/providers/favorites_kanjis_providers.dart';
 import 'package:video_player/video_player.dart';
 
 class KanjiDetails extends ConsumerStatefulWidget {
@@ -180,19 +179,14 @@ class KanjiDetailsState extends ConsumerState<KanjiDetails> {
     );
   }
 
-  (String, String, String) searchKanjiInFavorites(String kanji) {
-    var queryKanji = myFavoritesCached.firstWhere(
-        (element) => element.$3 == kanji,
-        orElse: () => ("", "", ""));
-    return queryKanji;
-  }
-
   @override
   void initState() {
     super.initState();
 
-    var queryKanji = searchKanjiInFavorites(widget.kanjiFromApi.kanjiCharacter);
-    _favoriteStatus = queryKanji != ("", "", "");
+    var queryKanji = ref
+        .read(favoritesCachedProvider.notifier)
+        .searchInFavorites(widget.kanjiFromApi.kanjiCharacter);
+    _favoriteStatus = queryKanji != "";
 
     _videoController = VideoPlayerController.networkUrl(
         Uri.parse(widget.kanjiFromApi.videoLink))
@@ -220,7 +214,7 @@ class KanjiDetailsState extends ConsumerState<KanjiDetails> {
         actions: [
           IconButton(
               onPressed: () {
-                var queryKanji = ref
+                final queryKanji = ref
                     .read(favoritesCachedProvider.notifier)
                     .searchInFavorites(widget.kanjiFromApi.kanjiCharacter);
                 //searchKanjiInFavorites(widget.kanjiFromApi.kanjiCharacter);
@@ -231,12 +225,6 @@ class KanjiDetailsState extends ConsumerState<KanjiDetails> {
                   };
                   dbFirebase.collection("favorites").add(favoriteKanji).then(
                     (DocumentReference doc) {
-                      myFavoritesCached.add((
-                        doc.id,
-                        "kanjiCharacter",
-                        widget.kanjiFromApi.kanjiCharacter
-                      ));
-
                       ref
                           .read(favoritesCachedProvider.notifier)
                           .addItem(widget.kanjiFromApi.kanjiCharacter);
