@@ -61,32 +61,28 @@ class KanjiItem extends StatelessWidget {
                     Color.fromARGB(70, 121, 21, 21)
                   ], begin: Alignment.topLeft, end: Alignment.bottomRight),
                 ),
-                child: Container(
-                  decoration: const BoxDecoration(
-                    border: Border(
-                      bottom: BorderSide(
-                          style: BorderStyle.solid, color: Colors.white70),
+                child: Column(
+                  children: [
+                    Text(
+                      kanjiFromApi.englishMeaning,
+                      style: Theme.of(context).textTheme.titleLarge!.copyWith(
+                            color: Theme.of(context)
+                                .colorScheme
+                                .onSecondaryContainer,
+                            fontWeight: FontWeight.bold,
+                          ),
+                      textAlign: TextAlign.center,
                     ),
-                  ),
-                  child: Column(
-                    children: [
-                      Text(
-                        kanjiFromApi.englishMeaning,
-                        style: Theme.of(context).textTheme.titleLarge!.copyWith(
-                              color: Theme.of(context)
-                                  .colorScheme
-                                  .onSecondaryContainer,
-                              fontWeight: FontWeight.bold,
-                            ),
-                        textAlign: TextAlign.center,
-                      ),
-                      const SizedBox(
-                        height: 10,
-                      ),
-                      Text("Kunyomi: ${kanjiFromApi.hiraganaMeaning}"),
-                      Text("Onyomi: ${kanjiFromApi.katakanaMeaning}"),
-                    ],
-                  ),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    Text("Kunyomi: ${kanjiFromApi.hiraganaMeaning}"),
+                    Text("Onyomi: ${kanjiFromApi.katakanaMeaning}"),
+                    const Divider(
+                      height: 10,
+                      color: Colors.amber,
+                    )
+                  ],
                 ),
               ),
             ),
