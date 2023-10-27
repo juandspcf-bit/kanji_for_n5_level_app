@@ -27,12 +27,15 @@ class _MainContentState extends ConsumerState<MainContent> {
 
   void getListOfFavorites() async {
     final querySnapshot = await dbFirebase.collection("favorites").get();
-    myFavoritesCached = querySnapshot.docs.map(
-      (e) {
-        Map<String, dynamic> data = e.data();
-        return (e.id, 'kanjiCharacter', data['kanjiCharacter'] as String);
-      },
-    ).toList();
+
+    ref
+        .read(favoritesCachedProvider.notifier)
+        .setInitState(querySnapshot.docs.map(
+          (e) {
+            Map<String, dynamic> data = e.data();
+            return data['kanjiCharacter'] as String;
+          },
+        ).toList());
   }
 
   @override
