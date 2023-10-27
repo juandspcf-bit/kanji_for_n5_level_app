@@ -8,10 +8,7 @@ import 'package:kanji_for_n5_level_app/screens/kaji_details.dart';
 class FavoriteScreen extends ConsumerStatefulWidget {
   const FavoriteScreen({
     super.key,
-    //required this.isFromTabNav,
   });
-
-  //final bool isFromTabNav;
 
   @override
   ConsumerState<FavoriteScreen> createState() => _FavoriteScreenState();
