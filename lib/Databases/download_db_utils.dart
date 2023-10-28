@@ -93,12 +93,14 @@ Future<List<KanjiFromApi>> loadStoredKanjis() async {
   final dbKanjiFromApi = await kanjiFromApiDatabase;
   final dbExamples = await examplesDatabase;
   final dbStrokes = await strokesDatabase;
-  final data = await dbKanjiFromApi.query('kanji_FromApi');
+  final dataKanjiFromApi = await dbKanjiFromApi.query('kanji_FromApi');
 
-  if (data.isEmpty) return [];
+  if (dataKanjiFromApi.isEmpty) return [];
 
-  final listFutures = data.map((kanjiFromApi) async {
-    final exampleUuid = kanjiFromApi['examplesUuid'] as String;
+  final List<KanjiFromApi> kanjisFromApi = [];
+
+  for (final mapKanjiFromDb in dataKanjiFromApi) {
+    final exampleUuid = mapKanjiFromDb['examplesUuid'] as String;
     final listMapExamplesFromDb = await dbExamples.rawQuery(
         'SELECT * FROM examples WHERE examplesUuid = ? ', [exampleUuid]);
 
@@ -115,7 +117,7 @@ Future<List<KanjiFromApi>> loadStoredKanjis() async {
           audio: audio);
     }).toList();
 
-    final strokesUuid = kanjiFromApi['strokesUuid'] as String;
+    final strokesUuid = mapKanjiFromDb['strokesUuid'] as String;
     final listMapStrokesImagesLisnkFromDb = await dbStrokes.rawQuery(
         'SELECT * FROM strokes WHERE strokesUuid = ? ', [strokesUuid]);
 
@@ -126,22 +128,17 @@ Future<List<KanjiFromApi>> loadStoredKanjis() async {
     final strokes = Strokes(
         count: listStrokesImagesLinks.length, images: listStrokesImagesLinks);
 
-    return KanjiFromApi(
-        kanjiCharacter: kanjiFromApi['kanjiCharacter'] as String,
-        englishMeaning: kanjiFromApi['englishMeaning'] as String,
-        kanjiImageLink: kanjiFromApi['kanjiImageLink'] as String,
-        katakanaMeaning: kanjiFromApi['katakanaMeaning'] as String,
-        hiraganaMeaning: kanjiFromApi['hiraganaMeaning'] as String,
-        videoLink: kanjiFromApi['videoLink'] as String,
-        example: examples,
-        strokes: strokes);
+    final kanjiFromApi = KanjiFromApi(
+      kanjiCharacter: mapKanjiFromDb['kanjiCharacter'] as String,
+      englishMeaning: mapKanjiFromDb['englishMeaning'] as String,
+      kanjiImageLink: mapKanjiFromDb['kanjiImageLink'] as String,
+      katakanaMeaning: mapKanjiFromDb['katakanaMeaning'] as String,
+      hiraganaMeaning: mapKanjiFromDb['hiraganaMeaning'] as String,
+      videoLink: mapKanjiFromDb['videoLink'] as String,
+      example: examples,
+      strokes: strokes,
+    );
 
-    //return kanjiFromApi['kanjiCharacter'] as String;
-  }).toList();
-
-  final List<KanjiFromApi> kanjisFromApi = [];
-  for (var element in listFutures) {
-    final kanjiFromApi = await element;
     kanjisFromApi.add(kanjiFromApi);
   }
 

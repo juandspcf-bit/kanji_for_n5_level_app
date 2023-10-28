@@ -17,17 +17,6 @@ class KanjiItem extends StatelessWidget {
   ) navigateToKanjiDetails;
 
   void downloadKanji(KanjiFromApi kanjiFromApi) {}
-  String cutWords(String text) {
-    final splitText = text.split('、');
-    if (splitText.length == 1) return text;
-    return '${splitText[0]}, ${splitText[1]}';
-  }
-
-  String cutEnglishMeaning(String text) {
-    final splitText = text.split(', ');
-    if (splitText.length == 1) return text;
-    return '${splitText[0]}, ${splitText[1]}';
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -64,71 +53,100 @@ class KanjiItem extends StatelessWidget {
             const SizedBox(
               width: 15,
             ),
-            Expanded(
-              child: Container(
-                padding: const EdgeInsets.all(10),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(20),
-                  gradient: const LinearGradient(colors: [
-                    Color.fromARGB(180, 250, 8, 8),
-                    Color.fromARGB(180, 192, 20, 20),
-                    Color.fromARGB(70, 121, 21, 21)
-                  ], begin: Alignment.topLeft, end: Alignment.bottomRight),
-                ),
-                child: LayoutBuilder(
-                  builder: (context, constraints) {
-                    return Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              cutEnglishMeaning(kanjiFromApi.englishMeaning),
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .titleLarge!
-                                  .copyWith(
-                                    color: Theme.of(context)
-                                        .colorScheme
-                                        .onSecondaryContainer,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                              //textAlign: TextAlign.start,
-                            ),
-                            const SizedBox(
-                              height: 10,
-                            ),
-                            Text(
-                              "Kunyomi: ${cutWords(kanjiFromApi.hiraganaMeaning)}",
-                            ),
-                            Text(
-                              "Onyomi:${cutWords(kanjiFromApi.katakanaMeaning)}",
-                            ),
-                          ],
-                        ),
-                        GestureDetector(
-                          onTap: () {
-                            insertKanjiFromApi(kanjiFromApi);
-                          },
-                          child: Container(
-                            decoration:
-                                const BoxDecoration(shape: BoxShape.circle),
-                            padding: const EdgeInsets.only(
-                                left: 30, top: 30, bottom: 30),
-                            child: const Icon(
-                              Icons.download_for_offline,
-                              size: 50,
-                            ),
-                          ),
-                        )
-                      ],
-                    );
-                  },
-                ),
-              ),
-            ),
+            ContainerDefinitions(
+              kanjiFromApi: kanjiFromApi,
+            )
           ],
+        ),
+      ),
+    );
+  }
+}
+
+class ContainerDefinitions extends StatefulWidget {
+  const ContainerDefinitions({
+    super.key,
+    required this.kanjiFromApi,
+  });
+
+  final KanjiFromApi kanjiFromApi;
+
+  @override
+  State<StatefulWidget> createState() => ContainerDefinitionsState();
+}
+
+class ContainerDefinitionsState extends State<ContainerDefinitions> {
+  String cutWords(String text) {
+    final splitText = text.split('、');
+    if (splitText.length == 1) return text;
+    return '${splitText[0]}, ${splitText[1]}';
+  }
+
+  String cutEnglishMeaning(String text) {
+    final splitText = text.split(', ');
+    if (splitText.length == 1) return text;
+    return '${splitText[0]}, ${splitText[1]}';
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Expanded(
+      child: Container(
+        padding: const EdgeInsets.all(10),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(20),
+          gradient: const LinearGradient(colors: [
+            Color.fromARGB(180, 250, 8, 8),
+            Color.fromARGB(180, 192, 20, 20),
+            Color.fromARGB(70, 121, 21, 21)
+          ], begin: Alignment.topLeft, end: Alignment.bottomRight),
+        ),
+        child: LayoutBuilder(
+          builder: (context, constraints) {
+            return Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      cutEnglishMeaning(widget.kanjiFromApi.englishMeaning),
+                      style: Theme.of(context).textTheme.titleLarge!.copyWith(
+                            color: Theme.of(context)
+                                .colorScheme
+                                .onSecondaryContainer,
+                            fontWeight: FontWeight.bold,
+                          ),
+                      //textAlign: TextAlign.start,
+                    ),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    Text(
+                      "Kunyomi: ${cutWords(widget.kanjiFromApi.hiraganaMeaning)}",
+                    ),
+                    Text(
+                      "Onyomi:${cutWords(widget.kanjiFromApi.katakanaMeaning)}",
+                    ),
+                  ],
+                ),
+                GestureDetector(
+                  onTap: () {
+                    insertKanjiFromApi(widget.kanjiFromApi);
+                  },
+                  child: Container(
+                    decoration: const BoxDecoration(shape: BoxShape.circle),
+                    padding:
+                        const EdgeInsets.only(left: 30, top: 30, bottom: 30),
+                    child: const Icon(
+                      Icons.download_for_offline,
+                      size: 50,
+                    ),
+                  ),
+                )
+              ],
+            );
+          },
         ),
       ),
     );
