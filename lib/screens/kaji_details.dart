@@ -76,7 +76,7 @@ class KanjiDetailsState extends ConsumerState<KanjiDetails> {
   }
 
   List<Widget> getIndexedExamples(
-    List<Examples> examples,
+    List<Example> examples,
     Function() stopAnimation,
   ) {
     List<Widget> indexedExamples = [];

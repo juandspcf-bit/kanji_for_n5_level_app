@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:kanji_for_n5_level_app/Databases/download_db_utils.dart';
 import 'package:kanji_for_n5_level_app/models/kanji_from_api.dart';
 
 class KanjiItem extends StatelessWidget {
@@ -104,15 +105,12 @@ class KanjiItem extends StatelessWidget {
                             Text(
                               "Onyomi:${cutWords(kanjiFromApi.katakanaMeaning)}",
                             ),
-/*                             Container(
-                              height: 2,
-                              width: constraints.maxWidth * 0.9,
-                              color: Colors.amber,
-                            ) */
                           ],
                         ),
                         GestureDetector(
-                          onTap: () {},
+                          onTap: () {
+                            insertKanjiFromApi(kanjiFromApi);
+                          },
                           child: Container(
                             decoration:
                                 const BoxDecoration(shape: BoxShape.circle),

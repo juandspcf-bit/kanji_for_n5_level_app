@@ -5,7 +5,7 @@ class KanjiFromApi {
   final String katakanaMeaning;
   final String hiraganaMeaning;
   final String videoLink;
-  final List<Examples> example;
+  final List<Example> example;
   final Strokes strokes;
 
   KanjiFromApi(
@@ -17,14 +17,19 @@ class KanjiFromApi {
       required this.videoLink,
       required this.example,
       required this.strokes});
+
+  @override
+  String toString() {
+    return '$kanjiCharacter: $englishMeaning';
+  }
 }
 
-class Examples {
+class Example {
   final String japanese;
   final Meaning meaning;
   final AudioExamples audio;
 
-  Examples({
+  Example({
     required this.japanese,
     required this.meaning,
     required this.audio,
@@ -91,7 +96,7 @@ KanjiFromApi builKanjiInfoFromApi(Map<String, dynamic> body) {
 
   final List<dynamic> examplesFromAPI = body['examples'];
 
-  List<Examples> examples = examplesFromAPI.map((e) {
+  List<Example> examples = examplesFromAPI.map((e) {
     //
     final String japanese = e["japanese"];
     final Map<String, dynamic> meaningMap = e['meaning'];
@@ -103,7 +108,7 @@ KanjiFromApi builKanjiInfoFromApi(Map<String, dynamic> body) {
         ogg: audioMap['ogg'],
         mp3: audioMap['mp3']);
 
-    return Examples(
+    return Example(
       japanese: japanese,
       meaning: meaning,
       audio: audio,

@@ -29,13 +29,18 @@ class _MainContentState extends ConsumerState<MainContent> {
   void getListOfFavorites() async {
     final favoritesKanjis = await loadFavorites();
     ref.read(favoritesCachedProvider.notifier).setInitState(favoritesKanjis);
-    await getDownloadDatabase();
+  }
+
+  void getListOfStoredKanjis() async {
+    final listOfStoredKanjis = await loadStoredKanjis();
+    print('My stored kanjis are: $listOfStoredKanjis');
   }
 
   @override
   void initState() {
     super.initState();
     getListOfFavorites();
+    getListOfStoredKanjis();
   }
 
   Widget selectScreen(int selectedPageIndex) {

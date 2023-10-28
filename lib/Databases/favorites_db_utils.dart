@@ -33,23 +33,3 @@ Future<int> deleteFavorite(String kanji) async {
   return await db
       .delete("user_favorites", where: 'kanjiCharacter= ?', whereArgs: [kanji]);
 }
-
-
-/* class FavoritesDBProvider extends Notifier<(List<KanjiFromApi>, int)> {
-  @override
-  (List<KanjiFromApi>, int) build() {
-    return ([], 0);
-  }
-
-  void onSuccesRequest(List<KanjiFromApi> kanjisFromApi) {
-    state = (kanjisFromApi, 1);
-  }
-
-  void onSuccesAddRequest(List<KanjiFromApi> kanjisFromApi) {
-    state = ([...state.$1, ...kanjisFromApi], state.$2);
-  }
-}
-
-final favoritesDBProvider =
-    NotifierProvider<FavoritesDBProvider, (List<KanjiFromApi>, int)>(
-        FavoritesDBProvider.new); */
