@@ -15,6 +15,22 @@ class StatusStorageProvider extends Notifier<List<KanjiFromApi>> {
     state = [...state, kanjiFromApi];
   }
 
+  void deleteItem(KanjiFromApi kanjiFromApi) {
+    final copyState = [...state];
+    var copyState2 = [...state];
+    bool isThere = false;
+
+    for (int i = 0; i < copyState.length; i++) {
+      isThere = kanjiFromApi.kanjiCharacter == copyState[i].kanjiCharacter;
+      if (isThere) {
+        copyState2.removeAt(i);
+        break;
+      }
+    }
+
+    state = copyState2;
+  }
+
   StatusStorage isInStorage(KanjiFromApi kanjiFromApi) {
     final copyState = [...state];
     final kanjiQuery = copyState.map((e) => e.kanjiCharacter).firstWhere(

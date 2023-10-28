@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kanji_for_n5_level_app/models/kanji_from_api.dart';
 import 'package:kanji_for_n5_level_app/models/secction_model.dart';
 import 'package:kanji_for_n5_level_app/networking/request_api.dart';
+import 'package:kanji_for_n5_level_app/providers/status_stored_provider.dart';
 import 'package:kanji_for_n5_level_app/screens/body_list/body_list.dart';
 
 import 'package:kanji_for_n5_level_app/screens/kaji_details.dart';
 import 'package:kanji_for_n5_level_app/screens/quiz_screen/quizz_screen.dart';
 
-class KanjiList extends StatefulWidget {
+class KanjiList extends ConsumerStatefulWidget {
   const KanjiList({
     super.key,
     required this.sectionModel,
@@ -16,10 +18,10 @@ class KanjiList extends StatefulWidget {
   final SectionModel sectionModel;
 
   @override
-  State<KanjiList> createState() => _KanjiListState();
+  ConsumerState<KanjiList> createState() => _KanjiListState();
 }
 
-class _KanjiListState extends State<KanjiList> {
+class _KanjiListState extends ConsumerState<KanjiList> {
   List<KanjiFromApi> _kanjisModel = [];
   int statusResponse = 0;
 
@@ -59,6 +61,7 @@ class _KanjiListState extends State<KanjiList> {
 
   @override
   Widget build(BuildContext context) {
+    ref.watch(statusStorageProvider);
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.sectionModel.title),

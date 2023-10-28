@@ -171,7 +171,13 @@ class ContainerDefinitionsState extends ConsumerState<ContainerDefinitions> {
                             .read(statusStorageProvider.notifier)
                             .addItem(widget.kanjiFromApi);
                       }).catchError((onError) {});
-                    } else if (widget.statusStorage == StatusStorage.stored) {}
+                    } else if (widget.statusStorage == StatusStorage.stored) {
+                      deleteKanjiFromApi(widget.kanjiFromApi).then((value) {
+                        ref
+                            .read(statusStorageProvider.notifier)
+                            .deleteItem(widget.kanjiFromApi);
+                      }).catchError((onError) {});
+                    }
                   },
                   child: Container(
                     decoration: const BoxDecoration(shape: BoxShape.circle),

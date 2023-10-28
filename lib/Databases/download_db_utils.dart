@@ -13,8 +13,7 @@ Future<Database> get kanjiFromApiDatabase async {
     onCreate: (db, version) {
       return db.execute(
           'CREATE TABLE kanji_FromApi(id INTEGER PRIMARY KEY AUTOINCREMENT, kanjiCharacter TEXT,'
-          ' englishMeaning TEXT, kanjiImageLink TEXT, katakanaMeaning TEXT, hiraganaMeaning TEXT, videoLink TEXT,'
-          ' examplesUuid TEXT, strokesUuid TEXT)');
+          ' englishMeaning TEXT, kanjiImageLink TEXT, katakanaMeaning TEXT, hiraganaMeaning TEXT, videoLink TEXT)');
     },
     version: 1,
   );
@@ -28,7 +27,7 @@ Future<Database> get examplesDatabase async {
     onCreate: (db, version) {
       return db.execute(
           'CREATE TABLE examples(id INTEGER PRIMARY KEY AUTOINCREMENT, japanese TEXT,'
-          ' meaning TEXT, opus TEXT, aac TEXT, ogg TEXT, mp3 TEXT, examplesUuid TEXT)');
+          ' meaning TEXT, opus TEXT, aac TEXT, ogg TEXT, mp3 TEXT, kanjiCharacter TEXT)');
     },
     version: 1,
   );
@@ -42,7 +41,7 @@ Future<Database> get strokesDatabase async {
     onCreate: (db, version) {
       return db.execute(
           'CREATE TABLE strokes(id INTEGER PRIMARY KEY AUTOINCREMENT, strokeImageLink TEXT,'
-          ' strokesUuid TEXT)');
+          ' kanjiCharacter TEXT)');
     },
     version: 1,
   );
@@ -60,9 +59,9 @@ Future<List<KanjiFromApi>> loadStoredKanjis() async {
   final List<KanjiFromApi> kanjisFromApi = [];
 
   for (final mapKanjiFromDb in dataKanjiFromApi) {
-    final exampleUuid = mapKanjiFromDb['examplesUuid'] as String;
+    final kanjiCharacter = mapKanjiFromDb['kanjiCharacter'] as String;
     final listMapExamplesFromDb = await dbExamples.rawQuery(
-        'SELECT * FROM examples WHERE examplesUuid = ? ', [exampleUuid]);
+        'SELECT * FROM examples WHERE kanjiCharacter = ? ', [kanjiCharacter]);
 
     final examples = listMapExamplesFromDb.map((exampleFromDb) {
       final audio = AudioExamples(
@@ -77,9 +76,8 @@ Future<List<KanjiFromApi>> loadStoredKanjis() async {
           audio: audio);
     }).toList();
 
-    final strokesUuid = mapKanjiFromDb['strokesUuid'] as String;
     final listMapStrokesImagesLisnkFromDb = await dbStrokes.rawQuery(
-        'SELECT * FROM strokes WHERE strokesUuid = ? ', [strokesUuid]);
+        'SELECT * FROM strokes WHERE kanjiCharacter = ? ', [kanjiCharacter]);
 
     final listStrokesImagesLinks = listMapStrokesImagesLisnkFromDb
         .map((imageLinkMap) => imageLinkMap['strokeImageLink'] as String)
@@ -110,8 +108,6 @@ Future<int> insertKanjiFromApi(KanjiFromApi kanjiFromApi) async {
   final dbExamples = await examplesDatabase;
   final dbStrokes = await strokesDatabase;
 
-  final uuidForDb = uuid.v4();
-
   for (var example in kanjiFromApi.example) {
     final exampleObject = {
       'japanese': example.japanese,
@@ -120,7 +116,7 @@ Future<int> insertKanjiFromApi(KanjiFromApi kanjiFromApi) async {
       'aac': example.audio.aac,
       'ogg': example.audio.ogg,
       'mp3': example.audio.mp3,
-      'examplesUuid': uuidForDb,
+      'kanjiCharacter': kanjiFromApi.kanjiCharacter,
     };
     await dbExamples.insert('examples', exampleObject);
   }
@@ -128,7 +124,7 @@ Future<int> insertKanjiFromApi(KanjiFromApi kanjiFromApi) async {
   for (var strokeImage in kanjiFromApi.strokes.images) {
     final strokeObject = {
       'strokeImageLink': strokeImage,
-      'strokesUuid': uuidForDb,
+      'kanjiCharacter': kanjiFromApi.kanjiCharacter,
     };
     await dbStrokes.insert('strokes', strokeObject);
   }
@@ -140,17 +136,24 @@ Future<int> insertKanjiFromApi(KanjiFromApi kanjiFromApi) async {
     'katakanaMeaning': kanjiFromApi.katakanaMeaning,
     'hiraganaMeaning': kanjiFromApi.hiraganaMeaning,
     'videoLink': kanjiFromApi.videoLink,
-    'examplesUuid': uuidForDb,
-    'strokesUuid': uuidForDb,
   });
 }
 
 Future<int> deleteKanjiFromApi(KanjiFromApi kanjiFromApi) async {
   final dbKanjiFromApi = await kanjiFromApiDatabase;
-  //final dbExamples = await examplesDatabase;
-  //final dbStrokes = await strokesDatabase;
-  count = await dbKanjiFromApi.rawDelete(
-      'DELETE FROM Test WHERE kanjiCharacter = ?',
-      [kanjiFromApi.kanjiCharacter]);
+  final dbExamples = await examplesDatabase;
+  final dbStrokes = await strokesDatabase;
+  try {
+    await dbKanjiFromApi.rawDelete(
+        'DELETE FROM kanji_FromApi WHERE kanjiCharacter = ?',
+        [kanjiFromApi.kanjiCharacter]);
+    await dbExamples.rawDelete('DELETE FROM examples WHERE kanjiCharacter = ?',
+        [kanjiFromApi.kanjiCharacter]);
+    await dbStrokes.rawDelete('DELETE FROM strokes WHERE kanjiCharacter = ?',
+        [kanjiFromApi.kanjiCharacter]);
+  } catch (e) {
+    print(e);
+  }
+
   return 0;
 }
