@@ -1,13 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:kanji_for_n5_level_app/Databases/download_db_utils.dart';
 import 'package:kanji_for_n5_level_app/models/kanji_from_api.dart';
+import 'package:kanji_for_n5_level_app/providers/status_stored_provider.dart';
 
 class KanjiItem extends StatelessWidget {
   const KanjiItem({
     super.key,
     required this.kanjiFromApi,
     required this.navigateToKanjiDetails,
+    required this.statusStorage,
   });
 
   final KanjiFromApi kanjiFromApi;
@@ -15,6 +18,7 @@ class KanjiItem extends StatelessWidget {
     BuildContext context,
     KanjiFromApi? kanjiFromApi,
   ) navigateToKanjiDetails;
+  final StatusStorage statusStorage;
 
   void downloadKanji(KanjiFromApi kanjiFromApi) {}
 
@@ -55,6 +59,7 @@ class KanjiItem extends StatelessWidget {
             ),
             ContainerDefinitions(
               kanjiFromApi: kanjiFromApi,
+              statusStorage: statusStorage,
             )
           ],
         ),
@@ -63,19 +68,24 @@ class KanjiItem extends StatelessWidget {
   }
 }
 
-class ContainerDefinitions extends StatefulWidget {
+class ContainerDefinitions extends ConsumerStatefulWidget {
   const ContainerDefinitions({
     super.key,
     required this.kanjiFromApi,
+    required this.statusStorage,
   });
 
   final KanjiFromApi kanjiFromApi;
+  final StatusStorage statusStorage;
 
   @override
-  State<StatefulWidget> createState() => ContainerDefinitionsState();
+  ConsumerState<ContainerDefinitions> createState() =>
+      ContainerDefinitionsState();
 }
 
-class ContainerDefinitionsState extends State<ContainerDefinitions> {
+class ContainerDefinitionsState extends ConsumerState<ContainerDefinitions> {
+  late Widget statusStorageWidget;
+
   String cutWords(String text) {
     final splitText = text.split('、');
     if (splitText.length == 1) return text;
@@ -88,8 +98,28 @@ class ContainerDefinitionsState extends State<ContainerDefinitions> {
     return '${splitText[0]}, ${splitText[1]}';
   }
 
+  Widget selectWidgetStatus() {
+    if (widget.statusStorage == StatusStorage.onlyOnline) {
+      return const Icon(
+        Icons.download_for_offline,
+        size: 50,
+      );
+    } else if (widget.statusStorage == StatusStorage.stored) {
+      return const Icon(
+        Icons.storage,
+        size: 50,
+      );
+    }
+
+    return const Icon(
+      Icons.question_mark,
+      size: 50,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
+    statusStorageWidget = selectWidgetStatus();
     return Expanded(
       child: Container(
         padding: const EdgeInsets.all(10),
@@ -132,16 +162,22 @@ class ContainerDefinitionsState extends State<ContainerDefinitions> {
                 ),
                 GestureDetector(
                   onTap: () {
-                    insertKanjiFromApi(widget.kanjiFromApi);
+                    setState(() {
+                      statusStorageWidget = const CircularProgressIndicator();
+                    });
+                    if (widget.statusStorage == StatusStorage.onlyOnline) {
+                      insertKanjiFromApi(widget.kanjiFromApi).then((value) {
+                        ref
+                            .read(statusStorageProvider.notifier)
+                            .addItem(widget.kanjiFromApi);
+                      }).catchError((onError) {});
+                    } else if (widget.statusStorage == StatusStorage.stored) {}
                   },
                   child: Container(
                     decoration: const BoxDecoration(shape: BoxShape.circle),
                     padding:
                         const EdgeInsets.only(left: 30, top: 30, bottom: 30),
-                    child: const Icon(
-                      Icons.download_for_offline,
-                      size: 50,
-                    ),
+                    child: statusStorageWidget,
                   ),
                 )
               ],

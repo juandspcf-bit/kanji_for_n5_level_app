@@ -80,7 +80,7 @@ class _KanjiListState extends State<KanjiList> {
       ),
       body: BodyKanjisList(
         statusResponse: statusResponse,
-        kanjisModel: _kanjisModel,
+        kanjisFromApi: _kanjisModel,
         navigateToKanjiDetails: navigateToKanjiDetails,
       ),
     );

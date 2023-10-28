@@ -49,46 +49,6 @@ Future<Database> get strokesDatabase async {
   return db;
 }
 
-Future<int> insertKanjiFromApi(KanjiFromApi kanjiFromApi) async {
-  final dbKanjiFromApi = await kanjiFromApiDatabase;
-  final dbExamples = await examplesDatabase;
-  final dbStrokes = await strokesDatabase;
-
-  final uuidForDb = uuid.v4();
-
-  for (var example in kanjiFromApi.example) {
-    final exampleObject = {
-      'japanese': example.japanese,
-      'meaning': example.meaning.english,
-      'opus': example.audio.opus,
-      'aac': example.audio.aac,
-      'ogg': example.audio.ogg,
-      'mp3': example.audio.mp3,
-      'examplesUuid': uuidForDb,
-    };
-    await dbExamples.insert('examples', exampleObject);
-  }
-
-  for (var strokeImage in kanjiFromApi.strokes.images) {
-    final strokeObject = {
-      'strokeImageLink': strokeImage,
-      'strokesUuid': uuidForDb,
-    };
-    await dbStrokes.insert('strokes', strokeObject);
-  }
-
-  return dbKanjiFromApi.insert("kanji_FromApi", {
-    'kanjiCharacter': kanjiFromApi.kanjiCharacter,
-    'englishMeaning': kanjiFromApi.englishMeaning,
-    'kanjiImageLink': kanjiFromApi.kanjiImageLink,
-    'katakanaMeaning': kanjiFromApi.katakanaMeaning,
-    'hiraganaMeaning': kanjiFromApi.hiraganaMeaning,
-    'videoLink': kanjiFromApi.videoLink,
-    'examplesUuid': uuidForDb,
-    'strokesUuid': uuidForDb,
-  });
-}
-
 Future<List<KanjiFromApi>> loadStoredKanjis() async {
   final dbKanjiFromApi = await kanjiFromApiDatabase;
   final dbExamples = await examplesDatabase;
@@ -143,4 +103,54 @@ Future<List<KanjiFromApi>> loadStoredKanjis() async {
   }
 
   return kanjisFromApi;
+}
+
+Future<int> insertKanjiFromApi(KanjiFromApi kanjiFromApi) async {
+  final dbKanjiFromApi = await kanjiFromApiDatabase;
+  final dbExamples = await examplesDatabase;
+  final dbStrokes = await strokesDatabase;
+
+  final uuidForDb = uuid.v4();
+
+  for (var example in kanjiFromApi.example) {
+    final exampleObject = {
+      'japanese': example.japanese,
+      'meaning': example.meaning.english,
+      'opus': example.audio.opus,
+      'aac': example.audio.aac,
+      'ogg': example.audio.ogg,
+      'mp3': example.audio.mp3,
+      'examplesUuid': uuidForDb,
+    };
+    await dbExamples.insert('examples', exampleObject);
+  }
+
+  for (var strokeImage in kanjiFromApi.strokes.images) {
+    final strokeObject = {
+      'strokeImageLink': strokeImage,
+      'strokesUuid': uuidForDb,
+    };
+    await dbStrokes.insert('strokes', strokeObject);
+  }
+
+  return dbKanjiFromApi.insert("kanji_FromApi", {
+    'kanjiCharacter': kanjiFromApi.kanjiCharacter,
+    'englishMeaning': kanjiFromApi.englishMeaning,
+    'kanjiImageLink': kanjiFromApi.kanjiImageLink,
+    'katakanaMeaning': kanjiFromApi.katakanaMeaning,
+    'hiraganaMeaning': kanjiFromApi.hiraganaMeaning,
+    'videoLink': kanjiFromApi.videoLink,
+    'examplesUuid': uuidForDb,
+    'strokesUuid': uuidForDb,
+  });
+}
+
+Future<int> deleteKanjiFromApi(KanjiFromApi kanjiFromApi) async {
+  final dbKanjiFromApi = await kanjiFromApiDatabase;
+  //final dbExamples = await examplesDatabase;
+  //final dbStrokes = await strokesDatabase;
+  count = await dbKanjiFromApi.rawDelete(
+      'DELETE FROM Test WHERE kanjiCharacter = ?',
+      [kanjiFromApi.kanjiCharacter]);
+  return 0;
 }

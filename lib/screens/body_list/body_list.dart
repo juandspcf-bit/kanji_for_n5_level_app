@@ -1,32 +1,41 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kanji_for_n5_level_app/models/kanji_from_api.dart';
+import 'package:kanji_for_n5_level_app/providers/status_stored_provider.dart';
 import 'package:kanji_for_n5_level_app/screens/body_list/kanji_item.dart';
 
-class BodyKanjisList extends StatelessWidget {
+class BodyKanjisList extends ConsumerWidget {
   const BodyKanjisList({
     super.key,
     required this.statusResponse,
-    required this.kanjisModel,
+    required this.kanjisFromApi,
     required this.navigateToKanjiDetails,
   });
 
   final int statusResponse;
-  final List<KanjiFromApi> kanjisModel;
+  final List<KanjiFromApi> kanjisFromApi;
   final void Function(BuildContext, KanjiFromApi?) navigateToKanjiDetails;
 
-  Widget buildTree(BuildContext context, int statusResponse,
-      List<KanjiFromApi> kanjisModel) {
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    ref.watch(statusStorageProvider);
+    print('restarted');
+
     if (statusResponse == 0) {
       return const Center(child: CircularProgressIndicator());
     } else if (statusResponse == 1) {
       return ListView.builder(
-          itemCount: kanjisModel.length,
+          itemCount: kanjisFromApi.length,
           itemBuilder: (ctx, index) {
+            final statusStorage = ref
+                .read(statusStorageProvider.notifier)
+                .isInStorage(kanjisFromApi[index]);
             return KanjiItem(
-              key: ValueKey(kanjisModel[index].kanjiCharacter),
-              kanjiFromApi: kanjisModel[index],
+              key: ValueKey(kanjisFromApi[index].kanjiCharacter),
+              kanjiFromApi: kanjisFromApi[index],
               navigateToKanjiDetails: navigateToKanjiDetails,
-            ); //Text('${kanjisModel[index].kanjiCharacter} : ${kanjisModel[index].englishMeaning}');
+              statusStorage: statusStorage,
+            );
           });
     } else if (statusResponse == 2) {
       return Column(
@@ -85,10 +94,5 @@ class BodyKanjisList extends StatelessWidget {
         ],
       );
     }
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return buildTree(context, statusResponse, kanjisModel);
   }
 }

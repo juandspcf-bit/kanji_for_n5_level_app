@@ -35,7 +35,7 @@ class _FavoriteScreenState extends ConsumerState<FavoriteScreen> {
 
     return BodyKanjisList(
       statusResponse: kanjis.$2,
-      kanjisModel: kanjis.$1,
+      kanjisFromApi: kanjis.$1,
       navigateToKanjiDetails: navigateToKanjiDetails,
     );
   }
