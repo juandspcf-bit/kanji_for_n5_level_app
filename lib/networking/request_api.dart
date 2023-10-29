@@ -20,6 +20,20 @@ class RequestApi {
       kanjisCharacteres,
     );
 
+    if (kanjisCharacteres.length == lists.$4.length) {
+      final List<KanjiFromApi> fixedLengthList = [];
+      for (int i = 0; i < lists.$4.length; i++) {
+        for (int j = 0; j < storedKanjisFromApi.length; j++) {
+          if (lists.$4[i] == storedKanjisFromApi[j].kanjiCharacter) {
+            fixedLengthList.add(storedKanjisFromApi[j]);
+            break;
+          }
+        }
+      }
+      onSuccesRequest(fixedLengthList);
+      return;
+    }
+
     for (final kanji in lists.$3) {
       group.add(getKanjiData(kanji));
     }
