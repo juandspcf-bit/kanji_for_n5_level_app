@@ -8,12 +8,14 @@ class FavoritesCached extends Notifier<(List<KanjiFromApi>, int)> {
     return ([], 0);
   }
 
-  void setInitState(List<String> myFavoritesCached) {
+  void setInitialFavorites(
+      List<KanjiFromApi> storedKanjis, List<String> myFavoritesCached) {
     if (myFavoritesCached.isEmpty) {
       state = ([], 3);
       return;
     }
-    RequestApi.getKanjis(myFavoritesCached, onSuccesRequest, onErrorRequest);
+    RequestApi.getKanjis(
+        storedKanjis, myFavoritesCached, onSuccesRequest, onErrorRequest);
   }
 
   void onSuccesRequest(List<KanjiFromApi> kanjisFromApi) {
@@ -28,8 +30,9 @@ class FavoritesCached extends Notifier<(List<KanjiFromApi>, int)> {
     state = ([], 2);
   }
 
-  void addItem(String item) {
-    RequestApi.getKanjis([item], onSuccesAddRequest, onErrorRequest);
+  void addItem(List<KanjiFromApi> storedItems, String item) {
+    RequestApi.getKanjis(
+        storedItems, [item], onSuccesAddRequest, onErrorRequest);
   }
 
   void removeItem(String item) {

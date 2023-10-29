@@ -18,6 +18,7 @@ class BodyKanjisList extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    ref.watch(statusStorageProvider);
     if (statusResponse == 0) {
       return const Center(child: CircularProgressIndicator());
     } else if (statusResponse == 1) {

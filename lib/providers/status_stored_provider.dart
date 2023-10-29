@@ -7,7 +7,11 @@ class StatusStorageProvider extends Notifier<List<KanjiFromApi>> {
     return [];
   }
 
-  void addSetItems(List<KanjiFromApi> items) {
+  List<KanjiFromApi> getStoresItems() {
+    return state;
+  }
+
+  void setInitialStoredKanjis(List<KanjiFromApi> items) {
     state = items;
   }
 

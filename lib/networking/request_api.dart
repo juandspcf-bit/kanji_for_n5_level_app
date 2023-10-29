@@ -8,13 +8,19 @@ import 'package:http/http.dart' as http;
 
 class RequestApi {
   static void getKanjis(
-    List<String> kanjis,
+    List<KanjiFromApi> storedKanjisFromApi,
+    List<String> kanjisCharacteres,
     void Function(List<KanjiFromApi> kanjisFromApi) onSuccesRequest,
     void Function() onErrorRequest,
   ) {
     FutureGroup<Response> group = FutureGroup<Response>();
 
-    for (final kanji in kanjis) {
+    final lists = getIndexedKanjis(
+      storedKanjisFromApi,
+      kanjisCharacteres,
+    );
+
+    for (final kanji in lists.$3) {
       group.add(getKanjiData(kanji));
     }
 
@@ -30,8 +36,23 @@ class RequestApi {
       for (final body in bodies) {
         kanjisFromApi.add(builKanjiInfoFromApi(body));
       }
+      final fixedLengthList = List<KanjiFromApi>.filled(
+          kanjisCharacteres.length, kanjisFromApi.first);
+      for (int i = 0; i < lists.$1.length; i++) {
+        fixedLengthList[lists.$1[i]] = kanjisFromApi[i];
+      }
+      for (int i = 0; i < lists.$4.length; i++) {
+        for (int j = 0; j < storedKanjisFromApi.length; j++) {
+          if (lists.$4[i] == storedKanjisFromApi[j].kanjiCharacter) {
+            fixedLengthList[lists.$2[i]] = storedKanjisFromApi[j];
+            //break;
+          }
+        }
+        /* print(
+            'testing ${storedKanjisFromApi[i].kanjiCharacter} , ${kanjisCharacteres[lists.$2[i]]}'); */
+      }
 
-      onSuccesRequest(kanjisFromApi);
+      onSuccesRequest(fixedLengthList);
     }).catchError((onError) {
       onErrorRequest();
     });
@@ -50,5 +71,38 @@ class RequestApi {
         'X-RapidAPI-Host': 'kanjialive-api.p.rapidapi.com'
       },
     );
+  }
+
+  static (List<int>, List<int>, List<String>, List<String>) getIndexedKanjis(
+    List<KanjiFromApi> storedKanjis,
+    List<String> kanjis,
+  ) {
+    final copyKanjis = [...kanjis];
+    List<int> indexesToRemove = [];
+    List<int> indexesToKeep = [];
+    for (int i = 0; i < kanjis.length; i++) {
+      bool toKeep = true;
+      for (int j = 0; j < storedKanjis.length; j++) {
+        if (kanjis[i] == storedKanjis[j].kanjiCharacter) {
+          indexesToRemove.add(i);
+          toKeep = false;
+          continue;
+        }
+      }
+      if (toKeep) {
+        indexesToKeep.add(i);
+      }
+    }
+    List<String> listToKeep = [];
+    for (var index in indexesToKeep) {
+      listToKeep.add(copyKanjis[index]);
+    }
+
+    List<String> listToRemove = [];
+    for (var index in indexesToRemove) {
+      listToRemove.add(copyKanjis[index]);
+    }
+
+    return (indexesToKeep, indexesToRemove, listToKeep, listToRemove);
   }
 }

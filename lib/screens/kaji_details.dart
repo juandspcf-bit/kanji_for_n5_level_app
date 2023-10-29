@@ -5,6 +5,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:kanji_for_n5_level_app/Databases/favorites_db_utils.dart';
 import 'package:kanji_for_n5_level_app/models/kanji_from_api.dart';
 import 'package:kanji_for_n5_level_app/providers/favorites_cached_provider.dart';
+import 'package:kanji_for_n5_level_app/providers/status_stored_provider.dart';
 import 'package:video_player/video_player.dart';
 
 class KanjiDetails extends ConsumerStatefulWidget {
@@ -228,9 +229,11 @@ class KanjiDetailsState extends ConsumerState<KanjiDetails> {
                 if (queryKanji == "") {
                   insertFavorite(widget.kanjiFromApi.kanjiCharacter)
                       .then((value) {
-                    ref
-                        .read(favoritesCachedProvider.notifier)
-                        .addItem(widget.kanjiFromApi.kanjiCharacter);
+                    final storedItems = ref
+                        .read(statusStorageProvider.notifier)
+                        .getStoresItems();
+                    ref.read(favoritesCachedProvider.notifier).addItem(
+                        storedItems, widget.kanjiFromApi.kanjiCharacter);
                   });
                 } else {
                   deleteFavorite(widget.kanjiFromApi.kanjiCharacter)

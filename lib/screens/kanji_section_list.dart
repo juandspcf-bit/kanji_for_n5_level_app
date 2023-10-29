@@ -55,13 +55,18 @@ class _KanjiListState extends ConsumerState<KanjiList> {
   @override
   void initState() {
     super.initState();
+    final storedKanjis =
+        ref.read(statusStorageProvider.notifier).getStoresItems();
     RequestApi.getKanjis(
-        widget.sectionModel.kanjis, onSuccesRequest, onErrorRequest);
+      storedKanjis,
+      widget.sectionModel.kanjis,
+      onSuccesRequest,
+      onErrorRequest,
+    );
   }
 
   @override
   Widget build(BuildContext context) {
-    ref.watch(statusStorageProvider);
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.sectionModel.title),

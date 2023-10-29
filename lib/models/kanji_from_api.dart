@@ -70,8 +70,6 @@ KanjiFromApi builKanjiInfoFromApi(Map<String, dynamic> body) {
   final String kanjiCharacterFromAPI = kanjiInfo['character'];
 
   final Map<String, dynamic> kanjiStrokes = kanjiInfo["strokes"];
-  //final List<dynamic> kanjiTimingsFromApis = kanjiStrokes["timings"];
-  //final kanjiTimings = kanjiTimingsFromApis.map((e) => e as int).toList();
 
   final List<dynamic> kanjiImagesFromApis = kanjiStrokes["images"];
   final kanjiImages = kanjiImagesFromApis.map((e) => e as String).toList();

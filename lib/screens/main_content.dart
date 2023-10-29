@@ -27,22 +27,23 @@ class _MainContentState extends ConsumerState<MainContent> {
     });
   }
 
-  void getListOfFavorites() async {
-    final favoritesKanjis = await loadFavorites();
-    ref.read(favoritesCachedProvider.notifier).setInitState(favoritesKanjis);
-  }
-
-  void getListOfStoredKanjis() async {
+  void getInitData() async {
     final listOfStoredKanjis = await loadStoredKanjis();
-    ref.read(statusStorageProvider.notifier).addSetItems(listOfStoredKanjis);
+    ref
+        .read(statusStorageProvider.notifier)
+        .setInitialStoredKanjis(listOfStoredKanjis);
+    final favoritesKanjis = await loadFavorites();
+    ref
+        .read(favoritesCachedProvider.notifier)
+        .setInitialFavorites(listOfStoredKanjis, favoritesKanjis);
     print('My stored kanjis are: $listOfStoredKanjis');
   }
 
   @override
   void initState() {
     super.initState();
-    getListOfFavorites();
-    getListOfStoredKanjis();
+
+    getInitData();
   }
 
   Widget selectScreen(int selectedPageIndex) {
