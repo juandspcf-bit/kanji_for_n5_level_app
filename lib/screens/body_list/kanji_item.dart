@@ -61,71 +61,89 @@ class _KanjiItemState extends ConsumerState<KanjiItem> {
   }
 
   Widget getContainerWidget() {
-    return ListTile(
-      leading: Container(
-        height: 80,
-        width: 80,
-        decoration: BoxDecoration(
-            color: Theme.of(context).colorScheme.onPrimaryContainer,
-            borderRadius: const BorderRadius.all(Radius.circular(10))),
-        child: SvgPicture.network(
-          widget.kanjiFromApi.kanjiImageLink,
-          height: 80,
-          width: 800,
-          semanticsLabel: widget.kanjiFromApi.kanjiCharacter,
-          placeholderBuilder: (BuildContext context) => Container(
-              color: Colors.transparent,
-              height: 100,
-              width: 100,
-              child: const CircularProgressIndicator(
-                backgroundColor: Color.fromARGB(179, 5, 16, 51),
-              )),
+    return Padding(
+      padding: const EdgeInsets.symmetric(
+        vertical: 5,
+        horizontal: 10,
+      ),
+      child: Card(
+        child: ListTile(
+          leading: GestureDetector(
+            onTap: () {
+              widget.navigateToKanjiDetails(context, widget.kanjiFromApi);
+            },
+            child: Container(
+              height: 80,
+              width: 60,
+              decoration: BoxDecoration(
+                  color: Theme.of(context).colorScheme.onPrimaryContainer,
+                  borderRadius: const BorderRadius.all(Radius.circular(10))),
+              child: SvgPicture.network(
+                widget.kanjiFromApi.kanjiImageLink,
+                fit: BoxFit.contain,
+                semanticsLabel: widget.kanjiFromApi.kanjiCharacter,
+                placeholderBuilder: (BuildContext context) => Container(
+                    color: Colors.transparent,
+                    height: 100,
+                    width: 100,
+                    child: const CircularProgressIndicator(
+                      backgroundColor: Color.fromARGB(179, 5, 16, 51),
+                    )),
+              ),
+            ),
+          ),
+          title: GestureDetector(
+            onTap: () {
+              widget.navigateToKanjiDetails(context, widget.kanjiFromApi);
+            },
+            child: Text(
+              cutEnglishMeaning(widget.kanjiFromApi.englishMeaning),
+              textAlign: TextAlign.start,
+            ),
+          ),
+          subtitle: GestureDetector(
+            onTap: () {
+              widget.navigateToKanjiDetails(context, widget.kanjiFromApi);
+            },
+            child:
+                Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+              Text(
+                "Kunyomi: ${cutWords(widget.kanjiFromApi.hiraganaMeaning)}",
+              ),
+              Text(
+                "Onyomi:${cutWords(widget.kanjiFromApi.katakanaMeaning)}",
+              ),
+            ]),
+          ),
+          trailing: InkWell(
+            onTap: () {
+              setState(() {
+                statusStorageWidget = const CircularProgressIndicator();
+              });
+              if (widget.statusStorage == StatusStorage.onlyOnline) {
+                insertKanjiFromApi(widget.kanjiFromApi).then((value) {
+                  ref
+                      .read(statusStorageProvider.notifier)
+                      .addItem(widget.kanjiFromApi);
+                }).catchError((onError) {});
+              } else if (widget.statusStorage == StatusStorage.stored) {
+                deleteKanjiFromApi(widget.kanjiFromApi).then((value) {
+                  ref
+                      .read(statusStorageProvider.notifier)
+                      .deleteItem(widget.kanjiFromApi);
+                }).catchError((onError) {});
+              }
+            },
+            child: Container(
+              decoration: const BoxDecoration(shape: BoxShape.circle),
+              child: statusStorageWidget,
+            ),
+          ),
+          isThreeLine: true,
+          //tileColor: const Color.fromARGB(255, 147, 76, 14),
+          //shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
         ),
       ),
-      title: Text(
-        cutEnglishMeaning(widget.kanjiFromApi.englishMeaning),
-        textAlign: TextAlign.start,
-      ),
-      subtitle: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-        Text(
-          "Kunyomi: ${cutWords(widget.kanjiFromApi.hiraganaMeaning)}",
-        ),
-        Text(
-          "Onyomi:${cutWords(widget.kanjiFromApi.katakanaMeaning)}",
-        ),
-      ]),
-      trailing: GestureDetector(
-        onTap: () {
-          setState(() {
-            statusStorageWidget = const CircularProgressIndicator();
-          });
-          if (widget.statusStorage == StatusStorage.onlyOnline) {
-            insertKanjiFromApi(widget.kanjiFromApi).then((value) {
-              ref
-                  .read(statusStorageProvider.notifier)
-                  .addItem(widget.kanjiFromApi);
-            }).catchError((onError) {});
-          } else if (widget.statusStorage == StatusStorage.stored) {
-            deleteKanjiFromApi(widget.kanjiFromApi).then((value) {
-              ref
-                  .read(statusStorageProvider.notifier)
-                  .deleteItem(widget.kanjiFromApi);
-            }).catchError((onError) {});
-          }
-        },
-        child: Container(
-          decoration: const BoxDecoration(shape: BoxShape.circle),
-          padding: const EdgeInsets.only(left: 30, top: 30, bottom: 30),
-          child: statusStorageWidget,
-        ),
-      ),
-      isThreeLine: true,
-      tileColor: const Color.fromARGB(255, 147, 76, 14),
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-      onTap: () {
-        widget.navigateToKanjiDetails(context, widget.kanjiFromApi);
-      },
-      contentPadding: EdgeInsets.symmetric(vertical: 20, horizontal: 10),
     );
   }
 
