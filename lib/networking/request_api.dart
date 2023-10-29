@@ -42,6 +42,24 @@ class RequestApi {
 
     List<Map<String, dynamic>> bodies = [];
     List<KanjiFromApi> kanjisFromApi = [];
+
+    if (kanjisCharacteres.length == lists.$3.length) {
+      group.future.then((List<Response> kanjiInformationList) {
+        for (final kanjiInformation in kanjiInformationList) {
+          bodies.add(json.decode(kanjiInformation.body));
+        }
+
+        for (final body in bodies) {
+          kanjisFromApi.add(builKanjiInfoFromApi(body));
+        }
+
+        onSuccesRequest(kanjisFromApi);
+      }).catchError((onError) {
+        onErrorRequest();
+      });
+      return;
+    }
+
     group.future.then((List<Response> kanjiInformationList) {
       for (final kanjiInformation in kanjiInformationList) {
         bodies.add(json.decode(kanjiInformation.body));
