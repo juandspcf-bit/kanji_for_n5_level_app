@@ -32,7 +32,6 @@ class _FavoriteScreenState extends ConsumerState<FavoriteScreen> {
   @override
   Widget build(BuildContext context) {
     final kanjis = ref.watch(favoritesCachedProvider);
-
     return BodyKanjisList(
       statusResponse: kanjis.$2,
       kanjisFromApi: kanjis.$1,

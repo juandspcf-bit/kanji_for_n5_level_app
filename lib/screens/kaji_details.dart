@@ -232,15 +232,16 @@ class KanjiDetailsState extends ConsumerState<KanjiDetails> {
                     final storedItems = ref
                         .read(statusStorageProvider.notifier)
                         .getStoresItems();
-                    ref.read(favoritesCachedProvider.notifier).addItem(
-                        storedItems, widget.kanjiFromApi.kanjiCharacter);
+                    ref
+                        .read(favoritesCachedProvider.notifier)
+                        .addItem(storedItems, widget.kanjiFromApi);
                   });
                 } else {
                   deleteFavorite(widget.kanjiFromApi.kanjiCharacter)
                       .then((value) {
                     ref
                         .read(favoritesCachedProvider.notifier)
-                        .removeItem(widget.kanjiFromApi.kanjiCharacter);
+                        .removeItem(widget.kanjiFromApi);
                   });
                 }
 

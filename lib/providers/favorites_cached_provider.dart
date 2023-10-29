@@ -22,23 +22,18 @@ class FavoritesCached extends Notifier<(List<KanjiFromApi>, int)> {
     state = (kanjisFromApi, 1);
   }
 
-  void onSuccesAddRequest(List<KanjiFromApi> kanjisFromApi) {
-    state = ([...state.$1, ...kanjisFromApi], 1);
-  }
-
   void onErrorRequest() {
     state = ([], 2);
   }
 
-  void addItem(List<KanjiFromApi> storedItems, String item) {
-    RequestApi.getKanjis(
-        storedItems, [item], onSuccesAddRequest, onErrorRequest);
+  void addItem(List<KanjiFromApi> storedItems, KanjiFromApi kanjiFromApi) {
+    state = ([...state.$1, kanjiFromApi], 1);
   }
 
-  void removeItem(String item) {
+  void removeItem(KanjiFromApi favoritekanjiFromApi) {
     final copyState = [...state.$1];
-    int index =
-        copyState.indexWhere((element) => element.kanjiCharacter == item);
+    int index = copyState.indexWhere((element) =>
+        element.kanjiCharacter == favoritekanjiFromApi.kanjiCharacter);
     copyState.removeAt(index);
     state = ([...copyState], state.$2);
   }

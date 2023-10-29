@@ -45,7 +45,7 @@ class RequestApi {
         for (int j = 0; j < storedKanjisFromApi.length; j++) {
           if (lists.$4[i] == storedKanjisFromApi[j].kanjiCharacter) {
             fixedLengthList[lists.$2[i]] = storedKanjisFromApi[j];
-            //break;
+            break;
           }
         }
         /* print(
