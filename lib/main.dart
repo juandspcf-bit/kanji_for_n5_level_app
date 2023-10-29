@@ -49,8 +49,8 @@ class MyApp extends StatelessWidget {
         ),
         elevatedButtonTheme: ElevatedButtonThemeData(
           style: ElevatedButton.styleFrom(
-            backgroundColor: kDarkColorScheme.primaryContainer,
-            foregroundColor: kDarkColorScheme.onPrimaryContainer,
+            backgroundColor: kDarkColorScheme.secondaryContainer,
+            foregroundColor: kDarkColorScheme.onSecondaryContainer,
           ),
         ),
       ),
