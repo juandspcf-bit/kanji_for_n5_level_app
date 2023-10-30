@@ -1,4 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kanji_for_n5_level_app/Databases/download_db_utils.dart';
@@ -7,9 +8,13 @@ import 'package:kanji_for_n5_level_app/providers/favorites_cached_provider.dart'
 import 'package:kanji_for_n5_level_app/providers/status_stored_provider.dart';
 import 'package:kanji_for_n5_level_app/screens/favorite_screen.dart';
 import 'package:kanji_for_n5_level_app/screens/sections_screen.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 const temporalAvatar =
     "https://firebasestorage.googleapis.com/v0/b/kanji-for-n5.appspot.com/o/unnamed.jpg?alt=media&token=38275fec-42f3-4d95-b1fd-785e82d4086f&_gl=1*19p8v1f*_ga*MjAyNTg0OTcyOS4xNjk2NDEwODIz*_ga_CW55HF8NVT*MTY5NzEwMTY3NC45LjEuMTY5NzEwMzExMy4zMy4wLjA.";
+
+Dio dio = Dio();
 
 class MainContent extends ConsumerStatefulWidget {
   const MainContent({super.key});
@@ -36,13 +41,25 @@ class _MainContentState extends ConsumerState<MainContent> {
     ref
         .read(favoritesCachedProvider.notifier)
         .setInitialFavorites(listOfStoredKanjis, favoritesKanjis);
-    print('My stored kanjis are: $listOfStoredKanjis');
+    /* final SharedPreferences prefs = await SharedPreferences.getInstance();
+    final bool? isAskedStoragePermission = prefs.getBool('isAskedStoragePermission');
+    if (isAskedStoragePermission == null || isAskedStoragePermission == false) {
+      final isGrantedPermission = await _requestWritePermission();
+      await prefs.setBool('isAskedStoragePermition', true);
+      await prefs.setBool('isGrantedPermission', isGrantedPermission);  
+    }else{
+      prefs.getBool('isGrantedPermission');
+    } */
+  }
+
+  Future<bool> _requestWritePermission() async {
+    await Permission.storage.request();
+    return await Permission.storage.request().isGranted;
   }
 
   @override
   void initState() {
     super.initState();
-
     getInitData();
   }
 

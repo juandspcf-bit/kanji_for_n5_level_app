@@ -1,8 +1,14 @@
+import 'dart:io';
+
+import 'package:async/async.dart';
 import 'package:kanji_for_n5_level_app/models/kanji_from_api.dart';
+import 'package:kanji_for_n5_level_app/screens/main_content.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:sqflite/sqflite.dart' as sql;
 import 'package:path/path.dart' as path;
 import 'package:uuid/uuid.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:dio/dio.dart';
 
 const uuid = Uuid();
 
@@ -108,6 +114,8 @@ Future<int> insertKanjiFromApi(KanjiFromApi kanjiFromApi) async {
   final dbExamples = await examplesDatabase;
   final dbStrokes = await strokesDatabase;
 
+  //downloadFiles(kanjiFromApi);
+
   for (var example in kanjiFromApi.example) {
     final exampleObject = {
       'japanese': example.japanese,
@@ -137,6 +145,106 @@ Future<int> insertKanjiFromApi(KanjiFromApi kanjiFromApi) async {
     'hiraganaMeaning': kanjiFromApi.hiraganaMeaning,
     'videoLink': kanjiFromApi.videoLink,
   });
+}
+
+void insertExampleEntry(KanjiFromApi kanjiFromApi) async {
+  List<Map<String, dynamic>> exampleMaps = [];
+  FutureGroup<Response> group = FutureGroup<Response>();
+  for (var example in kanjiFromApi.example) {
+    final List<String> pathsToDocuments = [];
+    downloadExample(example, pathsToDocuments).then((responses) {
+      final exampleMap = {
+        'japanese': example.japanese,
+        'meaning': example.meaning.english,
+        'opus': pathsToDocuments[0],
+        'aac': pathsToDocuments[1],
+        'ogg': pathsToDocuments[2],
+        'mp3': pathsToDocuments[3],
+        'kanjiCharacter': kanjiFromApi.kanjiCharacter,
+      };
+      exampleMaps.add(exampleMap);
+    }).catchError((onError) {});
+  }
+}
+
+Future<List<Response<dynamic>>> downloadExample(
+  Example example,
+  List<String> pathsToDocuments,
+) async {
+  final dirDocumentPath = await getApplicationDocumentsDirectory();
+  FutureGroup<Response> group = FutureGroup<Response>();
+  final audioLinks = [
+    example.audio.opus,
+    example.audio.aac,
+    example.audio.ogg,
+    example.audio.mp3
+  ];
+
+  for (var audioLink in audioLinks) {
+    final path = getPathToDocuments(
+      dirDocumentPath: dirDocumentPath,
+      link: audioLink,
+    );
+    pathsToDocuments.add(path);
+    addToFutureGroup(path: path, link: audioLink, group: group, dio: dio);
+  }
+
+  group.close();
+
+  return group.future;
+}
+
+void insertStrokesEntry(KanjiFromApi kanjiFromApi) async {
+  final dirDocumentPath = await getApplicationDocumentsDirectory();
+  FutureGroup<Response> group = FutureGroup<Response>();
+  final pathsToDocuments = [];
+  for (var strokeImageLink in kanjiFromApi.strokes.images) {
+    final path = getPathToDocuments(
+      dirDocumentPath: dirDocumentPath,
+      link: strokeImageLink,
+    );
+    pathsToDocuments.add(path);
+    addToFutureGroup(path: path, link: strokeImageLink, group: group, dio: dio);
+  }
+
+  group.close();
+
+  group.future.then((responses) {
+    for (var strokeImagePath in pathsToDocuments) {
+      final strokeObject = {
+        'strokeImageLink': strokeImagePath,
+        'kanjiCharacter': kanjiFromApi.kanjiCharacter,
+      };
+      //TODO inser to database
+    }
+  }).catchError((onError) {});
+}
+
+void addToFutureGroup({
+  required String path,
+  required String link,
+  required FutureGroup<Response<dynamic>> group,
+  required Dio dio,
+}) {
+  group.add(dio.download(
+    link,
+    path,
+    onReceiveProgress: (received, total) {
+/*         if (total != -1) {
+          print((received / total * 100).toStringAsFixed(0) + "%");
+          //you can build progressbar feature too
+        } */
+    },
+  ));
+}
+
+String getPathToDocuments({
+  required Directory dirDocumentPath,
+  required String link,
+}) {
+  final lastSeparatorIndex = link.lastIndexOf('/');
+  final nameFile = link.substring(lastSeparatorIndex + 1);
+  return nameFile;
 }
 
 Future<int> deleteKanjiFromApi(KanjiFromApi kanjiFromApi) async {
