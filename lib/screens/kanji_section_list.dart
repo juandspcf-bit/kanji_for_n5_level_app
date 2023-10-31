@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:kanji_for_n5_level_app/models/kanji_from_api.dart';
 import 'package:kanji_for_n5_level_app/models/secction_model.dart';
-import 'package:kanji_for_n5_level_app/networking/request_api.dart';
+import 'package:kanji_for_n5_level_app/providers/kanjis_list_provider.dart';
 import 'package:kanji_for_n5_level_app/providers/status_stored_provider.dart';
 import 'package:kanji_for_n5_level_app/screens/body_list/body_list.dart';
 
@@ -21,7 +20,7 @@ class KanjiList extends ConsumerStatefulWidget {
 }
 
 class _KanjiListState extends ConsumerState<KanjiList> {
-  List<KanjiFromApi> _kanjisFromApi = [];
+/*   List<KanjiFromApi> _kanjisFromApi = [];
   int statusResponse = 0;
 
   void onSuccesRequest(List<KanjiFromApi> kanjisFromApi) {
@@ -35,34 +34,39 @@ class _KanjiListState extends ConsumerState<KanjiList> {
     setState(() {
       statusResponse = 2;
     });
-  }
+  } */
 
   @override
   void initState() {
     super.initState();
+/*     ref.read(kanjiListProvider.notifier).clearKanjiList();
     final storedKanjis =
         ref.read(statusStorageProvider.notifier).getStoresItems();
-    RequestApi.getKanjis(
+    ref
+        .read(kanjiListProvider.notifier)
+        .setKanjiList(storedKanjis, widget.sectionModel.kanjis); */
+/*     RequestApi.getKanjis(
       storedKanjis,
       widget.sectionModel.kanjis,
       onSuccesRequest,
       onErrorRequest,
-    );
+    ); */
   }
 
   @override
   Widget build(BuildContext context) {
+    final kanjiList = ref.watch(kanjiListProvider);
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.sectionModel.title),
         actions: [
           IconButton(
-              onPressed: statusResponse == 1
+              onPressed: kanjiList.$2 == 1
                   ? () {
                       Navigator.of(context).push(
                         MaterialPageRoute(
                           builder: (ctx) {
-                            return QuizScreen(kanjisModel: _kanjisFromApi);
+                            return QuizScreen(kanjisModel: kanjiList.$1);
                           },
                         ),
                       );
@@ -72,8 +76,8 @@ class _KanjiListState extends ConsumerState<KanjiList> {
         ],
       ),
       body: BodyKanjisList(
-        statusResponse: statusResponse,
-        kanjisFromApi: _kanjisFromApi,
+        kanjisFromApi: kanjiList.$1,
+        statusResponse: kanjiList.$2,
       ),
     );
   }

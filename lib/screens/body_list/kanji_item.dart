@@ -5,6 +5,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:kanji_for_n5_level_app/Databases/download_db_utils.dart';
 import 'package:kanji_for_n5_level_app/models/kanji_from_api.dart';
+import 'package:kanji_for_n5_level_app/networking/request_api.dart';
+import 'package:kanji_for_n5_level_app/providers/kanjis_list_provider.dart';
 import 'package:kanji_for_n5_level_app/providers/status_stored_provider.dart';
 import 'package:kanji_for_n5_level_app/screens/kaji_details.dart';
 
@@ -27,7 +29,7 @@ class _KanjiItemState extends ConsumerState<KanjiItem> {
   void downloadKanji(KanjiFromApi kanjiFromApi) {}
 
   late Widget statusStorageWidget;
-  bool isDownloading = false;
+  bool isProcessing = false;
 
   void navigateToKanjiDetails(
     BuildContext context,
@@ -58,18 +60,18 @@ class _KanjiItemState extends ConsumerState<KanjiItem> {
 
   Widget selectWidgetStatus() {
     if (widget.statusStorage == StatusStorage.onlyOnline &&
-        isDownloading == false) {
+        isProcessing == false) {
       return const Icon(
         Icons.download_for_offline,
         size: 50,
       );
     } else if (widget.statusStorage == StatusStorage.stored &&
-        isDownloading == false) {
+        isProcessing == false) {
       return const Icon(
         Icons.storage,
         size: 50,
       );
-    } else if (isDownloading) {
+    } else if (isProcessing) {
       return const CircularProgressIndicator();
     }
 
@@ -145,7 +147,7 @@ class _KanjiItemState extends ConsumerState<KanjiItem> {
         trailing: InkWell(
           onTap: () {
             setState(() {
-              isDownloading = true;
+              isProcessing = true;
             });
             if (widget.statusStorage == StatusStorage.onlyOnline) {
               insertKanjiFromApi(widget.kanjiFromApi)
@@ -154,8 +156,11 @@ class _KanjiItemState extends ConsumerState<KanjiItem> {
                 ref
                     .read(statusStorageProvider.notifier)
                     .addItem(kanjiFromApiStored);
+                ref
+                    .read(kanjiListProvider.notifier)
+                    .updateKanji(kanjiFromApiStored);
                 setState(() {
-                  isDownloading = false;
+                  isProcessing = false;
                 });
               }).catchError((onError) {});
             } else if (widget.statusStorage == StatusStorage.stored) {
@@ -163,8 +168,16 @@ class _KanjiItemState extends ConsumerState<KanjiItem> {
                 ref
                     .read(statusStorageProvider.notifier)
                     .deleteItem(widget.kanjiFromApi);
-                setState(() {
-                  isDownloading = false;
+                RequestApi.getKanjis([], [widget.kanjiFromApi.kanjiCharacter],
+                    (list) {
+                  ref.read(kanjiListProvider.notifier).updateKanji(list[0]);
+                  setState(() {
+                    isProcessing = false;
+                  });
+                }, () {
+                  setState(() {
+                    isProcessing = false;
+                  });
                 });
               }).catchError((onError) {});
             }

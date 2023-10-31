@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:kanji_for_n5_level_app/models/secction_model.dart';
+import 'package:kanji_for_n5_level_app/providers/kanjis_list_provider.dart';
+import 'package:kanji_for_n5_level_app/providers/status_stored_provider.dart';
 import 'package:kanji_for_n5_level_app/screens/kanji_section_list.dart';
 
 class Sections extends StatelessWidget {
@@ -24,7 +27,7 @@ class Sections extends StatelessWidget {
   }
 }
 
-class Section extends StatelessWidget {
+class Section extends ConsumerStatefulWidget {
   const Section({
     super.key,
     required this.sectionData,
@@ -32,17 +35,28 @@ class Section extends StatelessWidget {
 
   final SectionModel sectionData;
 
+  @override
+  ConsumerState<Section> createState() => _SectionState();
+}
+
+class _SectionState extends ConsumerState<Section> {
   void updateList() {}
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
+        ref.read(kanjiListProvider.notifier).clearKanjiList();
+        final storedKanjis =
+            ref.read(statusStorageProvider.notifier).getStoresItems();
+        ref
+            .read(kanjiListProvider.notifier)
+            .setKanjiList(storedKanjis, widget.sectionData.kanjis);
         Navigator.of(context).push(
           MaterialPageRoute(
             builder: (ctx) {
               return KanjiList(
-                sectionModel: sectionData,
+                sectionModel: widget.sectionData,
               );
             },
           ),
@@ -66,7 +80,7 @@ class Section extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Text(
-              sectionData.title,
+              widget.sectionData.title,
               style: Theme.of(context).textTheme.titleLarge?.copyWith(
                   fontWeight: FontWeight.bold,
                   color: Theme.of(context).colorScheme.onSecondaryContainer,
@@ -74,7 +88,7 @@ class Section extends StatelessWidget {
               textAlign: TextAlign.center,
             ),
             Text(
-              "Seccion ${sectionData.sectionNumber}",
+              "Seccion ${widget.sectionData.sectionNumber}",
               style: Theme.of(context).textTheme.titleMedium?.copyWith(
                   color: Theme.of(context).colorScheme.onSecondaryContainer,
                   fontFamily: GoogleFonts.roboto().fontFamily),
