@@ -257,9 +257,9 @@ class KanjiDetailsState extends ConsumerState<KanjiDetails> {
                     final storedItems = ref
                         .read(statusStorageProvider.notifier)
                         .getStoresItems();
-                    ref
-                        .read(favoritesCachedProvider.notifier)
-                        .addItem(storedItems, widget.kanjiFromApi);
+                    ref.read(favoritesCachedProvider.notifier).addItem(
+                        storedItems[widget.kanjiFromApi.section]!,
+                        widget.kanjiFromApi);
                   });
                 } else {
                   deleteFavorite(widget.kanjiFromApi.kanjiCharacter)

@@ -20,7 +20,7 @@ Future<Database> get kanjiFromApiDatabase async {
     onCreate: (db, version) {
       return db.execute(
           'CREATE TABLE kanji_FromApi(id INTEGER PRIMARY KEY AUTOINCREMENT, kanjiCharacter TEXT,'
-          ' englishMeaning TEXT, kanjiImageLink TEXT, katakanaMeaning TEXT, hiraganaMeaning TEXT, videoLink TEXT)');
+          ' englishMeaning TEXT, kanjiImageLink TEXT, katakanaMeaning TEXT, hiraganaMeaning TEXT, videoLink TEXT, section INTEGER)');
     },
     version: 1,
   );
@@ -93,6 +93,8 @@ Future<List<KanjiFromApi>> loadStoredKanjis() async {
     final strokes = Strokes(
         count: listStrokesImagesLinks.length, images: listStrokesImagesLinks);
 
+    print(mapKanjiFromDb);
+
     final kanjiFromApi = KanjiFromApi(
       kanjiCharacter: mapKanjiFromDb['kanjiCharacter'] as String,
       englishMeaning: mapKanjiFromDb['englishMeaning'] as String,
@@ -100,6 +102,7 @@ Future<List<KanjiFromApi>> loadStoredKanjis() async {
       katakanaMeaning: mapKanjiFromDb['katakanaMeaning'] as String,
       hiraganaMeaning: mapKanjiFromDb['hiraganaMeaning'] as String,
       videoLink: mapKanjiFromDb['videoLink'] as String,
+      section: mapKanjiFromDb['section'] as int,
       example: examples,
       strokes: strokes,
     );
@@ -142,6 +145,7 @@ Future<KanjiFromApi> insertKanjiFromApi(
       katakanaMeaning: kanjiMap['katakanaMeaning'] ?? '',
       hiraganaMeaning: kanjiMap['hiraganaMeaning'] ?? '',
       videoLink: kanjiMap['videoLink'] ?? '',
+      section: int.parse(kanjiMap['section'] ?? '0'),
       example: examples,
       strokes: strokes);
 }
@@ -269,10 +273,19 @@ Future<Map<String, String>> insertKanjiEntry(KanjiFromApi kanjiFromApi) async {
     'katakanaMeaning': kanjiFromApi.katakanaMeaning,
     'hiraganaMeaning': kanjiFromApi.hiraganaMeaning,
     'videoLink': pathsToDocuments[1],
+    'section': kanjiFromApi.section
   };
 
   await dbKanjiFromApi.insert("kanji_FromApi", kanjiMap);
-  return kanjiMap;
+  return {
+    'kanjiCharacter': kanjiFromApi.kanjiCharacter,
+    'englishMeaning': kanjiFromApi.englishMeaning,
+    'kanjiImageLink': pathsToDocuments[0],
+    'katakanaMeaning': kanjiFromApi.katakanaMeaning,
+    'hiraganaMeaning': kanjiFromApi.hiraganaMeaning,
+    'videoLink': pathsToDocuments[1],
+    'section': kanjiFromApi.section.toString()
+  };
 }
 
 void addToFutureGroup({

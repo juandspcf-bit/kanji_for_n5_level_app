@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kanji_for_n5_level_app/Databases/download_db_utils.dart';
 import 'package:kanji_for_n5_level_app/Databases/favorites_db_utils.dart';
 import 'package:kanji_for_n5_level_app/providers/favorites_cached_provider.dart';
+import 'package:kanji_for_n5_level_app/providers/kanjis_list_provider.dart';
 import 'package:kanji_for_n5_level_app/providers/status_stored_provider.dart';
 import 'package:kanji_for_n5_level_app/screens/favorite_screen.dart';
 import 'package:kanji_for_n5_level_app/screens/sections_screen.dart';
@@ -27,6 +28,23 @@ class _MainContentState extends ConsumerState<MainContent> {
 
   void _selectPage(int index) {
     setState(() {
+      if (index == 1) {
+        ref.read(kanjiListProvider.notifier).clearKanjiList();
+        final storedKanjis =
+            ref.read(statusStorageProvider.notifier).getStoresItems();
+        ref.read(kanjiListProvider.notifier).setKanjiList(
+            storedKanjis.values.fold([], (previousValue, element) {
+                  previousValue!.addAll(element);
+                  return previousValue;
+                }) ??
+                [],
+            ref
+                .read(favoritesCachedProvider.notifier)
+                .getFavorites()
+                .map((e) => e.kanjiCharacter)
+                .toList(),
+            10);
+      }
       _selectedPageIndex = index;
     });
   }
@@ -39,7 +57,7 @@ class _MainContentState extends ConsumerState<MainContent> {
     final favoritesKanjis = await loadFavorites();
     ref
         .read(favoritesCachedProvider.notifier)
-        .setInitialFavorites(listOfStoredKanjis, favoritesKanjis);
+        .setInitialFavorites(listOfStoredKanjis, favoritesKanjis, 10);
     /* final SharedPreferences prefs = await SharedPreferences.getInstance();
     final bool? isAskedStoragePermission = prefs.getBool('isAskedStoragePermission');
     if (isAskedStoragePermission == null || isAskedStoragePermission == false) {
@@ -51,10 +69,10 @@ class _MainContentState extends ConsumerState<MainContent> {
     } */
   }
 
-  Future<bool> _requestWritePermission() async {
+/*   Future<bool> _requestWritePermission() async {
     await Permission.storage.request();
     return await Permission.storage.request().isGranted;
-  }
+  } */
 
   @override
   void initState() {

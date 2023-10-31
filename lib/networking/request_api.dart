@@ -10,6 +10,7 @@ class RequestApi {
   static void getKanjis(
     List<KanjiFromApi> storedKanjisFromApi,
     List<String> kanjisCharacteres,
+    int section,
     void Function(List<KanjiFromApi> kanjisFromApi) onSuccesRequest,
     void Function() onErrorRequest,
   ) {
@@ -50,7 +51,7 @@ class RequestApi {
         }
 
         for (final body in bodies) {
-          kanjisFromApi.add(builKanjiInfoFromApi(body));
+          kanjisFromApi.add(builKanjiInfoFromApi(body, section));
         }
 
         onSuccesRequest(kanjisFromApi);
@@ -66,7 +67,7 @@ class RequestApi {
       }
 
       for (final body in bodies) {
-        kanjisFromApi.add(builKanjiInfoFromApi(body));
+        kanjisFromApi.add(builKanjiInfoFromApi(body, section));
       }
       final fixedLengthList = List<KanjiFromApi>.filled(
           kanjisCharacteres.length, kanjisFromApi.first);

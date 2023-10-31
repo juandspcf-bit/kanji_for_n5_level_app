@@ -162,14 +162,19 @@ class _KanjiItemState extends ConsumerState<KanjiItem> {
                 setState(() {
                   isProcessing = false;
                 });
-              }).catchError((onError) {});
+              }).catchError((onError) {
+                print('error in storage $onError');
+                setState(() {
+                  isProcessing = false;
+                });
+              });
             } else if (widget.statusStorage == StatusStorage.stored) {
               deleteKanjiFromApi(widget.kanjiFromApi).then((value) {
                 ref
                     .read(statusStorageProvider.notifier)
                     .deleteItem(widget.kanjiFromApi);
                 RequestApi.getKanjis([], [widget.kanjiFromApi.kanjiCharacter],
-                    (list) {
+                    widget.kanjiFromApi.section, (list) {
                   ref.read(kanjiListProvider.notifier).updateKanji(list[0]);
                   setState(() {
                     isProcessing = false;

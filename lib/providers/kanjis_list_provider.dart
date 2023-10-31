@@ -32,10 +32,12 @@ class KanjiListProvider extends Notifier<(List<KanjiFromApi>, int)> {
   void setKanjiList(
     List<KanjiFromApi> storedKanjis,
     List<String> kanjisCharacteres,
+    int section,
   ) {
     RequestApi.getKanjis(
       storedKanjis,
       kanjisCharacteres,
+      section,
       onSuccesRequest,
       onErrorRequest,
     );

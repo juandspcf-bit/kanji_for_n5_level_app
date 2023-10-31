@@ -1,27 +1,45 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kanji_for_n5_level_app/models/kanji_from_api.dart';
 
-class StatusStorageProvider extends Notifier<List<KanjiFromApi>> {
+class StatusStorageProvider extends Notifier<Map<int, List<KanjiFromApi>>> {
   @override
-  List<KanjiFromApi> build() {
-    return [];
+  Map<int, List<KanjiFromApi>> build() {
+    return {};
   }
 
-  List<KanjiFromApi> getStoresItems() {
+  Map<int, List<KanjiFromApi>> getStoresItems() {
     return state;
   }
 
   void setInitialStoredKanjis(List<KanjiFromApi> items) {
-    state = items;
+    Map<int, List<KanjiFromApi>> copyState = {};
+
+    for (var element in items) {
+      var list = copyState[element.section];
+      if (list == null) copyState[element.section] = [];
+      copyState[element.section]!.add(element);
+    }
+
+    state = copyState;
   }
 
   void addItem(KanjiFromApi kanjiFromApi) {
-    state = [...state, kanjiFromApi];
+    Map<int, List<KanjiFromApi>> copyState = Map.from(state);
+    var list = copyState[kanjiFromApi.section];
+    if (list == null) copyState[kanjiFromApi.section] = [];
+    copyState[kanjiFromApi.section]!.add(kanjiFromApi);
+    state = copyState;
   }
 
   void deleteItem(KanjiFromApi kanjiFromApi) {
-    final copyState = [...state];
-    var copyState2 = [...state];
+    Map<int, List<KanjiFromApi>> copyStateMap = Map.from(state);
+
+    if (copyStateMap[kanjiFromApi.section] == null) {
+      copyStateMap[kanjiFromApi.section] = [];
+    }
+    var list = copyStateMap[kanjiFromApi.section];
+    final copyState = [...list!];
+    var copyState2 = [...list];
     bool isThere = false;
 
     for (int i = 0; i < copyState.length; i++) {
@@ -32,11 +50,16 @@ class StatusStorageProvider extends Notifier<List<KanjiFromApi>> {
       }
     }
 
-    state = copyState2;
+    copyStateMap[kanjiFromApi.section] = copyState2;
+    state = copyStateMap;
   }
 
   (KanjiFromApi, StatusStorage) isInStorage(KanjiFromApi kanjiFromApi) {
-    final copyState = [...state];
+    Map<int, List<KanjiFromApi>> copyStateMap = Map.from(state);
+    if (copyStateMap[kanjiFromApi.section] == null) {
+      copyStateMap[kanjiFromApi.section] = [];
+    }
+    final copyState = [...copyStateMap[kanjiFromApi.section]!];
 
     late KanjiFromApi kanjiQuery;
 
@@ -57,7 +80,7 @@ class StatusStorageProvider extends Notifier<List<KanjiFromApi>> {
 }
 
 final statusStorageProvider =
-    NotifierProvider<StatusStorageProvider, List<KanjiFromApi>>(
+    NotifierProvider<StatusStorageProvider, Map<int, List<KanjiFromApi>>>(
         StatusStorageProvider.new);
 
 enum StatusStorage { onlyOnline, stored, dowloading }

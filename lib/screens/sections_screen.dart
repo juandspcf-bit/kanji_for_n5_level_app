@@ -49,9 +49,10 @@ class _SectionState extends ConsumerState<Section> {
         ref.read(kanjiListProvider.notifier).clearKanjiList();
         final storedKanjis =
             ref.read(statusStorageProvider.notifier).getStoresItems();
-        ref
-            .read(kanjiListProvider.notifier)
-            .setKanjiList(storedKanjis, widget.sectionData.kanjis);
+        ref.read(kanjiListProvider.notifier).setKanjiList(
+            storedKanjis[widget.sectionData.sectionNumber] ?? [],
+            widget.sectionData.kanjis,
+            widget.sectionData.sectionNumber);
         Navigator.of(context).push(
           MaterialPageRoute(
             builder: (ctx) {

@@ -5,6 +5,7 @@ class KanjiFromApi {
   final String katakanaMeaning;
   final String hiraganaMeaning;
   final String videoLink;
+  final int section;
   final List<Example> example;
   final Strokes strokes;
 
@@ -15,6 +16,7 @@ class KanjiFromApi {
       required this.katakanaMeaning,
       required this.hiraganaMeaning,
       required this.videoLink,
+      required this.section,
       required this.example,
       required this.strokes});
 
@@ -64,7 +66,7 @@ class Strokes {
   });
 }
 
-KanjiFromApi builKanjiInfoFromApi(Map<String, dynamic> body) {
+KanjiFromApi builKanjiInfoFromApi(Map<String, dynamic> body, int section) {
   final Map<String, dynamic> kanjiInfo = body['kanji'];
 
   final String kanjiCharacterFromAPI = kanjiInfo['character'];
@@ -119,6 +121,7 @@ KanjiFromApi builKanjiInfoFromApi(Map<String, dynamic> body) {
       kanjiImageLink: kanjiImageFromAPI,
       katakanaMeaning: katakanaMeaningFromAPI,
       hiraganaMeaning: hiraganaMeaningFromAPI,
+      section: section,
       videoLink: videoLinkFromAPI,
       example: examples,
       strokes: strokesInfo);
