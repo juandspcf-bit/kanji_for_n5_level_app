@@ -27,6 +27,7 @@ class _KanjiItemState extends ConsumerState<KanjiItem> {
   void downloadKanji(KanjiFromApi kanjiFromApi) {}
 
   late Widget statusStorageWidget;
+  bool isDownloading = false;
 
   void navigateToKanjiDetails(
     BuildContext context,
@@ -56,17 +57,19 @@ class _KanjiItemState extends ConsumerState<KanjiItem> {
   }
 
   Widget selectWidgetStatus() {
-    if (widget.statusStorage == StatusStorage.onlyOnline) {
+    if (widget.statusStorage == StatusStorage.onlyOnline &&
+        isDownloading == false) {
       return const Icon(
         Icons.download_for_offline,
         size: 50,
       );
-    } else if (widget.statusStorage == StatusStorage.stored) {
+    } else if (widget.statusStorage == StatusStorage.stored &&
+        isDownloading == false) {
       return const Icon(
         Icons.storage,
         size: 50,
       );
-    } else if (widget.statusStorage == StatusStorage.dowloading) {
+    } else if (isDownloading) {
       return const CircularProgressIndicator();
     }
 
@@ -142,24 +145,29 @@ class _KanjiItemState extends ConsumerState<KanjiItem> {
         trailing: InkWell(
           onTap: () {
             setState(() {
-              statusStorageWidget = const Placeholder();
-              print('touched');
+              isDownloading = true;
             });
-            // if (widget.statusStorage == StatusStorage.onlyOnline) {
-            //   insertKanjiFromApi(widget.kanjiFromApi)
-            //       .then((kanjiFromApiStored) {
-            //     //print(' my stored kanji is $kanjiFromApiStored');
-            //     ref
-            //         .read(statusStorageProvider.notifier)
-            //         .addItem(kanjiFromApiStored);
-            //   }).catchError((onError) {});
-            // } else if (widget.statusStorage == StatusStorage.stored) {
-            //   deleteKanjiFromApi(widget.kanjiFromApi).then((value) {
-            //     ref
-            //         .read(statusStorageProvider.notifier)
-            //         .deleteItem(widget.kanjiFromApi);
-            //   }).catchError((onError) {});
-            // }
+            if (widget.statusStorage == StatusStorage.onlyOnline) {
+              insertKanjiFromApi(widget.kanjiFromApi)
+                  .then((kanjiFromApiStored) {
+                //print(' my stored kanji is $kanjiFromApiStored');
+                ref
+                    .read(statusStorageProvider.notifier)
+                    .addItem(kanjiFromApiStored);
+                setState(() {
+                  isDownloading = false;
+                });
+              }).catchError((onError) {});
+            } else if (widget.statusStorage == StatusStorage.stored) {
+              deleteKanjiFromApi(widget.kanjiFromApi).then((value) {
+                ref
+                    .read(statusStorageProvider.notifier)
+                    .deleteItem(widget.kanjiFromApi);
+                setState(() {
+                  isDownloading = false;
+                });
+              }).catchError((onError) {});
+            }
           },
           child: Container(
             decoration: const BoxDecoration(shape: BoxShape.circle),
