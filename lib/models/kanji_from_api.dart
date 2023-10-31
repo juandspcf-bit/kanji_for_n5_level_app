@@ -20,7 +20,7 @@ class KanjiFromApi {
 
   @override
   String toString() {
-    return '$kanjiCharacter: $englishMeaning';
+    return 'kanji character $kanjiCharacter, : meaning: $englishMeaning, image link: $kanjiImageLink';
   }
 }
 

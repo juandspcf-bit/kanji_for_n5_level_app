@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:assets_audio_player/assets_audio_player.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -9,9 +11,11 @@ import 'package:kanji_for_n5_level_app/providers/status_stored_provider.dart';
 import 'package:video_player/video_player.dart';
 
 class KanjiDetails extends ConsumerStatefulWidget {
-  const KanjiDetails({super.key, required this.kanjiFromApi});
+  const KanjiDetails(
+      {super.key, required this.kanjiFromApi, required this.statusStorage});
 
   final KanjiFromApi kanjiFromApi;
+  final StatusStorage statusStorage;
 
   @override
   ConsumerState<KanjiDetails> createState() => KanjiDetailsState();
@@ -31,6 +35,7 @@ class KanjiDetailsState extends ConsumerState<KanjiDetails> {
   List<Widget> getListStrokes(List<String> images) {
     List<Widget> strokes = [];
     for (int index = 0; index < images.length; index++) {
+      print('image holder ${images[index]}');
       Widget stroke = Row(
         children: [
           const SizedBox(
@@ -46,19 +51,33 @@ class KanjiDetailsState extends ConsumerState<KanjiDetails> {
               onTap: () {
                 _scaleDialog(images[index], index);
               },
-              child: SvgPicture.network(
-                images[index],
-                height: 80,
-                width: 80,
-                semanticsLabel: widget.kanjiFromApi.kanjiCharacter,
-                placeholderBuilder: (BuildContext context) => Container(
-                    color: Colors.transparent,
-                    height: 40,
-                    width: 40,
-                    child: const CircularProgressIndicator(
-                      backgroundColor: Color.fromARGB(179, 5, 16, 51),
-                    )),
-              ),
+              child: widget.statusStorage == StatusStorage.onlyOnline
+                  ? SvgPicture.network(
+                      images[index],
+                      height: 80,
+                      width: 80,
+                      semanticsLabel: widget.kanjiFromApi.kanjiCharacter,
+                      placeholderBuilder: (BuildContext context) => Container(
+                          color: Colors.transparent,
+                          height: 40,
+                          width: 40,
+                          child: const CircularProgressIndicator(
+                            backgroundColor: Color.fromARGB(179, 5, 16, 51),
+                          )),
+                    )
+                  : SvgPicture.file(
+                      File(images[index]),
+                      height: 80,
+                      width: 80,
+                      semanticsLabel: widget.kanjiFromApi.kanjiCharacter,
+                      placeholderBuilder: (BuildContext context) => Container(
+                          color: Colors.transparent,
+                          height: 40,
+                          width: 40,
+                          child: const CircularProgressIndicator(
+                            backgroundColor: Color.fromARGB(179, 5, 16, 51),
+                          )),
+                    ),
             ),
           ),
           index != images.length - 1
@@ -117,9 +136,15 @@ class KanjiDetailsState extends ConsumerState<KanjiDetails> {
                   final assetsAudioPlayer = AssetsAudioPlayer();
 
                   try {
-                    await assetsAudioPlayer.open(
-                      Audio.network(examples[index].audio.mp3),
-                    );
+                    if (widget.statusStorage == StatusStorage.onlyOnline) {
+                      await assetsAudioPlayer.open(
+                        Audio.network(examples[index].audio.mp3),
+                      );
+                    } else if (widget.statusStorage == StatusStorage.stored) {
+                      await assetsAudioPlayer.open(
+                        Audio.file(examples[index].audio.mp3),
+                      );
+                    }
                   } catch (t) {
                     //mp3 unreachable
                   }
@@ -435,61 +460,6 @@ class KanjiDetailsState extends ConsumerState<KanjiDetails> {
             ),
           )
         ],
-      ),
-    );
-  }
-}
-
-class ExamplesAndInfo extends StatelessWidget {
-  const ExamplesAndInfo(
-      {super.key, required this.widget, required this.stopAnimation});
-
-  final KanjiDetails widget;
-  final void Function() stopAnimation;
-
-  @override
-  Widget build(BuildContext context) {
-    return Expanded(
-      child: SingleChildScrollView(
-        child: Column(children: [
-          for (final example in widget.kanjiFromApi.example)
-            ListTile(
-              title: Column(
-                children: [
-                  Text(example.japanese),
-                  const SizedBox(
-                    height: 7,
-                  ),
-                  Text(example.meaning.english),
-                  const SizedBox(
-                    height: 7,
-                  ),
-                ],
-              ),
-              trailing: Container(
-                decoration: BoxDecoration(
-                    color: Theme.of(context).colorScheme.primary,
-                    borderRadius: BorderRadius.circular(30)),
-                child: IconButton(
-                  color: Theme.of(context).colorScheme.onPrimary,
-                  onPressed: () async {
-                    stopAnimation();
-
-                    final assetsAudioPlayer = AssetsAudioPlayer();
-
-                    try {
-                      await assetsAudioPlayer.open(
-                        Audio.network(example.audio.mp3),
-                      );
-                    } catch (t) {
-                      //mp3 unreachable
-                    }
-                  },
-                  icon: const Icon(Icons.play_arrow_rounded),
-                ),
-              ),
-            )
-        ]),
       ),
     );
   }

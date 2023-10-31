@@ -35,17 +35,24 @@ class StatusStorageProvider extends Notifier<List<KanjiFromApi>> {
     state = copyState2;
   }
 
-  StatusStorage isInStorage(KanjiFromApi kanjiFromApi) {
+  (KanjiFromApi, StatusStorage) isInStorage(KanjiFromApi kanjiFromApi) {
     final copyState = [...state];
-    final kanjiQuery = copyState.map((e) => e.kanjiCharacter).firstWhere(
-        (element) => element == kanjiFromApi.kanjiCharacter,
-        orElse: () => '');
 
-    if (kanjiQuery != '') {
-      return StatusStorage.stored;
-    } else {
-      return StatusStorage.onlyOnline;
+    late KanjiFromApi kanjiQuery;
+
+    StatusStorage inStorage;
+    try {
+      kanjiQuery = copyState.firstWhere(
+          (element) => element.kanjiCharacter == kanjiFromApi.kanjiCharacter);
+      inStorage = StatusStorage.stored;
+    } on StateError catch (e) {
+      e.message;
+      kanjiQuery = kanjiFromApi;
+      inStorage = StatusStorage.onlyOnline;
     }
+
+    print('my stored kanji is $kanjiFromApi, in storage ? : $inStorage');
+    return (kanjiQuery, inStorage);
   }
 }
 

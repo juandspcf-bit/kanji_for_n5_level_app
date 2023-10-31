@@ -9,12 +9,10 @@ class BodyKanjisList extends ConsumerWidget {
     super.key,
     required this.statusResponse,
     required this.kanjisFromApi,
-    required this.navigateToKanjiDetails,
   });
 
   final int statusResponse;
   final List<KanjiFromApi> kanjisFromApi;
-  final void Function(BuildContext, KanjiFromApi?) navigateToKanjiDetails;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -29,10 +27,13 @@ class BodyKanjisList extends ConsumerWidget {
                 .read(statusStorageProvider.notifier)
                 .isInStorage(kanjisFromApi[index]);
             return KanjiItem(
-              key: ValueKey(kanjisFromApi[index].kanjiCharacter),
-              kanjiFromApi: kanjisFromApi[index],
-              navigateToKanjiDetails: navigateToKanjiDetails,
-              statusStorage: statusStorage,
+              key: ValueKey(statusStorage.$2 == StatusStorage.stored
+                  ? statusStorage.$1.kanjiCharacter
+                  : kanjisFromApi[index].kanjiCharacter),
+              kanjiFromApi: statusStorage.$2 == StatusStorage.stored
+                  ? statusStorage.$1
+                  : kanjisFromApi[index],
+              statusStorage: statusStorage.$2,
             );
           });
     } else if (statusResponse == 2) {

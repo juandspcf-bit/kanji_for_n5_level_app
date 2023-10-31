@@ -6,7 +6,6 @@ import 'package:kanji_for_n5_level_app/networking/request_api.dart';
 import 'package:kanji_for_n5_level_app/providers/status_stored_provider.dart';
 import 'package:kanji_for_n5_level_app/screens/body_list/body_list.dart';
 
-import 'package:kanji_for_n5_level_app/screens/kaji_details.dart';
 import 'package:kanji_for_n5_level_app/screens/quiz_screen/quizz_screen.dart';
 
 class KanjiList extends ConsumerStatefulWidget {
@@ -36,20 +35,6 @@ class _KanjiListState extends ConsumerState<KanjiList> {
     setState(() {
       statusResponse = 2;
     });
-  }
-
-  void navigateToKanjiDetails(
-    BuildContext context,
-    KanjiFromApi? kanjiFromApi,
-  ) {
-    if (kanjiFromApi == null) return;
-    Navigator.of(context).push(
-      MaterialPageRoute(builder: (ctx) {
-        return KanjiDetails(
-          kanjiFromApi: kanjiFromApi,
-        );
-      }),
-    );
   }
 
   @override
@@ -89,7 +74,6 @@ class _KanjiListState extends ConsumerState<KanjiList> {
       body: BodyKanjisList(
         statusResponse: statusResponse,
         kanjisFromApi: _kanjisModel,
-        navigateToKanjiDetails: navigateToKanjiDetails,
       ),
     );
   }

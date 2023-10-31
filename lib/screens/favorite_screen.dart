@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:kanji_for_n5_level_app/models/kanji_from_api.dart';
 import 'package:kanji_for_n5_level_app/providers/favorites_cached_provider.dart';
 import 'package:kanji_for_n5_level_app/screens/body_list/body_list.dart';
-import 'package:kanji_for_n5_level_app/screens/kaji_details.dart';
 
 class FavoriteScreen extends ConsumerStatefulWidget {
   const FavoriteScreen({
@@ -15,27 +13,12 @@ class FavoriteScreen extends ConsumerStatefulWidget {
 }
 
 class _FavoriteScreenState extends ConsumerState<FavoriteScreen> {
-  void navigateToKanjiDetails(
-    BuildContext context,
-    KanjiFromApi? kanjiFromApi,
-  ) {
-    if (kanjiFromApi == null) return;
-    Navigator.of(context).push(
-      MaterialPageRoute(builder: (ctx) {
-        return KanjiDetails(
-          kanjiFromApi: kanjiFromApi,
-        );
-      }),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     final kanjis = ref.watch(favoritesCachedProvider);
     return BodyKanjisList(
       statusResponse: kanjis.$2,
       kanjisFromApi: kanjis.$1,
-      navigateToKanjiDetails: navigateToKanjiDetails,
     );
   }
 }
