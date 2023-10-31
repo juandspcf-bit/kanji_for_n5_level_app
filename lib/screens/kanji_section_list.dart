@@ -21,12 +21,12 @@ class KanjiList extends ConsumerStatefulWidget {
 }
 
 class _KanjiListState extends ConsumerState<KanjiList> {
-  List<KanjiFromApi> _kanjisModel = [];
+  List<KanjiFromApi> _kanjisFromApi = [];
   int statusResponse = 0;
 
   void onSuccesRequest(List<KanjiFromApi> kanjisFromApi) {
     setState(() {
-      _kanjisModel = kanjisFromApi;
+      _kanjisFromApi = kanjisFromApi;
       statusResponse = 1;
     });
   }
@@ -62,7 +62,7 @@ class _KanjiListState extends ConsumerState<KanjiList> {
                       Navigator.of(context).push(
                         MaterialPageRoute(
                           builder: (ctx) {
-                            return QuizScreen(kanjisModel: _kanjisModel);
+                            return QuizScreen(kanjisModel: _kanjisFromApi);
                           },
                         ),
                       );
@@ -73,7 +73,7 @@ class _KanjiListState extends ConsumerState<KanjiList> {
       ),
       body: BodyKanjisList(
         statusResponse: statusResponse,
-        kanjisFromApi: _kanjisModel,
+        kanjisFromApi: _kanjisFromApi,
       ),
     );
   }
