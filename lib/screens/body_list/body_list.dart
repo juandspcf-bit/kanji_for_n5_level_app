@@ -15,6 +15,7 @@ class BodyKanjisList extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    print('status response $statusResponse');
     if (statusResponse == 0) {
       return const Center(child: CircularProgressIndicator());
     } else if (statusResponse == 1 && kanjisFromApi.isNotEmpty) {

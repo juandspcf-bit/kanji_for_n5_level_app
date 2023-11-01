@@ -11,7 +11,7 @@ class FavoritesCached extends Notifier<(List<KanjiFromApi>, int)> {
   void setInitialFavorites(List<KanjiFromApi> storedKanjis,
       List<String> myFavoritesCached, int section) {
     if (myFavoritesCached.isEmpty) {
-      state = ([], 3);
+      state = ([], 1);
       return;
     }
     RequestApi.getKanjis(storedKanjis, myFavoritesCached, section,

@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:kanji_for_n5_level_app/models/secction_model.dart';
 import 'package:kanji_for_n5_level_app/providers/kanjis_list_provider.dart';
+import 'package:kanji_for_n5_level_app/providers/kanjis_sections_list_providers.dart';
 import 'package:kanji_for_n5_level_app/providers/status_stored_provider.dart';
 import 'package:kanji_for_n5_level_app/screens/kanji_section_list.dart';
 
@@ -40,19 +41,35 @@ class Section extends ConsumerStatefulWidget {
 }
 
 class _SectionState extends ConsumerState<Section> {
-  void updateList() {}
-
   @override
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
-        ref.read(kanjiListProvider.notifier).clearKanjiList();
-        final storedKanjis =
-            ref.read(statusStorageProvider.notifier).getStoresItems();
-        ref.read(kanjiListProvider.notifier).setKanjiList(
-            storedKanjis[widget.sectionData.sectionNumber] ?? [],
-            widget.sectionData.kanjis,
-            widget.sectionData.sectionNumber);
+        final listFromCachedSection = ref
+            .read(kanjisScectionsListProvider.notifier)
+            .getKanjisFromSection(widget.sectionData.sectionNumber);
+        if (listFromCachedSection.$1.isNotEmpty) {
+          ref
+              .read(kanjiListProvider.notifier)
+              .setKanjiListFromCachedSection(listFromCachedSection);
+          ref
+              .read(
+            kanjisScectionsListProvider.notifier,
+          )
+              .setSectionKanjiList(
+            widget.sectionData.sectionNumber,
+            ([], 0),
+          );
+        } else {
+          ref.read(kanjiListProvider.notifier).clearKanjiList();
+          final storedKanjis =
+              ref.read(statusStorageProvider.notifier).getStoresItems();
+          ref.read(kanjiListProvider.notifier).setKanjiList(
+              storedKanjis[widget.sectionData.sectionNumber] ?? [],
+              widget.sectionData.kanjis,
+              widget.sectionData.sectionNumber);
+        }
+
         Navigator.of(context).push(
           MaterialPageRoute(
             builder: (ctx) {

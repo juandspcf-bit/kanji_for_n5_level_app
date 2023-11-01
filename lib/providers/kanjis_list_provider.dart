@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kanji_for_n5_level_app/models/kanji_from_api.dart';
 import 'package:kanji_for_n5_level_app/networking/request_api.dart';
@@ -41,6 +42,10 @@ class KanjiListProvider extends Notifier<(List<KanjiFromApi>, int)> {
       onSuccesRequest,
       onErrorRequest,
     );
+  }
+
+  void setKanjiListFromCachedSection((List<KanjiFromApi>, int) listRecord) {
+    state = listRecord;
   }
 
   void clearKanjiList() {
