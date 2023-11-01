@@ -1,6 +1,9 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:kanji_for_n5_level_app/models/kanji_from_api.dart';
+import 'package:kanji_for_n5_level_app/providers/status_stored_provider.dart';
 import 'package:kanji_for_n5_level_app/screens/quiz_screen/score_body.dart';
 
 enum Screens { quiz, score }
@@ -183,25 +186,54 @@ class _QuizScreenState extends State<QuizScreen> {
                                       Radius.circular(10),
                                     ),
                                   ),
-                                  child: SvgPicture.network(
-                                    randomKanjisToAskMeaning[index]
-                                        .kanjiImageLink,
-                                    height: 70,
-                                    width: 70,
-                                    semanticsLabel:
-                                        randomKanjisToAskMeaning[index]
-                                            .kanjiCharacter,
-                                    placeholderBuilder:
-                                        (BuildContext context) => Container(
-                                            color: Colors.transparent,
-                                            height: 40,
-                                            width: 40,
-                                            child:
-                                                const CircularProgressIndicator(
-                                              backgroundColor: Color.fromARGB(
-                                                  179, 5, 16, 51),
-                                            )),
-                                  ),
+                                  child: randomKanjisToAskMeaning[index]
+                                                  .statusStorage ==
+                                              StatusStorage.onlyOnline ||
+                                          randomKanjisToAskMeaning[index]
+                                                  .statusStorage ==
+                                              StatusStorage.dowloading
+                                      ? SvgPicture.network(
+                                          randomKanjisToAskMeaning[index]
+                                              .kanjiImageLink,
+                                          height: 70,
+                                          width: 70,
+                                          semanticsLabel:
+                                              randomKanjisToAskMeaning[index]
+                                                  .kanjiCharacter,
+                                          placeholderBuilder: (BuildContext
+                                                  context) =>
+                                              Container(
+                                                  color: Colors.transparent,
+                                                  height: 40,
+                                                  width: 40,
+                                                  child:
+                                                      const CircularProgressIndicator(
+                                                    backgroundColor:
+                                                        Color.fromARGB(
+                                                            179, 5, 16, 51),
+                                                  )),
+                                        )
+                                      : SvgPicture.file(
+                                          File(randomKanjisToAskMeaning[index]
+                                              .kanjiImageLink),
+                                          height: 70,
+                                          width: 70,
+                                          semanticsLabel:
+                                              randomKanjisToAskMeaning[index]
+                                                  .kanjiCharacter,
+                                          placeholderBuilder: (BuildContext
+                                                  context) =>
+                                              Container(
+                                                  color: Colors.transparent,
+                                                  height: 40,
+                                                  width: 40,
+                                                  child:
+                                                      const CircularProgressIndicator(
+                                                    backgroundColor:
+                                                        Color.fromARGB(
+                                                            179, 5, 16, 51),
+                                                  )),
+                                        ),
                                 ),
                               ),
                         Column(

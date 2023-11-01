@@ -74,7 +74,6 @@ class StatusStorageProvider extends Notifier<Map<int, List<KanjiFromApi>>> {
       inStorage = StatusStorage.onlyOnline;
     }
 
-    print('my stored kanji is $kanjiFromApi, in storage ? : $inStorage');
     return (kanjiQuery, inStorage);
   }
 }

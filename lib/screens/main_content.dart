@@ -6,7 +6,6 @@ import 'package:kanji_for_n5_level_app/Databases/download_db_utils.dart';
 import 'package:kanji_for_n5_level_app/Databases/favorites_db_utils.dart';
 import 'package:kanji_for_n5_level_app/providers/favorite_screen_selection_provider.dart';
 import 'package:kanji_for_n5_level_app/providers/favorites_cached_provider.dart';
-import 'package:kanji_for_n5_level_app/providers/kanjis_list_provider.dart';
 import 'package:kanji_for_n5_level_app/providers/status_stored_provider.dart';
 import 'package:kanji_for_n5_level_app/screens/favorite_screen.dart';
 import 'package:kanji_for_n5_level_app/screens/sections_screen.dart';

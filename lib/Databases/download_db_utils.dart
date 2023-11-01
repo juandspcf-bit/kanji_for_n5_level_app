@@ -1,7 +1,6 @@
 import 'dart:io';
 
 import 'package:async/async.dart';
-import 'package:flutter/material.dart';
 import 'package:kanji_for_n5_level_app/models/kanji_from_api.dart';
 import 'package:kanji_for_n5_level_app/providers/status_stored_provider.dart';
 import 'package:kanji_for_n5_level_app/screens/main_content.dart';
@@ -93,8 +92,6 @@ Future<List<KanjiFromApi>> loadStoredKanjis() async {
 
     final strokes = Strokes(
         count: listStrokesImagesLinks.length, images: listStrokesImagesLinks);
-
-    print(mapKanjiFromDb);
 
     final kanjiFromApi = KanjiFromApi(
       kanjiCharacter: mapKanjiFromDb['kanjiCharacter'] as String,
@@ -331,7 +328,7 @@ Future<int> deleteKanjiFromApi(KanjiFromApi kanjiFromApi) async {
     await dbStrokes.rawDelete('DELETE FROM strokes WHERE kanjiCharacter = ?',
         [kanjiFromApi.kanjiCharacter]);
   } catch (e) {
-    print(e);
+    e.toString();
   }
 
   return 0;

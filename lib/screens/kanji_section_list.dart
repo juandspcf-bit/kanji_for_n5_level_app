@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kanji_for_n5_level_app/models/secction_model.dart';
+import 'package:kanji_for_n5_level_app/providers/access_to_quiz_provider.dart';
 import 'package:kanji_for_n5_level_app/providers/kanjis_list_provider.dart';
 import 'package:kanji_for_n5_level_app/screens/body_list/body_list.dart';
 
@@ -27,12 +28,13 @@ class _KanjiListState extends ConsumerState<KanjiList> {
   @override
   Widget build(BuildContext context) {
     final kanjiList = ref.watch(kanjiListProvider);
+    final accesToQuiz = ref.watch(accesToQuizProvider);
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.sectionModel.title),
         actions: [
           IconButton(
-              onPressed: kanjiList.$2 == 1
+              onPressed: kanjiList.$2 == 1 && accesToQuiz
                   ? () {
                       Navigator.of(context).push(
                         MaterialPageRoute(

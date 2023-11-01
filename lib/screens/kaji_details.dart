@@ -35,7 +35,6 @@ class KanjiDetailsState extends ConsumerState<KanjiDetails> {
   List<Widget> getListStrokes(List<String> images) {
     List<Widget> strokes = [];
     for (int index = 0; index < images.length; index++) {
-      print('image holder ${images[index]}');
       Widget stroke = Row(
         children: [
           const SizedBox(
