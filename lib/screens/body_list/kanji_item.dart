@@ -6,6 +6,8 @@ import 'package:flutter_svg/svg.dart';
 import 'package:kanji_for_n5_level_app/Databases/download_db_utils.dart';
 import 'package:kanji_for_n5_level_app/models/kanji_from_api.dart';
 import 'package:kanji_for_n5_level_app/networking/request_api.dart';
+import 'package:kanji_for_n5_level_app/providers/favorite_screen_selection_provider.dart';
+import 'package:kanji_for_n5_level_app/providers/favorites_cached_provider.dart';
 import 'package:kanji_for_n5_level_app/providers/kanjis_list_provider.dart';
 import 'package:kanji_for_n5_level_app/providers/status_stored_provider.dart';
 import 'package:kanji_for_n5_level_app/screens/kaji_details.dart';
@@ -156,9 +158,20 @@ class _KanjiItemState extends ConsumerState<KanjiItem> {
                 ref
                     .read(statusStorageProvider.notifier)
                     .addItem(kanjiFromApiStored);
-                ref
-                    .read(kanjiListProvider.notifier)
-                    .updateKanji(kanjiFromApiStored);
+
+                final selection = ref
+                    .read(favoriteScreenSelectionProvider.notifier)
+                    .getSelection();
+                if (selection) {
+                  ref
+                      .read(favoritesCachedProvider.notifier)
+                      .updateKanji(kanjiFromApiStored);
+                } else {
+                  ref
+                      .read(kanjiListProvider.notifier)
+                      .updateKanji(kanjiFromApiStored);
+                }
+
                 setState(() {
                   isProcessing = false;
                 });
@@ -173,9 +186,18 @@ class _KanjiItemState extends ConsumerState<KanjiItem> {
                 ref
                     .read(statusStorageProvider.notifier)
                     .deleteItem(widget.kanjiFromApi);
+                final selection = ref
+                    .read(favoriteScreenSelectionProvider.notifier)
+                    .getSelection();
                 RequestApi.getKanjis([], [widget.kanjiFromApi.kanjiCharacter],
                     widget.kanjiFromApi.section, (list) {
-                  ref.read(kanjiListProvider.notifier).updateKanji(list[0]);
+                  if (selection) {
+                    ref
+                        .read(favoritesCachedProvider.notifier)
+                        .updateKanji(list[0]);
+                  } else {
+                    ref.read(kanjiListProvider.notifier).updateKanji(list[0]);
+                  }
                   setState(() {
                     isProcessing = false;
                   });

@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:async/async.dart';
 import 'package:flutter/material.dart';
 import 'package:kanji_for_n5_level_app/models/kanji_from_api.dart';
+import 'package:kanji_for_n5_level_app/providers/status_stored_provider.dart';
 import 'package:kanji_for_n5_level_app/screens/main_content.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:sqflite/sqflite.dart' as sql;
@@ -103,6 +104,7 @@ Future<List<KanjiFromApi>> loadStoredKanjis() async {
       hiraganaMeaning: mapKanjiFromDb['hiraganaMeaning'] as String,
       videoLink: mapKanjiFromDb['videoLink'] as String,
       section: mapKanjiFromDb['section'] as int,
+      statusStorage: StatusStorage.stored,
       example: examples,
       strokes: strokes,
     );
@@ -146,6 +148,7 @@ Future<KanjiFromApi> insertKanjiFromApi(
       hiraganaMeaning: kanjiMap['hiraganaMeaning'] ?? '',
       videoLink: kanjiMap['videoLink'] ?? '',
       section: int.parse(kanjiMap['section'] ?? '0'),
+      statusStorage: StatusStorage.stored,
       example: examples,
       strokes: strokes);
 }

@@ -258,7 +258,10 @@ class KanjiDetailsState extends ConsumerState<KanjiDetails> {
                         .read(statusStorageProvider.notifier)
                         .getStoresItems();
                     ref.read(favoritesCachedProvider.notifier).addItem(
-                        storedItems[widget.kanjiFromApi.section]!,
+                        storedItems.values.fold([], (previousValue, element) {
+                          previousValue.addAll(element);
+                          return previousValue;
+                        }),
                         widget.kanjiFromApi);
                   });
                 } else {

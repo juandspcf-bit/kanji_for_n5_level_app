@@ -33,7 +33,7 @@ class BodyKanjisList extends ConsumerWidget {
               kanjiFromApi: statusStorage.$2 == StatusStorage.stored
                   ? statusStorage.$1
                   : kanjisFromApi[index],
-              statusStorage: statusStorage.$2,
+              statusStorage: kanjisFromApi[index].statusStorage,
             );
           });
     } else if (statusResponse == 2) {

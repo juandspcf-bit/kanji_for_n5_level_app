@@ -4,12 +4,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kanji_for_n5_level_app/Databases/download_db_utils.dart';
 import 'package:kanji_for_n5_level_app/Databases/favorites_db_utils.dart';
+import 'package:kanji_for_n5_level_app/providers/favorite_screen_selection_provider.dart';
 import 'package:kanji_for_n5_level_app/providers/favorites_cached_provider.dart';
 import 'package:kanji_for_n5_level_app/providers/kanjis_list_provider.dart';
 import 'package:kanji_for_n5_level_app/providers/status_stored_provider.dart';
 import 'package:kanji_for_n5_level_app/screens/favorite_screen.dart';
 import 'package:kanji_for_n5_level_app/screens/sections_screen.dart';
-import 'package:permission_handler/permission_handler.dart';
 
 const temporalAvatar =
     "https://firebasestorage.googleapis.com/v0/b/kanji-for-n5.appspot.com/o/unnamed.jpg?alt=media&token=38275fec-42f3-4d95-b1fd-785e82d4086f&_gl=1*19p8v1f*_ga*MjAyNTg0OTcyOS4xNjk2NDEwODIz*_ga_CW55HF8NVT*MTY5NzEwMTY3NC45LjEuMTY5NzEwMzExMy4zMy4wLjA.";
@@ -29,22 +29,11 @@ class _MainContentState extends ConsumerState<MainContent> {
   void _selectPage(int index) {
     setState(() {
       if (index == 1) {
-        ref.read(kanjiListProvider.notifier).clearKanjiList();
-        final storedKanjis =
-            ref.read(statusStorageProvider.notifier).getStoresItems();
-        ref.read(kanjiListProvider.notifier).setKanjiList(
-            storedKanjis.values.fold([], (previousValue, element) {
-                  previousValue!.addAll(element);
-                  return previousValue;
-                }) ??
-                [],
-            ref
-                .read(favoritesCachedProvider.notifier)
-                .getFavorites()
-                .map((e) => e.kanjiCharacter)
-                .toList(),
-            10);
+        ref.read(favoriteScreenSelectionProvider.notifier).setSelection();
+      } else {
+        ref.read(favoriteScreenSelectionProvider.notifier).setNotSelection();
       }
+
       _selectedPageIndex = index;
     });
   }

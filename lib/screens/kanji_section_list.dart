@@ -19,37 +19,9 @@ class KanjiList extends ConsumerStatefulWidget {
 }
 
 class _KanjiListState extends ConsumerState<KanjiList> {
-/*   List<KanjiFromApi> _kanjisFromApi = [];
-  int statusResponse = 0;
-
-  void onSuccesRequest(List<KanjiFromApi> kanjisFromApi) {
-    setState(() {
-      _kanjisFromApi = kanjisFromApi;
-      statusResponse = 1;
-    });
-  }
-
-  void onErrorRequest() {
-    setState(() {
-      statusResponse = 2;
-    });
-  } */
-
   @override
   void initState() {
     super.initState();
-/*     ref.read(kanjiListProvider.notifier).clearKanjiList();
-    final storedKanjis =
-        ref.read(statusStorageProvider.notifier).getStoresItems();
-    ref
-        .read(kanjiListProvider.notifier)
-        .setKanjiList(storedKanjis, widget.sectionModel.kanjis); */
-/*     RequestApi.getKanjis(
-      storedKanjis,
-      widget.sectionModel.kanjis,
-      onSuccesRequest,
-      onErrorRequest,
-    ); */
   }
 
   @override

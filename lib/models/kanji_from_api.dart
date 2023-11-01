@@ -1,3 +1,5 @@
+import 'package:kanji_for_n5_level_app/providers/status_stored_provider.dart';
+
 class KanjiFromApi {
   final String kanjiCharacter;
   final String englishMeaning;
@@ -6,6 +8,7 @@ class KanjiFromApi {
   final String hiraganaMeaning;
   final String videoLink;
   final int section;
+  final StatusStorage statusStorage;
   final List<Example> example;
   final Strokes strokes;
 
@@ -17,6 +20,7 @@ class KanjiFromApi {
       required this.hiraganaMeaning,
       required this.videoLink,
       required this.section,
+      required this.statusStorage,
       required this.example,
       required this.strokes});
 
@@ -123,6 +127,7 @@ KanjiFromApi builKanjiInfoFromApi(Map<String, dynamic> body, int section) {
       hiraganaMeaning: hiraganaMeaningFromAPI,
       section: section,
       videoLink: videoLinkFromAPI,
+      statusStorage: StatusStorage.onlyOnline,
       example: examples,
       strokes: strokesInfo);
 
