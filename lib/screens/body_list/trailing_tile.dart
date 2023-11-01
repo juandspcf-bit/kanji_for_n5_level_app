@@ -12,14 +12,12 @@ import 'package:kanji_for_n5_level_app/providers/status_stored_provider.dart';
 class TrailingTile extends ConsumerWidget {
   const TrailingTile({
     super.key,
-    required this.accessToKanjiItemsButtons,
     required this.kanjiFromApi,
-    required this.setAccessToKanjiItemsButtons,
+    //required this.setAccessToKanjiItemsButtons,
   });
 
-  final bool accessToKanjiItemsButtons;
   final KanjiFromApi kanjiFromApi;
-  final void Function(bool value) setAccessToKanjiItemsButtons;
+  //final void Function(bool value) setAccessToKanjiItemsButtons;
 
   Widget selectWidgetStatus(KanjiFromApi kanjiFromApi) {
     if (kanjiFromApi.statusStorage == StatusStorage.onlyOnline) {
@@ -65,7 +63,7 @@ class TrailingTile extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return InkWell(
       onTap: () {
-        if (!accessToKanjiItemsButtons) return;
+        if (!kanjiFromApi.accessToKanjiItemsButtons) return;
         final selection =
             ref.read(favoriteScreenSelectionProvider.notifier).getSelection();
 
@@ -97,7 +95,7 @@ class TrailingTile extends ConsumerWidget {
             }
           }).whenComplete(() {
             ref.read(accesToQuizProvider.notifier).giveAccesToQuiz();
-            setAccessToKanjiItemsButtons(true);
+            //setAccessToKanjiItemsButtons(true);
           });
         } else if (kanjiFromApi.statusStorage == StatusStorage.stored) {
           deleteKanjiFromApi(kanjiFromApi).then((value) {
@@ -111,7 +109,7 @@ class TrailingTile extends ConsumerWidget {
                 ref.read(kanjiListProvider.notifier).updateKanji(list[0]);
               }
               ref.read(accesToQuizProvider.notifier).giveAccesToQuiz();
-              setAccessToKanjiItemsButtons(true);
+              //setAccessToKanjiItemsButtons(true);
             }, () {
               if (selection) {
                 ref.read(favoritesCachedProvider.notifier).updateKanji(
@@ -123,7 +121,7 @@ class TrailingTile extends ConsumerWidget {
                         StatusStorage.stored, true, kanjiFromApi));
               }
               ref.read(accesToQuizProvider.notifier).giveAccesToQuiz();
-              setAccessToKanjiItemsButtons(true);
+              //setAccessToKanjiItemsButtons(true);
             });
           }).catchError((onError) {
             if (selection) {
@@ -135,7 +133,7 @@ class TrailingTile extends ConsumerWidget {
             }
 
             ref.read(accesToQuizProvider.notifier).giveAccesToQuiz();
-            setAccessToKanjiItemsButtons(true);
+            //setAccessToKanjiItemsButtons(true);
           });
         }
 
@@ -152,7 +150,7 @@ class TrailingTile extends ConsumerWidget {
               );
         }
 
-        setAccessToKanjiItemsButtons(false);
+        //setAccessToKanjiItemsButtons(false);
       },
       child: Container(
         decoration: const BoxDecoration(shape: BoxShape.circle),

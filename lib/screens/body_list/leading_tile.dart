@@ -8,12 +8,10 @@ import 'package:kanji_for_n5_level_app/providers/status_stored_provider.dart';
 class LeadingTile extends StatelessWidget {
   const LeadingTile({
     super.key,
-    required this.accessToKanjiItemsButtons,
     required this.kanjiFromApi,
     required this.navigateToKanjiDetails,
   });
 
-  final bool accessToKanjiItemsButtons;
   final KanjiFromApi kanjiFromApi;
   final void Function(
     BuildContext context,
@@ -23,7 +21,7 @@ class LeadingTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: accessToKanjiItemsButtons
+      onTap: kanjiFromApi.accessToKanjiItemsButtons
           ? () {
               navigateToKanjiDetails(context, kanjiFromApi);
             }
@@ -32,7 +30,7 @@ class LeadingTile extends StatelessWidget {
         height: 80,
         width: 60,
         decoration: BoxDecoration(
-            color: accessToKanjiItemsButtons
+            color: kanjiFromApi.accessToKanjiItemsButtons
                 ? Theme.of(context)
                     .colorScheme
                     .onPrimaryContainer

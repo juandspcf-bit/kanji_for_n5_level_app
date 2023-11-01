@@ -4,12 +4,10 @@ import 'package:kanji_for_n5_level_app/models/kanji_from_api.dart';
 class TitleTile extends StatelessWidget {
   const TitleTile({
     super.key,
-    required this.accessToKanjiItemsButtons,
     required this.kanjiFromApi,
     required this.navigateToKanjiDetails,
   });
 
-  final bool accessToKanjiItemsButtons;
   final KanjiFromApi kanjiFromApi;
 
   final void Function(
@@ -26,7 +24,7 @@ class TitleTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: accessToKanjiItemsButtons
+      onTap: kanjiFromApi.accessToKanjiItemsButtons
           ? () {
               navigateToKanjiDetails(context, kanjiFromApi);
             }
@@ -34,7 +32,7 @@ class TitleTile extends StatelessWidget {
       child: Text(
         cutEnglishMeaning(kanjiFromApi.englishMeaning),
         textAlign: TextAlign.start,
-        style: accessToKanjiItemsButtons
+        style: kanjiFromApi.accessToKanjiItemsButtons
             ? Theme.of(context).textTheme.bodyMedium!.copyWith(
                 color: Theme.of(context)
                     .colorScheme

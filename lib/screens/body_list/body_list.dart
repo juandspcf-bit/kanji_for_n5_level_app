@@ -24,7 +24,6 @@ class BodyKanjisList extends ConsumerWidget {
             return KanjiItem(
               key: ValueKey(kanjisFromApi[index].kanjiCharacter),
               kanjiFromApi: kanjisFromApi[index],
-              statusStorage: kanjisFromApi[index].statusStorage,
             );
           });
     } else if (statusResponse == 2) {
