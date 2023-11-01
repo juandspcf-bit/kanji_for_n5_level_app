@@ -43,7 +43,10 @@ class TrailingTile extends ConsumerWidget {
   }
 
   KanjiFromApi updateStatusKanji(
-      StatusStorage statusStorage, KanjiFromApi kanjiFromApi) {
+    StatusStorage statusStorage,
+    bool accessToKanjiItemsButtons,
+    KanjiFromApi kanjiFromApi,
+  ) {
     return KanjiFromApi(
         kanjiCharacter: kanjiFromApi.kanjiCharacter,
         englishMeaning: kanjiFromApi.englishMeaning,
@@ -53,6 +56,7 @@ class TrailingTile extends ConsumerWidget {
         videoLink: kanjiFromApi.videoLink,
         section: kanjiFromApi.section,
         statusStorage: statusStorage,
+        accessToKanjiItemsButtons: accessToKanjiItemsButtons,
         example: kanjiFromApi.example,
         strokes: kanjiFromApi.strokes);
   }
@@ -84,10 +88,12 @@ class TrailingTile extends ConsumerWidget {
           }).catchError((onError) {
             if (selection) {
               ref.read(favoritesCachedProvider.notifier).updateKanji(
-                  updateStatusKanji(StatusStorage.onlyOnline, kanjiFromApi));
+                  updateStatusKanji(
+                      StatusStorage.onlyOnline, true, kanjiFromApi));
             } else {
               ref.read(kanjiListProvider.notifier).updateKanji(
-                  updateStatusKanji(StatusStorage.onlyOnline, kanjiFromApi));
+                  updateStatusKanji(
+                      StatusStorage.onlyOnline, true, kanjiFromApi));
             }
           }).whenComplete(() {
             ref.read(accesToQuizProvider.notifier).giveAccesToQuiz();
@@ -109,10 +115,12 @@ class TrailingTile extends ConsumerWidget {
             }, () {
               if (selection) {
                 ref.read(favoritesCachedProvider.notifier).updateKanji(
-                    updateStatusKanji(StatusStorage.stored, kanjiFromApi));
+                    updateStatusKanji(
+                        StatusStorage.stored, true, kanjiFromApi));
               } else {
                 ref.read(kanjiListProvider.notifier).updateKanji(
-                    updateStatusKanji(StatusStorage.stored, kanjiFromApi));
+                    updateStatusKanji(
+                        StatusStorage.stored, true, kanjiFromApi));
               }
               ref.read(accesToQuizProvider.notifier).giveAccesToQuiz();
               setAccessToKanjiItemsButtons(true);
@@ -120,10 +128,10 @@ class TrailingTile extends ConsumerWidget {
           }).catchError((onError) {
             if (selection) {
               ref.read(favoritesCachedProvider.notifier).updateKanji(
-                  updateStatusKanji(StatusStorage.stored, kanjiFromApi));
+                  updateStatusKanji(StatusStorage.stored, true, kanjiFromApi));
             } else {
               ref.read(kanjiListProvider.notifier).updateKanji(
-                  updateStatusKanji(StatusStorage.stored, kanjiFromApi));
+                  updateStatusKanji(StatusStorage.stored, true, kanjiFromApi));
             }
 
             ref.read(accesToQuizProvider.notifier).giveAccesToQuiz();
@@ -133,12 +141,14 @@ class TrailingTile extends ConsumerWidget {
 
         if (selection) {
           ref.read(favoritesCachedProvider.notifier).updateKanji(
-                updateStatusKanji(StatusStorage.dowloading, kanjiFromApi),
+                updateStatusKanji(
+                    StatusStorage.dowloading, false, kanjiFromApi),
               );
         } else {
           ref.read(accesToQuizProvider.notifier).denyAccesToQuiz();
           ref.read(kanjiListProvider.notifier).updateKanji(
-                updateStatusKanji(StatusStorage.dowloading, kanjiFromApi),
+                updateStatusKanji(
+                    StatusStorage.dowloading, false, kanjiFromApi),
               );
         }
 

@@ -9,6 +9,7 @@ class KanjiFromApi {
   final String videoLink;
   final int section;
   final StatusStorage statusStorage;
+  final bool accessToKanjiItemsButtons;
   final List<Example> example;
   final Strokes strokes;
 
@@ -21,6 +22,7 @@ class KanjiFromApi {
       required this.videoLink,
       required this.section,
       required this.statusStorage,
+      required this.accessToKanjiItemsButtons,
       required this.example,
       required this.strokes});
 
@@ -128,6 +130,7 @@ KanjiFromApi builKanjiInfoFromApi(Map<String, dynamic> body, int section) {
       section: section,
       videoLink: videoLinkFromAPI,
       statusStorage: StatusStorage.onlyOnline,
+      accessToKanjiItemsButtons: true,
       example: examples,
       strokes: strokesInfo);
 

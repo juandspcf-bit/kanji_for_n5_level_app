@@ -101,6 +101,7 @@ Future<List<KanjiFromApi>> loadStoredKanjis() async {
       hiraganaMeaning: mapKanjiFromDb['hiraganaMeaning'] as String,
       videoLink: mapKanjiFromDb['videoLink'] as String,
       section: mapKanjiFromDb['section'] as int,
+      accessToKanjiItemsButtons: true,
       statusStorage: StatusStorage.stored,
       example: examples,
       strokes: strokes,
@@ -146,6 +147,7 @@ Future<KanjiFromApi> insertKanjiFromApi(
       videoLink: kanjiMap['videoLink'] ?? '',
       section: int.parse(kanjiMap['section'] ?? '0'),
       statusStorage: StatusStorage.stored,
+      accessToKanjiItemsButtons: true,
       example: examples,
       strokes: strokes);
 }
