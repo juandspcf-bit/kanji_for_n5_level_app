@@ -41,7 +41,7 @@ class LeadingTile extends StatelessWidget {
                     .withOpacity(0.5),
             borderRadius: const BorderRadius.all(Radius.circular(10))),
         child: kanjiFromApi.statusStorage == StatusStorage.onlyOnline ||
-                kanjiFromApi.statusStorage == StatusStorage.dowloading
+                kanjiFromApi.statusStorage == StatusStorage.proccessing
             ? SvgPicture.network(
                 kanjiFromApi.kanjiImageLink,
                 fit: BoxFit.contain,

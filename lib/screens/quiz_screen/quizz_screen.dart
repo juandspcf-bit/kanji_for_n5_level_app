@@ -191,7 +191,7 @@ class _QuizScreenState extends State<QuizScreen> {
                                               StatusStorage.onlyOnline ||
                                           randomKanjisToAskMeaning[index]
                                                   .statusStorage ==
-                                              StatusStorage.dowloading
+                                              StatusStorage.proccessing
                                       ? SvgPicture.network(
                                           randomKanjisToAskMeaning[index]
                                               .kanjiImageLink,

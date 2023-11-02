@@ -324,6 +324,17 @@ Future<List<DeleteStatus>> deleteKanjiFromApi(KanjiFromApi kanjiFromApi) async {
 
   final List<DeleteStatus> listDeleteStatus = [];
 
+  renameFile(String linkPath) async {
+    final linkFile = File(linkPath);
+    final existsYet = await linkFile.exists();
+    if (existsYet) {
+      final lastIndex = linkPath.lastIndexOf('.');
+      final newName =
+          '${linkPath.substring(0, lastIndex)}Trash${linkPath.substring(lastIndex)}';
+      return linkFile.rename(newName);
+    }
+  }
+
   final listKanjiMapFromDb = await dbExamples.rawQuery(
       'SELECT * FROM kanji_FromApi WHERE kanjiCharacter = ? ',
       [kanjiFromApi.kanjiCharacter]);
@@ -353,6 +364,21 @@ Future<List<DeleteStatus>> deleteKanjiFromApi(KanjiFromApi kanjiFromApi) async {
       await groupKanjiVideoLinkFile.future;
     } catch (e) {
       e.toString();
+
+      listKanjiMapFromDb
+          .map((e) => e['kanjiImageLink'] as String)
+          .map((e) async {
+        renameFile(e);
+      });
+
+      listKanjiMapFromDb.map((e) => e['videoLink'] as String).map((e) async {
+        renameFile(e);
+      });
+
+      final documents = await getApplicationDocumentsDirectory();
+      final files = Directory(documents.path).list();
+      files.listen((event) {});
+
       listDeleteStatus.add(DeleteStatus.errorMediaLinksFiles);
     }
   }
@@ -389,6 +415,20 @@ Future<List<DeleteStatus>> deleteKanjiFromApi(KanjiFromApi kanjiFromApi) async {
       await groupKanjiExampleAudioLinksFile.future;
     } catch (e) {
       e.toString();
+
+      listMapExamplesFromDb.map((exampleFromDb) {
+        return AudioExamples(
+            opus: exampleFromDb['opus'] as String,
+            aac: exampleFromDb['aac'] as String,
+            ogg: exampleFromDb['ogg'] as String,
+            mp3: exampleFromDb['mp3'] as String);
+      }).map((e) async {
+        await renameFile(e.opus);
+        await renameFile(e.aac);
+        await renameFile(e.ogg);
+        await renameFile(e.mp3);
+      });
+
       listDeleteStatus.add(DeleteStatus.errorAudioExampleLinksFiles);
     }
   }
@@ -413,6 +453,13 @@ Future<List<DeleteStatus>> deleteKanjiFromApi(KanjiFromApi kanjiFromApi) async {
       await groupKanjiStrokesLinksFile.future;
     } catch (e) {
       e.toString();
+
+      listMapStrokesImagesLisnkFromDb
+          .map((imageLinkMap) => imageLinkMap['strokeImageLink'] as String)
+          .map((e) {
+        renameFile(e);
+      });
+
       listDeleteStatus.add(DeleteStatus.errorStrokeLinksFiles);
     }
   }

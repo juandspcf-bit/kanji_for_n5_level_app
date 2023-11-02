@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kanji_for_n5_level_app/models/kanji_from_api.dart';
 import 'package:kanji_for_n5_level_app/models/secction_model.dart';
+import 'package:kanji_for_n5_level_app/providers/error_status_after_processing.dart';
 import 'package:kanji_for_n5_level_app/providers/kanjis_list_provider.dart';
 import 'package:kanji_for_n5_level_app/providers/status_stored_provider.dart';
 import 'package:kanji_for_n5_level_app/screens/body_list/body_list.dart';
@@ -47,7 +48,7 @@ class KanjiSectionList extends ConsumerWidget {
   bool isAnyProcessingData(List<KanjiFromApi> list) {
     try {
       list.firstWhere(
-        (element) => element.statusStorage == StatusStorage.dowloading,
+        (element) => element.statusStorage == StatusStorage.proccessing,
       );
 
       return true;
@@ -59,12 +60,14 @@ class KanjiSectionList extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final kanjiList = ref.watch(kanjiListProvider);
+    //final statusProcessingError = ref.watch(errorStatusAfterProcessingStorage);
+
     final accesToQuiz = !isAnyProcessingData(kanjiList.$1);
     return WillPopScope(
       onWillPop: () {
         try {
           kanjiList.$1.firstWhere(
-            (element) => element.statusStorage == StatusStorage.dowloading,
+            (element) => element.statusStorage == StatusStorage.proccessing,
           );
 
           _scaleDialog(context);

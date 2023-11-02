@@ -29,13 +29,83 @@ class TrailingTile extends ConsumerWidget {
         Icons.storage,
         size: 50,
       );
-    } else if (kanjiFromApi.statusStorage == StatusStorage.dowloading) {
+    } else if (kanjiFromApi.statusStorage == StatusStorage.proccessing) {
       return const CircularProgressIndicator();
     }
 
     return const Icon(
       Icons.question_mark,
       size: 50,
+    );
+  }
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return InkWell(
+      onTap: () {
+        if (!kanjiFromApi.accessToKanjiItemsButtons) return;
+        final selection =
+            ref.read(favoriteScreenSelectionProvider.notifier).getSelection();
+
+        final kanjiItemProcessingHelper =
+            KanjiItemProcessingHelper(kanjiFromApi, selection, ref, context);
+
+        if (kanjiFromApi.statusStorage == StatusStorage.onlyOnline) {
+          kanjiItemProcessingHelper.insertKanjiToStorage();
+        } else if (kanjiFromApi.statusStorage == StatusStorage.stored) {
+          kanjiItemProcessingHelper.deleteKanjFromStorage();
+        }
+
+        kanjiItemProcessingHelper.updateKanjiItemStatusToProcessingStatus();
+      },
+      child: Container(
+        decoration: const BoxDecoration(shape: BoxShape.circle),
+        child: selectWidgetStatus(kanjiFromApi),
+      ),
+    );
+  }
+}
+
+class KanjiItemProcessingHelper {
+  const KanjiItemProcessingHelper(
+      this.kanjiFromApi, this.selection, this.ref, this.buildContext);
+
+  final KanjiFromApi kanjiFromApi;
+  final bool selection;
+  final WidgetRef ref;
+  final BuildContext buildContext;
+
+  Widget _dialogError() {
+    return AlertDialog(
+      title: const Text("Error during storing data!!"),
+      content: const Icon(
+        Icons.error_rounded,
+        color: Colors.amberAccent,
+      ),
+      actions: <Widget>[
+        TextButton(
+            onPressed: () {
+              Navigator.of(buildContext).pop();
+            },
+            child: const Text("Okay"))
+      ],
+    );
+  }
+
+  void _scaleDialogError() {
+    showGeneralDialog(
+      context: buildContext,
+      pageBuilder: (ctx, a1, a2) {
+        return Container();
+      },
+      transitionBuilder: (ctx, a1, a2, child) {
+        var curve = Curves.easeInOut.transform(a1.value);
+        return Transform.scale(
+          scale: curve,
+          child: _dialogError(),
+        );
+      },
+      transitionDuration: const Duration(milliseconds: 300),
     );
   }
 
@@ -68,96 +138,70 @@ class TrailingTile extends ConsumerWidget {
         kanjiFromApi.section, onSucces, onError);
   }
 
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    return InkWell(
-      onTap: () {
-        if (!kanjiFromApi.accessToKanjiItemsButtons) return;
-        final selection =
-            ref.read(favoriteScreenSelectionProvider.notifier).getSelection();
+  void deleteKanjFromStorage() {
+    deleteKanjiFromApi(kanjiFromApi).then((deleteStatus) {
+      ref.read(statusStorageProvider.notifier).deleteItem(kanjiFromApi);
 
-        if (kanjiFromApi.statusStorage == StatusStorage.onlyOnline) {
-          insertKanjiFromApi(kanjiFromApi).then((kanjiFromApiStored) {
-            //print(' my stored kanji is $kanjiFromApiStored');
-            ref
-                .read(statusStorageProvider.notifier)
-                .addItem(kanjiFromApiStored);
-
-            if (selection) {
-              ref
-                  .read(favoritesCachedProvider.notifier)
-                  .updateKanji(kanjiFromApiStored);
-            } else {
-              ref
-                  .read(kanjiListProvider.notifier)
-                  .updateKanji(kanjiFromApiStored);
-            }
-          }).catchError((onError) {
-            if (selection) {
-              ref.read(favoritesCachedProvider.notifier).updateKanji(
-                  updateStatusKanji(
-                      StatusStorage.onlyOnline, true, kanjiFromApi));
-            } else {
-              ref.read(kanjiListProvider.notifier).updateKanji(
-                  updateStatusKanji(
-                      StatusStorage.onlyOnline, true, kanjiFromApi));
-            }
-          });
-        } else if (kanjiFromApi.statusStorage == StatusStorage.stored) {
-          deleteKanjiFromApi(kanjiFromApi).then((deleteStatus) {
-            ref.read(statusStorageProvider.notifier).deleteItem(kanjiFromApi);
-
-            onSuccess(List<KanjiFromApi> list) {
-              if (selection) {
-                ref.read(favoritesCachedProvider.notifier).updateKanji(list[0]);
-              } else {
-                ref.read(kanjiListProvider.notifier).updateKanji(list[0]);
-              }
-            }
-
-            onError() {
-              if (selection) {
-                ref.read(favoritesCachedProvider.notifier).updateKanji(
-                    updateStatusKanji(
-                        StatusStorage.stored, true, kanjiFromApi));
-              } else {
-                ref.read(kanjiListProvider.notifier).updateKanji(
-                    updateStatusKanji(
-                        StatusStorage.stored, true, kanjiFromApi));
-              }
-            }
-
-            updateKanjiWithOnliVersion(
-                kanjiFromApi, selection, ref, onSuccess, onError);
-          }).catchError((onError) {
-            if (selection) {
-              ref.read(favoritesCachedProvider.notifier).updateKanji(
-                  updateStatusKanji(StatusStorage.stored, true, kanjiFromApi));
-            } else {
-              ref.read(kanjiListProvider.notifier).updateKanji(
-                  updateStatusKanji(StatusStorage.stored, true, kanjiFromApi));
-            }
-          });
+      onSuccess(List<KanjiFromApi> list) {
+        if (selection) {
+          ref.read(favoritesCachedProvider.notifier).updateKanji(list[0]);
+        } else {
+          ref.read(kanjiListProvider.notifier).updateKanji(list[0]);
         }
+      }
 
+      onError() {
         if (selection) {
           ref.read(favoritesCachedProvider.notifier).updateKanji(
-                updateStatusKanji(
-                    StatusStorage.dowloading, false, kanjiFromApi),
-              );
+              updateStatusKanji(StatusStorage.stored, true, kanjiFromApi));
         } else {
           ref.read(kanjiListProvider.notifier).updateKanji(
-                updateStatusKanji(
-                    StatusStorage.dowloading, false, kanjiFromApi),
-              );
+              updateStatusKanji(StatusStorage.stored, true, kanjiFromApi));
         }
+      }
 
-        //setAccessToKanjiItemsButtons(false);
-      },
-      child: Container(
-        decoration: const BoxDecoration(shape: BoxShape.circle),
-        child: selectWidgetStatus(kanjiFromApi),
-      ),
-    );
+      updateKanjiWithOnliVersion(
+          kanjiFromApi, selection, ref, onSuccess, onError);
+
+      if (deleteStatus.contains(DeleteStatus.errorKanjiDatabase)) {
+        //TODO handle error
+        _scaleDialogError();
+      }
+    });
+  }
+
+  void insertKanjiToStorage() {
+    insertKanjiFromApi(kanjiFromApi).then((kanjiFromApiStored) {
+      //print(' my stored kanji is $kanjiFromApiStored');
+      ref.read(statusStorageProvider.notifier).addItem(kanjiFromApiStored);
+
+      if (selection) {
+        ref
+            .read(favoritesCachedProvider.notifier)
+            .updateKanji(kanjiFromApiStored);
+      } else {
+        ref.read(kanjiListProvider.notifier).updateKanji(kanjiFromApiStored);
+      }
+    }).catchError((onError) {
+      if (selection) {
+        ref.read(favoritesCachedProvider.notifier).updateKanji(
+            updateStatusKanji(StatusStorage.onlyOnline, true, kanjiFromApi));
+      } else {
+        ref.read(kanjiListProvider.notifier).updateKanji(
+            updateStatusKanji(StatusStorage.onlyOnline, true, kanjiFromApi));
+      }
+    });
+  }
+
+  void updateKanjiItemStatusToProcessingStatus() {
+    if (selection) {
+      ref.read(favoritesCachedProvider.notifier).updateKanji(
+            updateStatusKanji(StatusStorage.proccessing, false, kanjiFromApi),
+          );
+    } else {
+      ref.read(kanjiListProvider.notifier).updateKanji(
+            updateStatusKanji(StatusStorage.proccessing, false, kanjiFromApi),
+          );
+    }
   }
 }
