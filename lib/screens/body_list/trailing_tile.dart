@@ -58,6 +58,16 @@ class TrailingTile extends ConsumerWidget {
         strokes: kanjiFromApi.strokes);
   }
 
+  void updateKanjiWithOnliVersion(
+      KanjiFromApi kanjiFromApi,
+      bool selection,
+      WidgetRef ref,
+      void Function(List<KanjiFromApi> data) onSucces,
+      void Function() onError) {
+    RequestApi.getKanjis([], [kanjiFromApi.kanjiCharacter],
+        kanjiFromApi.section, onSucces, onError);
+  }
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return InkWell(
@@ -94,17 +104,18 @@ class TrailingTile extends ConsumerWidget {
             }
           });
         } else if (kanjiFromApi.statusStorage == StatusStorage.stored) {
-          deleteKanjiFromApi(kanjiFromApi).then((value) {
+          deleteKanjiFromApi(kanjiFromApi).then((deleteStatus) {
             ref.read(statusStorageProvider.notifier).deleteItem(kanjiFromApi);
-            RequestApi.getKanjis(
-                [], [kanjiFromApi.kanjiCharacter], kanjiFromApi.section,
-                (list) {
+
+            onSuccess(List<KanjiFromApi> list) {
               if (selection) {
                 ref.read(favoritesCachedProvider.notifier).updateKanji(list[0]);
               } else {
                 ref.read(kanjiListProvider.notifier).updateKanji(list[0]);
               }
-            }, () {
+            }
+
+            onError() {
               if (selection) {
                 ref.read(favoritesCachedProvider.notifier).updateKanji(
                     updateStatusKanji(
@@ -114,7 +125,10 @@ class TrailingTile extends ConsumerWidget {
                     updateStatusKanji(
                         StatusStorage.stored, true, kanjiFromApi));
               }
-            });
+            }
+
+            updateKanjiWithOnliVersion(
+                kanjiFromApi, selection, ref, onSuccess, onError);
           }).catchError((onError) {
             if (selection) {
               ref.read(favoritesCachedProvider.notifier).updateKanji(

@@ -317,10 +317,12 @@ String getPathToDocuments({
   return '${dirDocumentPath.path}/$nameFile';
 }
 
-Future<DeleteStatus> deleteKanjiFromApi(KanjiFromApi kanjiFromApi) async {
+Future<List<DeleteStatus>> deleteKanjiFromApi(KanjiFromApi kanjiFromApi) async {
   final dbKanjiFromApi = await kanjiFromApiDatabase;
   final dbExamples = await examplesDatabase;
   final dbStrokes = await strokesDatabase;
+
+  final List<DeleteStatus> listDeleteStatus = [];
 
   final listKanjiMapFromDb = await dbExamples.rawQuery(
       'SELECT * FROM kanji_FromApi WHERE kanjiCharacter = ? ',
@@ -351,7 +353,7 @@ Future<DeleteStatus> deleteKanjiFromApi(KanjiFromApi kanjiFromApi) async {
       await groupKanjiVideoLinkFile.future;
     } catch (e) {
       e.toString();
-      return DeleteStatus.errorMediaLinksFiles;
+      listDeleteStatus.add(DeleteStatus.errorMediaLinksFiles);
     }
   }
 
@@ -387,7 +389,7 @@ Future<DeleteStatus> deleteKanjiFromApi(KanjiFromApi kanjiFromApi) async {
       await groupKanjiExampleAudioLinksFile.future;
     } catch (e) {
       e.toString();
-      return DeleteStatus.errorAudioExampleLinksFiles;
+      listDeleteStatus.add(DeleteStatus.errorAudioExampleLinksFiles);
     }
   }
 
@@ -411,7 +413,7 @@ Future<DeleteStatus> deleteKanjiFromApi(KanjiFromApi kanjiFromApi) async {
       await groupKanjiStrokesLinksFile.future;
     } catch (e) {
       e.toString();
-      return DeleteStatus.errorStrokeLinksFiles;
+      listDeleteStatus.add(DeleteStatus.errorStrokeLinksFiles);
     }
   }
 
@@ -423,11 +425,13 @@ Future<DeleteStatus> deleteKanjiFromApi(KanjiFromApi kanjiFromApi) async {
         [kanjiFromApi.kanjiCharacter]);
     await dbStrokes.rawDelete('DELETE FROM strokes WHERE kanjiCharacter = ?',
         [kanjiFromApi.kanjiCharacter]);
-    return DeleteStatus.succes;
+    listDeleteStatus.add(DeleteStatus.succes);
   } catch (e) {
     e.toString();
-    return DeleteStatus.errorKanjiDatabase;
+    listDeleteStatus.add(DeleteStatus.errorKanjiDatabase);
   }
+
+  return listDeleteStatus;
 }
 
 enum DeleteStatus {
