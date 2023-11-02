@@ -317,10 +317,104 @@ String getPathToDocuments({
   return '${dirDocumentPath.path}/$nameFile';
 }
 
-Future<int> deleteKanjiFromApi(KanjiFromApi kanjiFromApi) async {
+Future<DeleteStatus> deleteKanjiFromApi(KanjiFromApi kanjiFromApi) async {
   final dbKanjiFromApi = await kanjiFromApiDatabase;
   final dbExamples = await examplesDatabase;
   final dbStrokes = await strokesDatabase;
+
+  final listKanjiMapFromDb = await dbExamples.rawQuery(
+      'SELECT * FROM kanji_FromApi WHERE kanjiCharacter = ? ',
+      [kanjiFromApi.kanjiCharacter]);
+
+  if (listKanjiMapFromDb.isNotEmpty) {
+    try {
+      FutureGroup<FileSystemEntity> groupKanjiImageLinkFile =
+          FutureGroup<FileSystemEntity>();
+
+      listKanjiMapFromDb.map((e) => e['kanjiImageLink'] as String).map((e) {
+        final kanjiImageLinkFile = File(e);
+        groupKanjiImageLinkFile.add(kanjiImageLinkFile.delete());
+      });
+
+      groupKanjiImageLinkFile.close();
+      await groupKanjiImageLinkFile.future;
+
+      FutureGroup<FileSystemEntity> groupKanjiVideoLinkFile =
+          FutureGroup<FileSystemEntity>();
+
+      listKanjiMapFromDb.map((e) => e['videoLink'] as String).map((e) {
+        final videoLinkFile = File(e);
+        groupKanjiVideoLinkFile.add(videoLinkFile.delete());
+      });
+
+      groupKanjiVideoLinkFile.close();
+      await groupKanjiVideoLinkFile.future;
+    } catch (e) {
+      e.toString();
+      return DeleteStatus.errorMediaLinksFiles;
+    }
+  }
+
+  final listMapExamplesFromDb = await dbExamples.rawQuery(
+      'SELECT * FROM examples WHERE kanjiCharacter = ? ',
+      [kanjiFromApi.kanjiCharacter]);
+
+  if (listMapExamplesFromDb.isNotEmpty) {
+    try {
+      FutureGroup<int> groupKanjiExampleAudioLinksFile = FutureGroup<int>();
+
+      listMapExamplesFromDb.map((exampleFromDb) {
+        return AudioExamples(
+            opus: exampleFromDb['opus'] as String,
+            aac: exampleFromDb['aac'] as String,
+            ogg: exampleFromDb['ogg'] as String,
+            mp3: exampleFromDb['mp3'] as String);
+      }).map((e) async {
+        groupKanjiExampleAudioLinksFile.add(Future(() async {
+          final opusFile = File(e.opus);
+          await opusFile.delete();
+          final aacFile = File(e.aac);
+          await aacFile.delete();
+          final oggFile = File(e.ogg);
+          await oggFile.delete();
+          final mp3File = File(e.mp3);
+          await mp3File.delete();
+          return 1;
+        }));
+      });
+
+      groupKanjiExampleAudioLinksFile.close();
+      await groupKanjiExampleAudioLinksFile.future;
+    } catch (e) {
+      e.toString();
+      return DeleteStatus.errorAudioExampleLinksFiles;
+    }
+  }
+
+  final listMapStrokesImagesLisnkFromDb = await dbStrokes.rawQuery(
+      'SELECT * FROM strokes WHERE kanjiCharacter = ? ',
+      [kanjiFromApi.kanjiCharacter]);
+
+  if (listMapStrokesImagesLisnkFromDb.isNotEmpty) {
+    try {
+      FutureGroup<FileSystemEntity> groupKanjiStrokesLinksFile =
+          FutureGroup<FileSystemEntity>();
+
+      listMapStrokesImagesLisnkFromDb
+          .map((imageLinkMap) => imageLinkMap['strokeImageLink'] as String)
+          .map((e) {
+        final strokeLinkFile = File(e);
+        groupKanjiStrokesLinksFile.add(strokeLinkFile.delete());
+      });
+
+      groupKanjiStrokesLinksFile.close();
+      await groupKanjiStrokesLinksFile.future;
+    } catch (e) {
+      e.toString();
+      return DeleteStatus.errorStrokeLinksFiles;
+    }
+  }
+
   try {
     await dbKanjiFromApi.rawDelete(
         'DELETE FROM kanji_FromApi WHERE kanjiCharacter = ?',
@@ -329,9 +423,17 @@ Future<int> deleteKanjiFromApi(KanjiFromApi kanjiFromApi) async {
         [kanjiFromApi.kanjiCharacter]);
     await dbStrokes.rawDelete('DELETE FROM strokes WHERE kanjiCharacter = ?',
         [kanjiFromApi.kanjiCharacter]);
+    return DeleteStatus.succes;
   } catch (e) {
     e.toString();
+    return DeleteStatus.errorKanjiDatabase;
   }
+}
 
-  return 0;
+enum DeleteStatus {
+  errorMediaLinksFiles,
+  errorAudioExampleLinksFiles,
+  errorStrokeLinksFiles,
+  errorKanjiDatabase,
+  succes,
 }

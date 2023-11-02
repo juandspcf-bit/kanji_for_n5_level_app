@@ -45,30 +45,13 @@ class _SectionState extends ConsumerState<Section> {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
-        final listFromCachedSection = ref
-            .read(kanjisScectionsListProvider.notifier)
-            .getKanjisFromSection(widget.sectionData.sectionNumber);
-        if (listFromCachedSection.$1.isNotEmpty) {
-          ref
-              .read(kanjiListProvider.notifier)
-              .setKanjiListFromCachedSection(listFromCachedSection);
-          ref
-              .read(
-            kanjisScectionsListProvider.notifier,
-          )
-              .setSectionKanjiList(
-            widget.sectionData.sectionNumber,
-            ([], 0),
-          );
-        } else {
-          ref.read(kanjiListProvider.notifier).clearKanjiList();
-          final storedKanjis =
-              ref.read(statusStorageProvider.notifier).getStoresItems();
-          ref.read(kanjiListProvider.notifier).setKanjiList(
-              storedKanjis[widget.sectionData.sectionNumber] ?? [],
-              widget.sectionData.kanjis,
-              widget.sectionData.sectionNumber);
-        }
+        ref.read(kanjiListProvider.notifier).clearKanjiList();
+        final storedKanjis =
+            ref.read(statusStorageProvider.notifier).getStoresItems();
+        ref.read(kanjiListProvider.notifier).setKanjiList(
+            storedKanjis[widget.sectionData.sectionNumber] ?? [],
+            widget.sectionData.kanjis,
+            widget.sectionData.sectionNumber);
 
         Navigator.of(context).push(
           MaterialPageRoute(

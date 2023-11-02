@@ -3,7 +3,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kanji_for_n5_level_app/Databases/download_db_utils.dart';
 import 'package:kanji_for_n5_level_app/models/kanji_from_api.dart';
 import 'package:kanji_for_n5_level_app/networking/request_api.dart';
-import 'package:kanji_for_n5_level_app/providers/access_to_quiz_provider.dart';
 import 'package:kanji_for_n5_level_app/providers/favorite_screen_selection_provider.dart';
 import 'package:kanji_for_n5_level_app/providers/favorites_cached_provider.dart';
 import 'package:kanji_for_n5_level_app/providers/kanjis_list_provider.dart';
@@ -93,9 +92,6 @@ class TrailingTile extends ConsumerWidget {
                   updateStatusKanji(
                       StatusStorage.onlyOnline, true, kanjiFromApi));
             }
-          }).whenComplete(() {
-            ref.read(accesToQuizProvider.notifier).giveAccesToQuiz();
-            //setAccessToKanjiItemsButtons(true);
           });
         } else if (kanjiFromApi.statusStorage == StatusStorage.stored) {
           deleteKanjiFromApi(kanjiFromApi).then((value) {
@@ -108,8 +104,6 @@ class TrailingTile extends ConsumerWidget {
               } else {
                 ref.read(kanjiListProvider.notifier).updateKanji(list[0]);
               }
-              ref.read(accesToQuizProvider.notifier).giveAccesToQuiz();
-              //setAccessToKanjiItemsButtons(true);
             }, () {
               if (selection) {
                 ref.read(favoritesCachedProvider.notifier).updateKanji(
@@ -120,8 +114,6 @@ class TrailingTile extends ConsumerWidget {
                     updateStatusKanji(
                         StatusStorage.stored, true, kanjiFromApi));
               }
-              ref.read(accesToQuizProvider.notifier).giveAccesToQuiz();
-              //setAccessToKanjiItemsButtons(true);
             });
           }).catchError((onError) {
             if (selection) {
@@ -131,9 +123,6 @@ class TrailingTile extends ConsumerWidget {
               ref.read(kanjiListProvider.notifier).updateKanji(
                   updateStatusKanji(StatusStorage.stored, true, kanjiFromApi));
             }
-
-            ref.read(accesToQuizProvider.notifier).giveAccesToQuiz();
-            //setAccessToKanjiItemsButtons(true);
           });
         }
 
@@ -143,7 +132,6 @@ class TrailingTile extends ConsumerWidget {
                     StatusStorage.dowloading, false, kanjiFromApi),
               );
         } else {
-          ref.read(accesToQuizProvider.notifier).denyAccesToQuiz();
           ref.read(kanjiListProvider.notifier).updateKanji(
                 updateStatusKanji(
                     StatusStorage.dowloading, false, kanjiFromApi),
