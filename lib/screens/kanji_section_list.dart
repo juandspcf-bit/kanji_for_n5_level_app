@@ -8,19 +8,11 @@ import 'package:kanji_for_n5_level_app/screens/body_list/body_list.dart';
 
 import 'package:kanji_for_n5_level_app/screens/quiz_screen/quizz_screen.dart';
 
-class KanjiList extends ConsumerStatefulWidget {
-  const KanjiList({
+class KanjiSectionList extends ConsumerWidget {
+  const KanjiSectionList({
     super.key,
-    required this.sectionModel,
   });
 
-  final SectionModel sectionModel;
-
-  @override
-  ConsumerState<KanjiList> createState() => _KanjiListState();
-}
-
-class _KanjiListState extends ConsumerState<KanjiList> {
   Widget _dialog(BuildContext context) {
     return AlertDialog(
       title: const Text("Please wait!!"),
@@ -35,7 +27,7 @@ class _KanjiListState extends ConsumerState<KanjiList> {
     );
   }
 
-  void _scaleDialog() {
+  void _scaleDialog(BuildContext context) {
     showGeneralDialog(
       context: context,
       pageBuilder: (ctx, a1, a2) {
@@ -65,7 +57,7 @@ class _KanjiListState extends ConsumerState<KanjiList> {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final kanjiList = ref.watch(kanjiListProvider);
     final accesToQuiz = !isAnyProcessingData(kanjiList.$1);
     return WillPopScope(
@@ -75,7 +67,7 @@ class _KanjiListState extends ConsumerState<KanjiList> {
             (element) => element.statusStorage == StatusStorage.dowloading,
           );
 
-          _scaleDialog();
+          _scaleDialog(context);
 
           return Future(() => false);
         } on StateError {
@@ -84,7 +76,7 @@ class _KanjiListState extends ConsumerState<KanjiList> {
       },
       child: Scaffold(
         appBar: AppBar(
-          title: Text(widget.sectionModel.title),
+          title: Text(listSections[kanjiList.$3 - 1].title),
           actions: [
             IconButton(
                 onPressed: kanjiList.$2 == 1 && accesToQuiz

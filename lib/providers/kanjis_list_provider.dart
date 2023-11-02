@@ -2,18 +2,18 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kanji_for_n5_level_app/models/kanji_from_api.dart';
 import 'package:kanji_for_n5_level_app/networking/request_api.dart';
 
-class KanjiListProvider extends Notifier<(List<KanjiFromApi>, int)> {
+class KanjiListProvider extends Notifier<(List<KanjiFromApi>, int, int)> {
   @override
-  (List<KanjiFromApi>, int) build() {
-    return ([], 0);
+  (List<KanjiFromApi>, int, int) build() {
+    return ([], 0, 1);
   }
 
   void onSuccesRequest(List<KanjiFromApi> kanjisFromApi) {
-    state = (kanjisFromApi, 1);
+    state = (kanjisFromApi, 1, kanjisFromApi.first.section);
   }
 
   void onErrorRequest() {
-    state = ([], 2);
+    state = ([], 2, state.$3);
   }
 
   void updateKanji(KanjiFromApi storedKanji) {
@@ -23,7 +23,7 @@ class KanjiListProvider extends Notifier<(List<KanjiFromApi>, int)> {
       final kanjiIndex = copyState.indexWhere(
           (element) => element.kanjiCharacter == storedKanji.kanjiCharacter);
       copyState[kanjiIndex] = storedKanji;
-      state = (copyState, state.$2);
+      state = (copyState, state.$2, state.$3);
     } on StateError catch (e) {
       e.message;
     }
@@ -43,11 +43,11 @@ class KanjiListProvider extends Notifier<(List<KanjiFromApi>, int)> {
     );
   }
 
-  void clearKanjiList() {
-    state = ([], 0);
+  void clearKanjiList(int section) {
+    state = ([], 0, section);
   }
 }
 
 final kanjiListProvider =
-    NotifierProvider<KanjiListProvider, (List<KanjiFromApi>, int)>(
+    NotifierProvider<KanjiListProvider, (List<KanjiFromApi>, int, int)>(
         KanjiListProvider.new);

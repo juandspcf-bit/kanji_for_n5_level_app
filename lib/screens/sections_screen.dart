@@ -3,7 +3,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:kanji_for_n5_level_app/models/secction_model.dart';
 import 'package:kanji_for_n5_level_app/providers/kanjis_list_provider.dart';
-import 'package:kanji_for_n5_level_app/providers/kanjis_sections_list_providers.dart';
 import 'package:kanji_for_n5_level_app/providers/status_stored_provider.dart';
 import 'package:kanji_for_n5_level_app/screens/kanji_section_list.dart';
 
@@ -45,7 +44,9 @@ class _SectionState extends ConsumerState<Section> {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
-        ref.read(kanjiListProvider.notifier).clearKanjiList();
+        ref
+            .read(kanjiListProvider.notifier)
+            .clearKanjiList(widget.sectionData.sectionNumber);
         final storedKanjis =
             ref.read(statusStorageProvider.notifier).getStoresItems();
         ref.read(kanjiListProvider.notifier).setKanjiList(
@@ -56,9 +57,7 @@ class _SectionState extends ConsumerState<Section> {
         Navigator.of(context).push(
           MaterialPageRoute(
             builder: (ctx) {
-              return KanjiList(
-                sectionModel: widget.sectionData,
-              );
+              return const KanjiSectionList();
             },
           ),
         );
