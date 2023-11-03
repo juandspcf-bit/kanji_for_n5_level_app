@@ -1,14 +1,17 @@
 import 'dart:io';
 
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:kanji_for_n5_level_app/models/kanji_from_api.dart';
+import 'package:kanji_for_n5_level_app/providers/status_connection_provider.dart';
 import 'package:kanji_for_n5_level_app/providers/status_stored_provider.dart';
 import 'package:kanji_for_n5_level_app/screens/quiz_screen/score_body.dart';
 
 enum Screens { quiz, score }
 
-class QuizScreen extends StatefulWidget {
+class QuizScreen extends ConsumerStatefulWidget {
   const QuizScreen({
     super.key,
     required this.kanjisModel,
@@ -17,10 +20,10 @@ class QuizScreen extends StatefulWidget {
   final List<KanjiFromApi> kanjisModel;
 
   @override
-  State<QuizScreen> createState() => _QuizScreenState();
+  ConsumerState<QuizScreen> createState() => _QuizScreenState();
 }
 
-class _QuizScreenState extends State<QuizScreen> {
+class _QuizScreenState extends ConsumerState<QuizScreen> {
   late List<String> imageLinksFromDraggedItems;
   late List<double> initialOpacities;
   late List<bool> isDraggeInitialList;
@@ -110,6 +113,13 @@ class _QuizScreenState extends State<QuizScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final resultStatus = ref.watch(statusConnectionProvider);
+    var mainAxisAlignment = MainAxisAlignment.start;
+    if (resultStatus == ConnectivityResult.none) {
+      resetTheQuiz();
+      mainAxisAlignment = MainAxisAlignment.center;
+    }
+
     return Scaffold(
       appBar: AppBar(title: const Text("Test your knowledge")),
       body: Padding(
@@ -119,13 +129,55 @@ class _QuizScreenState extends State<QuizScreen> {
           right: 30,
           left: 30,
         ),
-        child: currentScreenType == Screens.score
-            ? ScoreBody(
+        child: Column(
+          mainAxisAlignment: mainAxisAlignment,
+          children: [
+            if (resultStatus == ConnectivityResult.none)
+              Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Center(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Expanded(
+                          child: Text(
+                            'The internet connection has gone, restart the quiz later',
+                            style: Theme.of(context)
+                                .textTheme
+                                .titleLarge!
+                                .copyWith(overflow: TextOverflow.ellipsis),
+                            textAlign: TextAlign.center,
+                            overflow: TextOverflow.ellipsis,
+                            maxLines: 3,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 25,
+                  ),
+                  const Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(
+                        Icons.error_outline,
+                        color: Colors.amber,
+                        size: 80,
+                      ),
+                    ],
+                  )
+                ],
+              )
+            else if (currentScreenType == Screens.score)
+              ScoreBody(
                 isCorrectAnswer: isCorrectAnswer,
                 isOmittedAnswer: isOmittedAnswer,
                 resetTheQuiz: resetTheQuiz,
               )
-            : SingleChildScrollView(
+            else
+              SingleChildScrollView(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
@@ -410,6 +462,8 @@ class _QuizScreenState extends State<QuizScreen> {
                   ],
                 ),
               ),
+          ],
+        ),
       ),
     );
   }

@@ -1,3 +1,4 @@
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kanji_for_n5_level_app/Databases/download_db_utils.dart';
@@ -6,6 +7,7 @@ import 'package:kanji_for_n5_level_app/networking/request_api.dart';
 import 'package:kanji_for_n5_level_app/providers/favorite_screen_selection_provider.dart';
 import 'package:kanji_for_n5_level_app/providers/favorites_cached_provider.dart';
 import 'package:kanji_for_n5_level_app/providers/kanjis_list_provider.dart';
+import 'package:kanji_for_n5_level_app/providers/status_connection_provider.dart';
 import 'package:kanji_for_n5_level_app/providers/status_stored_provider.dart';
 
 class TrailingTile extends ConsumerWidget {
@@ -39,11 +41,29 @@ class TrailingTile extends ConsumerWidget {
     );
   }
 
+  void showSnackBarQuizz(BuildContext context, String message, int duration) {
+    if (context.mounted) {
+      ScaffoldMessenger.of(context).clearSnackBars();
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          duration: Duration(seconds: duration),
+          content: Text(message),
+        ),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return InkWell(
       onTap: () {
         if (!kanjiFromApi.accessToKanjiItemsButtons) return;
+        final resultStatus = ref.read(statusConnectionProvider);
+        if (ConnectivityResult.none == resultStatus) {
+          showSnackBarQuizz(
+              context, 'you shoul be connected to performn this acction', 3);
+          return;
+        }
         final selection =
             ref.read(favoriteScreenSelectionProvider.notifier).getSelection();
 

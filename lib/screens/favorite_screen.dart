@@ -1,6 +1,10 @@
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:kanji_for_n5_level_app/models/kanji_from_api.dart';
 import 'package:kanji_for_n5_level_app/providers/favorites_cached_provider.dart';
+import 'package:kanji_for_n5_level_app/providers/status_connection_provider.dart';
+import 'package:kanji_for_n5_level_app/providers/status_stored_provider.dart';
 import 'package:kanji_for_n5_level_app/screens/body_list/body_list.dart';
 
 class FavoriteScreen extends ConsumerStatefulWidget {
@@ -15,10 +19,24 @@ class FavoriteScreen extends ConsumerStatefulWidget {
 class _FavoriteScreenState extends ConsumerState<FavoriteScreen> {
   @override
   Widget build(BuildContext context) {
-    final kanjis = ref.watch(favoritesCachedProvider);
+    var kanjiList = ref.watch(favoritesCachedProvider);
+    final resultStatus = ref.watch(statusConnectionProvider);
+
+    if (resultStatus == ConnectivityResult.none) {
+      print('storage ${kanjiList.$1}');
+      final favoritesKanjisStored = kanjiList.$1
+          .where((element) => element.statusStorage == StatusStorage.stored)
+          .toList();
+      if (favoritesKanjisStored.isNotEmpty) {
+        kanjiList = (favoritesKanjisStored, 1);
+      } else {
+        kanjiList = (<KanjiFromApi>[], 1);
+      }
+    }
+
     return BodyKanjisList(
-      statusResponse: kanjis.$2,
-      kanjisFromApi: kanjis.$1,
+      statusResponse: kanjiList.$2,
+      kanjisFromApi: kanjiList.$1,
     );
   }
 }

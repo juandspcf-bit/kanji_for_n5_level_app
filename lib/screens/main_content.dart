@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:dio/dio.dart';
@@ -9,6 +7,7 @@ import 'package:kanji_for_n5_level_app/Databases/download_db_utils.dart';
 import 'package:kanji_for_n5_level_app/Databases/favorites_db_utils.dart';
 import 'package:kanji_for_n5_level_app/providers/favorite_screen_selection_provider.dart';
 import 'package:kanji_for_n5_level_app/providers/favorites_cached_provider.dart';
+import 'package:kanji_for_n5_level_app/providers/status_connection_provider.dart';
 import 'package:kanji_for_n5_level_app/providers/status_stored_provider.dart';
 import 'package:kanji_for_n5_level_app/screens/favorite_screen.dart';
 import 'package:kanji_for_n5_level_app/screens/sections_screen.dart';
@@ -95,9 +94,16 @@ class _MainContentState extends ConsumerState<MainContent> {
         .read(statusStorageProvider.notifier)
         .setInitialStoredKanjis(listOfStoredKanjis);
     final favoritesKanjis = await loadFavorites();
-    ref
-        .read(favoritesCachedProvider.notifier)
-        .setInitialFavorites(listOfStoredKanjis, favoritesKanjis, 10);
+    Connectivity().checkConnectivity().then((result) {
+      if (ConnectivityResult.none == result) {
+        ref.read(favoritesCachedProvider.notifier).setInitialFavoritesOffline(
+            listOfStoredKanjis, favoritesKanjis, 10);
+      } else {
+        ref
+            .read(favoritesCachedProvider.notifier)
+            .setInitialFavoritesOnline(listOfStoredKanjis, favoritesKanjis, 10);
+      }
+    });
 
     /*    final connectivityResult = await (Connectivity().checkConnectivity());
     print(connectivityResult); */
@@ -127,6 +133,8 @@ class _MainContentState extends ConsumerState<MainContent> {
   void initState() {
     super.initState();
     getInitData();
+    Connectivity().checkConnectivity().then((result) =>
+        ref.read(statusConnectionProvider.notifier).setInitialStatus(result));
 /*     subscription = Connectivity()
         .onConnectivityChanged
         .listen((ConnectivityResult result) {

@@ -6,6 +6,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kanji_for_n5_level_app/models/kanji_from_api.dart';
 import 'package:kanji_for_n5_level_app/models/secction_model.dart';
 import 'package:kanji_for_n5_level_app/providers/kanjis_list_provider.dart';
+import 'package:kanji_for_n5_level_app/providers/status_connection_provider.dart';
 import 'package:kanji_for_n5_level_app/providers/status_stored_provider.dart';
 import 'package:kanji_for_n5_level_app/screens/body_list/body_list.dart';
 
@@ -21,8 +22,8 @@ class KanjiSectionList extends ConsumerStatefulWidget {
 }
 
 class _KanjiSectionListState extends ConsumerState<KanjiSectionList> {
-  StreamSubscription? subscription;
-  ConnectivityResult? resultStatus;
+/*   StreamSubscription? subscription;
+  ConnectivityResult? resultStatus; */
 
   Widget _dialog(BuildContext context) {
     return AlertDialog(
@@ -80,36 +81,15 @@ class _KanjiSectionListState extends ConsumerState<KanjiSectionList> {
   }
 
   @override
-  void initState() {
-    super.initState();
-    Connectivity().checkConnectivity().then((value) {
-      setState(() {
-        resultStatus = value;
-      });
-    });
-    subscription = Connectivity()
-        .onConnectivityChanged
-        .listen((ConnectivityResult result) {
-      if (result == ConnectivityResult.none) {
-        showSnackBarQuizz('no internet connection', 20);
-      }
-      setState(() {
-        resultStatus = result;
-        print(result);
-      });
-    });
-  }
-
-  @override
   Widget build(BuildContext context) {
     var kanjiList = (<KanjiFromApi>[], 0, 1);
+    final resultStatus = ref.watch(statusConnectionProvider);
     if (resultStatus == ConnectivityResult.none) {
       final kanjiListFromProvider = ref.read(kanjiListProvider);
       final storedKanjis = ref.read(statusStorageProvider);
 
       if (storedKanjis[kanjiListFromProvider.$3] != null &&
           storedKanjis[kanjiListFromProvider.$3]!.isNotEmpty) {
-        print(storedKanjis[kanjiListFromProvider.$3]!);
         kanjiList = (
           storedKanjis[kanjiListFromProvider.$3]!,
           1,
@@ -122,7 +102,8 @@ class _KanjiSectionListState extends ConsumerState<KanjiSectionList> {
       kanjiList = ref.watch(kanjiListProvider);
     }
 
-    final accesToQuiz = !isAnyProcessingData(kanjiList.$1);
+    final accesToQuiz = !isAnyProcessingData(kanjiList.$1) &&
+        !(resultStatus == ConnectivityResult.none);
     return WillPopScope(
       onWillPop: () {
         try {

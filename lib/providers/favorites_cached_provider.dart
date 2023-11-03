@@ -8,7 +8,7 @@ class FavoritesCached extends Notifier<(List<KanjiFromApi>, int)> {
     return ([], 0);
   }
 
-  void setInitialFavorites(List<KanjiFromApi> storedKanjis,
+  void setInitialFavoritesOnline(List<KanjiFromApi> storedKanjis,
       List<String> myFavoritesCached, int section) {
     if (myFavoritesCached.isEmpty) {
       state = ([], 1);
@@ -16,6 +16,28 @@ class FavoritesCached extends Notifier<(List<KanjiFromApi>, int)> {
     }
     RequestApi.getKanjis(storedKanjis, myFavoritesCached, section,
         onSuccesRequest, onErrorRequest);
+  }
+
+  void setInitialFavoritesOffline(List<KanjiFromApi> storedKanjis,
+      List<String> myFavoritesCached, int section) {
+    if (myFavoritesCached.isEmpty) {
+      state = ([], 1);
+      return;
+    }
+
+    List<KanjiFromApi> favoriteKanjisStored = [];
+
+    for (var favorite in myFavoritesCached) {
+      try {
+        final favoriteStored =
+            storedKanjis.firstWhere((e) => e.kanjiCharacter == favorite);
+        favoriteKanjisStored.add(favoriteStored);
+      } catch (e) {
+        continue;
+      }
+    }
+
+    onSuccesRequest(favoriteKanjisStored);
   }
 
   void onSuccesRequest(List<KanjiFromApi> kanjisFromApi) {
