@@ -151,6 +151,7 @@ class KanjiItemProcessingHelper {
       }
 
       onError() {
+        //TODO handle error
         if (selection) {
           ref.read(favoritesCachedProvider.notifier).updateKanji(
               updateStatusKanji(StatusStorage.stored, true, kanjiFromApi));
@@ -162,11 +163,6 @@ class KanjiItemProcessingHelper {
 
       updateKanjiWithOnliVersion(
           kanjiFromApi, selection, ref, onSuccess, onError);
-
-      if (deleteStatus.contains(DeleteStatus.errorKanjiDatabase)) {
-        //TODO handle error
-        _scaleDialogError();
-      }
     });
   }
 

@@ -1,18 +1,28 @@
+import 'dart:async';
+
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kanji_for_n5_level_app/models/kanji_from_api.dart';
 import 'package:kanji_for_n5_level_app/models/secction_model.dart';
-import 'package:kanji_for_n5_level_app/providers/error_status_after_processing.dart';
 import 'package:kanji_for_n5_level_app/providers/kanjis_list_provider.dart';
 import 'package:kanji_for_n5_level_app/providers/status_stored_provider.dart';
 import 'package:kanji_for_n5_level_app/screens/body_list/body_list.dart';
 
 import 'package:kanji_for_n5_level_app/screens/quiz_screen/quizz_screen.dart';
 
-class KanjiSectionList extends ConsumerWidget {
+class KanjiSectionList extends ConsumerStatefulWidget {
   const KanjiSectionList({
     super.key,
   });
+
+  @override
+  ConsumerState<KanjiSectionList> createState() => _KanjiSectionListState();
+}
+
+class _KanjiSectionListState extends ConsumerState<KanjiSectionList> {
+  StreamSubscription? subscription;
+  ConnectivityResult? resultStatus;
 
   Widget _dialog(BuildContext context) {
     return AlertDialog(
@@ -57,10 +67,60 @@ class KanjiSectionList extends ConsumerWidget {
     }
   }
 
+  void showSnackBarQuizz(String message, int duration) {
+    if (mounted) {
+      ScaffoldMessenger.of(context).clearSnackBars();
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          duration: Duration(seconds: duration),
+          content: Text(message),
+        ),
+      );
+    }
+  }
+
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final kanjiList = ref.watch(kanjiListProvider);
-    //final statusProcessingError = ref.watch(errorStatusAfterProcessingStorage);
+  void initState() {
+    super.initState();
+    Connectivity().checkConnectivity().then((value) {
+      setState(() {
+        resultStatus = value;
+      });
+    });
+    subscription = Connectivity()
+        .onConnectivityChanged
+        .listen((ConnectivityResult result) {
+      if (result == ConnectivityResult.none) {
+        showSnackBarQuizz('no internet connection', 20);
+      }
+      setState(() {
+        resultStatus = result;
+        print(result);
+      });
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    var kanjiList = (<KanjiFromApi>[], 0, 1);
+    if (resultStatus == ConnectivityResult.none) {
+      final kanjiListFromProvider = ref.read(kanjiListProvider);
+      final storedKanjis = ref.read(statusStorageProvider);
+
+      if (storedKanjis[kanjiListFromProvider.$3] != null &&
+          storedKanjis[kanjiListFromProvider.$3]!.isNotEmpty) {
+        print(storedKanjis[kanjiListFromProvider.$3]!);
+        kanjiList = (
+          storedKanjis[kanjiListFromProvider.$3]!,
+          1,
+          kanjiListFromProvider.$3
+        );
+      } else {
+        kanjiList = (<KanjiFromApi>[], 1, kanjiListFromProvider.$3);
+      }
+    } else {
+      kanjiList = ref.watch(kanjiListProvider);
+    }
 
     final accesToQuiz = !isAnyProcessingData(kanjiList.$1);
     return WillPopScope(

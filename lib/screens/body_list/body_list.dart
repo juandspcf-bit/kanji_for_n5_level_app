@@ -1,9 +1,12 @@
+import 'dart:async';
+
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kanji_for_n5_level_app/models/kanji_from_api.dart';
 import 'package:kanji_for_n5_level_app/screens/body_list/kanji_item.dart';
 
-class BodyKanjisList extends ConsumerWidget {
+class BodyKanjisList extends ConsumerStatefulWidget {
   const BodyKanjisList({
     super.key,
     required this.statusResponse,
@@ -14,20 +17,29 @@ class BodyKanjisList extends ConsumerWidget {
   final List<KanjiFromApi> kanjisFromApi;
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    print('status response $statusResponse');
-    if (statusResponse == 0) {
+  ConsumerState<BodyKanjisList> createState() => _BodiKanjiListState();
+}
+
+class _BodiKanjiListState extends ConsumerState<BodyKanjisList> {
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    if (widget.statusResponse == 0) {
       return const Center(child: CircularProgressIndicator());
-    } else if (statusResponse == 1 && kanjisFromApi.isNotEmpty) {
+    } else if (widget.statusResponse == 1 && widget.kanjisFromApi.isNotEmpty) {
       return ListView.builder(
-          itemCount: kanjisFromApi.length,
+          itemCount: widget.kanjisFromApi.length,
           itemBuilder: (ctx, index) {
             return KanjiItem(
-              key: ValueKey(kanjisFromApi[index].kanjiCharacter),
-              kanjiFromApi: kanjisFromApi[index],
+              key: ValueKey(widget.kanjisFromApi[index].kanjiCharacter),
+              kanjiFromApi: widget.kanjisFromApi[index],
             );
           });
-    } else if (statusResponse == 2) {
+    } else if (widget.statusResponse == 2) {
       return Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
@@ -55,7 +67,7 @@ class BodyKanjisList extends ConsumerWidget {
           )
         ],
       );
-    } else if (statusResponse == 1 && kanjisFromApi.isEmpty) {
+    } else if (widget.statusResponse == 1 && widget.kanjisFromApi.isEmpty) {
       return Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
