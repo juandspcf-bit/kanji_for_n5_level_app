@@ -27,8 +27,8 @@ class LeadingTile extends StatelessWidget {
         semanticsLabel: kanjiFromApi.kanjiCharacter,
         placeholderBuilder: (BuildContext context) => Container(
             color: Colors.transparent,
-            height: 100,
-            width: 100,
+            height: 70,
+            width: 70,
             child: const CircularProgressIndicator(
               backgroundColor: Color.fromARGB(179, 5, 16, 51),
             )),
@@ -41,16 +41,24 @@ class LeadingTile extends StatelessWidget {
         semanticsLabel: kanjiFromApi.kanjiCharacter,
         placeholderBuilder: (BuildContext context) => Container(
             color: Colors.transparent,
-            height: 100,
-            width: 100,
+            height: 70,
+            width: 70,
             child: const CircularProgressIndicator(
               backgroundColor: Color.fromARGB(179, 5, 16, 51),
             )),
       );
     } else {
-      return Icon(
-        Icons.question_mark_rounded,
-        color: Theme.of(context).colorScheme.onPrimaryContainer,
+      return SvgPicture.asset(
+        'assets/images/question-mark-2-svgrepo-com.svg',
+        fit: BoxFit.contain,
+        semanticsLabel: kanjiFromApi.kanjiCharacter,
+        placeholderBuilder: (BuildContext context) => Container(
+            color: Colors.transparent,
+            height: 100,
+            width: 100,
+            child: const CircularProgressIndicator(
+              backgroundColor: Color.fromARGB(179, 5, 16, 51),
+            )),
       );
     }
   }
@@ -64,8 +72,8 @@ class LeadingTile extends StatelessWidget {
             }
           : null,
       child: Container(
-        height: 80,
-        width: 60,
+        height: 70,
+        width: 70,
         decoration: BoxDecoration(
             color: kanjiFromApi.accessToKanjiItemsButtons
                 ? Theme.of(context)

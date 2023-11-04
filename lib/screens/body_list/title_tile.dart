@@ -28,16 +28,12 @@ class TitleTile extends StatelessWidget {
         cutEnglishMeaning(kanjiFromApi.englishMeaning),
         textAlign: TextAlign.start,
         style: kanjiFromApi.accessToKanjiItemsButtons
-            ? Theme.of(context).textTheme.bodyMedium!.copyWith(
-                color: Theme.of(context)
-                    .colorScheme
-                    .onSecondaryContainer
-                    .withOpacity(1.0))
-            : Theme.of(context).textTheme.bodyMedium!.copyWith(
-                color: Theme.of(context)
-                    .colorScheme
-                    .onSecondaryContainer
-                    .withOpacity(0.5)),
+            ? Theme.of(context).textTheme.titleMedium!.copyWith(
+                color: Colors.white.withOpacity(1.0),
+                fontWeight: FontWeight.bold)
+            : Theme.of(context).textTheme.titleMedium!.copyWith(
+                color: Colors.white.withOpacity(0.5),
+                fontWeight: FontWeight.bold),
       );
     } else {
       return Icon(

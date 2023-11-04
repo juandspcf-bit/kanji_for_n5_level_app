@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:dio/dio.dart';
@@ -5,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kanji_for_n5_level_app/Databases/download_db_utils.dart';
 import 'package:kanji_for_n5_level_app/Databases/favorites_db_utils.dart';
+import 'package:kanji_for_n5_level_app/models/kanji_from_api.dart';
 import 'package:kanji_for_n5_level_app/providers/favorite_screen_selection_provider.dart';
 import 'package:kanji_for_n5_level_app/providers/favorites_cached_provider.dart';
 import 'package:kanji_for_n5_level_app/providers/status_connection_provider.dart';
@@ -16,6 +19,23 @@ const temporalAvatar =
     "https://firebasestorage.googleapis.com/v0/b/kanji-for-n5.appspot.com/o/unnamed.jpg?alt=media&token=38275fec-42f3-4d95-b1fd-785e82d4086f&_gl=1*19p8v1f*_ga*MjAyNTg0OTcyOS4xNjk2NDEwODIz*_ga_CW55HF8NVT*MTY5NzEwMTY3NC45LjEuMTY5NzEwMzExMy4zMy4wLjA.";
 
 Dio dio = Dio();
+
+void cleanStoredFiles(List<KanjiFromApi> listOfStoredKanjis) async {
+  final List<KanjiFromApi> listKanjisOk = [];
+  final List<KanjiFromApi> listKanjisNotOk = [];
+  for (var storedKanji in listOfStoredKanjis) {
+    final listExamples = storedKanji.example;
+    for (var example in listExamples) {
+      final opusPath = example.audio.opus;
+      final opusFile = File(opusPath);
+      final existOpusFile = await opusFile.exists();
+      if (!existOpusFile) {
+        listKanjisNotOk.add(storedKanji);
+        break;
+      }
+    }
+  }
+}
 
 class MainContent extends ConsumerStatefulWidget {
   const MainContent({super.key});
@@ -92,6 +112,7 @@ class _MainContentState extends ConsumerState<MainContent> {
 
   void getInitData() async {
     final listOfStoredKanjis = await loadStoredKanjis();
+
     ref
         .read(statusStorageProvider.notifier)
         .setInitialStoredKanjis(listOfStoredKanjis);
@@ -106,30 +127,7 @@ class _MainContentState extends ConsumerState<MainContent> {
             .setInitialFavoritesOnline(listOfStoredKanjis, favoritesKanjis, 10);
       }
     });
-
-    /*    final connectivityResult = await (Connectivity().checkConnectivity());
-    print(connectivityResult); */
-/*     final Directory directory = await getApplicationDocumentsDirectory();
-    final List<FileSystemEntity> files = directory.listSync();
-    files.map((e) => e.path).forEach((element) {
-      print(element);
-    }); */
-
-    /* final SharedPreferences prefs = await SharedPreferences.getInstance();
-    final bool? isAskedStoragePermission = prefs.getBool('isAskedStoragePermission');
-    if (isAskedStoragePermission == null || isAskedStoragePermission == false) {
-      final isGrantedPermission = await _requestWritePermission();
-      await prefs.setBool('isAskedStoragePermition', true);
-      await prefs.setBool('isGrantedPermission', isGrantedPermission);  
-    }else{
-      prefs.getBool('isGrantedPermission');
-    } */
   }
-
-/*   Future<bool> _requestWritePermission() async {
-    await Permission.storage.request();
-    return await Permission.storage.request().isGranted;
-  } */
 
   @override
   void initState() {

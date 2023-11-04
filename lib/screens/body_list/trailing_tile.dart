@@ -20,24 +20,27 @@ class TrailingTile extends ConsumerWidget {
   final KanjiFromApi kanjiFromApi;
   //final void Function(bool value) setAccessToKanjiItemsButtons;
 
-  Widget selectWidgetStatus(KanjiFromApi kanjiFromApi) {
+  Widget selectWidgetStatus(KanjiFromApi kanjiFromApi, BuildContext context) {
     if (kanjiFromApi.statusStorage == StatusStorage.onlyOnline) {
-      return const Icon(
+      return Icon(
         Icons.download_for_offline,
+        color: Theme.of(context).colorScheme.onSecondaryContainer,
         size: 50,
       );
     } else if (kanjiFromApi.statusStorage == StatusStorage.stored) {
-      return const Icon(
+      return Icon(
         Icons.storage,
+        color: Theme.of(context).colorScheme.onSecondaryContainer,
         size: 50,
       );
     } else if (kanjiFromApi.statusStorage == StatusStorage.proccessingStoring ||
         kanjiFromApi.statusStorage == StatusStorage.proccessingDeleting) {
       return const CircularProgressIndicator();
     } else {
-      return const Icon(
+      return Icon(
         Icons.question_mark_rounded,
-        color: Colors.amberAccent,
+        color: Theme.of(context).colorScheme.onSecondaryContainer,
+        size: 50,
       );
     }
   }
@@ -56,7 +59,7 @@ class TrailingTile extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return InkWell(
+    return GestureDetector(
       onTap: () {
         if (!kanjiFromApi.accessToKanjiItemsButtons) return;
         final resultStatus = ref.read(statusConnectionProvider);
@@ -83,7 +86,7 @@ class TrailingTile extends ConsumerWidget {
       },
       child: Container(
         decoration: const BoxDecoration(shape: BoxShape.circle),
-        child: selectWidgetStatus(kanjiFromApi),
+        child: selectWidgetStatus(kanjiFromApi, context),
       ),
     );
   }
@@ -100,10 +103,12 @@ class KanjiItemProcessingHelper {
 
   Widget _dialogError() {
     return AlertDialog(
-      title: const Text("Error during storing data!!"),
+      title: const Text(
+          'An issue happened when deleting this item, please go back to the section list and access the content again to see the updated content.'),
       content: const Icon(
         Icons.error_rounded,
         color: Colors.amberAccent,
+        size: 70,
       ),
       actions: <Widget>[
         TextButton(
@@ -173,7 +178,8 @@ class KanjiItemProcessingHelper {
       }
 
       onError() {
-        //TODO handle error
+        //TODO handle error connection online
+
         if (selection) {
           ref.read(favoritesCachedProvider.notifier).updateKanji(
               updateStatusKanji(
@@ -182,11 +188,14 @@ class KanjiItemProcessingHelper {
           ref.read(kanjiListProvider.notifier).updateKanji(updateStatusKanji(
               StatusStorage.errorDeleting, true, kanjiFromApi));
         }
+        _scaleDialogError();
       }
 
       updateKanjiWithOnliVersion(
           kanjiFromApi, selection, ref, onSuccess, onError);
     }).onError((error, stackTrace) {
+      //TODO handle error connection database and others
+
       if (selection) {
         ref.read(favoritesCachedProvider.notifier).updateKanji(
             updateStatusKanji(StatusStorage.errorDeleting, true, kanjiFromApi));
@@ -199,7 +208,6 @@ class KanjiItemProcessingHelper {
 
   void insertKanjiToStorage() {
     insertKanjiFromApi(kanjiFromApi).then((kanjiFromApiStored) {
-      //print(' my stored kanji is $kanjiFromApiStored');
       ref.read(statusStorageProvider.notifier).addItem(kanjiFromApiStored);
 
       if (selection) {

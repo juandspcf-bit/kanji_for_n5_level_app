@@ -44,24 +44,57 @@ class _KanjiItemState extends ConsumerState<KanjiItem> {
       color: accessToKanjiItemsButtons
           ? Theme.of(context).cardColor.withOpacity(1)
           : Theme.of(context).cardColor.withOpacity(0.5),
-      child: ListTile(
-        leading: LeadingTile(
-          kanjiFromApi: widget.kanjiFromApi,
-          navigateToKanjiDetails: navigateToKanjiDetails,
+      child: Padding(
+        padding: const EdgeInsets.all(15.0),
+        child: Row(
+          children: [
+            LeadingTile(
+              kanjiFromApi: widget.kanjiFromApi,
+              navigateToKanjiDetails: navigateToKanjiDetails,
+            ),
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.all(10.0),
+                child: GestureDetector(
+                  onTap: widget.kanjiFromApi.accessToKanjiItemsButtons
+                      ? () {
+                          navigateToKanjiDetails(context, widget.kanjiFromApi);
+                        }
+                      : null,
+                  child: Container(
+                    color: Colors.transparent,
+                    width: double.infinity,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        TitleTile(
+                          kanjiFromApi: widget.kanjiFromApi,
+                          navigateToKanjiDetails: navigateToKanjiDetails,
+                        ),
+                        const SizedBox(
+                          height: 5,
+                        ),
+                        SubTitleTile(
+                          kanjiFromApi: widget.kanjiFromApi,
+                          navigateToKanjiDetails: navigateToKanjiDetails,
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            ),
+            Center(
+              child: Padding(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 5, vertical: 15),
+                child: TrailingTile(
+                  kanjiFromApi: widget.kanjiFromApi,
+                ),
+              ),
+            )
+          ],
         ),
-        title: TitleTile(
-          kanjiFromApi: widget.kanjiFromApi,
-          navigateToKanjiDetails: navigateToKanjiDetails,
-        ),
-        subtitle: SubTitleTile(
-          kanjiFromApi: widget.kanjiFromApi,
-          navigateToKanjiDetails: navigateToKanjiDetails,
-        ),
-        trailing: TrailingTile(
-          kanjiFromApi: widget.kanjiFromApi,
-        ),
-        isThreeLine: true,
-        titleTextStyle: Theme.of(context).textTheme.titleMedium,
       ),
     );
   }
