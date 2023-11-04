@@ -18,6 +18,43 @@ class LeadingTile extends StatelessWidget {
     KanjiFromApi? kanjiFromApi,
   ) navigateToKanjiDetails;
 
+  Widget setSVGwidget(BuildContext context) {
+    if (kanjiFromApi.statusStorage == StatusStorage.onlyOnline ||
+        kanjiFromApi.statusStorage == StatusStorage.proccessingStoring) {
+      return SvgPicture.network(
+        kanjiFromApi.kanjiImageLink,
+        fit: BoxFit.contain,
+        semanticsLabel: kanjiFromApi.kanjiCharacter,
+        placeholderBuilder: (BuildContext context) => Container(
+            color: Colors.transparent,
+            height: 100,
+            width: 100,
+            child: const CircularProgressIndicator(
+              backgroundColor: Color.fromARGB(179, 5, 16, 51),
+            )),
+      );
+    } else if (kanjiFromApi.statusStorage == StatusStorage.stored ||
+        kanjiFromApi.statusStorage == StatusStorage.proccessingDeleting) {
+      return SvgPicture.file(
+        File(kanjiFromApi.kanjiImageLink),
+        fit: BoxFit.contain,
+        semanticsLabel: kanjiFromApi.kanjiCharacter,
+        placeholderBuilder: (BuildContext context) => Container(
+            color: Colors.transparent,
+            height: 100,
+            width: 100,
+            child: const CircularProgressIndicator(
+              backgroundColor: Color.fromARGB(179, 5, 16, 51),
+            )),
+      );
+    } else {
+      return Icon(
+        Icons.question_mark_rounded,
+        color: Theme.of(context).colorScheme.onPrimaryContainer,
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -33,39 +70,14 @@ class LeadingTile extends StatelessWidget {
             color: kanjiFromApi.accessToKanjiItemsButtons
                 ? Theme.of(context)
                     .colorScheme
-                    .onPrimaryContainer
+                    .onSecondaryContainer
                     .withOpacity(1.0)
                 : Theme.of(context)
                     .colorScheme
-                    .onPrimaryContainer
+                    .onSecondaryContainer
                     .withOpacity(0.5),
             borderRadius: const BorderRadius.all(Radius.circular(10))),
-        child: kanjiFromApi.statusStorage == StatusStorage.onlyOnline ||
-                kanjiFromApi.statusStorage == StatusStorage.proccessing
-            ? SvgPicture.network(
-                kanjiFromApi.kanjiImageLink,
-                fit: BoxFit.contain,
-                semanticsLabel: kanjiFromApi.kanjiCharacter,
-                placeholderBuilder: (BuildContext context) => Container(
-                    color: Colors.transparent,
-                    height: 100,
-                    width: 100,
-                    child: const CircularProgressIndicator(
-                      backgroundColor: Color.fromARGB(179, 5, 16, 51),
-                    )),
-              )
-            : SvgPicture.file(
-                File(kanjiFromApi.kanjiImageLink),
-                fit: BoxFit.contain,
-                semanticsLabel: kanjiFromApi.kanjiCharacter,
-                placeholderBuilder: (BuildContext context) => Container(
-                    color: Colors.transparent,
-                    height: 100,
-                    width: 100,
-                    child: const CircularProgressIndicator(
-                      backgroundColor: Color.fromARGB(179, 5, 16, 51),
-                    )),
-              ),
+        child: setSVGwidget(context),
       ),
     );
   }

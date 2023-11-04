@@ -59,7 +59,9 @@ class _KanjiSectionListState extends ConsumerState<KanjiSectionList> {
   bool isAnyProcessingData(List<KanjiFromApi> list) {
     try {
       list.firstWhere(
-        (element) => element.statusStorage == StatusStorage.proccessing,
+        (element) =>
+            element.statusStorage == StatusStorage.proccessingStoring ||
+            element.statusStorage == StatusStorage.proccessingDeleting,
       );
 
       return true;
@@ -108,7 +110,9 @@ class _KanjiSectionListState extends ConsumerState<KanjiSectionList> {
       onWillPop: () {
         try {
           kanjiList.$1.firstWhere(
-            (element) => element.statusStorage == StatusStorage.proccessing,
+            (element) =>
+                element.statusStorage == StatusStorage.proccessingStoring ||
+                element.statusStorage == StatusStorage.proccessingDeleting,
           );
 
           _scaleDialog(context);

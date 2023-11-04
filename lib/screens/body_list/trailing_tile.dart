@@ -31,14 +31,15 @@ class TrailingTile extends ConsumerWidget {
         Icons.storage,
         size: 50,
       );
-    } else if (kanjiFromApi.statusStorage == StatusStorage.proccessing) {
+    } else if (kanjiFromApi.statusStorage == StatusStorage.proccessingStoring ||
+        kanjiFromApi.statusStorage == StatusStorage.proccessingDeleting) {
       return const CircularProgressIndicator();
+    } else {
+      return const Icon(
+        Icons.question_mark_rounded,
+        color: Colors.amberAccent,
+      );
     }
-
-    return const Icon(
-      Icons.question_mark,
-      size: 50,
-    );
   }
 
   void showSnackBarQuizz(BuildContext context, String message, int duration) {
@@ -71,12 +72,14 @@ class TrailingTile extends ConsumerWidget {
             KanjiItemProcessingHelper(kanjiFromApi, selection, ref, context);
 
         if (kanjiFromApi.statusStorage == StatusStorage.onlyOnline) {
+          kanjiItemProcessingHelper.updateKanjiItemStatusToProcessingStatus(
+              StatusStorage.proccessingStoring);
           kanjiItemProcessingHelper.insertKanjiToStorage();
         } else if (kanjiFromApi.statusStorage == StatusStorage.stored) {
+          kanjiItemProcessingHelper.updateKanjiItemStatusToProcessingStatus(
+              StatusStorage.proccessingDeleting);
           kanjiItemProcessingHelper.deleteKanjFromStorage();
         }
-
-        kanjiItemProcessingHelper.updateKanjiItemStatusToProcessingStatus();
       },
       child: Container(
         decoration: const BoxDecoration(shape: BoxShape.circle),
@@ -161,7 +164,6 @@ class KanjiItemProcessingHelper {
   void deleteKanjFromStorage() {
     deleteKanjiFromApi(kanjiFromApi).then((deleteStatus) {
       ref.read(statusStorageProvider.notifier).deleteItem(kanjiFromApi);
-
       onSuccess(List<KanjiFromApi> list) {
         if (selection) {
           ref.read(favoritesCachedProvider.notifier).updateKanji(list[0]);
@@ -174,15 +176,24 @@ class KanjiItemProcessingHelper {
         //TODO handle error
         if (selection) {
           ref.read(favoritesCachedProvider.notifier).updateKanji(
-              updateStatusKanji(StatusStorage.stored, true, kanjiFromApi));
+              updateStatusKanji(
+                  StatusStorage.errorDeleting, true, kanjiFromApi));
         } else {
-          ref.read(kanjiListProvider.notifier).updateKanji(
-              updateStatusKanji(StatusStorage.stored, true, kanjiFromApi));
+          ref.read(kanjiListProvider.notifier).updateKanji(updateStatusKanji(
+              StatusStorage.errorDeleting, true, kanjiFromApi));
         }
       }
 
       updateKanjiWithOnliVersion(
           kanjiFromApi, selection, ref, onSuccess, onError);
+    }).onError((error, stackTrace) {
+      if (selection) {
+        ref.read(favoritesCachedProvider.notifier).updateKanji(
+            updateStatusKanji(StatusStorage.errorDeleting, true, kanjiFromApi));
+      } else {
+        ref.read(kanjiListProvider.notifier).updateKanji(
+            updateStatusKanji(StatusStorage.errorDeleting, true, kanjiFromApi));
+      }
     });
   }
 
@@ -209,14 +220,14 @@ class KanjiItemProcessingHelper {
     });
   }
 
-  void updateKanjiItemStatusToProcessingStatus() {
+  void updateKanjiItemStatusToProcessingStatus(StatusStorage statusStorage) {
     if (selection) {
       ref.read(favoritesCachedProvider.notifier).updateKanji(
-            updateStatusKanji(StatusStorage.proccessing, false, kanjiFromApi),
+            updateStatusKanji(statusStorage, false, kanjiFromApi),
           );
     } else {
       ref.read(kanjiListProvider.notifier).updateKanji(
-            updateStatusKanji(StatusStorage.proccessing, false, kanjiFromApi),
+            updateStatusKanji(statusStorage, false, kanjiFromApi),
           );
     }
   }

@@ -82,4 +82,10 @@ final statusStorageProvider =
     NotifierProvider<StatusStorageProvider, Map<int, List<KanjiFromApi>>>(
         StatusStorageProvider.new);
 
-enum StatusStorage { onlyOnline, stored, proccessing }
+enum StatusStorage {
+  onlyOnline,
+  stored,
+  proccessingStoring,
+  proccessingDeleting,
+  errorDeleting
+}

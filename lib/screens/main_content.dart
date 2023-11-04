@@ -62,7 +62,9 @@ class _MainContentState extends ConsumerState<MainContent> {
     final listFavorites = ref.read(favoritesCachedProvider);
     try {
       listFavorites.$1.firstWhere(
-        (element) => element.statusStorage == StatusStorage.proccessing,
+        (element) =>
+            element.statusStorage == StatusStorage.proccessingStoring ||
+            element.statusStorage == StatusStorage.proccessingDeleting,
       );
 
       return true;

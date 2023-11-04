@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:kanji_for_n5_level_app/models/kanji_from_api.dart';
+import 'package:kanji_for_n5_level_app/providers/status_stored_provider.dart';
 
 class SubTitleTile extends StatelessWidget {
   const SubTitleTile({
@@ -20,15 +21,9 @@ class SubTitleTile extends StatelessWidget {
     return '${splitText[0]}, ${splitText[1]}';
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: kanjiFromApi.accessToKanjiItemsButtons
-          ? () {
-              navigateToKanjiDetails(context, kanjiFromApi);
-            }
-          : null,
-      child: Column(
+  Widget setSubTitlewidget(BuildContext context) {
+    if (kanjiFromApi.statusStorage != StatusStorage.errorDeleting) {
+      return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
@@ -60,7 +55,24 @@ class SubTitleTile extends StatelessWidget {
                         .withOpacity(0.5)),
           ),
         ],
-      ),
+      );
+    } else {
+      return Icon(
+        Icons.question_mark_rounded,
+        color: Theme.of(context).colorScheme.onSecondaryContainer,
+      );
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: kanjiFromApi.accessToKanjiItemsButtons
+          ? () {
+              navigateToKanjiDetails(context, kanjiFromApi);
+            }
+          : null,
+      child: setSubTitlewidget(context),
     );
   }
 }

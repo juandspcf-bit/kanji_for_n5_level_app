@@ -239,11 +239,13 @@ class _QuizScreenState extends ConsumerState<QuizScreen> {
                                     ),
                                   ),
                                   child: randomKanjisToAskMeaning[index]
+                                              .statusStorage ==
+                                          StatusStorage
+                                              .onlyOnline /* ||
+                                          (randomKanjisToAskMeaning[index]
                                                   .statusStorage ==
-                                              StatusStorage.onlyOnline ||
-                                          randomKanjisToAskMeaning[index]
-                                                  .statusStorage ==
-                                              StatusStorage.proccessing
+                                              StatusStorage.proccessingStoring || randomKanjisToAskMeaning[index]
+                                                  .statusStorage == StatusStorage.proccessingStoringDeleting) */
                                       ? SvgPicture.network(
                                           randomKanjisToAskMeaning[index]
                                               .kanjiImageLink,
