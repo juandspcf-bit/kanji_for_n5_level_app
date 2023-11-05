@@ -87,5 +87,6 @@ enum StatusStorage {
   stored,
   proccessingStoring,
   proccessingDeleting,
+  disableForDownload,
   errorDeleting
 }

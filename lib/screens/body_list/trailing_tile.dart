@@ -22,6 +22,42 @@ class TrailingTile extends ConsumerWidget {
   final void Function(KanjiFromApi kanjiFromApi) insertKanji;
   final void Function(KanjiFromApi kanjiFromApi) deleteKanji;
 
+  Widget _dialogError(BuildContext buildContext) {
+    return AlertDialog(
+      title: const Text(
+          'The max number of parallel downloads is three, please wait until they are finished'),
+      content: const Icon(
+        Icons.block,
+        color: Colors.amberAccent,
+        size: 70,
+      ),
+      actions: <Widget>[
+        TextButton(
+            onPressed: () {
+              Navigator.of(buildContext).pop();
+            },
+            child: const Text("Okay"))
+      ],
+    );
+  }
+
+  void _scaleDialogError(BuildContext buildContext) {
+    showGeneralDialog(
+      context: buildContext,
+      pageBuilder: (ctx, a1, a2) {
+        return Container();
+      },
+      transitionBuilder: (ctx, a1, a2, child) {
+        var curve = Curves.easeInOut.transform(a1.value);
+        return Transform.scale(
+          scale: curve,
+          child: _dialogError(buildContext),
+        );
+      },
+      transitionDuration: const Duration(milliseconds: 300),
+    );
+  }
+
   Widget selectWidgetStatus(KanjiFromApi kanjiFromApi, BuildContext context) {
     if (kanjiFromApi.statusStorage == StatusStorage.onlyOnline) {
       return Icon(
@@ -59,24 +95,42 @@ class TrailingTile extends ConsumerWidget {
     }
   }
 
+  int countActiveDownloads(List<KanjiFromApi> kanjiList) {
+    return kanjiList
+        .where(
+            (kanji) => kanji.statusStorage == StatusStorage.proccessingStoring)
+        .toList()
+        .length;
+  }
+
+  bool isMoreOfTheAllowedDownloads(
+      BuildContext context, List<KanjiFromApi> kanjiList) {
+    int countActivesDownloads = countActiveDownloads(kanjiList);
+    return countActivesDownloads >= 3;
+  }
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return GestureDetector(
-      onTap: () {
-        if (!kanjiFromApi.accessToKanjiItemsButtons) return;
-        final resultStatus = ref.read(statusConnectionProvider);
-        if (ConnectivityResult.none == resultStatus) {
-          showSnackBarQuizz(
-              context, 'you shoul be connected to performn this acction', 3);
-          return;
-        }
+      onTap: isMoreOfTheAllowedDownloads(
+              context, ref.read(kanjiListProvider).$1)
+          ? null
+          : () {
+              if (!kanjiFromApi.accessToKanjiItemsButtons) return;
 
-        if (kanjiFromApi.statusStorage == StatusStorage.onlyOnline) {
-          insertKanji(kanjiFromApi);
-        } else if (kanjiFromApi.statusStorage == StatusStorage.stored) {
-          deleteKanji(kanjiFromApi);
-        }
-      },
+              final resultStatus = ref.read(statusConnectionProvider);
+              if (ConnectivityResult.none == resultStatus) {
+                showSnackBarQuizz(context,
+                    'you shoul be connected to performn this acction', 3);
+                return;
+              }
+
+              if (kanjiFromApi.statusStorage == StatusStorage.onlyOnline) {
+                insertKanji(kanjiFromApi);
+              } else if (kanjiFromApi.statusStorage == StatusStorage.stored) {
+                deleteKanji(kanjiFromApi);
+              }
+            },
       child: Container(
         decoration: const BoxDecoration(shape: BoxShape.circle),
         child: selectWidgetStatus(kanjiFromApi, context),
