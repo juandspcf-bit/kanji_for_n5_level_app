@@ -324,7 +324,7 @@ Future<List<DeleteStatus>> deleteKanjiFromApi(KanjiFromApi kanjiFromApi) async {
 
   final List<DeleteStatus> listDeleteStatus = [];
 
-  final listKanjiMapFromDb = await dbExamples.rawQuery(
+  final listKanjiMapFromDb = await dbKanjiFromApi.rawQuery(
       'SELECT * FROM kanji_FromApi WHERE kanjiCharacter = ? ',
       [kanjiFromApi.kanjiCharacter]);
 

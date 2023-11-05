@@ -23,7 +23,6 @@ class _FavoriteScreenState extends ConsumerState<FavoriteScreen> {
     final resultStatus = ref.watch(statusConnectionProvider);
 
     if (resultStatus == ConnectivityResult.none) {
-      print('storage ${kanjiList.$1}');
       final favoritesKanjisStored = kanjiList.$1
           .where((element) => element.statusStorage == StatusStorage.stored)
           .toList();

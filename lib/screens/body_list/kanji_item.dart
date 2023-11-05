@@ -2,6 +2,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kanji_for_n5_level_app/models/kanji_from_api.dart';
+import 'package:kanji_for_n5_level_app/providers/favorite_screen_selection_provider.dart';
+import 'package:kanji_for_n5_level_app/providers/status_stored_provider.dart';
 import 'package:kanji_for_n5_level_app/screens/body_list/leading_tile.dart';
 import 'package:kanji_for_n5_level_app/screens/body_list/subtitle_tile.dart';
 import 'package:kanji_for_n5_level_app/screens/body_list/title_tile.dart';
@@ -12,9 +14,13 @@ class KanjiItem extends ConsumerStatefulWidget {
   const KanjiItem({
     super.key,
     required this.kanjiFromApi,
+    required this.insertKanji,
+    required this.deleteKanji,
   });
 
   final KanjiFromApi kanjiFromApi;
+  final void Function(KanjiFromApi kanjiFromApi) insertKanji;
+  final void Function(KanjiFromApi kanjiFromApi) deleteKanji;
 
   @override
   ConsumerState<KanjiItem> createState() => _KanjiItemState();
@@ -22,6 +28,18 @@ class KanjiItem extends ConsumerStatefulWidget {
 
 class _KanjiItemState extends ConsumerState<KanjiItem> {
   var accessToKanjiItemsButtons = true;
+
+  void insertKanji(
+    KanjiFromApi kanjiFromApi,
+  ) {
+    final selection =
+        ref.read(favoriteScreenSelectionProvider.notifier).getSelection();
+    final kanjiItemProcessingHelper =
+        KanjiItemProcessingHelper(kanjiFromApi, selection, ref, context);
+    kanjiItemProcessingHelper.updateKanjiItemStatusToProcessingStatus(
+        StatusStorage.proccessingStoring);
+    kanjiItemProcessingHelper.insertKanjiToStorage();
+  }
 
   void navigateToKanjiDetails(
     BuildContext context,
@@ -90,6 +108,8 @@ class _KanjiItemState extends ConsumerState<KanjiItem> {
                     const EdgeInsets.symmetric(horizontal: 5, vertical: 15),
                 child: TrailingTile(
                   kanjiFromApi: widget.kanjiFromApi,
+                  insertKanji: widget.insertKanji,
+                  deleteKanji: widget.deleteKanji,
                 ),
               ),
             )

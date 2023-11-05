@@ -22,9 +22,6 @@ class KanjiSectionList extends ConsumerStatefulWidget {
 }
 
 class _KanjiSectionListState extends ConsumerState<KanjiSectionList> {
-/*   StreamSubscription? subscription;
-  ConnectivityResult? resultStatus; */
-
   Widget _dialog(BuildContext context) {
     return AlertDialog(
       title: const Text("Please wait!!"),
