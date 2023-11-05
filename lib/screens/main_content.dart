@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kanji_for_n5_level_app/Databases/download_db_utils.dart';
@@ -20,21 +21,76 @@ const temporalAvatar =
 
 Dio dio = Dio();
 
-void cleanStoredFiles(List<KanjiFromApi> listOfStoredKanjis) async {
-  final List<KanjiFromApi> listKanjisOk = [];
-  final List<KanjiFromApi> listKanjisNotOk = [];
-  for (var storedKanji in listOfStoredKanjis) {
-    final listExamples = storedKanji.example;
+Future<List<(KanjiFromApi, bool)>> cleanStoredFiles(
+    List<KanjiFromApi> listOfStoredKanjis) async {
+  final List<(KanjiFromApi, bool)> listKanjisRecords =
+      listOfStoredKanjis.map((e) => (e, true)).toList();
+  for (int i = 0; i < listKanjisRecords.length; i++) {
+    var storedKanjiRecord = listKanjisRecords[i];
+    final listExamples = storedKanjiRecord.$1.example;
     for (var example in listExamples) {
-      final opusPath = example.audio.opus;
-      final opusFile = File(opusPath);
-      final existOpusFile = await opusFile.exists();
-      if (!existOpusFile) {
-        listKanjisNotOk.add(storedKanji);
+      var existAudioFile = await checkFileIfExists(example.audio.opus);
+      if (!existAudioFile) {
+        storedKanjiRecord = (storedKanjiRecord.$1, false);
+        break;
+      }
+
+      existAudioFile = await checkFileIfExists(example.audio.aac);
+      if (!existAudioFile) {
+        storedKanjiRecord = (storedKanjiRecord.$1, false);
+        break;
+      }
+
+      existAudioFile = await checkFileIfExists(example.audio.ogg);
+      if (!existAudioFile) {
+        storedKanjiRecord = (storedKanjiRecord.$1, false);
+        break;
+      }
+
+      existAudioFile = await checkFileIfExists(example.audio.mp3);
+      if (!existAudioFile) {
+        storedKanjiRecord = (storedKanjiRecord.$1, false);
         break;
       }
     }
+    if (!storedKanjiRecord.$2) {
+      continue;
+    }
+
+    final listStrokes = storedKanjiRecord.$1.strokes.images;
+    for (var i = 0; i < listStrokes.length; i++) {
+      var existStrokeFile = await checkFileIfExists(listStrokes[i]);
+      if (!existStrokeFile) {
+        storedKanjiRecord = (storedKanjiRecord.$1, false);
+        break;
+      }
+    }
+
+    if (!storedKanjiRecord.$2) {
+      continue;
+    }
+
+    var existVideoFile =
+        await checkFileIfExists(storedKanjiRecord.$1.videoLink);
+    if (!existVideoFile) {
+      storedKanjiRecord = (storedKanjiRecord.$1, false);
+      break;
+    }
+
+    var existImageFile =
+        await checkFileIfExists(storedKanjiRecord.$1.kanjiImageLink);
+    if (!existImageFile) {
+      storedKanjiRecord = (storedKanjiRecord.$1, false);
+      break;
+    }
   }
+
+  return listKanjisRecords.where((element) => element.$2 == true).toList();
+}
+
+Future<bool> checkFileIfExists(String audioPath) async {
+  final audioFile = File(audioPath);
+  return await audioFile.exists();
 }
 
 class MainContent extends ConsumerStatefulWidget {
@@ -46,6 +102,11 @@ class MainContent extends ConsumerStatefulWidget {
 
 class _MainContentState extends ConsumerState<MainContent> {
   int _selectedPageIndex = 0;
+
+  Future<List<(KanjiFromApi, bool)>> runCompute(
+      List<KanjiFromApi> listOfStoredKanjis) async {
+    return await compute(cleanStoredFiles, listOfStoredKanjis);
+  }
 
   Widget _dialog(BuildContext context) {
     return AlertDialog(
@@ -112,6 +173,10 @@ class _MainContentState extends ConsumerState<MainContent> {
 
   void getInitData() async {
     final listOfStoredKanjis = await loadStoredKanjis();
+    List<(KanjiFromApi, bool)> validKanjis =
+        await runCompute(listOfStoredKanjis);
+
+    print('${listOfStoredKanjis.length} : ${validKanjis.length}');
 
     ref
         .read(statusStorageProvider.notifier)
