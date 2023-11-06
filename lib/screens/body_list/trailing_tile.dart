@@ -112,25 +112,26 @@ class TrailingTile extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return GestureDetector(
-      onTap: isMoreOfTheAllowedDownloads(
+      onTap: /* isMoreOfTheAllowedDownloads(
               context, ref.read(kanjiListProvider).$1)
           ? null
-          : () {
-              if (!kanjiFromApi.accessToKanjiItemsButtons) return;
+          :  */
+          () {
+        if (!kanjiFromApi.accessToKanjiItemsButtons) return;
 
-              final resultStatus = ref.read(statusConnectionProvider);
-              if (ConnectivityResult.none == resultStatus) {
-                showSnackBarQuizz(context,
-                    'you shoul be connected to performn this acction', 3);
-                return;
-              }
+        final resultStatus = ref.read(statusConnectionProvider);
+        if (ConnectivityResult.none == resultStatus) {
+          showSnackBarQuizz(
+              context, 'you shoul be connected to performn this acction', 3);
+          return;
+        }
 
-              if (kanjiFromApi.statusStorage == StatusStorage.onlyOnline) {
-                insertKanji(kanjiFromApi);
-              } else if (kanjiFromApi.statusStorage == StatusStorage.stored) {
-                deleteKanji(kanjiFromApi);
-              }
-            },
+        if (kanjiFromApi.statusStorage == StatusStorage.onlyOnline) {
+          insertKanji(kanjiFromApi);
+        } else if (kanjiFromApi.statusStorage == StatusStorage.stored) {
+          deleteKanji(kanjiFromApi);
+        }
+      },
       child: Container(
         decoration: const BoxDecoration(shape: BoxShape.circle),
         child: selectWidgetStatus(kanjiFromApi, context),
