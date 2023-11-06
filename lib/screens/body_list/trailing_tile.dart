@@ -112,11 +112,7 @@ class TrailingTile extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return GestureDetector(
-      onTap: /* isMoreOfTheAllowedDownloads(
-              context, ref.read(kanjiListProvider).$1)
-          ? null
-          :  */
-          () {
+      onTap: () {
         if (!kanjiFromApi.accessToKanjiItemsButtons) return;
 
         final resultStatus = ref.read(statusConnectionProvider);

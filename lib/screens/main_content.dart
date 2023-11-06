@@ -17,7 +17,6 @@ import 'package:kanji_for_n5_level_app/providers/status_stored_provider.dart';
 import 'package:kanji_for_n5_level_app/screens/favorite_screen.dart';
 import 'package:kanji_for_n5_level_app/screens/sections_screen.dart';
 import 'package:logger/logger.dart';
-import 'package:path_provider/path_provider.dart';
 
 const temporalAvatar =
     "https://firebasestorage.googleapis.com/v0/b/kanji-for-n5.appspot.com/o/unnamed.jpg?alt=media&token=38275fec-42f3-4d95-b1fd-785e82d4086f&_gl=1*19p8v1f*_ga*MjAyNTg0OTcyOS4xNjk2NDEwODIz*_ga_CW55HF8NVT*MTY5NzEwMTY3NC45LjEuMTY5NzEwMzExMy4zMy4wLjA.";
@@ -25,8 +24,8 @@ const temporalAvatar =
 Dio dio = Dio();
 final logger = Logger();
 
-Future<List<(KanjiFromApi, bool)>> cleanStoredFiles(
-    List<KanjiFromApi> listOfStoredKanjis) async {
+Future<(List<(KanjiFromApi, bool)>, List<(KanjiFromApi, bool)>)>
+    cleanInvalidStoredFiles(List<KanjiFromApi> listOfStoredKanjis) async {
   final List<(KanjiFromApi, bool)> listKanjisRecords =
       listOfStoredKanjis.map((e) => (e, true)).toList();
   for (int i = 0; i < listKanjisRecords.length; i++) {
@@ -89,7 +88,27 @@ Future<List<(KanjiFromApi, bool)>> cleanStoredFiles(
     }
   }
 
-  return listKanjisRecords.where((element) => element.$2 == true).toList();
+  return (
+    listKanjisRecords.where((element) => element.$2 == true).toList(),
+    listKanjisRecords.where((element) => element.$2 == false).toList()
+  );
+}
+
+Future<void> cleanInvaliDbRecords(
+    List<KanjiFromApi> listOfInavlidKanjis) async {
+  final dbKanjiFromApi = await kanjiFromApiDatabase;
+  final dbExamples = await examplesDatabase;
+  final dbStrokes = await strokesDatabase;
+
+  for (var kanjiFromApi in listOfInavlidKanjis) {
+    await dbKanjiFromApi.rawDelete(
+        'DELETE FROM kanji_FromApi WHERE kanjiCharacter = ?',
+        [kanjiFromApi.kanjiCharacter]);
+    await dbExamples.rawDelete('DELETE FROM examples WHERE kanjiCharacter = ?',
+        [kanjiFromApi.kanjiCharacter]);
+    await dbStrokes.rawDelete('DELETE FROM strokes WHERE kanjiCharacter = ?',
+        [kanjiFromApi.kanjiCharacter]);
+  }
 }
 
 Future<bool> checkFileIfExists(String audioPath) async {
@@ -107,9 +126,9 @@ class MainContent extends ConsumerStatefulWidget {
 class _MainContentState extends ConsumerState<MainContent> {
   int _selectedPageIndex = 0;
 
-  Future<List<(KanjiFromApi, bool)>> runCompute(
+  Future<(List<(KanjiFromApi, bool)>, List<(KanjiFromApi, bool)>)> runCompute(
       List<KanjiFromApi> listOfStoredKanjis) async {
-    return await compute(cleanStoredFiles, listOfStoredKanjis);
+    return await compute(cleanInvalidStoredFiles, listOfStoredKanjis);
   }
 
   Widget _dialog(BuildContext context) {
@@ -176,25 +195,28 @@ class _MainContentState extends ConsumerState<MainContent> {
   }
 
   void getInitData() async {
-    final listOfStoredKanjis = await loadStoredKanjis();
-    List<(KanjiFromApi, bool)> validKanjis =
-        await runCompute(listOfStoredKanjis);
-
-    logger.d('${listOfStoredKanjis.length} : ${validKanjis.length}');
+    var listOfStoredKanjis = await loadStoredKanjis();
+    final validAndInvalidKanjis = await runCompute(listOfStoredKanjis);
+    logger
+        .d('${listOfStoredKanjis.length} : ${validAndInvalidKanjis.$1.length}');
+    final listOfValidStoredKanjis =
+        validAndInvalidKanjis.$1.map((e) => e.$1).toList();
+    final listOfInvalidStoredKanjis =
+        validAndInvalidKanjis.$2.map((e) => e.$1).toList();
+    cleanInvaliDbRecords(listOfInvalidStoredKanjis);
     FlutterNativeSplash.remove();
 
     ref
         .read(statusStorageProvider.notifier)
-        .setInitialStoredKanjis(listOfStoredKanjis);
+        .setInitialStoredKanjis(listOfValidStoredKanjis);
     final favoritesKanjis = await loadFavorites();
     Connectivity().checkConnectivity().then((result) {
       if (ConnectivityResult.none == result) {
         ref.read(favoritesCachedProvider.notifier).setInitialFavoritesOffline(
-            listOfStoredKanjis, favoritesKanjis, 10);
+            listOfValidStoredKanjis, favoritesKanjis, 10);
       } else {
-        ref
-            .read(favoritesCachedProvider.notifier)
-            .setInitialFavoritesOnline(listOfStoredKanjis, favoritesKanjis, 10);
+        ref.read(favoritesCachedProvider.notifier).setInitialFavoritesOnline(
+            listOfValidStoredKanjis, favoritesKanjis, 10);
       }
     });
   }

@@ -287,64 +287,70 @@ class KanjiDetailsState extends ConsumerState<KanjiDetails> {
             height: 20,
           ),
           _videoController.value.isInitialized
-              ? Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    const SizedBox(
-                      height: 20,
-                    ),
-                    SizedBox(
-                      height: 100 * _videoController.value.aspectRatio,
-                      width: 100,
-                      child: AspectRatio(
-                        aspectRatio: _videoController.value.aspectRatio,
-                        child: VideoPlayer(_videoController),
+              ? SizedBox(
+                  height: 120,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const SizedBox(
+                        height: 20,
                       ),
-                    ),
-                    Material(
-                      child: Ink(
-                        decoration: BoxDecoration(
-                            color: Theme.of(context).colorScheme.primary,
-                            borderRadius: BorderRadius.circular(30)),
-                        child: InkWell(
-                          highlightColor: Colors.blue.withOpacity(0.4),
-                          splashColor: Colors.green.withOpacity(0.5),
-                          onTap: () {},
-                          child: IconButton(
-                            color: Theme.of(context).colorScheme.onPrimary,
-                            splashColor: Colors.deepOrange,
-                            onPressed: () async {
-                              setState(() {
+                      SizedBox(
+                        height: 100 * _videoController.value.aspectRatio,
+                        width: 100,
+                        child: AspectRatio(
+                          aspectRatio: _videoController.value.aspectRatio,
+                          child: VideoPlayer(_videoController),
+                        ),
+                      ),
+                      Material(
+                        child: Ink(
+                          decoration: BoxDecoration(
+                              color: Theme.of(context).colorScheme.primary,
+                              borderRadius: BorderRadius.circular(30)),
+                          child: InkWell(
+                            highlightColor: Colors.blue.withOpacity(0.4),
+                            splashColor: Colors.green.withOpacity(0.5),
+                            onTap: () {},
+                            child: IconButton(
+                              color: Theme.of(context).colorScheme.onPrimary,
+                              splashColor: Colors.deepOrange,
+                              onPressed: () async {
+                                setState(() {
+                                  _videoController.value.isPlaying
+                                      ? _videoController.pause()
+                                      : _videoController.play();
+                                });
+                              },
+                              icon: Icon(
                                 _videoController.value.isPlaying
-                                    ? _videoController.pause()
-                                    : _videoController.play();
-                              });
-                            },
-                            icon: Icon(
-                              _videoController.value.isPlaying
-                                  ? Icons.pause
-                                  : Icons.play_arrow,
+                                    ? Icons.pause
+                                    : Icons.play_arrow,
+                              ),
                             ),
                           ),
                         ),
                       ),
-                    ),
-                    const SizedBox(
-                      height: 20,
-                    ),
-                  ],
+                      const SizedBox(
+                        height: 20,
+                      ),
+                    ],
+                  ),
                 )
-              : Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    SizedBox(
-                        height: 128 * _videoController.value.aspectRatio,
-                        width: 128,
-                        child: const Padding(
-                          padding: EdgeInsets.all(40.0),
-                          child: CircularProgressIndicator(),
-                        )),
-                  ],
+              : SizedBox(
+                  height: 120,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      SizedBox(
+                          height: 128 * _videoController.value.aspectRatio,
+                          width: 128,
+                          child: const Padding(
+                            padding: EdgeInsets.all(40.0),
+                            child: CircularProgressIndicator(),
+                          )),
+                    ],
+                  ),
                 ),
           const SizedBox(
             height: 10,

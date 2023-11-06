@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:kanji_for_n5_level_app/Databases/db_computes_functions.dart';
+import 'package:kanji_for_n5_level_app/Databases/db_computes_functions_for_deleting_data.dart';
+import 'package:kanji_for_n5_level_app/Databases/db_computes_functions_for_inserting_data.dart';
 import 'package:kanji_for_n5_level_app/models/kanji_from_api.dart';
 import 'package:kanji_for_n5_level_app/providers/favorite_screen_selection_provider.dart';
 import 'package:kanji_for_n5_level_app/providers/status_stored_provider.dart';
@@ -36,7 +37,6 @@ class _BodiKanjiListState extends ConsumerState<BodyKanjisList> {
         KanjiItemProcessingHelper(kanjiFromApi, selection, ref, context);
     kanjiItemProcessingHelper.updateKanjiItemStatusToProcessingStatus(
         StatusStorage.proccessingStoring);
-    //kanjiItemProcessingHelper.insertKanjiToStorage();
     insertKanjiToStorageComputeVersion(kanjiFromApi, ref, selection);
   }
 
@@ -47,7 +47,12 @@ class _BodiKanjiListState extends ConsumerState<BodyKanjisList> {
         KanjiItemProcessingHelper(kanjiFromApi, selection, ref, context);
     kanjiItemProcessingHelper.updateKanjiItemStatusToProcessingStatus(
         StatusStorage.proccessingDeleting);
-    kanjiItemProcessingHelper.deleteKanjFromStorage();
+    deleteKanjiFromStorageComputeVersion(
+      kanjiFromApi,
+      ref,
+      selection,
+      context,
+    );
   }
 
   @override

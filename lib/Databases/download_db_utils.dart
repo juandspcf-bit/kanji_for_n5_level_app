@@ -439,8 +439,12 @@ Future<List<DeleteStatus>> deleteKanjiFromApi(KanjiFromApi kanjiFromApi) async {
 
 enum DeleteStatus {
   errorMediaLinksFiles,
+  succesMediaLinksFiles,
   errorAudioExampleLinksFiles,
+  succesAudioExampleLinksFiles,
   errorStrokeLinksFiles,
+  succesStrokeLinksFiles,
   errorKanjiDatabase,
+  successKanjiDatabase,
   succes,
 }

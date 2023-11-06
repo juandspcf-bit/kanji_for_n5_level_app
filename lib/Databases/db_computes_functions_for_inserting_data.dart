@@ -11,21 +11,16 @@ import 'package:kanji_for_n5_level_app/providers/kanjis_list_provider.dart';
 import 'package:kanji_for_n5_level_app/providers/status_stored_provider.dart';
 import 'package:kanji_for_n5_level_app/screens/main_content.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:sqflite/sqflite.dart';
 
 void insertKanjiToStorageComputeVersion(
     KanjiFromApi kanjiFromApi, WidgetRef ref, bool selection) async {
   try {
     final dirDocumentPath = await getApplicationDocumentsDirectory();
-    final dbExamples = await examplesDatabase;
     final kanjiFromApiStored = await compute(
         insertKanjiFromApiComputeVersion,
         ParametersCompute(
           kanjiFromApi: kanjiFromApi,
           path: dirDocumentPath,
-          dbExamples: dbExamples,
-          dbStrokes: await strokesDatabase,
-          dbKanjiFromApi: await kanjiFromApiDatabase,
         ));
 
     insertPathsInDB(kanjiFromApiStored);
@@ -49,16 +44,10 @@ void insertKanjiToStorageComputeVersion(
 class ParametersCompute {
   final Directory path;
   final KanjiFromApi kanjiFromApi;
-  final Database dbExamples;
-  final Database dbStrokes;
-  final Database dbKanjiFromApi;
 
   ParametersCompute({
     required this.path,
     required this.kanjiFromApi,
-    required this.dbExamples,
-    required this.dbStrokes,
-    required this.dbKanjiFromApi,
   });
 }
 
@@ -69,6 +58,7 @@ void insertPathsInDB(KanjiFromApi kanjifromApi) async {
     mapAudios['aac'] = e.audio.aac;
     mapAudios['ogg'] = e.audio.ogg;
     mapAudios['mp3'] = e.audio.mp3;
+    mapAudios['kanjiCharacter'] = kanjifromApi.kanjiCharacter;
     return mapAudios;
   });
 
@@ -105,7 +95,7 @@ void insertPathsInDB(KanjiFromApi kanjifromApi) async {
     'katakanaMeaning': kanjifromApi.katakanaMeaning,
     'hiraganaMeaning': kanjifromApi.hiraganaMeaning,
     'videoLink': kanjifromApi.videoLink,
-    'section': kanjifromApi.section
+    'section': kanjifromApi.section,
   };
   final dbKanjiFromApi = await kanjiFromApiDatabase;
   await dbKanjiFromApi.insert("kanji_FromApi", kanjiMap);
@@ -117,7 +107,7 @@ Future<KanjiFromApi> insertKanjiFromApiComputeVersion(
   final strokesPaths =
       await insertStrokesEntryComputeVersion(parametersCompute);
 
-  final kanjiMap = await insertKanjiEntryComoputeVersion(parametersCompute);
+  final kanjiMap = await insertKanjiEntryComputeVersion(parametersCompute);
 
   final List<Example> examples = [];
   for (var exampleMap in examplesMap) {
@@ -158,19 +148,6 @@ Future<List<Map<String, String>>> insertExampleEntryComputeVersion(
         await downloadExampleComputeVersion(example, parametersCompute);
     exampleMaps.add(exampleMap);
   }
-
-/*   for (var exampleMap in exampleMaps) {
-    await parametersCompute.dbExamples.insert('examples', exampleMap);
-  } */
-
-  /* FutureGroup<int> groupDb = FutureGroup<int>();
-  for (var exampleMap in exampleMaps) {
-    groupDb.add(parametersCompute.dbExamples.insert('examples', exampleMap));
-  }
-
-  groupDb.close(); */
-
-  //await groupDb.future;
 
   return exampleMaps;
 }
@@ -231,20 +208,10 @@ Future<List<String>> insertStrokesEntryComputeVersion(
 
   await group.future;
 
-/*   FutureGroup<int> groupDb = FutureGroup<int>();
-  for (var strokeImagePath in pathsToDocuments) {
-    final strokeMap = {
-      'strokeImageLink': strokeImagePath,
-      'kanjiCharacter': parametersCompute.kanjiFromApi.kanjiCharacter,
-    };
-    groupDb.add(parametersCompute.dbStrokes.insert('strokes', strokeMap));
-  }
-  groupDb.close();
-  await groupDb.future; */
   return pathsToDocuments;
 }
 
-Future<Map<String, String>> insertKanjiEntryComoputeVersion(
+Future<Map<String, String>> insertKanjiEntryComputeVersion(
     ParametersCompute parametersCompute) async {
   FutureGroup<Response<dynamic>> group = FutureGroup<Response<dynamic>>();
   final List<String> pathsToDocuments = [];
@@ -268,17 +235,6 @@ Future<Map<String, String>> insertKanjiEntryComoputeVersion(
 
   await group.future;
 
-/*   final kanjiMap = {
-    'kanjiCharacter': parametersCompute.kanjiFromApi.kanjiCharacter,
-    'englishMeaning': parametersCompute.kanjiFromApi.englishMeaning,
-    'kanjiImageLink': pathsToDocuments[0],
-    'katakanaMeaning': parametersCompute.kanjiFromApi.katakanaMeaning,
-    'hiraganaMeaning': parametersCompute.kanjiFromApi.hiraganaMeaning,
-    'videoLink': pathsToDocuments[1],
-    'section': parametersCompute.kanjiFromApi.section
-  }; */
-
-  //await parametersCompute.dbKanjiFromApi.insert("kanji_FromApi", kanjiMap);
   return {
     'kanjiCharacter': parametersCompute.kanjiFromApi.kanjiCharacter,
     'englishMeaning': parametersCompute.kanjiFromApi.englishMeaning,
