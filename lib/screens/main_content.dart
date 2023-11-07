@@ -224,12 +224,6 @@ class _MainContentState extends ConsumerState<MainContent> {
     getInitData();
     Connectivity().checkConnectivity().then((result) =>
         ref.read(statusConnectionProvider.notifier).setInitialStatus(result));
-/*     subscription = Connectivity()
-        .onConnectivityChanged
-        .listen((ConnectivityResult result) {
-      // Got a new connectivity status!
-      print(result);
-    }); */
   }
 
   Widget selectScreen(int selectedPageIndex) {

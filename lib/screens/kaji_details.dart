@@ -244,6 +244,7 @@ class KanjiDetailsState extends ConsumerState<KanjiDetails> {
       appBar: AppBar(
         title: Text(widget.kanjiFromApi.kanjiCharacter),
         actions: [
+          IconButton(onPressed: () {}, icon: const Icon(Icons.quiz)),
           IconButton(
               onPressed: () {
                 final queryKanji = ref
