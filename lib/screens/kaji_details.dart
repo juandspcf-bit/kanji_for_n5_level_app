@@ -7,7 +7,9 @@ import 'package:flutter_svg/svg.dart';
 import 'package:kanji_for_n5_level_app/Databases/favorites_db_utils.dart';
 import 'package:kanji_for_n5_level_app/models/kanji_from_api.dart';
 import 'package:kanji_for_n5_level_app/providers/favorites_cached_provider.dart';
+import 'package:kanji_for_n5_level_app/providers/quiz_details_providers.dart';
 import 'package:kanji_for_n5_level_app/providers/status_stored_provider.dart';
+import 'package:kanji_for_n5_level_app/screens/quiz_details_screen.dart/quizz_details_screen.dart';
 import 'package:video_player/video_player.dart';
 
 class KanjiDetails extends ConsumerStatefulWidget {
@@ -244,7 +246,19 @@ class KanjiDetailsState extends ConsumerState<KanjiDetails> {
       appBar: AppBar(
         title: Text(widget.kanjiFromApi.kanjiCharacter),
         actions: [
-          IconButton(onPressed: () {}, icon: const Icon(Icons.quiz)),
+          IconButton(
+              onPressed: () {
+                ref
+                    .read(quizDetailsProvider.notifier)
+                    .suffleExamples(widget.kanjiFromApi);
+                ref.read(quizDetailsProvider.notifier).setQuizState(0);
+                Navigator.of(context).push(MaterialPageRoute(
+                  builder: (context) {
+                    return QuizDetailsScreen(kanjiFromApi: widget.kanjiFromApi);
+                  },
+                ));
+              },
+              icon: const Icon(Icons.quiz)),
           IconButton(
               onPressed: () {
                 final queryKanji = ref
