@@ -58,6 +58,8 @@ void insertPathsInDB(KanjiFromApi kanjifromApi) async {
     mapAudios['aac'] = e.audio.aac;
     mapAudios['ogg'] = e.audio.ogg;
     mapAudios['mp3'] = e.audio.mp3;
+    mapAudios['japanese'] = e.japanese;
+    mapAudios['meaning'] = e.meaning.english;
     mapAudios['kanjiCharacter'] = kanjifromApi.kanjiCharacter;
     return mapAudios;
   });
