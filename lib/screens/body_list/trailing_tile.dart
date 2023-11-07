@@ -1,14 +1,12 @@
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:kanji_for_n5_level_app/Databases/download_db_utils.dart';
 import 'package:kanji_for_n5_level_app/models/kanji_from_api.dart';
 import 'package:kanji_for_n5_level_app/networking/request_api.dart';
 import 'package:kanji_for_n5_level_app/providers/favorites_cached_provider.dart';
 import 'package:kanji_for_n5_level_app/providers/kanjis_list_provider.dart';
 import 'package:kanji_for_n5_level_app/providers/status_connection_provider.dart';
 import 'package:kanji_for_n5_level_app/providers/status_stored_provider.dart';
-import 'package:kanji_for_n5_level_app/screens/main_content.dart';
 
 class TrailingTile extends ConsumerWidget {
   const TrailingTile({
@@ -21,42 +19,6 @@ class TrailingTile extends ConsumerWidget {
   final KanjiFromApi kanjiFromApi;
   final void Function(KanjiFromApi kanjiFromApi) insertKanji;
   final void Function(KanjiFromApi kanjiFromApi) deleteKanji;
-
-  Widget _dialogError(BuildContext buildContext) {
-    return AlertDialog(
-      title: const Text(
-          'The max number of parallel downloads is three, please wait until they are finished'),
-      content: const Icon(
-        Icons.block,
-        color: Colors.amberAccent,
-        size: 70,
-      ),
-      actions: <Widget>[
-        TextButton(
-            onPressed: () {
-              Navigator.of(buildContext).pop();
-            },
-            child: const Text("Okay"))
-      ],
-    );
-  }
-
-  void _scaleDialogError(BuildContext buildContext) {
-    showGeneralDialog(
-      context: buildContext,
-      pageBuilder: (ctx, a1, a2) {
-        return Container();
-      },
-      transitionBuilder: (ctx, a1, a2, child) {
-        var curve = Curves.easeInOut.transform(a1.value);
-        return Transform.scale(
-          scale: curve,
-          child: _dialogError(buildContext),
-        );
-      },
-      transitionDuration: const Duration(milliseconds: 300),
-    );
-  }
 
   Widget selectWidgetStatus(KanjiFromApi kanjiFromApi, BuildContext context) {
     if (kanjiFromApi.statusStorage == StatusStorage.onlyOnline) {
@@ -145,42 +107,6 @@ class KanjiItemProcessingHelper {
   final WidgetRef ref;
   final BuildContext buildContext;
 
-  Widget _dialogError() {
-    return AlertDialog(
-      title: const Text(
-          'An issue happened when deleting this item, please go back to the section list and access the content again to see the updated content.'),
-      content: const Icon(
-        Icons.error_rounded,
-        color: Colors.amberAccent,
-        size: 70,
-      ),
-      actions: <Widget>[
-        TextButton(
-            onPressed: () {
-              Navigator.of(buildContext).pop();
-            },
-            child: const Text("Okay"))
-      ],
-    );
-  }
-
-  void _scaleDialogError() {
-    showGeneralDialog(
-      context: buildContext,
-      pageBuilder: (ctx, a1, a2) {
-        return Container();
-      },
-      transitionBuilder: (ctx, a1, a2, child) {
-        var curve = Curves.easeInOut.transform(a1.value);
-        return Transform.scale(
-          scale: curve,
-          child: _dialogError(),
-        );
-      },
-      transitionDuration: const Duration(milliseconds: 300),
-    );
-  }
-
   KanjiFromApi updateStatusKanji(
     StatusStorage statusStorage,
     bool accessToKanjiItemsButtons,
@@ -208,69 +134,6 @@ class KanjiItemProcessingHelper {
       void Function() onError) {
     RequestApi.getKanjis([], [kanjiFromApi.kanjiCharacter],
         kanjiFromApi.section, onSucces, onError);
-  }
-
-  void deleteKanjFromStorage() {
-    deleteKanjiFromApi(kanjiFromApi).then((deleteStatus) {
-      ref.read(statusStorageProvider.notifier).deleteItem(kanjiFromApi);
-      onSuccess(List<KanjiFromApi> list) {
-        if (selection) {
-          ref.read(favoritesCachedProvider.notifier).updateKanji(list[0]);
-        } else {
-          ref.read(kanjiListProvider.notifier).updateKanji(list[0]);
-        }
-      }
-
-      onError() {
-        //TODO handle error connection online
-
-        if (selection) {
-          ref.read(favoritesCachedProvider.notifier).updateKanji(
-              updateStatusKanji(
-                  StatusStorage.errorDeleting, true, kanjiFromApi));
-        } else {
-          ref.read(kanjiListProvider.notifier).updateKanji(updateStatusKanji(
-              StatusStorage.errorDeleting, true, kanjiFromApi));
-        }
-        _scaleDialogError();
-      }
-
-      updateKanjiWithOnliVersion(
-          kanjiFromApi, selection, ref, onSuccess, onError);
-    }).onError((error, stackTrace) {
-      //TODO handle error connection database and others
-
-      if (selection) {
-        ref.read(favoritesCachedProvider.notifier).updateKanji(
-            updateStatusKanji(StatusStorage.errorDeleting, true, kanjiFromApi));
-      } else {
-        ref.read(kanjiListProvider.notifier).updateKanji(
-            updateStatusKanji(StatusStorage.errorDeleting, true, kanjiFromApi));
-      }
-    });
-  }
-
-  void insertKanjiToStorage() {
-    insertKanjiFromApi(kanjiFromApi).then((kanjiFromApiStored) {
-      ref.read(statusStorageProvider.notifier).addItem(kanjiFromApiStored);
-
-      if (selection) {
-        ref
-            .read(favoritesCachedProvider.notifier)
-            .updateKanji(kanjiFromApiStored);
-      } else {
-        ref.read(kanjiListProvider.notifier).updateKanji(kanjiFromApiStored);
-      }
-    }).catchError((onError) {
-      logger.d('the error is $onError');
-      if (selection) {
-        ref.read(favoritesCachedProvider.notifier).updateKanji(
-            updateStatusKanji(StatusStorage.onlyOnline, true, kanjiFromApi));
-      } else {
-        ref.read(kanjiListProvider.notifier).updateKanji(
-            updateStatusKanji(StatusStorage.onlyOnline, true, kanjiFromApi));
-      }
-    });
   }
 
   void updateKanjiItemStatusToProcessingStatus(StatusStorage statusStorage) {
