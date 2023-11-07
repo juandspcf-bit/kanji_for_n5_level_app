@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kanji_for_n5_level_app/models/kanji_from_api.dart';
 
@@ -67,18 +65,20 @@ class QuizDetailsProvider extends Notifier<
       indexQuestion: index,
       audioQuestion: dataQuiz[index].audioQuestion,
       answer1: (
-        hiraganaMeaning: kanjiFromApi.hiraganaMeaning,
-        englishMeaning: kanjiFromApi.englishMeaning,
+        hiraganaMeaning: posibleAnswers[0].hiraganaMeaning,
+        englishMeaning: posibleAnswers[0].englishMeaning,
       ),
       answer2: (
-        hiraganaMeaning: kanjiFromApi.hiraganaMeaning,
-        englishMeaning: kanjiFromApi.englishMeaning,
+        hiraganaMeaning: posibleAnswers[1].hiraganaMeaning,
+        englishMeaning: posibleAnswers[1].englishMeaning,
       ),
       answer3: (
-        hiraganaMeaning: kanjiFromApi.hiraganaMeaning,
-        englishMeaning: kanjiFromApi.englishMeaning,
+        hiraganaMeaning: posibleAnswers[2].hiraganaMeaning,
+        englishMeaning: posibleAnswers[2].englishMeaning,
       ),
     );
+
+    state = value;
   }
 
   void suffleExamples(KanjiFromApi kanjiFromApi) {
