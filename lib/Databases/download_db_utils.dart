@@ -15,7 +15,13 @@ Future<Database> get kanjiFromApiDatabase async {
   final dbPath = await sql.getDatabasesPath();
   final db = await sql.openDatabase(
     path.join(dbPath, "downloadkanjis.db"),
-    onCreate: (db, version) {
+    onCreate: (db, version) async {
+      db.execute(
+          'CREATE TABLE strokes(id INTEGER PRIMARY KEY AUTOINCREMENT, strokeImageLink TEXT,'
+          ' kanjiCharacter TEXT)');
+      db.execute(
+          'CREATE TABLE examples(id INTEGER PRIMARY KEY AUTOINCREMENT, japanese TEXT,'
+          ' meaning TEXT, opus TEXT, aac TEXT, ogg TEXT, mp3 TEXT, kanjiCharacter TEXT)');
       return db.execute(
           'CREATE TABLE kanji_FromApi(id INTEGER PRIMARY KEY AUTOINCREMENT, kanjiCharacter TEXT,'
           ' englishMeaning TEXT, kanjiImageLink TEXT, katakanaMeaning TEXT, hiraganaMeaning TEXT, videoLink TEXT, section INTEGER)');
@@ -25,39 +31,9 @@ Future<Database> get kanjiFromApiDatabase async {
   return db;
 }
 
-Future<Database> get examplesDatabase async {
-  final dbPath = await sql.getDatabasesPath();
-  final db = await sql.openDatabase(
-    path.join(dbPath, "examples.db"),
-    onCreate: (db, version) {
-      return db.execute(
-          'CREATE TABLE examples(id INTEGER PRIMARY KEY AUTOINCREMENT, japanese TEXT,'
-          ' meaning TEXT, opus TEXT, aac TEXT, ogg TEXT, mp3 TEXT, kanjiCharacter TEXT)');
-    },
-    version: 1,
-  );
-  return db;
-}
-
-Future<Database> get strokesDatabase async {
-  final dbPath = await sql.getDatabasesPath();
-  final db = await sql.openDatabase(
-    path.join(dbPath, "strokes.db"),
-    onCreate: (db, version) {
-      return db.execute(
-          'CREATE TABLE strokes(id INTEGER PRIMARY KEY AUTOINCREMENT, strokeImageLink TEXT,'
-          ' kanjiCharacter TEXT)');
-    },
-    version: 1,
-  );
-  return db;
-}
-
 Future<List<KanjiFromApi>> loadStoredKanjis() async {
-  final dbKanjiFromApi = await kanjiFromApiDatabase;
-  final dbExamples = await examplesDatabase;
-  final dbStrokes = await strokesDatabase;
-  final dataKanjiFromApi = await dbKanjiFromApi.query('kanji_FromApi');
+  final db = await kanjiFromApiDatabase;
+  final dataKanjiFromApi = await db.query('kanji_FromApi');
 
   if (dataKanjiFromApi.isEmpty) return [];
 
@@ -65,7 +41,7 @@ Future<List<KanjiFromApi>> loadStoredKanjis() async {
 
   for (final mapKanjiFromDb in dataKanjiFromApi) {
     final kanjiCharacter = mapKanjiFromDb['kanjiCharacter'] as String;
-    final listMapExamplesFromDb = await dbExamples.rawQuery(
+    final listMapExamplesFromDb = await db.rawQuery(
         'SELECT * FROM examples WHERE kanjiCharacter = ? ', [kanjiCharacter]);
 
     final examples = listMapExamplesFromDb.map((exampleFromDb) {
@@ -81,7 +57,7 @@ Future<List<KanjiFromApi>> loadStoredKanjis() async {
           audio: audio);
     }).toList();
 
-    final listMapStrokesImagesLisnkFromDb = await dbStrokes.rawQuery(
+    final listMapStrokesImagesLisnkFromDb = await db.rawQuery(
         'SELECT * FROM strokes WHERE kanjiCharacter = ? ', [kanjiCharacter]);
 
     final listStrokesImagesLinks = listMapStrokesImagesLisnkFromDb

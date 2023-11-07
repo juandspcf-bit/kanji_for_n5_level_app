@@ -19,17 +19,15 @@ void deleteKanjiFromStorageComputeVersion(
   BuildContext buildContext,
 ) async {
   try {
-    final dbKanjiFromApi = await kanjiFromApiDatabase;
-    final dbExamples = await examplesDatabase;
-    final dbStrokes = await strokesDatabase;
+    final db = await kanjiFromApiDatabase;
 
-    final listKanjiMapFromDb = await dbKanjiFromApi.rawQuery(
+    final listKanjiMapFromDb = await db.rawQuery(
         'SELECT * FROM kanji_FromApi WHERE kanjiCharacter = ? ',
         [kanjiFromApi.kanjiCharacter]);
-    final listMapExamplesFromDb = await dbExamples.rawQuery(
+    final listMapExamplesFromDb = await db.rawQuery(
         'SELECT * FROM examples WHERE kanjiCharacter = ? ',
         [kanjiFromApi.kanjiCharacter]);
-    final listMapStrokesImagesLisnkFromDb = await dbStrokes.rawQuery(
+    final listMapStrokesImagesLisnkFromDb = await db.rawQuery(
         'SELECT * FROM strokes WHERE kanjiCharacter = ? ',
         [kanjiFromApi.kanjiCharacter]);
 
@@ -40,12 +38,11 @@ void deleteKanjiFromStorageComputeVersion(
 
     await compute(deleteKanjiFromApiComputeVersion, parametersDelete);
 
-    await dbKanjiFromApi.rawDelete(
-        'DELETE FROM kanji_FromApi WHERE kanjiCharacter = ?',
+    await db.rawDelete('DELETE FROM kanji_FromApi WHERE kanjiCharacter = ?',
         [kanjiFromApi.kanjiCharacter]);
-    await dbExamples.rawDelete('DELETE FROM examples WHERE kanjiCharacter = ?',
+    await db.rawDelete('DELETE FROM examples WHERE kanjiCharacter = ?',
         [kanjiFromApi.kanjiCharacter]);
-    await dbStrokes.rawDelete('DELETE FROM strokes WHERE kanjiCharacter = ?',
+    await db.rawDelete('DELETE FROM strokes WHERE kanjiCharacter = ?',
         [kanjiFromApi.kanjiCharacter]);
 
     ref.read(statusStorageProvider.notifier).deleteItem(kanjiFromApi);

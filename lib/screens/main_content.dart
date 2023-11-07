@@ -96,17 +96,14 @@ Future<(List<(KanjiFromApi, bool)>, List<(KanjiFromApi, bool)>)>
 
 Future<void> cleanInvaliDbRecords(
     List<KanjiFromApi> listOfInavlidKanjis) async {
-  final dbKanjiFromApi = await kanjiFromApiDatabase;
-  final dbExamples = await examplesDatabase;
-  final dbStrokes = await strokesDatabase;
+  final db = await kanjiFromApiDatabase;
 
   for (var kanjiFromApi in listOfInavlidKanjis) {
-    await dbKanjiFromApi.rawDelete(
-        'DELETE FROM kanji_FromApi WHERE kanjiCharacter = ?',
+    await db.rawDelete('DELETE FROM kanji_FromApi WHERE kanjiCharacter = ?',
         [kanjiFromApi.kanjiCharacter]);
-    await dbExamples.rawDelete('DELETE FROM examples WHERE kanjiCharacter = ?',
+    await db.rawDelete('DELETE FROM examples WHERE kanjiCharacter = ?',
         [kanjiFromApi.kanjiCharacter]);
-    await dbStrokes.rawDelete('DELETE FROM strokes WHERE kanjiCharacter = ?',
+    await db.rawDelete('DELETE FROM strokes WHERE kanjiCharacter = ?',
         [kanjiFromApi.kanjiCharacter]);
   }
 }

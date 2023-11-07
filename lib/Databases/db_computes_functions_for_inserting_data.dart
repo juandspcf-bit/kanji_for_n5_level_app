@@ -65,7 +65,7 @@ void insertPathsInDB(KanjiFromApi kanjifromApi) async {
   });
 
   FutureGroup<int> groupExamplesDb = FutureGroup<int>();
-  final dbExamples = await examplesDatabase;
+  final dbExamples = await kanjiFromApiDatabase;
   for (var exampleMap in exampleMaps) {
     groupExamplesDb.add(dbExamples.insert('examples', exampleMap));
   }
@@ -81,7 +81,7 @@ void insertPathsInDB(KanjiFromApi kanjifromApi) async {
       'kanjiCharacter': kanjifromApi.kanjiCharacter,
     };
   });
-  final dbStrokes = await strokesDatabase;
+  final dbStrokes = await kanjiFromApiDatabase;
   for (var strokesMap in strokes) {
     groupStrokesDb.add(dbStrokes.insert('strokes', strokesMap));
   }
