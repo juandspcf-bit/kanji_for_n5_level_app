@@ -32,33 +32,42 @@ class QuizDetailsProvider extends Notifier<
   }
 
   List<({String audioQuestion, String englishMeaning, String hiraganaMeaning})>
-      dataQuiz = [];
-  List<StateAnswersQuizDetails> answers = [];
+      _dataQuiz = [];
+  List<StateAnswersQuizDetails> _answers = [];
 
   int getQuizStateCurrentIndex() {
     return state.indexQuestion;
   }
 
+  int getQuizStateLenght() {
+    return _dataQuiz.length;
+  }
+
   void setQuizState(int index) {
-    final dataQuizCopy = [...dataQuiz];
+    final dataQuizCopy = [..._dataQuiz];
     dataQuizCopy.shuffle();
     int indexToRemove = dataQuizCopy.indexWhere((element) =>
-        element.hiraganaMeaning == dataQuiz[index].hiraganaMeaning);
+        element.hiraganaMeaning == _dataQuiz[index].hiraganaMeaning);
     dataQuizCopy.removeAt(indexToRemove);
     dataQuizCopy.shuffle();
-    final posibleAnswers = [
+    final List<
+        ({
+          String audioQuestion,
+          String hiraganaMeaning,
+          String englishMeaning
+        })> posibleAnswers = [
       (
-        audioQuestion: dataQuiz[index].audioQuestion,
-        hiraganaMeaning: dataQuiz[index].hiraganaMeaning,
-        englishMeaning: dataQuiz[index].englishMeaning,
+        audioQuestion: _dataQuiz[index].audioQuestion,
+        hiraganaMeaning: _dataQuiz[index].hiraganaMeaning,
+        englishMeaning: _dataQuiz[index].englishMeaning,
       ),
       (
-        audioQuestion: dataQuizCopy[index].audioQuestion,
+        audioQuestion: '',
         hiraganaMeaning: dataQuizCopy[0].hiraganaMeaning,
         englishMeaning: dataQuizCopy[0].englishMeaning,
       ),
       (
-        audioQuestion: dataQuizCopy[index].audioQuestion,
+        audioQuestion: '',
         hiraganaMeaning: dataQuizCopy[1].hiraganaMeaning,
         englishMeaning: dataQuizCopy[1].englishMeaning,
       ),
@@ -77,7 +86,7 @@ class QuizDetailsProvider extends Notifier<
       ({String hiraganaMeaning, String englishMeaning}) answer3,
     }) value = (
       indexQuestion: index,
-      audioQuestion: dataQuiz[index].audioQuestion,
+      audioQuestion: _dataQuiz[index].audioQuestion,
       selectedAnswer: 4,
       answer1: (
         hiraganaMeaning: posibleAnswers[0].hiraganaMeaning,
@@ -105,8 +114,9 @@ class QuizDetailsProvider extends Notifier<
             ))
         .toList();
     dataInit.shuffle();
-    dataQuiz = dataInit;
-    logger.d(dataQuiz);
+    _dataQuiz = dataInit;
+    _answers = List.filled(_dataQuiz.length, StateAnswersQuizDetails.ommitted);
+    logger.d(_dataQuiz);
     //mp3Audios = mp3AudiosInit;
   }
 
@@ -136,30 +146,44 @@ class QuizDetailsProvider extends Notifier<
       ),
     );
 
-    final correct = dataQuiz.firstWhere(
+    logger.d('answer type: $stateCopy');
+
+    final correct = _dataQuiz.firstWhere(
         (element) => element.audioQuestion == stateCopy.audioQuestion);
 
-    ({String englishMeaning, String hiraganaMeaning}) answerRadioTiles;
+    ({String hiraganaMeaning, String englishMeaning}) answerRadioTiles;
     if (selectedAnswer == 0) {
-      answerRadioTiles = stateCopy.answer1;
+      answerRadioTiles = (
+        hiraganaMeaning: stateCopy.answer1.hiraganaMeaning,
+        englishMeaning: stateCopy.answer1.englishMeaning
+      );
     } else if (selectedAnswer == 1) {
-      answerRadioTiles = stateCopy.answer2;
-    }
-    if (selectedAnswer == 2) {
-      answerRadioTiles = stateCopy.answer3;
+      answerRadioTiles = (
+        hiraganaMeaning: stateCopy.answer2.hiraganaMeaning,
+        englishMeaning: stateCopy.answer2.englishMeaning
+      );
+    } else if (selectedAnswer == 2) {
+      answerRadioTiles = (
+        hiraganaMeaning: stateCopy.answer3.hiraganaMeaning,
+        englishMeaning: stateCopy.answer3.englishMeaning
+      );
     } else {
       answerRadioTiles = (hiraganaMeaning: '', englishMeaning: '');
     }
 
     if (answerRadioTiles.hiraganaMeaning == '') {
-      answers[stateCopy.indexQuestion] = StateAnswersQuizDetails.ommitted;
+      _answers[stateCopy.indexQuestion] = StateAnswersQuizDetails.ommitted;
     } else if (answerRadioTiles.hiraganaMeaning == correct.hiraganaMeaning) {
-      answers[stateCopy.indexQuestion] = StateAnswersQuizDetails.correct;
+      _answers[stateCopy.indexQuestion] = StateAnswersQuizDetails.correct;
     } else {
-      answers[stateCopy.indexQuestion] = StateAnswersQuizDetails.incorrect;
+      _answers[stateCopy.indexQuestion] = StateAnswersQuizDetails.incorrect;
     }
-
+    logger.d('answer type: ${_answers[stateCopy.indexQuestion]}');
     state = stateCopy;
+  }
+
+  List<StateAnswersQuizDetails> getStatusAnswers() {
+    return _answers;
   }
 }
 
