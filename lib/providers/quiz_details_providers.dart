@@ -1,5 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kanji_for_n5_level_app/models/kanji_from_api.dart';
+import 'package:kanji_for_n5_level_app/providers/quiz_details_score_screen.dart';
+import 'package:kanji_for_n5_level_app/providers/select_quiz_details_screen.dart';
 import 'package:kanji_for_n5_level_app/screens/main_content.dart';
 
 class QuizDetailsProvider extends Notifier<
@@ -24,7 +26,7 @@ class QuizDetailsProvider extends Notifier<
     return (
       indexQuestion: 0,
       audioQuestion: "",
-      selectedAnswer: 0,
+      selectedAnswer: 4,
       answer1: (hiraganaMeaning: '', englishMeaning: ''),
       answer2: (hiraganaMeaning: '', englishMeaning: ''),
       answer3: (hiraganaMeaning: '', englishMeaning: ''),
@@ -38,6 +40,8 @@ class QuizDetailsProvider extends Notifier<
   void resetValues() {
     _dataQuiz.shuffle();
     _answers = List.filled(_dataQuiz.length, StateAnswersQuizDetails.ommitted);
+
+    setQuizState(0);
   }
 
   int getQuizStateCurrentIndex() {
@@ -46,6 +50,14 @@ class QuizDetailsProvider extends Notifier<
 
   int getQuizStateLenght() {
     return _dataQuiz.length;
+  }
+
+  bool isQuizDataLenghtReached() {
+    int currentIndex =
+        ref.read(quizDetailsProvider.notifier).getQuizStateCurrentIndex();
+
+    final length = getQuizStateLenght();
+    return (length - 1) == currentIndex;
   }
 
   void setQuizState(int index) {
@@ -110,7 +122,7 @@ class QuizDetailsProvider extends Notifier<
     state = value;
   }
 
-  void suffleExamples(KanjiFromApi kanjiFromApi) {
+  void setDataQuiz(KanjiFromApi kanjiFromApi) {
     final dataInit = kanjiFromApi.example
         .map((e) => (
               audioQuestion: e.audio.mp3,

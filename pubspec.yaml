@@ -55,6 +55,7 @@ dependencies:
   connectivity_plus: ^5.0.1
   logger: ^2.0.2+1
   flutter_native_splash: ^2.3.5
+  lottie: ^2.7.0
 
 dev_dependencies:
   flutter_test:
@@ -74,6 +75,7 @@ dev_dependencies:
 flutter:
   assets:
     - assets/images/
+    - assets/lottie_files/
 
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in

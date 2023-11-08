@@ -8,6 +8,7 @@ import 'package:kanji_for_n5_level_app/Databases/favorites_db_utils.dart';
 import 'package:kanji_for_n5_level_app/models/kanji_from_api.dart';
 import 'package:kanji_for_n5_level_app/providers/favorites_cached_provider.dart';
 import 'package:kanji_for_n5_level_app/providers/quiz_details_providers.dart';
+import 'package:kanji_for_n5_level_app/providers/select_quiz_details_screen.dart';
 import 'package:kanji_for_n5_level_app/providers/status_stored_provider.dart';
 import 'package:kanji_for_n5_level_app/screens/quiz_details_screen.dart/quizz_details_screen.dart';
 import 'package:video_player/video_player.dart';
@@ -250,8 +251,9 @@ class KanjiDetailsState extends ConsumerState<KanjiDetails> {
               onPressed: () {
                 ref
                     .read(quizDetailsProvider.notifier)
-                    .suffleExamples(widget.kanjiFromApi);
+                    .setDataQuiz(widget.kanjiFromApi);
                 ref.read(quizDetailsProvider.notifier).setQuizState(0);
+                ref.read(selectQuizDetailsProvider.notifier).setScreen(0);
                 Navigator.of(context).push(MaterialPageRoute(
                   builder: (context) {
                     return QuizDetailsScreen(kanjiFromApi: widget.kanjiFromApi);

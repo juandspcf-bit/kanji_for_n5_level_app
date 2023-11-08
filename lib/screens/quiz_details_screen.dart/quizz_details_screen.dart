@@ -8,6 +8,7 @@ import 'package:kanji_for_n5_level_app/providers/quiz_details_score_screen.dart'
 import 'package:kanji_for_n5_level_app/providers/select_quiz_details_screen.dart';
 import 'package:kanji_for_n5_level_app/providers/status_stored_provider.dart';
 import 'package:kanji_for_n5_level_app/screens/main_content.dart';
+import 'package:lottie/lottie.dart';
 
 class QuizDetailsScreen extends ConsumerStatefulWidget {
   const QuizDetailsScreen({super.key, required this.kanjiFromApi});
@@ -62,7 +63,7 @@ class QuestionScreen extends ConsumerWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text(
-                'Question 1 of 5',
+                'Question ${stateQuiz.indexQuestion + 1} of ${kanjiFromApi.example.length}',
                 style: Theme.of(context).textTheme.titleLarge,
               ),
             ],
@@ -127,21 +128,18 @@ class QuestionScreen extends ConsumerWidget {
           padding: const EdgeInsets.all(8.0),
           child: ElevatedButton.icon(
             onPressed: () {
-              int currentIndex = ref
+              if (ref
                   .read(quizDetailsProvider.notifier)
-                  .getQuizStateCurrentIndex();
-
-              final length =
-                  ref.read(quizDetailsProvider.notifier).getQuizStateLenght();
-              if ((length - 1) == currentIndex) {
+                  .isQuizDataLenghtReached()) {
                 ref.read(quizDetailsScoreProvider.notifier).setAnswers();
                 ref.read(selectQuizDetailsProvider.notifier).setScreen(1);
                 return;
               }
 
-              ref
-                  .read(quizDetailsProvider.notifier)
-                  .setQuizState(++currentIndex);
+              ref.read(quizDetailsProvider.notifier).setQuizState(ref
+                      .read(quizDetailsProvider.notifier)
+                      .getQuizStateCurrentIndex() +
+                  1);
             },
             style: ElevatedButton.styleFrom(
               textStyle: Theme.of(context).textTheme.bodyLarge,
@@ -245,6 +243,59 @@ class QuizDetailsScore extends ConsumerWidget {
     final scores = ref.watch(quizDetailsScoreProvider);
     return Column(
       children: [
+        const SizedBox(
+          height: 20,
+        ),
+        Wrap(
+          alignment: WrapAlignment.start,
+          spacing: 30,
+
+          //mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                const Icon(
+                  Icons.square,
+                  color: Color.fromARGB(255, 229, 243, 33),
+                ),
+                Text(
+                  'Correct\n answers:\n ${scores.correctAnswers.length}',
+                  textAlign: TextAlign.center,
+                ),
+              ],
+            ),
+            Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                const Icon(
+                  Icons.square,
+                  color: Color.fromARGB(255, 194, 88, 27),
+                ),
+                Text(
+                  'Incorrect\n answers:\n ${scores.incorrectAnwers.length}',
+                  textAlign: TextAlign.center,
+                ),
+              ],
+            ),
+            Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                const Icon(
+                  Icons.square,
+                  color: Color.fromARGB(255, 33, 72, 243),
+                ),
+                Text(
+                  'Omited\n answers:\n ${scores.omitted.length}',
+                  textAlign: TextAlign.center,
+                ),
+              ],
+            ),
+          ],
+        ),
+        const SizedBox(
+          height: 20,
+        ),
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -300,6 +351,9 @@ class QuizDetailsScore extends ConsumerWidget {
             ),
           ],
         ),
+        const SizedBox(
+          height: 20,
+        ),
         Padding(
           padding: const EdgeInsets.all(8.0),
           child: ElevatedButton.icon(
@@ -313,7 +367,7 @@ class QuizDetailsScore extends ConsumerWidget {
                   (Theme.of(context).textTheme.bodyLarge!.height ?? 30) + 10),
             ),
             icon: const Icon(Icons.arrow_circle_right),
-            label: const Text('Next'),
+            label: const Text('Restart quiz'),
           ),
         ),
       ],
