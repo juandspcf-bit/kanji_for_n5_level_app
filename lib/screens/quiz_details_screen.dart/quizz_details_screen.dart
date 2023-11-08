@@ -134,6 +134,7 @@ class QuestionScreen extends ConsumerWidget {
               final length =
                   ref.read(quizDetailsProvider.notifier).getQuizStateLenght();
               if ((length - 1) == currentIndex) {
+                ref.read(quizDetailsScoreProvider.notifier).setAnswers();
                 ref.read(selectQuizDetailsProvider.notifier).setScreen(1);
                 return;
               }
@@ -242,57 +243,77 @@ class QuizDetailsScore extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final scores = ref.watch(quizDetailsScoreProvider);
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
+    return Column(
       children: [
-        Container(
-          width: 256,
-          height: 256,
-          color: Theme.of(context).scaffoldBackgroundColor,
-          child: BarChart(
-            BarChartData(
-                titlesData: titlesData,
-                gridData: const FlGridData(show: false),
-                alignment: BarChartAlignment.spaceAround,
-                borderData: borderData,
-                barGroups: [
-                  BarChartGroupData(
-                    x: 0,
-                    barsSpace: 20,
-                    barRods: [
-                      BarChartRodData(
-                          width: 10,
-                          toY: scores.correctAnswers.length.toDouble(),
-                          //color: Colors.amber,
-                          gradient: _barsGradientCorrect),
-                    ],
-                  ),
-                  BarChartGroupData(
-                    x: 1,
-                    barRods: [
-                      BarChartRodData(
-                        width: 10,
-                        toY: scores.incorrectAnwers.length.toDouble(),
-                        gradient: _barsGradientIncorrect,
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Container(
+              width: 256,
+              height: 256,
+              color: Theme.of(context).scaffoldBackgroundColor,
+              child: BarChart(
+                BarChartData(
+                    titlesData: titlesData,
+                    gridData: const FlGridData(show: false),
+                    alignment: BarChartAlignment.spaceAround,
+                    borderData: borderData,
+                    barGroups: [
+                      BarChartGroupData(
+                        x: 0,
+                        barsSpace: 20,
+                        barRods: [
+                          BarChartRodData(
+                              width: 10,
+                              toY: scores.correctAnswers.length.toDouble(),
+                              //color: Colors.amber,
+                              gradient: _barsGradientCorrect),
+                        ],
                       ),
-                    ],
-                  ),
-                  BarChartGroupData(
-                    x: 2,
-                    barRods: [
-                      BarChartRodData(
-                        width: 10,
-                        toY: scores.omitted.length.toDouble(),
-                        gradient: _barsGradientOmited,
+                      BarChartGroupData(
+                        x: 1,
+                        barRods: [
+                          BarChartRodData(
+                            width: 10,
+                            toY: scores.incorrectAnwers.length.toDouble(),
+                            gradient: _barsGradientIncorrect,
+                          ),
+                        ],
                       ),
-                    ],
-                  )
-                ]
-                // read about it in the BarChartData section
-                ),
-            swapAnimationDuration:
-                const Duration(milliseconds: 150), // Optional
-            swapAnimationCurve: Curves.linear, // Optional
+                      BarChartGroupData(
+                        x: 2,
+                        barRods: [
+                          BarChartRodData(
+                            width: 10,
+                            toY: scores.omitted.length.toDouble(),
+                            gradient: _barsGradientOmited,
+                          ),
+                        ],
+                      )
+                    ]
+                    // read about it in the BarChartData section
+                    ),
+                swapAnimationDuration:
+                    const Duration(milliseconds: 150), // Optional
+                swapAnimationCurve: Curves.linear, // Optional
+              ),
+            ),
+          ],
+        ),
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: ElevatedButton.icon(
+            onPressed: () {
+              ref.read(quizDetailsProvider.notifier).resetValues();
+              ref.read(selectQuizDetailsProvider.notifier).setScreen(0);
+            },
+            style: ElevatedButton.styleFrom(
+              textStyle: Theme.of(context).textTheme.bodyLarge,
+              minimumSize: Size.fromHeight(
+                  (Theme.of(context).textTheme.bodyLarge!.height ?? 30) + 10),
+            ),
+            icon: const Icon(Icons.arrow_circle_right),
+            label: const Text('Next'),
           ),
         ),
       ],

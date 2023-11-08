@@ -13,9 +13,25 @@ class QuizDetailsScoreProvider extends Notifier<
     List<StateAnswersQuizDetails> incorrectAnwers,
     List<StateAnswersQuizDetails> omitted
   }) build() {
+    return (
+      correctAnswers: [],
+      incorrectAnwers: [],
+      omitted: [],
+    );
+  }
+
+  void resetStateScoreQuizDetails() {
+    state = (
+      correctAnswers: [],
+      incorrectAnwers: [],
+      omitted: [],
+    );
+  }
+
+  void setAnswers() {
     final answers = ref.read(quizDetailsProvider.notifier).getStatusAnswers();
 
-    return (
+    state = (
       correctAnswers:
           answers.where((e) => e == StateAnswersQuizDetails.correct).toList(),
       incorrectAnwers:

@@ -35,6 +35,11 @@ class QuizDetailsProvider extends Notifier<
       _dataQuiz = [];
   List<StateAnswersQuizDetails> _answers = [];
 
+  void resetValues() {
+    _dataQuiz.shuffle();
+    _answers = List.filled(_dataQuiz.length, StateAnswersQuizDetails.ommitted);
+  }
+
   int getQuizStateCurrentIndex() {
     return state.indexQuestion;
   }
