@@ -33,11 +33,18 @@ class QuizDetailsProvider extends Notifier<
 
   List<({String audioQuestion, String englishMeaning, String hiraganaMeaning})>
       dataQuiz = [];
+  List<StateAnswersQuizDetails> answers = [];
+
+  int getQuizStateCurrentIndex() {
+    return state.indexQuestion;
+  }
 
   void setQuizState(int index) {
-    final dataQuizCopy = dataQuiz;
+    final dataQuizCopy = [...dataQuiz];
     dataQuizCopy.shuffle();
-    dataQuizCopy.remove(dataQuiz[index]);
+    int indexToRemove = dataQuizCopy.indexWhere((element) =>
+        element.hiraganaMeaning == dataQuiz[index].hiraganaMeaning);
+    dataQuizCopy.removeAt(indexToRemove);
     dataQuizCopy.shuffle();
     final posibleAnswers = [
       (
@@ -59,6 +66,8 @@ class QuizDetailsProvider extends Notifier<
 
     posibleAnswers.shuffle();
 
+    logger.d('the possible answers are $posibleAnswers');
+
     ({
       int indexQuestion,
       String audioQuestion,
@@ -69,7 +78,7 @@ class QuizDetailsProvider extends Notifier<
     }) value = (
       indexQuestion: index,
       audioQuestion: dataQuiz[index].audioQuestion,
-      selectedAnswer: 0,
+      selectedAnswer: 4,
       answer1: (
         hiraganaMeaning: posibleAnswers[0].hiraganaMeaning,
         englishMeaning: posibleAnswers[0].englishMeaning,
@@ -100,6 +109,58 @@ class QuizDetailsProvider extends Notifier<
     logger.d(dataQuiz);
     //mp3Audios = mp3AudiosInit;
   }
+
+  void setAnswer(int selectedAnswer) {
+    ({
+      int indexQuestion,
+      String audioQuestion,
+      int selectedAnswer,
+      ({String hiraganaMeaning, String englishMeaning}) answer1,
+      ({String hiraganaMeaning, String englishMeaning}) answer2,
+      ({String hiraganaMeaning, String englishMeaning}) answer3,
+    }) stateCopy = (
+      indexQuestion: state.indexQuestion,
+      audioQuestion: state.audioQuestion,
+      selectedAnswer: selectedAnswer,
+      answer1: (
+        hiraganaMeaning: state.answer1.hiraganaMeaning,
+        englishMeaning: state.answer1.englishMeaning,
+      ),
+      answer2: (
+        hiraganaMeaning: state.answer2.hiraganaMeaning,
+        englishMeaning: state.answer2.englishMeaning,
+      ),
+      answer3: (
+        hiraganaMeaning: state.answer3.hiraganaMeaning,
+        englishMeaning: state.answer3.englishMeaning,
+      ),
+    );
+
+    final correct = dataQuiz.firstWhere(
+        (element) => element.audioQuestion == stateCopy.audioQuestion);
+
+    ({String englishMeaning, String hiraganaMeaning}) answerRadioTiles;
+    if (selectedAnswer == 0) {
+      answerRadioTiles = stateCopy.answer1;
+    } else if (selectedAnswer == 1) {
+      answerRadioTiles = stateCopy.answer2;
+    }
+    if (selectedAnswer == 2) {
+      answerRadioTiles = stateCopy.answer3;
+    } else {
+      answerRadioTiles = (hiraganaMeaning: '', englishMeaning: '');
+    }
+
+    if (answerRadioTiles.hiraganaMeaning == '') {
+      answers[stateCopy.indexQuestion] = StateAnswersQuizDetails.ommitted;
+    } else if (answerRadioTiles.hiraganaMeaning == correct.hiraganaMeaning) {
+      answers[stateCopy.indexQuestion] = StateAnswersQuizDetails.correct;
+    } else {
+      answers[stateCopy.indexQuestion] = StateAnswersQuizDetails.incorrect;
+    }
+
+    state = stateCopy;
+  }
 }
 
 final quizDetailsProvider = NotifierProvider<
@@ -112,3 +173,5 @@ final quizDetailsProvider = NotifierProvider<
       ({String hiraganaMeaning, String englishMeaning}) answer2,
       ({String hiraganaMeaning, String englishMeaning}) answer3,
     })>(QuizDetailsProvider.new);
+
+enum StateAnswersQuizDetails { correct, incorrect, ommitted }
