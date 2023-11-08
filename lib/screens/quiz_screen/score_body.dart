@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:kanji_for_n5_level_app/screens/quiz_screen/screen_chart.dart';
+import 'package:lottie/lottie.dart';
 
 class ScoreBody extends StatefulWidget {
   const ScoreBody({
@@ -41,6 +42,8 @@ class _ScoreBodyState extends State<ScoreBody> {
     return (countCorrects, countIncorrects, countOmited);
   }
 
+  double _opacity = 1.0;
+  bool _visibility = true;
   @override
   void initState() {
     super.initState();
@@ -48,86 +51,114 @@ class _ScoreBodyState extends State<ScoreBody> {
     countCorrects = counts.$1;
     countIncorrects = counts.$2;
     countOmited = counts.$3;
+    Future<double>.delayed(const Duration(seconds: 3), () => 0.0).then((value) {
+      setState(() {
+        _opacity = value;
+      });
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        const SizedBox(
-          height: 20,
-        ),
-        Text(
-          "This is the stats of your quiz",
-          style: Theme.of(context).textTheme.titleMedium,
-        ),
-        const SizedBox(
-          height: 20,
-        ),
-        Wrap(
-          alignment: WrapAlignment.start,
-          spacing: 30,
+    return Stack(children: [
+      Column(
+        children: [
+          const SizedBox(
+            height: 20,
+          ),
+          Text(
+            "This is the stats of your quiz",
+            style: Theme.of(context).textTheme.titleMedium,
+          ),
+          const SizedBox(
+            height: 20,
+          ),
+          Wrap(
+            alignment: WrapAlignment.start,
+            spacing: 30,
 
-          //mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                const Icon(
-                  Icons.square,
-                  color: Color.fromARGB(255, 229, 243, 33),
-                ),
-                Text(
-                  'Correct\n answers:\n $countCorrects',
-                  textAlign: TextAlign.center,
-                ),
-              ],
-            ),
-            Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                const Icon(
-                  Icons.square,
-                  color: Color.fromARGB(255, 194, 88, 27),
-                ),
-                Text(
-                  'Incorrect\n answers:\n $countIncorrects',
-                  textAlign: TextAlign.center,
-                ),
-              ],
-            ),
-            Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                const Icon(
-                  Icons.square,
-                  color: Color.fromARGB(255, 33, 72, 243),
-                ),
-                Text(
-                  'Omited\n answers:\n $countOmited',
-                  textAlign: TextAlign.center,
-                ),
-              ],
-            ),
-          ],
-        ),
-        const SizedBox(
-          height: 40,
-        ),
-        ScreenChart(
-          countCorrects: countCorrects,
-          countIncorrects: countIncorrects,
-          countOmited: countOmited,
-        ),
-        const SizedBox(
-          height: 40,
-        ),
-        ElevatedButton(
+            //mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const Icon(
+                    Icons.square,
+                    color: Color.fromARGB(255, 229, 243, 33),
+                  ),
+                  Text(
+                    'Correct\n answers:\n $countCorrects',
+                    textAlign: TextAlign.center,
+                  ),
+                ],
+              ),
+              Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const Icon(
+                    Icons.square,
+                    color: Color.fromARGB(255, 194, 88, 27),
+                  ),
+                  Text(
+                    'Incorrect\n answers:\n $countIncorrects',
+                    textAlign: TextAlign.center,
+                  ),
+                ],
+              ),
+              Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const Icon(
+                    Icons.square,
+                    color: Color.fromARGB(255, 33, 72, 243),
+                  ),
+                  Text(
+                    'Omited\n answers:\n $countOmited',
+                    textAlign: TextAlign.center,
+                  ),
+                ],
+              ),
+            ],
+          ),
+          const SizedBox(
+            height: 40,
+          ),
+          ScreenChart(
+            countCorrects: countCorrects,
+            countIncorrects: countIncorrects,
+            countOmited: countOmited,
+          ),
+          const SizedBox(
+            height: 40,
+          ),
+          ElevatedButton(
             onPressed: () {
               widget.resetTheQuiz();
             },
-            child: const Text('Restart quiz'))
-      ],
-    );
+            style: ElevatedButton.styleFrom(
+              textStyle: Theme.of(context).textTheme.bodyLarge,
+              minimumSize: Size.fromHeight(
+                  (Theme.of(context).textTheme.bodyLarge!.height ?? 30) + 10),
+            ),
+            child: const Text('Restart quiz'),
+          )
+        ],
+      ),
+      Visibility(
+        visible: (_visibility && countIncorrects == 0 && countOmited == 0),
+        child: AnimatedOpacity(
+          opacity: _opacity,
+          duration: const Duration(milliseconds: 3000),
+          // The green box must be a child of the AnimatedOpacity widget.
+          child: Lottie.asset('assets/lottie_files/congrats.json',
+              fit: BoxFit.fitWidth),
+          onEnd: () {
+            setState(() {
+              _visibility = false;
+            });
+          },
+        ),
+      ),
+    ]);
   }
 }

@@ -14,10 +14,10 @@ enum Screens { quiz, score }
 class QuizScreen extends ConsumerStatefulWidget {
   const QuizScreen({
     super.key,
-    required this.kanjisModel,
+    required this.kanjisFromApi,
   });
 
-  final List<KanjiFromApi> kanjisModel;
+  final List<KanjiFromApi> kanjisFromApi;
 
   @override
   ConsumerState<QuizScreen> createState() => _QuizScreenState();
@@ -62,7 +62,7 @@ class _QuizScreenState extends ConsumerState<QuizScreen> {
   }
 
   List<KanjiFromApi> suffleData() {
-    final copy1 = [...widget.kanjisModel];
+    final copy1 = [...widget.kanjisFromApi];
     copy1.shuffle();
     return copy1;
   }
@@ -90,7 +90,7 @@ class _QuizScreenState extends ConsumerState<QuizScreen> {
     randomKanjisToAskMeaning = suffleData();
     index = 0;
     randomSolutions = getPosibleSolutions(randomKanjisToAskMeaning[index]);
-    final initValues = initLinks(widget.kanjisModel.length);
+    final initValues = initLinks(widget.kanjisFromApi.length);
     imageLinksFromDraggedItems = initValues.$1;
     initialOpacities = initValues.$2;
     isDraggeInitialList = initValues.$3;
@@ -401,7 +401,9 @@ class _QuizScreenState extends ConsumerState<QuizScreen> {
                           final isDraggedList = <bool>[];
                           final isDraggegImageLink = <String>[];
                           final opacityValues = <double>[];
-                          for (int i = 0; i < widget.kanjisModel.length; i++) {
+                          for (int i = 0;
+                              i < widget.kanjisFromApi.length;
+                              i++) {
                             isDraggedList.add(false);
                             isDraggegImageLink.add("");
                             opacityValues.add(0.0);
@@ -433,13 +435,13 @@ class _QuizScreenState extends ConsumerState<QuizScreen> {
                           if (!isDraggeInitialList[index]) {
                             isOmittedAnswer[index] = true;
                           }
-                          if (index < widget.kanjisModel.length - 1) {
+                          if (index < widget.kanjisFromApi.length - 1) {
                             setState(() {
                               index++;
                               randomSolutions = getPosibleSolutions(
                                   randomKanjisToAskMeaning[index]);
                               final initValues =
-                                  initLinks(widget.kanjisModel.length);
+                                  initLinks(widget.kanjisFromApi.length);
                               imageLinksFromDraggedItems = initValues.$1;
                               initialOpacities = initValues.$2;
                               isDraggeInitialList = initValues.$3;

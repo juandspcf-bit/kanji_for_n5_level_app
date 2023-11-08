@@ -129,7 +129,7 @@ class _KanjiSectionListState extends ConsumerState<KanjiSectionList> {
                         Navigator.of(context).push(
                           MaterialPageRoute(
                             builder: (ctx) {
-                              return QuizScreen(kanjisModel: kanjiList.$1);
+                              return QuizScreen(kanjisFromApi: kanjiList.$1);
                             },
                           ),
                         );
