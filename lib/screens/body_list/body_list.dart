@@ -4,6 +4,8 @@ import 'package:kanji_for_n5_level_app/Databases/db_computes_functions_for_delet
 import 'package:kanji_for_n5_level_app/Databases/db_computes_functions_for_inserting_data.dart';
 import 'package:kanji_for_n5_level_app/models/kanji_from_api.dart';
 import 'package:kanji_for_n5_level_app/providers/favorite_screen_selection_provider.dart';
+import 'package:kanji_for_n5_level_app/providers/favorites_cached_provider.dart';
+import 'package:kanji_for_n5_level_app/providers/kanjis_list_provider.dart';
 import 'package:kanji_for_n5_level_app/providers/status_stored_provider.dart';
 import 'package:kanji_for_n5_level_app/screens/body_list/kanji_item.dart';
 import 'package:kanji_for_n5_level_app/screens/body_list/trailing_tile.dart';
@@ -33,20 +35,34 @@ class _BodiKanjiListState extends ConsumerState<BodyKanjisList> {
   ) {
     final selection =
         ref.read(favoriteScreenSelectionProvider.notifier).getSelection();
-    final kanjiItemProcessingHelper =
-        KanjiItemProcessingHelper(kanjiFromApi, selection, ref, context);
-    kanjiItemProcessingHelper.updateKanjiItemStatusToProcessingStatus(
-        StatusStorage.proccessingStoring);
+    if (selection) {
+      ref.read(favoritesCachedProvider.notifier).updateKanji(
+            updateStatusKanji(
+                StatusStorage.proccessingStoring, false, kanjiFromApi),
+          );
+    } else {
+      ref.read(kanjiListProvider.notifier).updateKanji(
+            updateStatusKanji(
+                StatusStorage.proccessingStoring, false, kanjiFromApi),
+          );
+    }
     insertKanjiToStorageComputeVersion(kanjiFromApi, ref, selection);
   }
 
   void deleteKanji(KanjiFromApi kanjiFromApi) {
     final selection =
         ref.read(favoriteScreenSelectionProvider.notifier).getSelection();
-    final kanjiItemProcessingHelper =
-        KanjiItemProcessingHelper(kanjiFromApi, selection, ref, context);
-    kanjiItemProcessingHelper.updateKanjiItemStatusToProcessingStatus(
-        StatusStorage.proccessingDeleting);
+    if (selection) {
+      ref.read(favoritesCachedProvider.notifier).updateKanji(
+            updateStatusKanji(
+                StatusStorage.proccessingStoring, false, kanjiFromApi),
+          );
+    } else {
+      ref.read(kanjiListProvider.notifier).updateKanji(
+            updateStatusKanji(
+                StatusStorage.proccessingDeleting, false, kanjiFromApi),
+          );
+    }
     deleteKanjiFromStorageComputeVersion(
       kanjiFromApi,
       ref,

@@ -1,6 +1,14 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:kanji_for_n5_level_app/Databases/db_computes_functions_for_deleting_data.dart';
+import 'package:kanji_for_n5_level_app/Databases/db_computes_functions_for_inserting_data.dart';
+import 'package:kanji_for_n5_level_app/Databases/download_db_utils.dart';
 import 'package:kanji_for_n5_level_app/models/kanji_from_api.dart';
 import 'package:kanji_for_n5_level_app/networking/request_api.dart';
+import 'package:kanji_for_n5_level_app/providers/favorites_cached_provider.dart';
+import 'package:kanji_for_n5_level_app/providers/status_stored_provider.dart';
+import 'package:kanji_for_n5_level_app/screens/main_content.dart';
+import 'package:path_provider/path_provider.dart';
 
 class KanjiListProvider extends Notifier<(List<KanjiFromApi>, int, int)> {
   @override
@@ -45,6 +53,105 @@ class KanjiListProvider extends Notifier<(List<KanjiFromApi>, int, int)> {
 
   void clearKanjiList(int section) {
     state = ([], 0, section);
+  }
+
+  void insertKanjiToStorageComputeVersion(
+      KanjiFromApi kanjiFromApi, bool selection) async {
+    try {
+      final dirDocumentPath = await getApplicationDocumentsDirectory();
+      final kanjiFromApiStored = await compute(
+          insertKanjiFromApiComputeVersion,
+          ParametersCompute(
+            kanjiFromApi: kanjiFromApi,
+            path: dirDocumentPath,
+          ));
+
+      insertPathsInDB(kanjiFromApiStored);
+      ref.read(statusStorageProvider.notifier).addItem(kanjiFromApiStored);
+
+      if (selection) {
+        ref
+            .read(favoritesCachedProvider.notifier)
+            .updateKanji(kanjiFromApiStored);
+      } else {
+        ref.read(kanjiListProvider.notifier).updateKanji(kanjiFromApiStored);
+      }
+      logger.i(kanjiFromApiStored);
+      logger.d('success');
+    } catch (e) {
+      logger.e('error sotoring');
+      logger.e(e.toString());
+    }
+  }
+
+  void deleteKanjiFromStorageComputeVersion(
+    KanjiFromApi kanjiFromApi,
+    bool selection,
+  ) async {
+    try {
+      final db = await kanjiFromApiDatabase;
+
+      final listKanjiMapFromDb = await db.rawQuery(
+          'SELECT * FROM kanji_FromApi WHERE kanjiCharacter = ? ',
+          [kanjiFromApi.kanjiCharacter]);
+      final listMapExamplesFromDb = await db.rawQuery(
+          'SELECT * FROM examples WHERE kanjiCharacter = ? ',
+          [kanjiFromApi.kanjiCharacter]);
+      final listMapStrokesImagesLisnkFromDb = await db.rawQuery(
+          'SELECT * FROM strokes WHERE kanjiCharacter = ? ',
+          [kanjiFromApi.kanjiCharacter]);
+
+      final parametersDelete = ParametersDelete(
+          listKanjiMapFromDb: listKanjiMapFromDb,
+          listMapExamplesFromDb: listMapExamplesFromDb,
+          listMapStrokesImagesLisnkFromDb: listMapStrokesImagesLisnkFromDb);
+
+      await compute(deleteKanjiFromApiComputeVersion, parametersDelete);
+
+      await db.rawDelete('DELETE FROM kanji_FromApi WHERE kanjiCharacter = ?',
+          [kanjiFromApi.kanjiCharacter]);
+      await db.rawDelete('DELETE FROM examples WHERE kanjiCharacter = ?',
+          [kanjiFromApi.kanjiCharacter]);
+      await db.rawDelete('DELETE FROM strokes WHERE kanjiCharacter = ?',
+          [kanjiFromApi.kanjiCharacter]);
+
+      ref.read(statusStorageProvider.notifier).deleteItem(kanjiFromApi);
+
+      onSuccess(List<KanjiFromApi> list) {
+        if (selection) {
+          ref.read(favoritesCachedProvider.notifier).updateKanji(list[0]);
+        } else {
+          ref.read(kanjiListProvider.notifier).updateKanji(list[0]);
+        }
+      }
+
+      onError() {
+        //TODO handle error connection online
+
+        if (selection) {
+          ref.read(favoritesCachedProvider.notifier).updateKanji(
+              updateStatusKanjiComputeVersion(
+                  StatusStorage.errorDeleting, true, kanjiFromApi));
+        } else {
+          ref.read(kanjiListProvider.notifier).updateKanji(
+              updateStatusKanjiComputeVersion(
+                  StatusStorage.errorDeleting, true, kanjiFromApi));
+        }
+        //_scaleDialogError(buildContext);
+      }
+
+      updateKanjiWithOnliVersionComputeVersion(
+          kanjiFromApi, selection, onSuccess, onError);
+
+      logger.d('success');
+    } catch (e) {
+/*     if (buildContext.mounted) {
+      _scaleDialogError(buildContext);
+    } */
+
+      logger.e('error sotoring');
+      logger.e(e.toString());
+    }
   }
 }
 

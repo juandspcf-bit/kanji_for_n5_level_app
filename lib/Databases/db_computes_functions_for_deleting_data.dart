@@ -71,7 +71,7 @@ void deleteKanjiFromStorageComputeVersion(
     }
 
     updateKanjiWithOnliVersionComputeVersion(
-        kanjiFromApi, selection, ref, onSuccess, onError);
+        kanjiFromApi, selection, onSuccess, onError);
 
     logger.d('success');
   } catch (e) {
@@ -184,7 +184,6 @@ Future<void> deleteKanjiFromApiComputeVersion(
 void updateKanjiWithOnliVersionComputeVersion(
     KanjiFromApi kanjiFromApi,
     bool selection,
-    WidgetRef ref,
     void Function(List<KanjiFromApi> data) onSucces,
     void Function() onError) {
   RequestApi.getKanjis([], [kanjiFromApi.kanjiCharacter], kanjiFromApi.section,

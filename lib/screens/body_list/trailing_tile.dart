@@ -2,8 +2,6 @@ import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kanji_for_n5_level_app/models/kanji_from_api.dart';
-import 'package:kanji_for_n5_level_app/networking/request_api.dart';
-import 'package:kanji_for_n5_level_app/providers/favorites_cached_provider.dart';
 import 'package:kanji_for_n5_level_app/providers/kanjis_list_provider.dart';
 import 'package:kanji_for_n5_level_app/providers/status_connection_provider.dart';
 import 'package:kanji_for_n5_level_app/providers/status_stored_provider.dart';
@@ -80,14 +78,14 @@ class TrailingTile extends ConsumerWidget {
         final resultStatus = ref.read(statusConnectionProvider);
         if (ConnectivityResult.none == resultStatus) {
           showSnackBarQuizz(
-              context, 'you shoul be connected to performn this acction', 3);
+              context, 'you shoul be connected to perform this acction', 3);
           return;
         }
 
         if (kanjiFromApi.statusStorage == StatusStorage.onlyOnline) {
-          insertKanji(kanjiFromApi);
+          //insertKanji(kanjiFromApi);
         } else if (kanjiFromApi.statusStorage == StatusStorage.stored) {
-          deleteKanji(kanjiFromApi);
+          //deleteKanji(kanjiFromApi);
         }
       },
       child: Container(
@@ -98,53 +96,21 @@ class TrailingTile extends ConsumerWidget {
   }
 }
 
-class KanjiItemProcessingHelper {
-  const KanjiItemProcessingHelper(
-      this.kanjiFromApi, this.selection, this.ref, this.buildContext);
-
-  final KanjiFromApi kanjiFromApi;
-  final bool selection;
-  final WidgetRef ref;
-  final BuildContext buildContext;
-
-  KanjiFromApi updateStatusKanji(
-    StatusStorage statusStorage,
-    bool accessToKanjiItemsButtons,
-    KanjiFromApi kanjiFromApi,
-  ) {
-    return KanjiFromApi(
-        kanjiCharacter: kanjiFromApi.kanjiCharacter,
-        englishMeaning: kanjiFromApi.englishMeaning,
-        kanjiImageLink: kanjiFromApi.kanjiImageLink,
-        katakanaMeaning: kanjiFromApi.katakanaMeaning,
-        hiraganaMeaning: kanjiFromApi.hiraganaMeaning,
-        videoLink: kanjiFromApi.videoLink,
-        section: kanjiFromApi.section,
-        statusStorage: statusStorage,
-        accessToKanjiItemsButtons: accessToKanjiItemsButtons,
-        example: kanjiFromApi.example,
-        strokes: kanjiFromApi.strokes);
-  }
-
-  void updateKanjiWithOnliVersion(
-      KanjiFromApi kanjiFromApi,
-      bool selection,
-      WidgetRef ref,
-      void Function(List<KanjiFromApi> data) onSucces,
-      void Function() onError) {
-    RequestApi.getKanjis([], [kanjiFromApi.kanjiCharacter],
-        kanjiFromApi.section, onSucces, onError);
-  }
-
-  void updateKanjiItemStatusToProcessingStatus(StatusStorage statusStorage) {
-    if (selection) {
-      ref.read(favoritesCachedProvider.notifier).updateKanji(
-            updateStatusKanji(statusStorage, false, kanjiFromApi),
-          );
-    } else {
-      ref.read(kanjiListProvider.notifier).updateKanji(
-            updateStatusKanji(statusStorage, false, kanjiFromApi),
-          );
-    }
-  }
+KanjiFromApi updateStatusKanji(
+  StatusStorage statusStorage,
+  bool accessToKanjiItemsButtons,
+  KanjiFromApi kanjiFromApi,
+) {
+  return KanjiFromApi(
+      kanjiCharacter: kanjiFromApi.kanjiCharacter,
+      englishMeaning: kanjiFromApi.englishMeaning,
+      kanjiImageLink: kanjiFromApi.kanjiImageLink,
+      katakanaMeaning: kanjiFromApi.katakanaMeaning,
+      hiraganaMeaning: kanjiFromApi.hiraganaMeaning,
+      videoLink: kanjiFromApi.videoLink,
+      section: kanjiFromApi.section,
+      statusStorage: statusStorage,
+      accessToKanjiItemsButtons: accessToKanjiItemsButtons,
+      example: kanjiFromApi.example,
+      strokes: kanjiFromApi.strokes);
 }
