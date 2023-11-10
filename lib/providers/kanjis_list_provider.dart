@@ -5,6 +5,7 @@ import 'package:kanji_for_n5_level_app/Databases/db_computes_functions_for_inser
 import 'package:kanji_for_n5_level_app/Databases/download_db_utils.dart';
 import 'package:kanji_for_n5_level_app/models/kanji_from_api.dart';
 import 'package:kanji_for_n5_level_app/networking/request_api.dart';
+import 'package:kanji_for_n5_level_app/providers/error_storing_database_status.dart';
 import 'package:kanji_for_n5_level_app/providers/favorites_cached_provider.dart';
 import 'package:kanji_for_n5_level_app/providers/status_stored_provider.dart';
 import 'package:kanji_for_n5_level_app/screens/main_content.dart';
@@ -137,6 +138,8 @@ class KanjiListProvider extends Notifier<(List<KanjiFromApi>, int, int)> {
               updateStatusKanjiComputeVersion(
                   StatusStorage.errorDeleting, true, kanjiFromApi));
         }
+
+        ref.read(errorStoringDatabaseStatus.notifier).setError(true);
         //_scaleDialogError(buildContext);
       }
 
@@ -148,6 +151,7 @@ class KanjiListProvider extends Notifier<(List<KanjiFromApi>, int, int)> {
 /*     if (buildContext.mounted) {
       _scaleDialogError(buildContext);
     } */
+      ref.read(errorStoringDatabaseStatus.notifier).setError(true);
 
       logger.e('error sotoring');
       logger.e(e.toString());
