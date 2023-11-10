@@ -70,8 +70,7 @@ void deleteKanjiFromStorageComputeVersion(
       _scaleDialogError(buildContext);
     }
 
-    updateKanjiWithOnliVersionComputeVersion(
-        kanjiFromApi, selection, onSuccess, onError);
+    updateKanjiWithOnliVersionComputeVersion(kanjiFromApi, onSuccess, onError);
 
     logger.d('success');
   } catch (e) {
@@ -181,11 +180,8 @@ Future<void> deleteKanjiFromApiComputeVersion(
   }
 }
 
-void updateKanjiWithOnliVersionComputeVersion(
-    KanjiFromApi kanjiFromApi,
-    bool selection,
-    void Function(List<KanjiFromApi> data) onSucces,
-    void Function() onError) {
+void updateKanjiWithOnliVersionComputeVersion(KanjiFromApi kanjiFromApi,
+    void Function(List<KanjiFromApi> data) onSucces, void Function() onError) {
   RequestApi.getKanjis([], [kanjiFromApi.kanjiCharacter], kanjiFromApi.section,
       onSucces, onError);
 }

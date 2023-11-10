@@ -1,4 +1,4 @@
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+/* import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class FavoriteScreenSelectionProvider extends Notifier<bool> {
   @override
@@ -21,4 +21,4 @@ class FavoriteScreenSelectionProvider extends Notifier<bool> {
 
 final favoriteScreenSelectionProvider =
     NotifierProvider<FavoriteScreenSelectionProvider, bool>(
-        FavoriteScreenSelectionProvider.new);
+        FavoriteScreenSelectionProvider.new); */

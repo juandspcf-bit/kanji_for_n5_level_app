@@ -1,14 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:kanji_for_n5_level_app/Databases/db_computes_functions_for_deleting_data.dart';
-import 'package:kanji_for_n5_level_app/Databases/db_computes_functions_for_inserting_data.dart';
 import 'package:kanji_for_n5_level_app/models/kanji_from_api.dart';
-import 'package:kanji_for_n5_level_app/providers/favorite_screen_selection_provider.dart';
-import 'package:kanji_for_n5_level_app/providers/favorites_cached_provider.dart';
-import 'package:kanji_for_n5_level_app/providers/kanjis_list_provider.dart';
-import 'package:kanji_for_n5_level_app/providers/status_stored_provider.dart';
 import 'package:kanji_for_n5_level_app/screens/body_list/kanji_item.dart';
-import 'package:kanji_for_n5_level_app/screens/body_list/trailing_tile.dart';
 
 class BodyKanjisList extends ConsumerStatefulWidget {
   const BodyKanjisList({
@@ -30,47 +23,6 @@ class _BodiKanjiListState extends ConsumerState<BodyKanjisList> {
     super.initState();
   }
 
-  void insertKanji(
-    KanjiFromApi kanjiFromApi,
-  ) {
-    final selection =
-        ref.read(favoriteScreenSelectionProvider.notifier).getSelection();
-    if (selection) {
-      ref.read(favoritesCachedProvider.notifier).updateKanji(
-            updateStatusKanji(
-                StatusStorage.proccessingStoring, false, kanjiFromApi),
-          );
-    } else {
-      ref.read(kanjiListProvider.notifier).updateKanji(
-            updateStatusKanji(
-                StatusStorage.proccessingStoring, false, kanjiFromApi),
-          );
-    }
-    insertKanjiToStorageComputeVersion(kanjiFromApi, ref, selection);
-  }
-
-  void deleteKanji(KanjiFromApi kanjiFromApi) {
-    final selection =
-        ref.read(favoriteScreenSelectionProvider.notifier).getSelection();
-    if (selection) {
-      ref.read(favoritesCachedProvider.notifier).updateKanji(
-            updateStatusKanji(
-                StatusStorage.proccessingStoring, false, kanjiFromApi),
-          );
-    } else {
-      ref.read(kanjiListProvider.notifier).updateKanji(
-            updateStatusKanji(
-                StatusStorage.proccessingDeleting, false, kanjiFromApi),
-          );
-    }
-    deleteKanjiFromStorageComputeVersion(
-      kanjiFromApi,
-      ref,
-      selection,
-      context,
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     if (widget.statusResponse == 0) {
@@ -82,8 +34,6 @@ class _BodiKanjiListState extends ConsumerState<BodyKanjisList> {
             return KanjiItem(
               key: ValueKey(widget.kanjisFromApi[index].kanjiCharacter),
               kanjiFromApi: widget.kanjisFromApi[index],
-              insertKanji: insertKanji,
-              deleteKanji: deleteKanji,
             );
           });
     } else if (widget.statusResponse == 2) {

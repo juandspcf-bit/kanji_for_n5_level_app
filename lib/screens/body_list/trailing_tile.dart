@@ -2,7 +2,9 @@ import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kanji_for_n5_level_app/models/kanji_from_api.dart';
+import 'package:kanji_for_n5_level_app/providers/favorites_cached_provider.dart';
 import 'package:kanji_for_n5_level_app/providers/kanjis_list_provider.dart';
+import 'package:kanji_for_n5_level_app/providers/selection_navigation_bar_screen.dart';
 import 'package:kanji_for_n5_level_app/providers/status_connection_provider.dart';
 import 'package:kanji_for_n5_level_app/providers/status_stored_provider.dart';
 
@@ -10,13 +12,9 @@ class TrailingTile extends ConsumerWidget {
   const TrailingTile({
     super.key,
     required this.kanjiFromApi,
-    required this.insertKanji,
-    required this.deleteKanji,
   });
 
   final KanjiFromApi kanjiFromApi;
-  final void Function(KanjiFromApi kanjiFromApi) insertKanji;
-  final void Function(KanjiFromApi kanjiFromApi) deleteKanji;
 
   Widget selectWidgetStatus(KanjiFromApi kanjiFromApi, BuildContext context) {
     if (kanjiFromApi.statusStorage == StatusStorage.onlyOnline) {
@@ -69,6 +67,19 @@ class TrailingTile extends ConsumerWidget {
     return countActivesDownloads >= 3;
   }
 
+  void setToProccesingStatus(
+      StatusStorage proccessingStoring, int selection, WidgetRef ref) {
+    if (selection == 1) {
+      ref.read(favoritesCachedProvider.notifier).updateKanji(
+            updateStatusKanji(proccessingStoring, false, kanjiFromApi),
+          );
+    } else {
+      ref.read(kanjiListProvider.notifier).updateKanji(
+            updateStatusKanji(proccessingStoring, false, kanjiFromApi),
+          );
+    }
+  }
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return GestureDetector(
@@ -82,10 +93,19 @@ class TrailingTile extends ConsumerWidget {
           return;
         }
 
+        final selection = ref.read(selectionNavigationBarScreen);
         if (kanjiFromApi.statusStorage == StatusStorage.onlyOnline) {
-          //insertKanji(kanjiFromApi);
+          setToProccesingStatus(
+              StatusStorage.proccessingStoring, selection, ref);
+          ref
+              .read(kanjiListProvider.notifier)
+              .insertKanjiToStorageComputeVersion(kanjiFromApi, selection);
         } else if (kanjiFromApi.statusStorage == StatusStorage.stored) {
-          //deleteKanji(kanjiFromApi);
+          setToProccesingStatus(
+              StatusStorage.proccessingDeleting, selection, ref);
+          ref
+              .read(kanjiListProvider.notifier)
+              .deleteKanjiFromStorageComputeVersion(kanjiFromApi, selection);
         }
       },
       child: Container(

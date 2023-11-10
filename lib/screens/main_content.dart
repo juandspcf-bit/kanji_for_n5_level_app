@@ -10,8 +10,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kanji_for_n5_level_app/Databases/download_db_utils.dart';
 import 'package:kanji_for_n5_level_app/Databases/favorites_db_utils.dart';
 import 'package:kanji_for_n5_level_app/models/kanji_from_api.dart';
-import 'package:kanji_for_n5_level_app/providers/favorite_screen_selection_provider.dart';
 import 'package:kanji_for_n5_level_app/providers/favorites_cached_provider.dart';
+import 'package:kanji_for_n5_level_app/providers/selection_navigation_bar_screen.dart';
 import 'package:kanji_for_n5_level_app/providers/status_connection_provider.dart';
 import 'package:kanji_for_n5_level_app/providers/status_stored_provider.dart';
 import 'package:kanji_for_n5_level_app/screens/favorite_screen.dart';
@@ -121,8 +121,6 @@ class MainContent extends ConsumerStatefulWidget {
 }
 
 class _MainContentState extends ConsumerState<MainContent> {
-  int _selectedPageIndex = 0;
-
   Future<(List<(KanjiFromApi, bool)>, List<(KanjiFromApi, bool)>)> runCompute(
       List<KanjiFromApi> listOfStoredKanjis) async {
     return await compute(cleanInvalidStoredFiles, listOfStoredKanjis);
@@ -175,20 +173,16 @@ class _MainContentState extends ConsumerState<MainContent> {
   }
 
   void _selectPage(int index) {
-    setState(() {
-      if (index == 0 && isAnyProcessingData()) {
-        _scaleDialog();
-        return;
-      }
+    if (index == 0 && isAnyProcessingData()) {
+      _scaleDialog();
+      return;
+    }
 
-      if (index == 1) {
-        ref.read(favoriteScreenSelectionProvider.notifier).setSelection();
-      } else {
-        ref.read(favoriteScreenSelectionProvider.notifier).setNotSelection();
-      }
-
-      _selectedPageIndex = index;
-    });
+    if (index == 1) {
+      ref.read(selectionNavigationBarScreen.notifier).setScreen(1);
+    } else {
+      ref.read(selectionNavigationBarScreen.notifier).setScreen(0);
+    }
   }
 
   void getInitData() async {
@@ -249,7 +243,8 @@ class _MainContentState extends ConsumerState<MainContent> {
   @override
   Widget build(BuildContext context) {
     String scaffoldTitle = "Welcome juan";
-    if (_selectedPageIndex == 1) scaffoldTitle = "Favorites";
+    final selectedPageIndex = ref.watch(selectionNavigationBarScreen);
+    if (selectedPageIndex == 1) scaffoldTitle = "Favorites";
 
     return Scaffold(
       appBar: AppBar(
@@ -269,14 +264,14 @@ class _MainContentState extends ConsumerState<MainContent> {
           ),
         ],
       ),
-      body: selectScreen(_selectedPageIndex),
+      body: selectScreen(selectedPageIndex),
       bottomNavigationBar: BottomNavigationBar(
         backgroundColor: Theme.of(context).colorScheme.secondaryContainer,
         selectedItemColor: Theme.of(context).colorScheme.onSecondaryContainer,
         unselectedItemColor:
             Theme.of(context).colorScheme.onSecondaryContainer.withAlpha(100),
         onTap: _selectPage,
-        currentIndex: _selectedPageIndex,
+        currentIndex: selectedPageIndex,
         items: const [
           BottomNavigationBarItem(
             icon: Icon(Icons.book),

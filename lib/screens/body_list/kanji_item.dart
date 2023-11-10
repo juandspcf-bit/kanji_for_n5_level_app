@@ -12,13 +12,9 @@ class KanjiItem extends ConsumerStatefulWidget {
   const KanjiItem({
     super.key,
     required this.kanjiFromApi,
-    required this.insertKanji,
-    required this.deleteKanji,
   });
 
   final KanjiFromApi kanjiFromApi;
-  final void Function(KanjiFromApi kanjiFromApi) insertKanji;
-  final void Function(KanjiFromApi kanjiFromApi) deleteKanji;
 
   @override
   ConsumerState<KanjiItem> createState() => _KanjiItemState();
@@ -94,8 +90,6 @@ class _KanjiItemState extends ConsumerState<KanjiItem> {
                     const EdgeInsets.symmetric(horizontal: 5, vertical: 15),
                 child: TrailingTile(
                   kanjiFromApi: widget.kanjiFromApi,
-                  insertKanji: widget.insertKanji,
-                  deleteKanji: widget.deleteKanji,
                 ),
               ),
             )

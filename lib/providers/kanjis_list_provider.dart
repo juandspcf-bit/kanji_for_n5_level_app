@@ -56,7 +56,7 @@ class KanjiListProvider extends Notifier<(List<KanjiFromApi>, int, int)> {
   }
 
   void insertKanjiToStorageComputeVersion(
-      KanjiFromApi kanjiFromApi, bool selection) async {
+      KanjiFromApi kanjiFromApi, int selection) async {
     try {
       final dirDocumentPath = await getApplicationDocumentsDirectory();
       final kanjiFromApiStored = await compute(
@@ -69,7 +69,7 @@ class KanjiListProvider extends Notifier<(List<KanjiFromApi>, int, int)> {
       insertPathsInDB(kanjiFromApiStored);
       ref.read(statusStorageProvider.notifier).addItem(kanjiFromApiStored);
 
-      if (selection) {
+      if (selection == 1) {
         ref
             .read(favoritesCachedProvider.notifier)
             .updateKanji(kanjiFromApiStored);
@@ -86,7 +86,7 @@ class KanjiListProvider extends Notifier<(List<KanjiFromApi>, int, int)> {
 
   void deleteKanjiFromStorageComputeVersion(
     KanjiFromApi kanjiFromApi,
-    bool selection,
+    int selection,
   ) async {
     try {
       final db = await kanjiFromApiDatabase;
@@ -118,7 +118,7 @@ class KanjiListProvider extends Notifier<(List<KanjiFromApi>, int, int)> {
       ref.read(statusStorageProvider.notifier).deleteItem(kanjiFromApi);
 
       onSuccess(List<KanjiFromApi> list) {
-        if (selection) {
+        if (selection == 1) {
           ref.read(favoritesCachedProvider.notifier).updateKanji(list[0]);
         } else {
           ref.read(kanjiListProvider.notifier).updateKanji(list[0]);
@@ -128,7 +128,7 @@ class KanjiListProvider extends Notifier<(List<KanjiFromApi>, int, int)> {
       onError() {
         //TODO handle error connection online
 
-        if (selection) {
+        if (selection == 1) {
           ref.read(favoritesCachedProvider.notifier).updateKanji(
               updateStatusKanjiComputeVersion(
                   StatusStorage.errorDeleting, true, kanjiFromApi));
@@ -141,7 +141,7 @@ class KanjiListProvider extends Notifier<(List<KanjiFromApi>, int, int)> {
       }
 
       updateKanjiWithOnliVersionComputeVersion(
-          kanjiFromApi, selection, onSuccess, onError);
+          kanjiFromApi, onSuccess, onError);
 
       logger.d('success');
     } catch (e) {
