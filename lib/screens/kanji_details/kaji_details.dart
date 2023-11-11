@@ -10,6 +10,7 @@ import 'package:kanji_for_n5_level_app/providers/favorites_cached_provider.dart'
 import 'package:kanji_for_n5_level_app/providers/quiz_details_providers.dart';
 import 'package:kanji_for_n5_level_app/providers/select_quiz_details_screen.dart';
 import 'package:kanji_for_n5_level_app/providers/status_stored_provider.dart';
+import 'package:kanji_for_n5_level_app/screens/kanji_details/examples_audios.dart';
 import 'package:kanji_for_n5_level_app/screens/kanji_details/meaning_definition.dart';
 import 'package:kanji_for_n5_level_app/screens/kanji_details/strokes_images.dart';
 import 'package:kanji_for_n5_level_app/screens/quiz_details_screen.dart/quizz_details_screen.dart';
@@ -39,7 +40,7 @@ class KanjiDetailsState extends ConsumerState<KanjiDetails> {
 
   List<Widget> getIndexedExamples(
     List<Example> examples,
-    Function() stopAnimation,
+    void Function() stopAnimation,
   ) {
     List<Widget> indexedExamples = [];
     for (int index = 0; index < examples.length; index++) {
@@ -139,177 +140,312 @@ class KanjiDetailsState extends ConsumerState<KanjiDetails> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.kanjiFromApi.kanjiCharacter),
-        actions: [
-          IconButton(
-              onPressed: () {
-                ref
-                    .read(quizDetailsProvider.notifier)
-                    .setDataQuiz(widget.kanjiFromApi);
-                ref.read(quizDetailsProvider.notifier).setQuizState(0);
-                ref.read(selectQuizDetailsProvider.notifier).setScreen(0);
-                Navigator.of(context).push(MaterialPageRoute(
-                  builder: (context) {
-                    return QuizDetailsScreen(kanjiFromApi: widget.kanjiFromApi);
-                  },
-                ));
-              },
-              icon: const Icon(Icons.quiz)),
-          IconButton(
-              onPressed: () {
-                final queryKanji = ref
-                    .read(favoritesCachedProvider.notifier)
-                    .searchInFavorites(widget.kanjiFromApi.kanjiCharacter);
+    return DefaultTabController(
+      initialIndex: 0,
+      length: 2,
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text(widget.kanjiFromApi.kanjiCharacter),
+          actions: [
+            IconButton(
+                onPressed: () {
+                  ref
+                      .read(quizDetailsProvider.notifier)
+                      .setDataQuiz(widget.kanjiFromApi);
+                  ref.read(quizDetailsProvider.notifier).setQuizState(0);
+                  ref.read(selectQuizDetailsProvider.notifier).setScreen(0);
+                  Navigator.of(context).push(MaterialPageRoute(
+                    builder: (context) {
+                      return QuizDetailsScreen(
+                          kanjiFromApi: widget.kanjiFromApi);
+                    },
+                  ));
+                },
+                icon: const Icon(Icons.quiz)),
+            IconButton(
+                onPressed: () {
+                  final queryKanji = ref
+                      .read(favoritesCachedProvider.notifier)
+                      .searchInFavorites(widget.kanjiFromApi.kanjiCharacter);
 
-                if (queryKanji == "") {
-                  insertFavorite(widget.kanjiFromApi.kanjiCharacter)
-                      .then((value) {
-                    final storedItems = ref
-                        .read(statusStorageProvider.notifier)
-                        .getStoresItems();
-                    ref.read(favoritesCachedProvider.notifier).addItem(
-                        storedItems.values.fold([], (previousValue, element) {
-                          previousValue.addAll(element);
-                          return previousValue;
-                        }),
-                        widget.kanjiFromApi);
-                  });
-                } else {
-                  deleteFavorite(widget.kanjiFromApi.kanjiCharacter)
-                      .then((value) {
-                    ref
-                        .read(favoritesCachedProvider.notifier)
-                        .removeItem(widget.kanjiFromApi);
-                  });
-                }
+                  if (queryKanji == "") {
+                    insertFavorite(widget.kanjiFromApi.kanjiCharacter)
+                        .then((value) {
+                      final storedItems = ref
+                          .read(statusStorageProvider.notifier)
+                          .getStoresItems();
+                      ref.read(favoritesCachedProvider.notifier).addItem(
+                          storedItems.values.fold([], (previousValue, element) {
+                            previousValue.addAll(element);
+                            return previousValue;
+                          }),
+                          widget.kanjiFromApi);
+                    });
+                  } else {
+                    deleteFavorite(widget.kanjiFromApi.kanjiCharacter)
+                        .then((value) {
+                      ref
+                          .read(favoritesCachedProvider.notifier)
+                          .removeItem(widget.kanjiFromApi);
+                    });
+                  }
 
-                setState(() {
-                  _favoriteStatus = queryKanji == "";
-                });
-              },
-              icon: Icon(_favoriteStatus
-                  ? Icons.favorite
-                  : Icons.favorite_border_outlined))
-        ],
-      ),
-      body: Column(
-        children: [
-          const SizedBox(
-            height: 20,
+                  setState(() {
+                    _favoriteStatus = queryKanji == "";
+                  });
+                },
+                icon: Icon(_favoriteStatus
+                    ? Icons.favorite
+                    : Icons.favorite_border_outlined))
+          ],
+          bottom: const TabBar(
+            tabs: <Widget>[
+              Tab(
+                icon: Icon(Icons.draw),
+              ),
+              Tab(
+                icon: Icon(Icons.play_lesson),
+              ),
+            ],
           ),
-          _videoController.value.isInitialized
-              ? SizedBox(
-                  height: 120,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      const SizedBox(
-                        height: 20,
-                      ),
-                      SizedBox(
-                        height: 100 * _videoController.value.aspectRatio,
-                        width: 100,
-                        child: AspectRatio(
-                          aspectRatio: _videoController.value.aspectRatio,
-                          child: VideoPlayer(_videoController),
+        ),
+        body: TabBarView(
+          children: <Widget>[
+            Column(
+              children: [
+                const SizedBox(
+                  height: 20,
+                ),
+                _videoController.value.isInitialized
+                    ? SizedBox(
+                        height: 120,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            const SizedBox(
+                              height: 20,
+                            ),
+                            SizedBox(
+                              height: 100 * _videoController.value.aspectRatio,
+                              width: 100,
+                              child: AspectRatio(
+                                aspectRatio: _videoController.value.aspectRatio,
+                                child: VideoPlayer(_videoController),
+                              ),
+                            ),
+                            Material(
+                              child: Ink(
+                                decoration: BoxDecoration(
+                                    color:
+                                        Theme.of(context).colorScheme.primary,
+                                    borderRadius: BorderRadius.circular(30)),
+                                child: InkWell(
+                                  highlightColor: Colors.blue.withOpacity(0.4),
+                                  splashColor: Colors.green.withOpacity(0.5),
+                                  onTap: () {},
+                                  child: IconButton(
+                                    color:
+                                        Theme.of(context).colorScheme.onPrimary,
+                                    splashColor: Colors.deepOrange,
+                                    onPressed: () async {
+                                      setState(() {
+                                        _videoController.value.isPlaying
+                                            ? _videoController.pause()
+                                            : _videoController.play();
+                                      });
+                                    },
+                                    icon: Icon(
+                                      _videoController.value.isPlaying
+                                          ? Icons.pause
+                                          : Icons.play_arrow,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                            const SizedBox(
+                              height: 20,
+                            ),
+                          ],
+                        ),
+                      )
+                    : SizedBox(
+                        height: 120,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            SizedBox(
+                                height:
+                                    128 * _videoController.value.aspectRatio,
+                                width: 128,
+                                child: const Padding(
+                                  padding: EdgeInsets.all(40.0),
+                                  child: CircularProgressIndicator(),
+                                )),
+                          ],
                         ),
                       ),
-                      Material(
-                        child: Ink(
-                          decoration: BoxDecoration(
-                              color: Theme.of(context).colorScheme.primary,
-                              borderRadius: BorderRadius.circular(30)),
-                          child: InkWell(
-                            highlightColor: Colors.blue.withOpacity(0.4),
-                            splashColor: Colors.green.withOpacity(0.5),
-                            onTap: () {},
-                            child: IconButton(
-                              color: Theme.of(context).colorScheme.onPrimary,
-                              splashColor: Colors.deepOrange,
-                              onPressed: () async {
-                                setState(() {
+                const SizedBox(
+                  height: 10,
+                ),
+                const Divider(
+                  height: 4,
+                ),
+                StrokesImages(
+                  kanjiFromApi: widget.kanjiFromApi,
+                  statusStorage: widget.statusStorage,
+                ),
+              ],
+            ),
+            Column(
+              children: [
+                MeaningAndDefinition(
+                  englishMeaning: widget.kanjiFromApi.englishMeaning,
+                  hiraganaMeaning: widget.kanjiFromApi.hiraganaMeaning,
+                  katakanaMeaning: widget.kanjiFromApi.katakanaMeaning,
+                ),
+                const Divider(
+                  height: 4,
+                ),
+                const SizedBox(
+                  height: 10,
+                ),
+                Text(
+                  "Examples",
+                  style: Theme.of(context)
+                      .textTheme
+                      .titleLarge!
+                      .copyWith(fontWeight: FontWeight.bold),
+                ),
+                const SizedBox(
+                  height: 10,
+                ),
+                Expanded(
+                  child: ExampleAudios(
+                    examples: widget.kanjiFromApi.example,
+                    stopAnimation: stopAnimation,
+                    statusStorage: widget.statusStorage,
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
+
+/*         Column(
+          children: [
+            const SizedBox(
+              height: 20,
+            ),
+            _videoController.value.isInitialized
+                ? SizedBox(
+                    height: 120,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        const SizedBox(
+                          height: 20,
+                        ),
+                        SizedBox(
+                          height: 100 * _videoController.value.aspectRatio,
+                          width: 100,
+                          child: AspectRatio(
+                            aspectRatio: _videoController.value.aspectRatio,
+                            child: VideoPlayer(_videoController),
+                          ),
+                        ),
+                        Material(
+                          child: Ink(
+                            decoration: BoxDecoration(
+                                color: Theme.of(context).colorScheme.primary,
+                                borderRadius: BorderRadius.circular(30)),
+                            child: InkWell(
+                              highlightColor: Colors.blue.withOpacity(0.4),
+                              splashColor: Colors.green.withOpacity(0.5),
+                              onTap: () {},
+                              child: IconButton(
+                                color: Theme.of(context).colorScheme.onPrimary,
+                                splashColor: Colors.deepOrange,
+                                onPressed: () async {
+                                  setState(() {
+                                    _videoController.value.isPlaying
+                                        ? _videoController.pause()
+                                        : _videoController.play();
+                                  });
+                                },
+                                icon: Icon(
                                   _videoController.value.isPlaying
-                                      ? _videoController.pause()
-                                      : _videoController.play();
-                                });
-                              },
-                              icon: Icon(
-                                _videoController.value.isPlaying
-                                    ? Icons.pause
-                                    : Icons.play_arrow,
+                                      ? Icons.pause
+                                      : Icons.play_arrow,
+                                ),
                               ),
                             ),
                           ),
                         ),
-                      ),
-                      const SizedBox(
-                        height: 20,
-                      ),
-                    ],
+                        const SizedBox(
+                          height: 20,
+                        ),
+                      ],
+                    ),
+                  )
+                : SizedBox(
+                    height: 120,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        SizedBox(
+                            height: 128 * _videoController.value.aspectRatio,
+                            width: 128,
+                            child: const Padding(
+                              padding: EdgeInsets.all(40.0),
+                              child: CircularProgressIndicator(),
+                            )),
+                      ],
+                    ),
                   ),
-                )
-              : SizedBox(
-                  height: 120,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      SizedBox(
-                          height: 128 * _videoController.value.aspectRatio,
-                          width: 128,
-                          child: const Padding(
-                            padding: EdgeInsets.all(40.0),
-                            child: CircularProgressIndicator(),
-                          )),
-                    ],
-                  ),
-                ),
-          const SizedBox(
-            height: 10,
-          ),
-          const Divider(
-            height: 4,
-          ),
-          StrokesImages(
-            kanjiFromApi: widget.kanjiFromApi,
-            statusStorage: widget.statusStorage,
-          ),
-          const Divider(
-            height: 4,
-          ),
-          MeaningAndDefinition(
-            englishMeaning: widget.kanjiFromApi.englishMeaning,
-            hiraganaMeaning: widget.kanjiFromApi.hiraganaMeaning,
-            katakanaMeaning: widget.kanjiFromApi.katakanaMeaning,
-          ),
-          const Divider(
-            height: 4,
-          ),
-          const SizedBox(
-            height: 10,
-          ),
-          Text(
-            "Examples",
-            style: Theme.of(context)
-                .textTheme
-                .titleLarge!
-                .copyWith(fontWeight: FontWeight.bold),
-          ),
-          const SizedBox(
-            height: 10,
-          ),
-          Expanded(
-            child: SingleChildScrollView(
-              child: Column(
-                children: [
-                  ...getIndexedExamples(
-                      widget.kanjiFromApi.example, stopAnimation)
-                ],
+            const SizedBox(
+              height: 10,
+            ),
+            const Divider(
+              height: 4,
+            ),
+            StrokesImages(
+              kanjiFromApi: widget.kanjiFromApi,
+              statusStorage: widget.statusStorage,
+            ),
+            const Divider(
+              height: 4,
+            ),
+            MeaningAndDefinition(
+              englishMeaning: widget.kanjiFromApi.englishMeaning,
+              hiraganaMeaning: widget.kanjiFromApi.hiraganaMeaning,
+              katakanaMeaning: widget.kanjiFromApi.katakanaMeaning,
+            ),
+            const Divider(
+              height: 4,
+            ),
+            const SizedBox(
+              height: 10,
+            ),
+            Text(
+              "Examples",
+              style: Theme.of(context)
+                  .textTheme
+                  .titleLarge!
+                  .copyWith(fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(
+              height: 10,
+            ),
+            Expanded(
+              child: ExampleAudios(
+                examples: widget.kanjiFromApi.example,
+                stopAnimation: stopAnimation,
+                statusStorage: widget.statusStorage,
               ),
             ),
-          )
-        ],
+          ],
+        ), */
       ),
     );
   }
