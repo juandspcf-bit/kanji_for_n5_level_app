@@ -140,7 +140,6 @@ class KanjiListProvider extends Notifier<(List<KanjiFromApi>, int, int)> {
         }
 
         ref.read(errorStoringDatabaseStatus.notifier).setError(true);
-        //_scaleDialogError(buildContext);
       }
 
       updateKanjiWithOnliVersionComputeVersion(
@@ -148,9 +147,6 @@ class KanjiListProvider extends Notifier<(List<KanjiFromApi>, int, int)> {
 
       logger.d('success');
     } catch (e) {
-/*     if (buildContext.mounted) {
-      _scaleDialogError(buildContext);
-    } */
       ref.read(errorStoringDatabaseStatus.notifier).setError(true);
 
       logger.e('error sotoring');
