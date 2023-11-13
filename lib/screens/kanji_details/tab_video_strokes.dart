@@ -51,13 +51,15 @@ class _TabVideoStrokes extends ConsumerState<TabVideoStrokes> {
         FutureBuilder(
             future: initializadedVideoPlayer,
             builder: (ctx, snapShot) {
-              if (snapShot.connectionState == ConnectionState.done) {
+              if (snapShot.connectionState == ConnectionState.done &&
+                  !snapShot.hasError) {
                 _videoController.setLooping(true);
                 _videoController.play();
               }
               return VideoSection(
                 videoController: _videoController,
                 connectionState: snapShot.connectionState,
+                hasError: snapShot.hasError,
               );
             }),
         const Divider(
@@ -72,32 +74,24 @@ class _TabVideoStrokes extends ConsumerState<TabVideoStrokes> {
   }
 }
 
-class VideoSection extends ConsumerStatefulWidget {
+class VideoSection extends ConsumerWidget {
   const VideoSection({
     super.key,
     required this.videoController,
     required this.connectionState,
+    required this.hasError,
   });
 
   final VideoPlayerController videoController;
   final ConnectionState connectionState;
+  final bool hasError;
 
   @override
-  ConsumerState<VideoSection> createState() => _VideoSection();
-}
-
-class _VideoSection extends ConsumerState<VideoSection> {
-  @override
-  void initState() {
-    super.initState();
-  }
-
-  @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final videoStatus = ref.watch(videoStatusPlaying);
-    widget.videoController.setPlaybackSpeed(videoStatus.speed);
+    videoController.setPlaybackSpeed(videoStatus.speed);
     var opacity = 1.0;
-    if (widget.connectionState == ConnectionState.waiting) opacity = 0.0;
+    if (connectionState == ConnectionState.waiting) opacity = 0.0;
 
     return Column(
       children: [
@@ -107,7 +101,7 @@ class _VideoSection extends ConsumerState<VideoSection> {
             final widthVideo = widthCard - 30;
             return Stack(
               alignment: Alignment.center,
-              children: widget.connectionState == ConnectionState.done
+              children: connectionState == ConnectionState.done && !hasError
                   ? [
                       Align(
                         alignment: Alignment.center,
@@ -115,8 +109,8 @@ class _VideoSection extends ConsumerState<VideoSection> {
                           surfaceTintColor: Colors.transparent,
                           color: Colors.white,
                           child: SizedBox(
-                            height: widthCard *
-                                widget.videoController.value.aspectRatio,
+                            height:
+                                widthCard * videoController.value.aspectRatio,
                             width: widthCard,
                           ),
                         ),
@@ -124,19 +118,18 @@ class _VideoSection extends ConsumerState<VideoSection> {
                       Align(
                         alignment: Alignment.center,
                         child: SizedBox(
-                          height: widthVideo *
-                              widget.videoController.value.aspectRatio,
+                          height:
+                              widthVideo * videoController.value.aspectRatio,
                           width: widthVideo,
                           child: AspectRatio(
-                            aspectRatio:
-                                widget.videoController.value.aspectRatio,
-                            child: VideoPlayer(widget.videoController),
+                            aspectRatio: videoController.value.aspectRatio,
+                            child: VideoPlayer(videoController),
                           ),
                         ),
                       ),
                     ]
                   : [
-                      if (widget.connectionState == ConnectionState.waiting)
+                      if (connectionState == ConnectionState.waiting)
                         Align(
                           alignment: Alignment.center,
                           child: Card(
@@ -144,8 +137,8 @@ class _VideoSection extends ConsumerState<VideoSection> {
                             surfaceTintColor: Colors.transparent,
                             color: Colors.transparent,
                             child: SizedBox(
-                              height: widthCard *
-                                  widget.videoController.value.aspectRatio,
+                              height:
+                                  widthCard * videoController.value.aspectRatio,
                               width: widthCard,
                               child: const CircularProgressIndicator(
                                 strokeWidth: 8,
@@ -161,8 +154,8 @@ class _VideoSection extends ConsumerState<VideoSection> {
                             surfaceTintColor: Colors.transparent,
                             color: Colors.transparent,
                             child: SizedBox(
-                              height: widthCard *
-                                  widget.videoController.value.aspectRatio,
+                              height:
+                                  widthCard * videoController.value.aspectRatio,
                               width: widthCard,
                               child: const Icon(
                                 Icons.error,
@@ -193,11 +186,11 @@ class _VideoSection extends ConsumerState<VideoSection> {
                   ),
                   onPressed: () async {
                     /*  */
-                    widget.videoController.value.isPlaying
-                        ? widget.videoController.pause().then((value) => ref
+                    videoController.value.isPlaying
+                        ? videoController.pause().then((value) => ref
                             .read(videoStatusPlaying.notifier)
                             .setIsPlaying(false))
-                        : widget.videoController.play().then((value) => ref
+                        : videoController.play().then((value) => ref
                             .read(videoStatusPlaying.notifier)
                             .setIsPlaying(true));
                   },
