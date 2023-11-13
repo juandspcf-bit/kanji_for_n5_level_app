@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kanji_for_n5_level_app/models/kanji_from_api.dart';
+import 'package:kanji_for_n5_level_app/providers/video_status_playing.dart';
 import 'package:kanji_for_n5_level_app/screens/body_list/leading_tile.dart';
 import 'package:kanji_for_n5_level_app/screens/body_list/subtitle_tile.dart';
 import 'package:kanji_for_n5_level_app/screens/body_list/title_tile.dart';
@@ -28,6 +29,8 @@ class _KanjiItemState extends ConsumerState<KanjiItem> {
     KanjiFromApi? kanjiFromApi,
   ) {
     if (kanjiFromApi == null) return;
+    ref.read(videoStatusPlaying.notifier).setSpeed(1.0);
+    ref.read(videoStatusPlaying.notifier).setIsPlaying(true);
     Navigator.of(context).push(
       MaterialPageRoute(builder: (ctx) {
         return KanjiDetails(

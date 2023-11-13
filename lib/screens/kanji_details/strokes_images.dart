@@ -62,11 +62,8 @@ class StrokesImages extends ConsumerWidget {
     final List<String> images = kanjiFromApi.strokes.images;
     List<Widget> strokes = [];
     for (int index = 0; index < images.length; index++) {
-      Widget stroke = Row(
+      Widget stroke = Column(
         children: [
-          const SizedBox(
-            width: 20,
-          ),
           Container(
             height: 80,
             width: 80,
@@ -106,14 +103,18 @@ class StrokesImages extends ConsumerWidget {
                     ),
             ),
           ),
-          index != images.length - 1
+          const SizedBox(
+            height: 10,
+          ),
+          Text('Stroke ${index + 1}')
+          /*           index != images.length - 1
               ? const SizedBox(
                   width: 10,
                   child: Icon(Icons.arrow_circle_right_outlined),
                 )
               : const SizedBox(
                   width: 20,
-                ),
+                ), */
         ],
       );
       strokes.add(stroke);
@@ -123,35 +124,39 @@ class StrokesImages extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return Column(
-      children: [
-        const SizedBox(
-          height: 10,
-        ),
-        Text(
-          "Strokes",
-          style: Theme.of(context)
-              .textTheme
-              .titleLarge!
-              .copyWith(fontWeight: FontWeight.bold),
-        ),
-        SingleChildScrollView(
-          scrollDirection: Axis.horizontal,
-          child: Card(
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [...getListStrokes(context)],
+    return Expanded(
+      child: Column(
+        children: [
+          const SizedBox(
+            height: 10,
+          ),
+          Text(
+            "Strokes",
+            style: Theme.of(context)
+                .textTheme
+                .titleLarge!
+                .copyWith(fontWeight: FontWeight.bold),
+          ),
+          const SizedBox(
+            height: 20,
+          ),
+          Expanded(
+            child: GridView(
+              padding: const EdgeInsets.all(5),
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 3,
+                childAspectRatio: 1,
+                crossAxisSpacing: 0,
+                mainAxisSpacing: 0,
               ),
+              children: [...getListStrokes(context)],
             ),
           ),
-        ),
-        const SizedBox(
-          height: 10,
-        ),
-      ],
+          const SizedBox(
+            height: 10,
+          ),
+        ],
+      ),
     ); // TODO: implement build
   }
 }
