@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:kanji_for_n5_level_app/models/kanji_from_api.dart';
 import 'package:kanji_for_n5_level_app/providers/status_stored_provider.dart';
+import 'package:kanji_for_n5_level_app/providers/video_status_playing.dart';
 import 'package:kanji_for_n5_level_app/screens/kanji_details/strokes_images.dart';
 import 'package:kanji_for_n5_level_app/screens/main_content.dart';
 import 'package:video_player/video_player.dart';
@@ -75,93 +76,8 @@ class _TabVideoStrokes extends ConsumerState<TabVideoStrokes> {
               } else if (snapShot.connectionState == ConnectionState.done) {
                 _videoController.setLooping(true);
                 _videoController.play();
-                return SizedBox(
-                  height: 370,
-                  child: Column(
-                    children: [
-                      const SizedBox(
-                        height: 20,
-                      ),
-                      Stack(
-                        alignment: Alignment.center,
-                        children: [
-                          Align(
-                            alignment: Alignment.center,
-                            child: Card(
-                              surfaceTintColor: Colors.transparent,
-                              color: Colors.white,
-                              child: SizedBox(
-                                height:
-                                    230 * _videoController.value.aspectRatio,
-                                width: 230,
-                              ),
-                            ),
-                          ),
-                          Align(
-                            alignment: Alignment.center,
-                            child: SizedBox(
-                              height: 200 * _videoController.value.aspectRatio,
-                              width: 200,
-                              child: AspectRatio(
-                                aspectRatio: _videoController.value.aspectRatio,
-                                child: VideoPlayer(_videoController),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Container(
-                            decoration: BoxDecoration(
-                              color: Theme.of(context).colorScheme.primary,
-                              shape: BoxShape.circle,
-                            ),
-                            child: IconButton(
-                              style: ButtonStyle(
-                                overlayColor:
-                                    MaterialStateProperty.all(Colors.black26),
-                                backgroundColor: MaterialStateProperty.all(
-                                    Theme.of(context).colorScheme.primary),
-                              ),
-                              onPressed: () async {
-/*                                 _videoController.value.isPlaying;
-                                logger.d(_videoController.value.isPlaying);
-                                _videoController.pause();
-                                _videoController.value.isPlaying; */
-                                _videoController.value.isPlaying
-                                    ? _videoController.pause()
-                                    : _videoController.play();
-                              },
-                              icon: Padding(
-                                padding: const EdgeInsets.all(4.0),
-                                child: Icon(
-                                  _videoController.value.isPlaying
-                                      ? Icons.pause
-                                      : Icons.play_arrow,
-                                  size: 30,
-                                  color:
-                                      Theme.of(context).colorScheme.onPrimary,
-                                ),
-                              ),
-                            ),
-                          ),
-                          TextButton(
-                              onPressed: () {
-                                _videoController.setPlaybackSpeed(0.5);
-                              },
-                              child: Text(
-                                '0.5X',
-                                style: GoogleFonts.chakraPetch(),
-                              ))
-                        ],
-                      ),
-                      const SizedBox(
-                        height: 10,
-                      ),
-                    ],
-                  ),
+                return VideoSection(
+                  videoController: _videoController,
                 );
               } else {
                 return const Placeholder();
@@ -175,6 +91,120 @@ class _TabVideoStrokes extends ConsumerState<TabVideoStrokes> {
           statusStorage: widget.statusStorage,
         ),
       ],
+    );
+  }
+}
+
+class VideoSection extends ConsumerStatefulWidget {
+  const VideoSection({
+    super.key,
+    required this.videoController,
+  });
+
+  final VideoPlayerController videoController;
+
+  @override
+  ConsumerState<VideoSection> createState() => _VideoSection();
+}
+
+class _VideoSection extends ConsumerState<VideoSection> {
+  @override
+  Widget build(BuildContext context) {
+    final videoStatus = ref.watch(videoStatusPlaying);
+    widget.videoController.setPlaybackSpeed(videoStatus.speed);
+    return SizedBox(
+      height: 370,
+      child: Column(
+        children: [
+          const SizedBox(
+            height: 20,
+          ),
+          Stack(
+            alignment: Alignment.center,
+            children: [
+              Align(
+                alignment: Alignment.center,
+                child: Card(
+                  surfaceTintColor: Colors.transparent,
+                  color: Colors.white,
+                  child: SizedBox(
+                    height: 230 * widget.videoController.value.aspectRatio,
+                    width: 230,
+                  ),
+                ),
+              ),
+              Align(
+                alignment: Alignment.center,
+                child: SizedBox(
+                  height: 200 * widget.videoController.value.aspectRatio,
+                  width: 200,
+                  child: AspectRatio(
+                    aspectRatio: widget.videoController.value.aspectRatio,
+                    child: VideoPlayer(widget.videoController),
+                  ),
+                ),
+              ),
+            ],
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Container(
+                decoration: BoxDecoration(
+                  color: Theme.of(context).colorScheme.primary,
+                  shape: BoxShape.circle,
+                ),
+                child: IconButton(
+                  style: ButtonStyle(
+                    overlayColor: MaterialStateProperty.all(Colors.black26),
+                    backgroundColor: MaterialStateProperty.all(
+                        Theme.of(context).colorScheme.primary),
+                  ),
+                  onPressed: () async {
+/*  */
+                    widget.videoController.value.isPlaying
+                        ? widget.videoController.pause().then((value) => ref
+                            .read(videoStatusPlaying.notifier)
+                            .setIsPlaying(false))
+                        : widget.videoController.play().then((value) => ref
+                            .read(videoStatusPlaying.notifier)
+                            .setIsPlaying(true));
+                  },
+                  icon: Padding(
+                    padding: const EdgeInsets.all(4.0),
+                    child: Icon(
+                      videoStatus.isPlaying ? Icons.pause : Icons.play_arrow,
+                      size: 30,
+                      color: Theme.of(context).colorScheme.onPrimary,
+                    ),
+                  ),
+                ),
+              ),
+              TextButton(
+                onPressed: () {
+                  ref.read(videoStatusPlaying.notifier).setSpeed(1.0);
+                },
+                child: Text(
+                  '1.0X',
+                  style: GoogleFonts.chakraPetch(),
+                ),
+              ),
+              TextButton(
+                onPressed: () {
+                  ref.read(videoStatusPlaying.notifier).setSpeed(0.5);
+                },
+                child: Text(
+                  '0.5X',
+                  style: GoogleFonts.chakraPetch(),
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(
+            height: 10,
+          ),
+        ],
+      ),
     );
   }
 }
