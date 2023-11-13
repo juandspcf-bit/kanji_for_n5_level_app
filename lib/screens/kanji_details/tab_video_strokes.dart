@@ -34,16 +34,6 @@ class _TabVideoStrokes extends ConsumerState<TabVideoStrokes> {
     _videoController = VideoPlayerController.networkUrl(
         Uri.parse(widget.kanjiFromApi.videoLink));
     initializadedVideoPlayer = _videoController.initialize();
-
-/*     _videoController = VideoPlayerController.networkUrl(
-        Uri.parse(widget.kanjiFromApi.videoLink))
-      ..initialize().then((_) {
-        // Ensure the first frame is shown after the video is initialized, even before the play button has been pressed.
-        setState(() {
-          _videoController.setLooping(true);
-          _videoController.play();
-        });
-      }); */
   }
 
   @override
@@ -58,7 +48,7 @@ class _TabVideoStrokes extends ConsumerState<TabVideoStrokes> {
     return Column(
       children: [
         const SizedBox(
-          height: 20,
+          height: 10,
         ),
         FutureBuilder(
             future: initializadedVideoPlayer,
@@ -112,99 +102,110 @@ class _VideoSection extends ConsumerState<VideoSection> {
   Widget build(BuildContext context) {
     final videoStatus = ref.watch(videoStatusPlaying);
     widget.videoController.setPlaybackSpeed(videoStatus.speed);
-    return SizedBox(
-      height: 370,
-      child: Column(
-        children: [
-          const SizedBox(
-            height: 20,
-          ),
-          Stack(
-            alignment: Alignment.center,
-            children: [
-              Align(
-                alignment: Alignment.center,
-                child: Card(
-                  surfaceTintColor: Colors.transparent,
-                  color: Colors.white,
-                  child: SizedBox(
-                    height: 230 * widget.videoController.value.aspectRatio,
-                    width: 230,
-                  ),
-                ),
-              ),
-              Align(
-                alignment: Alignment.center,
-                child: SizedBox(
-                  height: 200 * widget.videoController.value.aspectRatio,
-                  width: 200,
-                  child: AspectRatio(
-                    aspectRatio: widget.videoController.value.aspectRatio,
-                    child: VideoPlayer(widget.videoController),
-                  ),
-                ),
-              ),
-            ],
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Container(
-                decoration: BoxDecoration(
-                  color: Theme.of(context).colorScheme.primary,
-                  shape: BoxShape.circle,
-                ),
-                child: IconButton(
-                  style: ButtonStyle(
-                    overlayColor: MaterialStateProperty.all(Colors.black26),
-                    backgroundColor: MaterialStateProperty.all(
-                        Theme.of(context).colorScheme.primary),
-                  ),
-                  onPressed: () async {
-/*  */
-                    widget.videoController.value.isPlaying
-                        ? widget.videoController.pause().then((value) => ref
-                            .read(videoStatusPlaying.notifier)
-                            .setIsPlaying(false))
-                        : widget.videoController.play().then((value) => ref
-                            .read(videoStatusPlaying.notifier)
-                            .setIsPlaying(true));
-                  },
-                  icon: Padding(
-                    padding: const EdgeInsets.all(4.0),
-                    child: Icon(
-                      videoStatus.isPlaying ? Icons.pause : Icons.play_arrow,
-                      size: 30,
-                      color: Theme.of(context).colorScheme.onPrimary,
+    return Column(
+      children: [
+        LayoutBuilder(
+          builder: (ctx, constrains) {
+            final widthCard = (constrains.maxWidth * 0.6);
+            final widthVideo = widthCard - 30;
+            return Stack(
+              alignment: Alignment.center,
+              children: [
+                Align(
+                  alignment: Alignment.center,
+                  child: Card(
+                    surfaceTintColor: Colors.transparent,
+                    color: Colors.white,
+                    child: SizedBox(
+                      height:
+                          widthCard * widget.videoController.value.aspectRatio,
+                      width: widthCard,
                     ),
                   ),
                 ),
+                Align(
+                  alignment: Alignment.center,
+                  child: SizedBox(
+                    height:
+                        widthVideo * widget.videoController.value.aspectRatio,
+                    width: widthVideo,
+                    child: AspectRatio(
+                      aspectRatio: widget.videoController.value.aspectRatio,
+                      child: VideoPlayer(widget.videoController),
+                    ),
+                  ),
+                ),
+              ],
+            );
+          },
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Container(
+              decoration: BoxDecoration(
+                color: Theme.of(context).colorScheme.primary,
+                shape: BoxShape.circle,
               ),
-              TextButton(
-                onPressed: () {
-                  ref.read(videoStatusPlaying.notifier).setSpeed(1.0);
+              child: IconButton(
+                style: ButtonStyle(
+                  overlayColor: MaterialStateProperty.all(Colors.black26),
+                  backgroundColor: MaterialStateProperty.all(
+                      Theme.of(context).colorScheme.primary),
+                ),
+                onPressed: () async {
+/*  */
+                  widget.videoController.value.isPlaying
+                      ? widget.videoController.pause().then((value) => ref
+                          .read(videoStatusPlaying.notifier)
+                          .setIsPlaying(false))
+                      : widget.videoController.play().then((value) => ref
+                          .read(videoStatusPlaying.notifier)
+                          .setIsPlaying(true));
                 },
-                child: Text(
-                  '1.0X',
-                  style: GoogleFonts.chakraPetch(),
+                icon: Padding(
+                  padding: const EdgeInsets.all(4.0),
+                  child: Icon(
+                    videoStatus.isPlaying ? Icons.pause : Icons.play_arrow,
+                    size: 30,
+                    color: Theme.of(context).colorScheme.onPrimary,
+                  ),
                 ),
               ),
-              TextButton(
-                onPressed: () {
-                  ref.read(videoStatusPlaying.notifier).setSpeed(0.5);
-                },
-                child: Text(
-                  '0.5X',
-                  style: GoogleFonts.chakraPetch(),
-                ),
+            ),
+            TextButton(
+              onPressed: () {
+                ref.read(videoStatusPlaying.notifier).setSpeed(1.0);
+              },
+              child: Text(
+                '1.0X',
+                style: GoogleFonts.chakraPetch(),
               ),
-            ],
-          ),
-          const SizedBox(
-            height: 10,
-          ),
-        ],
-      ),
+            ),
+            TextButton(
+              onPressed: () {
+                ref.read(videoStatusPlaying.notifier).setSpeed(0.5);
+              },
+              child: Text(
+                '0.5X',
+                style: GoogleFonts.chakraPetch(),
+              ),
+            ),
+            TextButton(
+              onPressed: () {
+                ref.read(videoStatusPlaying.notifier).setSpeed(0.25);
+              },
+              child: Text(
+                '0.25X',
+                style: GoogleFonts.chakraPetch(),
+              ),
+            ),
+          ],
+        ),
+        const SizedBox(
+          height: 10,
+        ),
+      ],
     );
   }
 }
