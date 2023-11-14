@@ -7,6 +7,8 @@ import 'package:flutter_svg/svg.dart';
 import 'package:kanji_for_n5_level_app/models/kanji_from_api.dart';
 import 'package:kanji_for_n5_level_app/providers/status_connection_provider.dart';
 import 'package:kanji_for_n5_level_app/providers/status_stored_provider.dart';
+import 'package:kanji_for_n5_level_app/screens/quiz_screen/draggable_kanji.dart';
+import 'package:kanji_for_n5_level_app/screens/quiz_screen/kanji_possible_solution_container.dart';
 import 'package:kanji_for_n5_level_app/screens/quiz_screen/score_body.dart';
 
 enum Screens { quiz, score }
@@ -26,7 +28,7 @@ class QuizScreen extends ConsumerStatefulWidget {
 class _QuizScreenState extends ConsumerState<QuizScreen> {
   late List<String> imageLinksFromDraggedItems;
   late List<double> initialOpacities;
-  late List<bool> isDraggeInitialList;
+  late List<bool> isDraggedStatusList;
   late List<bool> isCorrectAnswer;
   late List<bool> isOmittedAnswer;
   late List<bool> isChecked;
@@ -86,18 +88,6 @@ class _QuizScreenState extends ConsumerState<QuizScreen> {
     );
   }
 
-  String cutWords(String text) {
-    final splitText = text.split('、');
-    if (splitText.length == 1) return text;
-    return '${splitText[0]}, ${splitText[1]}';
-  }
-
-  String cutEnglishMeaning(String text) {
-    final splitText = text.split(', ');
-    if (splitText.length == 1) return text;
-    return '${splitText[0]}, ${splitText[1]}';
-  }
-
   void initTheQuiz() {
     currentScreenType = Screens.quiz;
     randomKanjisToAskMeaning = suffleData();
@@ -106,7 +96,7 @@ class _QuizScreenState extends ConsumerState<QuizScreen> {
     final initValues = initLinks(widget.kanjisFromApi.length);
     imageLinksFromDraggedItems = initValues.$1;
     initialOpacities = initValues.$2;
-    isDraggeInitialList = initValues.$3;
+    isDraggedStatusList = initValues.$3;
     isCorrectAnswer = initValues.$4;
     isOmittedAnswer = initValues.$5;
     isChecked = initValues.$6;
@@ -118,59 +108,14 @@ class _QuizScreenState extends ConsumerState<QuizScreen> {
     });
   }
 
-  Widget showIsCorrectAnswerWidget(int i) {
-    if (isDraggeInitialList[index] == true &&
-        randomSolutions[i].kanjiCharacter ==
-            randomKanjisToAskMeaning[index].kanjiCharacter &&
-        imageLinksFromDraggedItems[i] != "") {
-      return const Icon(
-        Icons.done,
-        color: Colors.amberAccent,
-        size: 40,
-      );
-    } else if (isDraggeInitialList[index] == true &&
-        randomSolutions[i].kanjiCharacter !=
-            randomKanjisToAskMeaning[index].kanjiCharacter &&
-        imageLinksFromDraggedItems[i] != "") {
-      return const Icon(
-        Icons.close,
-        color: Colors.amberAccent,
-        size: 40,
-      );
-    } else {
-      return Container();
-    }
-  }
-
-  Widget? displayDraggedIcon(String path, KanjiFromApi randomSolution) {
-    if (path == '') return null;
-
-    if (randomKanjisToAskMeaning[index].statusStorage ==
-        StatusStorage.onlyOnline) {
-      return SvgPicture.network(
-        path,
-        height: 70,
-        width: 70,
-        semanticsLabel: randomSolution.kanjiCharacter,
-        placeholderBuilder: (BuildContext context) => Container(
-          color: Colors.transparent,
-          height: 70,
-          width: 70,
-        ),
-      );
-    } else {
-      return SvgPicture.file(
-        File(path),
-        height: 70,
-        width: 70,
-        semanticsLabel: randomSolution.kanjiCharacter,
-        placeholderBuilder: (BuildContext context) => Container(
-          color: Colors.transparent,
-          height: 70,
-          width: 70,
-        ),
-      );
-    }
+  void onDraggedKanji(int i, KanjiFromApi data) {
+    setState(() {
+      imageLinksFromDraggedItems[i] = data.kanjiImageLink;
+      initialOpacities[i] = 1.0;
+      isDraggedStatusList[index] = true;
+      isCorrectAnswer[index] = randomSolutions[i].kanjiCharacter ==
+          randomKanjisToAskMeaning[index].kanjiCharacter;
+    });
   }
 
   @override
@@ -262,97 +207,10 @@ class _QuizScreenState extends ConsumerState<QuizScreen> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        isDraggeInitialList[index] == true
-                            ? Container(
-                                width: 70,
-                                height: 70,
-                                decoration: BoxDecoration(
-                                  color: Theme.of(context)
-                                      .colorScheme
-                                      .onPrimaryContainer
-                                      .withOpacity(0),
-                                  borderRadius: const BorderRadius.all(
-                                    Radius.circular(10),
-                                  ),
-                                  border: Border.all(color: Colors.white),
-                                ),
-                              )
-                            : Draggable<KanjiFromApi>(
-                                data: randomKanjisToAskMeaning[index],
-                                feedback: Text(randomKanjisToAskMeaning[index]
-                                    .kanjiCharacter),
-                                childWhenDragging: Container(
-                                  width: 70,
-                                  height: 70,
-                                  decoration: BoxDecoration(
-                                    color: Theme.of(context)
-                                        .colorScheme
-                                        .onPrimaryContainer
-                                        .withOpacity(0),
-                                    borderRadius: const BorderRadius.all(
-                                      Radius.circular(10),
-                                    ),
-                                    border: Border.all(color: Colors.white),
-                                  ),
-                                ),
-                                child: Container(
-                                  width: 70,
-                                  height: 70,
-                                  decoration: BoxDecoration(
-                                    color: Theme.of(context)
-                                        .colorScheme
-                                        .onPrimaryContainer,
-                                    borderRadius: const BorderRadius.all(
-                                      Radius.circular(10),
-                                    ),
-                                  ),
-                                  child: randomKanjisToAskMeaning[index]
-                                              .statusStorage ==
-                                          StatusStorage.onlyOnline
-                                      ? SvgPicture.network(
-                                          randomKanjisToAskMeaning[index]
-                                              .kanjiImageLink,
-                                          height: 70,
-                                          width: 70,
-                                          semanticsLabel:
-                                              randomKanjisToAskMeaning[index]
-                                                  .kanjiCharacter,
-                                          placeholderBuilder: (BuildContext
-                                                  context) =>
-                                              Container(
-                                                  color: Colors.transparent,
-                                                  height: 40,
-                                                  width: 40,
-                                                  child:
-                                                      const CircularProgressIndicator(
-                                                    backgroundColor:
-                                                        Color.fromARGB(
-                                                            179, 5, 16, 51),
-                                                  )),
-                                        )
-                                      : SvgPicture.file(
-                                          File(randomKanjisToAskMeaning[index]
-                                              .kanjiImageLink),
-                                          height: 70,
-                                          width: 70,
-                                          semanticsLabel:
-                                              randomKanjisToAskMeaning[index]
-                                                  .kanjiCharacter,
-                                          placeholderBuilder: (BuildContext
-                                                  context) =>
-                                              Container(
-                                                  color: Colors.transparent,
-                                                  height: 40,
-                                                  width: 40,
-                                                  child:
-                                                      const CircularProgressIndicator(
-                                                    backgroundColor:
-                                                        Color.fromARGB(
-                                                            179, 5, 16, 51),
-                                                  )),
-                                        ),
-                                ),
-                              ),
+                        DraggableKanji(
+                            isDragged: isDraggedStatusList[index],
+                            randomKanjisToAskMeaning:
+                                randomKanjisToAskMeaning[index]),
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.end,
                           children: [
@@ -361,70 +219,16 @@ class _QuizScreenState extends ConsumerState<QuizScreen> {
                                 crossAxisAlignment: CrossAxisAlignment.end,
                                 children: [
                                   DragTarget<KanjiFromApi>(onAccept: (data) {
-                                    setState(() {
-                                      imageLinksFromDraggedItems[i] =
-                                          data.kanjiImageLink;
-                                      initialOpacities[i] = 1.0;
-                                      isDraggeInitialList[index] = true;
-                                      isCorrectAnswer[index] =
-                                          randomSolutions[i].kanjiCharacter ==
-                                              randomKanjisToAskMeaning[index]
-                                                  .kanjiCharacter;
-                                    });
+                                    onDraggedKanji(i, data);
                                   }, builder: (ctx, _, __) {
-                                    return Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.end,
-                                      children: [
-                                        Row(
-                                          children: [
-                                            showIsCorrectAnswerWidget(i),
-                                            const SizedBox(
-                                              width: 10,
-                                            ),
-                                            Container(
-                                              width: 70,
-                                              height: 70,
-                                              decoration: BoxDecoration(
-                                                color: Theme.of(context)
-                                                    .colorScheme
-                                                    .onPrimaryContainer
-                                                    .withOpacity(
-                                                        initialOpacities[i]),
-                                                borderRadius:
-                                                    const BorderRadius.all(
-                                                  Radius.circular(10),
-                                                ),
-                                                border: Border.all(
-                                                    color: Colors.white),
-                                              ),
-                                              child: displayDraggedIcon(
-                                                imageLinksFromDraggedItems[i],
-                                                randomSolutions[i],
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                        const SizedBox(
-                                          height: 5,
-                                        ),
-                                        Text(cutEnglishMeaning(
-                                            randomSolutions[i].englishMeaning)),
-                                        const SizedBox(
-                                          height: 2,
-                                        ),
-                                        Text(
-                                            'kunyomi: ${cutWords(randomSolutions[i].hiraganaMeaning)}'),
-                                        const SizedBox(
-                                          height: 2,
-                                        ),
-                                        Text(
-                                            'Onyomi: ${cutWords(randomSolutions[i].katakanaMeaning)}'),
-                                        const SizedBox(
-                                          height: 10,
-                                        ),
-                                      ],
-                                    );
+                                    return KanjiDragTarget(
+                                        isDragged: isDraggedStatusList[index],
+                                        randomSolution: randomSolutions[i],
+                                        imagePathFromDraggedItem:
+                                            imageLinksFromDraggedItems[i],
+                                        randomKanjisToAskMeaning:
+                                            randomKanjisToAskMeaning[index],
+                                        initialOpacitie: initialOpacities[i]);
                                   }),
                                 ],
                               ),
@@ -440,20 +244,20 @@ class _QuizScreenState extends ConsumerState<QuizScreen> {
                       child: ElevatedButton(
                         onPressed: () {
                           final isDraggedList = <bool>[];
-                          final isDraggegImageLink = <String>[];
+                          final isDraggedImagePath = <String>[];
                           final opacityValues = <double>[];
                           for (int i = 0;
                               i < widget.kanjisFromApi.length;
                               i++) {
                             isDraggedList.add(false);
-                            isDraggegImageLink.add("");
+                            isDraggedImagePath.add("");
                             opacityValues.add(0.0);
                           }
                           setState(() {
-                            isDraggeInitialList = [...isDraggedList];
+                            isDraggedStatusList = [...isDraggedList];
                             isCorrectAnswer = [...isDraggedList];
                             imageLinksFromDraggedItems = [
-                              ...isDraggegImageLink
+                              ...isDraggedImagePath
                             ];
                             initialOpacities = [...opacityValues];
                             isChecked[index] = false;
@@ -473,7 +277,7 @@ class _QuizScreenState extends ConsumerState<QuizScreen> {
                       padding: const EdgeInsets.symmetric(vertical: 5),
                       child: ElevatedButton.icon(
                         onPressed: () {
-                          if (!isDraggeInitialList[index]) {
+                          if (!isDraggedStatusList[index]) {
                             isOmittedAnswer[index] = true;
                           }
                           if (index < widget.kanjisFromApi.length - 1) {
@@ -485,7 +289,7 @@ class _QuizScreenState extends ConsumerState<QuizScreen> {
                                   initLinks(widget.kanjisFromApi.length);
                               imageLinksFromDraggedItems = initValues.$1;
                               initialOpacities = initValues.$2;
-                              isDraggeInitialList = initValues.$3;
+                              isDraggedStatusList = initValues.$3;
                             });
                           } else {
                             setState(() {
