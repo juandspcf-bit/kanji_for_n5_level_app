@@ -118,6 +118,30 @@ class _QuizScreenState extends ConsumerState<QuizScreen> {
     });
   }
 
+  Widget showIsCorrectAnswerWidget(int i) {
+    if (isDraggeInitialList[index] == true &&
+        randomSolutions[i].kanjiCharacter ==
+            randomKanjisToAskMeaning[index].kanjiCharacter &&
+        imageLinksFromDraggedItems[i] != "") {
+      return const Icon(
+        Icons.done,
+        color: Colors.amberAccent,
+        size: 40,
+      );
+    } else if (isDraggeInitialList[index] == true &&
+        randomSolutions[i].kanjiCharacter !=
+            randomKanjisToAskMeaning[index].kanjiCharacter &&
+        imageLinksFromDraggedItems[i] != "") {
+      return const Icon(
+        Icons.close,
+        color: Colors.amberAccent,
+        size: 40,
+      );
+    } else {
+      return Container();
+    }
+  }
+
   @override
   void initState() {
     super.initState();
@@ -310,26 +334,6 @@ class _QuizScreenState extends ConsumerState<QuizScreen> {
                               Column(
                                 crossAxisAlignment: CrossAxisAlignment.end,
                                 children: [
-                                  if (isDraggeInitialList[index] == true &&
-                                      randomSolutions[i].kanjiCharacter ==
-                                          randomKanjisToAskMeaning[index]
-                                              .kanjiCharacter &&
-                                      imageLinksFromDraggedItems[i] != "")
-                                    const Icon(
-                                      Icons.done,
-                                      color: Colors.amberAccent,
-                                      size: 40,
-                                    )
-                                  else if (isDraggeInitialList[index] == true &&
-                                      randomSolutions[i].kanjiCharacter !=
-                                          randomKanjisToAskMeaning[index]
-                                              .kanjiCharacter &&
-                                      imageLinksFromDraggedItems[i] != "")
-                                    const Icon(
-                                      Icons.close,
-                                      color: Colors.amberAccent,
-                                      size: 40,
-                                    ),
                                   DragTarget<KanjiFromApi>(onAccept: (data) {
                                     setState(() {
                                       imageLinksFromDraggedItems[i] =
@@ -346,41 +350,52 @@ class _QuizScreenState extends ConsumerState<QuizScreen> {
                                       crossAxisAlignment:
                                           CrossAxisAlignment.end,
                                       children: [
-                                        Container(
-                                          width: 70,
-                                          height: 70,
-                                          decoration: BoxDecoration(
-                                            color: Theme.of(context)
-                                                .colorScheme
-                                                .onPrimaryContainer
-                                                .withOpacity(
-                                                    initialOpacities[i]),
-                                            borderRadius:
-                                                const BorderRadius.all(
-                                              Radius.circular(10),
+                                        Row(
+                                          children: [
+                                            showIsCorrectAnswerWidget(i),
+                                            const SizedBox(
+                                              width: 10,
                                             ),
-                                            border:
-                                                Border.all(color: Colors.white),
-                                          ),
-                                          child: imageLinksFromDraggedItems[
-                                                      i] ==
-                                                  ''
-                                              ? null
-                                              : SvgPicture.network(
-                                                  imageLinksFromDraggedItems[i],
-                                                  height: 70,
-                                                  width: 70,
-                                                  semanticsLabel:
-                                                      randomSolutions[i]
-                                                          .kanjiCharacter,
-                                                  placeholderBuilder:
-                                                      (BuildContext context) =>
-                                                          Container(
-                                                    color: Colors.transparent,
-                                                    height: 70,
-                                                    width: 70,
-                                                  ),
+                                            Container(
+                                              width: 70,
+                                              height: 70,
+                                              decoration: BoxDecoration(
+                                                color: Theme.of(context)
+                                                    .colorScheme
+                                                    .onPrimaryContainer
+                                                    .withOpacity(
+                                                        initialOpacities[i]),
+                                                borderRadius:
+                                                    const BorderRadius.all(
+                                                  Radius.circular(10),
                                                 ),
+                                                border: Border.all(
+                                                    color: Colors.white),
+                                              ),
+                                              child: imageLinksFromDraggedItems[
+                                                          i] ==
+                                                      ''
+                                                  ? null
+                                                  : SvgPicture.network(
+                                                      imageLinksFromDraggedItems[
+                                                          i],
+                                                      height: 70,
+                                                      width: 70,
+                                                      semanticsLabel:
+                                                          randomSolutions[i]
+                                                              .kanjiCharacter,
+                                                      placeholderBuilder:
+                                                          (BuildContext
+                                                                  context) =>
+                                                              Container(
+                                                        color:
+                                                            Colors.transparent,
+                                                        height: 70,
+                                                        width: 70,
+                                                      ),
+                                                    ),
+                                            ),
+                                          ],
                                         ),
                                         const SizedBox(
                                           height: 5,
