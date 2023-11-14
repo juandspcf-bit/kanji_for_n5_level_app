@@ -1,4 +1,3 @@
-import 'package:assets_audio_player/assets_audio_player.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kanji_for_n5_level_app/Databases/favorites_db_utils.dart';
@@ -10,7 +9,6 @@ import 'package:kanji_for_n5_level_app/providers/status_stored_provider.dart';
 import 'package:kanji_for_n5_level_app/screens/kanji_details/tab_examples.dart';
 import 'package:kanji_for_n5_level_app/screens/kanji_details/tab_video_strokes.dart';
 import 'package:kanji_for_n5_level_app/screens/quiz_details_screen.dart/quizz_details_screen.dart';
-import 'package:video_player/video_player.dart';
 
 class KanjiDetails extends ConsumerStatefulWidget {
   const KanjiDetails(

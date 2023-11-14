@@ -1,7 +1,6 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:kanji_for_n5_level_app/models/kanji_from_api.dart';
@@ -9,12 +8,12 @@ import 'package:kanji_for_n5_level_app/providers/status_stored_provider.dart';
 
 class DraggableKanji extends ConsumerWidget {
   final bool isDragged;
-  final KanjiFromApi randomKanjisToAskMeaning;
+  final KanjiFromApi kanjiToAskMeaning;
 
   const DraggableKanji({
     super.key,
     required this.isDragged,
-    required this.randomKanjisToAskMeaning,
+    required this.kanjiToAskMeaning,
   });
 
   @override
@@ -35,8 +34,8 @@ class DraggableKanji extends ConsumerWidget {
             ),
           )
         : Draggable<KanjiFromApi>(
-            data: randomKanjisToAskMeaning,
-            feedback: Text(randomKanjisToAskMeaning.kanjiCharacter),
+            data: kanjiToAskMeaning,
+            feedback: Text(kanjiToAskMeaning.kanjiCharacter),
             childWhenDragging: Container(
               width: 70,
               height: 70,
@@ -60,13 +59,12 @@ class DraggableKanji extends ConsumerWidget {
                   Radius.circular(10),
                 ),
               ),
-              child: randomKanjisToAskMeaning.statusStorage ==
-                      StatusStorage.onlyOnline
+              child: kanjiToAskMeaning.statusStorage == StatusStorage.onlyOnline
                   ? SvgPicture.network(
-                      randomKanjisToAskMeaning.kanjiImageLink,
+                      kanjiToAskMeaning.kanjiImageLink,
                       height: 70,
                       width: 70,
-                      semanticsLabel: randomKanjisToAskMeaning.kanjiCharacter,
+                      semanticsLabel: kanjiToAskMeaning.kanjiCharacter,
                       placeholderBuilder: (BuildContext context) => Container(
                           color: Colors.transparent,
                           height: 40,
@@ -76,10 +74,10 @@ class DraggableKanji extends ConsumerWidget {
                           )),
                     )
                   : SvgPicture.file(
-                      File(randomKanjisToAskMeaning.kanjiImageLink),
+                      File(kanjiToAskMeaning.kanjiImageLink),
                       height: 70,
                       width: 70,
-                      semanticsLabel: randomKanjisToAskMeaning.kanjiCharacter,
+                      semanticsLabel: kanjiToAskMeaning.kanjiCharacter,
                       placeholderBuilder: (BuildContext context) => Container(
                           color: Colors.transparent,
                           height: 40,

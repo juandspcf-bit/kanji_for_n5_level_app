@@ -7,6 +7,8 @@ import 'package:flutter_svg/svg.dart';
 import 'package:kanji_for_n5_level_app/models/kanji_from_api.dart';
 import 'package:kanji_for_n5_level_app/providers/status_connection_provider.dart';
 import 'package:kanji_for_n5_level_app/providers/status_stored_provider.dart';
+import 'package:kanji_for_n5_level_app/screens/main_content.dart';
+import 'package:kanji_for_n5_level_app/screens/quiz_screen/column_drag_targets.dart';
 import 'package:kanji_for_n5_level_app/screens/quiz_screen/draggable_kanji.dart';
 import 'package:kanji_for_n5_level_app/screens/quiz_screen/kanji_possible_solution_container.dart';
 import 'package:kanji_for_n5_level_app/screens/quiz_screen/score_body.dart';
@@ -26,13 +28,13 @@ class QuizScreen extends ConsumerStatefulWidget {
 }
 
 class _QuizScreenState extends ConsumerState<QuizScreen> {
-  late List<String> imageLinksFromDraggedItems;
+  late List<String> imagePathsFromDraggedItems;
   late List<double> initialOpacities;
   late List<bool> isDraggedStatusList;
   late List<bool> isCorrectAnswer;
   late List<bool> isOmittedAnswer;
   late List<bool> isChecked;
-  late List<KanjiFromApi> randomKanjisToAskMeaning;
+  late List<KanjiFromApi> kanjisToAskMeaning;
   late int index;
   late List<KanjiFromApi> randomSolutions;
   late Screens currentScreenType;
@@ -70,7 +72,7 @@ class _QuizScreenState extends ConsumerState<QuizScreen> {
   }
 
   List<KanjiFromApi> getPosibleSolutions(KanjiFromApi kanjiToRemove) {
-    final copy1 = [...randomKanjisToAskMeaning];
+    final copy1 = [...kanjisToAskMeaning];
     copy1.shuffle();
     copy1.remove(kanjiToRemove);
     final copy2 = [kanjiToRemove, ...copy1.sublist(0, 2)];
@@ -90,11 +92,11 @@ class _QuizScreenState extends ConsumerState<QuizScreen> {
 
   void initTheQuiz() {
     currentScreenType = Screens.quiz;
-    randomKanjisToAskMeaning = suffleData();
+    kanjisToAskMeaning = suffleData();
     index = 0;
-    randomSolutions = getPosibleSolutions(randomKanjisToAskMeaning[index]);
+    randomSolutions = getPosibleSolutions(kanjisToAskMeaning[index]);
     final initValues = initLinks(widget.kanjisFromApi.length);
-    imageLinksFromDraggedItems = initValues.$1;
+    imagePathsFromDraggedItems = initValues.$1;
     initialOpacities = initValues.$2;
     isDraggedStatusList = initValues.$3;
     isCorrectAnswer = initValues.$4;
@@ -110,11 +112,12 @@ class _QuizScreenState extends ConsumerState<QuizScreen> {
 
   void onDraggedKanji(int i, KanjiFromApi data) {
     setState(() {
-      imageLinksFromDraggedItems[i] = data.kanjiImageLink;
+      imagePathsFromDraggedItems[i] = data.kanjiImageLink;
       initialOpacities[i] = 1.0;
       isDraggedStatusList[index] = true;
       isCorrectAnswer[index] = randomSolutions[i].kanjiCharacter ==
-          randomKanjisToAskMeaning[index].kanjiCharacter;
+          kanjisToAskMeaning[index].kanjiCharacter;
+      logger.d(isCorrectAnswer[index]);
     });
   }
 
@@ -198,7 +201,7 @@ class _QuizScreenState extends ConsumerState<QuizScreen> {
                       height: 20,
                     ),
                     Text(
-                      'Question ${index + 1} of ${randomKanjisToAskMeaning.length}',
+                      'Question ${index + 1} of ${kanjisToAskMeaning.length}',
                       style: Theme.of(context).textTheme.titleLarge,
                     ),
                     const SizedBox(
@@ -209,31 +212,15 @@ class _QuizScreenState extends ConsumerState<QuizScreen> {
                       children: [
                         DraggableKanji(
                             isDragged: isDraggedStatusList[index],
-                            randomKanjisToAskMeaning:
-                                randomKanjisToAskMeaning[index]),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.end,
-                          children: [
-                            for (int i = 0; i < randomSolutions.length; i++)
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.end,
-                                children: [
-                                  DragTarget<KanjiFromApi>(onAccept: (data) {
-                                    onDraggedKanji(i, data);
-                                  }, builder: (ctx, _, __) {
-                                    return KanjiDragTarget(
-                                        isDragged: isDraggedStatusList[index],
-                                        randomSolution: randomSolutions[i],
-                                        imagePathFromDraggedItem:
-                                            imageLinksFromDraggedItems[i],
-                                        randomKanjisToAskMeaning:
-                                            randomKanjisToAskMeaning[index],
-                                        initialOpacitie: initialOpacities[i]);
-                                  }),
-                                ],
-                              ),
-                          ],
-                        ),
+                            kanjiToAskMeaning: kanjisToAskMeaning[index]),
+                        ColumnDragTargets(
+                            isDragged: isDraggedStatusList[index],
+                            randomSolutions: randomSolutions,
+                            kanjiToAskMeaning: kanjisToAskMeaning[index],
+                            imagePathFromDraggedItem:
+                                imagePathsFromDraggedItems,
+                            initialOpacitie: initialOpacities,
+                            onDraggedKanji: onDraggedKanji)
                       ],
                     ),
                     const SizedBox(
@@ -256,7 +243,7 @@ class _QuizScreenState extends ConsumerState<QuizScreen> {
                           setState(() {
                             isDraggedStatusList = [...isDraggedList];
                             isCorrectAnswer = [...isDraggedList];
-                            imageLinksFromDraggedItems = [
+                            imagePathsFromDraggedItems = [
                               ...isDraggedImagePath
                             ];
                             initialOpacities = [...opacityValues];
@@ -284,10 +271,10 @@ class _QuizScreenState extends ConsumerState<QuizScreen> {
                             setState(() {
                               index++;
                               randomSolutions = getPosibleSolutions(
-                                  randomKanjisToAskMeaning[index]);
+                                  kanjisToAskMeaning[index]);
                               final initValues =
                                   initLinks(widget.kanjisFromApi.length);
-                              imageLinksFromDraggedItems = initValues.$1;
+                              imagePathsFromDraggedItems = initValues.$1;
                               initialOpacities = initValues.$2;
                               isDraggedStatusList = initValues.$3;
                             });
