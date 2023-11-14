@@ -69,6 +69,7 @@ class _QuizScreenState extends ConsumerState<QuizScreen> {
 
   List<KanjiFromApi> getPosibleSolutions(KanjiFromApi kanjiToRemove) {
     final copy1 = [...randomKanjisToAskMeaning];
+    copy1.shuffle();
     copy1.remove(kanjiToRemove);
     final copy2 = [kanjiToRemove, ...copy1.sublist(0, 2)];
     copy2.shuffle();
@@ -83,6 +84,18 @@ class _QuizScreenState extends ConsumerState<QuizScreen> {
         content: Text(message),
       ),
     );
+  }
+
+  String cutWords(String text) {
+    final splitText = text.split('、');
+    if (splitText.length == 1) return text;
+    return '${splitText[0]}, ${splitText[1]}';
+  }
+
+  String cutEnglishMeaning(String text) {
+    final splitText = text.split(', ');
+    if (splitText.length == 1) return text;
+    return '${splitText[0]}, ${splitText[1]}';
   }
 
   void initTheQuiz() {
@@ -291,9 +304,11 @@ class _QuizScreenState extends ConsumerState<QuizScreen> {
                                 ),
                               ),
                         Column(
+                          crossAxisAlignment: CrossAxisAlignment.end,
                           children: [
                             for (int i = 0; i < randomSolutions.length; i++)
                               Column(
+                                crossAxisAlignment: CrossAxisAlignment.end,
                                 children: [
                                   if (isDraggeInitialList[index] == true &&
                                       randomSolutions[i].kanjiCharacter ==
@@ -328,6 +343,8 @@ class _QuizScreenState extends ConsumerState<QuizScreen> {
                                     });
                                   }, builder: (ctx, _, __) {
                                     return Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.end,
                                       children: [
                                         Container(
                                           width: 70,
@@ -368,17 +385,18 @@ class _QuizScreenState extends ConsumerState<QuizScreen> {
                                         const SizedBox(
                                           height: 5,
                                         ),
-                                        Text(randomSolutions[i].englishMeaning),
+                                        Text(cutEnglishMeaning(
+                                            randomSolutions[i].englishMeaning)),
                                         const SizedBox(
                                           height: 2,
                                         ),
                                         Text(
-                                            'kunyomi: ${randomSolutions[i].hiraganaMeaning}'),
+                                            'kunyomi: ${cutWords(randomSolutions[i].hiraganaMeaning)}'),
                                         const SizedBox(
                                           height: 2,
                                         ),
                                         Text(
-                                            'Onyomi: ${randomSolutions[i].katakanaMeaning}'),
+                                            'Onyomi: ${cutWords(randomSolutions[i].katakanaMeaning)}'),
                                         const SizedBox(
                                           height: 10,
                                         ),
