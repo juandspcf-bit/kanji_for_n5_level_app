@@ -142,6 +142,37 @@ class _QuizScreenState extends ConsumerState<QuizScreen> {
     }
   }
 
+  Widget? displayDraggedIcon(String path, KanjiFromApi randomSolution) {
+    if (path == '') return null;
+
+    if (randomKanjisToAskMeaning[index].statusStorage ==
+        StatusStorage.onlyOnline) {
+      return SvgPicture.network(
+        path,
+        height: 70,
+        width: 70,
+        semanticsLabel: randomSolution.kanjiCharacter,
+        placeholderBuilder: (BuildContext context) => Container(
+          color: Colors.transparent,
+          height: 70,
+          width: 70,
+        ),
+      );
+    } else {
+      return SvgPicture.file(
+        File(path),
+        height: 70,
+        width: 70,
+        semanticsLabel: randomSolution.kanjiCharacter,
+        placeholderBuilder: (BuildContext context) => Container(
+          color: Colors.transparent,
+          height: 70,
+          width: 70,
+        ),
+      );
+    }
+  }
+
   @override
   void initState() {
     super.initState();
@@ -277,12 +308,7 @@ class _QuizScreenState extends ConsumerState<QuizScreen> {
                                   ),
                                   child: randomKanjisToAskMeaning[index]
                                               .statusStorage ==
-                                          StatusStorage
-                                              .onlyOnline /* ||
-                                          (randomKanjisToAskMeaning[index]
-                                                  .statusStorage ==
-                                              StatusStorage.proccessingStoring || randomKanjisToAskMeaning[index]
-                                                  .statusStorage == StatusStorage.proccessingStoringDeleting) */
+                                          StatusStorage.onlyOnline
                                       ? SvgPicture.network(
                                           randomKanjisToAskMeaning[index]
                                               .kanjiImageLink,
@@ -372,28 +398,10 @@ class _QuizScreenState extends ConsumerState<QuizScreen> {
                                                 border: Border.all(
                                                     color: Colors.white),
                                               ),
-                                              child: imageLinksFromDraggedItems[
-                                                          i] ==
-                                                      ''
-                                                  ? null
-                                                  : SvgPicture.network(
-                                                      imageLinksFromDraggedItems[
-                                                          i],
-                                                      height: 70,
-                                                      width: 70,
-                                                      semanticsLabel:
-                                                          randomSolutions[i]
-                                                              .kanjiCharacter,
-                                                      placeholderBuilder:
-                                                          (BuildContext
-                                                                  context) =>
-                                                              Container(
-                                                        color:
-                                                            Colors.transparent,
-                                                        height: 70,
-                                                        width: 70,
-                                                      ),
-                                                    ),
+                                              child: displayDraggedIcon(
+                                                imageLinksFromDraggedItems[i],
+                                                randomSolutions[i],
+                                              ),
                                             ),
                                           ],
                                         ),
