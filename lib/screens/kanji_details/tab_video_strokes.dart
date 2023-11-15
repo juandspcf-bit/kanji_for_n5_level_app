@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:kanji_for_n5_level_app/models/kanji_from_api.dart';
-import 'package:kanji_for_n5_level_app/providers/status_stored_provider.dart';
+import 'package:kanji_for_n5_level_app/providers/kanji_details_provider.dart';
 import 'package:kanji_for_n5_level_app/providers/video_status_playing.dart';
 import 'package:kanji_for_n5_level_app/screens/kanji_details/meaning_definition.dart';
 import 'package:video_player/video_player.dart';
@@ -10,12 +9,7 @@ import 'package:video_player/video_player.dart';
 class TabVideoStrokes extends ConsumerStatefulWidget {
   const TabVideoStrokes({
     super.key,
-    required this.kanjiFromApi,
-    required this.statusStorage,
   });
-
-  final KanjiFromApi kanjiFromApi;
-  final StatusStorage statusStorage;
 
   @override
   ConsumerState<TabVideoStrokes> createState() => _TabVideoStrokes();
@@ -28,9 +22,9 @@ class _TabVideoStrokes extends ConsumerState<TabVideoStrokes> {
   @override
   void initState() {
     super.initState();
-
+    final kanjiDetailsData = ref.read(kanjiDetailsProvider);
     _videoController = VideoPlayerController.networkUrl(
-        Uri.parse(widget.kanjiFromApi.videoLink));
+        Uri.parse(kanjiDetailsData!.kanjiFromApi.videoLink));
     initializadedVideoPlayer = _videoController.initialize();
   }
 
@@ -43,6 +37,7 @@ class _TabVideoStrokes extends ConsumerState<TabVideoStrokes> {
 
   @override
   Widget build(BuildContext context) {
+    final kanjiFromApi = ref.watch(kanjiDetailsProvider)!.kanjiFromApi;
     return Column(
       children: [
         const SizedBox(
@@ -65,14 +60,10 @@ class _TabVideoStrokes extends ConsumerState<TabVideoStrokes> {
         const Divider(
           height: 4,
         ),
-        /* StrokesImages(
-          kanjiFromApi: widget.kanjiFromApi,
-          statusStorage: widget.statusStorage,
-        ), */
         MeaningAndDefinition(
-          englishMeaning: widget.kanjiFromApi.englishMeaning,
-          hiraganaMeaning: widget.kanjiFromApi.hiraganaMeaning,
-          katakanaMeaning: widget.kanjiFromApi.katakanaMeaning,
+          englishMeaning: kanjiFromApi.englishMeaning,
+          hiraganaMeaning: kanjiFromApi.hiraganaMeaning,
+          katakanaMeaning: kanjiFromApi.katakanaMeaning,
         ),
       ],
     );

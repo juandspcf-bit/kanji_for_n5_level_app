@@ -1,25 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:kanji_for_n5_level_app/models/kanji_from_api.dart';
-import 'package:kanji_for_n5_level_app/providers/status_stored_provider.dart';
+import 'package:kanji_for_n5_level_app/providers/kanji_details_provider.dart';
 import 'package:kanji_for_n5_level_app/screens/kanji_details/examples_audios.dart';
-import 'package:kanji_for_n5_level_app/screens/kanji_details/meaning_definition.dart';
-import 'package:kanji_for_n5_level_app/screens/kanji_details/strokes_images.dart';
 
 class TabExamples extends ConsumerWidget {
   const TabExamples({
     super.key,
-    required this.kanjiFromApi,
-    required this.statusStorage,
-    required this.stopAnimation,
   });
-
-  final KanjiFromApi kanjiFromApi;
-  final StatusStorage statusStorage;
-  final void Function() stopAnimation;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final kanjiDetailsData = ref.watch(kanjiDetailsProvider);
+    final kanjiFromApi = kanjiDetailsData!.kanjiFromApi;
+    final statusStorage = kanjiDetailsData.statusStorage;
     return Column(
       children: [
         const SizedBox(
@@ -38,7 +31,6 @@ class TabExamples extends ConsumerWidget {
         Expanded(
           child: ExampleAudios(
             examples: kanjiFromApi.example,
-            stopAnimation: stopAnimation,
             statusStorage: statusStorage,
           ),
         ),

@@ -8,12 +8,10 @@ class ExampleAudios extends ConsumerWidget {
   const ExampleAudios({
     super.key,
     required this.examples,
-    required this.stopAnimation,
     required this.statusStorage,
   });
 
   final List<Example> examples;
-  final void Function() stopAnimation;
   final StatusStorage statusStorage;
 
   @override
@@ -41,41 +39,33 @@ class ExampleAudios extends ConsumerWidget {
                       ),
                     ],
                   ),
-                  trailing: Material(
-                    child: Ink(
-                      decoration: BoxDecoration(
-                          color: Theme.of(context).colorScheme.primary,
-                          borderRadius: BorderRadius.circular(30)),
-                      child: InkWell(
-                        highlightColor: Colors.blue.withOpacity(0.4),
-                        splashColor: Colors.green.withOpacity(0.5),
-                        onTap: () {},
-                        child: IconButton(
-                          color: Theme.of(context).colorScheme.onPrimary,
-                          splashColor: Colors.deepOrange,
-                          onPressed: () async {
-                            stopAnimation();
+                  trailing: IconButton(
+                    style: ButtonStyle(
+                      overlayColor: MaterialStateProperty.all(Colors.black26),
+                      backgroundColor: MaterialStateProperty.all(
+                          Theme.of(context).colorScheme.primary),
+                    ),
+                    onPressed: () async {
+                      final assetsAudioPlayer = AssetsAudioPlayer();
 
-                            final assetsAudioPlayer = AssetsAudioPlayer();
-
-                            try {
-                              if (statusStorage == StatusStorage.onlyOnline) {
-                                await assetsAudioPlayer.open(
-                                  Audio.network(examples[index].audio.mp3),
-                                );
-                              } else if (statusStorage ==
-                                  StatusStorage.stored) {
-                                await assetsAudioPlayer.open(
-                                  Audio.file(examples[index].audio.mp3),
-                                );
-                              }
-                            } catch (t) {
-                              //mp3 unreachable
-                            }
-                          },
-                          icon: const Icon(Icons.play_arrow_rounded),
-                        ),
-                      ),
+                      try {
+                        if (statusStorage == StatusStorage.onlyOnline) {
+                          await assetsAudioPlayer.open(
+                            Audio.network(examples[index].audio.mp3),
+                          );
+                        } else if (statusStorage == StatusStorage.stored) {
+                          await assetsAudioPlayer.open(
+                            Audio.file(examples[index].audio.mp3),
+                          );
+                        }
+                      } catch (t) {
+                        //mp3 unreachable
+                      }
+                    },
+                    icon: Icon(
+                      Icons.play_arrow_rounded,
+                      size: 30,
+                      color: Theme.of(context).colorScheme.onPrimary,
                     ),
                   ),
                 )
