@@ -11,7 +11,7 @@ class ColumnDragTargets extends ConsumerWidget {
     required this.randomSolutions,
     required this.kanjiToAskMeaning,
     required this.imagePathFromDraggedItem,
-    required this.initialOpacitie,
+    required this.initialOpacities,
     required this.onDraggedKanji,
   });
 
@@ -19,7 +19,7 @@ class ColumnDragTargets extends ConsumerWidget {
   final List<KanjiFromApi> randomSolutions;
   final KanjiFromApi kanjiToAskMeaning;
   final List<String> imagePathFromDraggedItem;
-  final List<double> initialOpacitie;
+  final List<double> initialOpacities;
   final void Function(int i, KanjiFromApi data) onDraggedKanji;
 
   @override
@@ -42,7 +42,7 @@ class ColumnDragTargets extends ConsumerWidget {
                     imagePathFromDraggedItem:
                         imagePathFromDraggedItem[indexColumnTargets],
                     randomKanjisToAskMeaning: kanjiToAskMeaning,
-                    initialOpacitie: initialOpacitie[indexColumnTargets]);
+                    initialOpacitie: initialOpacities[indexColumnTargets]);
               }),
             ],
           ),

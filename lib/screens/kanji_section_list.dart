@@ -6,6 +6,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kanji_for_n5_level_app/models/kanji_from_api.dart';
 import 'package:kanji_for_n5_level_app/models/secction_model.dart';
 import 'package:kanji_for_n5_level_app/providers/kanjis_list_provider.dart';
+import 'package:kanji_for_n5_level_app/providers/quiz_kanji_list_provider.dart';
 import 'package:kanji_for_n5_level_app/providers/status_connection_provider.dart';
 import 'package:kanji_for_n5_level_app/providers/status_stored_provider.dart';
 import 'package:kanji_for_n5_level_app/screens/body_list/body_list.dart';
@@ -126,6 +127,10 @@ class _KanjiSectionListState extends ConsumerState<KanjiSectionList> {
             IconButton(
                 onPressed: kanjiList.$2 == 1 && accesToQuiz
                     ? () {
+                        ref
+                            .read(quizDataValuesProvider.notifier)
+                            .initTheStateBeforeAccessingQuizScreen(
+                                kanjiList.$1.length, kanjiList.$1);
                         Navigator.of(context).push(
                           MaterialPageRoute(
                             builder: (ctx) {
