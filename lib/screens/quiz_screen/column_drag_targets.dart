@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kanji_for_n5_level_app/models/kanji_from_api.dart';
+import 'package:kanji_for_n5_level_app/providers/quiz_kanji_list_provider.dart';
 import 'package:kanji_for_n5_level_app/screens/quiz_screen/kanji_possible_solution_container.dart';
 
 class ColumnDragTargets extends ConsumerWidget {
@@ -12,7 +13,6 @@ class ColumnDragTargets extends ConsumerWidget {
     required this.kanjiToAskMeaning,
     required this.imagePathFromDraggedItem,
     required this.initialOpacities,
-    required this.onDraggedKanji,
   });
 
   final bool isDragged;
@@ -20,7 +20,6 @@ class ColumnDragTargets extends ConsumerWidget {
   final KanjiFromApi kanjiToAskMeaning;
   final List<String> imagePathFromDraggedItem;
   final List<double> initialOpacities;
-  final void Function(int i, KanjiFromApi data) onDraggedKanji;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -34,7 +33,9 @@ class ColumnDragTargets extends ConsumerWidget {
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
               DragTarget<KanjiFromApi>(onAccept: (data) {
-                onDraggedKanji(indexColumnTargets, data);
+                ref
+                    .read(quizDataValuesProvider.notifier)
+                    .onDraggedKanji(indexColumnTargets, data);
               }, builder: (ctx, _, __) {
                 return KanjiDragTarget(
                     isDragged: isDragged,

@@ -4,6 +4,7 @@ import 'package:kanji_for_n5_level_app/models/kanji_from_api.dart';
 import 'package:kanji_for_n5_level_app/providers/status_stored_provider.dart';
 import 'package:kanji_for_n5_level_app/screens/kanji_details/examples_audios.dart';
 import 'package:kanji_for_n5_level_app/screens/kanji_details/meaning_definition.dart';
+import 'package:kanji_for_n5_level_app/screens/kanji_details/strokes_images.dart';
 
 class TabExamples extends ConsumerWidget {
   const TabExamples({
@@ -21,14 +22,6 @@ class TabExamples extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return Column(
       children: [
-        MeaningAndDefinition(
-          englishMeaning: kanjiFromApi.englishMeaning,
-          hiraganaMeaning: kanjiFromApi.hiraganaMeaning,
-          katakanaMeaning: kanjiFromApi.katakanaMeaning,
-        ),
-        const Divider(
-          height: 4,
-        ),
         const SizedBox(
           height: 10,
         ),

@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:kanji_for_n5_level_app/providers/quiz_kanji_list_provider.dart';
 import 'package:kanji_for_n5_level_app/screens/quiz_screen/screen_chart.dart';
 import 'package:lottie/lottie.dart';
 
-class ScoreBody extends StatefulWidget {
+class ScoreBody extends ConsumerStatefulWidget {
   const ScoreBody({
     super.key,
     required this.isCorrectAnswer,
@@ -15,10 +17,10 @@ class ScoreBody extends StatefulWidget {
   final Function() resetTheQuiz;
 
   @override
-  State<ScoreBody> createState() => _ScoreBodyState();
+  ConsumerState<ScoreBody> createState() => _ScoreBodyState();
 }
 
-class _ScoreBodyState extends State<ScoreBody> {
+class _ScoreBodyState extends ConsumerState<ScoreBody> {
   int countCorrects = 0, countIncorrects = 0, countOmited = 0;
 
   (int, int, int) getCounts() {
@@ -133,7 +135,7 @@ class _ScoreBodyState extends State<ScoreBody> {
           ),
           ElevatedButton(
             onPressed: () {
-              widget.resetTheQuiz();
+              ref.read(quizDataValuesProvider.notifier).resetTheQuiz();
             },
             style: ElevatedButton.styleFrom(
               textStyle: Theme.of(context).textTheme.bodyLarge,

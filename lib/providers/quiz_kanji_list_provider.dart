@@ -188,6 +188,7 @@ class QuizDataValuesProvider extends Notifier<QuizDataValues> {
       List<KanjiFromApi> kanjisToAskMeaning, KanjiFromApi kanjiToRemove) {
     final copy1 = [...kanjisToAskMeaning];
     copy1.shuffle();
+    copy1.shuffle();
     copy1.remove(kanjiToRemove);
     final copy2 = [kanjiToRemove, ...copy1.sublist(0, 2)];
     copy2.shuffle();

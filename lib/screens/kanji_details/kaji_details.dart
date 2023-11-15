@@ -7,6 +7,7 @@ import 'package:kanji_for_n5_level_app/providers/quiz_details_providers.dart';
 import 'package:kanji_for_n5_level_app/providers/select_quiz_details_screen.dart';
 import 'package:kanji_for_n5_level_app/providers/status_stored_provider.dart';
 import 'package:kanji_for_n5_level_app/screens/kanji_details/tab_examples.dart';
+import 'package:kanji_for_n5_level_app/screens/kanji_details/tab_strokes.dart';
 import 'package:kanji_for_n5_level_app/screens/kanji_details/tab_video_strokes.dart';
 import 'package:kanji_for_n5_level_app/screens/quiz_details_screen.dart/quizz_details_screen.dart';
 
@@ -50,7 +51,7 @@ class KanjiDetailsState extends ConsumerState<KanjiDetails> {
   Widget build(BuildContext context) {
     return DefaultTabController(
       initialIndex: 0,
-      length: 2,
+      length: 3,
       child: Scaffold(
         appBar: AppBar(
           title: Text(widget.kanjiFromApi.kanjiCharacter),
@@ -109,6 +110,9 @@ class KanjiDetailsState extends ConsumerState<KanjiDetails> {
           bottom: const TabBar(
             tabs: <Widget>[
               Tab(
+                icon: Icon(Icons.movie),
+              ),
+              Tab(
                 icon: Icon(Icons.draw),
               ),
               Tab(
@@ -120,6 +124,10 @@ class KanjiDetailsState extends ConsumerState<KanjiDetails> {
         body: TabBarView(
           children: <Widget>[
             TabVideoStrokes(
+              kanjiFromApi: widget.kanjiFromApi,
+              statusStorage: widget.statusStorage,
+            ),
+            TabStrokes(
               kanjiFromApi: widget.kanjiFromApi,
               statusStorage: widget.statusStorage,
             ),

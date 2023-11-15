@@ -4,7 +4,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:kanji_for_n5_level_app/models/kanji_from_api.dart';
 import 'package:kanji_for_n5_level_app/providers/status_stored_provider.dart';
 import 'package:kanji_for_n5_level_app/providers/video_status_playing.dart';
-import 'package:kanji_for_n5_level_app/screens/kanji_details/strokes_images.dart';
+import 'package:kanji_for_n5_level_app/screens/kanji_details/meaning_definition.dart';
 import 'package:video_player/video_player.dart';
 
 class TabVideoStrokes extends ConsumerStatefulWidget {
@@ -65,9 +65,14 @@ class _TabVideoStrokes extends ConsumerState<TabVideoStrokes> {
         const Divider(
           height: 4,
         ),
-        StrokesImages(
+        /* StrokesImages(
           kanjiFromApi: widget.kanjiFromApi,
           statusStorage: widget.statusStorage,
+        ), */
+        MeaningAndDefinition(
+          englishMeaning: widget.kanjiFromApi.englishMeaning,
+          hiraganaMeaning: widget.kanjiFromApi.hiraganaMeaning,
+          katakanaMeaning: widget.kanjiFromApi.katakanaMeaning,
         ),
       ],
     );
