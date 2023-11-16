@@ -1,8 +1,13 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:kanji_for_n5_level_app/Databases/db_computes_functions_for_inserting_data.dart';
 import 'package:kanji_for_n5_level_app/models/kanji_from_api.dart';
 import 'package:kanji_for_n5_level_app/networking/request_api.dart';
+import 'package:kanji_for_n5_level_app/providers/status_stored_provider.dart';
+import 'package:kanji_for_n5_level_app/screens/main_content.dart';
+import 'package:path_provider/path_provider.dart';
 
-class FavoritesCached extends Notifier<(List<KanjiFromApi>, int)> {
+class FavoritesListProvider extends Notifier<(List<KanjiFromApi>, int)> {
   @override
   (List<KanjiFromApi>, int) build() {
     return ([], 0);
@@ -81,18 +86,33 @@ class FavoritesCached extends Notifier<(List<KanjiFromApi>, int)> {
     if (kanjiIndex == -1) return;
     copyState[kanjiIndex] = storedKanji;
     state = (copyState, state.$2);
+  }
 
-/*     try {
-      final kanjiIndex = copyState.indexWhere(
-          (element) => element.kanjiCharacter == storedKanji.kanjiCharacter);
-      copyState[kanjiIndex] = storedKanji;
-      state = (copyState, state.$2);
-    } on StateError catch (e) {
-      e.message;
-    } */
+  void insertKanjiToStorageComputeVersion(
+      KanjiFromApi kanjiFromApi, int selection) async {
+    try {
+      final dirDocumentPath = await getApplicationDocumentsDirectory();
+      final kanjiFromApiStored = await compute(
+          insertKanjiFromApiComputeVersion,
+          ParametersCompute(
+            kanjiFromApi: kanjiFromApi,
+            path: dirDocumentPath,
+          ));
+
+      insertPathsInDB(kanjiFromApiStored);
+      ref.read(statusStorageProvider.notifier).addItem(kanjiFromApiStored);
+
+      ref.read(favoritesListProvider.notifier).updateKanji(kanjiFromApiStored);
+
+      logger.i(kanjiFromApiStored);
+      logger.d('success');
+    } catch (e) {
+      logger.e('error sotoring');
+      logger.e(e.toString());
+    }
   }
 }
 
-final favoritesCachedProvider =
-    NotifierProvider<FavoritesCached, (List<KanjiFromApi>, int)>(
-        FavoritesCached.new);
+final favoritesListProvider =
+    NotifierProvider<FavoritesListProvider, (List<KanjiFromApi>, int)>(
+        FavoritesListProvider.new);

@@ -158,7 +158,7 @@ class _MainContentState extends ConsumerState<MainContent> {
   }
 
   bool isAnyProcessingData() {
-    final listFavorites = ref.read(favoritesCachedProvider);
+    final listFavorites = ref.read(favoritesListProvider);
     try {
       listFavorites.$1.firstWhere(
         (element) =>
@@ -203,10 +203,10 @@ class _MainContentState extends ConsumerState<MainContent> {
     final favoritesKanjis = await loadFavorites();
     Connectivity().checkConnectivity().then((result) {
       if (ConnectivityResult.none == result) {
-        ref.read(favoritesCachedProvider.notifier).setInitialFavoritesOffline(
+        ref.read(favoritesListProvider.notifier).setInitialFavoritesOffline(
             listOfValidStoredKanjis, favoritesKanjis, 10);
       } else {
-        ref.read(favoritesCachedProvider.notifier).setInitialFavoritesOnline(
+        ref.read(favoritesListProvider.notifier).setInitialFavoritesOnline(
             listOfValidStoredKanjis, favoritesKanjis, 10);
       }
     });

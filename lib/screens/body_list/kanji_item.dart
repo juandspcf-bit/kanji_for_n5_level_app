@@ -35,7 +35,7 @@ class _KanjiItemState extends ConsumerState<KanjiItem> {
     ref.read(videoStatusPlaying.notifier).setSpeed(1.0);
     ref.read(videoStatusPlaying.notifier).setIsPlaying(true);
     var queryKanji = ref
-        .read(favoritesCachedProvider.notifier)
+        .read(favoritesListProvider.notifier)
         .searchInFavorites(widget.kanjiFromApi.kanjiCharacter);
     final favoriteStatus = queryKanji != "";
     ref.read(kanjiDetailsProvider.notifier).setInitValues(

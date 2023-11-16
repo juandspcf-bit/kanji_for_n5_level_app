@@ -19,7 +19,7 @@ class FavoriteScreen extends ConsumerStatefulWidget {
 class _FavoriteScreenState extends ConsumerState<FavoriteScreen> {
   @override
   Widget build(BuildContext context) {
-    var kanjiList = ref.watch(favoritesCachedProvider);
+    var kanjiList = ref.watch(favoritesListProvider);
     final resultStatus = ref.watch(statusConnectionProvider);
 
     if (resultStatus == ConnectivityResult.none) {

@@ -67,9 +67,7 @@ class KanjiListProvider extends Notifier<(List<KanjiFromApi>, int, int)> {
       insertPathsInDB(kanjiFromApiStored);
       ref.read(statusStorageProvider.notifier).addItem(kanjiFromApiStored);
 
-      ref
-          .read(favoritesCachedProvider.notifier)
-          .updateKanji(kanjiFromApiStored);
+      ref.read(favoritesListProvider.notifier).updateKanji(kanjiFromApiStored);
 
       if (selection == 0) {
         ref.read(kanjiListProvider.notifier).updateKanji(kanjiFromApiStored);
@@ -116,26 +114,22 @@ class KanjiListProvider extends Notifier<(List<KanjiFromApi>, int, int)> {
       ref.read(statusStorageProvider.notifier).deleteItem(kanjiFromApi);
 
       onSuccess(List<KanjiFromApi> list) {
-        if (selection == 1) {
-          ref.read(favoritesCachedProvider.notifier).updateKanji(list[0]);
-        } else {
+        ref.read(favoritesListProvider.notifier).updateKanji(list[0]);
+        if (selection == 0) {
           ref.read(kanjiListProvider.notifier).updateKanji(list[0]);
         }
       }
 
       onError() {
         //TODO handle error connection online
-
-        if (selection == 1) {
-          ref.read(favoritesCachedProvider.notifier).updateKanji(
-              updateStatusKanjiComputeVersion(
-                  StatusStorage.errorDeleting, true, kanjiFromApi));
-        } else {
+        ref.read(favoritesListProvider.notifier).updateKanji(
+            updateStatusKanjiComputeVersion(
+                StatusStorage.errorDeleting, true, kanjiFromApi));
+        if (selection == 0) {
           ref.read(kanjiListProvider.notifier).updateKanji(
               updateStatusKanjiComputeVersion(
                   StatusStorage.errorDeleting, true, kanjiFromApi));
         }
-
         ref.read(errorStoringDatabaseStatus.notifier).setError(true);
       }
 
