@@ -60,45 +60,91 @@ class ExampleAudios extends ConsumerWidget {
                   ),
                   title: Column(
                     children: [
-                      Text(examples[index].japanese),
-                      const SizedBox(
-                        height: 7,
+                      Text(
+                        examples[index].japanese,
+                        style: data.track == index && data.isPlaying
+                            ? Theme.of(context).textTheme.titleMedium!.copyWith(
+                                fontWeight: FontWeight.bold,
+                                color: Colors.amberAccent)
+                            : Theme.of(context)
+                                .textTheme
+                                .bodyLarge!
+                                .copyWith(fontWeight: FontWeight.bold),
                       ),
-                      Text(examples[index].meaning.english),
                       const SizedBox(
                         height: 7,
                       ),
                     ],
                   ),
-                  trailing: IconButton(
-                    style: ButtonStyle(
-                      overlayColor: MaterialStateProperty.all(Colors.black26),
-                      backgroundColor: MaterialStateProperty.all(
-                          Theme.of(context).colorScheme.primary),
+                  subtitle: Column(children: [
+                    Text(
+                      examples[index].meaning.english,
+                      style: data.track == index && data.isPlaying
+                          ? Theme.of(context)
+                              .textTheme
+                              .titleSmall!
+                              .copyWith(color: Colors.amberAccent)
+                          : Theme.of(context).textTheme.bodyMedium,
                     ),
-                    onPressed: () async {
-                      final assetsAudioPlayer = AssetsAudioPlayer();
+                    const SizedBox(
+                      height: 7,
+                    ),
+                  ]),
+                  trailing: Builder(builder: (context) {
+                    final assetsAudioPlayer = AssetsAudioPlayer();
+                    return IconButton(
+                      style: ButtonStyle(
+                        overlayColor: MaterialStateProperty.all(Colors.black26),
+                        backgroundColor: MaterialStateProperty.all(
+                            Theme.of(context).colorScheme.primary),
+                      ),
+                      onPressed: () async {
+                        await assetsAudioPlayer.stop();
+                        if (data.track == index && data.isPlaying) return;
 
-                      try {
-                        if (statusStorage == StatusStorage.onlyOnline) {
-                          await assetsAudioPlayer.open(
-                            Audio.network(examples[index].audio.mp3),
-                          );
-                        } else if (statusStorage == StatusStorage.stored) {
-                          await assetsAudioPlayer.open(
-                            Audio.file(examples[index].audio.mp3),
-                          );
+                        try {
+                          if (statusStorage == StatusStorage.onlyOnline) {
+                            await assetsAudioPlayer.open(
+                              Audio.network(examples[index].audio.mp3),
+                            );
+                          } else if (statusStorage == StatusStorage.stored) {
+                            await assetsAudioPlayer.open(
+                              Audio.file(examples[index].audio.mp3),
+                            );
+                          }
+                        } catch (t) {
+                          //mp3 unreachable
                         }
-                      } catch (t) {
-                        //mp3 unreachable
-                      }
-                    },
-                    icon: Icon(
-                      Icons.play_arrow_rounded,
-                      size: 30,
-                      color: Theme.of(context).colorScheme.onPrimary,
-                    ),
-                  ),
+                      },
+                      icon: data.track == index && data.isPlaying
+                          ? Icon(
+                              Icons.music_note,
+                              size: 30,
+                              color: Theme.of(context).colorScheme.onPrimary,
+                            )
+                          : StreamBuilder(
+                              stream: assetsAudioPlayer.isPlaying,
+                              builder: (context, asyncSnapshot) {
+                                if (asyncSnapshot.data == null) {
+                                  return Icon(
+                                    Icons.play_arrow_rounded,
+                                    size: 30,
+                                    color:
+                                        Theme.of(context).colorScheme.onPrimary,
+                                  );
+                                }
+                                final bool isPlaying = asyncSnapshot.data!;
+                                return Icon(
+                                  isPlaying
+                                      ? Icons.music_note
+                                      : Icons.play_arrow_rounded,
+                                  size: 30,
+                                  color:
+                                      Theme.of(context).colorScheme.onPrimary,
+                                );
+                              }),
+                    );
+                  }),
                 )
             ],
           ),

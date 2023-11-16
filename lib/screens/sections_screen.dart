@@ -6,6 +6,7 @@ import 'package:kanji_for_n5_level_app/models/secction_model.dart';
 import 'package:kanji_for_n5_level_app/providers/kanjis_list_provider.dart';
 import 'package:kanji_for_n5_level_app/providers/status_stored_provider.dart';
 import 'package:kanji_for_n5_level_app/screens/kanji_section_list.dart';
+import 'package:kanji_for_n5_level_app/screens/main_content.dart';
 
 class Sections extends StatelessWidget {
   const Sections({super.key});
@@ -60,6 +61,7 @@ class _SectionState extends ConsumerState<Section> {
             .clearKanjiList(widget.sectionData.sectionNumber);
         final storedKanjis =
             ref.read(statusStorageProvider.notifier).getStoresItems();
+        logger.d(storedKanjis);
         ref.read(kanjiListProvider.notifier).setKanjiList(
             storedKanjis[widget.sectionData.sectionNumber] ?? [],
             widget.sectionData.kanjis,

@@ -76,14 +76,20 @@ class FavoritesCached extends Notifier<(List<KanjiFromApi>, int)> {
   void updateKanji(KanjiFromApi storedKanji) {
     final copyState = [...state.$1];
 
-    try {
+    final kanjiIndex = copyState.indexWhere(
+        (element) => element.kanjiCharacter == storedKanji.kanjiCharacter);
+    if (kanjiIndex == -1) return;
+    copyState[kanjiIndex] = storedKanji;
+    state = (copyState, state.$2);
+
+/*     try {
       final kanjiIndex = copyState.indexWhere(
           (element) => element.kanjiCharacter == storedKanji.kanjiCharacter);
       copyState[kanjiIndex] = storedKanji;
       state = (copyState, state.$2);
     } on StateError catch (e) {
       e.message;
-    }
+    } */
   }
 }
 

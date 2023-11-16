@@ -28,14 +28,11 @@ class KanjiListProvider extends Notifier<(List<KanjiFromApi>, int, int)> {
   void updateKanji(KanjiFromApi storedKanji) {
     final copyState = [...state.$1];
 
-    try {
-      final kanjiIndex = copyState.indexWhere(
-          (element) => element.kanjiCharacter == storedKanji.kanjiCharacter);
-      copyState[kanjiIndex] = storedKanji;
-      state = (copyState, state.$2, state.$3);
-    } on StateError catch (e) {
-      e.message;
-    }
+    final kanjiIndex = copyState.indexWhere(
+        (element) => element.kanjiCharacter == storedKanji.kanjiCharacter);
+    if (kanjiIndex == -1) return;
+    copyState[kanjiIndex] = storedKanji;
+    state = (copyState, state.$2, state.$3);
   }
 
   void setKanjiList(
@@ -70,11 +67,11 @@ class KanjiListProvider extends Notifier<(List<KanjiFromApi>, int, int)> {
       insertPathsInDB(kanjiFromApiStored);
       ref.read(statusStorageProvider.notifier).addItem(kanjiFromApiStored);
 
-      if (selection == 1) {
-        ref
-            .read(favoritesCachedProvider.notifier)
-            .updateKanji(kanjiFromApiStored);
-      } else {
+      ref
+          .read(favoritesCachedProvider.notifier)
+          .updateKanji(kanjiFromApiStored);
+
+      if (selection == 0) {
         ref.read(kanjiListProvider.notifier).updateKanji(kanjiFromApiStored);
       }
       logger.i(kanjiFromApiStored);

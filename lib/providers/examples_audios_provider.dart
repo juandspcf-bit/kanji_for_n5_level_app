@@ -77,8 +77,7 @@ class ExamplesAudiosProvider extends Notifier<ExamplesAudiosData> {
   }
 
   void stopAudio() {
-    state.assetsAudioPlayer.stop();
-    setIsPlaying(false);
+    state.assetsAudioPlayer.stop().then((value) => setIsPlaying(false));
   }
 }
 

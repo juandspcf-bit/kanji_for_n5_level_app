@@ -2,44 +2,9 @@ import 'dart:io';
 
 import 'package:async/async.dart';
 import 'package:dio/dio.dart';
-import 'package:flutter/foundation.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kanji_for_n5_level_app/Databases/download_db_utils.dart';
 import 'package:kanji_for_n5_level_app/models/kanji_from_api.dart';
-import 'package:kanji_for_n5_level_app/providers/favorites_cached_provider.dart';
-import 'package:kanji_for_n5_level_app/providers/kanjis_list_provider.dart';
 import 'package:kanji_for_n5_level_app/providers/status_stored_provider.dart';
-import 'package:kanji_for_n5_level_app/screens/main_content.dart';
-import 'package:path_provider/path_provider.dart';
-
-void insertKanjiToStorageComputeVersion(
-    KanjiFromApi kanjiFromApi, WidgetRef ref, bool selection) async {
-  try {
-    final dirDocumentPath = await getApplicationDocumentsDirectory();
-    final kanjiFromApiStored = await compute(
-        insertKanjiFromApiComputeVersion,
-        ParametersCompute(
-          kanjiFromApi: kanjiFromApi,
-          path: dirDocumentPath,
-        ));
-
-    insertPathsInDB(kanjiFromApiStored);
-    ref.read(statusStorageProvider.notifier).addItem(kanjiFromApiStored);
-
-    if (selection) {
-      ref
-          .read(favoritesCachedProvider.notifier)
-          .updateKanji(kanjiFromApiStored);
-    } else {
-      ref.read(kanjiListProvider.notifier).updateKanji(kanjiFromApiStored);
-    }
-    logger.i(kanjiFromApiStored);
-    logger.d('success');
-  } catch (e) {
-    logger.e('error sotoring');
-    logger.e(e.toString());
-  }
-}
 
 class ParametersCompute {
   final Directory path;
