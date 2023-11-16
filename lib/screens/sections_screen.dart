@@ -61,7 +61,6 @@ class _SectionState extends ConsumerState<Section> {
             .clearKanjiList(widget.sectionData.sectionNumber);
         final storedKanjis =
             ref.read(statusStorageProvider.notifier).getStoresItems();
-        logger.d(storedKanjis);
         ref.read(kanjiListProvider.notifier).setKanjiList(
             storedKanjis[widget.sectionData.sectionNumber] ?? [],
             widget.sectionData.kanjis,

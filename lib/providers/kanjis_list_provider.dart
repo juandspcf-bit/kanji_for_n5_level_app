@@ -149,3 +149,15 @@ class KanjiListProvider extends Notifier<(List<KanjiFromApi>, int, int)> {
 final kanjiListProvider =
     NotifierProvider<KanjiListProvider, (List<KanjiFromApi>, int, int)>(
         KanjiListProvider.new);
+
+class KanjiListData {
+  final List<KanjiFromApi> kanjiList;
+  final int status;
+  final int section;
+
+  KanjiListData({
+    required this.kanjiList,
+    required this.status,
+    required this.section,
+  });
+}
