@@ -11,28 +11,32 @@ import 'package:kanji_for_n5_level_app/providers/status_stored_provider.dart';
 import 'package:kanji_for_n5_level_app/screens/main_content.dart';
 import 'package:path_provider/path_provider.dart';
 
-class KanjiListProvider extends Notifier<(List<KanjiFromApi>, int, int)> {
+class KanjiListProvider extends Notifier<KanjiListData> {
   @override
-  (List<KanjiFromApi>, int, int) build() {
-    return ([], 0, 1);
+  KanjiListData build() {
+    return KanjiListData(kanjiList: [], status: 0, section: 1);
   }
 
   void onSuccesRequest(List<KanjiFromApi> kanjisFromApi) {
-    state = (kanjisFromApi, 1, kanjisFromApi.first.section);
+    state = KanjiListData(
+        kanjiList: kanjisFromApi,
+        status: 1,
+        section: kanjisFromApi.first.section);
   }
 
   void onErrorRequest() {
-    state = ([], 2, state.$3);
+    state = KanjiListData(kanjiList: [], status: 2, section: state.section);
   }
 
   void updateKanji(KanjiFromApi storedKanji) {
-    final copyState = [...state.$1];
+    final copyState = [...state.kanjiList];
 
     final kanjiIndex = copyState.indexWhere(
         (element) => element.kanjiCharacter == storedKanji.kanjiCharacter);
     if (kanjiIndex == -1) return;
     copyState[kanjiIndex] = storedKanji;
-    state = (copyState, state.$2, state.$3);
+    state = KanjiListData(
+        kanjiList: copyState, status: state.status, section: state.section);
   }
 
   void setKanjiList(
@@ -49,8 +53,25 @@ class KanjiListProvider extends Notifier<(List<KanjiFromApi>, int, int)> {
     );
   }
 
+  void setKanjiListFromRepositories(
+    List<String> kanjisCharacteres,
+    int section,
+  ) {
+    clearKanjiList(section);
+    final storedKanjis =
+        ref.read(statusStorageProvider.notifier).getStoresItems();
+
+    RequestApi.getKanjis(
+      storedKanjis[section] ?? [],
+      kanjisCharacteres,
+      section,
+      onSuccesRequest,
+      onErrorRequest,
+    );
+  }
+
   void clearKanjiList(int section) {
-    state = ([], 0, section);
+    state = KanjiListData(kanjiList: [], status: 0, section: section);
   }
 
   void insertKanjiToStorageComputeVersion(
@@ -147,8 +168,7 @@ class KanjiListProvider extends Notifier<(List<KanjiFromApi>, int, int)> {
 }
 
 final kanjiListProvider =
-    NotifierProvider<KanjiListProvider, (List<KanjiFromApi>, int, int)>(
-        KanjiListProvider.new);
+    NotifierProvider<KanjiListProvider, KanjiListData>(KanjiListProvider.new);
 
 class KanjiListData {
   final List<KanjiFromApi> kanjiList;

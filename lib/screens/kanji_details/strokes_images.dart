@@ -124,39 +124,37 @@ class StrokesImages extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return Expanded(
-      child: Column(
-        children: [
-          const SizedBox(
-            height: 10,
-          ),
-          Text(
-            "Strokes",
-            style: Theme.of(context)
-                .textTheme
-                .titleLarge!
-                .copyWith(fontWeight: FontWeight.bold),
-          ),
-          const SizedBox(
-            height: 20,
-          ),
-          Expanded(
-            child: GridView(
-              padding: const EdgeInsets.all(5),
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 3,
-                childAspectRatio: 1,
-                crossAxisSpacing: 0,
-                mainAxisSpacing: 0,
-              ),
-              children: [...getListStrokes(context)],
+    return Column(
+      children: [
+        const SizedBox(
+          height: 10,
+        ),
+        Text(
+          "Strokes",
+          style: Theme.of(context)
+              .textTheme
+              .titleLarge!
+              .copyWith(fontWeight: FontWeight.bold),
+        ),
+        const SizedBox(
+          height: 20,
+        ),
+        Expanded(
+          child: GridView(
+            padding: const EdgeInsets.all(5),
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 3,
+              childAspectRatio: 1,
+              crossAxisSpacing: 0,
+              mainAxisSpacing: 0,
             ),
+            children: [...getListStrokes(context)],
           ),
-          const SizedBox(
-            height: 10,
-          ),
-        ],
-      ),
+        ),
+        const SizedBox(
+          height: 10,
+        ),
+      ],
     ); // TODO: implement build
   }
 }

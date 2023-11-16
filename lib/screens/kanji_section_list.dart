@@ -82,32 +82,35 @@ class _KanjiSectionListState extends ConsumerState<KanjiSectionList> {
 
   @override
   Widget build(BuildContext context) {
-    var kanjiList = (<KanjiFromApi>[], 0, 1);
+    var kanjiList =
+        KanjiListData(kanjiList: <KanjiFromApi>[], status: 0, section: 1);
     final resultStatus = ref.watch(statusConnectionProvider);
     if (resultStatus == ConnectivityResult.none) {
       final kanjiListFromProvider = ref.read(kanjiListProvider);
       final storedKanjis = ref.read(statusStorageProvider);
 
-      if (storedKanjis[kanjiListFromProvider.$3] != null &&
-          storedKanjis[kanjiListFromProvider.$3]!.isNotEmpty) {
-        kanjiList = (
-          storedKanjis[kanjiListFromProvider.$3]!,
-          1,
-          kanjiListFromProvider.$3
-        );
+      if (storedKanjis[kanjiListFromProvider.section] != null &&
+          storedKanjis[kanjiListFromProvider.section]!.isNotEmpty) {
+        kanjiList = KanjiListData(
+            kanjiList: storedKanjis[kanjiListFromProvider.section]!,
+            status: 1,
+            section: kanjiListFromProvider.section);
       } else {
-        kanjiList = (<KanjiFromApi>[], 1, kanjiListFromProvider.$3);
+        kanjiList = KanjiListData(
+            kanjiList: <KanjiFromApi>[],
+            status: 1,
+            section: kanjiListFromProvider.section);
       }
     } else {
       kanjiList = ref.watch(kanjiListProvider);
     }
 
-    final accesToQuiz = !isAnyProcessingData(kanjiList.$1) &&
+    final accesToQuiz = !isAnyProcessingData(kanjiList.kanjiList) &&
         !(resultStatus == ConnectivityResult.none);
     return WillPopScope(
       onWillPop: () {
         try {
-          kanjiList.$1.firstWhere(
+          kanjiList.kanjiList.firstWhere(
             (element) =>
                 element.statusStorage == StatusStorage.proccessingStoring ||
                 element.statusStorage == StatusStorage.proccessingDeleting,
@@ -122,19 +125,21 @@ class _KanjiSectionListState extends ConsumerState<KanjiSectionList> {
       },
       child: Scaffold(
         appBar: AppBar(
-          title: Text(listSections[kanjiList.$3 - 1].title),
+          title: Text(listSections[kanjiList.section - 1].title),
           actions: [
             IconButton(
-                onPressed: kanjiList.$2 == 1 && accesToQuiz
+                onPressed: kanjiList.status == 1 && accesToQuiz
                     ? () {
                         ref
                             .read(quizDataValuesProvider.notifier)
                             .initTheStateBeforeAccessingQuizScreen(
-                                kanjiList.$1.length, kanjiList.$1);
+                                kanjiList.kanjiList.length,
+                                kanjiList.kanjiList);
                         Navigator.of(context).push(
                           MaterialPageRoute(
                             builder: (ctx) {
-                              return QuizScreen(kanjisFromApi: kanjiList.$1);
+                              return QuizScreen(
+                                  kanjisFromApi: kanjiList.kanjiList);
                             },
                           ),
                         );
@@ -144,8 +149,8 @@ class _KanjiSectionListState extends ConsumerState<KanjiSectionList> {
           ],
         ),
         body: BodyKanjisList(
-          kanjisFromApi: kanjiList.$1,
-          statusResponse: kanjiList.$2,
+          kanjisFromApi: kanjiList.kanjiList,
+          statusResponse: kanjiList.status,
         ),
       ),
     );
