@@ -2,9 +2,11 @@ import 'dart:io';
 
 import 'package:async/async.dart';
 import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart';
 import 'package:kanji_for_n5_level_app/Databases/download_db_utils.dart';
 import 'package:kanji_for_n5_level_app/models/kanji_from_api.dart';
 import 'package:kanji_for_n5_level_app/providers/status_stored_provider.dart';
+import 'package:path_provider/path_provider.dart';
 
 class ParametersCompute {
   final Directory path;
@@ -16,7 +18,7 @@ class ParametersCompute {
   });
 }
 
-void insertPathsInDB(KanjiFromApi kanjifromApi) async {
+Future<int> insertPathsInDB(KanjiFromApi kanjifromApi) async {
   final exampleMaps = kanjifromApi.example.map((e) {
     Map<String, String> mapAudios = {};
     mapAudios['opus'] = e.audio.opus;
@@ -65,7 +67,7 @@ void insertPathsInDB(KanjiFromApi kanjifromApi) async {
     'section': kanjifromApi.section,
   };
   final dbKanjiFromApi = await kanjiFromApiDatabase;
-  await dbKanjiFromApi.insert("kanji_FromApi", kanjiMap);
+  return await dbKanjiFromApi.insert("kanji_FromApi", kanjiMap);
 }
 
 Future<KanjiFromApi> insertKanjiFromApiComputeVersion(
@@ -105,6 +107,19 @@ Future<KanjiFromApi> insertKanjiFromApiComputeVersion(
       accessToKanjiItemsButtons: true,
       example: examples,
       strokes: strokes);
+}
+
+Future<KanjiFromApi> storeKanji(KanjiFromApi kanjiFromApi) async {
+  final dirDocumentPath = await getApplicationDocumentsDirectory();
+  final kanjiFromApiStored = await compute(
+      insertKanjiFromApiComputeVersion,
+      ParametersCompute(
+        kanjiFromApi: kanjiFromApi,
+        path: dirDocumentPath,
+      ));
+
+  await insertPathsInDB(kanjiFromApiStored);
+  return Future(() => kanjiFromApiStored);
 }
 
 Future<List<Map<String, String>>> insertExampleEntryComputeVersion(

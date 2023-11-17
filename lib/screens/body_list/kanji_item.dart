@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kanji_for_n5_level_app/models/kanji_from_api.dart';
 import 'package:kanji_for_n5_level_app/providers/examples_audios_provider.dart';
-import 'package:kanji_for_n5_level_app/providers/favorites_cached_provider.dart';
+import 'package:kanji_for_n5_level_app/providers/favorites_kanjis_provider.dart';
 import 'package:kanji_for_n5_level_app/providers/kanji_details_provider.dart';
 import 'package:kanji_for_n5_level_app/providers/video_status_playing.dart';
 import 'package:kanji_for_n5_level_app/screens/body_list/leading_tile.dart';

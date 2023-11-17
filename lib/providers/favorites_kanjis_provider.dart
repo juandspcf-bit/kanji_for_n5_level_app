@@ -1,11 +1,9 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kanji_for_n5_level_app/Databases/db_computes_functions_for_inserting_data.dart';
 import 'package:kanji_for_n5_level_app/models/kanji_from_api.dart';
 import 'package:kanji_for_n5_level_app/networking/request_api.dart';
 import 'package:kanji_for_n5_level_app/providers/status_stored_provider.dart';
 import 'package:kanji_for_n5_level_app/screens/main_content.dart';
-import 'package:path_provider/path_provider.dart';
 
 class FavoritesListProvider extends Notifier<(List<KanjiFromApi>, int)> {
   @override
@@ -88,21 +86,10 @@ class FavoritesListProvider extends Notifier<(List<KanjiFromApi>, int)> {
     state = (copyState, state.$2);
   }
 
-  void insertKanjiToStorageComputeVersion(
-      KanjiFromApi kanjiFromApi, int selection) async {
+  void insertKanjiToStorage(KanjiFromApi kanjiFromApi, int selection) async {
     try {
-      final dirDocumentPath = await getApplicationDocumentsDirectory();
-      final kanjiFromApiStored = await compute(
-          insertKanjiFromApiComputeVersion,
-          ParametersCompute(
-            kanjiFromApi: kanjiFromApi,
-            path: dirDocumentPath,
-          ));
-
-      insertPathsInDB(kanjiFromApiStored);
-      ref.read(statusStorageProvider.notifier).addItem(kanjiFromApiStored);
-
-      ref.read(favoritesListProvider.notifier).updateKanji(kanjiFromApiStored);
+      final kanjiFromApiStored = await storeKanji(kanjiFromApi);
+      updateProviders(kanjiFromApiStored);
 
       logger.i(kanjiFromApiStored);
       logger.d('success');
@@ -110,6 +97,12 @@ class FavoritesListProvider extends Notifier<(List<KanjiFromApi>, int)> {
       logger.e('error sotoring');
       logger.e(e.toString());
     }
+  }
+
+  void updateProviders(KanjiFromApi kanjiFromApiStored) {
+    ref.read(statusStorageProvider.notifier).addItem(kanjiFromApiStored);
+
+    ref.read(favoritesListProvider.notifier).updateKanji(kanjiFromApiStored);
   }
 }
 

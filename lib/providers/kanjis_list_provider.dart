@@ -6,10 +6,9 @@ import 'package:kanji_for_n5_level_app/Databases/download_db_utils.dart';
 import 'package:kanji_for_n5_level_app/models/kanji_from_api.dart';
 import 'package:kanji_for_n5_level_app/networking/request_api.dart';
 import 'package:kanji_for_n5_level_app/providers/error_storing_database_status.dart';
-import 'package:kanji_for_n5_level_app/providers/favorites_cached_provider.dart';
+import 'package:kanji_for_n5_level_app/providers/favorites_kanjis_provider.dart';
 import 'package:kanji_for_n5_level_app/providers/status_stored_provider.dart';
 import 'package:kanji_for_n5_level_app/screens/main_content.dart';
-import 'package:path_provider/path_provider.dart';
 
 class KanjiListProvider extends Notifier<KanjiListData> {
   @override
@@ -74,30 +73,27 @@ class KanjiListProvider extends Notifier<KanjiListData> {
     state = KanjiListData(kanjiList: [], status: 0, section: section);
   }
 
-  void insertKanjiToStorageComputeVersion(
-      KanjiFromApi kanjiFromApi, int selection) async {
+  void insertKanjiToStorage(KanjiFromApi kanjiFromApi, int selection) async {
     try {
-      final dirDocumentPath = await getApplicationDocumentsDirectory();
-      final kanjiFromApiStored = await compute(
-          insertKanjiFromApiComputeVersion,
-          ParametersCompute(
-            kanjiFromApi: kanjiFromApi,
-            path: dirDocumentPath,
-          ));
+      final kanjiFromApiStored = await storeKanji(kanjiFromApi);
 
-      insertPathsInDB(kanjiFromApiStored);
-      ref.read(statusStorageProvider.notifier).addItem(kanjiFromApiStored);
+      updateProviders(kanjiFromApiStored, selection);
 
-      ref.read(favoritesListProvider.notifier).updateKanji(kanjiFromApiStored);
-
-      if (selection == 0) {
-        ref.read(kanjiListProvider.notifier).updateKanji(kanjiFromApiStored);
-      }
       logger.i(kanjiFromApiStored);
       logger.d('success');
     } catch (e) {
       logger.e('error sotoring');
       logger.e(e.toString());
+    }
+  }
+
+  void updateProviders(KanjiFromApi kanjiFromApiStored, int selection) {
+    ref.read(statusStorageProvider.notifier).addItem(kanjiFromApiStored);
+
+    ref.read(favoritesListProvider.notifier).updateKanji(kanjiFromApiStored);
+
+    if (selection == 0) {
+      updateKanji(kanjiFromApiStored);
     }
   }
 

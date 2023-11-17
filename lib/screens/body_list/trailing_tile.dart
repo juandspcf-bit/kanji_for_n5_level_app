@@ -2,7 +2,7 @@ import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kanji_for_n5_level_app/models/kanji_from_api.dart';
-import 'package:kanji_for_n5_level_app/providers/favorites_cached_provider.dart';
+import 'package:kanji_for_n5_level_app/providers/favorites_kanjis_provider.dart';
 import 'package:kanji_for_n5_level_app/providers/kanjis_list_provider.dart';
 import 'package:kanji_for_n5_level_app/providers/selection_navigation_bar_screen.dart';
 import 'package:kanji_for_n5_level_app/providers/status_connection_provider.dart';
@@ -101,11 +101,11 @@ class TrailingTile extends ConsumerWidget {
           if (selection == 0) {
             ref
                 .read(kanjiListProvider.notifier)
-                .insertKanjiToStorageComputeVersion(kanjiFromApi, selection);
+                .insertKanjiToStorage(kanjiFromApi, selection);
           } else {
             ref
                 .read(favoritesListProvider.notifier)
-                .insertKanjiToStorageComputeVersion(kanjiFromApi, selection);
+                .insertKanjiToStorage(kanjiFromApi, selection);
           }
 
           /* ref
