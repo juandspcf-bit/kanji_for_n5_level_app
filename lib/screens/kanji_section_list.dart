@@ -87,7 +87,7 @@ class _KanjiSectionListState extends ConsumerState<KanjiSectionList> {
     final resultStatus = ref.watch(statusConnectionProvider);
     if (resultStatus == ConnectivityResult.none) {
       final kanjiListFromProvider = ref.read(kanjiListProvider);
-      final storedKanjis = ref.read(statusStorageProvider);
+      final storedKanjis = ref.read(storedKanjisProvider);
 
       if (storedKanjis[kanjiListFromProvider.section] != null &&
           storedKanjis[kanjiListFromProvider.section]!.isNotEmpty) {

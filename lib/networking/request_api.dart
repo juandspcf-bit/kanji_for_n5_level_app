@@ -8,7 +8,7 @@ import 'package:http/http.dart' as http;
 
 class RequestApi {
   static void getKanjis(
-    List<KanjiFromApi> storedKanjisFromApi,
+    List<KanjiFromApi> storedKanjis,
     List<String> kanjisCharacteres,
     int section,
     void Function(List<KanjiFromApi> kanjisFromApi) onSuccesRequest,
@@ -16,17 +16,17 @@ class RequestApi {
   ) {
     FutureGroup<Response> group = FutureGroup<Response>();
 
-    final lists = getIndexedKanjis(
-      storedKanjisFromApi,
+    final lists = getGroupedKanjisAccordingToItsStorageStatus(
+      storedKanjis,
       kanjisCharacteres,
     );
 
     if (kanjisCharacteres.length == lists.$4.length) {
       final List<KanjiFromApi> fixedLengthList = [];
       for (int i = 0; i < lists.$4.length; i++) {
-        for (int j = 0; j < storedKanjisFromApi.length; j++) {
-          if (lists.$4[i] == storedKanjisFromApi[j].kanjiCharacter) {
-            fixedLengthList.add(storedKanjisFromApi[j]);
+        for (int j = 0; j < storedKanjis.length; j++) {
+          if (lists.$4[i] == storedKanjis[j].kanjiCharacter) {
+            fixedLengthList.add(storedKanjis[j]);
             break;
           }
         }
@@ -75,9 +75,9 @@ class RequestApi {
         fixedLengthList[lists.$1[i]] = kanjisFromApi[i];
       }
       for (int i = 0; i < lists.$4.length; i++) {
-        for (int j = 0; j < storedKanjisFromApi.length; j++) {
-          if (lists.$4[i] == storedKanjisFromApi[j].kanjiCharacter) {
-            fixedLengthList[lists.$2[i]] = storedKanjisFromApi[j];
+        for (int j = 0; j < storedKanjis.length; j++) {
+          if (lists.$4[i] == storedKanjis[j].kanjiCharacter) {
+            fixedLengthList[lists.$2[i]] = storedKanjis[j];
             break;
           }
         }
@@ -106,36 +106,42 @@ class RequestApi {
     );
   }
 
-  static (List<int>, List<int>, List<String>, List<String>) getIndexedKanjis(
+  static (List<int>, List<int>, List<String>, List<String>)
+      getGroupedKanjisAccordingToItsStorageStatus(
     List<KanjiFromApi> storedKanjis,
-    List<String> kanjis,
+    List<String> kanjisCharacteres,
   ) {
-    final copyKanjis = [...kanjis];
-    List<int> indexesToRemove = [];
-    List<int> indexesToKeep = [];
-    for (int i = 0; i < kanjis.length; i++) {
+    final copyKanjis = [...kanjisCharacteres];
+    List<int> indexesFromStoredKanjis = [];
+    List<int> indexesFromKanjisToRequestToApi = [];
+    for (int i = 0; i < kanjisCharacteres.length; i++) {
       bool toKeep = true;
       for (int j = 0; j < storedKanjis.length; j++) {
-        if (kanjis[i] == storedKanjis[j].kanjiCharacter) {
-          indexesToRemove.add(i);
+        if (kanjisCharacteres[i] == storedKanjis[j].kanjiCharacter) {
+          indexesFromStoredKanjis.add(i);
           toKeep = false;
           continue;
         }
       }
       if (toKeep) {
-        indexesToKeep.add(i);
+        indexesFromKanjisToRequestToApi.add(i);
       }
     }
-    List<String> listToKeep = [];
-    for (var index in indexesToKeep) {
-      listToKeep.add(copyKanjis[index]);
+    List<String> listOfKanjisToRequestToApi = [];
+    for (var index in indexesFromKanjisToRequestToApi) {
+      listOfKanjisToRequestToApi.add(copyKanjis[index]);
     }
 
-    List<String> listToRemove = [];
-    for (var index in indexesToRemove) {
-      listToRemove.add(copyKanjis[index]);
+    List<String> listOfStoredKanjis = [];
+    for (var index in indexesFromStoredKanjis) {
+      listOfStoredKanjis.add(copyKanjis[index]);
     }
 
-    return (indexesToKeep, indexesToRemove, listToKeep, listToRemove);
+    return (
+      indexesFromKanjisToRequestToApi,
+      indexesFromStoredKanjis,
+      listOfKanjisToRequestToApi,
+      listOfStoredKanjis,
+    );
   }
 }

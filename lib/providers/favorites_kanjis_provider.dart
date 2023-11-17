@@ -100,7 +100,7 @@ class FavoritesListProvider extends Notifier<(List<KanjiFromApi>, int)> {
   }
 
   void updateProviders(KanjiFromApi kanjiFromApiStored) {
-    ref.read(statusStorageProvider.notifier).addItem(kanjiFromApiStored);
+    ref.read(storedKanjisProvider.notifier).addItem(kanjiFromApiStored);
 
     ref.read(favoritesListProvider.notifier).updateKanji(kanjiFromApiStored);
   }

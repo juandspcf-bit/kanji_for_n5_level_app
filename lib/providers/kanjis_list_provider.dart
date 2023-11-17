@@ -58,7 +58,7 @@ class KanjiListProvider extends Notifier<KanjiListData> {
   ) {
     clearKanjiList(section);
     final storedKanjis =
-        ref.read(statusStorageProvider.notifier).getStoresItems();
+        ref.read(storedKanjisProvider.notifier).getStoresItems();
 
     RequestApi.getKanjis(
       storedKanjis[section] ?? [],
@@ -88,7 +88,7 @@ class KanjiListProvider extends Notifier<KanjiListData> {
   }
 
   void updateProviders(KanjiFromApi kanjiFromApiStored, int selection) {
-    ref.read(statusStorageProvider.notifier).addItem(kanjiFromApiStored);
+    ref.read(storedKanjisProvider.notifier).addItem(kanjiFromApiStored);
 
     ref.read(favoritesListProvider.notifier).updateKanji(kanjiFromApiStored);
 
@@ -128,7 +128,7 @@ class KanjiListProvider extends Notifier<KanjiListData> {
       await db.rawDelete('DELETE FROM strokes WHERE kanjiCharacter = ?',
           [kanjiFromApi.kanjiCharacter]);
 
-      ref.read(statusStorageProvider.notifier).deleteItem(kanjiFromApi);
+      ref.read(storedKanjisProvider.notifier).deleteItem(kanjiFromApi);
 
       onSuccess(List<KanjiFromApi> list) {
         ref.read(favoritesListProvider.notifier).updateKanji(list[0]);

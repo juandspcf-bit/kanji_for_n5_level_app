@@ -198,7 +198,7 @@ class _MainContentState extends ConsumerState<MainContent> {
     FlutterNativeSplash.remove();
 
     ref
-        .read(statusStorageProvider.notifier)
+        .read(storedKanjisProvider.notifier)
         .setInitialStoredKanjis(listOfValidStoredKanjis);
     final favoritesKanjis = await loadFavorites();
     Connectivity().checkConnectivity().then((result) {

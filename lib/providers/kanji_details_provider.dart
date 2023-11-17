@@ -36,7 +36,7 @@ class KanjiDetailsProvider extends Notifier<KanjiDetailsData?> {
     if (queryKanji == "") {
       insertFavorite(kanjiFromApi.kanjiCharacter).then((value) {
         final storedItems =
-            ref.read(statusStorageProvider.notifier).getStoresItems();
+            ref.read(storedKanjisProvider.notifier).getStoresItems();
         ref.read(favoritesListProvider.notifier).addItem(
             storedItems.values.fold([], (previousValue, element) {
               previousValue.addAll(element);
