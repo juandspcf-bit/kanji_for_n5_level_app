@@ -78,9 +78,14 @@ class _SectionState extends ConsumerState<Section> {
         height: 128,
         decoration: BoxDecoration(
             //color: Theme.of(context).colorScheme.secondaryContainer,
-            gradient: LinearGradient(colors: [
-              Theme.of(context).colorScheme.secondaryContainer.withOpacity(0.9),
-              Theme.of(context).colorScheme.secondaryContainer.withOpacity(0.3),
+            gradient: /* RadialGradient(radius: 5, colors: [
+              Theme.of(context).colorScheme.primaryContainer,
+              Colors.white70,
+            ]) */
+                const LinearGradient(colors: [
+              Color.fromARGB(
+                  255, 66, 53, 245), //Color.fromARGB(255, 245, 95, 53),
+              Color.fromARGB(255, 51, 130, 142),
             ], begin: Alignment.topLeft, end: Alignment.bottomRight),
             borderRadius: BorderRadius.circular(10),
             border: Border.all(color: Colors.white38)),

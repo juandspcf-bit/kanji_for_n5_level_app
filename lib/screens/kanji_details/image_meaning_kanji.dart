@@ -1,7 +1,7 @@
-import 'package:flutter/widgets.dart';
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:kanji_for_n5_level_app/main.dart';
-import 'package:kanji_for_n5_level_app/providers/kanji_details_provider.dart';
+import 'package:kanji_for_n5_level_app/providers/image_meaning_kanji_provider.dart';
 
 class ImageMeaningKanji extends ConsumerStatefulWidget {
   const ImageMeaningKanji({super.key});
@@ -14,21 +14,30 @@ class _ImageMeaningKanjiState extends ConsumerState<ImageMeaningKanji> {
   @override
   void initState() {
     super.initState();
-    final kanjiData = ref.read(kanjiDetailsProvider);
-    final imagesLinks = dbFirebase.collection("sectionPictures");
-    imagesLinks
-        .where("kanji", isEqualTo: kanjiData!.kanjiFromApi.kanjiCharacter)
-        .get()
-        .then(
-      (querySnapshot) {
-        for (var docSnapshot in querySnapshot.docs) {}
-      },
-      onError: (e) => print("Error completing: $e"),
-    );
   }
 
   @override
   Widget build(BuildContext context) {
-    return Builder(builder: (BuildContext ctx) {});
+    final imageUrl = ref.watch(imageMeaningKanjiProvider).link;
+    if (imageUrl == '') {
+      return LayoutBuilder(
+        builder: (context, constraints) {
+          final height = constraints.maxWidth * 427 / 640;
+          return SizedBox(
+              height: height,
+              width: height,
+              child: const Padding(
+                padding: EdgeInsets.all(20.0),
+                child: CircularProgressIndicator(),
+              ));
+        },
+      );
+    }
+    return CachedNetworkImage(
+      imageUrl: imageUrl,
+      progressIndicatorBuilder: (ctx, text, porgress) {
+        return const CircularProgressIndicator.adaptive();
+      },
+    );
   }
 }
