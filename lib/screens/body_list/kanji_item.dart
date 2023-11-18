@@ -63,7 +63,7 @@ class _KanjiItemState extends ConsumerState<KanjiItem> {
   Widget build(BuildContext context) {
     return Card(
       color: accessToKanjiItemsButtons
-          ? Theme.of(context).cardColor.withOpacity(1)
+          ? Theme.of(context).colorScheme.primaryContainer
           : Theme.of(context).cardColor.withOpacity(0.5),
       child: Padding(
         padding: const EdgeInsets.all(15.0),

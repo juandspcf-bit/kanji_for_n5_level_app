@@ -240,10 +240,12 @@ class _QuizDetailsScore extends ConsumerState<QuizDetailsScore> {
                     ref.read(selectQuizDetailsProvider.notifier).setScreen(0);
                   },
                   style: ElevatedButton.styleFrom(
+                    backgroundColor: Theme.of(context).colorScheme.primary,
+                    foregroundColor: Theme.of(context).colorScheme.onPrimary,
                     textStyle: Theme.of(context).textTheme.bodyLarge,
                     minimumSize: Size.fromHeight(
                         (Theme.of(context).textTheme.bodyLarge!.height ?? 30) +
-                            10),
+                            30),
                   ),
                   icon: const Icon(Icons.arrow_circle_right),
                   label: const Text('Restart quiz'),

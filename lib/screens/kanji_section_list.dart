@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -107,20 +105,13 @@ class _KanjiSectionListState extends ConsumerState<KanjiSectionList> {
 
     final accesToQuiz = !isAnyProcessingData(kanjiList.kanjiList) &&
         !(resultStatus == ConnectivityResult.none);
-    return WillPopScope(
-      onWillPop: () {
-        try {
-          kanjiList.kanjiList.firstWhere(
-            (element) =>
-                element.statusStorage == StatusStorage.proccessingStoring ||
-                element.statusStorage == StatusStorage.proccessingDeleting,
-          );
 
+    return PopScope(
+      canPop: accesToQuiz,
+      onPopInvoked: (didPop) {
+        if (!accesToQuiz) {
           _scaleDialog(context);
-
-          return Future(() => false);
-        } on StateError {
-          return Future(() => true);
+          return;
         }
       },
       child: Scaffold(

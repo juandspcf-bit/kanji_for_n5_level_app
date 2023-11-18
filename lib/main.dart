@@ -14,7 +14,7 @@ var kColorScheme = ColorScheme.fromSeed(
 
 var kDarkColorScheme = ColorScheme.fromSeed(
   brightness: Brightness.dark,
-  seedColor: const Color.fromARGB(255, 37, 42, 65),
+  seedColor: const Color(0xFF008490),
 );
 
 void main() async {
@@ -40,9 +40,8 @@ class MyApp extends StatelessWidget {
       title: 'Flutter Demo',
       debugShowCheckedModeBanner: false,
       darkTheme: ThemeData.dark().copyWith(
-        useMaterial3: true,
         colorScheme: kDarkColorScheme,
-        cardTheme: const CardTheme().copyWith(
+        /*       cardTheme: const CardTheme().copyWith(
           color: kDarkColorScheme.secondaryContainer,
           margin: const EdgeInsets.symmetric(
             horizontal: 16,
@@ -55,6 +54,8 @@ class MyApp extends StatelessWidget {
             foregroundColor: kDarkColorScheme.onSecondaryContainer,
           ),
         ),
+         appBarTheme: const AppBarTheme()
+            .copyWith(backgroundColor: Color.fromARGB(255, 14, 46, 77)),*/
       ),
       theme: ThemeData(
         colorScheme: kColorScheme,

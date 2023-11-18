@@ -22,29 +22,33 @@ class ExampleAudios extends ConsumerWidget {
     return Column(
       children: [
         ElevatedButton.icon(
-            onPressed: () async {
-              if (data.isPlaying) {
-                ref.read(examplesAudiosProvider.notifier).stopAudio();
-                return;
-              }
-
-              ref
-                  .read(examplesAudiosProvider)
-                  .assetsAudioPlayer
-                  .open(
-                      Playlist(audios: [
-                        for (int index = 0; index < examples.length; index++)
-                          if (statusStorage == StatusStorage.onlyOnline)
-                            Audio.network(examples[index].audio.mp3)
-                          else if (statusStorage == StatusStorage.stored)
-                            Audio.file(examples[index].audio.mp3),
-                      ]),
-                      loopMode: LoopMode.none //loop the full playlist
-                      )
-                  .then((value) => ref
-                      .read(examplesAudiosProvider.notifier)
-                      .setIsPlaying(true));
-            },
+            onPressed: data.isPlaying
+                ? null
+                : () async {
+                    ref
+                        .read(examplesAudiosProvider)
+                        .assetsAudioPlayer
+                        .open(
+                            Playlist(audios: [
+                              for (int index = 0;
+                                  index < examples.length;
+                                  index++)
+                                if (statusStorage == StatusStorage.onlyOnline)
+                                  Audio.network(examples[index].audio.mp3)
+                                else if (statusStorage == StatusStorage.stored)
+                                  Audio.file(examples[index].audio.mp3),
+                            ]),
+                            loopMode: LoopMode.none //loop the full playlist
+                            )
+                        .then((value) => ref
+                            .read(examplesAudiosProvider.notifier)
+                            .setIsPlaying(true));
+                  },
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Theme.of(context).colorScheme.primary,
+              foregroundColor: Theme.of(context).colorScheme.onPrimary,
+              textStyle: Theme.of(context).textTheme.bodyLarge,
+            ),
             icon: Icon(data.isPlaying ? Icons.stop : Icons.playlist_play),
             label: const Text('playlist')),
         Expanded(

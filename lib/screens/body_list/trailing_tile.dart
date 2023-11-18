@@ -107,10 +107,6 @@ class TrailingTile extends ConsumerWidget {
                 .read(favoritesListProvider.notifier)
                 .insertKanjiToStorage(kanjiFromApi, selection);
           }
-
-          /* ref
-              .read(kanjiListProvider.notifier)
-              .insertKanjiToStorageComputeVersion(kanjiFromApi, selection); */
         } else if (kanjiFromApi.statusStorage == StatusStorage.stored) {
           setToProccesingStatus(
               StatusStorage.proccessingDeleting, selection, ref);

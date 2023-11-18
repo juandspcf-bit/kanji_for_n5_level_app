@@ -42,12 +42,11 @@ class KanjiDetails extends ConsumerWidget {
             }
           });
 
-          return WillPopScope(
-            onWillPop: () {
+          return PopScope(
+            onPopInvoked: (didPop) {
+              if (!didPop) return;
               ref.read(examplesAudiosProvider).assetsAudioPlayer.stop();
               ref.read(examplesAudiosProvider.notifier).setIsPlaying(false);
-              Navigator.of(context).pop();
-              return Future(() => true);
             },
             child: Scaffold(
               appBar: AppBar(
