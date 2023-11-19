@@ -15,9 +15,9 @@ class Sections extends StatelessWidget {
       padding: const EdgeInsets.all(24),
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 2,
-        childAspectRatio: 3 / 2,
+        childAspectRatio: 2 / 2,
         crossAxisSpacing: 20,
-        mainAxisSpacing: 20,
+        mainAxisSpacing: 40,
       ),
       children: [
         for (final sectionData in listSections)
@@ -74,16 +74,8 @@ class _SectionState extends ConsumerState<Section> {
       splashColor: Theme.of(context).primaryColor,
       child: Container(
         padding: const EdgeInsets.only(left: 10, right: 10),
-        width: 128,
-        height: 128,
         decoration: BoxDecoration(
             color: Theme.of(context).colorScheme.primaryContainer,
-/*             gradient:
-                const LinearGradient(colors: [
-              Color.fromARGB(
-                  255, 66, 53, 245), //Color.fromARGB(255, 245, 95, 53),
-              Color.fromARGB(255, 51, 130, 142),
-            ], begin: Alignment.topLeft, end: Alignment.bottomRight), */
             borderRadius: BorderRadius.circular(10),
             border: Border.all(color: Colors.white38)),
         child: Column(
