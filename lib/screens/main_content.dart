@@ -251,9 +251,9 @@ class _MainContentState extends ConsumerState<MainContent> {
     double iconSize;
     switch (sizeScreen) {
       case ScreenSize.extraLarge:
-        iconSize = 80;
-      case ScreenSize.large:
         iconSize = 60;
+      case ScreenSize.large:
+        iconSize = 40;
       case _:
         iconSize = 30;
     }
