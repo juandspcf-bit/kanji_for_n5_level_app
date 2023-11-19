@@ -9,6 +9,7 @@ import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kanji_for_n5_level_app/Databases/download_db_utils.dart';
 import 'package:kanji_for_n5_level_app/Databases/favorites_db_utils.dart';
+import 'package:kanji_for_n5_level_app/config_files/screen_config.dart';
 import 'package:kanji_for_n5_level_app/models/kanji_from_api.dart';
 import 'package:kanji_for_n5_level_app/providers/favorites_kanjis_provider.dart';
 import 'package:kanji_for_n5_level_app/providers/selection_navigation_bar_screen.dart';
@@ -246,6 +247,17 @@ class _MainContentState extends ConsumerState<MainContent> {
     final selectedPageIndex = ref.watch(selectionNavigationBarScreen);
     if (selectedPageIndex == 1) scaffoldTitle = "Favorites";
 
+    final sizeScreen = getScreenSize(context);
+    double iconSize;
+    switch (sizeScreen) {
+      case ScreenSize.extraLarge:
+        iconSize = 80;
+      case ScreenSize.large:
+        iconSize = 60;
+      case _:
+        iconSize = 30;
+    }
+
     return Scaffold(
       appBar: AppBar(
         title: Text(scaffoldTitle),
@@ -266,19 +278,25 @@ class _MainContentState extends ConsumerState<MainContent> {
       ),
       body: selectScreen(selectedPageIndex),
       bottomNavigationBar: BottomNavigationBar(
-        backgroundColor: Theme.of(context).colorScheme.secondaryContainer,
-        selectedItemColor: Theme.of(context).colorScheme.onSecondaryContainer,
+        backgroundColor: Theme.of(context).colorScheme.primaryContainer,
+        selectedItemColor: Theme.of(context).colorScheme.onPrimaryContainer,
         unselectedItemColor:
-            Theme.of(context).colorScheme.onSecondaryContainer.withAlpha(100),
+            Theme.of(context).colorScheme.onPrimaryContainer.withAlpha(100),
         onTap: _selectPage,
         currentIndex: selectedPageIndex,
-        items: const [
+        items: [
           BottomNavigationBarItem(
-            icon: Icon(Icons.book),
+            icon: Icon(
+              Icons.book,
+              size: iconSize,
+            ),
             label: "Sections",
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.star),
+            icon: Icon(
+              Icons.star,
+              size: iconSize,
+            ),
             label: "Favorites",
           ),
         ],

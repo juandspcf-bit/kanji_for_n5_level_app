@@ -2,6 +2,7 @@ import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:kanji_for_n5_level_app/config_files/screen_config.dart';
 import 'package:kanji_for_n5_level_app/models/secction_model.dart';
 import 'package:kanji_for_n5_level_app/providers/kanjis_list_provider.dart';
 import 'package:kanji_for_n5_level_app/screens/kanji_section_list.dart';
@@ -11,10 +12,20 @@ class Sections extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final sizeScreen = getScreenSize(context);
+    int crossAxisCount;
+    switch (sizeScreen) {
+      case ScreenSize.extraLarge:
+        crossAxisCount = 4;
+      case ScreenSize.large:
+        crossAxisCount = 3;
+      case _:
+        crossAxisCount = 2;
+    }
     return GridView(
       padding: const EdgeInsets.all(24),
-      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 2,
+      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+        crossAxisCount: crossAxisCount,
         childAspectRatio: 2 / 2,
         crossAxisSpacing: 20,
         mainAxisSpacing: 40,

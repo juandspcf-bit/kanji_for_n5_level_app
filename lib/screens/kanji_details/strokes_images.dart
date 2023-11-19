@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:kanji_for_n5_level_app/config_files/screen_config.dart';
 import 'package:kanji_for_n5_level_app/models/kanji_from_api.dart';
 import 'package:kanji_for_n5_level_app/providers/status_stored_provider.dart';
 
@@ -58,15 +59,15 @@ class StrokesImages extends ConsumerWidget {
     );
   }
 
-  List<Widget> getListStrokes(BuildContext context) {
+  List<Widget> getListStrokes(BuildContext context, int containerSize) {
     final List<String> images = kanjiFromApi.strokes.images;
     List<Widget> strokes = [];
     for (int index = 0; index < images.length; index++) {
       Widget stroke = Column(
         children: [
           Container(
-            height: 80,
-            width: 80,
+            height: containerSize.toDouble(),
+            width: containerSize.toDouble(),
             decoration: BoxDecoration(
                 color: Theme.of(context).colorScheme.onPrimaryContainer,
                 borderRadius: const BorderRadius.all(Radius.circular(10))),
@@ -107,14 +108,6 @@ class StrokesImages extends ConsumerWidget {
             height: 10,
           ),
           Text('Stroke ${index + 1}')
-          /*           index != images.length - 1
-              ? const SizedBox(
-                  width: 10,
-                  child: Icon(Icons.arrow_circle_right_outlined),
-                )
-              : const SizedBox(
-                  width: 20,
-                ), */
         ],
       );
       strokes.add(stroke);
@@ -124,6 +117,26 @@ class StrokesImages extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final sizeScreen = getScreenSize(context);
+    int crossAxisCount;
+    int containerSize;
+    switch (sizeScreen) {
+      case ScreenSize.extraLarge:
+        {
+          crossAxisCount = 6;
+          containerSize = 140;
+        }
+      case ScreenSize.large:
+        {
+          crossAxisCount = 4;
+          containerSize = 120;
+        }
+      case _:
+        {
+          crossAxisCount = 3;
+          containerSize = 80;
+        }
+    }
     return Column(
       children: [
         const SizedBox(
@@ -142,13 +155,13 @@ class StrokesImages extends ConsumerWidget {
         Expanded(
           child: GridView(
             padding: const EdgeInsets.all(5),
-            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 3,
+            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: crossAxisCount,
               childAspectRatio: 1,
               crossAxisSpacing: 0,
               mainAxisSpacing: 0,
             ),
-            children: [...getListStrokes(context)],
+            children: [...getListStrokes(context, containerSize)],
           ),
         ),
         const SizedBox(
