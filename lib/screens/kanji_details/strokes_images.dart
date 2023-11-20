@@ -129,7 +129,7 @@ class StrokesImages extends ConsumerWidget {
       case ScreenSize.large:
         {
           crossAxisCount = 4;
-          containerSize = 120;
+          containerSize = 100;
         }
       case _:
         {
