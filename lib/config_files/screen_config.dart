@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:kanji_for_n5_level_app/screens/main_content.dart';
+import 'package:kanji_for_n5_level_app/main_screens/main_content.dart';
 
 enum ScreenSize {
-  small(300),
-  normal(400),
-  large(600),
-  extraLarge(1000);
+  small(300.0),
+  normal(400.0),
+  large(600.0),
+  extraLarge(1000.0);
 
   final double size;
 

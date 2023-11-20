@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:kanji_for_n5_level_app/screens/main_content.dart';
+import 'package:kanji_for_n5_level_app/main_screens/main_content.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
 

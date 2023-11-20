@@ -6,7 +6,7 @@ import 'package:kanji_for_n5_level_app/config_files/screen_config.dart';
 import 'package:kanji_for_n5_level_app/models/secction_model.dart';
 import 'package:kanji_for_n5_level_app/providers/kanjis_list_provider.dart';
 import 'package:kanji_for_n5_level_app/screens/kanji_section_list.dart';
-import 'package:kanji_for_n5_level_app/screens/main_content.dart';
+import 'package:kanji_for_n5_level_app/main_screens/main_content.dart';
 
 class Sections extends StatelessWidget {
   const Sections({super.key});

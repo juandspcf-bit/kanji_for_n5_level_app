@@ -3,7 +3,7 @@ import 'package:kanji_for_n5_level_app/Databases/db_computes_functions_for_inser
 import 'package:kanji_for_n5_level_app/models/kanji_from_api.dart';
 import 'package:kanji_for_n5_level_app/networking/request_api.dart';
 import 'package:kanji_for_n5_level_app/providers/status_stored_provider.dart';
-import 'package:kanji_for_n5_level_app/screens/main_content.dart';
+import 'package:kanji_for_n5_level_app/main_screens/main_content.dart';
 
 class FavoritesListProvider extends Notifier<(List<KanjiFromApi>, int)> {
   @override
