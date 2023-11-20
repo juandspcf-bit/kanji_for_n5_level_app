@@ -66,7 +66,7 @@ class QuizDataValuesProvider extends Notifier<QuizDataValues> {
         imagePathsFromDraggedItems: [...isDraggedImagePath],
         initialOpacities: [...opacityValues],
         isDraggedStatusList: [...isDraggedList],
-        isCorrectAnswer: [...isDraggedList],
+        isCorrectAnswer: [...state.isCorrectAnswer],
         isOmittedAnswer: state.isOmittedAnswer,
         kanjisToAskMeaning: state.kanjisToAskMeaning,
         index: state.index,

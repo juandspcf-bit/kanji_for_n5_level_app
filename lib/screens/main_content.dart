@@ -277,29 +277,35 @@ class _MainContentState extends ConsumerState<MainContent> {
         ],
       ),
       body: selectScreen(selectedPageIndex),
-      bottomNavigationBar: BottomNavigationBar(
-        backgroundColor: Theme.of(context).colorScheme.primaryContainer,
-        selectedItemColor: Theme.of(context).colorScheme.onPrimaryContainer,
-        unselectedItemColor:
-            Theme.of(context).colorScheme.onPrimaryContainer.withAlpha(100),
-        onTap: _selectPage,
-        currentIndex: selectedPageIndex,
-        items: [
-          BottomNavigationBarItem(
-            icon: Icon(
-              Icons.book,
-              size: iconSize,
+      bottomNavigationBar: Container(
+        foregroundDecoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(20),
+            border: Border.all(
+                color: Colors
+                    .white38) //Border(top: BorderSide(color: Colors.white38, width: 1)),
             ),
-            label: "Sections",
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(
-              Icons.star,
-              size: iconSize,
+        child: BottomNavigationBar(
+          unselectedItemColor:
+              Theme.of(context).colorScheme.onPrimaryContainer.withAlpha(100),
+          onTap: _selectPage,
+          currentIndex: selectedPageIndex,
+          items: [
+            BottomNavigationBarItem(
+              icon: Icon(
+                Icons.book,
+                size: iconSize,
+              ),
+              label: "Sections",
             ),
-            label: "Favorites",
-          ),
-        ],
+            BottomNavigationBarItem(
+              icon: Icon(
+                Icons.star,
+                size: iconSize,
+              ),
+              label: "Favorites",
+            ),
+          ],
+        ),
       ),
     );
   }
