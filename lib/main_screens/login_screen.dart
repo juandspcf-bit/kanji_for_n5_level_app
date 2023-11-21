@@ -36,7 +36,6 @@ class _LoginFormState extends ConsumerState<LoginForm> {
 
   @override
   void dispose() {
-    // TODO: implement dispose
     super.dispose();
     textEditingController1.dispose();
     textEditingController2.dispose();
@@ -52,7 +51,7 @@ class _LoginFormState extends ConsumerState<LoginForm> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text(
-              'Sign Up to Kanji for N5',
+              'Loging to Kanji for N5',
               style: Theme.of(context).textTheme.titleLarge,
             ),
             const SizedBox(
@@ -102,25 +101,6 @@ class _LoginFormState extends ConsumerState<LoginForm> {
                   const SizedBox(
                     height: 10,
                   ),
-                  TextFormField(
-                    controller: textEditingController2,
-                    decoration: const InputDecoration().copyWith(
-                      border: const OutlineInputBorder(),
-                      prefixIcon: const Icon(Icons.key),
-                      labelText: 'Confirm Password',
-                    ),
-                    keyboardType: TextInputType.visiblePassword,
-                    obscureText: true,
-                    validator: (text) {
-                      if (text != null &&
-                          text.length >= 4 &&
-                          text.length <= 10) {
-                        return null;
-                      } else {
-                        return 'Password should be between 10 and 4 characters';
-                      }
-                    },
-                  )
                 ],
               ),
             ),

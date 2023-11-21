@@ -1,13 +1,14 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:kanji_for_n5_level_app/main_screens/main_content.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:kanji_for_n5_level_app/screens/login_screen.dart';
+import 'package:kanji_for_n5_level_app/main_screens/sing_up_screen.dart';
 import 'firebase_options.dart';
 
 final dbFirebase = FirebaseFirestore.instance;
+final storageRef = FirebaseStorage.instance.ref();
 
 var kColorScheme = ColorScheme.fromSeed(
   seedColor: const Color.fromARGB(255, 96, 59, 181),
@@ -63,7 +64,7 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
       ),
       themeMode: ThemeMode.dark,
-      home: LoginForm(),
+      home: SingUpForm(),
     );
   }
 }
