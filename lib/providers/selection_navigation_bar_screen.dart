@@ -1,33 +1,37 @@
 import 'dart:io';
 
 import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kanji_for_n5_level_app/Databases/download_db_utils.dart';
 import 'package:kanji_for_n5_level_app/Databases/favorites_db_utils.dart';
+import 'package:kanji_for_n5_level_app/main.dart';
 import 'package:kanji_for_n5_level_app/main_screens/main_content.dart';
 import 'package:kanji_for_n5_level_app/models/kanji_from_api.dart';
 import 'package:kanji_for_n5_level_app/providers/favorites_kanjis_provider.dart';
 import 'package:kanji_for_n5_level_app/providers/status_connection_provider.dart';
 import 'package:kanji_for_n5_level_app/providers/status_stored_provider.dart';
 
-class SelectionNavigationBarScreen extends Notifier<int> {
+class SelectionNavigationBarScreen extends Notifier<MainScreenData> {
   @override
-  int build() {
+  MainScreenData build() {
     getInitData();
+
     Connectivity().checkConnectivity().then((result) =>
         ref.read(statusConnectionProvider.notifier).setInitialStatus(result));
-    return 0;
+    //getAvatar();
+    return MainScreenData(selection: 0, avatarLink: '');
   }
 
   void setScreen(int screen) {
-    state = screen;
+    state = MainScreenData(selection: screen, avatarLink: state.avatarLink);
   }
 
   int getScreenSelection() {
-    return state;
+    return state.selection;
   }
 
   bool isAnyProcessingData() {
@@ -90,11 +94,31 @@ class SelectionNavigationBarScreen extends Notifier<int> {
       }
     });
   }
+
+  Future<void> getAvatar() async {
+    final uuid = FirebaseAuth.instance.currentUser!.uid;
+
+    final userPhoto = storageRef.child("userImages/$uuid.jpg");
+    final link = await userPhoto.getDownloadURL();
+    logger.d(link);
+    state = MainScreenData(selection: state.selection, avatarLink: link);
+  }
+
+  void initPage() {
+    getAvatar();
+  }
 }
 
 final selectionNavigationBarScreen =
-    NotifierProvider<SelectionNavigationBarScreen, int>(
+    NotifierProvider<SelectionNavigationBarScreen, MainScreenData>(
         SelectionNavigationBarScreen.new);
+
+class MainScreenData {
+  final int selection;
+  final String avatarLink;
+
+  MainScreenData({required this.selection, required this.avatarLink});
+}
 
 enum ScreenSelection { kanjiSections, favoritesKanjis }
 

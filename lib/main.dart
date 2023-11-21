@@ -1,14 +1,19 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:kanji_for_n5_level_app/main_screens/login_screen.dart';
+import 'package:kanji_for_n5_level_app/main_screens/main_content.dart';
 import 'package:kanji_for_n5_level_app/main_screens/sing_up_screen.dart';
+import 'package:kanji_for_n5_level_app/providers/selection_navigation_bar_screen.dart';
 import 'firebase_options.dart';
 
 final dbFirebase = FirebaseFirestore.instance;
 final storageRef = FirebaseStorage.instance.ref();
+final streamAuth = FirebaseAuth.instance.userChanges();
 
 var kColorScheme = ColorScheme.fromSeed(
   seedColor: const Color.fromARGB(255, 96, 59, 181),
@@ -32,12 +37,12 @@ void main() async {
   );
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends ConsumerWidget {
   const MyApp({super.key});
 
   // This widget is the root of your application.
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return MaterialApp(
       title: 'Flutter Demo',
       debugShowCheckedModeBanner: false,
@@ -64,7 +69,17 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
       ),
       themeMode: ThemeMode.dark,
-      home: SingUpForm(),
+      home: StreamBuilder(
+          stream: streamAuth,
+          builder: (ctx, snapShot) {
+            final user = snapShot.data;
+            if (user != null) {
+              ref.read(selectionNavigationBarScreen.notifier).initPage();
+              return const MainContent();
+            } else {
+              return const LoginForm();
+            }
+          }),
     );
   }
 }

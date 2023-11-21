@@ -1,4 +1,5 @@
 import 'package:email_validator/email_validator.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -16,20 +17,21 @@ class _LoginFormState extends ConsumerState<LoginForm> {
   final TextEditingController textEditingController1 = TextEditingController();
   final TextEditingController textEditingController2 = TextEditingController();
 
-  void onValidate() {
+  void onValidate() async {
     if (_formKey.currentState!.validate()) {
-      final password1 = textEditingController1.text;
-      final password2 = textEditingController2.text;
-      logger.d('$password1, $password2');
-      if (password1 == password2) {
-        _formKey.currentState!.save();
-      } else {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Passwords should match'),
-            duration: Duration(seconds: 3),
-          ),
-        );
+      final emailAddress = textEditingController1.text;
+      final password = textEditingController2.text;
+
+      try {
+        final credential = await FirebaseAuth.instance
+            .signInWithEmailAndPassword(
+                email: emailAddress, password: password);
+      } on FirebaseAuthException catch (e) {
+        if (e.code == 'user-not-found') {
+          print('No user found for that email.');
+        } else if (e.code == 'wrong-password') {
+          print('Wrong password provided for that user.');
+        }
       }
     }
   }
@@ -62,6 +64,7 @@ class _LoginFormState extends ConsumerState<LoginForm> {
               child: Column(
                 children: [
                   TextFormField(
+                    controller: textEditingController1,
                     decoration: const InputDecoration().copyWith(
                         border: const OutlineInputBorder(),
                         prefixIcon: const Icon(Icons.email),
@@ -80,7 +83,7 @@ class _LoginFormState extends ConsumerState<LoginForm> {
                     height: 10,
                   ),
                   TextFormField(
-                    controller: textEditingController1,
+                    controller: textEditingController2,
                     decoration: const InputDecoration().copyWith(
                       border: const OutlineInputBorder(),
                       prefixIcon: const Icon(Icons.key),

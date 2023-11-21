@@ -1,8 +1,10 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dio/dio.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kanji_for_n5_level_app/config_files/screen_config.dart';
+import 'package:kanji_for_n5_level_app/main.dart';
 import 'package:kanji_for_n5_level_app/main_screens/bottom_navigation_bar.dart';
 import 'package:kanji_for_n5_level_app/providers/selection_navigation_bar_screen.dart';
 import 'package:kanji_for_n5_level_app/screens/favorite_screen.dart';
@@ -73,7 +75,7 @@ class MainContent extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     String scaffoldTitle = "Welcome juan";
     final selectedPageIndex = ref.watch(selectionNavigationBarScreen);
-    if (selectedPageIndex == 1) scaffoldTitle = "Favorites";
+    if (selectedPageIndex.selection == 1) scaffoldTitle = "Favorites";
 
     final sizeScreen = getScreenSize(context);
     double iconSize;
@@ -90,12 +92,17 @@ class MainContent extends ConsumerWidget {
       appBar: AppBar(
         title: Text(scaffoldTitle),
         actions: [
+          IconButton(
+              onPressed: () async {
+                await FirebaseAuth.instance.signOut();
+              },
+              icon: const Icon(Icons.logout)),
           Padding(
             padding: const EdgeInsets.only(top: 3, bottom: 3, right: 3),
             child: ClipRRect(
               borderRadius: BorderRadius.circular(10000.0),
               child: CachedNetworkImage(
-                imageUrl: temporalAvatar,
+                imageUrl: selectedPageIndex.avatarLink,
                 placeholder: (context, url) =>
                     const CircularProgressIndicator(),
                 errorWidget: (context, url, error) => const Icon(Icons.error),
@@ -104,7 +111,7 @@ class MainContent extends ConsumerWidget {
           ),
         ],
       ),
-      body: selectScreen(selectedPageIndex),
+      body: selectScreen(selectedPageIndex.selection),
       bottomNavigationBar: CustomBottomNavigationBar(
         iconSize: iconSize,
         selectPage: (index) {
@@ -112,7 +119,7 @@ class MainContent extends ConsumerWidget {
               .read(selectionNavigationBarScreen.notifier)
               .selectPage(index, context, _scaleDialog);
         },
-        selectedPageIndex: selectedPageIndex,
+        selectedPageIndex: selectedPageIndex.selection,
       ),
     );
   }
