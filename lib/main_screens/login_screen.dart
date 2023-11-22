@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kanji_for_n5_level_app/main_screens/main_content.dart';
+import 'package:kanji_for_n5_level_app/main_screens/sing_up_screen.dart';
 
 class LoginForm extends ConsumerStatefulWidget {
   const LoginForm({super.key});
@@ -17,20 +18,61 @@ class _LoginFormState extends ConsumerState<LoginForm> {
   final TextEditingController textEditingController1 = TextEditingController();
   final TextEditingController textEditingController2 = TextEditingController();
 
+  Widget _dialog(BuildContext context, String text) {
+    return AlertDialog(
+      title: const Text("Errro in login!!"),
+      content: Text(text),
+      actions: <Widget>[
+        TextButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+            child: const Text("Okay"))
+      ],
+    );
+  }
+
+  void _dialogErrorInLogin(BuildContext context, String text) {
+    showGeneralDialog(
+      context: context,
+      pageBuilder: (ctx, a1, a2) {
+        return Container();
+      },
+      transitionBuilder: (ctx, a1, a2, child) {
+        var curve = Curves.easeInOut.transform(a1.value);
+        return Transform.scale(
+          scale: curve,
+          child: _dialog(ctx, text),
+        );
+      },
+      transitionDuration: const Duration(milliseconds: 300),
+    );
+  }
+
   void onValidate() async {
     if (_formKey.currentState!.validate()) {
       final emailAddress = textEditingController1.text;
       final password = textEditingController2.text;
 
       try {
-        final credential = await FirebaseAuth.instance
-            .signInWithEmailAndPassword(
-                email: emailAddress, password: password);
+        await FirebaseAuth.instance.signInWithEmailAndPassword(
+            email: emailAddress, password: password);
       } on FirebaseAuthException catch (e) {
-        if (e.code == 'user-not-found') {
-          print('No user found for that email.');
+        if (e.code == 'INVALID_LOGIN_CREDENTIALS') {
+          logger.e(e.code);
+          if (context.mounted) {
+            _dialogErrorInLogin(context,
+                'No user found for that email or the password is incorrect');
+          }
+        } else if (e.code == 'user-not-found') {
+          if (context.mounted) {
+            _dialogErrorInLogin(context, 'No user found for that email.');
+          }
         } else if (e.code == 'wrong-password') {
-          print('Wrong password provided for that user.');
+          if (context.mounted) {
+            _dialogErrorInLogin(
+                context, 'Wrong password provided for that user.');
+          }
         }
       }
     }
@@ -118,6 +160,25 @@ class _LoginFormState extends ConsumerState<LoginForm> {
                   currentFocus.unfocus();
                 }
                 onValidate();
+              },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Theme.of(context).colorScheme.primary,
+                foregroundColor: Theme.of(context).colorScheme.onPrimary,
+                minimumSize: const Size.fromHeight(40), // NEW
+              ),
+              child: const Text('Login'),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                FocusScopeNode currentFocus = FocusScope.of(context);
+
+                if (!currentFocus.hasPrimaryFocus) {
+                  currentFocus.unfocus();
+                }
+
+                Navigator.of(context).push(MaterialPageRoute(builder: (ctx) {
+                  return const SingUpForm();
+                }));
               },
               style: ElevatedButton.styleFrom(
                 backgroundColor: Theme.of(context).colorScheme.primary,

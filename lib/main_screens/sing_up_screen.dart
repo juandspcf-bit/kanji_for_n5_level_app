@@ -19,6 +19,8 @@ class SingUpForm extends ConsumerStatefulWidget {
 
 class _SingUpFormState extends ConsumerState<SingUpForm> {
   final _formKey = GlobalKey<FormState>();
+  final TextEditingController textEditingControllerFullName =
+      TextEditingController();
   final TextEditingController textEditingController0 = TextEditingController();
   final TextEditingController textEditingController1 = TextEditingController();
   final TextEditingController textEditingController2 = TextEditingController();
@@ -28,6 +30,7 @@ class _SingUpFormState extends ConsumerState<SingUpForm> {
 
   void onValidate() async {
     if (_formKey.currentState!.validate()) {
+      final fullName = textEditingControllerFullName;
       final emailAddress = textEditingController0.text;
       final password1 = textEditingController1.text;
       final password2 = textEditingController2.text;
@@ -41,14 +44,27 @@ class _SingUpFormState extends ConsumerState<SingUpForm> {
             password: password1,
           );
 
-          if (pathProfileUser.isEmpty) return;
-          final userPhoto =
-              storageRef.child("userImages/${credential.user!.uid}.jpg");
-          try {
-            await userPhoto.putFile(File(pathProfileUser));
-          } catch (e) {
-            logger.e('error');
-            logger.e(e);
+          final user = credential.user;
+
+          if (user != null) {
+            user.updateDisplayName(fullName.text);
+            user.updateEmail(emailAddress);
+          }
+
+          if (pathProfileUser.isNotEmpty) {
+            try {
+              final userPhoto =
+                  storageRef.child("userImages/${credential.user!.uid}.jpg");
+
+              await userPhoto.putFile(File(pathProfileUser));
+            } catch (e) {
+              logger.e('error');
+              logger.e(e);
+            }
+          }
+
+          if (context.mounted) {
+            Navigator.of(context).pop();
           }
         } on FirebaseAuthException catch (e) {
           if (e.code == 'weak-password') {
@@ -73,6 +89,7 @@ class _SingUpFormState extends ConsumerState<SingUpForm> {
   @override
   void dispose() {
     super.dispose();
+    textEditingControllerFullName.dispose();
     textEditingController0.dispose();
     textEditingController1.dispose();
     textEditingController2.dispose();
@@ -82,6 +99,7 @@ class _SingUpFormState extends ConsumerState<SingUpForm> {
   Widget build(BuildContext context) {
     FlutterNativeSplash.remove();
     return Scaffold(
+      appBar: AppBar(),
       body: SafeArea(
         child: SingleChildScrollView(
           child: Padding(
@@ -124,6 +142,27 @@ class _SingUpFormState extends ConsumerState<SingUpForm> {
                   key: _formKey,
                   child: Column(
                     children: [
+                      TextFormField(
+                        controller: textEditingControllerFullName,
+                        decoration: const InputDecoration().copyWith(
+                          border: const OutlineInputBorder(),
+                          prefixIcon: const Icon(Icons.person),
+                          labelText: 'Full Name',
+                        ),
+                        keyboardType: TextInputType.name,
+                        validator: (text) {
+                          if (text != null &&
+                              text.isNotEmpty &&
+                              text.length > 2) {
+                            return null;
+                          } else {
+                            return 'Please provide a not to short name';
+                          }
+                        },
+                      ),
+                      const SizedBox(
+                        height: 10,
+                      ),
                       TextFormField(
                         controller: textEditingController0,
                         decoration: const InputDecoration().copyWith(

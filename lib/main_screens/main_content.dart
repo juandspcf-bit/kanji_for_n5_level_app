@@ -18,7 +18,9 @@ Dio dio = Dio();
 final logger = Logger();
 
 class MainContent extends ConsumerWidget {
-  const MainContent({super.key});
+  const MainContent({super.key, required this.uuid});
+
+  final String uuid;
 
   Widget _dialog(BuildContext context) {
     return AlertDialog(
@@ -73,9 +75,11 @@ class MainContent extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    String scaffoldTitle = "Welcome juan";
-    final selectedPageIndex = ref.watch(selectionNavigationBarScreen);
-    if (selectedPageIndex.selection == 1) scaffoldTitle = "Favorites";
+    final dataStateMainContent = ref.watch(mainScreenProvider);
+
+    String scaffoldTitle = 'Welcome \n ${dataStateMainContent.fullName}';
+
+    if (dataStateMainContent.selection == 1) scaffoldTitle = "Favorites";
 
     final sizeScreen = getScreenSize(context);
     double iconSize;
@@ -102,24 +106,25 @@ class MainContent extends ConsumerWidget {
             child: ClipRRect(
               borderRadius: BorderRadius.circular(10000.0),
               child: CachedNetworkImage(
-                imageUrl: selectedPageIndex.avatarLink,
+                imageUrl: dataStateMainContent.avatarLink,
                 placeholder: (context, url) =>
                     const CircularProgressIndicator(),
-                errorWidget: (context, url, error) => const Icon(Icons.error),
+                errorWidget: (context, url, error) =>
+                    Image.asset('assets/images/user.png'),
               ),
             ),
           ),
         ],
       ),
-      body: selectScreen(selectedPageIndex.selection),
+      body: selectScreen(dataStateMainContent.selection),
       bottomNavigationBar: CustomBottomNavigationBar(
         iconSize: iconSize,
         selectPage: (index) {
           ref
-              .read(selectionNavigationBarScreen.notifier)
+              .read(mainScreenProvider.notifier)
               .selectPage(index, context, _scaleDialog);
         },
-        selectedPageIndex: selectedPageIndex.selection,
+        selectedPageIndex: dataStateMainContent.selection,
       ),
     );
   }

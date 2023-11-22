@@ -15,7 +15,7 @@ import 'package:kanji_for_n5_level_app/providers/favorites_kanjis_provider.dart'
 import 'package:kanji_for_n5_level_app/providers/status_connection_provider.dart';
 import 'package:kanji_for_n5_level_app/providers/status_stored_provider.dart';
 
-class SelectionNavigationBarScreen extends Notifier<MainScreenData> {
+class MainScreenProvider extends Notifier<MainScreenData> {
   @override
   MainScreenData build() {
     getInitData();
@@ -23,11 +23,14 @@ class SelectionNavigationBarScreen extends Notifier<MainScreenData> {
     Connectivity().checkConnectivity().then((result) =>
         ref.read(statusConnectionProvider.notifier).setInitialStatus(result));
     //getAvatar();
-    return MainScreenData(selection: 0, avatarLink: '');
+    return MainScreenData(selection: 0, avatarLink: '', fullName: '');
   }
 
   void setScreen(int screen) {
-    state = MainScreenData(selection: screen, avatarLink: state.avatarLink);
+    state = MainScreenData(
+        selection: screen,
+        avatarLink: state.avatarLink,
+        fullName: state.fullName);
   }
 
   int getScreenSelection() {
@@ -57,9 +60,9 @@ class SelectionNavigationBarScreen extends Notifier<MainScreenData> {
     }
 
     if (index == 1) {
-      ref.read(selectionNavigationBarScreen.notifier).setScreen(1);
+      ref.read(mainScreenProvider.notifier).setScreen(1);
     } else {
-      ref.read(selectionNavigationBarScreen.notifier).setScreen(0);
+      ref.read(mainScreenProvider.notifier).setScreen(0);
     }
   }
 
@@ -95,29 +98,43 @@ class SelectionNavigationBarScreen extends Notifier<MainScreenData> {
     });
   }
 
-  Future<void> getAvatar() async {
+  Future<void> getAppBarData() async {
     final uuid = FirebaseAuth.instance.currentUser!.uid;
+    final fullName = FirebaseAuth.instance.currentUser!.displayName;
 
-    final userPhoto = storageRef.child("userImages/$uuid.jpg");
-    final link = await userPhoto.getDownloadURL();
-    logger.d(link);
-    state = MainScreenData(selection: state.selection, avatarLink: link);
+    try {
+      final userPhoto = storageRef.child("userImages/$uuid.jpg");
+
+      final link = await userPhoto.getDownloadURL();
+      logger.d(link);
+      state = MainScreenData(
+          selection: state.selection,
+          avatarLink: link,
+          fullName: fullName ?? '');
+    } catch (e) {
+      logger.e('error reading profile photo');
+      state = MainScreenData(
+          selection: state.selection, avatarLink: '', fullName: fullName ?? '');
+    }
   }
 
   void initPage() {
-    getAvatar();
+    getAppBarData();
   }
 }
 
-final selectionNavigationBarScreen =
-    NotifierProvider<SelectionNavigationBarScreen, MainScreenData>(
-        SelectionNavigationBarScreen.new);
+final mainScreenProvider = NotifierProvider<MainScreenProvider, MainScreenData>(
+    MainScreenProvider.new);
 
 class MainScreenData {
   final int selection;
   final String avatarLink;
+  final String fullName;
 
-  MainScreenData({required this.selection, required this.avatarLink});
+  MainScreenData(
+      {required this.selection,
+      required this.avatarLink,
+      required this.fullName});
 }
 
 enum ScreenSelection { kanjiSections, favoritesKanjis }

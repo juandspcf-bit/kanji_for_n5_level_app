@@ -93,27 +93,27 @@ class TrailingTile extends ConsumerWidget {
           return;
         }
 
-        final selection = ref.read(selectionNavigationBarScreen);
+        final dataMainScreen = ref.read(mainScreenProvider);
         if (kanjiFromApi.statusStorage == StatusStorage.onlyOnline) {
           setToProccesingStatus(
-              StatusStorage.proccessingStoring, selection.selection, ref);
+              StatusStorage.proccessingStoring, dataMainScreen.selection, ref);
 
-          if (selection == 0) {
+          if (dataMainScreen.selection == 0) {
             ref
                 .read(kanjiListProvider.notifier)
-                .insertKanjiToStorage(kanjiFromApi, selection.selection);
+                .insertKanjiToStorage(kanjiFromApi, dataMainScreen.selection);
           } else {
             ref
                 .read(favoritesListProvider.notifier)
-                .insertKanjiToStorage(kanjiFromApi, selection.selection);
+                .insertKanjiToStorage(kanjiFromApi, dataMainScreen.selection);
           }
         } else if (kanjiFromApi.statusStorage == StatusStorage.stored) {
           setToProccesingStatus(
-              StatusStorage.proccessingDeleting, selection.selection, ref);
+              StatusStorage.proccessingDeleting, dataMainScreen.selection, ref);
           ref
               .read(kanjiListProvider.notifier)
               .deleteKanjiFromStorageComputeVersion(
-                  kanjiFromApi, selection.selection);
+                  kanjiFromApi, dataMainScreen.selection);
         }
       },
       child: Container(

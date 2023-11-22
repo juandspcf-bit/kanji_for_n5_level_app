@@ -73,10 +73,13 @@ class MyApp extends ConsumerWidget {
           stream: streamAuth,
           builder: (ctx, snapShot) {
             final user = snapShot.data;
+            logger.d('called');
             if (user != null) {
-              ref.read(selectionNavigationBarScreen.notifier).initPage();
-              return const MainContent();
+              logger.d('the uuid is ${user.uid}');
+              ref.read(mainScreenProvider.notifier).initPage();
+              return MainContent(uuid: user.uid);
             } else {
+              logger.d('called loging form');
               return const LoginForm();
             }
           }),
