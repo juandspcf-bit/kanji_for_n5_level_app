@@ -107,9 +107,9 @@ class _KanjiSectionListState extends ConsumerState<KanjiSectionList> {
         !(resultStatus == ConnectivityResult.none);
 
     return PopScope(
-      canPop: accesToQuiz,
+      canPop: !isAnyProcessingData(kanjiList.kanjiList),
       onPopInvoked: (didPop) {
-        if (!accesToQuiz) {
+        if (isAnyProcessingData(kanjiList.kanjiList)) {
           _scaleDialog(context);
           return;
         }

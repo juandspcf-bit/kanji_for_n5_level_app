@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
@@ -8,6 +9,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:kanji_for_n5_level_app/main_screens/login_screen.dart';
 import 'package:kanji_for_n5_level_app/main_screens/main_content.dart';
 import 'package:kanji_for_n5_level_app/providers/selection_navigation_bar_screen.dart';
+import 'package:kanji_for_n5_level_app/providers/status_connection_provider.dart';
 import 'firebase_options.dart';
 
 final dbFirebase = FirebaseFirestore.instance;
@@ -72,23 +74,46 @@ class MyApp extends ConsumerWidget {
           stream: streamAuth,
           builder: (ctx, snapShot) {
             final user = snapShot.data;
-            logger.d('called');
-            if (user != null) {
-              FutureBuilder(
-                future: ref.read(mainScreenProvider.notifier).initPage(),
-                builder: (BuildContext context, AsyncSnapshot<void> snapshot) {
-                  final connectionStatus = snapShot.connectionState;
-                  if (connectionStatus == ConnectionState.waiting) {
-                    return const CircularProgressIndicator();
-                  } else if (connectionStatus == ConnectionState.done) {
-                    return MainContent(uuid: user.uid);
-                  } else {
-                    return const Center(child: Text('error'));
-                  }
-                },
-              );
 
-              return MainContent(uuid: user.uid);
+            if (user != null) {
+              final connectionWifiState = ref.watch(statusConnectionProvider);
+              if (connectionWifiState == ConnectivityResult.none) {
+                return FutureBuilder(
+                  future:
+                      ref.read(mainScreenProvider.notifier).initPageOffline(),
+                  builder:
+                      (BuildContext context, AsyncSnapshot<void> snapshot) {
+                    final connectionStatus = snapShot.connectionState;
+                    logger.d('The connection status is $connectionStatus');
+                    if (connectionStatus == ConnectionState.waiting) {
+                      return const CircularProgressIndicator();
+                    } else if (connectionStatus == ConnectionState.done ||
+                        connectionStatus == ConnectionState.active) {
+                      return MainContent(uuid: user.uid);
+                    } else {
+                      return const Center(child: Text('error'));
+                    }
+                  },
+                );
+              } else {
+                return FutureBuilder(
+                  future:
+                      ref.read(mainScreenProvider.notifier).initPageOnline(),
+                  builder:
+                      (BuildContext context, AsyncSnapshot<void> snapshot) {
+                    final connectionStatus = snapShot.connectionState;
+                    logger.d('The connection status is $connectionStatus');
+                    if (connectionStatus == ConnectionState.waiting) {
+                      return const CircularProgressIndicator();
+                    } else if (connectionStatus == ConnectionState.done ||
+                        connectionStatus == ConnectionState.active) {
+                      return MainContent(uuid: user.uid);
+                    } else {
+                      return const Center(child: Text('error'));
+                    }
+                  },
+                );
+              }
             } else {
               logger.d('called loging form');
               return const LoginForm();

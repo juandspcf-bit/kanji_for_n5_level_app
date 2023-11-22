@@ -103,7 +103,7 @@ class MainScreenProvider extends Notifier<MainScreenData> {
     final uuid = FirebaseAuth.instance.currentUser!.uid;
     final fullName = FirebaseAuth.instance.currentUser!.displayName;
 
-    logger.d(fullName);
+    logger.d('The full name is 1 $fullName');
 
     try {
       final userPhoto = storageRef.child("userImages/$uuid.jpg");
@@ -114,18 +114,33 @@ class MainScreenProvider extends Notifier<MainScreenData> {
           selection: 0, avatarLink: link, fullName: fullName ?? '');
     } catch (e) {
       logger.e('error reading profile photo');
+      logger.d('The full name is 2 $fullName');
       state = MainScreenData(
           selection: 0, avatarLink: '', fullName: fullName ?? '');
     }
+  }
+
+  Future<void> getAppBarDataOffline() async {
+    final fullName = FirebaseAuth.instance.currentUser!.displayName;
+
+    logger.d('The full name is 1 $fullName');
+
+    state =
+        MainScreenData(selection: 0, avatarLink: '', fullName: fullName ?? '');
   }
 
   void resetMainScreenState() {
     state = MainScreenData(selection: 0, avatarLink: '', fullName: '');
   }
 
-  Future<void> initPage() async {
+  Future<void> initPageOnline() async {
     await getInitData();
     await getAppBarData();
+  }
+
+  Future<void> initPageOffline() async {
+    await getInitData();
+    await getAppBarDataOffline();
   }
 }
 
