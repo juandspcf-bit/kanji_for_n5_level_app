@@ -1,39 +1,25 @@
 import 'dart:io';
 
 import 'package:async/async.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:kanji_for_n5_level_app/Databases/db_definitions.dart';
 import 'package:kanji_for_n5_level_app/models/kanji_from_api.dart';
 import 'package:kanji_for_n5_level_app/providers/status_stored_provider.dart';
-import 'package:sqflite/sqflite.dart';
-import 'package:sqflite/sqflite.dart' as sql;
-import 'package:path/path.dart' as path;
 import 'package:uuid/uuid.dart';
 import 'package:dio/dio.dart';
 
 const uuid = Uuid();
 
-Future<Database> get kanjiFromApiDatabase async {
-  final dbPath = await sql.getDatabasesPath();
-  final db = await sql.openDatabase(
-    path.join(dbPath, "downloadkanjis.db"),
-    onCreate: (db, version) async {
-      db.execute(
-          'CREATE TABLE strokes(id INTEGER PRIMARY KEY AUTOINCREMENT, strokeImageLink TEXT,'
-          ' kanjiCharacter TEXT)');
-      db.execute(
-          'CREATE TABLE examples(id INTEGER PRIMARY KEY AUTOINCREMENT, japanese TEXT,'
-          ' meaning TEXT, opus TEXT, aac TEXT, ogg TEXT, mp3 TEXT, kanjiCharacter TEXT)');
-      return db.execute(
-          'CREATE TABLE kanji_FromApi(id INTEGER PRIMARY KEY AUTOINCREMENT, kanjiCharacter TEXT,'
-          ' englishMeaning TEXT, kanjiImageLink TEXT, katakanaMeaning TEXT, hiraganaMeaning TEXT, videoLink TEXT, section INTEGER)');
-    },
-    version: 1,
-  );
-  return db;
-}
-
 Future<List<KanjiFromApi>> loadStoredKanjis() async {
+  final user = FirebaseAuth.instance.currentUser;
+
+  if (user == null) {
+    return Future(() => []);
+  }
+
   final db = await kanjiFromApiDatabase;
-  final dataKanjiFromApi = await db.query('kanji_FromApi');
+  final dataKanjiFromApi =
+      await db.query('kanji_FromApi', where: 'uuid = ?', whereArgs: [user.uid]);
 
   if (dataKanjiFromApi.isEmpty) return [];
 
@@ -42,7 +28,8 @@ Future<List<KanjiFromApi>> loadStoredKanjis() async {
   for (final mapKanjiFromDb in dataKanjiFromApi) {
     final kanjiCharacter = mapKanjiFromDb['kanjiCharacter'] as String;
     final listMapExamplesFromDb = await db.rawQuery(
-        'SELECT * FROM examples WHERE kanjiCharacter = ? ', [kanjiCharacter]);
+        'SELECT * FROM examples WHERE kanjiCharacter = ? AND uuid = ?',
+        [kanjiCharacter, user.uid]);
 
     final examples = listMapExamplesFromDb.map((exampleFromDb) {
       final audio = AudioExamples(
@@ -58,7 +45,8 @@ Future<List<KanjiFromApi>> loadStoredKanjis() async {
     }).toList();
 
     final listMapStrokesImagesLisnkFromDb = await db.rawQuery(
-        'SELECT * FROM strokes WHERE kanjiCharacter = ? ', [kanjiCharacter]);
+        'SELECT * FROM strokes WHERE kanjiCharacter = ? AND uuid = ?',
+        [kanjiCharacter, user.uid]);
 
     final listStrokesImagesLinks = listMapStrokesImagesLisnkFromDb
         .map((imageLinkMap) => imageLinkMap['strokeImageLink'] as String)
@@ -108,10 +96,11 @@ void addToFutureGroup({
 String getPathToDocuments({
   required Directory dirDocumentPath,
   required String link,
+  required String uuid,
 }) {
   final lastSeparatorIndex = link.lastIndexOf('/');
   final nameFile = link.substring(lastSeparatorIndex + 1);
-  return '${dirDocumentPath.path}/$nameFile';
+  return '${dirDocumentPath.path}/${uuid}_$nameFile';
 }
 
 enum DeleteStatus {

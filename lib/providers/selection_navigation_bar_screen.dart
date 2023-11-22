@@ -6,6 +6,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:kanji_for_n5_level_app/Databases/db_definitions.dart';
 import 'package:kanji_for_n5_level_app/Databases/download_db_utils.dart';
 import 'package:kanji_for_n5_level_app/Databases/favorites_db_utils.dart';
 import 'package:kanji_for_n5_level_app/main.dart';
@@ -18,7 +19,7 @@ import 'package:kanji_for_n5_level_app/providers/status_stored_provider.dart';
 class MainScreenProvider extends Notifier<MainScreenData> {
   @override
   MainScreenData build() {
-    getInitData();
+    //getInitData();
 
     Connectivity().checkConnectivity().then((result) =>
         ref.read(statusConnectionProvider.notifier).setInitialStatus(result));
@@ -71,7 +72,7 @@ class MainScreenProvider extends Notifier<MainScreenData> {
     return await compute(cleanInvalidStoredFiles, listOfStoredKanjis);
   }
 
-  void getInitData() async {
+  Future<void> getInitData() async {
     var listOfStoredKanjis = await loadStoredKanjis();
     final validAndInvalidKanjis = await runCompute(listOfStoredKanjis);
     logger
@@ -102,24 +103,29 @@ class MainScreenProvider extends Notifier<MainScreenData> {
     final uuid = FirebaseAuth.instance.currentUser!.uid;
     final fullName = FirebaseAuth.instance.currentUser!.displayName;
 
+    logger.d(fullName);
+
     try {
       final userPhoto = storageRef.child("userImages/$uuid.jpg");
 
       final link = await userPhoto.getDownloadURL();
       logger.d(link);
       state = MainScreenData(
-          selection: state.selection,
-          avatarLink: link,
-          fullName: fullName ?? '');
+          selection: 0, avatarLink: link, fullName: fullName ?? '');
     } catch (e) {
       logger.e('error reading profile photo');
       state = MainScreenData(
-          selection: state.selection, avatarLink: '', fullName: fullName ?? '');
+          selection: 0, avatarLink: '', fullName: fullName ?? '');
     }
   }
 
-  void initPage() {
-    getAppBarData();
+  void resetMainScreenState() {
+    state = MainScreenData(selection: 0, avatarLink: '', fullName: '');
+  }
+
+  Future<void> initPage() async {
+    await getInitData();
+    await getAppBarData();
   }
 }
 

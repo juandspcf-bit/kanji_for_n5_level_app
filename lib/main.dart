@@ -7,7 +7,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:kanji_for_n5_level_app/main_screens/login_screen.dart';
 import 'package:kanji_for_n5_level_app/main_screens/main_content.dart';
-import 'package:kanji_for_n5_level_app/main_screens/sing_up_screen.dart';
 import 'package:kanji_for_n5_level_app/providers/selection_navigation_bar_screen.dart';
 import 'firebase_options.dart';
 
@@ -75,8 +74,20 @@ class MyApp extends ConsumerWidget {
             final user = snapShot.data;
             logger.d('called');
             if (user != null) {
-              logger.d('the uuid is ${user.uid}');
-              ref.read(mainScreenProvider.notifier).initPage();
+              FutureBuilder(
+                future: ref.read(mainScreenProvider.notifier).initPage(),
+                builder: (BuildContext context, AsyncSnapshot<void> snapshot) {
+                  final connectionStatus = snapShot.connectionState;
+                  if (connectionStatus == ConnectionState.waiting) {
+                    return const CircularProgressIndicator();
+                  } else if (connectionStatus == ConnectionState.done) {
+                    return MainContent(uuid: user.uid);
+                  } else {
+                    return const Center(child: Text('error'));
+                  }
+                },
+              );
+
               return MainContent(uuid: user.uid);
             } else {
               logger.d('called loging form');

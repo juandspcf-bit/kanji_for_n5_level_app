@@ -4,15 +4,11 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kanji_for_n5_level_app/config_files/screen_config.dart';
-import 'package:kanji_for_n5_level_app/main.dart';
 import 'package:kanji_for_n5_level_app/main_screens/bottom_navigation_bar.dart';
 import 'package:kanji_for_n5_level_app/providers/selection_navigation_bar_screen.dart';
 import 'package:kanji_for_n5_level_app/screens/favorite_screen.dart';
 import 'package:kanji_for_n5_level_app/screens/sections_screen.dart';
 import 'package:logger/logger.dart';
-
-const temporalAvatar =
-    "https://firebasestorage.googleapis.com/v0/b/kanji-for-n5.appspot.com/o/unnamed.jpg?alt=media&token=38275fec-42f3-4d95-b1fd-785e82d4086f&_gl=1*19p8v1f*_ga*MjAyNTg0OTcyOS4xNjk2NDEwODIz*_ga_CW55HF8NVT*MTY5NzEwMTY3NC45LjEuMTY5NzEwMzExMy4zMy4wLjA.";
 
 Dio dio = Dio();
 final logger = Logger();
@@ -99,6 +95,7 @@ class MainContent extends ConsumerWidget {
           IconButton(
               onPressed: () async {
                 await FirebaseAuth.instance.signOut();
+                ref.read(mainScreenProvider.notifier).resetMainScreenState();
               },
               icon: const Icon(Icons.logout)),
           Padding(

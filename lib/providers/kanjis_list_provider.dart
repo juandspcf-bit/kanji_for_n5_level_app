@@ -1,8 +1,9 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kanji_for_n5_level_app/Databases/db_computes_functions_for_deleting_data.dart';
 import 'package:kanji_for_n5_level_app/Databases/db_computes_functions_for_inserting_data.dart';
-import 'package:kanji_for_n5_level_app/Databases/download_db_utils.dart';
+import 'package:kanji_for_n5_level_app/Databases/db_definitions.dart';
 import 'package:kanji_for_n5_level_app/models/kanji_from_api.dart';
 import 'package:kanji_for_n5_level_app/networking/request_api.dart';
 import 'package:kanji_for_n5_level_app/providers/error_storing_database_status.dart';
@@ -77,6 +78,8 @@ class KanjiListProvider extends Notifier<KanjiListData> {
     try {
       final kanjiFromApiStored = await storeKanji(kanjiFromApi);
 
+      if (kanjiFromApiStored == null) return;
+
       updateProviders(kanjiFromApiStored, selection);
 
       logger.i(kanjiFromApiStored);
@@ -101,18 +104,24 @@ class KanjiListProvider extends Notifier<KanjiListData> {
     KanjiFromApi kanjiFromApi,
     int selection,
   ) async {
+    final user = FirebaseAuth.instance.currentUser;
+
+    if (user == null) {
+      return Future(() => []);
+    }
+
     try {
       final db = await kanjiFromApiDatabase;
 
       final listKanjiMapFromDb = await db.rawQuery(
-          'SELECT * FROM kanji_FromApi WHERE kanjiCharacter = ? ',
-          [kanjiFromApi.kanjiCharacter]);
+          'SELECT * FROM kanji_FromApi WHERE kanjiCharacter = ? AND uuid = ?',
+          [kanjiFromApi.kanjiCharacter, user.uid]);
       final listMapExamplesFromDb = await db.rawQuery(
-          'SELECT * FROM examples WHERE kanjiCharacter = ? ',
-          [kanjiFromApi.kanjiCharacter]);
+          'SELECT * FROM examples WHERE kanjiCharacter = ? AND uuid = ?',
+          [kanjiFromApi.kanjiCharacter, user.uid]);
       final listMapStrokesImagesLisnkFromDb = await db.rawQuery(
-          'SELECT * FROM strokes WHERE kanjiCharacter = ? ',
-          [kanjiFromApi.kanjiCharacter]);
+          'SELECT * FROM strokes WHERE kanjiCharacter = ? AND uuid = ?',
+          [kanjiFromApi.kanjiCharacter, user.uid]);
 
       final parametersDelete = ParametersDelete(
           listKanjiMapFromDb: listKanjiMapFromDb,
@@ -121,12 +130,15 @@ class KanjiListProvider extends Notifier<KanjiListData> {
 
       await compute(deleteKanjiFromApiComputeVersion, parametersDelete);
 
-      await db.rawDelete('DELETE FROM kanji_FromApi WHERE kanjiCharacter = ?',
-          [kanjiFromApi.kanjiCharacter]);
-      await db.rawDelete('DELETE FROM examples WHERE kanjiCharacter = ?',
-          [kanjiFromApi.kanjiCharacter]);
-      await db.rawDelete('DELETE FROM strokes WHERE kanjiCharacter = ?',
-          [kanjiFromApi.kanjiCharacter]);
+      await db.rawDelete(
+          'DELETE FROM kanji_FromApi WHERE kanjiCharacter = ? AND uuid = ?',
+          [kanjiFromApi.kanjiCharacter, user.uid]);
+      await db.rawDelete(
+          'DELETE FROM examples WHERE kanjiCharacter = ? AND uuid = ?',
+          [kanjiFromApi.kanjiCharacter, user.uid]);
+      await db.rawDelete(
+          'DELETE FROM strokes WHERE kanjiCharacter = ? AND uuid = ?',
+          [kanjiFromApi.kanjiCharacter, user.uid]);
 
       ref.read(storedKanjisProvider.notifier).deleteItem(kanjiFromApi);
 
