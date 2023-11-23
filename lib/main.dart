@@ -77,43 +77,24 @@ class MyApp extends ConsumerWidget {
 
             if (user != null) {
               final connectionWifiState = ref.watch(statusConnectionProvider);
-              if (connectionWifiState == ConnectivityResult.none) {
-                return FutureBuilder(
-                  future:
-                      ref.read(mainScreenProvider.notifier).initPageOffline(),
-                  builder:
-                      (BuildContext context, AsyncSnapshot<void> snapshot) {
-                    final connectionStatus = snapShot.connectionState;
-                    logger.d('The connection status is $connectionStatus');
-                    if (connectionStatus == ConnectionState.waiting) {
-                      return const CircularProgressIndicator();
-                    } else if (connectionStatus == ConnectionState.done ||
-                        connectionStatus == ConnectionState.active) {
-                      return MainContent(uuid: user.uid);
-                    } else {
-                      return const Center(child: Text('error'));
-                    }
-                  },
-                );
-              } else {
-                return FutureBuilder(
-                  future:
-                      ref.read(mainScreenProvider.notifier).initPageOnline(),
-                  builder:
-                      (BuildContext context, AsyncSnapshot<void> snapshot) {
-                    final connectionStatus = snapShot.connectionState;
-                    logger.d('The connection status is $connectionStatus');
-                    if (connectionStatus == ConnectionState.waiting) {
-                      return const CircularProgressIndicator();
-                    } else if (connectionStatus == ConnectionState.done ||
-                        connectionStatus == ConnectionState.active) {
-                      return MainContent(uuid: user.uid);
-                    } else {
-                      return const Center(child: Text('error'));
-                    }
-                  },
-                );
-              }
+
+              return FutureBuilder(
+                future: connectionWifiState == ConnectivityResult.none
+                    ? ref.read(mainScreenProvider.notifier).initPageOffline()
+                    : ref.read(mainScreenProvider.notifier).initPageOnline(),
+                builder: (BuildContext context, AsyncSnapshot<void> snapshot) {
+                  final connectionStatus = snapShot.connectionState;
+                  logger.d('The connection status is $connectionStatus');
+                  if (connectionStatus == ConnectionState.waiting) {
+                    return const CircularProgressIndicator();
+                  } else if (connectionStatus == ConnectionState.done ||
+                      connectionStatus == ConnectionState.active) {
+                    return MainContent(uuid: user.uid);
+                  } else {
+                    return const Center(child: Text('error'));
+                  }
+                },
+              );
             } else {
               logger.d('called loging form');
               return const LoginForm();
