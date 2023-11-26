@@ -194,10 +194,10 @@ class _SingUpFormState extends ConsumerState<SingUpForm> {
                         validator: (text) {
                           if (text != null &&
                               text.length >= 4 &&
-                              text.length <= 10) {
+                              text.length <= 15) {
                             return null;
                           } else {
-                            return 'Password should be between 10 and 4 characters';
+                            return 'Password should be between 15 and 4 characters';
                           }
                         },
                       ),
@@ -216,10 +216,10 @@ class _SingUpFormState extends ConsumerState<SingUpForm> {
                         validator: (text) {
                           if (text != null &&
                               text.length >= 4 &&
-                              text.length <= 10) {
+                              text.length <= 15) {
                             return null;
                           } else {
-                            return 'Password should be between 10 and 4 characters';
+                            return 'Password should be between 15 and 4 characters';
                           }
                         },
                       )
