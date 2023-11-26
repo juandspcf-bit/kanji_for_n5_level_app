@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kanji_for_n5_level_app/config_files/screen_config.dart';
 import 'package:kanji_for_n5_level_app/screens/main_screens/bottom_navigation_bar.dart';
-import 'package:kanji_for_n5_level_app/providers/selection_navigation_bar_screen.dart';
+import 'package:kanji_for_n5_level_app/providers/main_screen_provider.dart';
 import 'package:kanji_for_n5_level_app/screens/favorite_screen.dart';
 import 'package:kanji_for_n5_level_app/screens/sections_screen.dart';
 import 'package:logger/logger.dart';
@@ -93,11 +93,12 @@ class MainContent extends ConsumerWidget {
         title: Text(scaffoldTitle),
         actions: [
           IconButton(
-              onPressed: () async {
-                await FirebaseAuth.instance.signOut();
-                ref.read(mainScreenProvider.notifier).resetMainScreenState();
-              },
-              icon: const Icon(Icons.logout)),
+            onPressed: () async {
+              await FirebaseAuth.instance.signOut();
+              ref.read(mainScreenProvider.notifier).resetMainScreenState();
+            },
+            icon: const Icon(Icons.logout),
+          ),
           Padding(
             padding: const EdgeInsets.only(top: 3, bottom: 3, right: 3),
             child: ClipRRect(
