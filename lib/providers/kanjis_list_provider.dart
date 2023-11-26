@@ -9,7 +9,7 @@ import 'package:kanji_for_n5_level_app/networking/request_api.dart';
 import 'package:kanji_for_n5_level_app/providers/error_storing_database_status.dart';
 import 'package:kanji_for_n5_level_app/providers/favorites_kanjis_provider.dart';
 import 'package:kanji_for_n5_level_app/providers/status_stored_provider.dart';
-import 'package:kanji_for_n5_level_app/main_screens/main_content.dart';
+import 'package:kanji_for_n5_level_app/screens/main_screens/main_content.dart';
 
 class KanjiListProvider extends Notifier<KanjiListData> {
   @override

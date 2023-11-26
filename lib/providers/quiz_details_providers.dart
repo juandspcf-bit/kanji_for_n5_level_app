@@ -1,6 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kanji_for_n5_level_app/models/kanji_from_api.dart';
-import 'package:kanji_for_n5_level_app/main_screens/main_content.dart';
+import 'package:kanji_for_n5_level_app/screens/main_screens/main_content.dart';
 
 class QuizDetailsProvider extends Notifier<
     ({

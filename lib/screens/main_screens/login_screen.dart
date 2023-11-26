@@ -3,8 +3,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:kanji_for_n5_level_app/main_screens/main_content.dart';
-import 'package:kanji_for_n5_level_app/main_screens/sing_up_screen.dart';
+import 'package:kanji_for_n5_level_app/screens/main_screens/main_content.dart';
+import 'package:kanji_for_n5_level_app/screens/main_screens/sing_up_screen.dart';
 
 class LoginForm extends ConsumerStatefulWidget {
   const LoginForm({super.key});

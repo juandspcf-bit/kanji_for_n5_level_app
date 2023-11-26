@@ -4,7 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kanji_for_n5_level_app/config_files/screen_config.dart';
-import 'package:kanji_for_n5_level_app/main_screens/bottom_navigation_bar.dart';
+import 'package:kanji_for_n5_level_app/screens/main_screens/bottom_navigation_bar.dart';
 import 'package:kanji_for_n5_level_app/providers/selection_navigation_bar_screen.dart';
 import 'package:kanji_for_n5_level_app/screens/favorite_screen.dart';
 import 'package:kanji_for_n5_level_app/screens/sections_screen.dart';
