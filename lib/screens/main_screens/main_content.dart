@@ -99,17 +99,13 @@ class MainContent extends ConsumerWidget {
             },
             icon: const Icon(Icons.logout),
           ),
-          Padding(
-            padding: const EdgeInsets.only(top: 3, bottom: 3, right: 3),
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(10000.0),
-              child: CachedNetworkImage(
-                imageUrl: dataStateMainContent.avatarLink,
-                placeholder: (context, url) =>
-                    const CircularProgressIndicator(),
-                errorWidget: (context, url, error) =>
-                    Image.asset('assets/images/user.png'),
-              ),
+          CircleAvatar(
+            radius: 25,
+            child: CachedNetworkImage(
+              imageUrl: dataStateMainContent.avatarLink,
+              placeholder: (context, url) => const CircularProgressIndicator(),
+              errorWidget: (context, url, error) =>
+                  Image.asset('assets/images/user.png'),
             ),
           ),
         ],
