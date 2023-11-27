@@ -29,7 +29,9 @@ class AccountDetails extends ConsumerWidget {
                 children: [
                   ListTile(
                     onTap: () {
-                      ref.read(personalInfoProvider.notifier).getAppBarData();
+                      ref
+                          .read(personalInfoProvider.notifier)
+                          .getInitialPersonalInfoData();
                       Navigator.of(context).push(
                         MaterialPageRoute(builder: (ctx) {
                           return PersonalInfo();

@@ -102,6 +102,7 @@ class MainContent extends ConsumerWidget {
             child: CircleAvatar(
               radius: 25,
               child: CachedNetworkImage(
+                fit: BoxFit.contain,
                 imageUrl: dataStateMainContent.avatarLink,
                 placeholder: (context, url) =>
                     const CircularProgressIndicator(),
