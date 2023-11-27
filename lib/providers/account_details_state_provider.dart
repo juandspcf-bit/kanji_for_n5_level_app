@@ -3,10 +3,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kanji_for_n5_level_app/main.dart';
 import 'package:kanji_for_n5_level_app/screens/main_screens/main_content.dart';
 
-class AccountDetailsProvider extends Notifier<AccountDetailsData> {
+class PersonalInfoProvider extends Notifier<PersonalInfoData> {
   @override
-  AccountDetailsData build() {
-    return AccountDetailsData(pathProfileUser: '', link: '');
+  PersonalInfoData build() {
+    return PersonalInfoData(pathProfileUser: '', birthdayDate: DateTime.now());
   }
 
   Future<void> getAppBarData() async {
@@ -19,21 +19,28 @@ class AccountDetailsProvider extends Notifier<AccountDetailsData> {
       final userPhoto = storageRef.child("userImages/$uuid.jpg");
 
       final photoLink = await userPhoto.getDownloadURL();
-      state = AccountDetailsData(pathProfileUser: photoLink, link: '');
+      state = PersonalInfoData(
+          pathProfileUser: photoLink, birthdayDate: state.birthdayDate);
     } catch (e) {
       logger.e('error reading profile photo');
-      state = AccountDetailsData(pathProfileUser: '', link: '');
+      state = PersonalInfoData(
+          pathProfileUser: '', birthdayDate: state.birthdayDate);
     }
+  }
+
+  void setBirthdayDate(DateTime date) {
+    state = PersonalInfoData(
+        pathProfileUser: state.pathProfileUser, birthdayDate: date);
   }
 }
 
-final accountDetailsProvider =
-    NotifierProvider<AccountDetailsProvider, AccountDetailsData>(
-        AccountDetailsProvider.new);
+final personalInfoProvider =
+    NotifierProvider<PersonalInfoProvider, PersonalInfoData>(
+        PersonalInfoProvider.new);
 
-class AccountDetailsData {
+class PersonalInfoData {
   final String pathProfileUser;
-  final String link;
+  final DateTime birthdayDate;
 
-  AccountDetailsData({required this.pathProfileUser, required this.link});
+  PersonalInfoData({required this.pathProfileUser, required this.birthdayDate});
 }

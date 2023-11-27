@@ -1,10 +1,10 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dio/dio.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kanji_for_n5_level_app/config_files/screen_config.dart';
 import 'package:kanji_for_n5_level_app/providers/account_details_state_provider.dart';
+import 'package:kanji_for_n5_level_app/screens/account_details/account_details.dart';
 import 'package:kanji_for_n5_level_app/screens/main_screens/bottom_navigation_bar.dart';
 import 'package:kanji_for_n5_level_app/providers/main_screen_provider.dart';
 import 'package:kanji_for_n5_level_app/screens/favorite_screen.dart';
@@ -93,16 +93,11 @@ class MainContent extends ConsumerWidget {
       appBar: AppBar(
         title: Text(scaffoldTitle),
         actions: [
-          IconButton(
-            onPressed: () async {
-              await FirebaseAuth.instance.signOut();
-              ref.read(mainScreenProvider.notifier).resetMainScreenState();
-            },
-            icon: const Icon(Icons.logout),
-          ),
           GestureDetector(
             onTap: () {
-              ref.read(accountDetailsProvider.notifier).getAppBarData();
+              Navigator.of(context).push(MaterialPageRoute(builder: (ctx) {
+                return const AccountDetails();
+              }));
             },
             child: CircleAvatar(
               radius: 25,

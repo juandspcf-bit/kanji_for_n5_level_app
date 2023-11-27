@@ -60,6 +60,7 @@ dependencies:
   email_validator: ^2.1.17
   image_picker: ^1.0.4
   firebase_storage: ^11.5.1
+  intl: ^0.18.1
 
 dev_dependencies:
   flutter_test:
