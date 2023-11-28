@@ -29,6 +29,7 @@ class AccountDetails extends ConsumerWidget {
                 children: [
                   ListTile(
                     onTap: () {
+                      ref.read(personalInfoProvider.notifier).resetData();
                       ref
                           .read(personalInfoProvider.notifier)
                           .getInitialPersonalInfoData();
@@ -46,7 +47,7 @@ class AccountDetails extends ConsumerWidget {
                       borderRadius:
                           const BorderRadius.all(Radius.circular(12.0)),
                     ),
-                    title: const Text('Full name, birthsday,'),
+                    title: const Text('Name, email,'),
                     trailing: const Icon(Icons.arrow_forward_ios),
                   ),
                   const SizedBox(

@@ -7,7 +7,20 @@ class PersonalInfoProvider extends Notifier<PersonalInfoData> {
   @override
   PersonalInfoData build() {
     return PersonalInfoData(
-        pathProfileUser: '', name: '', email: '', statusFetching: 0);
+        pathProfileUser: '',
+        pathProfileTemporal: '',
+        name: '',
+        email: '',
+        statusFetching: 0);
+  }
+
+  void resetData() {
+    state = PersonalInfoData(
+        pathProfileUser: '',
+        pathProfileTemporal: '',
+        name: '',
+        email: '',
+        statusFetching: 0);
   }
 
   Future<void> getInitialPersonalInfoData() async {
@@ -21,6 +34,7 @@ class PersonalInfoProvider extends Notifier<PersonalInfoData> {
       final photoLink = await userPhoto.getDownloadURL();
       state = PersonalInfoData(
         pathProfileUser: photoLink,
+        pathProfileTemporal: '',
         name: fullName ?? '',
         email: email ?? '',
         statusFetching: 2,
@@ -31,6 +45,7 @@ class PersonalInfoProvider extends Notifier<PersonalInfoData> {
       logger.d(email);
       state = PersonalInfoData(
         pathProfileUser: '',
+        pathProfileTemporal: '',
         name: fullName ?? 'no name',
         email: email ?? 'no data',
         statusFetching: 2,
@@ -38,9 +53,19 @@ class PersonalInfoProvider extends Notifier<PersonalInfoData> {
     }
   }
 
+  void setProfileTemporalPath(String path) async {
+    state = PersonalInfoData(
+        pathProfileUser: '',
+        pathProfileTemporal: path,
+        name: state.name,
+        email: state.email,
+        statusFetching: state.statusFetching);
+  }
+
   void setProfilePath(String path) async {
     state = PersonalInfoData(
         pathProfileUser: path,
+        pathProfileTemporal: state.pathProfileTemporal,
         name: state.name,
         email: state.email,
         statusFetching: state.statusFetching);
@@ -50,6 +75,7 @@ class PersonalInfoProvider extends Notifier<PersonalInfoData> {
     //await FirebaseAuth.instance.currentUser!.updateDisplayName(name);
     state = PersonalInfoData(
         pathProfileUser: state.pathProfileUser,
+        pathProfileTemporal: state.pathProfileTemporal,
         name: name,
         email: state.email,
         statusFetching: state.statusFetching);
@@ -59,6 +85,7 @@ class PersonalInfoProvider extends Notifier<PersonalInfoData> {
     //await FirebaseAuth.instance.currentUser!.updateEmail(email);
     state = PersonalInfoData(
         pathProfileUser: state.pathProfileUser,
+        pathProfileTemporal: state.pathProfileTemporal,
         name: state.name,
         email: email,
         statusFetching: state.statusFetching);
@@ -67,6 +94,7 @@ class PersonalInfoProvider extends Notifier<PersonalInfoData> {
   void setStatus(int status) async {
     state = PersonalInfoData(
         pathProfileUser: state.pathProfileUser,
+        pathProfileTemporal: state.pathProfileTemporal,
         name: state.name,
         email: state.email,
         statusFetching: status);
@@ -79,12 +107,14 @@ final personalInfoProvider =
 
 class PersonalInfoData {
   final String pathProfileUser;
+  final String pathProfileTemporal;
   final String name;
   final String email;
   final int statusFetching;
 
   PersonalInfoData(
       {required this.pathProfileUser,
+      required this.pathProfileTemporal,
       required this.name,
       required this.email,
       required this.statusFetching});

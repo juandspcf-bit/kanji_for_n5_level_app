@@ -99,10 +99,12 @@ class MainContent extends ConsumerWidget {
                 return const AccountDetails();
               }));
             },
-            child: CircleAvatar(
-              radius: 25,
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(1000),
               child: CachedNetworkImage(
-                fit: BoxFit.contain,
+                width: 60,
+                height: 60,
+                fit: BoxFit.cover,
                 imageUrl: dataStateMainContent.avatarLink,
                 placeholder: (context, url) =>
                     const CircularProgressIndicator(),

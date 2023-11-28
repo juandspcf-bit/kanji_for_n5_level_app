@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -68,24 +69,15 @@ class PersonalInfo extends ConsumerWidget {
                 if (photo != null) {
                   ref
                       .read(personalInfoProvider.notifier)
-                      .setProfilePath(photo.path);
+                      .setProfileTemporalPath(photo.path);
                 }
-
-                /*                       setState(() {
-                            if (photo != null) {
-                              pathProfileUser = photo.path;
-                            }
-                          }); */
               } on PlatformException catch (e) {
                 logger.e('Failed to pick image: $e');
               }
             },
-            child: CircleAvatar(
-              radius: 80,
-              backgroundImage: accountDetailsData.pathProfileUser.isEmpty
-                  ? AssetImage(pathAssetUser)
-                  : FileImage(File(accountDetailsData.pathProfileUser))
-                      as ImageProvider,
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(300),
+              child: getImageWidget(accountDetailsData),
             ),
           ),
           const SizedBox(
@@ -160,6 +152,43 @@ class PersonalInfo extends ConsumerWidget {
     }
   }
 
+  ImageProvider<Object> getImage(PersonalInfoData accountDetailsData) {
+    if (accountDetailsData.pathProfileUser.isNotEmpty) {
+      return NetworkImage(accountDetailsData.pathProfileUser);
+    } else if (accountDetailsData.pathProfileTemporal.isNotEmpty) {
+      return FileImage(File(accountDetailsData.pathProfileTemporal));
+    } else {
+      return AssetImage(pathAssetUser);
+    }
+  }
+
+  Widget getImageWidget(PersonalInfoData accountDetailsData) {
+    if (accountDetailsData.pathProfileUser.isNotEmpty) {
+      return CachedNetworkImage(
+          width: 128,
+          height: 128,
+          fit: BoxFit.cover,
+          placeholder: (context, url) => const CircularProgressIndicator(),
+          imageUrl: accountDetailsData.pathProfileUser,
+          errorWidget: (context, url, error) =>
+              Image.asset('assets/images/user.png'));
+    } else if (accountDetailsData.pathProfileTemporal.isNotEmpty) {
+      return FadeInImage(
+          width: 128,
+          height: 128,
+          fit: BoxFit.cover,
+          placeholder: AssetImage(pathAssetUser),
+          image: FileImage(File(accountDetailsData.pathProfileTemporal)));
+    } else {
+      return FadeInImage(
+          width: 128,
+          height: 128,
+          fit: BoxFit.cover,
+          placeholder: AssetImage(pathAssetUser),
+          image: AssetImage(pathAssetUser));
+    }
+  }
+
   void onValidate(WidgetRef ref) async {
     final currentFormState = _formKey.currentState;
     if (currentFormState == null) return;
@@ -171,12 +200,14 @@ class PersonalInfo extends ConsumerWidget {
         .updateDisplayName(accountDetailsData.name);
     await FirebaseAuth.instance.currentUser!
         .updateEmail(accountDetailsData.email);
-    if (accountDetailsData.pathProfileUser.isNotEmpty) {
+    if (accountDetailsData.pathProfileTemporal.isNotEmpty) {
       try {
         final userPhoto = storageRef
             .child("userImages/${FirebaseAuth.instance.currentUser!.uid}.jpg");
 
-        await userPhoto.putFile(File(accountDetailsData.pathProfileUser));
+        await userPhoto.putFile(File(accountDetailsData.pathProfileTemporal));
+        final url = await userPhoto.getDownloadURL();
+        ref.read(personalInfoProvider.notifier).setProfilePath(url);
       } catch (e) {
         logger.e('error');
         logger.e(e);
