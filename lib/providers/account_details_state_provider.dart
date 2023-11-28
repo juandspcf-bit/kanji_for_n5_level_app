@@ -129,6 +129,8 @@ class PersonalInfoProvider extends Notifier<PersonalInfoData> {
         logger.e(e);
       }
     }
+    setName(accountDetailsData.name);
+    setEmail(accountDetailsData.email);
     setStatus(2);
   }
 }
