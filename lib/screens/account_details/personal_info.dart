@@ -79,7 +79,7 @@ class PersonalInfo extends ConsumerWidget {
             },
             child: ClipRRect(
               borderRadius: BorderRadius.circular(300),
-              child: getImageWidget(accountDetailsData),
+              child: getImageProfileWidget(accountDetailsData),
             ),
           ),
           const SizedBox(
@@ -154,17 +154,7 @@ class PersonalInfo extends ConsumerWidget {
     }
   }
 
-  ImageProvider<Object> getImage(PersonalInfoData accountDetailsData) {
-    if (accountDetailsData.pathProfileUser.isNotEmpty) {
-      return NetworkImage(accountDetailsData.pathProfileUser);
-    } else if (accountDetailsData.pathProfileTemporal.isNotEmpty) {
-      return FileImage(File(accountDetailsData.pathProfileTemporal));
-    } else {
-      return AssetImage(pathAssetUser);
-    }
-  }
-
-  Widget getImageWidget(PersonalInfoData accountDetailsData) {
+  Widget getImageProfileWidget(PersonalInfoData accountDetailsData) {
     if (accountDetailsData.pathProfileUser.isNotEmpty) {
       return CachedNetworkImage(
         width: 128,
