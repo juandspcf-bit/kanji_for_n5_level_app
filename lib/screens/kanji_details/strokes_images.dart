@@ -18,20 +18,49 @@ class StrokesImages extends ConsumerWidget {
   Widget _dialog(BuildContext context, String image, int index) {
     return AlertDialog(
       title: Text("Stroke number ${index + 1}"),
-      content: SvgPicture.network(
-        image,
-        height: 120,
-        width: 120,
-        colorFilter: const ColorFilter.mode(Colors.white, BlendMode.srcIn),
-        semanticsLabel: kanjiFromApi.kanjiCharacter,
-        placeholderBuilder: (BuildContext context) => Container(
-            color: Colors.transparent,
-            height: 80,
-            width: 80,
-            child: const CircularProgressIndicator(
-              backgroundColor: Color.fromARGB(179, 5, 16, 51),
-            )),
-      ),
+      content: statusStorage == StatusStorage.onlyOnline
+          ? SvgPicture.network(
+              image,
+              height: 120,
+              width: 120,
+              colorFilter:
+                  const ColorFilter.mode(Colors.white, BlendMode.srcIn),
+              semanticsLabel: kanjiFromApi.kanjiCharacter,
+              placeholderBuilder: (BuildContext context) => Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Container(
+                    color: Colors.transparent,
+                    height: 80,
+                    width: 80,
+                    child: const CircularProgressIndicator(
+                      backgroundColor: Color.fromARGB(179, 5, 16, 51),
+                    ),
+                  ),
+                ],
+              ),
+            )
+          : SvgPicture.file(
+              File(image),
+              height: 120,
+              width: 120,
+              colorFilter:
+                  const ColorFilter.mode(Colors.white, BlendMode.srcIn),
+              semanticsLabel: kanjiFromApi.kanjiCharacter,
+              placeholderBuilder: (BuildContext context) => Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Container(
+                    color: Colors.transparent,
+                    height: 80,
+                    width: 80,
+                    child: const CircularProgressIndicator(
+                      backgroundColor: Color.fromARGB(179, 5, 16, 51),
+                    ),
+                  ),
+                ],
+              ),
+            ),
       actions: <Widget>[
         TextButton(
             onPressed: () {
