@@ -9,6 +9,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:kanji_for_n5_level_app/main.dart';
 import 'package:kanji_for_n5_level_app/providers/account_details_state_provider.dart';
+import 'package:kanji_for_n5_level_app/providers/main_screen_provider.dart';
 import 'package:kanji_for_n5_level_app/screens/main_screens/main_content.dart';
 
 class PersonalInfo extends ConsumerWidget {
@@ -16,6 +17,7 @@ class PersonalInfo extends ConsumerWidget {
 
   final ImagePicker picker = ImagePicker();
   final String pathAssetUser = 'assets/images/user.png';
+  final String pathErrorImage = 'assets/images/computer.png';
 
   final _formKey = GlobalKey<FormState>();
 
@@ -165,13 +167,13 @@ class PersonalInfo extends ConsumerWidget {
   Widget getImageWidget(PersonalInfoData accountDetailsData) {
     if (accountDetailsData.pathProfileUser.isNotEmpty) {
       return CachedNetworkImage(
-          width: 128,
-          height: 128,
-          fit: BoxFit.cover,
-          placeholder: (context, url) => const CircularProgressIndicator(),
-          imageUrl: accountDetailsData.pathProfileUser,
-          errorWidget: (context, url, error) =>
-              Image.asset('assets/images/user.png'));
+        width: 128,
+        height: 128,
+        fit: BoxFit.cover,
+        placeholder: (context, url) => const CircularProgressIndicator(),
+        imageUrl: accountDetailsData.pathProfileUser,
+        errorWidget: (context, url, error) => Image.asset(pathErrorImage),
+      );
     } else if (accountDetailsData.pathProfileTemporal.isNotEmpty) {
       return FadeInImage(
           width: 128,
@@ -208,6 +210,7 @@ class PersonalInfo extends ConsumerWidget {
         await userPhoto.putFile(File(accountDetailsData.pathProfileTemporal));
         final url = await userPhoto.getDownloadURL();
         ref.read(personalInfoProvider.notifier).setProfilePath(url);
+        ref.read(mainScreenProvider.notifier).setAvatarLink(url);
       } catch (e) {
         logger.e('error');
         logger.e(e);

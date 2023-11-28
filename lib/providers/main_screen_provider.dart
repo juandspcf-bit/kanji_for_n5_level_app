@@ -34,6 +34,11 @@ class MainScreenProvider extends Notifier<MainScreenData> {
         fullName: state.fullName);
   }
 
+  void setAvatarLink(String link) {
+    state = MainScreenData(
+        selection: state.selection, avatarLink: link, fullName: state.fullName);
+  }
+
   int getScreenSelection() {
     return state.selection;
   }
