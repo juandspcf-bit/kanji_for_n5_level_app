@@ -42,7 +42,8 @@ class StrokesImages extends ConsumerWidget {
     );
   }
 
-  void _scaleDialog(BuildContext context, String image, int index) {
+  void _scaleDialogForShowingSingleStroke(
+      BuildContext context, String image, int index) {
     showGeneralDialog(
       context: context,
       pageBuilder: (ctx, a1, a2) {
@@ -73,7 +74,8 @@ class StrokesImages extends ConsumerWidget {
                 borderRadius: const BorderRadius.all(Radius.circular(10))),
             child: GestureDetector(
               onTap: () {
-                _scaleDialog(context, images[index], index);
+                _scaleDialogForShowingSingleStroke(
+                    context, images[index], index);
               },
               child: statusStorage == StatusStorage.onlyOnline
                   ? SvgPicture.network(
