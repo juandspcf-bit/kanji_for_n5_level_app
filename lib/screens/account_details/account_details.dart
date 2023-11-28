@@ -35,7 +35,7 @@ class AccountDetails extends ConsumerWidget {
                           .getInitialPersonalInfoData();
                       Navigator.of(context).push(
                         MaterialPageRoute(builder: (ctx) {
-                          return PersonalInfo();
+                          return const PersonalInfo();
                         }),
                       );
                     },

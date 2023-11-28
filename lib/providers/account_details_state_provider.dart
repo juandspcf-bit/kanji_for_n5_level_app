@@ -1,6 +1,10 @@
+import 'dart:io';
+
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kanji_for_n5_level_app/main.dart';
+import 'package:kanji_for_n5_level_app/providers/main_screen_provider.dart';
 import 'package:kanji_for_n5_level_app/screens/main_screens/main_content.dart';
 
 class PersonalInfoProvider extends Notifier<PersonalInfoData> {
@@ -98,6 +102,34 @@ class PersonalInfoProvider extends Notifier<PersonalInfoData> {
         name: state.name,
         email: state.email,
         statusFetching: status);
+  }
+
+  void onValidate(GlobalKey<FormState> formKey, WidgetRef ref) async {
+    final currentFormState = formKey.currentState;
+    if (currentFormState == null) return;
+    if (!currentFormState.validate()) return;
+    currentFormState.save();
+    final accountDetailsData = ref.read(personalInfoProvider);
+    setStatus(1);
+    await FirebaseAuth.instance.currentUser!
+        .updateDisplayName(accountDetailsData.name);
+    await FirebaseAuth.instance.currentUser!
+        .updateEmail(accountDetailsData.email);
+    if (accountDetailsData.pathProfileTemporal.isNotEmpty) {
+      try {
+        final userPhoto = storageRef
+            .child("userImages/${FirebaseAuth.instance.currentUser!.uid}.jpg");
+
+        await userPhoto.putFile(File(accountDetailsData.pathProfileTemporal));
+        final url = await userPhoto.getDownloadURL();
+        setProfilePath(url);
+        ref.read(mainScreenProvider.notifier).setAvatarLink(url);
+      } catch (e) {
+        logger.e('error');
+        logger.e(e);
+      }
+    }
+    setStatus(2);
   }
 }
 
