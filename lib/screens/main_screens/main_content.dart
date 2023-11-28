@@ -99,18 +99,23 @@ class MainContent extends ConsumerWidget {
                 return const AccountDetails();
               }));
             },
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(1000),
-              child: CachedNetworkImage(
-                width: 60,
-                height: 60,
-                fit: BoxFit.cover,
-                imageUrl: dataStateMainContent.avatarLink,
-                placeholder: (context, url) =>
-                    const CircularProgressIndicator(),
-                errorWidget: (context, url, error) =>
-                    Image.asset('assets/images/user.png'),
-              ),
+            child: LayoutBuilder(
+              builder: (ctx, constrains) {
+                final height = constrains.maxHeight;
+                return ClipRRect(
+                  borderRadius: BorderRadius.circular(1000),
+                  child: CachedNetworkImage(
+                    width: height - 3,
+                    height: height - 3,
+                    fit: BoxFit.cover,
+                    imageUrl: dataStateMainContent.avatarLink,
+                    placeholder: (context, url) =>
+                        const CircularProgressIndicator(),
+                    errorWidget: (context, url, error) =>
+                        Image.asset('assets/images/user.png'),
+                  ),
+                );
+              },
             ),
           ),
         ],
