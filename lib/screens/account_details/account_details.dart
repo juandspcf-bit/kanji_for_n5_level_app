@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kanji_for_n5_level_app/providers/account_details_state_provider.dart';
+import 'package:kanji_for_n5_level_app/providers/login_provider.dart';
 import 'package:kanji_for_n5_level_app/providers/main_screen_provider.dart';
 import 'package:kanji_for_n5_level_app/screens/account_details/personal_info.dart';
 
@@ -59,6 +60,7 @@ class AccountDetails extends ConsumerWidget {
                       ref
                           .read(mainScreenProvider.notifier)
                           .resetMainScreenState();
+                      ref.read(loginProvider.notifier).setStatus(1);
                       if (context.mounted) {
                         Navigator.pop(context);
                       }

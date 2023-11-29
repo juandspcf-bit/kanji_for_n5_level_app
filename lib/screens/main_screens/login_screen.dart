@@ -1,5 +1,4 @@
 import 'package:email_validator/email_validator.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -17,8 +16,8 @@ class LoginForm extends ConsumerStatefulWidget {
 
 class _LoginFormState extends ConsumerState<LoginForm> {
   final _formKey = GlobalKey<FormState>();
-  late String email;
-  late String password;
+  String email = '';
+  String password = '';
 
   Widget _dialog(BuildContext context, String text) {
     return AlertDialog(
@@ -51,30 +50,43 @@ class _LoginFormState extends ConsumerState<LoginForm> {
     );
   }
 
-  void onValidate() async {
+  void onValidate(WidgetRef ref) async {
     final currenState = _formKey.currentState;
     if (currenState == null) return;
     if (currenState.validate()) {
-      try {
-        await FirebaseAuth.instance
-            .signInWithEmailAndPassword(email: email, password: password);
-      } on FirebaseAuthException catch (e) {
-        if (e.code == 'INVALID_LOGIN_CREDENTIALS') {
-          logger.e(e.code);
-          if (context.mounted) {
-            _dialogErrorInLogin(context,
-                'No user found for that email or the password is incorrect');
+      currenState.save();
+      final result = await ref.read(loginProvider.notifier).onValidate(
+            email,
+            password,
+          );
+
+      logger.d(result);
+      switch (result) {
+        case StatusLogingRequest.invalidCredentials:
+        case StatusLogingRequest.userNotFound:
+        case StatusLogingRequest.wrongPassword:
+          {
+            if (context.mounted) {
+              var snackBar = SnackBar(
+                content: Text(result.message),
+                duration: const Duration(seconds: 3),
+              );
+              ScaffoldMessenger.of(context).showSnackBar(snackBar);
+            }
           }
-        } else if (e.code == 'user-not-found') {
-          if (context.mounted) {
-            _dialogErrorInLogin(context, 'No user found for that email.');
+        case StatusLogingRequest.tooManyRequest:
+          {
+            if (context.mounted) {
+              const text =
+                  'Access to this account has been temporarily disabled '
+                  'due to many failed login attempts. You can immediately restore it by '
+                  'resetting your password or you can try again later.';
+              _dialogErrorInLogin(context, text);
+            }
           }
-        } else if (e.code == 'wrong-password') {
-          if (context.mounted) {
-            _dialogErrorInLogin(
-                context, 'Wrong password provided for that user.');
-          }
-        }
+
+          break;
+        default:
       }
     }
   }
@@ -82,116 +94,139 @@ class _LoginFormState extends ConsumerState<LoginForm> {
   @override
   Widget build(BuildContext context) {
     FlutterNativeSplash.remove();
-    final loginDataState = ref.watch(loginProvider);
+    final dataState = ref.watch(loginProvider);
     return Scaffold(
       body: Padding(
         padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 15),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(
-              'Loging to Kanji for N5',
-              style: Theme.of(context).textTheme.titleLarge,
-            ),
-            const SizedBox(
-              height: 40,
-            ),
-            Form(
-              key: _formKey,
-              child: Column(
-                children: [
-                  TextFormField(
-                    decoration: const InputDecoration().copyWith(
-                        border: const OutlineInputBorder(),
-                        prefixIcon: const Icon(Icons.email),
-                        labelText: 'Email',
-                        hintText: '***@***.com'),
-                    keyboardType: TextInputType.emailAddress,
-                    validator: (text) {
-                      if (text != null && EmailValidator.validate(text)) {
-                        return null;
-                      } else {
-                        return 'Not a valid email';
-                      }
-                    },
-                    onSaved: (value) {
-                      if (value == null) return;
-                      email = value;
-                    },
-                  ),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  TextFormField(
-                    decoration: const InputDecoration().copyWith(
-                      border: const OutlineInputBorder(),
-                      prefixIcon: const Icon(Icons.key),
-                      labelText: 'Password',
+        child: dataState.statusFetching == 0
+            ? Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      'Login to your account',
+                      style: Theme.of(context).textTheme.titleLarge,
                     ),
-                    keyboardType: TextInputType.visiblePassword,
-                    obscureText: true,
-                    validator: (text) {
-                      if (text != null &&
-                          text.length >= 4 &&
-                          text.length <= 10) {
-                        return null;
-                      } else {
-                        return 'Password should be between 10 and 4 characters';
-                      }
-                    },
-                    onSaved: (value) {
-                      if (value == null) return;
-                      password = value;
-                    },
+                    const SizedBox(
+                      height: 25,
+                    ),
+                    const SizedBox(
+                      height: 100,
+                      width: 100,
+                      child: CircularProgressIndicator(),
+                    ),
+                  ],
+                ),
+              )
+            : Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    'Loging to Kanji for N5',
+                    style: Theme.of(context).textTheme.titleLarge,
+                  ),
+                  const SizedBox(
+                    height: 40,
+                  ),
+                  Form(
+                    key: _formKey,
+                    child: Column(
+                      children: [
+                        TextFormField(
+                          initialValue: email,
+                          decoration: const InputDecoration().copyWith(
+                              border: const OutlineInputBorder(),
+                              prefixIcon: const Icon(Icons.email),
+                              labelText: 'Email',
+                              hintText: '***@***.com'),
+                          keyboardType: TextInputType.emailAddress,
+                          validator: (text) {
+                            if (text != null && EmailValidator.validate(text)) {
+                              return null;
+                            } else {
+                              return 'Not a valid email';
+                            }
+                          },
+                          onSaved: (value) {
+                            if (value == null) return;
+                            email = value;
+                          },
+                        ),
+                        const SizedBox(
+                          height: 10,
+                        ),
+                        TextFormField(
+                          initialValue: password,
+                          decoration: const InputDecoration().copyWith(
+                            border: const OutlineInputBorder(),
+                            prefixIcon: const Icon(Icons.key),
+                            labelText: 'Password',
+                          ),
+                          keyboardType: TextInputType.visiblePassword,
+                          obscureText: true,
+                          validator: (text) {
+                            if (text != null &&
+                                text.length >= 4 &&
+                                text.length <= 10) {
+                              return null;
+                            } else {
+                              return 'Password should be between 10 and 4 characters';
+                            }
+                          },
+                          onSaved: (value) {
+                            if (value == null) return;
+                            password = value;
+                          },
+                        ),
+                        const SizedBox(
+                          height: 10,
+                        ),
+                      ],
+                    ),
                   ),
                   const SizedBox(
                     height: 10,
+                  ),
+                  ElevatedButton(
+                    onPressed: () {
+                      FocusScopeNode currentFocus = FocusScope.of(context);
+
+                      if (!currentFocus.hasPrimaryFocus) {
+                        currentFocus.unfocus();
+                      }
+                      onValidate(ref);
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Theme.of(context).colorScheme.primary,
+                      foregroundColor: Theme.of(context).colorScheme.onPrimary,
+                      minimumSize: const Size.fromHeight(40), // NEW
+                    ),
+                    child: const Text('Login'),
+                  ),
+                  ElevatedButton(
+                    onPressed: () {
+                      FocusScopeNode currentFocus = FocusScope.of(context);
+
+                      if (!currentFocus.hasPrimaryFocus) {
+                        currentFocus.unfocus();
+                      }
+
+                      ref.read(singUpProvider.notifier).setStatus(1);
+
+                      Navigator.of(context)
+                          .push(MaterialPageRoute(builder: (ctx) {
+                        return const SingUpForm();
+                      }));
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Theme.of(context).colorScheme.primary,
+                      foregroundColor: Theme.of(context).colorScheme.onPrimary,
+                      minimumSize: const Size.fromHeight(40), // NEW
+                    ),
+                    child: const Text('Sing Up'),
                   ),
                 ],
               ),
-            ),
-            const SizedBox(
-              height: 10,
-            ),
-            ElevatedButton(
-              onPressed: () {
-                FocusScopeNode currentFocus = FocusScope.of(context);
-
-                if (!currentFocus.hasPrimaryFocus) {
-                  currentFocus.unfocus();
-                }
-                onValidate();
-              },
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Theme.of(context).colorScheme.primary,
-                foregroundColor: Theme.of(context).colorScheme.onPrimary,
-                minimumSize: const Size.fromHeight(40), // NEW
-              ),
-              child: const Text('Login'),
-            ),
-            ElevatedButton(
-              onPressed: () {
-                FocusScopeNode currentFocus = FocusScope.of(context);
-
-                if (!currentFocus.hasPrimaryFocus) {
-                  currentFocus.unfocus();
-                }
-
-                ref.read(singUpProvider.notifier).setStatus(1);
-
-                Navigator.of(context).push(MaterialPageRoute(builder: (ctx) {
-                  return const SingUpForm();
-                }));
-              },
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Theme.of(context).colorScheme.primary,
-                foregroundColor: Theme.of(context).colorScheme.onPrimary,
-                minimumSize: const Size.fromHeight(40), // NEW
-              ),
-              child: const Text('Sing Up'),
-            ),
-          ],
-        ),
       ),
     );
   }

@@ -94,11 +94,11 @@ class _SingUpFormState extends ConsumerState<SingUpForm> {
   @override
   Widget build(BuildContext context) {
     FlutterNativeSplash.remove();
-    final signUpDataState = ref.watch(singUpProvider);
+    final dataState = ref.watch(singUpProvider);
     return Scaffold(
       appBar: AppBar(),
       body: SafeArea(
-        child: signUpDataState.statusFetching == 0
+        child: dataState.statusFetching == 0
             ? Center(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
