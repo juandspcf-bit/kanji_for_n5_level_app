@@ -28,6 +28,37 @@ class _SingUpFormState extends ConsumerState<SingUpForm> {
   String pathProfileUser = '';
   final ImagePicker picker = ImagePicker();
 
+  Widget _dialog(BuildContext context) {
+    return AlertDialog(
+      title: const Text("Please wait!!"),
+      content: const Text('There is a error in the user creation, try again'),
+      actions: <Widget>[
+        TextButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+            child: const Text("Okay"))
+      ],
+    );
+  }
+
+  void _scaleDialogForUserCreationError(BuildContext context) {
+    showGeneralDialog(
+      context: context,
+      pageBuilder: (ctx, a1, a2) {
+        return Container();
+      },
+      transitionBuilder: (ctx, a1, a2, child) {
+        var curve = Curves.easeInOut.transform(a1.value);
+        return Transform.scale(
+          scale: curve,
+          child: _dialog(ctx),
+        );
+      },
+      transitionDuration: const Duration(milliseconds: 300),
+    );
+  }
+
   void onValidation() async {
     final currentState = _formKey.currentState;
     if (currentState == null || !currentState.validate()) return;
@@ -46,6 +77,9 @@ class _SingUpFormState extends ConsumerState<SingUpForm> {
         }
       } on ErrorDataBaseException catch (e) {
         logger.e(e.toString());
+        if (context.mounted) {
+          _scaleDialogForUserCreationError(context);
+        }
       }
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
