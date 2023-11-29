@@ -33,15 +33,19 @@ class _SingUpFormState extends ConsumerState<SingUpForm> {
     if (currentState == null || !currentState.validate()) return;
     currentState.save();
     if (password1 == password2) {
-      await ref.read(singUpProvider.notifier).createUser(
-            pathProfileUser,
-            fullName,
-            emailAddress,
-            password1,
-            password2,
-          );
-      if (context.mounted) {
-        Navigator.of(context).pop();
+      try {
+        await ref.read(singUpProvider.notifier).createUser(
+              pathProfileUser,
+              fullName,
+              emailAddress,
+              password1,
+              password2,
+            );
+        if (context.mounted) {
+          Navigator.of(context).pop();
+        }
+      } on ErrorDataBaseException catch (e) {
+        logger.e(e.toString());
       }
     } else {
       ScaffoldMessenger.of(context).showSnackBar(

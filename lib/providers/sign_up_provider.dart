@@ -57,12 +57,12 @@ class SingUpProvider extends Notifier<SingUpData> {
         logger.d('The account already exists for that email.');
       }
 
-      throw const ErrorDataBaseExecption(
+      throw const ErrorDataBaseException(
           message: 'Error with creation of account');
     } catch (e) {
       setStatus(1);
       logger.e(e);
-      throw const ErrorDataBaseExecption(
+      throw const ErrorDataBaseException(
           message: 'Error with creation of account');
     } finally {}
   }
@@ -77,8 +77,8 @@ class SingUpData {
   SingUpData({required this.statusFetching});
 }
 
-class ErrorDataBaseExecption implements Exception {
+class ErrorDataBaseException implements Exception {
   final String message;
 
-  const ErrorDataBaseExecption({required this.message});
+  const ErrorDataBaseException({required this.message});
 }
