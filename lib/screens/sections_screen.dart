@@ -66,52 +66,56 @@ class _SectionState extends ConsumerState<Section> {
 
   @override
   Widget build(BuildContext context) {
-    return InkWell(
-      onTap: () {
-        ref.read(kanjiListProvider.notifier).setKanjiListFromRepositories(
-            widget.sectionData.kanjis, widget.sectionData.sectionNumber);
+    return Container(
+      padding: const EdgeInsets.only(left: 10, right: 10),
+      child: Material(
+        borderRadius: const BorderRadius.all(Radius.circular(20)),
+        color: Theme.of(context).colorScheme.primaryContainer,
+        child: InkWell(
+          borderRadius: const BorderRadius.all(Radius.circular(20)),
+          onTap: () {
+            ref.read(kanjiListProvider.notifier).setKanjiListFromRepositories(
+                widget.sectionData.kanjis, widget.sectionData.sectionNumber);
 
-        Connectivity().checkConnectivity().then((result) {
-          if (result == ConnectivityResult.none) {
-            showSnackBarQuizz('no internet connection', 5);
-          }
-        });
+            Connectivity().checkConnectivity().then((result) {
+              if (result == ConnectivityResult.none) {
+                showSnackBarQuizz('no internet connection', 5);
+              }
+            });
 
-        Navigator.of(context).push(
-          MaterialPageRoute(
-            builder: (ctx) {
-              return const KanjiSectionList();
-            },
+            Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (ctx) {
+                  return const KanjiSectionList();
+                },
+              ),
+            );
+          },
+          splashColor: Colors.black38,
+          child: Container(
+            padding: const EdgeInsets.only(left: 10, right: 10),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Text(
+                  widget.sectionData.title,
+                  style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                      fontWeight: FontWeight.bold,
+                      color: Theme.of(context).colorScheme.onSecondaryContainer,
+                      fontFamily: GoogleFonts.roboto().fontFamily),
+                  textAlign: TextAlign.center,
+                ),
+                Text(
+                  "Seccion ${widget.sectionData.sectionNumber}",
+                  style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                      color: Theme.of(context).colorScheme.onSecondaryContainer,
+                      fontFamily: GoogleFonts.roboto().fontFamily),
+                  textAlign: TextAlign.center,
+                ),
+              ],
+            ),
           ),
-        );
-      },
-      splashColor: Theme.of(context).primaryColor,
-      child: Container(
-        padding: const EdgeInsets.only(left: 10, right: 10),
-        decoration: BoxDecoration(
-            color: Theme.of(context).colorScheme.primaryContainer,
-            borderRadius: BorderRadius.circular(10),
-            border: Border.all(color: Colors.white38)),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Text(
-              widget.sectionData.title,
-              style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                  fontWeight: FontWeight.bold,
-                  color: Theme.of(context).colorScheme.onSecondaryContainer,
-                  fontFamily: GoogleFonts.roboto().fontFamily),
-              textAlign: TextAlign.center,
-            ),
-            Text(
-              "Seccion ${widget.sectionData.sectionNumber}",
-              style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                  color: Theme.of(context).colorScheme.onSecondaryContainer,
-                  fontFamily: GoogleFonts.roboto().fontFamily),
-              textAlign: TextAlign.center,
-            ),
-          ],
         ),
       ),
     );
