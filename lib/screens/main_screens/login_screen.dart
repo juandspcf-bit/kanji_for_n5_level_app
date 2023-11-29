@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:kanji_for_n5_level_app/providers/login_provider.dart';
 import 'package:kanji_for_n5_level_app/providers/sign_up_provider.dart';
 import 'package:kanji_for_n5_level_app/screens/main_screens/main_content.dart';
 import 'package:kanji_for_n5_level_app/screens/main_screens/sing_up_screen.dart';
@@ -16,8 +17,8 @@ class LoginForm extends ConsumerStatefulWidget {
 
 class _LoginFormState extends ConsumerState<LoginForm> {
   final _formKey = GlobalKey<FormState>();
-  final TextEditingController textEditingController1 = TextEditingController();
-  final TextEditingController textEditingController2 = TextEditingController();
+  late String email;
+  late String password;
 
   Widget _dialog(BuildContext context, String text) {
     return AlertDialog(
@@ -51,13 +52,12 @@ class _LoginFormState extends ConsumerState<LoginForm> {
   }
 
   void onValidate() async {
-    if (_formKey.currentState!.validate()) {
-      final emailAddress = textEditingController1.text;
-      final password = textEditingController2.text;
-
+    final currenState = _formKey.currentState;
+    if (currenState == null) return;
+    if (currenState.validate()) {
       try {
-        await FirebaseAuth.instance.signInWithEmailAndPassword(
-            email: emailAddress, password: password);
+        await FirebaseAuth.instance
+            .signInWithEmailAndPassword(email: email, password: password);
       } on FirebaseAuthException catch (e) {
         if (e.code == 'INVALID_LOGIN_CREDENTIALS') {
           logger.e(e.code);
@@ -80,15 +80,9 @@ class _LoginFormState extends ConsumerState<LoginForm> {
   }
 
   @override
-  void dispose() {
-    super.dispose();
-    textEditingController1.dispose();
-    textEditingController2.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
     FlutterNativeSplash.remove();
+    final loginDataState = ref.watch(loginProvider);
     return Scaffold(
       body: Padding(
         padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 15),
@@ -107,7 +101,6 @@ class _LoginFormState extends ConsumerState<LoginForm> {
               child: Column(
                 children: [
                   TextFormField(
-                    controller: textEditingController1,
                     decoration: const InputDecoration().copyWith(
                         border: const OutlineInputBorder(),
                         prefixIcon: const Icon(Icons.email),
@@ -121,12 +114,15 @@ class _LoginFormState extends ConsumerState<LoginForm> {
                         return 'Not a valid email';
                       }
                     },
+                    onSaved: (value) {
+                      if (value == null) return;
+                      email = value;
+                    },
                   ),
                   const SizedBox(
                     height: 10,
                   ),
                   TextFormField(
-                    controller: textEditingController2,
                     decoration: const InputDecoration().copyWith(
                       border: const OutlineInputBorder(),
                       prefixIcon: const Icon(Icons.key),
@@ -142,6 +138,10 @@ class _LoginFormState extends ConsumerState<LoginForm> {
                       } else {
                         return 'Password should be between 10 and 4 characters';
                       }
+                    },
+                    onSaved: (value) {
+                      if (value == null) return;
+                      password = value;
                     },
                   ),
                   const SizedBox(
