@@ -1,7 +1,6 @@
 import 'dart:io';
 
 import 'package:email_validator/email_validator.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
@@ -19,22 +18,39 @@ class SingUpForm extends ConsumerStatefulWidget {
 
 class _SingUpFormState extends ConsumerState<SingUpForm> {
   final _formKey = GlobalKey<FormState>();
-  final TextEditingController textEditingControllerFullName =
-      TextEditingController();
-  final TextEditingController textEditingController0 = TextEditingController();
-  final TextEditingController textEditingController1 = TextEditingController();
-  final TextEditingController textEditingController2 = TextEditingController();
+
+  late String fullName;
+  late String emailAddress;
+  late String password1;
+  late String password2;
+
   String pathAssetUser = 'assets/images/user.png';
   String pathProfileUser = '';
   final ImagePicker picker = ImagePicker();
 
-  @override
-  void dispose() {
-    super.dispose();
-    textEditingControllerFullName.dispose();
-    textEditingController0.dispose();
-    textEditingController1.dispose();
-    textEditingController2.dispose();
+  void onValidation() async {
+    final currentState = _formKey.currentState;
+    if (currentState == null || !currentState.validate()) return;
+    currentState.save();
+    if (password1 == password2) {
+      await ref.read(singUpProvider.notifier).createUser(
+            pathProfileUser,
+            fullName,
+            emailAddress,
+            password1,
+            password2,
+          );
+      if (context.mounted) {
+        Navigator.of(context).pop();
+      }
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Passwords should match'),
+          duration: Duration(seconds: 3),
+        ),
+      );
+    }
   }
 
   @override
@@ -108,7 +124,6 @@ class _SingUpFormState extends ConsumerState<SingUpForm> {
                         child: Column(
                           children: [
                             TextFormField(
-                              controller: textEditingControllerFullName,
                               decoration: const InputDecoration().copyWith(
                                 border: const OutlineInputBorder(),
                                 prefixIcon: const Icon(Icons.person),
@@ -124,12 +139,14 @@ class _SingUpFormState extends ConsumerState<SingUpForm> {
                                   return 'Please provide a not to short name';
                                 }
                               },
+                              onSaved: (value) {
+                                fullName = value ?? '';
+                              },
                             ),
                             const SizedBox(
                               height: 10,
                             ),
                             TextFormField(
-                              controller: textEditingController0,
                               decoration: const InputDecoration().copyWith(
                                   border: const OutlineInputBorder(),
                                   prefixIcon: const Icon(Icons.email),
@@ -144,12 +161,14 @@ class _SingUpFormState extends ConsumerState<SingUpForm> {
                                   return 'Not a valid email';
                                 }
                               },
+                              onSaved: (value) {
+                                emailAddress = value ?? '';
+                              },
                             ),
                             const SizedBox(
                               height: 10,
                             ),
                             TextFormField(
-                              controller: textEditingController1,
                               decoration: const InputDecoration().copyWith(
                                 border: const OutlineInputBorder(),
                                 prefixIcon: const Icon(Icons.key),
@@ -166,12 +185,14 @@ class _SingUpFormState extends ConsumerState<SingUpForm> {
                                   return 'Password should be between 15 and 4 characters';
                                 }
                               },
+                              onSaved: (value) {
+                                password1 = value ?? '';
+                              },
                             ),
                             const SizedBox(
                               height: 10,
                             ),
                             TextFormField(
-                              controller: textEditingController2,
                               decoration: const InputDecoration().copyWith(
                                 border: const OutlineInputBorder(),
                                 prefixIcon: const Icon(Icons.key),
@@ -188,6 +209,9 @@ class _SingUpFormState extends ConsumerState<SingUpForm> {
                                   return 'Password should be between 15 and 4 characters';
                                 }
                               },
+                              onSaved: (value) {
+                                password2 = value ?? '';
+                              },
                             )
                           ],
                         ),
@@ -202,14 +226,7 @@ class _SingUpFormState extends ConsumerState<SingUpForm> {
                           if (!currentFocus.hasPrimaryFocus) {
                             currentFocus.unfocus();
                           }
-                          ref.read(singUpProvider.notifier).onValidate(
-                              _formKey,
-                              pathProfileUser,
-                              textEditingControllerFullName.text,
-                              textEditingController0.text,
-                              textEditingController1.text,
-                              textEditingController2.text,
-                              context);
+                          onValidation();
                         },
                         style: ElevatedButton.styleFrom(
                           backgroundColor:
