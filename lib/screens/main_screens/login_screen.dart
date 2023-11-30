@@ -276,10 +276,28 @@ class ModalEmailResetPassword extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 50),
+      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
       child: Center(
           child: Column(
         children: [
+          Container(
+            alignment: Alignment.centerRight,
+            child: IconButton(
+              onPressed: () {
+                FocusScopeNode currentFocus = FocusScope.of(context);
+
+                if (!currentFocus.hasPrimaryFocus) {
+                  currentFocus.unfocus();
+                }
+
+                Navigator.of(context).pop();
+              },
+              icon: const Icon(Icons.close_outlined),
+            ),
+          ),
+          const SizedBox(
+            height: 20,
+          ),
           Form(
             key: _formKey,
             child: TextFormField(
