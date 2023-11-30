@@ -264,12 +264,20 @@ class ModalEmailResetPassword extends ConsumerWidget {
 
   final _formKey = GlobalKey<FormState>();
 
-  bool onValidate(WidgetRef ref) {
+  bool onValidate(WidgetRef ref, BuildContext context) {
     final currentState = _formKey.currentState;
     if (currentState == null) return false;
     if (!currentState.validate()) return false;
     currentState.save();
-    ref.read(modalEmailResetProvider.notifier).onValidate();
+    ref.read(modalEmailResetProvider.notifier).onValidate().then((result) {
+      if (context.mounted) {
+        var snackBar = SnackBar(
+          content: Text(result.message),
+          duration: const Duration(seconds: 3),
+        );
+        ScaffoldMessenger.of(context).showSnackBar(snackBar);
+      }
+    });
     return true;
   }
 
@@ -331,7 +339,7 @@ class ModalEmailResetPassword extends ConsumerWidget {
                 currentFocus.unfocus();
               }
 
-              if (!onValidate(ref)) return;
+              if (!onValidate(ref, context)) return;
               Navigator.of(context).pop();
             },
             style: ElevatedButton.styleFrom(
