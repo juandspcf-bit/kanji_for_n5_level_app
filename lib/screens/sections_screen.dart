@@ -69,6 +69,7 @@ class _SectionState extends ConsumerState<Section> {
     return Container(
       padding: const EdgeInsets.only(left: 10, right: 10),
       child: Material(
+        clipBehavior: Clip.antiAlias,
         borderRadius: const BorderRadius.all(Radius.circular(20)),
         color: Theme.of(context).colorScheme.primaryContainer,
         child: InkWell(
@@ -91,7 +92,7 @@ class _SectionState extends ConsumerState<Section> {
               ),
             );
           },
-          splashColor: Colors.black38,
+          splashColor: Colors.black12,
           child: Container(
             padding: const EdgeInsets.only(left: 10, right: 10),
             child: Column(
