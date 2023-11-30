@@ -1,8 +1,10 @@
 import 'package:email_validator/email_validator.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kanji_for_n5_level_app/providers/login_provider.dart';
+import 'package:kanji_for_n5_level_app/providers/modal_email_reset_password_provider.dart';
 import 'package:kanji_for_n5_level_app/providers/sign_up_provider.dart';
 import 'package:kanji_for_n5_level_app/screens/main_screens/main_content.dart';
 import 'package:kanji_for_n5_level_app/screens/main_screens/sing_up_screen.dart';
@@ -167,7 +169,7 @@ class _LoginFormState extends ConsumerState<LoginForm> {
                           validator: (text) {
                             if (text != null &&
                                 text.length >= 4 &&
-                                text.length <= 10) {
+                                text.length <= 20) {
                               return null;
                             } else {
                               return 'Password should be between 10 and 4 characters';
@@ -184,8 +186,31 @@ class _LoginFormState extends ConsumerState<LoginForm> {
                       ],
                     ),
                   ),
-                  const SizedBox(
-                    height: 10,
+                  Container(
+                    alignment: Alignment.centerRight,
+                    child: Padding(
+                      padding: const EdgeInsets.only(top: 10, bottom: 10),
+                      child: TextButton(
+                        onPressed: () async {
+                          showModalBottomSheet(
+                              isScrollControlled: true,
+                              useSafeArea: true,
+                              context: context,
+                              builder: (ctx) {
+                                return ModalEmailResetPassword();
+                              });
+                        },
+                        style: TextButton.styleFrom(
+                          foregroundColor: Theme.of(context)
+                              .colorScheme
+                              .onBackground, //Text Color
+                        ),
+                        child: Text(
+                          'Forgotten password?',
+                          style: Theme.of(context).textTheme.bodyLarge,
+                        ),
+                      ),
+                    ),
                   ),
                   ElevatedButton(
                     onPressed: () {
@@ -228,6 +253,91 @@ class _LoginFormState extends ConsumerState<LoginForm> {
                 ],
               ),
       ),
+    );
+  }
+}
+
+class ModalEmailResetPassword extends ConsumerWidget {
+  ModalEmailResetPassword({
+    super.key,
+  });
+
+  final _formKey = GlobalKey<FormState>();
+
+  bool onValidate(WidgetRef ref) {
+    final currentState = _formKey.currentState;
+    if (currentState == null) return false;
+    if (!currentState.validate()) return false;
+    currentState.save();
+    ref.read(modalEmailResetProvider.notifier).onValidate();
+    return true;
+  }
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 50),
+      child: Center(
+          child: Column(
+        children: [
+          Form(
+            key: _formKey,
+            child: TextFormField(
+              decoration: const InputDecoration().copyWith(
+                  border: const OutlineInputBorder(),
+                  prefixIcon: const Icon(Icons.email),
+                  labelText: 'Email',
+                  hintText: '***@***.com'),
+              keyboardType: TextInputType.emailAddress,
+              validator: (text) {
+                if (text != null && EmailValidator.validate(text)) {
+                  return null;
+                } else {
+                  return 'Not a valid email';
+                }
+              },
+              onSaved: (email) {
+                if (email == null) return;
+                ref.read(modalEmailResetProvider.notifier).setEmail(email);
+              },
+            ),
+          ),
+          const SizedBox(
+            height: 20,
+          ),
+          ElevatedButton(
+            onPressed: () {
+              FocusScopeNode currentFocus = FocusScope.of(context);
+
+              if (!currentFocus.hasPrimaryFocus) {
+                currentFocus.unfocus();
+              }
+
+              if (!onValidate(ref)) return;
+              Navigator.of(context).pop();
+            },
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Theme.of(context).colorScheme.primary,
+              foregroundColor: Theme.of(context).colorScheme.onPrimary,
+              minimumSize: const Size.fromHeight(40), // NEW
+            ),
+            child: const Text('Reset password'),
+          ),
+          const SizedBox(
+            height: 20,
+          ),
+          Expanded(
+            child: Text(
+              'Click above to reset your password and an email will be sent to your inbox'
+              ' with some instructions.',
+              style: Theme.of(context).textTheme.bodyLarge,
+              softWrap: false,
+              maxLines: 3,
+              overflow: TextOverflow.ellipsis, // new
+            ),
+          ),
+        ],
+      )),
     );
   }
 }
