@@ -41,6 +41,18 @@ class ColumnDragTargets extends ConsumerWidget {
                     .read(quizDataValuesProvider.notifier)
                     .onDraggedKanji(indexColumnTargets, data);
               }, builder: (ctx, _, __) {
+                if (isDragged &&
+                    randomSolutions[indexColumnTargets].kanjiCharacter ==
+                        kanjiToAskMeaning.kanjiCharacter &&
+                    imagePathFromDraggedItem[indexColumnTargets] != "") {
+                  logger.d('correct $indexColumnTargets');
+                } else if (isDragged &&
+                    randomSolutions[indexColumnTargets].kanjiCharacter !=
+                        kanjiToAskMeaning.kanjiCharacter &&
+                    imagePathFromDraggedItem[indexColumnTargets] != "") {
+                  logger.d('incorrect $indexColumnTargets');
+                }
+
                 return KanjiDragTarget(
                     isDragged: isDragged,
                     randomSolution: randomSolutions[indexColumnTargets],

@@ -1,10 +1,8 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:kanji_for_n5_level_app/models/kanji_from_api.dart';
-import 'package:kanji_for_n5_level_app/providers/column_drag_provider.dart';
 import 'package:kanji_for_n5_level_app/providers/status_stored_provider.dart';
 import 'package:kanji_for_n5_level_app/screens/main_screens/main_content.dart';
 
@@ -104,7 +102,7 @@ class _KanjiDragTargetState extends State<KanjiDragTarget> {
   bool isDown = true;
   double scale = 1.0;
 
-  void _changeScale() {
+  void _scaleWidget() {
     logger.d('change scale $scale , $isDown');
     if (scale == 1 && isDown) {
       logger.d('scaling');
@@ -120,18 +118,12 @@ class _KanjiDragTargetState extends State<KanjiDragTarget> {
   }
 
   @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
     if (widget.isDragged &&
         widget.randomSolution.kanjiCharacter ==
             widget.randomKanjisToAskMeaning.kanjiCharacter &&
         widget.imagePathFromDraggedItem != "") {
-      _changeScale();
+      _scaleWidget();
     }
     return Column(
       crossAxisAlignment: CrossAxisAlignment.end,
