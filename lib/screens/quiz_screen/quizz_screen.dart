@@ -7,8 +7,7 @@ import 'package:kanji_for_n5_level_app/providers/status_connection_provider.dart
 import 'package:kanji_for_n5_level_app/screens/quiz_screen/internet_connection_error_screen.dart';
 import 'package:kanji_for_n5_level_app/screens/quiz_screen/quiz_question_screen.dart';
 import 'package:kanji_for_n5_level_app/screens/quiz_screen/score_body.dart';
-
-enum Screens { quiz, score }
+import 'package:kanji_for_n5_level_app/screens/quiz_screen/welcome_screen.dart';
 
 class QuizScreen extends ConsumerStatefulWidget {
   const QuizScreen({
@@ -64,7 +63,7 @@ class _QuizScreenState extends ConsumerState<QuizScreen> {
                 resetTheQuiz:
                     ref.read(quizDataValuesProvider.notifier).resetTheQuiz,
               )
-            else
+            else if (quizState.currentScreenType == Screens.quiz)
               QuizQuestionScreen(
                 isDraggedStatusList: quizState.isDraggedStatusList,
                 randomSolutions: quizState.randomSolutions,
@@ -73,6 +72,8 @@ class _QuizScreenState extends ConsumerState<QuizScreen> {
                 initialOpacities: quizState.initialOpacities,
                 index: quizState.index,
               )
+            else if (quizState.currentScreenType == Screens.welcome)
+              const WelcomeScreen()
           ],
         ),
       ),

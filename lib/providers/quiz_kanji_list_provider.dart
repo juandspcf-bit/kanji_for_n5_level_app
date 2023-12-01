@@ -1,7 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kanji_for_n5_level_app/models/kanji_from_api.dart';
-import 'package:kanji_for_n5_level_app/providers/column_drag_provider.dart';
-import 'package:kanji_for_n5_level_app/screens/quiz_screen/quizz_screen.dart';
 
 class QuizDataValuesProvider extends Notifier<QuizDataValues> {
   @override
@@ -151,7 +149,7 @@ class QuizDataValuesProvider extends Notifier<QuizDataValues> {
         kanjisToAskMeaning: kanjisToAskMeaning,
         index: index,
         randomSolutions: randomSolutions,
-        currentScreenType: Screens.quiz);
+        currentScreenType: Screens.welcome);
 
     state = quizDataValues;
   }
@@ -175,6 +173,21 @@ class QuizDataValuesProvider extends Notifier<QuizDataValues> {
         index: index,
         randomSolutions: randomSolutions,
         currentScreenType: Screens.quiz);
+
+    state = quizDataValues;
+  }
+
+  void setScreen(Screens screen) {
+    final quizDataValues = QuizDataValues(
+        imagePathsFromDraggedItems: state.imagePathsFromDraggedItems,
+        initialOpacities: state.initialOpacities,
+        isDraggedStatusList: state.isDraggedStatusList,
+        isCorrectAnswer: state.isCorrectAnswer,
+        isOmittedAnswer: state.isOmittedAnswer,
+        kanjisToAskMeaning: state.kanjisToAskMeaning,
+        index: state.index,
+        randomSolutions: state.randomSolutions,
+        currentScreenType: screen);
 
     state = quizDataValues;
   }
@@ -224,3 +237,5 @@ class QuizDataValues {
     required this.currentScreenType,
   });
 }
+
+enum Screens { quiz, score, welcome }
