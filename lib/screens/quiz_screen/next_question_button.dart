@@ -17,8 +17,7 @@ class NextQuestionButton extends ConsumerWidget {
           backgroundColor: Theme.of(context).colorScheme.primary,
           foregroundColor: Theme.of(context).colorScheme.onPrimary,
           textStyle: Theme.of(context).textTheme.bodyLarge,
-          minimumSize: Size.fromHeight(
-              (Theme.of(context).textTheme.bodyLarge!.height ?? 30) + 30),
+          minimumSize: const Size.fromHeight(40),
         ),
         icon: const Icon(Icons.arrow_circle_right),
         label: const Text('Next'),

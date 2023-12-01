@@ -50,12 +50,7 @@ class _KanjiDragTargetCorrectState extends State<KanjiDragTargetCorrect> {
 
   @override
   Widget build(BuildContext context) {
-    if (widget.isDragged &&
-        widget.randomSolution.kanjiCharacter ==
-            widget.randomKanjisToAskMeaning.kanjiCharacter &&
-        widget.imagePathFromDraggedItem != "") {
-      _scaleWidget();
-    }
+    _scaleWidget();
     return Column(
       crossAxisAlignment: CrossAxisAlignment.end,
       children: [
@@ -99,17 +94,11 @@ class _KanjiDragTargetCorrectState extends State<KanjiDragTargetCorrect> {
         const SizedBox(
           height: 5,
         ),
-        Text(cutEnglishMeaning(widget.randomSolution.englishMeaning)),
-        const SizedBox(
-          height: 2,
+        TextHints(
+          randomSolution: widget.randomSolution,
         ),
-        Text('kunyomi: ${cutWords(widget.randomSolution.hiraganaMeaning)}'),
         const SizedBox(
-          height: 2,
-        ),
-        Text('Onyomi: ${cutWords(widget.randomSolution.katakanaMeaning)}'),
-        const SizedBox(
-          height: 10,
+          height: 5,
         ),
       ],
     );
@@ -137,41 +126,10 @@ class KanjiDragTargetWrong extends StatefulWidget {
 }
 
 class _KanjiDragTargetWrongState extends State<KanjiDragTargetWrong> {
-  Widget? showDraggedKanji(String path, KanjiFromApi randomSolution,
-      KanjiFromApi randomKanjisToAskMeaning) {
-    if (path == '') return null;
-
-    if (randomKanjisToAskMeaning.statusStorage == StatusStorage.onlyOnline) {
-      return SvgPicture.network(
-        path,
-        height: 70,
-        width: 70,
-        semanticsLabel: randomSolution.kanjiCharacter,
-        placeholderBuilder: (BuildContext context) => Container(
-          color: Colors.transparent,
-          height: 70,
-          width: 70,
-        ),
-      );
-    } else {
-      return SvgPicture.file(
-        File(path),
-        height: 70,
-        width: 70,
-        semanticsLabel: randomSolution.kanjiCharacter,
-        placeholderBuilder: (BuildContext context) => Container(
-          color: Colors.transparent,
-          height: 70,
-          width: 70,
-        ),
-      );
-    }
-  }
-
   bool isDown = true;
   double turn = 0;
 
-  void _scaleWidget() {
+  void _rotateWidget() {
     logger.d('change scale $turn , $isDown');
     if (isDown) {
       turn = 0;
@@ -186,12 +144,7 @@ class _KanjiDragTargetWrongState extends State<KanjiDragTargetWrong> {
 
   @override
   Widget build(BuildContext context) {
-    if (widget.isDragged &&
-        widget.randomSolution.kanjiCharacter !=
-            widget.randomKanjisToAskMeaning.kanjiCharacter &&
-        widget.imagePathFromDraggedItem != "") {
-      _scaleWidget();
-    }
+    _rotateWidget();
     return Column(
       crossAxisAlignment: CrossAxisAlignment.end,
       children: [
@@ -235,17 +188,11 @@ class _KanjiDragTargetWrongState extends State<KanjiDragTargetWrong> {
         const SizedBox(
           height: 5,
         ),
-        Text(cutEnglishMeaning(widget.randomSolution.englishMeaning)),
-        const SizedBox(
-          height: 2,
+        TextHints(
+          randomSolution: widget.randomSolution,
         ),
-        Text('kunyomi: ${cutWords(widget.randomSolution.hiraganaMeaning)}'),
         const SizedBox(
-          height: 2,
-        ),
-        Text('Onyomi: ${cutWords(widget.randomSolution.katakanaMeaning)}'),
-        const SizedBox(
-          height: 10,
+          height: 5,
         ),
       ],
     );
@@ -273,74 +220,13 @@ class KanjiDragTargetNormal extends StatefulWidget {
 }
 
 class _KanjiDragTargetNormalState extends State<KanjiDragTargetNormal> {
-  Widget? showDraggedKanji(String path, KanjiFromApi randomSolution,
-      KanjiFromApi randomKanjisToAskMeaning) {
-    if (path == '') return null;
-
-    if (randomKanjisToAskMeaning.statusStorage == StatusStorage.onlyOnline) {
-      return SvgPicture.network(
-        path,
-        height: 70,
-        width: 70,
-        semanticsLabel: randomSolution.kanjiCharacter,
-        placeholderBuilder: (BuildContext context) => Container(
-          color: Colors.transparent,
-          height: 70,
-          width: 70,
-        ),
-      );
-    } else {
-      return SvgPicture.file(
-        File(path),
-        height: 70,
-        width: 70,
-        semanticsLabel: randomSolution.kanjiCharacter,
-        placeholderBuilder: (BuildContext context) => Container(
-          color: Colors.transparent,
-          height: 70,
-          width: 70,
-        ),
-      );
-    }
-  }
-
-  bool isDown = true;
-  double scale = 1.0;
-
-  void _scaleWidget() {
-    logger.d('change scale $scale , $isDown');
-    if (scale == 1 && isDown) {
-      logger.d('scaling');
-      scale = 2;
-      isDown = false;
-      Future.delayed(const Duration(seconds: 1), () {
-        setState(() {});
-      });
-    } else if (scale == 2 && !isDown) {
-      scale = 1;
-      isDown = true;
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
-    if (widget.isDragged &&
-        widget.randomSolution.kanjiCharacter ==
-            widget.randomKanjisToAskMeaning.kanjiCharacter &&
-        widget.imagePathFromDraggedItem != "") {
-      _scaleWidget();
-    }
     return Column(
       crossAxisAlignment: CrossAxisAlignment.end,
       children: [
         Row(
           children: [
-            showIsCorrectAnswerWidget(
-              isDragged: widget.isDragged,
-              randomSolution: widget.randomSolution,
-              imagePathFromDraggedItem: widget.imagePathFromDraggedItem,
-              randomKanjisToAskMeaning: widget.randomKanjisToAskMeaning,
-            ),
             const SizedBox(
               width: 10,
             ),
@@ -368,17 +254,11 @@ class _KanjiDragTargetNormalState extends State<KanjiDragTargetNormal> {
         const SizedBox(
           height: 5,
         ),
-        Text(cutEnglishMeaning(widget.randomSolution.englishMeaning)),
-        const SizedBox(
-          height: 2,
+        TextHints(
+          randomSolution: widget.randomSolution,
         ),
-        Text('kunyomi: ${cutWords(widget.randomSolution.hiraganaMeaning)}'),
         const SizedBox(
-          height: 2,
-        ),
-        Text('Onyomi: ${cutWords(widget.randomSolution.katakanaMeaning)}'),
-        const SizedBox(
-          height: 10,
+          height: 5,
         ),
       ],
     );
@@ -453,6 +333,33 @@ Widget? showDraggedKanji(String path, KanjiFromApi randomSolution,
         height: 70,
         width: 70,
       ),
+    );
+  }
+}
+
+class TextHints extends StatelessWidget {
+  const TextHints({super.key, required this.randomSolution});
+
+  final KanjiFromApi randomSolution;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.end,
+      children: [
+        Text(cutEnglishMeaning(randomSolution.englishMeaning)),
+        const SizedBox(
+          height: 2,
+        ),
+        Text('kunyomi: ${cutWords(randomSolution.hiraganaMeaning)}'),
+        const SizedBox(
+          height: 2,
+        ),
+        Text('Onyomi: ${cutWords(randomSolution.katakanaMeaning)}'),
+        const SizedBox(
+          height: 10,
+        ),
+      ],
     );
   }
 }
