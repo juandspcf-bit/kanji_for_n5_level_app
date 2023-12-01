@@ -36,31 +36,60 @@ class ColumnDragTargets extends ConsumerWidget {
           Column(
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
-              DragTarget<KanjiFromApi>(onAccept: (data) {
-                ref
-                    .read(quizDataValuesProvider.notifier)
-                    .onDraggedKanji(indexColumnTargets, data);
-              }, builder: (ctx, _, __) {
-                if (isDragged &&
-                    randomSolutions[indexColumnTargets].kanjiCharacter ==
-                        kanjiToAskMeaning.kanjiCharacter &&
-                    imagePathFromDraggedItem[indexColumnTargets] != "") {
-                  logger.d('correct $indexColumnTargets');
-                } else if (isDragged &&
-                    randomSolutions[indexColumnTargets].kanjiCharacter !=
-                        kanjiToAskMeaning.kanjiCharacter &&
-                    imagePathFromDraggedItem[indexColumnTargets] != "") {
-                  logger.d('incorrect $indexColumnTargets');
-                }
-
-                return KanjiDragTarget(
+              DragTarget<KanjiFromApi>(
+                onAccept: (data) {
+                  ref
+                      .read(quizDataValuesProvider.notifier)
+                      .onDraggedKanji(indexColumnTargets, data);
+                },
+                builder: (ctx, _, __) {
+                  if (isDragged &&
+                      randomSolutions[indexColumnTargets].kanjiCharacter ==
+                          kanjiToAskMeaning.kanjiCharacter &&
+                      imagePathFromDraggedItem[indexColumnTargets] != "") {
+                    logger.d('correct $indexColumnTargets');
+                    return KanjiDragTargetCorrect(
+                      isDragged: isDragged,
+                      randomSolution: randomSolutions[indexColumnTargets],
+                      imagePathFromDraggedItem:
+                          imagePathFromDraggedItem[indexColumnTargets],
+                      randomKanjisToAskMeaning: kanjiToAskMeaning,
+                      initialOpacitie: initialOpacities[indexColumnTargets],
+                    );
+                  } else if (isDragged &&
+                      randomSolutions[indexColumnTargets].kanjiCharacter !=
+                          kanjiToAskMeaning.kanjiCharacter &&
+                      imagePathFromDraggedItem[indexColumnTargets] != "") {
+                    logger.d('incorrect $indexColumnTargets');
+                    return KanjiDragTargetWrong(
+                      isDragged: isDragged,
+                      randomSolution: randomSolutions[indexColumnTargets],
+                      imagePathFromDraggedItem:
+                          imagePathFromDraggedItem[indexColumnTargets],
+                      randomKanjisToAskMeaning: kanjiToAskMeaning,
+                      initialOpacitie: initialOpacities[indexColumnTargets],
+                    );
+                  } else {
+                    return KanjiDragTargetNormal(
+                      isDragged: isDragged,
+                      randomSolution: randomSolutions[indexColumnTargets],
+                      imagePathFromDraggedItem:
+                          imagePathFromDraggedItem[indexColumnTargets],
+                      randomKanjisToAskMeaning: kanjiToAskMeaning,
+                      initialOpacitie: initialOpacities[indexColumnTargets],
+                    );
+                  }
+/* 
+                  return KanjiDragTarget(
                     isDragged: isDragged,
                     randomSolution: randomSolutions[indexColumnTargets],
                     imagePathFromDraggedItem:
                         imagePathFromDraggedItem[indexColumnTargets],
                     randomKanjisToAskMeaning: kanjiToAskMeaning,
-                    initialOpacitie: initialOpacities[indexColumnTargets]);
-              }),
+                    initialOpacitie: initialOpacities[indexColumnTargets],
+                  ); */
+                },
+              ),
             ],
           ),
       ],
