@@ -4,9 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:kanji_for_n5_level_app/models/kanji_from_api.dart';
+import 'package:kanji_for_n5_level_app/providers/column_drag_provider.dart';
 import 'package:kanji_for_n5_level_app/providers/status_stored_provider.dart';
+import 'package:kanji_for_n5_level_app/screens/main_screens/main_content.dart';
 
-class KanjiDragTarget extends ConsumerWidget {
+class KanjiDragTarget extends StatefulWidget {
   const KanjiDragTarget({
     super.key,
     required this.isDragged,
@@ -22,13 +24,18 @@ class KanjiDragTarget extends ConsumerWidget {
   final String imagePathFromDraggedItem;
   final double initialOpacitie;
 
+  @override
+  State<KanjiDragTarget> createState() => _KanjiDragTargetState();
+}
+
+class _KanjiDragTargetState extends State<KanjiDragTarget> {
   Widget showIsCorrectAnswerWidget({
     required bool isDragged,
     required KanjiFromApi randomSolution,
     required KanjiFromApi randomKanjisToAskMeaning,
     required String imagePathFromDraggedItem,
   }) {
-    if (isDragged == true &&
+    if (isDragged &&
         randomSolution.kanjiCharacter ==
             randomKanjisToAskMeaning.kanjiCharacter &&
         imagePathFromDraggedItem != "") {
@@ -94,39 +101,74 @@ class KanjiDragTarget extends ConsumerWidget {
     return '${splitText[0]}, ${splitText[1]}';
   }
 
+  bool isDown = true;
+  double scale = 1.0;
+
+  void _changeScale() {
+    logger.d('change scale $scale , $isDown');
+    if (scale == 1 && isDown) {
+      logger.d('scaling');
+      scale = 2;
+      isDown = false;
+      Future.delayed(const Duration(seconds: 1), () {
+        setState(() {});
+      });
+    } else if (scale == 2 && !isDown) {
+      scale = 1;
+      isDown = true;
+    }
+  }
+
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    if (widget.isDragged &&
+        widget.randomSolution.kanjiCharacter ==
+            widget.randomKanjisToAskMeaning.kanjiCharacter &&
+        widget.imagePathFromDraggedItem != "") {
+      _changeScale();
+    }
     return Column(
       crossAxisAlignment: CrossAxisAlignment.end,
       children: [
         Row(
           children: [
             showIsCorrectAnswerWidget(
-              isDragged: isDragged,
-              randomSolution: randomSolution,
-              imagePathFromDraggedItem: imagePathFromDraggedItem,
-              randomKanjisToAskMeaning: randomKanjisToAskMeaning,
+              isDragged: widget.isDragged,
+              randomSolution: widget.randomSolution,
+              imagePathFromDraggedItem: widget.imagePathFromDraggedItem,
+              randomKanjisToAskMeaning: widget.randomKanjisToAskMeaning,
             ),
             const SizedBox(
               width: 10,
             ),
-            Container(
-              width: 70,
-              height: 70,
-              decoration: BoxDecoration(
-                color: Theme.of(context)
-                    .colorScheme
-                    .onPrimaryContainer
-                    .withOpacity(initialOpacitie),
-                borderRadius: const BorderRadius.all(
-                  Radius.circular(10),
+            AnimatedScale(
+              curve: Curves.easeInOutBack,
+              scale: scale,
+              duration: const Duration(seconds: 2),
+              child: Container(
+                width: 70,
+                height: 70,
+                decoration: BoxDecoration(
+                  color: Theme.of(context)
+                      .colorScheme
+                      .onPrimaryContainer
+                      .withOpacity(widget.initialOpacitie),
+                  borderRadius: const BorderRadius.all(
+                    Radius.circular(10),
+                  ),
+                  border: Border.all(color: Colors.white),
                 ),
-                border: Border.all(color: Colors.white),
-              ),
-              child: showDraggedKanji(
-                imagePathFromDraggedItem,
-                randomSolution,
-                randomKanjisToAskMeaning,
+                child: showDraggedKanji(
+                  widget.imagePathFromDraggedItem,
+                  widget.randomSolution,
+                  widget.randomKanjisToAskMeaning,
+                ),
               ),
             ),
           ],
@@ -134,15 +176,15 @@ class KanjiDragTarget extends ConsumerWidget {
         const SizedBox(
           height: 5,
         ),
-        Text(cutEnglishMeaning(randomSolution.englishMeaning)),
+        Text(cutEnglishMeaning(widget.randomSolution.englishMeaning)),
         const SizedBox(
           height: 2,
         ),
-        Text('kunyomi: ${cutWords(randomSolution.hiraganaMeaning)}'),
+        Text('kunyomi: ${cutWords(widget.randomSolution.hiraganaMeaning)}'),
         const SizedBox(
           height: 2,
         ),
-        Text('Onyomi: ${cutWords(randomSolution.katakanaMeaning)}'),
+        Text('Onyomi: ${cutWords(widget.randomSolution.katakanaMeaning)}'),
         const SizedBox(
           height: 10,
         ),

@@ -1,5 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kanji_for_n5_level_app/models/kanji_from_api.dart';
+import 'package:kanji_for_n5_level_app/providers/column_drag_provider.dart';
 import 'package:kanji_for_n5_level_app/screens/quiz_screen/quizz_screen.dart';
 
 class QuizDataValuesProvider extends Notifier<QuizDataValues> {
