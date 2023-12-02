@@ -14,6 +14,7 @@ class WelcomeScreen extends ConsumerWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
+          Image.asset('assets/images/quiz.png'),
           Row(
             children: [
               Expanded(
@@ -29,7 +30,7 @@ class WelcomeScreen extends ConsumerWidget {
             ],
           ),
           const SizedBox(
-            height: 60,
+            height: 20,
           ),
           ElevatedButton(
             onPressed: () {
