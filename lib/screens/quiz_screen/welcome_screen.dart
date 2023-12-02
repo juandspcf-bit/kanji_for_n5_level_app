@@ -36,13 +36,12 @@ class WelcomeScreen extends ConsumerWidget {
             onPressed: () {
               ref.read(quizDataValuesProvider.notifier).setScreen(Screens.quiz);
             },
-            style: ElevatedButton.styleFrom(
-              backgroundColor: Theme.of(context).colorScheme.primary,
-              foregroundColor: Theme.of(context).colorScheme.onPrimary,
-              textStyle: Theme.of(context).textTheme.bodyLarge,
-              minimumSize: const Size.fromHeight(40),
+            style: ElevatedButton.styleFrom().copyWith(
+              minimumSize: const MaterialStatePropertyAll(
+                Size.fromHeight(40),
+              ),
             ),
-            child: const Text('Init the quiz'),
+            child: const Text('Start the quiz'),
           )
         ],
       ),

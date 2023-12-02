@@ -107,12 +107,10 @@ class QuestionScreen extends ConsumerWidget {
                       .getQuizStateCurrentIndex() +
                   1);
             },
-            style: ElevatedButton.styleFrom(
-              backgroundColor: Theme.of(context).colorScheme.primary,
-              foregroundColor: Theme.of(context).colorScheme.onPrimary,
-              textStyle: Theme.of(context).textTheme.bodyLarge,
-              minimumSize: Size.fromHeight(
-                  (Theme.of(context).textTheme.bodyLarge!.height ?? 30) + 30),
+            style: ElevatedButton.styleFrom().copyWith(
+              minimumSize: const MaterialStatePropertyAll(
+                Size.fromHeight(40),
+              ),
             ),
             icon: const Icon(Icons.arrow_circle_right),
             label: const Text('Next'),

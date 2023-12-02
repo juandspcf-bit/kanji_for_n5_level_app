@@ -220,10 +220,10 @@ class _LoginFormState extends ConsumerState<LoginForm> {
                       }
                       onValidate(ref);
                     },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Theme.of(context).colorScheme.primary,
-                      foregroundColor: Theme.of(context).colorScheme.onPrimary,
-                      minimumSize: const Size.fromHeight(40), // NEW
+                    style: ElevatedButton.styleFrom().copyWith(
+                      minimumSize: const MaterialStatePropertyAll(
+                        Size.fromHeight(40),
+                      ),
                     ),
                     child: const Text('Login'),
                   ),
@@ -242,10 +242,10 @@ class _LoginFormState extends ConsumerState<LoginForm> {
                         return const SingUpForm();
                       }));
                     },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Theme.of(context).colorScheme.primary,
-                      foregroundColor: Theme.of(context).colorScheme.onPrimary,
-                      minimumSize: const Size.fromHeight(40), // NEW
+                    style: ElevatedButton.styleFrom().copyWith(
+                      minimumSize: const MaterialStatePropertyAll(
+                        Size.fromHeight(40),
+                      ),
                     ),
                     child: const Text('Sing Up'),
                   ),
@@ -341,10 +341,10 @@ class ModalEmailResetPassword extends ConsumerWidget {
               if (!onValidate(ref, context)) return;
               Navigator.of(context).pop();
             },
-            style: ElevatedButton.styleFrom(
-              backgroundColor: Theme.of(context).colorScheme.primary,
-              foregroundColor: Theme.of(context).colorScheme.onPrimary,
-              minimumSize: const Size.fromHeight(40), // NEW
+            style: ElevatedButton.styleFrom().copyWith(
+              minimumSize: const MaterialStatePropertyAll(
+                Size.fromHeight(40),
+              ),
             ),
             child: const Text('Reset password'),
           ),

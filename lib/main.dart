@@ -49,6 +49,12 @@ class MyApp extends ConsumerWidget {
       debugShowCheckedModeBanner: false,
       darkTheme: ThemeData.dark().copyWith(
         colorScheme: kDarkColorScheme,
+        elevatedButtonTheme: ElevatedButtonThemeData(
+          style: ElevatedButton.styleFrom(
+            backgroundColor: kDarkColorScheme.primary,
+            foregroundColor: kDarkColorScheme.onPrimary,
+          ),
+        ),
         /*       cardTheme: const CardTheme().copyWith(
           color: kDarkColorScheme.secondaryContainer,
           margin: const EdgeInsets.symmetric(
@@ -56,12 +62,7 @@ class MyApp extends ConsumerWidget {
             vertical: 8,
           ),
         ),
-        elevatedButtonTheme: ElevatedButtonThemeData(
-          style: ElevatedButton.styleFrom(
-            backgroundColor: kDarkColorScheme.secondaryContainer,
-            foregroundColor: kDarkColorScheme.onSecondaryContainer,
-          ),
-        ),
+
          appBarTheme: const AppBarTheme()
             .copyWith(backgroundColor: Color.fromARGB(255, 14, 46, 77)),*/
       ),

@@ -25,7 +25,8 @@ class LoginProvider extends Notifier<LogingData> {
     } on FirebaseAuthException catch (e) {
       logger.e(e.code);
       setStatus(1);
-      if (e.code == 'INVALID_LOGIN_CREDENTIALS') {
+      if (e.code == 'INVALID_LOGIN_CREDENTIALS' ||
+          e.code == 'invalid-credential') {
         return StatusLogingRequest.invalidCredentials;
         //throw const InvalidCredentialsException();
       } else if (e.code == 'user-not-found') {
