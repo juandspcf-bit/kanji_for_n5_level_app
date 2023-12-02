@@ -73,7 +73,7 @@ class _QuizScreenState extends ConsumerState<QuizScreen> {
                 index: quizState.index,
               )
             else if (quizState.currentScreenType == Screens.welcome)
-              const WelcomeScreen()
+              const WelcomeKanjiQuizScreen()
           ],
         ),
       ),

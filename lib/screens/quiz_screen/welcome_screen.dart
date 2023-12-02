@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kanji_for_n5_level_app/providers/quiz_kanji_list_provider.dart';
 
-class WelcomeScreen extends ConsumerWidget {
-  const WelcomeScreen({super.key});
+class WelcomeKanjiQuizScreen extends ConsumerWidget {
+  const WelcomeKanjiQuizScreen({super.key});
 
   final welcomeMessage = 'Guess the correct meaning by dragging '
       'the kanji to one of the empty boxes.';

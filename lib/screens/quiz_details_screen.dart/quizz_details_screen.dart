@@ -5,6 +5,7 @@ import 'package:kanji_for_n5_level_app/models/kanji_from_api.dart';
 import 'package:kanji_for_n5_level_app/providers/select_quiz_details_screen.dart';
 import 'package:kanji_for_n5_level_app/screens/quiz_details_screen.dart/quiz_details_question.dart';
 import 'package:kanji_for_n5_level_app/screens/quiz_details_screen.dart/quiz_details_score.dart';
+import 'package:kanji_for_n5_level_app/screens/quiz_details_screen.dart/welcome_quiz_details_screen.dart';
 
 class QuizDetailsScreen extends ConsumerStatefulWidget {
   const QuizDetailsScreen({super.key, required this.kanjiFromApi});
@@ -16,10 +17,12 @@ class QuizDetailsScreen extends ConsumerStatefulWidget {
 }
 
 class _QuizDetailsScreenState extends ConsumerState<QuizDetailsScreen> {
-  Widget _selectScreen(int screenNumber) {
-    if (screenNumber == 0) {
+  Widget _selectScreen(ScreensQuizDetail screenNumber) {
+    if (screenNumber == ScreensQuizDetail.welcome) {
+      return const WelcomeQuizDetailsScreen();
+    } else if (screenNumber == ScreensQuizDetail.quizSelections) {
       return QuestionScreen(kanjiFromApi: widget.kanjiFromApi);
-    } else if (screenNumber == 1) {
+    } else if (screenNumber == ScreensQuizDetail.scoreSelections) {
       return const QuizDetailsScore();
     } else {
       return const Center(

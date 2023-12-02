@@ -237,7 +237,9 @@ class _QuizDetailsScore extends ConsumerState<QuizDetailsScore> {
                 child: ElevatedButton.icon(
                   onPressed: () {
                     ref.read(quizDetailsProvider.notifier).resetValues();
-                    ref.read(selectQuizDetailsProvider.notifier).setScreen(0);
+                    ref
+                        .read(selectQuizDetailsProvider.notifier)
+                        .setScreen(ScreensQuizDetail.quizSelections);
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Theme.of(context).colorScheme.primary,

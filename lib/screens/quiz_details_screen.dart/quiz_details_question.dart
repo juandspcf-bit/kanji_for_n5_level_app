@@ -98,7 +98,9 @@ class QuestionScreen extends ConsumerWidget {
                   .read(quizDetailsProvider.notifier)
                   .isQuizDataLenghtReached()) {
                 ref.read(quizDetailsScoreProvider.notifier).setAnswers();
-                ref.read(selectQuizDetailsProvider.notifier).setScreen(1);
+                ref
+                    .read(selectQuizDetailsProvider.notifier)
+                    .setScreen(ScreensQuizDetail.scoreSelections);
                 return;
               }
 
