@@ -10,6 +10,7 @@ class WelcomeQuizDetailsScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final screenNumber = ref.watch(selectQuizDetailsProvider);
     return Expanded(
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 0),
@@ -37,23 +38,33 @@ class WelcomeQuizDetailsScreen extends ConsumerWidget {
             RadioListTile(
               value: 0,
               title: const Text('Multi optional answers'),
-              groupValue: 2,
-              onChanged: ((value) {}),
+              groupValue: screenNumber.selectedOption,
+              onChanged: ((value) {
+                ref.read(selectQuizDetailsProvider.notifier).setOption(value);
+              }),
             ),
             RadioListTile(
               value: 1,
               title: const Text('Flash cards'),
-              groupValue: 2,
-              onChanged: ((value) {}),
+              groupValue: screenNumber.selectedOption,
+              onChanged: ((value) {
+                ref.read(selectQuizDetailsProvider.notifier).setOption(value);
+              }),
             ),
             const SizedBox(
               height: 20,
             ),
             ElevatedButton(
               onPressed: () {
-                ref
-                    .read(selectQuizDetailsProvider.notifier)
-                    .setScreen(ScreensQuizDetail.quizSelections);
+                if (screenNumber.selectedOption == 0) {
+                  ref
+                      .read(selectQuizDetailsProvider.notifier)
+                      .setScreen(ScreensQuizDetail.quizSelections);
+                } else {
+                  ref
+                      .read(selectQuizDetailsProvider.notifier)
+                      .setScreen(ScreensQuizDetail.quizFlashCard);
+                }
               },
               style: ElevatedButton.styleFrom().copyWith(
                 minimumSize: const MaterialStatePropertyAll(

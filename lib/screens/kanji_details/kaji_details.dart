@@ -61,6 +61,9 @@ class KanjiDetails extends ConsumerWidget {
                         ref
                             .read(selectQuizDetailsProvider.notifier)
                             .setScreen(ScreensQuizDetail.welcome);
+                        ref
+                            .read(selectQuizDetailsProvider.notifier)
+                            .setOption(2);
                         Navigator.of(context).push(MaterialPageRoute(
                           builder: (context) {
                             return QuizDetailsScreen(
