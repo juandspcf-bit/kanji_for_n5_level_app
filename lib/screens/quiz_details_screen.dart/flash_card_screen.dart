@@ -1,8 +1,6 @@
-import 'package:assets_audio_player/assets_audio_player.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kanji_for_n5_level_app/models/kanji_from_api.dart';
-import 'package:kanji_for_n5_level_app/providers/status_stored_provider.dart';
 
 class FlassCardScreen extends ConsumerWidget {
   const FlassCardScreen({super.key, required this.kanjiFromApi});
