@@ -26,9 +26,16 @@ class FlassCardScreen extends ConsumerWidget {
                   ),
                   borderRadius: BorderRadius.circular(30),
                 ),
-                child: ClipRRect(
-                    borderRadius: BorderRadius.circular(30),
-                    child: Image.asset('assets/images/flashcard.jpeg')),
+                child: PageView(
+                  children: [
+                    ClipRRect(
+                        borderRadius: BorderRadius.circular(30),
+                        child: Image.asset('assets/images/flashcard.jpeg')),
+                    ClipRRect(
+                        borderRadius: BorderRadius.circular(30),
+                        child: Image.asset('assets/images/quiz2.png'))
+                  ],
+                ),
               ),
             ],
           )
