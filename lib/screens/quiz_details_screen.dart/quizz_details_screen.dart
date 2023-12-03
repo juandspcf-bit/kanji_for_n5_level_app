@@ -26,7 +26,7 @@ class _QuizDetailsScreenState extends ConsumerState<QuizDetailsScreen> {
     } else if (screenNumber == ScreensQuizDetail.scoreSelections) {
       return const QuizDetailsScore();
     } else if (screenNumber == ScreensQuizDetail.quizFlashCard) {
-      return const FlassCardScreen();
+      return FlassCardScreen(kanjiFromApi: widget.kanjiFromApi);
     } else {
       return const Center(
         child: Text('Error'),
