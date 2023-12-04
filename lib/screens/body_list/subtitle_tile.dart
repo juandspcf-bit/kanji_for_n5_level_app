@@ -6,14 +6,9 @@ class SubTitleTile extends StatelessWidget {
   const SubTitleTile({
     super.key,
     required this.kanjiFromApi,
-    required this.navigateToKanjiDetails,
   });
 
   final KanjiFromApi kanjiFromApi;
-  final void Function(
-    BuildContext context,
-    KanjiFromApi? kanjiFromApi,
-  ) navigateToKanjiDetails;
 
   String cutWords(String text) {
     final splitText = text.split('、');
@@ -66,13 +61,6 @@ class SubTitleTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: kanjiFromApi.accessToKanjiItemsButtons
-          ? () {
-              navigateToKanjiDetails(context, kanjiFromApi);
-            }
-          : null,
-      child: setSubTitlewidget(context),
-    );
+    return setSubTitlewidget(context);
   }
 }

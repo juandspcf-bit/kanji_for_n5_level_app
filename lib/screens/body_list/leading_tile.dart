@@ -9,14 +9,9 @@ class LeadingTile extends StatelessWidget {
   const LeadingTile({
     super.key,
     required this.kanjiFromApi,
-    required this.navigateToKanjiDetails,
   });
 
   final KanjiFromApi kanjiFromApi;
-  final void Function(
-    BuildContext context,
-    KanjiFromApi? kanjiFromApi,
-  ) navigateToKanjiDetails;
 
   Widget setSVGwidget(BuildContext context) {
     if (kanjiFromApi.statusStorage == StatusStorage.onlyOnline ||
@@ -65,28 +60,21 @@ class LeadingTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: kanjiFromApi.accessToKanjiItemsButtons
-          ? () {
-              navigateToKanjiDetails(context, kanjiFromApi);
-            }
-          : null,
-      child: Container(
-        height: 70,
-        width: 70,
-        decoration: BoxDecoration(
-            color: kanjiFromApi.accessToKanjiItemsButtons
-                ? Theme.of(context)
-                    .colorScheme
-                    .onSecondaryContainer
-                    .withOpacity(1.0)
-                : Theme.of(context)
-                    .colorScheme
-                    .onSecondaryContainer
-                    .withOpacity(0.5),
-            borderRadius: const BorderRadius.all(Radius.circular(10))),
-        child: setSVGwidget(context),
-      ),
+    return Container(
+      height: 70,
+      width: 70,
+      decoration: BoxDecoration(
+          color: kanjiFromApi.accessToKanjiItemsButtons
+              ? Theme.of(context)
+                  .colorScheme
+                  .onSecondaryContainer
+                  .withOpacity(1.0)
+              : Theme.of(context)
+                  .colorScheme
+                  .onSecondaryContainer
+                  .withOpacity(0.5),
+          borderRadius: const BorderRadius.all(Radius.circular(10))),
+      child: setSVGwidget(context),
     );
   }
 }
