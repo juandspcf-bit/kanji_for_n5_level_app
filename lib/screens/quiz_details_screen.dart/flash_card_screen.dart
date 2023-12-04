@@ -5,6 +5,7 @@ import 'package:kanji_for_n5_level_app/models/kanji_from_api.dart';
 import 'package:kanji_for_n5_level_app/providers/flash_card_quiz_provider.dart';
 import 'package:kanji_for_n5_level_app/providers/status_stored_provider.dart';
 import 'package:kanji_for_n5_level_app/providers/video_status_playing.dart';
+import 'package:kanji_for_n5_level_app/screens/quiz_details_screen.dart/big_play_button.dart';
 
 class FlassCardScreen extends ConsumerWidget {
   FlassCardScreen({super.key, required this.kanjiFromApi});
@@ -52,46 +53,33 @@ class FlassCardScreen extends ConsumerWidget {
                   controller: controller,
                   children: [
                     Center(
-                      child: ClipOval(
-                        child: SizedBox(
-                          width: 90,
-                          height: 90,
-                          child: Material(
-                            color: Theme.of(context).colorScheme.primary,
-                            child: InkWell(
-                              splashColor: Colors.black38,
-                              onTap: () async {
-                                ref
-                                    .read(videoStatusPlaying.notifier)
-                                    .setIsPlaying(false);
-                                final assetsAudioPlayer = AssetsAudioPlayer();
+                      child: BigPlayButton(
+                        sizeOval: 90,
+                        sizeIcon: 60,
+                        onTap: () async {
+                          ref
+                              .read(videoStatusPlaying.notifier)
+                              .setIsPlaying(false);
+                          final assetsAudioPlayer = AssetsAudioPlayer();
 
-                                try {
-                                  if (kanjiFromApi.statusStorage ==
-                                      StatusStorage.onlyOnline) {
-                                    await assetsAudioPlayer.open(
-                                      Audio.network(
-                                          flashCardState.audioQuestion[
-                                              flashCardState.indexQuestion]),
-                                    );
-                                  } else if (kanjiFromApi.statusStorage ==
-                                      StatusStorage.stored) {
-                                    await assetsAudioPlayer.open(
-                                      Audio.file(flashCardState.audioQuestion[
-                                          flashCardState.indexQuestion]),
-                                    );
-                                  }
-                                } catch (t) {
-                                  //mp3 unreachable
-                                }
-                              },
-                              child: Icon(Icons.play_arrow,
-                                  size: 60,
-                                  color:
-                                      Theme.of(context).colorScheme.onPrimary),
-                            ),
-                          ),
-                        ),
+                          try {
+                            if (kanjiFromApi.statusStorage ==
+                                StatusStorage.onlyOnline) {
+                              await assetsAudioPlayer.open(
+                                Audio.network(flashCardState.audioQuestion[
+                                    flashCardState.indexQuestion]),
+                              );
+                            } else if (kanjiFromApi.statusStorage ==
+                                StatusStorage.stored) {
+                              await assetsAudioPlayer.open(
+                                Audio.file(flashCardState.audioQuestion[
+                                    flashCardState.indexQuestion]),
+                              );
+                            }
+                          } catch (t) {
+                            //mp3 unreachable
+                          }
+                        },
                       ),
                     ),
                     Center(
