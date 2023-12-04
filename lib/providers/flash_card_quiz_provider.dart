@@ -50,6 +50,11 @@ class FlashCardProvider extends Notifier<FlashCardData> {
           english: state.english);
     }
   }
+
+  bool isTheLastQuestion() {
+    final length = state.japanese.length;
+    return (length - 1) == state.indexQuestion;
+  }
 }
 
 final flashCardProvider =

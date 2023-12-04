@@ -6,8 +6,10 @@ import 'package:kanji_for_n5_level_app/providers/flash_card_quiz_provider.dart';
 import 'package:kanji_for_n5_level_app/providers/status_stored_provider.dart';
 
 class FlassCardScreen extends ConsumerWidget {
-  const FlassCardScreen({super.key, required this.kanjiFromApi});
+  FlassCardScreen({super.key, required this.kanjiFromApi});
   final KanjiFromApi kanjiFromApi;
+
+  final PageController controller = PageController();
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -46,6 +48,7 @@ class FlassCardScreen extends ConsumerWidget {
                   borderRadius: BorderRadius.circular(30),
                 ),
                 child: PageView(
+                  controller: controller,
                   children: [
                     Center(
                       child: ClipOval(
@@ -89,6 +92,7 @@ class FlassCardScreen extends ConsumerWidget {
                     ),
                     Center(
                       child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Text(
                             flashCardState
@@ -114,6 +118,7 @@ class FlassCardScreen extends ConsumerWidget {
           ElevatedButton.icon(
             onPressed: () {
               ref.read(flashCardProvider.notifier).incrementIndex();
+              controller.jumpToPage(0);
             },
             style: ElevatedButton.styleFrom().copyWith(
               minimumSize: const MaterialStatePropertyAll(
@@ -121,7 +126,9 @@ class FlassCardScreen extends ConsumerWidget {
               ),
             ),
             icon: const Icon(Icons.arrow_circle_right),
-            label: const Text('Next'),
+            label: Text(ref.read(flashCardProvider.notifier).isTheLastQuestion()
+                ? 'Restart the quiz'
+                : 'Next'),
           )
         ]),
       ),
