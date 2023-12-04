@@ -22,7 +22,7 @@ var kColorScheme = ColorScheme.fromSeed(
 
 var kDarkColorScheme = ColorScheme.fromSeed(
   brightness: Brightness.dark,
-  seedColor: const Color(0xFF008490),
+  seedColor: const Color(0xFF006687),
 );
 
 void main() async {
