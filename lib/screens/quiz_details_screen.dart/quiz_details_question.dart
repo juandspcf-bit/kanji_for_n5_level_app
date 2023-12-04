@@ -6,6 +6,7 @@ import 'package:kanji_for_n5_level_app/providers/quiz_details_providers.dart';
 import 'package:kanji_for_n5_level_app/providers/quiz_details_score_screen.dart';
 import 'package:kanji_for_n5_level_app/providers/select_quiz_details_screen.dart';
 import 'package:kanji_for_n5_level_app/providers/status_stored_provider.dart';
+import 'package:kanji_for_n5_level_app/providers/video_status_playing.dart';
 
 class QuestionScreen extends ConsumerWidget {
   final assetsAudioPlayer = AssetsAudioPlayer();
@@ -43,9 +44,10 @@ class QuestionScreen extends ConsumerWidget {
                 borderRadius: BorderRadius.circular(100)),
             child: IconButton(
               color: Theme.of(context).colorScheme.onPrimary,
-              splashColor: Colors.deepOrange,
+              splashColor: Colors.black38,
               onPressed: () async {
                 final assetsAudioPlayer = AssetsAudioPlayer();
+                ref.read(videoStatusPlaying.notifier).setIsPlaying(false);
 
                 try {
                   if (kanjiFromApi.statusStorage == StatusStorage.onlyOnline) {
@@ -62,9 +64,10 @@ class QuestionScreen extends ConsumerWidget {
                   //mp3 unreachable
                 }
               },
-              icon: const Icon(
+              icon: Icon(
                 Icons.play_arrow_rounded,
                 size: 80,
+                color: Theme.of(context).colorScheme.onPrimary,
               ),
             ),
           ),

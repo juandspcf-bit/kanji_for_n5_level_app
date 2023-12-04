@@ -7,7 +7,6 @@ import 'package:kanji_for_n5_level_app/providers/kanji_details_provider.dart';
 import 'package:kanji_for_n5_level_app/providers/quiz_details_providers.dart';
 import 'package:kanji_for_n5_level_app/providers/select_quiz_details_screen.dart';
 import 'package:kanji_for_n5_level_app/providers/status_stored_provider.dart';
-import 'package:kanji_for_n5_level_app/providers/video_status_playing.dart';
 import 'package:kanji_for_n5_level_app/screens/kanji_details/tab_examples.dart';
 import 'package:kanji_for_n5_level_app/screens/kanji_details/tab_strokes.dart';
 import 'package:kanji_for_n5_level_app/screens/kanji_details/tab_video_strokes.dart';
@@ -70,9 +69,7 @@ class KanjiDetails extends ConsumerWidget {
                         ref
                             .read(flashCardProvider.notifier)
                             .initTheQuiz(kanjiFromApi);
-                        ref
-                            .read(videoStatusPlaying.notifier)
-                            .setIsPlaying(false);
+
                         Navigator.of(context).push(MaterialPageRoute(
                           builder: (context) {
                             return QuizDetailsScreen(

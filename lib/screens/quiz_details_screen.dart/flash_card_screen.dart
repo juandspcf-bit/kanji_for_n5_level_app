@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kanji_for_n5_level_app/models/kanji_from_api.dart';
 import 'package:kanji_for_n5_level_app/providers/flash_card_quiz_provider.dart';
 import 'package:kanji_for_n5_level_app/providers/status_stored_provider.dart';
+import 'package:kanji_for_n5_level_app/providers/video_status_playing.dart';
 
 class FlassCardScreen extends ConsumerWidget {
   FlassCardScreen({super.key, required this.kanjiFromApi});
@@ -60,6 +61,9 @@ class FlassCardScreen extends ConsumerWidget {
                             child: InkWell(
                               splashColor: Colors.black38,
                               onTap: () async {
+                                ref
+                                    .read(videoStatusPlaying.notifier)
+                                    .setIsPlaying(false);
                                 final assetsAudioPlayer = AssetsAudioPlayer();
 
                                 try {
