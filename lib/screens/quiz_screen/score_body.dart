@@ -62,7 +62,7 @@ class _ScoreBodyState extends ConsumerState<ScoreBody> {
 
   @override
   Widget build(BuildContext context) {
-    return Stack(children: [
+    return Stack(alignment: Alignment.center, children: [
       Column(
         children: [
           const SizedBox(

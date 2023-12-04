@@ -99,6 +99,7 @@ class ScreenChart extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Container(
+          //TODO change the size when the screen is big
           width: 256,
           height: 256,
           color: Theme.of(context).scaffoldBackgroundColor,
