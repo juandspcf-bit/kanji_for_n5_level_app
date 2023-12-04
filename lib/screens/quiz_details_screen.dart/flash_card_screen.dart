@@ -7,14 +7,26 @@ import 'package:kanji_for_n5_level_app/providers/status_stored_provider.dart';
 import 'package:kanji_for_n5_level_app/providers/video_status_playing.dart';
 import 'package:kanji_for_n5_level_app/screens/quiz_details_screen.dart/big_play_button.dart';
 
-class FlassCardScreen extends ConsumerWidget {
-  FlassCardScreen({super.key, required this.kanjiFromApi});
+class FlassCardScreen extends ConsumerStatefulWidget {
+  const FlassCardScreen({super.key, required this.kanjiFromApi});
+
   final KanjiFromApi kanjiFromApi;
 
+  @override
+  ConsumerState<FlassCardScreen> createState() => _FlassCardScreenState();
+}
+
+class _FlassCardScreenState extends ConsumerState<FlassCardScreen> {
   final PageController controller = PageController();
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  void dispose() {
+    super.dispose();
+    controller.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final flashCardState = ref.watch(flashCardProvider);
     return Expanded(
       child: Padding(
@@ -27,7 +39,7 @@ class FlassCardScreen extends ConsumerWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text(
-                'Question ${flashCardState.indexQuestion + 1} of ${kanjiFromApi.example.length}',
+                'Question ${flashCardState.indexQuestion + 1} of ${widget.kanjiFromApi.example.length}',
                 style: Theme.of(context).textTheme.titleLarge,
               ),
             ],
@@ -63,13 +75,13 @@ class FlassCardScreen extends ConsumerWidget {
                           final assetsAudioPlayer = AssetsAudioPlayer();
 
                           try {
-                            if (kanjiFromApi.statusStorage ==
+                            if (widget.kanjiFromApi.statusStorage ==
                                 StatusStorage.onlyOnline) {
                               await assetsAudioPlayer.open(
                                 Audio.network(flashCardState.audioQuestion[
                                     flashCardState.indexQuestion]),
                               );
-                            } else if (kanjiFromApi.statusStorage ==
+                            } else if (widget.kanjiFromApi.statusStorage ==
                                 StatusStorage.stored) {
                               await assetsAudioPlayer.open(
                                 Audio.file(flashCardState.audioQuestion[
