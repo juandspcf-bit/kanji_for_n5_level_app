@@ -148,10 +148,11 @@ class _ScoreBodyState extends ConsumerState<ScoreBody> {
         ],
       ),
       Visibility(
-        visible: (_visibility && countIncorrects == 0 && countOmited == 0),
+        visible:
+            (_visibility /* && countIncorrects == 0 && countOmited == 0 */),
         child: AnimatedOpacity(
           opacity: _opacity,
-          duration: const Duration(milliseconds: 3000),
+          duration: const Duration(seconds: 3),
           // The green box must be a child of the AnimatedOpacity widget.
           child: Lottie.asset('assets/lottie_files/congrats.json',
               fit: BoxFit.fitWidth),
