@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kanji_for_n5_level_app/models/kanji_from_api.dart';
 import 'package:kanji_for_n5_level_app/providers/select_quiz_details_screen.dart';
 import 'package:kanji_for_n5_level_app/screens/quiz_details_screen.dart/flash_card_screen.dart';
+import 'package:kanji_for_n5_level_app/screens/quiz_details_screen.dart/flash_card_v2_screen.dart';
 import 'package:kanji_for_n5_level_app/screens/quiz_details_screen.dart/quiz_details_question.dart';
 import 'package:kanji_for_n5_level_app/screens/quiz_details_screen.dart/quiz_details_score.dart';
 import 'package:kanji_for_n5_level_app/screens/quiz_details_screen.dart/welcome_quiz_details_screen.dart';
@@ -26,7 +27,7 @@ class _QuizDetailsScreenState extends ConsumerState<QuizDetailsScreen> {
     } else if (screenNumber == ScreensQuizDetail.scoreSelections) {
       return const QuizDetailsScore();
     } else if (screenNumber == ScreensQuizDetail.quizFlashCard) {
-      return FlassCardScreen(kanjiFromApi: widget.kanjiFromApi);
+      return FlassCardV2Screen(kanjiFromApi: widget.kanjiFromApi);
     } else {
       return const Center(
         child: Text('Error'),
