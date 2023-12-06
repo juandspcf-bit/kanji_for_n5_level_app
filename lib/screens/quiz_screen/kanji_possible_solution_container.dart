@@ -36,9 +36,11 @@ class _KanjiDragTargetCorrectState extends State<KanjiDragTargetCorrect> {
       scale = 1;
       isDown = false;
       Future.delayed(const Duration(milliseconds: 500), () {
+        if (!mounted) return;
         setState(() {
           scale = 1.3;
           Future.delayed(const Duration(milliseconds: 500), () {
+            if (!mounted) return;
             setState(() {
               scale = 1;
             });
@@ -135,6 +137,7 @@ class _KanjiDragTargetWrongState extends State<KanjiDragTargetWrong> {
       turn = 0;
       isDown = false;
       Future.delayed(const Duration(milliseconds: 500), () {
+        if (!mounted) return;
         setState(() {
           turn = 1;
         });
