@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kanji_for_n5_level_app/models/kanji_from_api.dart';
 import 'package:kanji_for_n5_level_app/providers/select_quiz_details_screen.dart';
-import 'package:kanji_for_n5_level_app/screens/quiz_details_screen.dart/flash_card_screen.dart';
 import 'package:kanji_for_n5_level_app/screens/quiz_details_screen.dart/flash_card_v2_screen.dart';
 import 'package:kanji_for_n5_level_app/screens/quiz_details_screen.dart/quiz_details_question.dart';
 import 'package:kanji_for_n5_level_app/screens/quiz_details_screen.dart/quiz_details_score.dart';

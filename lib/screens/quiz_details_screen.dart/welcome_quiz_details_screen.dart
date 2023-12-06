@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:kanji_for_n5_level_app/providers/flash_card_widget_provider.dart';
 import 'package:kanji_for_n5_level_app/providers/select_quiz_details_screen.dart';
 
 class WelcomeQuizDetailsScreen extends ConsumerWidget {
@@ -61,6 +62,7 @@ class WelcomeQuizDetailsScreen extends ConsumerWidget {
                       .read(selectQuizDetailsProvider.notifier)
                       .setScreen(ScreensQuizDetail.quizSelections);
                 } else {
+                  ref.read(flashCardWidgetProvider.notifier).restartSide();
                   ref
                       .read(selectQuizDetailsProvider.notifier)
                       .setScreen(ScreensQuizDetail.quizFlashCard);
