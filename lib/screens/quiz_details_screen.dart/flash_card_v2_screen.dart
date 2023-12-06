@@ -6,7 +6,7 @@ import 'package:kanji_for_n5_level_app/providers/flash_card_widget_provider.dart
 import 'package:kanji_for_n5_level_app/screens/quiz_details_screen.dart/flash_card_widget.dart';
 
 class FlassCardV2Screen extends ConsumerWidget {
-  FlassCardV2Screen({super.key, required this.kanjiFromApi});
+  const FlassCardV2Screen({super.key, required this.kanjiFromApi});
 
   final KanjiFromApi kanjiFromApi;
   //final PageController controller = PageController();
