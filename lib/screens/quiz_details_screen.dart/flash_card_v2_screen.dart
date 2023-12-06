@@ -9,7 +9,7 @@ class FlassCardV2Screen extends ConsumerWidget {
   FlassCardV2Screen({super.key, required this.kanjiFromApi});
 
   final KanjiFromApi kanjiFromApi;
-  final PageController controller = PageController();
+  //final PageController controller = PageController();
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
