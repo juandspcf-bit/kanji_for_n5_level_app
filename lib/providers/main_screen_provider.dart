@@ -10,6 +10,7 @@ import 'package:kanji_for_n5_level_app/Databases/db_definitions.dart';
 import 'package:kanji_for_n5_level_app/Databases/download_db_utils.dart';
 import 'package:kanji_for_n5_level_app/Databases/favorites_db_utils.dart';
 import 'package:kanji_for_n5_level_app/main.dart';
+import 'package:kanji_for_n5_level_app/providers/score_kanji_list_provider.dart';
 import 'package:kanji_for_n5_level_app/screens/main_screens/main_content.dart';
 import 'package:kanji_for_n5_level_app/models/kanji_from_api.dart';
 import 'package:kanji_for_n5_level_app/providers/favorites_kanjis_provider.dart';
@@ -87,6 +88,7 @@ class MainScreenProvider extends Notifier<MainScreenData> {
     final listOfInvalidStoredKanjis =
         validAndInvalidKanjis.$2.map((e) => e.$1).toList();
     cleanInvaliDbRecords(listOfInvalidStoredKanjis);
+    ref.read(scoreKanjiListProvider.notifier).initLottieFile();
     FlutterNativeSplash.remove();
 
     ref

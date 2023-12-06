@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kanji_for_n5_level_app/providers/quiz_kanji_list_provider.dart';
+import 'package:kanji_for_n5_level_app/providers/score_kanji_list_provider.dart';
 import 'package:kanji_for_n5_level_app/screens/quiz_screen/screen_chart.dart';
 import 'package:lottie/lottie.dart';
 
@@ -49,10 +50,6 @@ class _ScoreBodyState extends ConsumerState<ScoreBody> {
   @override
   void initState() {
     super.initState();
-    final counts = getCounts();
-    countCorrects = counts.$1;
-    countIncorrects = counts.$2;
-    countOmited = counts.$3;
     Future<double>.delayed(const Duration(seconds: 3), () => 0.0).then((value) {
       setState(() {
         _opacity = value;
@@ -62,6 +59,8 @@ class _ScoreBodyState extends ConsumerState<ScoreBody> {
 
   @override
   Widget build(BuildContext context) {
+    final (countCorrects, countIncorrects, countOmited) = getCounts();
+    final scoreState = ref.watch(scoreKanjiListProvider);
     return Stack(alignment: Alignment.center, children: [
       Column(
         children: [
@@ -148,14 +147,14 @@ class _ScoreBodyState extends ConsumerState<ScoreBody> {
         ],
       ),
       Visibility(
-        visible:
-            (_visibility /* && countIncorrects == 0 && countOmited == 0 */),
+        visible: (_visibility && countIncorrects == 0 && countOmited == 0),
         child: AnimatedOpacity(
           opacity: _opacity,
           duration: const Duration(seconds: 3),
           // The green box must be a child of the AnimatedOpacity widget.
-          child: Lottie.asset('assets/lottie_files/congrats.json',
-              fit: BoxFit.fitWidth),
+          child: Lottie(
+            composition: scoreState.lottieComposition,
+          ),
           onEnd: () {
             setState(() {
               _visibility = false;
