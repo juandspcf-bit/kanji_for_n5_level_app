@@ -10,41 +10,39 @@ class WelcomeKanjiQuizScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return Expanded(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Image.asset('assets/images/quiz.png'),
-          Row(
-            children: [
-              Expanded(
-                child: Text(
-                  welcomeMessage,
-                  style: Theme.of(context).textTheme.titleLarge,
-                  softWrap: false,
-                  maxLines: 3,
-                  textAlign: TextAlign.center,
-                  overflow: TextOverflow.ellipsis,
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(
-            height: 20,
-          ),
-          ElevatedButton(
-            onPressed: () {
-              ref.read(quizDataValuesProvider.notifier).setScreen(Screens.quiz);
-            },
-            style: ElevatedButton.styleFrom().copyWith(
-              minimumSize: const MaterialStatePropertyAll(
-                Size.fromHeight(40),
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Image.asset('assets/images/quiz.png'),
+        Row(
+          children: [
+            Expanded(
+              child: Text(
+                welcomeMessage,
+                style: Theme.of(context).textTheme.titleLarge,
+                softWrap: false,
+                maxLines: 3,
+                textAlign: TextAlign.center,
+                overflow: TextOverflow.ellipsis,
               ),
             ),
-            child: const Text('Start the quiz'),
-          )
-        ],
-      ),
+          ],
+        ),
+        const SizedBox(
+          height: 20,
+        ),
+        ElevatedButton(
+          onPressed: () {
+            ref.read(quizDataValuesProvider.notifier).setScreen(Screens.quiz);
+          },
+          style: ElevatedButton.styleFrom().copyWith(
+            minimumSize: const MaterialStatePropertyAll(
+              Size.fromHeight(40),
+            ),
+          ),
+          child: const Text('Start the quiz'),
+        )
+      ],
     );
   }
 }

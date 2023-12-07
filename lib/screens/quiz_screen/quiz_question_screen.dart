@@ -26,42 +26,40 @@ class QuizQuestionScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return SingleChildScrollView(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: [
-          const SizedBox(
-            height: 20,
-          ),
-          Text(
-            'Question ${index + 1} of ${kanjisToAskMeaning.length}',
-            style: Theme.of(context).textTheme.titleLarge,
-          ),
-          const SizedBox(
-            height: 20,
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              DraggableKanji(
-                  isDragged: isDraggedStatusList[index],
-                  kanjiToAskMeaning: kanjisToAskMeaning[index]),
-              ColumnDragTargets(
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.start,
+      children: [
+        const SizedBox(
+          height: 20,
+        ),
+        Text(
+          'Question ${index + 1} of ${kanjisToAskMeaning.length}',
+          style: Theme.of(context).textTheme.titleLarge,
+        ),
+        const SizedBox(
+          height: 20,
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            DraggableKanji(
                 isDragged: isDraggedStatusList[index],
-                randomSolutions: randomSolutions,
-                kanjiToAskMeaning: kanjisToAskMeaning[index],
-                imagePathFromDraggedItem: imagePathFromDraggedItems,
-                initialOpacities: initialOpacities,
-              )
-            ],
-          ),
-          const SizedBox(
-            height: 15,
-          ),
-          const ResetQuestionButton(),
-          const NextQuestionButton(),
-        ],
-      ),
+                kanjiToAskMeaning: kanjisToAskMeaning[index]),
+            ColumnDragTargets(
+              isDragged: isDraggedStatusList[index],
+              randomSolutions: randomSolutions,
+              kanjiToAskMeaning: kanjisToAskMeaning[index],
+              imagePathFromDraggedItem: imagePathFromDraggedItems,
+              initialOpacities: initialOpacities,
+            )
+          ],
+        ),
+        const SizedBox(
+          height: 15,
+        ),
+        const ResetQuestionButton(),
+        const NextQuestionButton(),
+      ],
     );
   }
 }

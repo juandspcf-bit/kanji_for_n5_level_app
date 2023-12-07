@@ -36,10 +36,8 @@ class _QuizScreenState extends ConsumerState<QuizScreen> {
   Widget build(BuildContext context) {
     final resultStatus = ref.watch(statusConnectionProvider);
     final quizState = ref.watch(quizDataValuesProvider);
-    var mainAxisAlignment = MainAxisAlignment.start;
     if (resultStatus == ConnectivityResult.none) {
       ref.read(quizDataValuesProvider.notifier).resetTheQuiz();
-      mainAxisAlignment = MainAxisAlignment.center;
     }
 
     return Scaffold(
@@ -53,7 +51,6 @@ class _QuizScreenState extends ConsumerState<QuizScreen> {
         ),
         child: SingleChildScrollView(
           child: Column(
-            mainAxisAlignment: mainAxisAlignment,
             children: [
               if (resultStatus == ConnectivityResult.none)
                 const InternetConnectionErrorScreen()
