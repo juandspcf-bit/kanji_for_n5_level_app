@@ -2,19 +2,28 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:kanji_for_n5_level_app/providers/flash_card_widget_provider.dart';
 import 'package:kanji_for_n5_level_app/screens/main_screens/main_content.dart';
 
-class FlashCardWidget extends ConsumerWidget {
+class FlashCardWidget extends ConsumerStatefulWidget {
   final String japanese;
   final String english;
-  final double containerSize;
+  final double height;
+  final double width;
 
-  const FlashCardWidget(
-      {super.key,
-      required this.japanese,
-      required this.english,
-      required this.containerSize});
+  const FlashCardWidget({
+    super.key,
+    required this.japanese,
+    required this.english,
+    required this.height,
+    required this.width,
+  });
+
+  @override
+  ConsumerState<FlashCardWidget> createState() => _FlashCardWidgetState();
+}
+
+class _FlashCardWidgetState extends ConsumerState<FlashCardWidget> {
+  bool showFrontSide = true;
 
   Widget _buildFront(
     String japanese,
@@ -122,53 +131,54 @@ class FlashCardWidget extends ConsumerWidget {
   }
 
   Widget transitionBuilder(
-      Widget widget, Animation<double> animation, bool showFrontSide) {
+      Widget widget1, Animation<double> animation, bool showFrontSide) {
     final rotateAnim = Tween(begin: pi, end: 0.0).animate(animation);
     return AnimatedBuilder(
       animation: rotateAnim,
-      child: widget,
-      builder: (context, widget) {
-        final isUnder = (ValueKey(showFrontSide) != widget!.key);
+      child: widget1,
+      builder: (context, widget2) {
+        final isUnder = (ValueKey(showFrontSide) != widget2!.key);
         final value =
             isUnder ? min(rotateAnim.value, pi / 2) : rotateAnim.value;
         return Transform(
-          origin: Offset(containerSize / 2, 0),
+          origin: Offset(widget.width / 2, 0),
           transform: Matrix4.rotationY(value),
-          child: widget,
+          child: widget1,
         );
       },
     );
   }
 
-  Widget _buildFlipAnimation(String japanese, String english,
-      bool showFrontSide, BuildContext context, WidgetRef ref) {
+  Widget _buildFlipAnimation(
+      String japanese, String english, BuildContext context) {
     return GestureDetector(
-      onTap: () => ref.read(flashCardWidgetProvider.notifier).toggleState(),
+      onTap: () => setState(() {
+        showFrontSide = !showFrontSide;
+        logger.d('$showFrontSide');
+      }),
       child: Container(
-        constraints: BoxConstraints.tight(Size.square(containerSize)),
+        constraints: BoxConstraints.tight(Size(widget.width, widget.height)),
         child: AnimatedSwitcher(
           duration: const Duration(milliseconds: 600),
-          transitionBuilder: (Widget widget, Animation<double> animation) {
-            return transitionBuilder(widget, animation, showFrontSide);
+          transitionBuilder: (Widget widget1, Animation<double> animation) {
+            return transitionBuilder(widget1, animation, showFrontSide);
           },
           child: showFrontSide
               ? _buildFront(japanese, context)
               : _buildRear(japanese, english, context),
-          layoutBuilder: (widget, list) => Stack(children: [widget!, ...list]),
+          layoutBuilder: (widget2, list) =>
+              Stack(children: [widget2!, ...list]),
         ),
       ),
     );
   }
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final flashCardWidget = ref.watch(flashCardWidgetProvider);
+  Widget build(BuildContext context) {
     return _buildFlipAnimation(
-      japanese,
-      english,
-      flashCardWidget.showFrontSide,
+      widget.japanese,
+      widget.english,
       context,
-      ref,
     );
   }
 }
