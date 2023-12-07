@@ -51,30 +51,33 @@ class _QuizScreenState extends ConsumerState<QuizScreen> {
           right: 30,
           left: 30,
         ),
-        child: Column(
-          mainAxisAlignment: mainAxisAlignment,
-          children: [
-            if (resultStatus == ConnectivityResult.none)
-              const InternetConnectionErrorScreen()
-            else if (quizState.currentScreenType == Screens.score)
-              ScoreBody(
-                isCorrectAnswer: quizState.isCorrectAnswer,
-                isOmittedAnswer: quizState.isOmittedAnswer,
-                resetTheQuiz:
-                    ref.read(quizDataValuesProvider.notifier).resetTheQuiz,
-              )
-            else if (quizState.currentScreenType == Screens.quiz)
-              QuizQuestionScreen(
-                isDraggedStatusList: quizState.isDraggedStatusList,
-                randomSolutions: quizState.randomSolutions,
-                kanjisToAskMeaning: quizState.kanjisToAskMeaning,
-                imagePathFromDraggedItems: quizState.imagePathsFromDraggedItems,
-                initialOpacities: quizState.initialOpacities,
-                index: quizState.index,
-              )
-            else if (quizState.currentScreenType == Screens.welcome)
-              const WelcomeKanjiQuizScreen()
-          ],
+        child: SingleChildScrollView(
+          child: Column(
+            mainAxisAlignment: mainAxisAlignment,
+            children: [
+              if (resultStatus == ConnectivityResult.none)
+                const InternetConnectionErrorScreen()
+              else if (quizState.currentScreenType == Screens.score)
+                ScoreBody(
+                  isCorrectAnswer: quizState.isCorrectAnswer,
+                  isOmittedAnswer: quizState.isOmittedAnswer,
+                  resetTheQuiz:
+                      ref.read(quizDataValuesProvider.notifier).resetTheQuiz,
+                )
+              else if (quizState.currentScreenType == Screens.quiz)
+                QuizQuestionScreen(
+                  isDraggedStatusList: quizState.isDraggedStatusList,
+                  randomSolutions: quizState.randomSolutions,
+                  kanjisToAskMeaning: quizState.kanjisToAskMeaning,
+                  imagePathFromDraggedItems:
+                      quizState.imagePathsFromDraggedItems,
+                  initialOpacities: quizState.initialOpacities,
+                  index: quizState.index,
+                )
+              else if (quizState.currentScreenType == Screens.welcome)
+                const WelcomeKanjiQuizScreen()
+            ],
+          ),
         ),
       ),
     );
