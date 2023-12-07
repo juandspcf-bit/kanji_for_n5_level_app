@@ -55,6 +55,15 @@ class FlashCardProvider extends Notifier<FlashCardData> {
     final length = state.japanese.length;
     return (length - 1) == state.indexQuestion;
   }
+
+  void setIndex(int index) {
+    state = FlashCardData(
+        indexQuestion: index,
+        dataInit: state.dataInit,
+        audioQuestion: state.audioQuestion,
+        japanese: state.japanese,
+        english: state.english);
+  }
 }
 
 final flashCardProvider =
