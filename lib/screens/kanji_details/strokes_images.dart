@@ -148,16 +148,16 @@ class StrokesImages extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final sizeScreen = getScreenSize(context);
+    final sizeScreen = getScreenSizeWidth(context);
     int crossAxisCount;
     int containerSize;
     switch (sizeScreen) {
-      case ScreenSize.extraLarge:
+      case ScreenSizeWidth.extraLarge:
         {
           crossAxisCount = 6;
           containerSize = 140;
         }
-      case ScreenSize.large:
+      case ScreenSizeWidth.large:
         {
           crossAxisCount = 4;
           containerSize = 100;

@@ -32,6 +32,39 @@ class _QuizScreenState extends ConsumerState<QuizScreen> {
     );
   }
 
+  Widget getScreen(ConnectivityResult resultStatus, QuizDataValues quizState) {
+    if (resultStatus == ConnectivityResult.none) {
+      return const Center(child: InternetConnectionErrorScreen());
+    } else if (quizState.currentScreenType == Screens.score) {
+      return ScoreBody(
+        isCorrectAnswer: quizState.isCorrectAnswer,
+        isOmittedAnswer: quizState.isOmittedAnswer,
+        resetTheQuiz: ref.read(quizDataValuesProvider.notifier).resetTheQuiz,
+      );
+    } else if (quizState.currentScreenType == Screens.quiz) {
+      return SingleChildScrollView(
+        child: Column(
+          children: [
+            QuizQuestionScreen(
+              isDraggedStatusList: quizState.isDraggedStatusList,
+              randomSolutions: quizState.randomSolutions,
+              kanjisToAskMeaning: quizState.kanjisToAskMeaning,
+              imagePathFromDraggedItems: quizState.imagePathsFromDraggedItems,
+              initialOpacities: quizState.initialOpacities,
+              index: quizState.index,
+            ),
+          ],
+        ),
+      );
+    } else if (quizState.currentScreenType == Screens.welcome) {
+      return const Center(child: WelcomeKanjiQuizScreen());
+    } else {
+      return const Center(
+        child: Text('nothing to show'),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final resultStatus = ref.watch(statusConnectionProvider);
@@ -49,33 +82,7 @@ class _QuizScreenState extends ConsumerState<QuizScreen> {
           right: 30,
           left: 30,
         ),
-        child: SingleChildScrollView(
-          child: Column(
-            children: [
-              if (resultStatus == ConnectivityResult.none)
-                const InternetConnectionErrorScreen()
-              else if (quizState.currentScreenType == Screens.score)
-                ScoreBody(
-                  isCorrectAnswer: quizState.isCorrectAnswer,
-                  isOmittedAnswer: quizState.isOmittedAnswer,
-                  resetTheQuiz:
-                      ref.read(quizDataValuesProvider.notifier).resetTheQuiz,
-                )
-              else if (quizState.currentScreenType == Screens.quiz)
-                QuizQuestionScreen(
-                  isDraggedStatusList: quizState.isDraggedStatusList,
-                  randomSolutions: quizState.randomSolutions,
-                  kanjisToAskMeaning: quizState.kanjisToAskMeaning,
-                  imagePathFromDraggedItems:
-                      quizState.imagePathsFromDraggedItems,
-                  initialOpacities: quizState.initialOpacities,
-                  index: quizState.index,
-                )
-              else if (quizState.currentScreenType == Screens.welcome)
-                const WelcomeKanjiQuizScreen()
-            ],
-          ),
-        ),
+        child: getScreen(resultStatus, quizState),
       ),
     );
   }

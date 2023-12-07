@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:kanji_for_n5_level_app/config_files/screen_config.dart';
 import 'package:kanji_for_n5_level_app/models/kanji_from_api.dart';
 import 'package:kanji_for_n5_level_app/screens/quiz_screen/column_drag_targets.dart';
 import 'package:kanji_for_n5_level_app/screens/quiz_screen/draggable_kanji.dart';
@@ -24,8 +25,33 @@ class QuizQuestionScreen extends ConsumerWidget {
   final List<double> initialOpacities;
   final int index;
 
+  Widget getButtons(ScreenSizeHeight sizeScreen) {
+    switch (sizeScreen) {
+      case ScreenSizeHeight.normal:
+        return const Column(
+          children: [
+            ResetQuestionButton(),
+            NextQuestionButton(),
+          ],
+        );
+
+      default:
+        return const Row(
+          children: [
+            Expanded(child: ResetQuestionButton()),
+            SizedBox(
+              width: 20,
+            ),
+            Expanded(child: NextQuestionButton()),
+          ],
+        );
+    }
+  }
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final sizeScreen = getScreenSizeHeight(context);
+
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
@@ -57,8 +83,7 @@ class QuizQuestionScreen extends ConsumerWidget {
         const SizedBox(
           height: 15,
         ),
-        const ResetQuestionButton(),
-        const NextQuestionButton(),
+        getButtons(sizeScreen)
       ],
     );
   }

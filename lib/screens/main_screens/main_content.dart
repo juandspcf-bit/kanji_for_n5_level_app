@@ -77,12 +77,12 @@ class MainContent extends ConsumerWidget {
 
     if (dataStateMainContent.selection == 1) scaffoldTitle = "Favorites";
 
-    final sizeScreen = getScreenSize(context);
+    final sizeScreen = getScreenSizeWidth(context);
     double iconSize;
     switch (sizeScreen) {
-      case ScreenSize.extraLarge:
+      case ScreenSizeWidth.extraLarge:
         iconSize = 60;
-      case ScreenSize.large:
+      case ScreenSizeWidth.large:
         iconSize = 40;
       case _:
         iconSize = 30;
