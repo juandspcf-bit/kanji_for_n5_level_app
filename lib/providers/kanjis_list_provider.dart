@@ -5,7 +5,7 @@ import 'package:kanji_for_n5_level_app/Databases/db_computes_functions_for_delet
 import 'package:kanji_for_n5_level_app/Databases/db_computes_functions_for_inserting_data.dart';
 import 'package:kanji_for_n5_level_app/Databases/db_definitions.dart';
 import 'package:kanji_for_n5_level_app/models/kanji_from_api.dart';
-import 'package:kanji_for_n5_level_app/networking/request_api.dart';
+import 'package:kanji_for_n5_level_app/networking/request_kanji_list_api.dart';
 import 'package:kanji_for_n5_level_app/providers/error_storing_database_status.dart';
 import 'package:kanji_for_n5_level_app/providers/favorites_kanjis_provider.dart';
 import 'package:kanji_for_n5_level_app/providers/status_stored_provider.dart';
@@ -44,7 +44,7 @@ class KanjiListProvider extends Notifier<KanjiListData> {
     List<String> kanjisCharacteres,
     int section,
   ) {
-    RequestApi.getKanjis(
+    RequestKanjiListApi.getKanjis(
       storedKanjis,
       kanjisCharacteres,
       section,
@@ -61,7 +61,7 @@ class KanjiListProvider extends Notifier<KanjiListData> {
     final storedKanjis =
         ref.read(storedKanjisProvider.notifier).getStoresItems();
 
-    RequestApi.getKanjis(
+    RequestKanjiListApi.getKanjis(
       storedKanjis[section] ?? [],
       kanjisCharacteres,
       section,

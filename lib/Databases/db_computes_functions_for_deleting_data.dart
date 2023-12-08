@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:async/async.dart';
 import 'package:kanji_for_n5_level_app/models/kanji_from_api.dart';
-import 'package:kanji_for_n5_level_app/networking/request_api.dart';
+import 'package:kanji_for_n5_level_app/networking/request_kanji_list_api.dart';
 import 'package:kanji_for_n5_level_app/providers/status_stored_provider.dart';
 
 class ParametersDelete {
@@ -104,8 +104,8 @@ Future<void> deleteKanjiFromApiComputeVersion(
 
 void updateKanjiWithOnliVersionComputeVersion(KanjiFromApi kanjiFromApi,
     void Function(List<KanjiFromApi> data) onSucces, void Function() onError) {
-  RequestApi.getKanjis([], [kanjiFromApi.kanjiCharacter], kanjiFromApi.section,
-      onSucces, onError);
+  RequestKanjiListApi.getKanjis([], [kanjiFromApi.kanjiCharacter],
+      kanjiFromApi.section, onSucces, onError);
 }
 
 KanjiFromApi updateStatusKanjiComputeVersion(
