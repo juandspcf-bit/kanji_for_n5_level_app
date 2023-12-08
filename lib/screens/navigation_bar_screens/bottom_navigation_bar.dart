@@ -45,6 +45,13 @@ class CustomBottomNavigationBar extends ConsumerWidget {
             ),
             label: "Favorites",
           ),
+          BottomNavigationBarItem(
+            icon: Icon(
+              Icons.search,
+              size: iconSize,
+            ),
+            label: "basic search",
+          ),
         ],
       ),
     );

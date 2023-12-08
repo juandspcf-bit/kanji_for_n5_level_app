@@ -66,10 +66,12 @@ class MainScreenProvider extends Notifier<MainScreenData> {
       return;
     }
 
-    if (index == 1) {
+    if (index == 0) {
+      ref.read(mainScreenProvider.notifier).setScreen(0);
+    } else if (index == 1) {
       ref.read(mainScreenProvider.notifier).setScreen(1);
     } else {
-      ref.read(mainScreenProvider.notifier).setScreen(0);
+      ref.read(mainScreenProvider.notifier).setScreen(2);
     }
   }
 
