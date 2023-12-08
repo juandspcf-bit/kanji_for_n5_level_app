@@ -60,8 +60,8 @@ class _ScoreBodyState extends ConsumerState<ScoreBody> {
   @override
   Widget build(BuildContext context) {
     final (countCorrects, countIncorrects, countOmited) = getCounts();
-    final scoreState = ref.watch(scoreKanjiListProvider);
-    return Stack(alignment: Alignment.center, children: [
+    final lottieFilesState = ref.watch(lottieFilesProvider);
+    return Stack(alignment: Alignment.topCenter, children: [
       Column(
         children: [
           const SizedBox(
@@ -137,9 +137,6 @@ class _ScoreBodyState extends ConsumerState<ScoreBody> {
               ref.read(quizDataValuesProvider.notifier).resetTheQuiz();
             },
             style: ElevatedButton.styleFrom(
-              backgroundColor: Theme.of(context).colorScheme.primary,
-              foregroundColor: Theme.of(context).colorScheme.onPrimary,
-              textStyle: Theme.of(context).textTheme.bodyLarge,
               minimumSize: const Size.fromHeight(40),
             ),
             child: const Text('Restart quiz'),
@@ -153,7 +150,7 @@ class _ScoreBodyState extends ConsumerState<ScoreBody> {
           duration: const Duration(seconds: 3),
           // The green box must be a child of the AnimatedOpacity widget.
           child: Lottie(
-            composition: scoreState.lottieComposition,
+            composition: lottieFilesState.lottieComposition,
           ),
           onEnd: () {
             setState(() {

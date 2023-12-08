@@ -14,9 +14,6 @@ class ResetQuestionButton extends ConsumerWidget {
           ref.read(quizDataValuesProvider.notifier).onResetQuestion();
         },
         style: ElevatedButton.styleFrom(
-          backgroundColor: Theme.of(context).colorScheme.primary,
-          foregroundColor: Theme.of(context).colorScheme.onPrimary,
-          textStyle: Theme.of(context).textTheme.bodyLarge,
           minimumSize: const Size.fromHeight(40),
         ),
         child: const Text("Reset question"),

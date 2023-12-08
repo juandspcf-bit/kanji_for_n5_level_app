@@ -13,7 +13,14 @@ class WelcomeKanjiQuizScreen extends ConsumerWidget {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        Image.asset('assets/images/quiz.png'),
+        Container(
+          height: 250,
+          width: 350,
+          child: Image.asset(
+            'assets/images/quiz.png',
+            fit: BoxFit.fitHeight,
+          ),
+        ),
         Row(
           children: [
             Expanded(

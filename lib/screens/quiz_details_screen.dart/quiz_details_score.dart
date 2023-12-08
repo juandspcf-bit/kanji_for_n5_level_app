@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kanji_for_n5_level_app/providers/quiz_details_providers.dart';
 import 'package:kanji_for_n5_level_app/providers/quiz_details_score_screen.dart';
+import 'package:kanji_for_n5_level_app/providers/score_kanji_list_provider.dart';
 import 'package:kanji_for_n5_level_app/providers/select_quiz_details_screen.dart';
 import 'package:lottie/lottie.dart';
 
@@ -102,6 +103,7 @@ class _QuizDetailsScore extends ConsumerState<QuizDetailsScore> {
   @override
   Widget build(BuildContext context) {
     final scores = ref.watch(quizDetailsScoreProvider);
+    final lottieFilesState = ref.watch(lottieFilesProvider);
     return Padding(
       padding: const EdgeInsets.only(
         top: 0,
@@ -110,6 +112,7 @@ class _QuizDetailsScore extends ConsumerState<QuizDetailsScore> {
         left: 30,
       ),
       child: Stack(
+        alignment: Alignment.topCenter,
         children: [
           Column(
             children: [
@@ -242,12 +245,7 @@ class _QuizDetailsScore extends ConsumerState<QuizDetailsScore> {
                         .setScreen(ScreensQuizDetail.quizSelections);
                   },
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Theme.of(context).colorScheme.primary,
-                    foregroundColor: Theme.of(context).colorScheme.onPrimary,
-                    textStyle: Theme.of(context).textTheme.bodyLarge,
-                    minimumSize: Size.fromHeight(
-                        (Theme.of(context).textTheme.bodyLarge!.height ?? 30) +
-                            30),
+                    minimumSize: const Size.fromHeight(40),
                   ),
                   icon: const Icon(Icons.arrow_circle_right),
                   label: const Text('Restart quiz'),
@@ -263,8 +261,9 @@ class _QuizDetailsScore extends ConsumerState<QuizDetailsScore> {
               opacity: _opacity,
               duration: const Duration(milliseconds: 3000),
               // The green box must be a child of the AnimatedOpacity widget.
-              child: Lottie.asset('assets/lottie_files/congrats.json',
-                  fit: BoxFit.fitWidth),
+              child: Lottie(
+                composition: lottieFilesState.lottieComposition,
+              ),
               onEnd: () {
                 setState(() {
                   _visibility = false;

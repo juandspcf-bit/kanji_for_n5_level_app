@@ -88,7 +88,7 @@ class MainScreenProvider extends Notifier<MainScreenData> {
     final listOfInvalidStoredKanjis =
         validAndInvalidKanjis.$2.map((e) => e.$1).toList();
     cleanInvaliDbRecords(listOfInvalidStoredKanjis);
-    ref.read(scoreKanjiListProvider.notifier).initLottieFile();
+    ref.read(lottieFilesProvider.notifier).initLottieFile();
     FlutterNativeSplash.remove();
 
     ref

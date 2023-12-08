@@ -54,6 +54,7 @@ class MyApp extends ConsumerWidget {
           style: ElevatedButton.styleFrom(
             backgroundColor: kDarkColorScheme.primary,
             foregroundColor: kDarkColorScheme.onPrimary,
+            textStyle: Theme.of(context).textTheme.bodyLarge,
           ),
         ),
         /*       cardTheme: const CardTheme().copyWith(

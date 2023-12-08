@@ -1,7 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lottie/lottie.dart';
 
-class ScoreKanjiListProvider extends Notifier<ScoreKnajiListData> {
+class LottieFilesProvider extends Notifier<ScoreKnajiListData> {
   @override
   ScoreKnajiListData build() {
     return ScoreKnajiListData(lottieComposition: null);
@@ -14,9 +14,9 @@ class ScoreKanjiListProvider extends Notifier<ScoreKnajiListData> {
   }
 }
 
-final scoreKanjiListProvider =
-    NotifierProvider<ScoreKanjiListProvider, ScoreKnajiListData>(
-        ScoreKanjiListProvider.new);
+final lottieFilesProvider =
+    NotifierProvider<LottieFilesProvider, ScoreKnajiListData>(
+        LottieFilesProvider.new);
 
 class ScoreKnajiListData {
   final LottieComposition? lottieComposition;

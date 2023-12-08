@@ -36,10 +36,12 @@ class _QuizScreenState extends ConsumerState<QuizScreen> {
     if (resultStatus == ConnectivityResult.none) {
       return const Center(child: InternetConnectionErrorScreen());
     } else if (quizState.currentScreenType == Screens.score) {
-      return ScoreBody(
-        isCorrectAnswer: quizState.isCorrectAnswer,
-        isOmittedAnswer: quizState.isOmittedAnswer,
-        resetTheQuiz: ref.read(quizDataValuesProvider.notifier).resetTheQuiz,
+      return Center(
+        child: ScoreBody(
+          isCorrectAnswer: quizState.isCorrectAnswer,
+          isOmittedAnswer: quizState.isOmittedAnswer,
+          resetTheQuiz: ref.read(quizDataValuesProvider.notifier).resetTheQuiz,
+        ),
       );
     } else if (quizState.currentScreenType == Screens.quiz) {
       return SingleChildScrollView(
