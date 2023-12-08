@@ -17,7 +17,14 @@ class WelcomeQuizDetailsScreen extends ConsumerWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
-          Image.asset('assets/images/quiz2.png'),
+          SizedBox(
+            height: 250,
+            width: 350,
+            child: Image.asset(
+              'assets/images/quiz2.png',
+              fit: BoxFit.fitHeight,
+            ),
+          ),
           Row(
             children: [
               Expanded(
