@@ -3,8 +3,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kanji_for_n5_level_app/providers/flash_card_widget_provider.dart';
 import 'package:kanji_for_n5_level_app/providers/select_quiz_details_screen.dart';
 
-class WelcomeQuizDetailsScreen extends ConsumerWidget {
-  const WelcomeQuizDetailsScreen({super.key});
+class WelcomeKanjiDetailsQuizScreen extends ConsumerWidget {
+  const WelcomeKanjiDetailsQuizScreen({super.key});
 
   final welcomeMessage = 'Select the quiz type '
       'you would like to try.';
@@ -15,11 +15,10 @@ class WelcomeQuizDetailsScreen extends ConsumerWidget {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 0),
       child: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
           SizedBox(
             height: 250,
-            width: 350,
             child: Image.asset(
               'assets/images/quiz2.png',
               fit: BoxFit.fitHeight,
