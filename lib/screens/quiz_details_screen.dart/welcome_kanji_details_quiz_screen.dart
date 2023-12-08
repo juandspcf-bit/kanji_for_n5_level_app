@@ -24,6 +24,9 @@ class WelcomeKanjiDetailsQuizScreen extends ConsumerWidget {
               fit: BoxFit.fitHeight,
             ),
           ),
+          const SizedBox(
+            height: 20,
+          ),
           Row(
             children: [
               Expanded(
@@ -39,7 +42,7 @@ class WelcomeKanjiDetailsQuizScreen extends ConsumerWidget {
             ],
           ),
           const SizedBox(
-            height: 20,
+            height: 10,
           ),
           RadioListTile(
             value: 0,
@@ -58,7 +61,7 @@ class WelcomeKanjiDetailsQuizScreen extends ConsumerWidget {
             }),
           ),
           const SizedBox(
-            height: 20,
+            height: 10,
           ),
           ElevatedButton(
             onPressed: () {
