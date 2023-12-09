@@ -8,7 +8,6 @@ import 'package:kanji_for_n5_level_app/providers/status_connection_provider.dart
 import 'package:kanji_for_n5_level_app/providers/status_stored_provider.dart';
 import 'package:kanji_for_n5_level_app/screens/kanji_details/examples_audios.dart';
 import 'package:kanji_for_n5_level_app/screens/kanji_details/meaning_definition.dart';
-import 'package:kanji_for_n5_level_app/screens/main_screens/main_content.dart';
 
 class SearchScreen extends ConsumerWidget {
   SearchScreen({super.key});
@@ -21,16 +20,32 @@ class SearchScreen extends ConsumerWidget {
     if (currenState == null) return;
     if (currenState.validate()) {
       currenState.save();
+      return;
     }
+    ref.read(searchScreenProvider.notifier).setOnErrorTextField();
   }
 
-  Widget getResult(SearchState searchState, KanjiFromApi? kanjiFromApi) {
+  Widget getResult(SearchState searchState, KanjiFromApi? kanjiFromApi,
+      BuildContext context) {
     switch (searchState) {
+      case SearchState.errorForm:
+        return Center(
+          child: Expanded(
+            child: Text(
+              'type a valid word',
+              style: Theme.of(context).textTheme.titleLarge,
+              maxLines: 3,
+            ),
+          ),
+        );
       case SearchState.notSearching:
-        return const Center(
-          child: Text(
-            'search a kanji by its english meaning',
-            maxLines: 3,
+        return Center(
+          child: Expanded(
+            child: Text(
+              'search a kanji by its english meaning',
+              style: Theme.of(context).textTheme.titleLarge,
+              maxLines: 3,
+            ),
           ),
         );
       case SearchState.searching:
@@ -42,10 +57,13 @@ class SearchScreen extends ConsumerWidget {
           if (kanjiFromApi != null) {
             return Results(kanjiFromApi: kanjiFromApi);
           } else {
-            return const Center(
-              child: Text(
-                'The corresponding kanji for this word was not found',
-                maxLines: 3,
+            return Center(
+              child: Expanded(
+                child: Text(
+                  'The corresponding kanji for this word was not found',
+                  style: Theme.of(context).textTheme.titleLarge,
+                  maxLines: 3,
+                ),
               ),
             );
           }
@@ -104,7 +122,6 @@ class SearchScreen extends ConsumerWidget {
                         suffixIcon: GestureDetector(
                           child: const Icon(Icons.search),
                           onTap: () {
-                            logger.d('clicked');
                             onValidate(ref);
                             FocusScopeNode currentFocus =
                                 FocusScope.of(context);
@@ -138,7 +155,7 @@ class SearchScreen extends ConsumerWidget {
                 ),
                 Expanded(
                   child: getResult(searchScreenState.searchState,
-                      searchScreenState.kanjiFromApi),
+                      searchScreenState.kanjiFromApi, context),
                 )
               ],
             ),

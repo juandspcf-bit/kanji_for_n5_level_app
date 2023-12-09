@@ -16,6 +16,11 @@ class SearchScreenProvider extends Notifier<SearchScreenData> {
     _getKanjiFromEnglishWord(word);
   }
 
+  void setOnErrorTextField() {
+    state = SearchScreenData(
+        word: '', kanjiFromApi: null, searchState: SearchState.errorForm);
+  }
+
   void onSucces(List<KanjiFromApi> kanjiList) {
     state = SearchScreenData(
       word: state.word,
@@ -58,4 +63,5 @@ enum SearchState {
   stoped,
   searching,
   notSearching,
+  errorForm,
 }
