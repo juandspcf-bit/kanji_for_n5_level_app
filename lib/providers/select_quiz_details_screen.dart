@@ -1,4 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:kanji_for_n5_level_app/providers/flash_card_widget_provider.dart';
 
 class SelectQuizDetailsProvider extends Notifier<SelectQuizDetailsData> {
   @override
@@ -15,6 +16,15 @@ class SelectQuizDetailsProvider extends Notifier<SelectQuizDetailsData> {
   void setOption(int? value) {
     state = SelectQuizDetailsData(
         selectedOption: value ?? 2, screensQuizDetail: state.screensQuizDetail);
+  }
+
+  void selectScreen() {
+    if (state.selectedOption == 0) {
+      setScreen(ScreensQuizDetail.quizSelections);
+    } else if (state.selectedOption == 1) {
+      ref.read(flashCardWidgetProvider.notifier).restartSide();
+      setScreen(ScreensQuizDetail.quizFlashCard);
+    }
   }
 }
 

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:kanji_for_n5_level_app/providers/flash_card_widget_provider.dart';
 import 'package:kanji_for_n5_level_app/providers/select_quiz_details_screen.dart';
 
 class WelcomeKanjiDetailsQuizScreen extends ConsumerWidget {
@@ -65,16 +64,7 @@ class WelcomeKanjiDetailsQuizScreen extends ConsumerWidget {
           ),
           ElevatedButton(
             onPressed: () {
-              if (screenNumber.selectedOption == 0) {
-                ref
-                    .read(selectQuizDetailsProvider.notifier)
-                    .setScreen(ScreensQuizDetail.quizSelections);
-              } else if (screenNumber.selectedOption == 1) {
-                ref.read(flashCardWidgetProvider.notifier).restartSide();
-                ref
-                    .read(selectQuizDetailsProvider.notifier)
-                    .setScreen(ScreensQuizDetail.quizFlashCard);
-              }
+              ref.read(selectQuizDetailsProvider.notifier).selectScreen();
             },
             style: ElevatedButton.styleFrom().copyWith(
               minimumSize: const MaterialStatePropertyAll(
