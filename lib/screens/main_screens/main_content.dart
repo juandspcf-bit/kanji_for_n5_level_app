@@ -8,7 +8,7 @@ import 'package:kanji_for_n5_level_app/screens/navigation_bar_screens/bottom_nav
 import 'package:kanji_for_n5_level_app/providers/main_screen_provider.dart';
 import 'package:kanji_for_n5_level_app/screens/navigation_bar_screens/favorite_screen.dart';
 import 'package:kanji_for_n5_level_app/screens/navigation_bar_screens/search_screen.dart';
-import 'package:kanji_for_n5_level_app/screens/navigation_bar_screens/sections_screen.dart';
+import 'package:kanji_for_n5_level_app/screens/navigation_bar_screens/sections_screen/sections_screen.dart';
 import 'package:logger/logger.dart';
 
 Dio dio = Dio();
