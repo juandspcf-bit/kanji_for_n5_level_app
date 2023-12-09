@@ -1,7 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_svg/svg.dart';
+import 'package:http/http.dart';
 import 'package:kanji_for_n5_level_app/models/kanji_from_api.dart';
 import 'package:kanji_for_n5_level_app/providers/search_screen_provider.dart';
+import 'package:kanji_for_n5_level_app/providers/status_stored_provider.dart';
+import 'package:kanji_for_n5_level_app/screens/kanji_details/examples_audios.dart';
+import 'package:kanji_for_n5_level_app/screens/kanji_details/meaning_definition.dart';
 import 'package:kanji_for_n5_level_app/screens/main_screens/main_content.dart';
 
 class SearchScreen extends ConsumerWidget {
@@ -34,9 +39,7 @@ class SearchScreen extends ConsumerWidget {
       case SearchState.stoped:
         {
           if (kanjiFromApi != null) {
-            return Center(
-              child: Text(kanjiFromApi.kanjiCharacter),
-            );
+            return Results(kanjiFromApi: kanjiFromApi);
           } else {
             return const Center(
               child: Text(
@@ -59,6 +62,7 @@ class SearchScreen extends ConsumerWidget {
           Form(
             key: _formKey,
             child: TextFormField(
+              initialValue: searchScreenState.word,
               decoration: const InputDecoration().copyWith(
                   border: const OutlineInputBorder(),
                   suffixIcon: GestureDetector(
@@ -96,6 +100,50 @@ class SearchScreen extends ConsumerWidget {
           getResult(
               searchScreenState.searchState, searchScreenState.kanjiFromApi)
         ],
+      ),
+    );
+  }
+}
+
+class Results extends ConsumerWidget {
+  const Results({super.key, required this.kanjiFromApi});
+  final KanjiFromApi kanjiFromApi;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return Center(
+      child: SingleChildScrollView(
+        child: Column(
+          children: [
+            Container(
+              height: 80,
+              width: 80,
+              decoration: BoxDecoration(
+                  color: Theme.of(context).colorScheme.onPrimaryContainer,
+                  borderRadius: const BorderRadius.all(Radius.circular(10))),
+              child: SvgPicture.network(
+                kanjiFromApi.strokes.images.last,
+                height: 80,
+                width: 80,
+                semanticsLabel: kanjiFromApi.kanjiCharacter,
+                placeholderBuilder: (BuildContext context) => Container(
+                    color: Colors.transparent,
+                    height: 40,
+                    width: 40,
+                    child: const CircularProgressIndicator(
+                      backgroundColor: Color.fromARGB(179, 5, 16, 51),
+                    )),
+              ),
+            ),
+            MeaningAndDefinition(
+                englishMeaning: kanjiFromApi.englishMeaning,
+                hiraganaMeaning: kanjiFromApi.hiraganaMeaning,
+                katakanaMeaning: kanjiFromApi.katakanaMeaning),
+            const SizedBox(
+              height: 20,
+            ),
+          ],
+        ),
       ),
     );
   }

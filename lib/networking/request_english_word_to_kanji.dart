@@ -19,7 +19,7 @@ class RequestEnglishWordToKanji {
       RequestKanjiListApi.getKanjis(
           [], [kanjiMap['character']], 0, onSuccess, onError);
     }).onError((error, stackTrace) {
-      logger.e('error in getting kanji from english word');
+      onError();
     });
   }
 }
