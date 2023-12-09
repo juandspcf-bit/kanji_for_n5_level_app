@@ -74,20 +74,7 @@ class QuestionScreen extends ConsumerWidget {
               })),
           ElevatedButton.icon(
             onPressed: () {
-              if (ref
-                  .read(quizDetailsProvider.notifier)
-                  .isQuizDataLenghtReached()) {
-                ref.read(quizDetailsScoreProvider.notifier).setAnswers();
-                ref
-                    .read(selectQuizDetailsProvider.notifier)
-                    .setScreen(ScreensQuizDetail.scoreSelections);
-                return;
-              }
-
-              ref.read(quizDetailsProvider.notifier).setQuizState(ref
-                      .read(quizDetailsProvider.notifier)
-                      .getQuizStateCurrentIndex() +
-                  1);
+              ref.read(quizDetailsProvider.notifier).onNext();
             },
             style: ElevatedButton.styleFrom().copyWith(
               minimumSize: const MaterialStatePropertyAll(
