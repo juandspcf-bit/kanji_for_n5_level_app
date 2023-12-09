@@ -19,10 +19,8 @@ class RequestsApi {
   }
 
   static Future<Response> getKanjiFromEnglishWord(String word) async {
-    final url = Uri.https(
-      "kanjialive-api.p.rapidapi.com",
-      "api/public/kanji/?kem=$word",
-    );
+    final url = Uri.https("kanjialive-api.p.rapidapi.com",
+        "api/public/search/advanced", {'kem': word});
 
     return http.get(
       url,
