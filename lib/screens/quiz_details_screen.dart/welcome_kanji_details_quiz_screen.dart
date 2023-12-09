@@ -69,7 +69,7 @@ class WelcomeKanjiDetailsQuizScreen extends ConsumerWidget {
                 ref
                     .read(selectQuizDetailsProvider.notifier)
                     .setScreen(ScreensQuizDetail.quizSelections);
-              } else {
+              } else if (screenNumber.selectedOption == 1) {
                 ref.read(flashCardWidgetProvider.notifier).restartSide();
                 ref
                     .read(selectQuizDetailsProvider.notifier)
