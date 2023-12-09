@@ -53,6 +53,24 @@ class KanjiListProvider extends Notifier<KanjiListData> {
     );
   }
 
+  KanjiListData updatedKanjiList(KanjiListData kanjiList) {
+    final kanjiListFromProvider = kanjiList;
+    final storedKanjisFromProvider = ref.read(storedKanjisProvider);
+
+    if (storedKanjisFromProvider[kanjiListFromProvider.section] != null &&
+        storedKanjisFromProvider[kanjiListFromProvider.section]!.isNotEmpty) {
+      return KanjiListData(
+          kanjiList: storedKanjisFromProvider[kanjiListFromProvider.section]!,
+          status: 1,
+          section: kanjiListFromProvider.section);
+    } else {
+      return KanjiListData(
+          kanjiList: <KanjiFromApi>[],
+          status: 1,
+          section: kanjiListFromProvider.section);
+    }
+  }
+
   void setKanjiListFromRepositories(
     List<String> kanjisCharacteres,
     int section,
