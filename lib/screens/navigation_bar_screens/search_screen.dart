@@ -1,9 +1,10 @@
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:http/http.dart';
 import 'package:kanji_for_n5_level_app/models/kanji_from_api.dart';
 import 'package:kanji_for_n5_level_app/providers/search_screen_provider.dart';
+import 'package:kanji_for_n5_level_app/providers/status_connection_provider.dart';
 import 'package:kanji_for_n5_level_app/providers/status_stored_provider.dart';
 import 'package:kanji_for_n5_level_app/screens/kanji_details/examples_audios.dart';
 import 'package:kanji_for_n5_level_app/screens/kanji_details/meaning_definition.dart';
@@ -55,52 +56,92 @@ class SearchScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final searchScreenState = ref.watch(searchScreenProvider);
+    final statusConnectionState = ref.watch(statusConnectionProvider);
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 30),
-      child: Column(
-        children: [
-          Form(
-            key: _formKey,
-            child: TextFormField(
-              initialValue: searchScreenState.word,
-              decoration: const InputDecoration().copyWith(
-                  border: const OutlineInputBorder(),
-                  suffixIcon: GestureDetector(
-                    child: const Icon(Icons.search),
-                    onTap: () {
-                      logger.d('clicked');
-                      onValidate(ref);
-                      FocusScopeNode currentFocus = FocusScope.of(context);
+      padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 30),
+      child: statusConnectionState == ConnectivityResult.none
+          ? Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Expanded(
+                        child: Text(
+                          'No internet connection, you will be able to search when the connection is restored',
+                          style: Theme.of(context).textTheme.titleLarge,
+                          textAlign: TextAlign.center,
+                          maxLines: 3,
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(
+                    height: 25,
+                  ),
+                  const Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(
+                        Icons.wifi_off,
+                        color: Colors.amber,
+                        size: 80,
+                      ),
+                    ],
+                  )
+                ],
+              ),
+            )
+          : Column(
+              children: [
+                Form(
+                  key: _formKey,
+                  child: TextFormField(
+                    initialValue: searchScreenState.word,
+                    decoration: const InputDecoration().copyWith(
+                        border: const OutlineInputBorder(),
+                        suffixIcon: GestureDetector(
+                          child: const Icon(Icons.search),
+                          onTap: () {
+                            logger.d('clicked');
+                            onValidate(ref);
+                            FocusScopeNode currentFocus =
+                                FocusScope.of(context);
 
-                      if (!currentFocus.hasPrimaryFocus) {
-                        currentFocus.unfocus();
+                            if (!currentFocus.hasPrimaryFocus) {
+                              currentFocus.unfocus();
+                            }
+                          },
+                        ),
+                        labelText: 'english word',
+                        hintText: 'english word'),
+                    keyboardType: TextInputType.text,
+                    validator: (text) {
+                      if (text != null &&
+                          text.isNotEmpty &&
+                          validCharacters.hasMatch(text)) {
+                        return null;
+                      } else {
+                        return 'Not a valid word';
                       }
                     },
+                    onSaved: (value) {
+                      ref
+                          .read(searchScreenProvider.notifier)
+                          .setWord(value ?? '');
+                    },
                   ),
-                  labelText: 'english word',
-                  hintText: 'english word'),
-              keyboardType: TextInputType.text,
-              validator: (text) {
-                if (text != null &&
-                    text.isNotEmpty &&
-                    validCharacters.hasMatch(text)) {
-                  return null;
-                } else {
-                  return 'Not a valid word';
-                }
-              },
-              onSaved: (value) {
-                ref.read(searchScreenProvider.notifier).setWord(value ?? '');
-              },
+                ),
+                const SizedBox(
+                  height: 20,
+                ),
+                Expanded(
+                  child: getResult(searchScreenState.searchState,
+                      searchScreenState.kanjiFromApi),
+                )
+              ],
             ),
-          ),
-          const SizedBox(
-            height: 20,
-          ),
-          getResult(
-              searchScreenState.searchState, searchScreenState.kanjiFromApi)
-        ],
-      ),
     );
   }
 }
@@ -112,38 +153,43 @@ class Results extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Center(
-      child: SingleChildScrollView(
-        child: Column(
-          children: [
-            Container(
+      child: Column(
+        children: [
+          Container(
+            height: 80,
+            width: 80,
+            decoration: BoxDecoration(
+                color: Theme.of(context).colorScheme.onPrimaryContainer,
+                borderRadius: const BorderRadius.all(Radius.circular(10))),
+            child: SvgPicture.network(
+              kanjiFromApi.strokes.images.last,
               height: 80,
               width: 80,
-              decoration: BoxDecoration(
-                  color: Theme.of(context).colorScheme.onPrimaryContainer,
-                  borderRadius: const BorderRadius.all(Radius.circular(10))),
-              child: SvgPicture.network(
-                kanjiFromApi.strokes.images.last,
-                height: 80,
-                width: 80,
-                semanticsLabel: kanjiFromApi.kanjiCharacter,
-                placeholderBuilder: (BuildContext context) => Container(
-                    color: Colors.transparent,
-                    height: 40,
-                    width: 40,
-                    child: const CircularProgressIndicator(
-                      backgroundColor: Color.fromARGB(179, 5, 16, 51),
-                    )),
-              ),
+              semanticsLabel: kanjiFromApi.kanjiCharacter,
+              placeholderBuilder: (BuildContext context) => Container(
+                  color: Colors.transparent,
+                  height: 40,
+                  width: 40,
+                  child: const CircularProgressIndicator(
+                    backgroundColor: Color.fromARGB(179, 5, 16, 51),
+                  )),
             ),
-            MeaningAndDefinition(
-                englishMeaning: kanjiFromApi.englishMeaning,
-                hiraganaMeaning: kanjiFromApi.hiraganaMeaning,
-                katakanaMeaning: kanjiFromApi.katakanaMeaning),
-            const SizedBox(
-              height: 20,
+          ),
+          MeaningAndDefinition(
+            englishMeaning: kanjiFromApi.englishMeaning,
+            hiraganaMeaning: kanjiFromApi.hiraganaMeaning,
+            katakanaMeaning: kanjiFromApi.katakanaMeaning,
+          ),
+          const SizedBox(
+            height: 20,
+          ),
+          Expanded(
+            child: ExampleAudios(
+              examples: kanjiFromApi.example,
+              statusStorage: StatusStorage.onlyOnline,
             ),
-          ],
-        ),
+          )
+        ],
       ),
     );
   }
