@@ -1,8 +1,10 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kanji_for_n5_level_app/config_files/screen_config.dart';
+import 'package:kanji_for_n5_level_app/providers/status_connection_provider.dart';
 import 'package:kanji_for_n5_level_app/screens/account_details/account_details.dart';
 import 'package:kanji_for_n5_level_app/screens/navigation_bar_screens/bottom_navigation_bar.dart';
 import 'package:kanji_for_n5_level_app/providers/main_screen_provider.dart';
@@ -75,6 +77,7 @@ class MainContent extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final mainScreenData = ref.watch(mainScreenProvider);
+    final statusConnectionData = ref.watch(statusConnectionProvider);
 
     String scaffoldTitle = 'Welcome \n ${mainScreenData.fullName}';
 
@@ -95,6 +98,12 @@ class MainContent extends ConsumerWidget {
       appBar: AppBar(
         title: Text(scaffoldTitle),
         actions: [
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 10),
+            child: statusConnectionData == ConnectivityResult.none
+                ? const Icon(Icons.cloud_off)
+                : const Icon(Icons.cloud_done_rounded),
+          ),
           GestureDetector(
             onTap: () {
               Navigator.of(context).push(MaterialPageRoute(builder: (ctx) {

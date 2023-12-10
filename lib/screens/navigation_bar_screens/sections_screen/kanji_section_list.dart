@@ -66,29 +66,17 @@ class _KanjiSectionListState extends ConsumerState<KanjiSectionList> {
     }
   }
 
-  void showSnackBarQuizz(String message, int duration) {
-    if (mounted) {
-      ScaffoldMessenger.of(context).clearSnackBars();
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          duration: Duration(seconds: duration),
-          content: Text(message),
-        ),
-      );
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     var kanjiListData = ref.watch(kanjiListProvider);
-    final resultStatus = ref.watch(statusConnectionProvider);
-    if (resultStatus == ConnectivityResult.none) {
+    final statusConnectionData = ref.watch(statusConnectionProvider);
+    if (statusConnectionData == ConnectivityResult.none) {
       kanjiListData =
           ref.read(kanjiListProvider.notifier).updatedKanjiList(kanjiListData);
     }
 
     final accesToQuiz = !isAnyProcessingData(kanjiListData.kanjiList) &&
-        !(resultStatus == ConnectivityResult.none);
+        !(statusConnectionData == ConnectivityResult.none);
 
     return PopScope(
       canPop: !isAnyProcessingData(kanjiListData.kanjiList),
@@ -102,6 +90,12 @@ class _KanjiSectionListState extends ConsumerState<KanjiSectionList> {
         appBar: AppBar(
           title: Text(listSections[kanjiListData.section - 1].title),
           actions: [
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 10),
+              child: statusConnectionData == ConnectivityResult.none
+                  ? const Icon(Icons.cloud_off)
+                  : const Icon(Icons.cloud_done_rounded),
+            ),
             IconButton(
                 onPressed: kanjiListData.status == 1 && accesToQuiz
                     ? () {

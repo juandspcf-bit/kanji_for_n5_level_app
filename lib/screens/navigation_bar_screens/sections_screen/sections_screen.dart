@@ -1,4 +1,3 @@
-import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -54,16 +53,6 @@ class Section extends ConsumerStatefulWidget {
 }
 
 class _SectionState extends ConsumerState<Section> {
-  void showSnackBarQuizz(String message, int duration) {
-    ScaffoldMessenger.of(context).clearSnackBars();
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        duration: Duration(seconds: duration),
-        content: Text(message),
-      ),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -79,12 +68,6 @@ class _SectionState extends ConsumerState<Section> {
                   widget.sectionData.kanjis,
                   widget.sectionData.sectionNumber,
                 );
-
-            Connectivity().checkConnectivity().then((result) {
-              if (result == ConnectivityResult.none) {
-                showSnackBarQuizz('no internet connection', 5);
-              }
-            });
 
             Navigator.of(context).push(
               MaterialPageRoute(

@@ -1,3 +1,4 @@
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kanji_for_n5_level_app/models/kanji_from_api.dart';
@@ -6,6 +7,7 @@ import 'package:kanji_for_n5_level_app/providers/flash_card_quiz_provider.dart';
 import 'package:kanji_for_n5_level_app/providers/kanji_details_provider.dart';
 import 'package:kanji_for_n5_level_app/providers/quiz_details_providers.dart';
 import 'package:kanji_for_n5_level_app/providers/select_quiz_details_screen.dart';
+import 'package:kanji_for_n5_level_app/providers/status_connection_provider.dart';
 import 'package:kanji_for_n5_level_app/providers/status_stored_provider.dart';
 import 'package:kanji_for_n5_level_app/screens/kanji_details/tab_examples.dart';
 import 'package:kanji_for_n5_level_app/screens/kanji_details/tab_strokes.dart';
@@ -27,6 +29,7 @@ class KanjiDetails extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final statusConnectionData = ref.watch(statusConnectionProvider);
     return DefaultTabController(
       initialIndex: 0,
       length: 3,
@@ -54,6 +57,12 @@ class KanjiDetails extends ConsumerWidget {
               appBar: AppBar(
                 title: Text(kanjiFromApi.kanjiCharacter),
                 actions: [
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 10),
+                    child: statusConnectionData == ConnectivityResult.none
+                        ? const Icon(Icons.cloud_off)
+                        : const Icon(Icons.cloud_done_rounded),
+                  ),
                   IconButton(
                       onPressed: () {
                         ref
