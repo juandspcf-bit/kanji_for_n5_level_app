@@ -3,13 +3,18 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kanji_for_n5_level_app/models/kanji_from_api.dart';
 import 'package:kanji_for_n5_level_app/providers/quiz_details_providers.dart';
-import 'package:kanji_for_n5_level_app/providers/quiz_details_score_screen.dart';
-import 'package:kanji_for_n5_level_app/providers/select_quiz_details_screen.dart';
+import 'package:kanji_for_n5_level_app/screens/main_screens/main_content.dart';
 import 'package:kanji_for_n5_level_app/screens/quiz_details_screen.dart/big_play_button.dart';
 
 class QuestionScreen extends ConsumerWidget {
   final assetsAudioPlayer = AssetsAudioPlayer();
   final KanjiFromApi kanjiFromApi;
+
+  String formatText(String japanese) {
+    final firtsIndex = japanese.indexOf('（');
+    logger.d('the firtsIndex is $firtsIndex of $japanese');
+    return japanese.substring(0, firtsIndex).trim();
+  }
 
   QuestionScreen({super.key, required this.kanjiFromApi});
   @override
@@ -50,7 +55,7 @@ class QuestionScreen extends ConsumerWidget {
           ),
           RadioListTile(
               value: 0,
-              title: Text(quizDetailData.answer1.hiraganaMeaning),
+              title: Text(formatText(quizDetailData.answer1.hiraganaMeaning)),
               subtitle: Text(quizDetailData.answer1.englishMeaning),
               groupValue: quizDetailData.selectedAnswer,
               onChanged: ((value) {
@@ -58,7 +63,7 @@ class QuestionScreen extends ConsumerWidget {
               })),
           RadioListTile(
               value: 1,
-              title: Text(quizDetailData.answer2.hiraganaMeaning),
+              title: Text(formatText(quizDetailData.answer2.hiraganaMeaning)),
               subtitle: Text(quizDetailData.answer2.englishMeaning),
               groupValue: quizDetailData.selectedAnswer,
               onChanged: ((value) {
@@ -66,7 +71,7 @@ class QuestionScreen extends ConsumerWidget {
               })),
           RadioListTile(
               value: 2,
-              title: Text(quizDetailData.answer3.hiraganaMeaning),
+              title: Text(formatText(quizDetailData.answer3.hiraganaMeaning)),
               subtitle: Text(quizDetailData.answer3.englishMeaning),
               groupValue: quizDetailData.selectedAnswer,
               onChanged: ((value) {
