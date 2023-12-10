@@ -8,14 +8,14 @@ import 'package:kanji_for_n5_level_app/providers/sign_up_provider.dart';
 import 'package:kanji_for_n5_level_app/screens/main_screens/main_content.dart';
 import 'package:kanji_for_n5_level_app/screens/main_screens/sing_up_screen.dart';
 
-class LoginForm extends ConsumerStatefulWidget {
-  const LoginForm({super.key});
+class ToLoginFormScreen extends ConsumerStatefulWidget {
+  const ToLoginFormScreen({super.key});
 
   @override
-  ConsumerState<LoginForm> createState() => _LoginFormState();
+  ConsumerState<ToLoginFormScreen> createState() => _LoginFormState();
 }
 
-class _LoginFormState extends ConsumerState<LoginForm> {
+class _LoginFormState extends ConsumerState<ToLoginFormScreen> {
   final _formKey = GlobalKey<FormState>();
   String email = '';
   String password = '';

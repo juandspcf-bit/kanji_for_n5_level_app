@@ -1,15 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:kanji_for_n5_level_app/screens/main_screens/login_screen.dart';
-import 'package:kanji_for_n5_level_app/screens/main_screens/main_content.dart';
-import 'package:kanji_for_n5_level_app/providers/main_screen_provider.dart';
-import 'package:kanji_for_n5_level_app/providers/status_connection_provider.dart';
+import 'package:kanji_for_n5_level_app/auth_flow.dart';
 import 'firebase_options.dart';
 
 final dbFirebase = FirebaseFirestore.instance;
@@ -73,34 +69,7 @@ class MyApp extends ConsumerWidget {
         useMaterial3: true,
       ),
       themeMode: ThemeMode.dark,
-      home: StreamBuilder(
-          stream: streamAuth,
-          builder: (ctx, snapShot) {
-            final user = snapShot.data;
-
-            if (user != null) {
-              final connectionWifiState = ref.watch(statusConnectionProvider);
-
-              return FutureBuilder(
-                future: connectionWifiState == ConnectivityResult.none
-                    ? ref.read(mainScreenProvider.notifier).initAppOffline()
-                    : ref.read(mainScreenProvider.notifier).initAppOnline(),
-                builder: (BuildContext context, AsyncSnapshot<void> snapshot) {
-                  final connectionStatus = snapShot.connectionState;
-                  if (connectionStatus == ConnectionState.waiting) {
-                    return const CircularProgressIndicator();
-                  } else if (connectionStatus == ConnectionState.done ||
-                      connectionStatus == ConnectionState.active) {
-                    return MainContent(uuid: user.uid);
-                  } else {
-                    return const Center(child: Text('error'));
-                  }
-                },
-              );
-            } else {
-              return const LoginForm();
-            }
-          }),
+      home: const AuthFlow(),
     );
   }
 }

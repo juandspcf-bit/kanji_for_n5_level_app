@@ -17,9 +17,7 @@ Dio dio = Dio();
 final logger = Logger();
 
 class MainContent extends ConsumerWidget {
-  const MainContent({super.key, required this.uuid});
-
-  final String uuid;
+  const MainContent({super.key});
 
   Widget _dialog(BuildContext context) {
     return AlertDialog(
