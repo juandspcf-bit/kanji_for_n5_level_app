@@ -5,7 +5,7 @@ import 'package:dio/dio.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:kanji_for_n5_level_app/Databases/db_definitions.dart';
-import 'package:kanji_for_n5_level_app/Databases/download_db_utils.dart';
+import 'package:kanji_for_n5_level_app/Databases/db_utils.dart';
 import 'package:kanji_for_n5_level_app/models/kanji_from_api.dart';
 import 'package:kanji_for_n5_level_app/providers/status_stored_provider.dart';
 import 'package:path_provider/path_provider.dart';

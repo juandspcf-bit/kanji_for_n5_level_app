@@ -1,8 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:kanji_for_n5_level_app/Databases/db_computes_functions_for_deleting_data.dart';
-import 'package:kanji_for_n5_level_app/Databases/db_computes_functions_for_inserting_data.dart';
+import 'package:kanji_for_n5_level_app/Databases/db_deleting_data.dart';
+import 'package:kanji_for_n5_level_app/Databases/db_inserting_data.dart';
 import 'package:kanji_for_n5_level_app/Databases/db_definitions.dart';
 import 'package:kanji_for_n5_level_app/models/kanji_from_api.dart';
 import 'package:kanji_for_n5_level_app/networking/request_kanji_list_api.dart';
@@ -78,6 +78,8 @@ class KanjiListProvider extends Notifier<KanjiListData> {
     clearKanjiList(section);
     final storedKanjis =
         ref.read(storedKanjisProvider.notifier).getStoresItems();
+    logger.d(
+        'the stored kanjis for section $section are : ${storedKanjis[section]}');
 
     RequestKanjiListApi.getKanjis(
       storedKanjis[section] ?? [],
@@ -103,7 +105,7 @@ class KanjiListProvider extends Notifier<KanjiListData> {
       logger.i(kanjiFromApiStored);
       logger.d('success');
     } catch (e) {
-      logger.e('error sotoring');
+      logger.e('error storing');
       logger.e(e.toString());
     }
   }

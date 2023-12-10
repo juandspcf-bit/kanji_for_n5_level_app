@@ -1,5 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:kanji_for_n5_level_app/Databases/db_computes_functions_for_inserting_data.dart';
+import 'package:kanji_for_n5_level_app/Databases/db_inserting_data.dart';
 import 'package:kanji_for_n5_level_app/models/kanji_from_api.dart';
 import 'package:kanji_for_n5_level_app/networking/request_kanji_list_api.dart';
 import 'package:kanji_for_n5_level_app/providers/status_stored_provider.dart';

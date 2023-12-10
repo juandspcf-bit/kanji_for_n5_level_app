@@ -1,5 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kanji_for_n5_level_app/models/kanji_from_api.dart';
+import 'package:kanji_for_n5_level_app/models/secction_model.dart';
+import 'package:kanji_for_n5_level_app/screens/main_screens/main_content.dart';
 
 class StoredkanjisProvider extends Notifier<Map<int, List<KanjiFromApi>>> {
   @override
@@ -19,6 +21,8 @@ class StoredkanjisProvider extends Notifier<Map<int, List<KanjiFromApi>>> {
       if (list == null) copyState[element.section] = [];
       copyState[element.section]!.add(element);
     }
+
+    copyState = orderElements(copyState);
 
     state = copyState;
   }
@@ -75,6 +79,25 @@ class StoredkanjisProvider extends Notifier<Map<int, List<KanjiFromApi>>> {
     }
 
     return (kanjiQuery, inStorage);
+  }
+
+  Map<int, List<KanjiFromApi>> orderElements(
+      Map<int, List<KanjiFromApi>> copyState) {
+    Map<int, List<KanjiFromApi>> orderedKanjisSections = {};
+    copyState.forEach((key, value) {
+      logger.d('the ordered kanjis are $key');
+      final kanjisSection = sectionsKanjis['section$key']!;
+      orderedKanjisSections[key] = [];
+      for (var kanjiCharacter in kanjisSection) {
+        int index = value
+            .indexWhere((element) => element.kanjiCharacter == kanjiCharacter);
+        if (index != -1) {
+          orderedKanjisSections[key]!.add(value[index]);
+        }
+      }
+    });
+
+    return orderedKanjisSections;
   }
 }
 

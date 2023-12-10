@@ -74,11 +74,11 @@ class MainContent extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final dataStateMainContent = ref.watch(mainScreenProvider);
+    final mainScreenData = ref.watch(mainScreenProvider);
 
-    String scaffoldTitle = 'Welcome \n ${dataStateMainContent.fullName}';
+    String scaffoldTitle = 'Welcome \n ${mainScreenData.fullName}';
 
-    if (dataStateMainContent.selection == 1) scaffoldTitle = "Favorites";
+    if (mainScreenData.selection == 1) scaffoldTitle = "Favorites";
 
     final sizeScreen = getScreenSizeWidth(context);
     double iconSize;
@@ -110,7 +110,7 @@ class MainContent extends ConsumerWidget {
                     width: height - 3,
                     height: height - 3,
                     fit: BoxFit.cover,
-                    imageUrl: dataStateMainContent.avatarLink,
+                    imageUrl: mainScreenData.avatarLink,
                     placeholder: (context, url) =>
                         const CircularProgressIndicator(),
                     errorWidget: (context, url, error) =>
@@ -122,7 +122,7 @@ class MainContent extends ConsumerWidget {
           ),
         ],
       ),
-      body: selectScreen(dataStateMainContent.selection),
+      body: selectScreen(mainScreenData.selection),
       bottomNavigationBar: CustomBottomNavigationBar(
         iconSize: iconSize,
         selectPage: (index) {
@@ -130,7 +130,7 @@ class MainContent extends ConsumerWidget {
               .read(mainScreenProvider.notifier)
               .selectPage(index, context, _scaleDialog);
         },
-        selectedPageIndex: dataStateMainContent.selection,
+        selectedPageIndex: mainScreenData.selection,
       ),
     );
   }

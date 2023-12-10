@@ -7,8 +7,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kanji_for_n5_level_app/Databases/db_definitions.dart';
-import 'package:kanji_for_n5_level_app/Databases/download_db_utils.dart';
-import 'package:kanji_for_n5_level_app/Databases/favorites_db_utils.dart';
+import 'package:kanji_for_n5_level_app/Databases/db_loading_data.dart';
+import 'package:kanji_for_n5_level_app/Databases/db_favorites.dart';
 import 'package:kanji_for_n5_level_app/main.dart';
 import 'package:kanji_for_n5_level_app/providers/score_kanji_list_provider.dart';
 import 'package:kanji_for_n5_level_app/screens/main_screens/main_content.dart';
@@ -80,32 +80,46 @@ class MainScreenProvider extends Notifier<MainScreenData> {
     return await compute(cleanInvalidStoredFiles, listOfStoredKanjis);
   }
 
-  Future<void> getInitData() async {
-    var listOfStoredKanjis = await loadStoredKanjis();
+  Future<void> initAppOnline() async {
+    await getOnlineData();
+    await getAppBarData();
+  }
+
+  Future<void> initAppOffline() async {
+    await getOfflineData();
+    await getAppBarDataOffline();
+  }
+
+  Future<void> getOnlineData() async {
+    List<KanjiFromApi> listOfValidStoredKanjis = await loadStoredKanjis();
+    final favoritesKanjis = await loadFavorites();
+    ref.read(favoritesListProvider.notifier).setInitialFavoritesOnline(
+        listOfValidStoredKanjis, favoritesKanjis, 10);
+    FlutterNativeSplash.remove();
+  }
+
+  Future<void> getOfflineData() async {
+    List<KanjiFromApi> listOfValidStoredKanjis = await loadStoredKanjis();
+    final favoritesKanjis = await loadFavorites();
+    ref.read(favoritesListProvider.notifier).setInitialFavoritesOffline(
+        listOfValidStoredKanjis, favoritesKanjis, 10);
+    FlutterNativeSplash.remove();
+  }
+
+  Future<List<KanjiFromApi>> loadStoredKanjis() async {
+    var listOfStoredKanjis = await loadStoredKanjisFromDB();
     final validAndInvalidKanjis = await runCompute(listOfStoredKanjis);
-    logger
-        .d('${listOfStoredKanjis.length} : ${validAndInvalidKanjis.$1.length}');
     final listOfValidStoredKanjis =
         validAndInvalidKanjis.$1.map((e) => e.$1).toList();
     final listOfInvalidStoredKanjis =
         validAndInvalidKanjis.$2.map((e) => e.$1).toList();
     cleanInvaliDbRecords(listOfInvalidStoredKanjis);
     ref.read(lottieFilesProvider.notifier).initLottieFile();
-    FlutterNativeSplash.remove();
 
     ref
         .read(storedKanjisProvider.notifier)
         .setInitialStoredKanjis(listOfValidStoredKanjis);
-    final favoritesKanjis = await loadFavorites();
-    Connectivity().checkConnectivity().then((result) {
-      if (ConnectivityResult.none == result) {
-        ref.read(favoritesListProvider.notifier).setInitialFavoritesOffline(
-            listOfValidStoredKanjis, favoritesKanjis, 10);
-      } else {
-        ref.read(favoritesListProvider.notifier).setInitialFavoritesOnline(
-            listOfValidStoredKanjis, favoritesKanjis, 10);
-      }
-    });
+    return listOfValidStoredKanjis;
   }
 
   Future<void> getAppBarData() async {
@@ -140,16 +154,6 @@ class MainScreenProvider extends Notifier<MainScreenData> {
 
   void resetMainScreenState() {
     state = MainScreenData(selection: 0, avatarLink: '', fullName: '');
-  }
-
-  Future<void> initPageOnline() async {
-    await getInitData();
-    await getAppBarData();
-  }
-
-  Future<void> initPageOffline() async {
-    await getInitData();
-    await getAppBarDataOffline();
   }
 }
 

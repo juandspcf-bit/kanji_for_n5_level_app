@@ -83,11 +83,10 @@ class MyApp extends ConsumerWidget {
 
               return FutureBuilder(
                 future: connectionWifiState == ConnectivityResult.none
-                    ? ref.read(mainScreenProvider.notifier).initPageOffline()
-                    : ref.read(mainScreenProvider.notifier).initPageOnline(),
+                    ? ref.read(mainScreenProvider.notifier).initAppOffline()
+                    : ref.read(mainScreenProvider.notifier).initAppOnline(),
                 builder: (BuildContext context, AsyncSnapshot<void> snapshot) {
                   final connectionStatus = snapShot.connectionState;
-                  logger.d('The connection status is $connectionStatus');
                   if (connectionStatus == ConnectionState.waiting) {
                     return const CircularProgressIndicator();
                   } else if (connectionStatus == ConnectionState.done ||
@@ -99,7 +98,6 @@ class MyApp extends ConsumerWidget {
                 },
               );
             } else {
-              logger.d('called loging form');
               return const LoginForm();
             }
           }),

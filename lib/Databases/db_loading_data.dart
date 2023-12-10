@@ -1,16 +1,12 @@
-import 'dart:io';
-
-import 'package:async/async.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:kanji_for_n5_level_app/Databases/db_definitions.dart';
 import 'package:kanji_for_n5_level_app/models/kanji_from_api.dart';
 import 'package:kanji_for_n5_level_app/providers/status_stored_provider.dart';
 import 'package:uuid/uuid.dart';
-import 'package:dio/dio.dart';
 
 const uuid = Uuid();
 
-Future<List<KanjiFromApi>> loadStoredKanjis() async {
+Future<List<KanjiFromApi>> loadStoredKanjisFromDB() async {
   final user = FirebaseAuth.instance.currentUser;
 
   if (user == null) {
@@ -73,44 +69,4 @@ Future<List<KanjiFromApi>> loadStoredKanjis() async {
   }
 
   return kanjisFromApi;
-}
-
-void addToFutureGroup({
-  required String path,
-  required String link,
-  required FutureGroup<Response<dynamic>> group,
-  required Dio dio,
-}) {
-  group.add(dio.download(
-    link,
-    path,
-    onReceiveProgress: (received, total) {
-/*         if (total != -1) {
-          print((received / total * 100).toStringAsFixed(0) + "%");
-          //you can build progressbar feature too
-        } */
-    },
-  ));
-}
-
-String getPathToDocuments({
-  required Directory dirDocumentPath,
-  required String link,
-  required String uuid,
-}) {
-  final lastSeparatorIndex = link.lastIndexOf('/');
-  final nameFile = link.substring(lastSeparatorIndex + 1);
-  return '${dirDocumentPath.path}/${uuid}_$nameFile';
-}
-
-enum DeleteStatus {
-  errorMediaLinksFiles,
-  succesMediaLinksFiles,
-  errorAudioExampleLinksFiles,
-  succesAudioExampleLinksFiles,
-  errorStrokeLinksFiles,
-  succesStrokeLinksFiles,
-  errorKanjiDatabase,
-  successKanjiDatabase,
-  succes,
 }
