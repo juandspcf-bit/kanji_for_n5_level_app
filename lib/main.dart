@@ -6,6 +6,9 @@ import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:kanji_for_n5_level_app/auth_flow.dart';
+import 'package:kanji_for_n5_level_app/providers/on_boarding_provider.dart';
+import 'package:kanji_for_n5_level_app/screens/onBoarding_screen/my_page_viewer.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'firebase_options.dart';
 
 final dbFirebase = FirebaseFirestore.instance;
@@ -28,6 +31,9 @@ void main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
 
+/*   final SharedPreferences prefs = await SharedPreferences.getInstance();
+  final bool? isOnBoardingDone = prefs.getBool('isOnBoardingDone'); */
+
   runApp(
     const ProviderScope(
       child: MyApp(),
@@ -41,6 +47,7 @@ class MyApp extends ConsumerWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final onBoardingData = ref.watch(onBoardingProvider);
     return MaterialApp(
       title: 'Flutter Demo',
       debugShowCheckedModeBanner: false,
@@ -69,7 +76,10 @@ class MyApp extends ConsumerWidget {
         useMaterial3: true,
       ),
       themeMode: ThemeMode.dark,
-      home: const AuthFlow(),
+      home: (onBoardingData.isOnBoardingDone == null ||
+              onBoardingData.isOnBoardingDone == false)
+          ? const MyPageViewer()
+          : const AuthFlow(),
     );
   }
 }
