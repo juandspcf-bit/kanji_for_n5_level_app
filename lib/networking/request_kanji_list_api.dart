@@ -80,8 +80,6 @@ class RequestKanjiListApi {
             break;
           }
         }
-        /* print(
-            'testing ${storedKanjisFromApi[i].kanjiCharacter} , ${kanjisCharacteres[lists.$2[i]]}'); */
       }
 
       onSuccesRequest(fixedLengthList);

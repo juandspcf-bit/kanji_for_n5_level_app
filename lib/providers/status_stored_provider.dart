@@ -22,7 +22,7 @@ class StoredkanjisProvider extends Notifier<Map<int, List<KanjiFromApi>>> {
       copyState[element.section]!.add(element);
     }
 
-    //copyState = orderElements(copyState);
+    copyState = orderElements(copyState);
 
     state = copyState;
   }

@@ -95,7 +95,6 @@ class MainScreenProvider extends Notifier<MainScreenData> {
     final favoritesKanjis = await loadFavorites();
     ref.read(favoritesListProvider.notifier).setInitialFavoritesOnline(
         listOfValidStoredKanjis, favoritesKanjis, 10);
-    //FlutterNativeSplash.remove();
   }
 
   Future<void> getOfflineData() async {
@@ -103,7 +102,6 @@ class MainScreenProvider extends Notifier<MainScreenData> {
     final favoritesKanjis = await loadFavorites();
     ref.read(favoritesListProvider.notifier).setInitialFavoritesOffline(
         listOfValidStoredKanjis, favoritesKanjis, 10);
-    //FlutterNativeSplash.remove();
   }
 
   Future<List<KanjiFromApi>> loadStoredKanjis() async {

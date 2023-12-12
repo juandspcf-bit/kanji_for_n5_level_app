@@ -78,8 +78,6 @@ class KanjiListProvider extends Notifier<KanjiListData> {
     clearKanjiList(section);
     final storedKanjis =
         ref.read(storedKanjisProvider.notifier).getStoresItems();
-    logger.d(
-        'the stored kanjis for section $section are : ${storedKanjis[section]}');
 
     RequestKanjiListApi.getKanjis(
       storedKanjis[section] ?? [],
