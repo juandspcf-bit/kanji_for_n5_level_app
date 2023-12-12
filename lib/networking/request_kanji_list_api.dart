@@ -4,7 +4,6 @@ import 'package:async/async.dart';
 import 'package:http/http.dart';
 import 'package:kanji_for_n5_level_app/models/kanji_from_api.dart';
 import 'package:kanji_for_n5_level_app/networking/request_api.dart';
-import 'package:kanji_for_n5_level_app/screens/main_screens/main_content.dart';
 
 class RequestKanjiListApi {
   static void getKanjis(

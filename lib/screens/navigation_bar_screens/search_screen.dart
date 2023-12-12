@@ -30,22 +30,18 @@ class SearchScreen extends ConsumerWidget {
     switch (searchState) {
       case SearchState.errorForm:
         return Center(
-          child: Expanded(
-            child: Text(
-              'type a valid word',
-              style: Theme.of(context).textTheme.titleLarge,
-              maxLines: 3,
-            ),
+          child: Text(
+            'type a valid word',
+            style: Theme.of(context).textTheme.titleLarge,
+            maxLines: 3,
           ),
         );
       case SearchState.notSearching:
         return Center(
-          child: Expanded(
-            child: Text(
-              'search a kanji by its english meaning',
-              style: Theme.of(context).textTheme.titleLarge,
-              maxLines: 3,
-            ),
+          child: Text(
+            'search a kanji by its english meaning',
+            style: Theme.of(context).textTheme.titleLarge,
+            maxLines: 3,
           ),
         );
       case SearchState.searching:
@@ -58,12 +54,10 @@ class SearchScreen extends ConsumerWidget {
             return Results(kanjiFromApi: kanjiFromApi);
           } else {
             return Center(
-              child: Expanded(
-                child: Text(
-                  'The corresponding kanji for this word was not found',
-                  style: Theme.of(context).textTheme.titleLarge,
-                  maxLines: 3,
-                ),
+              child: Text(
+                'The corresponding kanji for this word was not found',
+                style: Theme.of(context).textTheme.titleLarge,
+                maxLines: 3,
               ),
             );
           }
@@ -85,13 +79,11 @@ class SearchScreen extends ConsumerWidget {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Expanded(
-                        child: Text(
-                          'No internet connection, you will be able to search when the connection is restored',
-                          style: Theme.of(context).textTheme.titleLarge,
-                          textAlign: TextAlign.center,
-                          maxLines: 3,
-                        ),
+                      Text(
+                        'No internet connection, you will be able to search when the connection is restored',
+                        style: Theme.of(context).textTheme.titleLarge,
+                        textAlign: TextAlign.center,
+                        maxLines: 3,
                       ),
                     ],
                   ),
