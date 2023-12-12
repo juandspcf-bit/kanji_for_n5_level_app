@@ -92,6 +92,9 @@ class FavoritesListProvider extends Notifier<(List<KanjiFromApi>, int)> {
 
       if (kanjiFromApiStored == null) return;
 
+      logger.d(
+          '${kanjiFromApiStored.section}, ${kanjiFromApiStored.kanjiCharacter} , ${kanjiFromApiStored.statusStorage}');
+
       updateProviders(kanjiFromApiStored);
 
       logger.i(kanjiFromApiStored);

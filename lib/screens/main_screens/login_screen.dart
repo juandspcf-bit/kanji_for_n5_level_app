@@ -94,7 +94,9 @@ class _LoginFormState extends ConsumerState<ToLoginFormScreen> {
 
   @override
   Widget build(BuildContext context) {
-    FlutterNativeSplash.remove();
+    Future.delayed(const Duration(milliseconds: 500), () {
+      if (context.mounted) FlutterNativeSplash.remove();
+    });
     final dataState = ref.watch(loginProvider);
     return Scaffold(
       body: Padding(

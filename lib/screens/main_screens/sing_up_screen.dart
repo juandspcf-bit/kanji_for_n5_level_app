@@ -93,7 +93,7 @@ class _SingUpFormState extends ConsumerState<SingUpForm> {
 
   @override
   Widget build(BuildContext context) {
-    FlutterNativeSplash.remove();
+    //FlutterNativeSplash.remove();
     final dataState = ref.watch(singUpProvider);
     return Scaffold(
       appBar: AppBar(),

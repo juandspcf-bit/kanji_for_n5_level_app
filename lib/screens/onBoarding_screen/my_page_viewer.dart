@@ -26,7 +26,9 @@ class _MyPageViewerState extends ConsumerState {
 
   @override
   Widget build(BuildContext context) {
-    FlutterNativeSplash.remove();
+    Future.delayed(const Duration(milliseconds: 500), () {
+      if (context.mounted) FlutterNativeSplash.remove();
+    });
     return Scaffold(
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 30),

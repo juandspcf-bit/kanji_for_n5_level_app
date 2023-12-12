@@ -1,5 +1,6 @@
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kanji_for_n5_level_app/main.dart';
 import 'package:kanji_for_n5_level_app/providers/main_screen_provider.dart';
@@ -25,7 +26,7 @@ class AuthFlow extends ConsumerWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    'Login to your account',
+                    'Loading',
                     style: Theme.of(context).textTheme.titleLarge,
                   ),
                   const SizedBox(
@@ -42,6 +43,7 @@ class AuthFlow extends ConsumerWidget {
           );
         } else if (connectionStatus == ConnectionState.done ||
             connectionStatus == ConnectionState.active) {
+          FlutterNativeSplash.remove();
           return const MainContent();
         } else {
           return const Center(child: Text('error'));

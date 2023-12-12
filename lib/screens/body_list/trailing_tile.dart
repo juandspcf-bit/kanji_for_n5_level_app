@@ -2,11 +2,13 @@ import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kanji_for_n5_level_app/models/kanji_from_api.dart';
+import 'package:kanji_for_n5_level_app/models/secction_model.dart';
 import 'package:kanji_for_n5_level_app/providers/favorites_kanjis_provider.dart';
 import 'package:kanji_for_n5_level_app/providers/kanjis_list_provider.dart';
 import 'package:kanji_for_n5_level_app/providers/main_screen_provider.dart';
 import 'package:kanji_for_n5_level_app/providers/status_connection_provider.dart';
 import 'package:kanji_for_n5_level_app/providers/status_stored_provider.dart';
+import 'package:kanji_for_n5_level_app/screens/main_screens/main_content.dart';
 
 class TrailingTile extends ConsumerWidget {
   const TrailingTile({
@@ -103,9 +105,11 @@ class TrailingTile extends ConsumerWidget {
                 .read(kanjiListProvider.notifier)
                 .insertKanjiToStorage(kanjiFromApi, dataMainScreen.selection);
           } else {
-            ref
-                .read(favoritesListProvider.notifier)
-                .insertKanjiToStorage(kanjiFromApi, dataMainScreen.selection);
+            logger.d(
+                '${kanjiFromApi.section}, ${kanjiFromApi.kanjiCharacter} , ${kanjiFromApi.statusStorage}');
+
+            ref.read(favoritesListProvider.notifier).insertKanjiToStorage(
+                setCorrectSection(kanjiFromApi), dataMainScreen.selection);
           }
         } else if (kanjiFromApi.statusStorage == StatusStorage.stored) {
           setToProccesingStatus(
@@ -121,6 +125,32 @@ class TrailingTile extends ConsumerWidget {
         child: selectWidgetStatus(kanjiFromApi, context),
       ),
     );
+  }
+
+  KanjiFromApi setCorrectSection(KanjiFromApi kanjiFromApi) {
+    var correcKanjiFromApi = kanjiFromApi;
+    for (var key in sectionsKanjis.keys) {
+      int index = sectionsKanjis[key]!
+          .indexWhere((element) => element == kanjiFromApi.kanjiCharacter);
+      if (index != -1) {
+        int? section = int.tryParse(key.substring(7));
+        correcKanjiFromApi = KanjiFromApi(
+            kanjiCharacter: kanjiFromApi.kanjiCharacter,
+            englishMeaning: kanjiFromApi.englishMeaning,
+            kanjiImageLink: kanjiFromApi.kanjiImageLink,
+            katakanaMeaning: kanjiFromApi.katakanaMeaning,
+            hiraganaMeaning: kanjiFromApi.hiraganaMeaning,
+            videoLink: kanjiFromApi.videoLink,
+            section: section ?? 10,
+            statusStorage: kanjiFromApi.statusStorage,
+            accessToKanjiItemsButtons: kanjiFromApi.accessToKanjiItemsButtons,
+            example: kanjiFromApi.example,
+            strokes: kanjiFromApi.strokes);
+
+        break;
+      }
+    }
+    return correcKanjiFromApi;
   }
 }
 
