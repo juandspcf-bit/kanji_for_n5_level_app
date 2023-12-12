@@ -1,12 +1,14 @@
 import 'dart:io';
 
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:kanji_for_n5_level_app/providers/account_details_state_provider.dart';
+import 'package:kanji_for_n5_level_app/providers/status_connection_provider.dart';
 import 'package:kanji_for_n5_level_app/screens/main_screens/main_content.dart';
 
 class UserData extends ConsumerWidget {
@@ -25,6 +27,8 @@ class UserData extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final statusConnectionData = ref.watch(statusConnectionProvider);
+    logger.d(statusConnectionData);
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
@@ -97,17 +101,19 @@ class UserData extends ConsumerWidget {
                   height: 20,
                 ),
                 ElevatedButton(
-                  onPressed: () {
-                    ref
-                        .read(personalInfoProvider.notifier)
-                        .onValidate(_formKey, ref);
-                  },
+                  onPressed: statusConnectionData == ConnectivityResult.none
+                      ? null
+                      : () {
+                          ref
+                              .read(personalInfoProvider.notifier)
+                              .onValidate(_formKey, ref);
+                        },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Theme.of(context).colorScheme.primary,
                     foregroundColor: Theme.of(context).colorScheme.onPrimary,
                     minimumSize: const Size.fromHeight(40), // NEW
                   ),
-                  child: const Text('Save the info'),
+                  child: const Text('Update your info'),
                 ),
               ],
             ),

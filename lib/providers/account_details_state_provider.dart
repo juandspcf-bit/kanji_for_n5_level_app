@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 
 import 'package:firebase_auth/firebase_auth.dart';
@@ -35,7 +36,10 @@ class PersonalInfoProvider extends Notifier<PersonalInfoData> {
     try {
       final userPhoto = storageRef.child("userImages/$uuid.jpg");
 
-      final photoLink = await userPhoto.getDownloadURL();
+      logger.e('reading profile photo');
+
+      final photoLink =
+          await userPhoto.getDownloadURL().timeout(const Duration(seconds: 10));
       state = PersonalInfoData(
         pathProfileUser: photoLink,
         pathProfileTemporal: '',
@@ -43,7 +47,7 @@ class PersonalInfoProvider extends Notifier<PersonalInfoData> {
         email: email ?? '',
         statusFetching: 2,
       );
-    } catch (e) {
+    } on TimeoutException {
       logger.e('error reading profile photo');
       logger.d(fullName);
       logger.d(email);
