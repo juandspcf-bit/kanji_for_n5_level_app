@@ -44,7 +44,37 @@ class RequestKanjiListApi {
     List<KanjiFromApi> kanjisFromApi = [];
 
     if (kanjisCharacteres.length == lists.$3.length) {
-      group.future.then((List<Response> kanjiInformationList) {
+      group.future.then(
+        (
+          List<Response> kanjiInformationList,
+        ) {
+          for (final kanjiInformation in kanjiInformationList) {
+            bodies.add(json.decode(kanjiInformation.body));
+          }
+
+          for (final body in bodies) {
+            kanjisFromApi.add(builKanjiInfoFromApi(body, section));
+          }
+
+          onSuccesRequest(kanjisFromApi);
+        },
+      ).catchError(
+        (onError) {
+          onErrorRequest();
+        },
+      ).timeout(
+        const Duration(seconds: 15),
+        onTimeout: () {
+          onErrorRequest();
+        },
+      );
+      return;
+    }
+
+    group.future.then(
+      (
+        List<Response> kanjiInformationList,
+      ) {
         for (final kanjiInformation in kanjiInformationList) {
           bodies.add(json.decode(kanjiInformation.body));
         }
@@ -52,40 +82,32 @@ class RequestKanjiListApi {
         for (final body in bodies) {
           kanjisFromApi.add(builKanjiInfoFromApi(body, section));
         }
-
-        onSuccesRequest(kanjisFromApi);
-      }).catchError((onError) {
-        onErrorRequest();
-      });
-      return;
-    }
-
-    group.future.then((List<Response> kanjiInformationList) {
-      for (final kanjiInformation in kanjiInformationList) {
-        bodies.add(json.decode(kanjiInformation.body));
-      }
-
-      for (final body in bodies) {
-        kanjisFromApi.add(builKanjiInfoFromApi(body, section));
-      }
-      final fixedLengthList = List<KanjiFromApi>.filled(
-          kanjisCharacteres.length, kanjisFromApi.first);
-      for (int i = 0; i < lists.$1.length; i++) {
-        fixedLengthList[lists.$1[i]] = kanjisFromApi[i];
-      }
-      for (int i = 0; i < lists.$4.length; i++) {
-        for (int j = 0; j < storedKanjis.length; j++) {
-          if (lists.$4[i] == storedKanjis[j].kanjiCharacter) {
-            fixedLengthList[lists.$2[i]] = storedKanjis[j];
-            break;
+        final fixedLengthList = List<KanjiFromApi>.filled(
+            kanjisCharacteres.length, kanjisFromApi.first);
+        for (int i = 0; i < lists.$1.length; i++) {
+          fixedLengthList[lists.$1[i]] = kanjisFromApi[i];
+        }
+        for (int i = 0; i < lists.$4.length; i++) {
+          for (int j = 0; j < storedKanjis.length; j++) {
+            if (lists.$4[i] == storedKanjis[j].kanjiCharacter) {
+              fixedLengthList[lists.$2[i]] = storedKanjis[j];
+              break;
+            }
           }
         }
-      }
 
-      onSuccesRequest(fixedLengthList);
-    }).catchError((onError) {
-      onErrorRequest();
-    });
+        onSuccesRequest(fixedLengthList);
+      },
+    ).catchError(
+      (onError) {
+        onErrorRequest();
+      },
+    ).timeout(
+      const Duration(seconds: 15),
+      onTimeout: () {
+        onErrorRequest();
+      },
+    );
   }
 
   static (List<int>, List<int>, List<String>, List<String>)
