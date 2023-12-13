@@ -8,7 +8,7 @@ import 'package:kanji_for_n5_level_app/models/kanji_from_api.dart';
 import 'package:kanji_for_n5_level_app/repositories/apis/kanji_alive/request_kanji_list_api.dart';
 import 'package:kanji_for_n5_level_app/providers/status_stored_provider.dart';
 
-Future<void> deleteKanji(KanjiFromApi kanjiFromApi) async {
+Future<void> deleteKanjiFromSqlDB(KanjiFromApi kanjiFromApi) async {
   final user = FirebaseAuth.instance.currentUser;
 
   if (user == null) {

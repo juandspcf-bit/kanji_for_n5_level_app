@@ -14,7 +14,8 @@ import 'firebase_options.dart';
 final dbFirebase = FirebaseFirestore.instance;
 final storageRef = FirebaseStorage.instance.ref();
 final streamAuth = FirebaseAuth.instance.userChanges();
-final applicationLayer = AppAplicationLayer();
+final ApplicationApiService applicationApiService = AppAplicationApiService();
+final ApplicationDBService applicationDBService = AppAplicationDBService();
 
 var kColorScheme = ColorScheme.fromSeed(
   seedColor: const Color.fromARGB(255, 96, 59, 181),

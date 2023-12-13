@@ -22,7 +22,7 @@ class ParametersCompute {
   });
 }
 
-Future<KanjiFromApi?> storeKanji(KanjiFromApi kanjiFromApi) async {
+Future<KanjiFromApi?> storeKanjiToSqlDB(KanjiFromApi kanjiFromApi) async {
   final user = FirebaseAuth.instance.currentUser;
 
   if (user == null) {

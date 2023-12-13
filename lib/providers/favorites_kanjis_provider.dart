@@ -88,7 +88,7 @@ class FavoritesListProvider extends Notifier<(List<KanjiFromApi>, int)> {
 
   void insertKanjiToStorage(KanjiFromApi kanjiFromApi, int selection) async {
     try {
-      final kanjiFromApiStored = await storeKanji(kanjiFromApi);
+      final kanjiFromApiStored = await storeKanjiToSqlDB(kanjiFromApi);
 
       if (kanjiFromApiStored == null) return;
 

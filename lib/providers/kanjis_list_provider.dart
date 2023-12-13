@@ -1,7 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kanji_for_n5_level_app/main.dart';
 import 'package:kanji_for_n5_level_app/repositories/local_database/db_deleting_data.dart';
-import 'package:kanji_for_n5_level_app/repositories/local_database/db_inserting_data.dart';
 import 'package:kanji_for_n5_level_app/models/kanji_from_api.dart';
 import 'package:kanji_for_n5_level_app/repositories/apis/kanji_alive/request_kanji_list_api.dart';
 import 'package:kanji_for_n5_level_app/providers/error_storing_database_status.dart';
@@ -77,21 +76,13 @@ class KanjiListProvider extends Notifier<KanjiListData> {
     final storedKanjis =
         ref.read(storedKanjisProvider.notifier).getStoresItems();
 
-    applicationLayer.requestKanjiListToApi(
+    applicationApiService.requestKanjiListToApi(
       storedKanjis[section] ?? [],
       kanjisCharacteres,
       section,
       onSuccesRequest,
       onErrorRequest,
     );
-
-/*     RequestKanjiListApi.getKanjis(
-      storedKanjis[section] ?? [],
-      kanjisCharacteres,
-      section,
-      onSuccesRequest,
-      onErrorRequest,
-    ); */
   }
 
   void clearKanjiList(int section) {
@@ -100,14 +91,15 @@ class KanjiListProvider extends Notifier<KanjiListData> {
 
   void insertKanjiToStorage(KanjiFromApi kanjiFromApi, int selection) async {
     try {
-      final kanjiFromApiStored = await storeKanji(kanjiFromApi);
+      final kanjiFromApiStored =
+          await applicationDBService.storeKanjiToLocalDatabase(kanjiFromApi);
 
       if (kanjiFromApiStored == null) return;
 
       updateProviders(kanjiFromApiStored, selection);
 
       logger.i(kanjiFromApiStored);
-      logger.d('success');
+      logger.d('success storing to db');
     } catch (e) {
       logger.e('error storing');
       logger.e(e.toString());
@@ -129,7 +121,7 @@ class KanjiListProvider extends Notifier<KanjiListData> {
     int selection,
   ) async {
     try {
-      await deleteKanji(kanjiFromApi);
+      await applicationDBService.deleteKanjiFromLocalDatabase(kanjiFromApi);
 
       ref.read(storedKanjisProvider.notifier).deleteItem(kanjiFromApi);
 
@@ -138,6 +130,7 @@ class KanjiListProvider extends Notifier<KanjiListData> {
         if (selection == 0) {
           ref.read(kanjiListProvider.notifier).updateKanji(list[0]);
         }
+        logger.d('success deleting from db');
       }
 
       onError() {
@@ -151,8 +144,6 @@ class KanjiListProvider extends Notifier<KanjiListData> {
                   StatusStorage.errorDeleting, true, kanjiFromApi));
         }
         ref.read(errorStoringDatabaseStatus.notifier).setError(true);
-
-        logger.d('success');
       }
 
       updateKanjiWithOnliVersion(
