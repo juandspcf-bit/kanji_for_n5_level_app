@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kanji_for_n5_level_app/models/kanji_from_api.dart';
 import 'package:kanji_for_n5_level_app/providers/error_storing_database_status.dart';
 import 'package:kanji_for_n5_level_app/screens/body_list/kanji_item.dart';
+import 'package:kanji_for_n5_level_app/screens/body_list/shimmer_list.dart';
 import 'package:shimmer/shimmer.dart';
 
 class BodyKanjisList extends ConsumerStatefulWidget {
@@ -68,66 +69,7 @@ class _BodiKanjiListState extends ConsumerState<BodyKanjisList> {
       _scaleDialogError(context);
     }
     if (widget.statusResponse == 0) {
-      return Center(
-        child: Shimmer.fromColors(
-          baseColor: Colors.grey.shade400,
-          highlightColor: Colors.white,
-          child: ListView.builder(
-            itemCount: 15,
-            itemBuilder: (ctx, index) {
-              return Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 15, vertical: 30),
-                child: Row(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Container(
-                        width: 70,
-                        height: 70,
-                        decoration: const BoxDecoration(
-                          color: Colors.white70,
-                          borderRadius: BorderRadius.all(
-                            Radius.circular(10),
-                          ),
-                        ),
-                      ),
-                    ),
-                    Expanded(
-                      child: Column(
-                        children: [
-                          Container(
-                            width: double.infinity,
-                            height: 20,
-                            decoration: const BoxDecoration(
-                              color: Colors.white70,
-                              borderRadius: BorderRadius.all(
-                                Radius.circular(10),
-                              ),
-                            ),
-                          ),
-                          const SizedBox(
-                            height: 20,
-                          ),
-                          Container(
-                              width: double.infinity,
-                              height: 20,
-                              decoration: const BoxDecoration(
-                                color: Colors.white70,
-                                borderRadius: BorderRadius.all(
-                                  Radius.circular(10),
-                                ),
-                              )),
-                        ],
-                      ),
-                    )
-                  ],
-                ),
-              );
-            },
-          ),
-        ),
-      );
+      return const ShimmerList();
     } else if (widget.statusResponse == 1 && widget.kanjisFromApi.isNotEmpty) {
       return ListView.builder(
         itemCount: widget.kanjisFromApi.length,
