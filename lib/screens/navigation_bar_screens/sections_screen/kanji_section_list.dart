@@ -71,8 +71,9 @@ class _KanjiSectionListState extends ConsumerState<KanjiSectionList> {
     var kanjiListData = ref.watch(kanjiListProvider);
     final statusConnectionData = ref.watch(statusConnectionProvider);
     if (statusConnectionData == ConnectivityResult.none) {
-      kanjiListData =
-          ref.read(kanjiListProvider.notifier).updatedKanjiList(kanjiListData);
+      kanjiListData = ref
+          .read(kanjiListProvider.notifier)
+          .getOfflineKanjiList(kanjiListData);
     }
 
     final accesToQuiz = !isAnyProcessingData(kanjiListData.kanjiList) &&

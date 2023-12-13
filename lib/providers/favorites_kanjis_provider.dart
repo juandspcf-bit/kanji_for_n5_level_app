@@ -1,7 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:kanji_for_n5_level_app/main.dart';
 import 'package:kanji_for_n5_level_app/repositories/local_database/db_inserting_data.dart';
 import 'package:kanji_for_n5_level_app/models/kanji_from_api.dart';
-import 'package:kanji_for_n5_level_app/repositories/apis/kanji_alive/request_kanji_list_api.dart';
 import 'package:kanji_for_n5_level_app/providers/status_stored_provider.dart';
 import 'package:kanji_for_n5_level_app/screens/main_screens/main_content.dart';
 
@@ -17,8 +17,22 @@ class FavoritesListProvider extends Notifier<(List<KanjiFromApi>, int)> {
       state = ([], 1);
       return;
     }
-    KanjiAliveApi.getKanjiList(storedKanjis, myFavoritesCached, section,
-        onSuccesRequest, onErrorRequest);
+
+    applicationApiService.requestKanjiListToApi(
+      storedKanjis,
+      myFavoritesCached,
+      section,
+      onSuccesRequest,
+      onErrorRequest,
+    );
+
+/*     KanjiAliveApi.getKanjiList(
+      storedKanjis,
+      myFavoritesCached,
+      section,
+      onSuccesRequest,
+      onErrorRequest,
+    ); */
   }
 
   void setInitialFavoritesOffline(List<KanjiFromApi> storedKanjis,

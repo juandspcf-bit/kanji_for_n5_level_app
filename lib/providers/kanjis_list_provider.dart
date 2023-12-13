@@ -50,7 +50,7 @@ class KanjiListProvider extends Notifier<KanjiListData> {
     );
   }
 
-  KanjiListData updatedKanjiList(KanjiListData kanjiList) {
+  KanjiListData getOfflineKanjiList(KanjiListData kanjiList) {
     final kanjiListFromProvider = kanjiList;
     final storedKanjisFromProvider = ref.read(storedKanjisProvider);
 
