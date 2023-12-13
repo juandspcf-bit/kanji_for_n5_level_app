@@ -65,7 +65,7 @@ class _SectionState extends ConsumerState<Section> {
           borderRadius: const BorderRadius.all(Radius.circular(20)),
           onTap: () {
             ref.read(kanjiListProvider.notifier).getKanjiListFromRepositories(
-                  widget.sectionData.kanjis,
+                  widget.sectionData.kanjisCharacters,
                   widget.sectionData.sectionNumber,
                 );
 

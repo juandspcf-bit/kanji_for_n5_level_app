@@ -25,14 +25,6 @@ class FavoritesListProvider extends Notifier<(List<KanjiFromApi>, int)> {
       onSuccesRequest,
       onErrorRequest,
     );
-
-/*     KanjiAliveApi.getKanjiList(
-      storedKanjis,
-      myFavoritesCached,
-      section,
-      onSuccesRequest,
-      onErrorRequest,
-    ); */
   }
 
   void setInitialFavoritesOffline(List<KanjiFromApi> storedKanjis,

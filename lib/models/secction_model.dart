@@ -2,54 +2,54 @@ class SectionModel {
   SectionModel({
     required this.title,
     required this.sectionNumber,
-    this.kanjis = const [],
+    this.kanjisCharacters = const [],
   });
 
   final String title;
   final int sectionNumber;
-  List<String> kanjis;
+  List<String> kanjisCharacters;
 }
 
 final listSections = [
   SectionModel(
       title: "From pictures",
       sectionNumber: 1,
-      kanjis: sectionsKanjis['section1']!),
+      kanjisCharacters: sectionsKanjis['section1']!),
   SectionModel(
     title: "Numbers",
     sectionNumber: 2,
-    kanjis: sectionsKanjis['section2']!,
+    kanjisCharacters: sectionsKanjis['section2']!,
   ),
   SectionModel(
       title: "Numbers and directions",
       sectionNumber: 3,
-      kanjis: sectionsKanjis['section3']!),
+      kanjisCharacters: sectionsKanjis['section3']!),
   SectionModel(
       title: "Human body and people",
       sectionNumber: 4,
-      kanjis: sectionsKanjis['section4']!),
+      kanjisCharacters: sectionsKanjis['section4']!),
   SectionModel(
       title: "Days and kanjis for the school",
       sectionNumber: 5,
-      kanjis: sectionsKanjis['section5']!),
+      kanjisCharacters: sectionsKanjis['section5']!),
   SectionModel(
     title: "Time",
     sectionNumber: 6,
-    kanjis: sectionsKanjis['section6']!,
+    kanjisCharacters: sectionsKanjis['section6']!,
   ),
   SectionModel(
       title: "Adjectives",
       sectionNumber: 7,
-      kanjis: sectionsKanjis['section7']!),
+      kanjisCharacters: sectionsKanjis['section7']!),
   SectionModel(
     title: "Verbs",
     sectionNumber: 8,
-    kanjis: sectionsKanjis['section8']!,
+    kanjisCharacters: sectionsKanjis['section8']!,
   ),
   SectionModel(
     title: "Nouns",
     sectionNumber: 9,
-    kanjis: sectionsKanjis['section9']!,
+    kanjisCharacters: sectionsKanjis['section9']!,
   )
 ];
 
