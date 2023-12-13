@@ -10,7 +10,7 @@ class ShimmerList extends StatelessWidget {
   Widget build(BuildContext context) {
     return Center(
       child: Shimmer.fromColors(
-        baseColor: Colors.grey.shade400,
+        baseColor: Colors.grey.shade700,
         highlightColor: Colors.white,
         child: ListView.builder(
           itemCount: 15,
