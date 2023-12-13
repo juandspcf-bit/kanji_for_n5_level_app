@@ -1,6 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kanji_for_n5_level_app/models/kanji_from_api.dart';
-import 'package:kanji_for_n5_level_app/networking/request_english_word_to_kanji.dart';
+import 'package:kanji_for_n5_level_app/repositories/apis/kanji_alive/request_english_word_to_kanji.dart';
 import 'package:kanji_for_n5_level_app/screens/main_screens/main_content.dart';
 
 class SearchScreenProvider extends Notifier<SearchScreenData> {

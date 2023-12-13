@@ -3,9 +3,9 @@ import 'dart:io';
 import 'package:async/async.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
-import 'package:kanji_for_n5_level_app/Databases/db_definitions.dart';
+import 'package:kanji_for_n5_level_app/repositories/local_database/db_definitions.dart';
 import 'package:kanji_for_n5_level_app/models/kanji_from_api.dart';
-import 'package:kanji_for_n5_level_app/networking/request_kanji_list_api.dart';
+import 'package:kanji_for_n5_level_app/repositories/apis/kanji_alive/request_kanji_list_api.dart';
 import 'package:kanji_for_n5_level_app/providers/status_stored_provider.dart';
 
 Future<void> deleteKanji(KanjiFromApi kanjiFromApi) async {
@@ -144,7 +144,7 @@ Future<void> deleteKanjiFromApiComputeVersion(
 
 void updateKanjiWithOnliVersion(KanjiFromApi kanjiFromApi,
     void Function(List<KanjiFromApi> data) onSucces, void Function() onError) {
-  RequestKanjiListApi.getKanjis([], [kanjiFromApi.kanjiCharacter],
+  KanjiAliveApi.getKanjiList([], [kanjiFromApi.kanjiCharacter],
       kanjiFromApi.section, onSucces, onError);
 }
 

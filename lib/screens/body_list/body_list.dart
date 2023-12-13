@@ -4,7 +4,6 @@ import 'package:kanji_for_n5_level_app/models/kanji_from_api.dart';
 import 'package:kanji_for_n5_level_app/providers/error_storing_database_status.dart';
 import 'package:kanji_for_n5_level_app/screens/body_list/kanji_item.dart';
 import 'package:kanji_for_n5_level_app/screens/body_list/shimmer_list.dart';
-import 'package:shimmer/shimmer.dart';
 
 class BodyKanjisList extends ConsumerStatefulWidget {
   const BodyKanjisList({

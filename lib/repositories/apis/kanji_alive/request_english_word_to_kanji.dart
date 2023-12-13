@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'package:kanji_for_n5_level_app/models/kanji_from_api.dart';
-import 'package:kanji_for_n5_level_app/networking/request_api.dart';
-import 'package:kanji_for_n5_level_app/networking/request_kanji_list_api.dart';
+import 'package:kanji_for_n5_level_app/repositories/apis/kanji_alive/request_api.dart';
+import 'package:kanji_for_n5_level_app/repositories/apis/kanji_alive/request_kanji_list_api.dart';
 import 'package:kanji_for_n5_level_app/screens/main_screens/main_content.dart';
 
 class RequestEnglishWordToKanji {
@@ -16,7 +16,7 @@ class RequestEnglishWordToKanji {
       Map<String, dynamic> kanjiMap = map['kanji'];
 
       logger.d(kanjiMap['character']);
-      RequestKanjiListApi.getKanjis(
+      KanjiAliveApi.getKanjiList(
           [], [kanjiMap['character']], 0, onSuccess, onError);
     }).onError((error, stackTrace) {
       onError();

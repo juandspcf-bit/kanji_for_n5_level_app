@@ -3,10 +3,10 @@ import 'dart:convert';
 import 'package:async/async.dart';
 import 'package:http/http.dart';
 import 'package:kanji_for_n5_level_app/models/kanji_from_api.dart';
-import 'package:kanji_for_n5_level_app/networking/request_api.dart';
+import 'package:kanji_for_n5_level_app/repositories/apis/kanji_alive/request_api.dart';
 
-class RequestKanjiListApi {
-  static void getKanjis(
+class KanjiAliveApi {
+  static void getKanjiList(
     List<KanjiFromApi> storedKanjis,
     List<String> kanjisCharacteres,
     int section,

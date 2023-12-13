@@ -1,11 +1,9 @@
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:kanji_for_n5_level_app/Databases/db_deleting_data.dart';
-import 'package:kanji_for_n5_level_app/Databases/db_inserting_data.dart';
-import 'package:kanji_for_n5_level_app/Databases/db_definitions.dart';
+import 'package:kanji_for_n5_level_app/main.dart';
+import 'package:kanji_for_n5_level_app/repositories/local_database/db_deleting_data.dart';
+import 'package:kanji_for_n5_level_app/repositories/local_database/db_inserting_data.dart';
 import 'package:kanji_for_n5_level_app/models/kanji_from_api.dart';
-import 'package:kanji_for_n5_level_app/networking/request_kanji_list_api.dart';
+import 'package:kanji_for_n5_level_app/repositories/apis/kanji_alive/request_kanji_list_api.dart';
 import 'package:kanji_for_n5_level_app/providers/error_storing_database_status.dart';
 import 'package:kanji_for_n5_level_app/providers/favorites_kanjis_provider.dart';
 import 'package:kanji_for_n5_level_app/providers/status_stored_provider.dart';
@@ -44,7 +42,7 @@ class KanjiListProvider extends Notifier<KanjiListData> {
     List<String> kanjisCharacteres,
     int section,
   ) {
-    RequestKanjiListApi.getKanjis(
+    KanjiAliveApi.getKanjiList(
       storedKanjis,
       kanjisCharacteres,
       section,
@@ -79,13 +77,21 @@ class KanjiListProvider extends Notifier<KanjiListData> {
     final storedKanjis =
         ref.read(storedKanjisProvider.notifier).getStoresItems();
 
-    RequestKanjiListApi.getKanjis(
+    applicationLayer.requestKanjiListToApi(
       storedKanjis[section] ?? [],
       kanjisCharacteres,
       section,
       onSuccesRequest,
       onErrorRequest,
     );
+
+/*     RequestKanjiListApi.getKanjis(
+      storedKanjis[section] ?? [],
+      kanjisCharacteres,
+      section,
+      onSuccesRequest,
+      onErrorRequest,
+    ); */
   }
 
   void clearKanjiList(int section) {

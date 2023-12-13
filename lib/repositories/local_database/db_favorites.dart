@@ -1,5 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:kanji_for_n5_level_app/Databases/db_definitions.dart';
+import 'package:kanji_for_n5_level_app/repositories/local_database/db_definitions.dart';
 import 'package:kanji_for_n5_level_app/screens/main_screens/main_content.dart';
 
 Future<List<String>> loadFavorites() async {

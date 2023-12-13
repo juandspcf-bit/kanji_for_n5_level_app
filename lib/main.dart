@@ -7,12 +7,14 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:kanji_for_n5_level_app/auth_flow.dart';
 import 'package:kanji_for_n5_level_app/providers/on_boarding_provider.dart';
+import 'package:kanji_for_n5_level_app/repositories/application_layer.dart';
 import 'package:kanji_for_n5_level_app/screens/onBoarding_screen/my_page_viewer.dart';
 import 'firebase_options.dart';
 
 final dbFirebase = FirebaseFirestore.instance;
 final storageRef = FirebaseStorage.instance.ref();
 final streamAuth = FirebaseAuth.instance.userChanges();
+final applicationLayer = AppAplicationLayer();
 
 var kColorScheme = ColorScheme.fromSeed(
   seedColor: const Color.fromARGB(255, 96, 59, 181),
