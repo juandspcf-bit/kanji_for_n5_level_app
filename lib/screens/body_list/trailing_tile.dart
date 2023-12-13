@@ -105,9 +105,6 @@ class TrailingTile extends ConsumerWidget {
                 .read(kanjiListProvider.notifier)
                 .insertKanjiToStorage(kanjiFromApi, dataMainScreen.selection);
           } else {
-            logger.d(
-                '${kanjiFromApi.section}, ${kanjiFromApi.kanjiCharacter} , ${kanjiFromApi.statusStorage}');
-
             ref.read(favoritesListProvider.notifier).insertKanjiToStorage(
                 setCorrectSection(kanjiFromApi), dataMainScreen.selection);
           }
@@ -116,8 +113,7 @@ class TrailingTile extends ConsumerWidget {
               StatusStorage.proccessingDeleting, dataMainScreen.selection, ref);
           ref
               .read(kanjiListProvider.notifier)
-              .deleteKanjiFromStorageComputeVersion(
-                  kanjiFromApi, dataMainScreen.selection);
+              .deleteKanjiFromStorage(kanjiFromApi, dataMainScreen.selection);
         }
       },
       child: Container(

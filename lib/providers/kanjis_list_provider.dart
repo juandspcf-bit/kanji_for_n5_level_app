@@ -118,45 +118,12 @@ class KanjiListProvider extends Notifier<KanjiListData> {
     }
   }
 
-  void deleteKanjiFromStorageComputeVersion(
+  void deleteKanjiFromStorage(
     KanjiFromApi kanjiFromApi,
     int selection,
   ) async {
-    final user = FirebaseAuth.instance.currentUser;
-
-    if (user == null) {
-      return Future(() => []);
-    }
-
     try {
-      final db = await kanjiFromApiDatabase;
-
-      final listKanjiMapFromDb = await db.rawQuery(
-          'SELECT * FROM kanji_FromApi WHERE kanjiCharacter = ? AND uuid = ?',
-          [kanjiFromApi.kanjiCharacter, user.uid]);
-      final listMapExamplesFromDb = await db.rawQuery(
-          'SELECT * FROM examples WHERE kanjiCharacter = ? AND uuid = ?',
-          [kanjiFromApi.kanjiCharacter, user.uid]);
-      final listMapStrokesImagesLisnkFromDb = await db.rawQuery(
-          'SELECT * FROM strokes WHERE kanjiCharacter = ? AND uuid = ?',
-          [kanjiFromApi.kanjiCharacter, user.uid]);
-
-      final parametersDelete = ParametersDelete(
-          listKanjiMapFromDb: listKanjiMapFromDb,
-          listMapExamplesFromDb: listMapExamplesFromDb,
-          listMapStrokesImagesLisnkFromDb: listMapStrokesImagesLisnkFromDb);
-
-      await compute(deleteKanjiFromApiComputeVersion, parametersDelete);
-
-      await db.rawDelete(
-          'DELETE FROM kanji_FromApi WHERE kanjiCharacter = ? AND uuid = ?',
-          [kanjiFromApi.kanjiCharacter, user.uid]);
-      await db.rawDelete(
-          'DELETE FROM examples WHERE kanjiCharacter = ? AND uuid = ?',
-          [kanjiFromApi.kanjiCharacter, user.uid]);
-      await db.rawDelete(
-          'DELETE FROM strokes WHERE kanjiCharacter = ? AND uuid = ?',
-          [kanjiFromApi.kanjiCharacter, user.uid]);
+      await deleteKanji(kanjiFromApi);
 
       ref.read(storedKanjisProvider.notifier).deleteItem(kanjiFromApi);
 
@@ -178,16 +145,19 @@ class KanjiListProvider extends Notifier<KanjiListData> {
                   StatusStorage.errorDeleting, true, kanjiFromApi));
         }
         ref.read(errorStoringDatabaseStatus.notifier).setError(true);
+
+        logger.d('success');
       }
 
-      updateKanjiWithOnliVersionComputeVersion(
-          kanjiFromApi, onSuccess, onError);
-
-      logger.d('success');
+      updateKanjiWithOnliVersion(
+        kanjiFromApi,
+        onSuccess,
+        onError,
+      );
     } catch (e) {
       ref.read(errorStoringDatabaseStatus.notifier).setError(true);
 
-      logger.e('error sotoring');
+      logger.e('error deleting');
       logger.e(e.toString());
     }
   }

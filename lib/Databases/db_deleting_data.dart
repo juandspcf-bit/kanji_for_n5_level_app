@@ -1,9 +1,49 @@
 import 'dart:io';
 
 import 'package:async/async.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/foundation.dart';
+import 'package:kanji_for_n5_level_app/Databases/db_definitions.dart';
 import 'package:kanji_for_n5_level_app/models/kanji_from_api.dart';
 import 'package:kanji_for_n5_level_app/networking/request_kanji_list_api.dart';
 import 'package:kanji_for_n5_level_app/providers/status_stored_provider.dart';
+
+Future<void> deleteKanji(KanjiFromApi kanjiFromApi) async {
+  final user = FirebaseAuth.instance.currentUser;
+
+  if (user == null) {
+    return Future(() => []);
+  }
+
+  final db = await kanjiFromApiDatabase;
+
+  final listKanjiMapFromDb = await db.rawQuery(
+      'SELECT * FROM kanji_FromApi WHERE kanjiCharacter = ? AND uuid = ?',
+      [kanjiFromApi.kanjiCharacter, user.uid]);
+  final listMapExamplesFromDb = await db.rawQuery(
+      'SELECT * FROM examples WHERE kanjiCharacter = ? AND uuid = ?',
+      [kanjiFromApi.kanjiCharacter, user.uid]);
+  final listMapStrokesImagesLisnkFromDb = await db.rawQuery(
+      'SELECT * FROM strokes WHERE kanjiCharacter = ? AND uuid = ?',
+      [kanjiFromApi.kanjiCharacter, user.uid]);
+
+  final parametersDelete = ParametersDelete(
+      listKanjiMapFromDb: listKanjiMapFromDb,
+      listMapExamplesFromDb: listMapExamplesFromDb,
+      listMapStrokesImagesLisnkFromDb: listMapStrokesImagesLisnkFromDb);
+
+  await compute(deleteKanjiFromApiComputeVersion, parametersDelete);
+
+  await db.rawDelete(
+      'DELETE FROM kanji_FromApi WHERE kanjiCharacter = ? AND uuid = ?',
+      [kanjiFromApi.kanjiCharacter, user.uid]);
+  await db.rawDelete(
+      'DELETE FROM examples WHERE kanjiCharacter = ? AND uuid = ?',
+      [kanjiFromApi.kanjiCharacter, user.uid]);
+  await db.rawDelete(
+      'DELETE FROM strokes WHERE kanjiCharacter = ? AND uuid = ?',
+      [kanjiFromApi.kanjiCharacter, user.uid]);
+}
 
 class ParametersDelete {
   final List<Map<String, Object?>> listKanjiMapFromDb;
@@ -102,7 +142,7 @@ Future<void> deleteKanjiFromApiComputeVersion(
   }
 }
 
-void updateKanjiWithOnliVersionComputeVersion(KanjiFromApi kanjiFromApi,
+void updateKanjiWithOnliVersion(KanjiFromApi kanjiFromApi,
     void Function(List<KanjiFromApi> data) onSucces, void Function() onError) {
   RequestKanjiListApi.getKanjis([], [kanjiFromApi.kanjiCharacter],
       kanjiFromApi.section, onSucces, onError);
