@@ -64,7 +64,7 @@ class _SectionState extends ConsumerState<Section> {
         child: InkWell(
           borderRadius: const BorderRadius.all(Radius.circular(20)),
           onTap: () {
-            ref.read(kanjiListProvider.notifier).setKanjiListFromRepositories(
+            ref.read(kanjiListProvider.notifier).getKanjiListFromRepositories(
                   widget.sectionData.kanjis,
                   widget.sectionData.sectionNumber,
                 );

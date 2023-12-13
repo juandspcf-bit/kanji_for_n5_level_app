@@ -24,19 +24,32 @@ class _ImageMeaningKanjiState extends ConsumerState<ImageMeaningKanji> {
         builder: (context, constraints) {
           final height = constraints.maxWidth * 427 / 640;
           return SizedBox(
-              height: height,
-              width: height,
-              child: const Padding(
-                padding: EdgeInsets.all(20.0),
-                child: CircularProgressIndicator(),
-              ));
+            height: height,
+            width: height,
+            child: const Padding(
+              padding: EdgeInsets.all(20.0),
+              child: CircularProgressIndicator(),
+            ),
+          );
         },
       );
     }
     return CachedNetworkImage(
       imageUrl: imageUrl,
       progressIndicatorBuilder: (ctx, text, porgress) {
-        return const CircularProgressIndicator.adaptive();
+        return LayoutBuilder(
+          builder: (context, constraints) {
+            final height = constraints.maxWidth * 427 / 640;
+            return SizedBox(
+              height: height,
+              width: height,
+              child: const Padding(
+                padding: EdgeInsets.all(20.0),
+                child: CircularProgressIndicator(),
+              ),
+            );
+          },
+        );
       },
     );
   }

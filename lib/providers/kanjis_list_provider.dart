@@ -68,7 +68,7 @@ class KanjiListProvider extends Notifier<KanjiListData> {
     }
   }
 
-  void setKanjiListFromRepositories(
+  void getKanjiListFromRepositories(
     List<String> kanjisCharacteres,
     int section,
   ) {
