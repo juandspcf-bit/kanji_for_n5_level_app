@@ -63,12 +63,8 @@ class _SectionState extends ConsumerState<Section> {
         color: Theme.of(context).colorScheme.primaryContainer,
         child: InkWell(
           borderRadius: const BorderRadius.all(Radius.circular(20)),
-          onTap: () {
-            ref.read(kanjiListProvider.notifier).getKanjiListFromRepositories(
-                  widget.sectionData.kanjisCharacters,
-                  widget.sectionData.sectionNumber,
-                );
-
+          onTap: () async {
+            if (!context.mounted) return;
             Navigator.of(context).push(
               MaterialPageRoute(
                 builder: (ctx) {
@@ -76,6 +72,10 @@ class _SectionState extends ConsumerState<Section> {
                 },
               ),
             );
+            await ref.read(kanjiListProvider.notifier).fetchKanjis(
+                  kanjisCharacters: widget.sectionData.kanjisCharacters,
+                  sectionNumber: widget.sectionData.sectionNumber,
+                );
           },
           splashColor: Colors.black12,
           child: Container(

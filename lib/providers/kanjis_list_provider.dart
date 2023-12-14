@@ -2,7 +2,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kanji_for_n5_level_app/main.dart';
 import 'package:kanji_for_n5_level_app/repositories/local_database/db_deleting_data.dart';
 import 'package:kanji_for_n5_level_app/models/kanji_from_api.dart';
-import 'package:kanji_for_n5_level_app/repositories/apis/kanji_alive/request_kanji_list_api.dart';
 import 'package:kanji_for_n5_level_app/providers/error_storing_database_status.dart';
 import 'package:kanji_for_n5_level_app/providers/favorites_kanjis_provider.dart';
 import 'package:kanji_for_n5_level_app/providers/status_stored_provider.dart';
@@ -36,20 +35,6 @@ class KanjiListProvider extends Notifier<KanjiListData> {
         kanjiList: copyState, status: state.status, section: state.section);
   }
 
-  void setKanjiList(
-    List<KanjiFromApi> storedKanjis,
-    List<String> kanjisCharacteres,
-    int section,
-  ) {
-    KanjiAliveApi.getKanjiList(
-      storedKanjis,
-      kanjisCharacteres,
-      section,
-      onSuccesRequest,
-      onErrorRequest,
-    );
-  }
-
   KanjiListData getOfflineKanjiList(KanjiListData kanjiList) {
     final kanjiListFromProvider = kanjiList;
     final storedKanjisFromProvider = ref.read(storedKanjisProvider);
@@ -68,7 +53,24 @@ class KanjiListProvider extends Notifier<KanjiListData> {
     }
   }
 
-  void getKanjiListFromRepositories(
+  Future<void> fetchKanjis(
+      {required List<String> kanjisCharacters,
+      required int sectionNumber}) async {
+    try {
+      List<KanjiFromApi> kanjiList = await ref
+          .read(kanjiListProvider.notifier)
+          .getKanjiListFromRepositories(
+            kanjisCharacters,
+            sectionNumber,
+          );
+
+      onSuccesRequest(kanjiList);
+    } catch (e) {
+      onErrorRequest();
+    }
+  }
+
+  Future<List<KanjiFromApi>> getKanjiListFromRepositories(
     List<String> kanjisCharacteres,
     int section,
   ) {
@@ -76,12 +78,10 @@ class KanjiListProvider extends Notifier<KanjiListData> {
     final storedKanjis =
         ref.read(storedKanjisProvider.notifier).getStoresItems();
 
-    applicationApiService.requestKanjiListToApi(
+    return applicationApiService.requestKanjiListToApi(
       storedKanjis[section] ?? [],
       kanjisCharacteres,
       section,
-      onSuccesRequest,
-      onErrorRequest,
     );
   }
 
@@ -125,33 +125,21 @@ class KanjiListProvider extends Notifier<KanjiListData> {
 
       ref.read(storedKanjisProvider.notifier).deleteItem(kanjiFromApi);
 
-      onSuccess(List<KanjiFromApi> list) {
-        ref.read(favoritesListProvider.notifier).updateKanji(list[0]);
-        if (selection == 0) {
-          ref.read(kanjiListProvider.notifier).updateKanji(list[0]);
-        }
-        logger.d('success deleting from db');
+      final kanjiList = await updateKanjiWithOnliVersion(kanjiFromApi);
+      ref.read(favoritesListProvider.notifier).updateKanji(kanjiList[0]);
+      if (selection == 0) {
+        ref.read(kanjiListProvider.notifier).updateKanji(kanjiList[0]);
       }
-
-      onError() {
-        //TODO handle error connection online
-        ref.read(favoritesListProvider.notifier).updateKanji(
+      logger.d('success deleting from db');
+    } catch (e) {
+      ref.read(favoritesListProvider.notifier).updateKanji(
+          updateStatusKanjiComputeVersion(
+              StatusStorage.errorDeleting, true, kanjiFromApi));
+      if (selection == 0) {
+        ref.read(kanjiListProvider.notifier).updateKanji(
             updateStatusKanjiComputeVersion(
                 StatusStorage.errorDeleting, true, kanjiFromApi));
-        if (selection == 0) {
-          ref.read(kanjiListProvider.notifier).updateKanji(
-              updateStatusKanjiComputeVersion(
-                  StatusStorage.errorDeleting, true, kanjiFromApi));
-        }
-        ref.read(errorStoringDatabaseStatus.notifier).setError(true);
       }
-
-      updateKanjiWithOnliVersion(
-        kanjiFromApi,
-        onSuccess,
-        onError,
-      );
-    } catch (e) {
       ref.read(errorStoringDatabaseStatus.notifier).setError(true);
 
       logger.e('error deleting');

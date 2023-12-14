@@ -6,13 +6,11 @@ import 'package:kanji_for_n5_level_app/models/kanji_from_api.dart';
 import 'package:kanji_for_n5_level_app/repositories/apis/kanji_alive/request_api.dart';
 
 class KanjiAliveApi {
-  static void getKanjiList(
+  static Future<List<KanjiFromApi>> getKanjiList(
     List<KanjiFromApi> storedKanjis,
     List<String> kanjisCharacteres,
     int section,
-    void Function(List<KanjiFromApi> kanjisFromApi) onSuccesRequest,
-    void Function() onErrorRequest,
-  ) {
+  ) async {
     FutureGroup<Response> group = FutureGroup<Response>();
 
     final lists = getGroupedKanjisAccordingToItsStorageStatus(
@@ -30,8 +28,8 @@ class KanjiAliveApi {
           }
         }
       }
-      onSuccesRequest(fixedLengthList);
-      return;
+      //onSuccesRequest(fixedLengthList);
+      return fixedLengthList;
     }
 
     for (final kanji in lists.$3) {
@@ -44,70 +42,45 @@ class KanjiAliveApi {
     List<KanjiFromApi> kanjisFromApi = [];
 
     if (kanjisCharacteres.length == lists.$3.length) {
-      group.future
-          .timeout(
-        const Duration(
-          seconds: 15,
-        ),
-      )
-          .then(
-        (
-          List<Response> kanjiInformationList,
-        ) {
-          for (final kanjiInformation in kanjiInformationList) {
-            bodies.add(json.decode(kanjiInformation.body));
-          }
+      List<Response> kanjiInformationList =
+          await group.future.timeout(const Duration(
+        seconds: 15,
+      ));
+      for (final kanjiInformation in kanjiInformationList) {
+        bodies.add(json.decode(kanjiInformation.body));
+      }
 
-          for (final body in bodies) {
-            kanjisFromApi.add(builKanjiInfoFromApi(body, section));
-          }
-
-          onSuccesRequest(kanjisFromApi);
-        },
-      ).catchError(
-        (onError) {
-          onErrorRequest();
-        },
-      );
-      return;
+      for (final body in bodies) {
+        kanjisFromApi.add(builKanjiInfoFromApi(body, section));
+      }
+      return kanjisFromApi;
     }
 
-    group.future
-        .timeout(
+    List<Response> kanjiInformationList = await group.future.timeout(
       const Duration(seconds: 15),
-    )
-        .then(
-      (
-        List<Response> kanjiInformationList,
-      ) {
-        for (final kanjiInformation in kanjiInformationList) {
-          bodies.add(json.decode(kanjiInformation.body));
-        }
-
-        for (final body in bodies) {
-          kanjisFromApi.add(builKanjiInfoFromApi(body, section));
-        }
-        final fixedLengthList = List<KanjiFromApi>.filled(
-            kanjisCharacteres.length, kanjisFromApi.first);
-        for (int i = 0; i < lists.$1.length; i++) {
-          fixedLengthList[lists.$1[i]] = kanjisFromApi[i];
-        }
-        for (int i = 0; i < lists.$4.length; i++) {
-          for (int j = 0; j < storedKanjis.length; j++) {
-            if (lists.$4[i] == storedKanjis[j].kanjiCharacter) {
-              fixedLengthList[lists.$2[i]] = storedKanjis[j];
-              break;
-            }
-          }
-        }
-
-        onSuccesRequest(fixedLengthList);
-      },
-    ).catchError(
-      (onError) {
-        onErrorRequest();
-      },
     );
+    for (final kanjiInformation in kanjiInformationList) {
+      bodies.add(json.decode(kanjiInformation.body));
+    }
+
+    for (final body in bodies) {
+      kanjisFromApi.add(builKanjiInfoFromApi(body, section));
+    }
+    final fixedLengthList = List<KanjiFromApi>.filled(
+        kanjisCharacteres.length, kanjisFromApi.first);
+    for (int i = 0; i < lists.$1.length; i++) {
+      fixedLengthList[lists.$1[i]] = kanjisFromApi[i];
+    }
+    for (int i = 0; i < lists.$4.length; i++) {
+      for (int j = 0; j < storedKanjis.length; j++) {
+        if (lists.$4[i] == storedKanjis[j].kanjiCharacter) {
+          fixedLengthList[lists.$2[i]] = storedKanjis[j];
+          break;
+        }
+      }
+    }
+
+    return fixedLengthList;
   }
 
   static (List<int>, List<int>, List<String>, List<String>)

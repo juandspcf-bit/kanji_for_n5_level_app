@@ -1,9 +1,16 @@
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kanji_for_n5_level_app/models/kanji_from_api.dart';
+import 'package:kanji_for_n5_level_app/models/secction_model.dart';
 import 'package:kanji_for_n5_level_app/providers/error_storing_database_status.dart';
+import 'package:kanji_for_n5_level_app/providers/kanjis_list_provider.dart';
+import 'package:kanji_for_n5_level_app/providers/listen_connection_provider.dart';
+import 'package:kanji_for_n5_level_app/providers/main_screen_provider.dart';
+import 'package:kanji_for_n5_level_app/providers/status_connection_provider.dart';
 import 'package:kanji_for_n5_level_app/screens/body_list/kanji_item.dart';
 import 'package:kanji_for_n5_level_app/screens/body_list/shimmer_list.dart';
+import 'package:kanji_for_n5_level_app/screens/main_screens/main_content.dart';
 
 class BodyKanjisList extends ConsumerStatefulWidget {
   const BodyKanjisList({
@@ -64,21 +71,47 @@ class _BodiKanjiListState extends ConsumerState<BodyKanjisList> {
 
   @override
   Widget build(BuildContext context) {
+    final connectivityData = ref.watch(statusConnectionProvider);
+    final mainScreenData = ref.watch(mainScreenProvider);
     if (ref.watch(errorStoringDatabaseStatus)) {
       _scaleDialogError(context);
     }
     if (widget.statusResponse == 0) {
       return const ShimmerList();
     } else if (widget.statusResponse == 1 && widget.kanjisFromApi.isNotEmpty) {
-      return ListView.builder(
-        itemCount: widget.kanjisFromApi.length,
-        itemBuilder: (ctx, index) {
-          return KanjiItem(
-            key: ValueKey(widget.kanjisFromApi[index].kanjiCharacter),
-            kanjiFromApi: widget.kanjisFromApi[index],
-          );
-        },
-      );
+      return connectivityData == ConnectivityResult.none ||
+              mainScreenData.selection == 1
+          ? ListView.builder(
+              itemCount: widget.kanjisFromApi.length,
+              itemBuilder: (ctx, index) {
+                return KanjiItem(
+                  key: ValueKey(widget.kanjisFromApi[index].kanjiCharacter),
+                  kanjiFromApi: widget.kanjisFromApi[index],
+                );
+              },
+            )
+          : RefreshIndicator(
+              onRefresh: () async {
+                if (connectivityData == ConnectivityResult.none) return;
+
+                final kanjiListData = ref.read(kanjiListProvider);
+                logger.d('the sections is ${kanjiListData.section}');
+                final sectionModel = listSections[kanjiListData.section - 1];
+                ref.read(kanjiListProvider.notifier).fetchKanjis(
+                      kanjisCharacters: sectionModel.kanjisCharacters,
+                      sectionNumber: kanjiListData.section,
+                    );
+              },
+              child: ListView.builder(
+                itemCount: widget.kanjisFromApi.length,
+                itemBuilder: (ctx, index) {
+                  return KanjiItem(
+                    key: ValueKey(widget.kanjisFromApi[index].kanjiCharacter),
+                    kanjiFromApi: widget.kanjisFromApi[index],
+                  );
+                },
+              ),
+            );
     } else if (widget.statusResponse == 2) {
       return Column(
         mainAxisAlignment: MainAxisAlignment.center,

@@ -12,19 +12,22 @@ class FavoritesListProvider extends Notifier<(List<KanjiFromApi>, int)> {
   }
 
   void setInitialFavoritesOnline(List<KanjiFromApi> storedKanjis,
-      List<String> myFavoritesCached, int section) {
+      List<String> myFavoritesCached, int section) async {
     if (myFavoritesCached.isEmpty) {
       state = ([], 1);
       return;
     }
 
-    applicationApiService.requestKanjiListToApi(
-      storedKanjis,
-      myFavoritesCached,
-      section,
-      onSuccesRequest,
-      onErrorRequest,
-    );
+    try {
+      final kanjiList = await applicationApiService.requestKanjiListToApi(
+        storedKanjis,
+        myFavoritesCached,
+        section,
+      );
+      onSuccesRequest(kanjiList);
+    } catch (e) {
+      onErrorRequest();
+    }
   }
 
   void setInitialFavoritesOffline(List<KanjiFromApi> storedKanjis,

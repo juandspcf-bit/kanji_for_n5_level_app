@@ -1,13 +1,18 @@
 import 'dart:convert';
+import 'package:http/http.dart';
 import 'package:kanji_for_n5_level_app/models/kanji_from_api.dart';
 import 'package:kanji_for_n5_level_app/repositories/apis/kanji_alive/request_api.dart';
 import 'package:kanji_for_n5_level_app/repositories/apis/kanji_alive/request_kanji_list_api.dart';
 import 'package:kanji_for_n5_level_app/screens/main_screens/main_content.dart';
 
 class RequestEnglishWordToKanji {
-  static void getKanjiFromEnglishWord(String word,
-      void Function(List<KanjiFromApi>) onSuccess, void Function() onError) {
-    RequestsApi.getKanjiFromEnglishWord(word).then((value) {
+  static void getKanjiFromEnglishWord(
+      String word,
+      void Function(List<KanjiFromApi>) onSuccess,
+      void Function() onError) async {
+    try {
+      Response value = await RequestsApi.getKanjiFromEnglishWord(word);
+
       final body = json.decode(value.body);
       logger.d(body);
       List<dynamic> data = body;
@@ -16,10 +21,12 @@ class RequestEnglishWordToKanji {
       Map<String, dynamic> kanjiMap = map['kanji'];
 
       logger.d(kanjiMap['character']);
-      KanjiAliveApi.getKanjiList(
-          [], [kanjiMap['character']], 0, onSuccess, onError);
-    }).onError((error, stackTrace) {
+      final kanjiList =
+          await KanjiAliveApi.getKanjiList([], [kanjiMap['character']], 0);
+
+      onSuccess(kanjiList);
+    } catch (e) {
       onError();
-    });
+    }
   }
 }

@@ -142,10 +142,10 @@ Future<void> deleteKanjiFromApiComputeVersion(
   }
 }
 
-void updateKanjiWithOnliVersion(KanjiFromApi kanjiFromApi,
-    void Function(List<KanjiFromApi> data) onSucces, void Function() onError) {
-  KanjiAliveApi.getKanjiList([], [kanjiFromApi.kanjiCharacter],
-      kanjiFromApi.section, onSucces, onError);
+Future<List<KanjiFromApi>> updateKanjiWithOnliVersion(
+    KanjiFromApi kanjiFromApi) {
+  return KanjiAliveApi.getKanjiList(
+      [], [kanjiFromApi.kanjiCharacter], kanjiFromApi.section);
 }
 
 KanjiFromApi updateStatusKanjiComputeVersion(

@@ -4,12 +4,10 @@ import 'package:kanji_for_n5_level_app/repositories/local_database/db_deleting_d
 import 'package:kanji_for_n5_level_app/repositories/local_database/db_inserting_data.dart';
 
 abstract class ApplicationApiService {
-  void requestKanjiListToApi(
+  Future<List<KanjiFromApi>> requestKanjiListToApi(
     List<KanjiFromApi> storedKanjis,
     List<String> kanjisCharacteres,
     int section,
-    void Function(List<KanjiFromApi> kanjisFromApi) onSuccesRequest,
-    void Function() onErrorRequest,
   );
 }
 
@@ -20,19 +18,15 @@ abstract class ApplicationDBService {
 
 class AppAplicationApiService implements ApplicationApiService {
   @override
-  void requestKanjiListToApi(
+  Future<List<KanjiFromApi>> requestKanjiListToApi(
     List<KanjiFromApi> storedKanjis,
     List<String> kanjisCharacteres,
     int section,
-    void Function(List<KanjiFromApi> kanjisFromApi) onSuccesRequest,
-    void Function() onErrorRequest,
-  ) {
-    KanjiAliveApi.getKanjiList(
+  ) async {
+    return KanjiAliveApi.getKanjiList(
       storedKanjis,
       kanjisCharacteres,
       section,
-      onSuccesRequest,
-      onErrorRequest,
     );
   }
 }
