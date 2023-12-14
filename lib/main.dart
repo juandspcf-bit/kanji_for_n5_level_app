@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:dio/dio.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
@@ -9,6 +10,7 @@ import 'package:kanji_for_n5_level_app/auth_flow.dart';
 import 'package:kanji_for_n5_level_app/providers/on_boarding_provider.dart';
 import 'package:kanji_for_n5_level_app/repositories/application_layer.dart';
 import 'package:kanji_for_n5_level_app/screens/onBoarding_screen/my_page_viewer.dart';
+import 'package:logger/logger.dart';
 import 'firebase_options.dart';
 
 final dbFirebase = FirebaseFirestore.instance;
@@ -16,6 +18,8 @@ final storageRef = FirebaseStorage.instance.ref();
 final streamAuth = FirebaseAuth.instance.userChanges();
 final ApplicationApiService applicationApiService = AppAplicationApiService();
 final ApplicationDBService applicationDBService = AppAplicationDBService();
+final dio = Dio();
+final logger = Logger();
 
 var kColorScheme = ColorScheme.fromSeed(
   seedColor: const Color.fromARGB(255, 96, 59, 181),

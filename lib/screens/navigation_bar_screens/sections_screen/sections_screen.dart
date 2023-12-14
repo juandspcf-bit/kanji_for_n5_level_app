@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:kanji_for_n5_level_app/config_files/screen_config.dart';
+import 'package:kanji_for_n5_level_app/main.dart';
 import 'package:kanji_for_n5_level_app/models/secction_model.dart';
 import 'package:kanji_for_n5_level_app/providers/kanjis_list_provider.dart';
 import 'package:kanji_for_n5_level_app/screens/navigation_bar_screens/sections_screen/kanji_section_list.dart';
-import 'package:kanji_for_n5_level_app/screens/main_screens/main_content.dart';
 
 class Sections extends StatelessWidget {
   const Sections({super.key});

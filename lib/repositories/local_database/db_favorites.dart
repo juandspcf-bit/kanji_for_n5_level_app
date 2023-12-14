@@ -1,6 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:kanji_for_n5_level_app/main.dart';
 import 'package:kanji_for_n5_level_app/repositories/local_database/db_definitions.dart';
-import 'package:kanji_for_n5_level_app/screens/main_screens/main_content.dart';
 
 Future<List<String>> loadFavorites() async {
   final user = FirebaseAuth.instance.currentUser;

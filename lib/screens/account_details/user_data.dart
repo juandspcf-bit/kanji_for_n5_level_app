@@ -7,9 +7,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:kanji_for_n5_level_app/main.dart';
 import 'package:kanji_for_n5_level_app/providers/account_details_state_provider.dart';
 import 'package:kanji_for_n5_level_app/providers/status_connection_provider.dart';
-import 'package:kanji_for_n5_level_app/screens/main_screens/main_content.dart';
 
 class UserData extends ConsumerWidget {
   UserData({

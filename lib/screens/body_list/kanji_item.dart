@@ -1,6 +1,7 @@
 // ignore: unused_import
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:kanji_for_n5_level_app/main.dart';
 import 'package:kanji_for_n5_level_app/models/kanji_from_api.dart';
 import 'package:kanji_for_n5_level_app/providers/examples_audios_provider.dart';
 import 'package:kanji_for_n5_level_app/providers/favorites_kanjis_provider.dart';
@@ -12,7 +13,6 @@ import 'package:kanji_for_n5_level_app/screens/body_list/subtitle_tile.dart';
 import 'package:kanji_for_n5_level_app/screens/body_list/title_tile.dart';
 import 'package:kanji_for_n5_level_app/screens/body_list/trailing_tile.dart';
 import 'package:kanji_for_n5_level_app/screens/kanji_details/kaji_details.dart';
-import 'package:kanji_for_n5_level_app/screens/main_screens/main_content.dart';
 
 class KanjiItem extends ConsumerStatefulWidget {
   const KanjiItem({

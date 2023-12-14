@@ -2,9 +2,9 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:kanji_for_n5_level_app/main.dart';
 import 'package:kanji_for_n5_level_app/models/kanji_from_api.dart';
 import 'package:kanji_for_n5_level_app/providers/status_stored_provider.dart';
-import 'package:kanji_for_n5_level_app/screens/main_screens/main_content.dart';
 
 class KanjiDragTargetCorrect extends StatefulWidget {
   const KanjiDragTargetCorrect({

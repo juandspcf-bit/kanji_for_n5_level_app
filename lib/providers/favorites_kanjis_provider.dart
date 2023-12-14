@@ -5,7 +5,6 @@ import 'package:kanji_for_n5_level_app/repositories/local_database/db_favorites.
 import 'package:kanji_for_n5_level_app/repositories/local_database/db_inserting_data.dart';
 import 'package:kanji_for_n5_level_app/models/kanji_from_api.dart';
 import 'package:kanji_for_n5_level_app/providers/status_stored_provider.dart';
-import 'package:kanji_for_n5_level_app/screens/main_screens/main_content.dart';
 
 class FavoritesListProvider extends Notifier<(List<KanjiFromApi>, int)> {
   @override

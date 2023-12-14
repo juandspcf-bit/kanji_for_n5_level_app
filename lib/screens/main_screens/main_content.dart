@@ -1,6 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kanji_for_n5_level_app/config_files/screen_config.dart';
@@ -12,10 +11,6 @@ import 'package:kanji_for_n5_level_app/screens/navigation_bar_screens/favorite_s
 import 'package:kanji_for_n5_level_app/screens/navigation_bar_screens/search_screen.dart';
 import 'package:kanji_for_n5_level_app/screens/navigation_bar_screens/sections_screen/sections_screen.dart';
 import 'package:kanji_for_n5_level_app/screens/status_operations_dialogs.dart';
-import 'package:logger/logger.dart';
-
-Dio dio = Dio();
-final logger = Logger();
 
 class MainContent extends ConsumerWidget with StatusDBStoringDialogs {
   const MainContent({super.key});

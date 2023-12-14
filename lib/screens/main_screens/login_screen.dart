@@ -2,10 +2,10 @@ import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:kanji_for_n5_level_app/main.dart';
 import 'package:kanji_for_n5_level_app/providers/login_provider.dart';
 import 'package:kanji_for_n5_level_app/providers/modal_email_reset_password_provider.dart';
 import 'package:kanji_for_n5_level_app/providers/sign_up_provider.dart';
-import 'package:kanji_for_n5_level_app/screens/main_screens/main_content.dart';
 import 'package:kanji_for_n5_level_app/screens/main_screens/sing_up_screen.dart';
 
 class ToLoginFormScreen extends ConsumerStatefulWidget {

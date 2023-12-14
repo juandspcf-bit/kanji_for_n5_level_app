@@ -1,9 +1,9 @@
 // ignore: implementation_imports
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:kanji_for_n5_level_app/main.dart';
 import 'package:kanji_for_n5_level_app/models/kanji_from_api.dart';
 import 'package:kanji_for_n5_level_app/providers/quiz_kanji_list_provider.dart';
-import 'package:kanji_for_n5_level_app/screens/main_screens/main_content.dart';
 import 'package:kanji_for_n5_level_app/screens/quiz_screen/kanji_possible_solution_container.dart';
 
 class ColumnDragTargets extends ConsumerWidget {
