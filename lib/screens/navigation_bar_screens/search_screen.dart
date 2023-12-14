@@ -29,38 +29,21 @@ class SearchScreen extends ConsumerWidget {
       BuildContext context) {
     switch (searchState) {
       case SearchState.errorForm:
-        return Center(
-          child: Text(
-            'type a valid word',
-            style: Theme.of(context).textTheme.titleLarge,
-            maxLines: 3,
-          ),
-        );
+        return const InfoStatusSearch(message: 'type a valid word');
       case SearchState.notSearching:
-        return Center(
-          child: Text(
-            'search a kanji by its english meaning',
-            style: Theme.of(context).textTheme.titleLarge,
-            maxLines: 3,
-          ),
-        );
+        return const InfoStatusSearch(
+            message: 'search a kanji by its english meaning');
       case SearchState.searching:
         return const Center(
           child: CircularProgressIndicator(),
         );
       case SearchState.stoped:
         {
-          if (kanjiFromApi != null) {
-            return Results(kanjiFromApi: kanjiFromApi);
-          } else {
-            return Center(
-              child: Text(
-                'The corresponding kanji for this word was not found',
-                style: Theme.of(context).textTheme.titleLarge,
-                maxLines: 3,
-              ),
-            );
+          if (kanjiFromApi == null) {
+            return const InfoStatusSearch(
+                message: 'The corresponding kanji for this word was not found');
           }
+          return Results(kanjiFromApi: kanjiFromApi);
         }
     }
   }
@@ -79,11 +62,13 @@ class SearchScreen extends ConsumerWidget {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Text(
-                        'No internet connection, you will be able to search when the connection is restored',
-                        style: Theme.of(context).textTheme.titleLarge,
-                        textAlign: TextAlign.center,
-                        maxLines: 3,
+                      Expanded(
+                        child: Text(
+                          'No internet connection, you will be able to search when the connection is restored',
+                          style: Theme.of(context).textTheme.titleLarge,
+                          textAlign: TextAlign.center,
+                          maxLines: 3,
+                        ),
                       ),
                     ],
                   ),
@@ -198,6 +183,30 @@ class Results extends ConsumerWidget {
               statusStorage: StatusStorage.onlyOnline,
             ),
           )
+        ],
+      ),
+    );
+  }
+}
+
+class InfoStatusSearch extends StatelessWidget {
+  const InfoStatusSearch({super.key, required this.message});
+
+  final String message;
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Expanded(
+            child: Text(
+              message,
+              style: Theme.of(context).textTheme.titleLarge,
+              maxLines: 3,
+            ),
+          ),
         ],
       ),
     );
