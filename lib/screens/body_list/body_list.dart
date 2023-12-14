@@ -11,7 +11,7 @@ import 'package:kanji_for_n5_level_app/providers/status_connection_provider.dart
 import 'package:kanji_for_n5_level_app/screens/body_list/kanji_item.dart';
 import 'package:kanji_for_n5_level_app/screens/body_list/shimmer_list.dart';
 
-class BodyKanjisList extends ConsumerStatefulWidget {
+class BodyKanjisList extends ConsumerWidget {
   const BodyKanjisList({
     super.key,
     required this.statusResponse,
@@ -21,12 +21,7 @@ class BodyKanjisList extends ConsumerStatefulWidget {
   final int statusResponse;
   final List<KanjiFromApi> kanjisFromApi;
 
-  @override
-  ConsumerState<BodyKanjisList> createState() => _BodiKanjiListState();
-}
-
-class _BodiKanjiListState extends ConsumerState<BodyKanjisList> {
-  Widget _dialogError(BuildContext buildContext) {
+  Widget _dialogError(BuildContext buildContext, WidgetRef ref) {
     return AlertDialog(
       title: const Text(
           'An issue happened when deleting this item, please go back to the section list and access the content again to see the updated content.'),
@@ -46,7 +41,7 @@ class _BodiKanjiListState extends ConsumerState<BodyKanjisList> {
     );
   }
 
-  void _scaleDialogError(BuildContext buildContext) {
+  void _scaleDialogError(BuildContext buildContext, WidgetRef ref) {
     showGeneralDialog(
       context: buildContext,
       pageBuilder: (ctx, a1, a2) {
@@ -56,7 +51,7 @@ class _BodiKanjiListState extends ConsumerState<BodyKanjisList> {
         var curve = Curves.easeInOut.transform(a1.value);
         return Transform.scale(
           scale: curve,
-          child: _dialogError(buildContext),
+          child: _dialogError(buildContext, ref),
         );
       },
       transitionDuration: const Duration(milliseconds: 300),
@@ -64,27 +59,22 @@ class _BodiKanjiListState extends ConsumerState<BodyKanjisList> {
   }
 
   @override
-  void initState() {
-    super.initState();
-  }
-
-  @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final connectivityData = ref.watch(statusConnectionProvider);
     final mainScreenData = ref.watch(mainScreenProvider);
     if (ref.watch(errorStoringDatabaseStatus)) {
-      _scaleDialogError(context);
+      _scaleDialogError(context, ref);
     }
-    if (widget.statusResponse == 0) {
+    if (statusResponse == 0) {
       return const ShimmerList();
-    } else if (widget.statusResponse == 1 && widget.kanjisFromApi.isNotEmpty) {
+    } else if (statusResponse == 1 && kanjisFromApi.isNotEmpty) {
       return connectivityData == ConnectivityResult.none
           ? ListView.builder(
-              itemCount: widget.kanjisFromApi.length,
+              itemCount: kanjisFromApi.length,
               itemBuilder: (ctx, index) {
                 return KanjiItem(
-                  key: ValueKey(widget.kanjisFromApi[index].kanjiCharacter),
-                  kanjiFromApi: widget.kanjisFromApi[index],
+                  key: ValueKey(kanjisFromApi[index].kanjiCharacter),
+                  kanjiFromApi: kanjisFromApi[index],
                 );
               },
             )
@@ -107,16 +97,16 @@ class _BodiKanjiListState extends ConsumerState<BodyKanjisList> {
                     );
               },
               child: ListView.builder(
-                itemCount: widget.kanjisFromApi.length,
+                itemCount: kanjisFromApi.length,
                 itemBuilder: (ctx, index) {
                   return KanjiItem(
-                    key: ValueKey(widget.kanjisFromApi[index].kanjiCharacter),
-                    kanjiFromApi: widget.kanjisFromApi[index],
+                    key: ValueKey(kanjisFromApi[index].kanjiCharacter),
+                    kanjiFromApi: kanjisFromApi[index],
                   );
                 },
               ),
             );
-    } else if (widget.statusResponse == 2) {
+    } else if (statusResponse == 2) {
       return LayoutBuilder(
         builder: (contx, viewportConstraints) {
           return RefreshIndicator(
@@ -177,7 +167,7 @@ class _BodiKanjiListState extends ConsumerState<BodyKanjisList> {
           );
         },
       );
-    } else if (widget.statusResponse == 1 && widget.kanjisFromApi.isEmpty) {
+    } else if (statusResponse == 1 && kanjisFromApi.isEmpty) {
       return Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
