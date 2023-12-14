@@ -119,61 +119,65 @@ class _BodiKanjiListState extends ConsumerState<BodyKanjisList> {
               ),
             );
     } else if (widget.statusResponse == 2) {
-      return RefreshIndicator(
-        onRefresh: () async {
-          if (connectivityData == ConnectivityResult.none) return;
+      return LayoutBuilder(
+        builder: (contx, viewportConstraints) {
+          return RefreshIndicator(
+            onRefresh: () async {
+              if (connectivityData == ConnectivityResult.none) return;
 
-          if (mainScreenData.selection == 1) {
-            await ref
-                .read(favoriteskanjisProvider.notifier)
-                .fetchFavoritesOnRefresh();
-            return;
-          }
+              if (mainScreenData.selection == 1) {
+                await ref
+                    .read(favoriteskanjisProvider.notifier)
+                    .fetchFavoritesOnRefresh();
+                return;
+              }
 
-          final kanjiListData = ref.read(kanjiListProvider);
-          final sectionModel = listSections[kanjiListData.section - 1];
-          ref.read(kanjiListProvider.notifier).fetchKanjis(
-                kanjisCharacters: sectionModel.kanjisCharacters,
-                sectionNumber: kanjiListData.section,
-              );
+              final kanjiListData = ref.read(kanjiListProvider);
+              final sectionModel = listSections[kanjiListData.section - 1];
+              ref.read(kanjiListProvider.notifier).fetchKanjis(
+                    kanjisCharacters: sectionModel.kanjisCharacters,
+                    sectionNumber: kanjiListData.section,
+                  );
+            },
+            child: ListView(
+              children: [
+                ConstrainedBox(
+                  constraints: viewportConstraints.copyWith(
+                    minHeight: viewportConstraints.maxHeight,
+                    maxHeight: double.infinity,
+                  ),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            'An error has occurr',
+                            style: Theme.of(context).textTheme.titleLarge,
+                          ),
+                        ],
+                      ),
+                      const SizedBox(
+                        height: 25,
+                      ),
+                      const Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(
+                            Icons.error_outline,
+                            color: Colors.amber,
+                            size: 80,
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                )
+              ],
+            ),
+          );
         },
-        child: ListView(
-          shrinkWrap: true,
-          //mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Expanded(
-              child: Container(
-                alignment: Alignment.center,
-                child: Column(
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          'An error has occurr',
-                          style: Theme.of(context).textTheme.titleLarge,
-                        ),
-                      ],
-                    ),
-                    const SizedBox(
-                      height: 25,
-                    ),
-                    const Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(
-                          Icons.error_outline,
-                          color: Colors.amber,
-                          size: 80,
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
-            )
-          ],
-        ),
       );
     } else if (widget.statusResponse == 1 && widget.kanjisFromApi.isEmpty) {
       return Column(
