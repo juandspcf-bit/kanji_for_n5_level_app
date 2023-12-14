@@ -2,23 +2,26 @@ import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kanji_for_n5_level_app/models/kanji_from_api.dart';
+import 'package:kanji_for_n5_level_app/providers/error_storing_database_status.dart';
 import 'package:kanji_for_n5_level_app/providers/favorites_kanjis_provider.dart';
+import 'package:kanji_for_n5_level_app/providers/main_screen_provider.dart';
 import 'package:kanji_for_n5_level_app/providers/status_connection_provider.dart';
 import 'package:kanji_for_n5_level_app/providers/status_stored_provider.dart';
 import 'package:kanji_for_n5_level_app/screens/body_list/body_list.dart';
+import 'package:kanji_for_n5_level_app/screens/navigation_bar_screens/db_dialog_error_message.dart';
 
-class FavoriteScreen extends ConsumerStatefulWidget {
+class FavoriteScreen extends ConsumerWidget with DialogErrorInDB {
   const FavoriteScreen({
     super.key,
   });
 
   @override
-  ConsumerState<FavoriteScreen> createState() => _FavoriteScreenState();
-}
-
-class _FavoriteScreenState extends ConsumerState<FavoriteScreen> {
-  @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final connectivityData = ref.watch(statusConnectionProvider);
+    final mainScreenData = ref.watch(mainScreenProvider);
+    if (ref.watch(errorDatabaseStatusProvider)) {
+      dbDeletingErrorDialog(context, ref);
+    }
     var kanjiFavoritesList = ref.watch(favoriteskanjisProvider);
     final resultStatus = ref.watch(statusConnectionProvider);
 
@@ -36,6 +39,8 @@ class _FavoriteScreenState extends ConsumerState<FavoriteScreen> {
     return BodyKanjisList(
       statusResponse: kanjiFavoritesList.$2,
       kanjisFromApi: kanjiFavoritesList.$1,
+      connectivityData: connectivityData,
+      mainScreenData: mainScreenData,
     );
   }
 }

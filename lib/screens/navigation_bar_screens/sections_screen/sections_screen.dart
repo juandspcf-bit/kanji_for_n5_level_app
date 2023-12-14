@@ -68,7 +68,7 @@ class _SectionState extends ConsumerState<Section> {
             Navigator.of(context).push(
               MaterialPageRoute(
                 builder: (ctx) {
-                  return const KanjiSectionList();
+                  return const KanjiListSectionScreen();
                 },
               ),
             );

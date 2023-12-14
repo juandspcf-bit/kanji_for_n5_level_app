@@ -3,11 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kanji_for_n5_level_app/models/kanji_from_api.dart';
 import 'package:kanji_for_n5_level_app/models/secction_model.dart';
-import 'package:kanji_for_n5_level_app/providers/error_storing_database_status.dart';
 import 'package:kanji_for_n5_level_app/providers/favorites_kanjis_provider.dart';
 import 'package:kanji_for_n5_level_app/providers/kanjis_list_provider.dart';
 import 'package:kanji_for_n5_level_app/providers/main_screen_provider.dart';
-import 'package:kanji_for_n5_level_app/providers/status_connection_provider.dart';
 import 'package:kanji_for_n5_level_app/screens/body_list/kanji_item.dart';
 import 'package:kanji_for_n5_level_app/screens/body_list/shimmer_list.dart';
 
@@ -16,55 +14,17 @@ class BodyKanjisList extends ConsumerWidget {
     super.key,
     required this.statusResponse,
     required this.kanjisFromApi,
+    required this.connectivityData,
+    required this.mainScreenData,
   });
 
   final int statusResponse;
   final List<KanjiFromApi> kanjisFromApi;
-
-  Widget _dialogError(BuildContext buildContext, WidgetRef ref) {
-    return AlertDialog(
-      title: const Text(
-          'An issue happened when deleting this item, please go back to the section list and access the content again to see the updated content.'),
-      content: const Icon(
-        Icons.error_rounded,
-        color: Colors.amberAccent,
-        size: 70,
-      ),
-      actions: <Widget>[
-        TextButton(
-            onPressed: () {
-              ref.read(errorStoringDatabaseStatus.notifier).setError(false);
-              Navigator.of(buildContext).pop();
-            },
-            child: const Text("Okay"))
-      ],
-    );
-  }
-
-  void _scaleDialogError(BuildContext buildContext, WidgetRef ref) {
-    showGeneralDialog(
-      context: buildContext,
-      pageBuilder: (ctx, a1, a2) {
-        return Container();
-      },
-      transitionBuilder: (ctx, a1, a2, child) {
-        var curve = Curves.easeInOut.transform(a1.value);
-        return Transform.scale(
-          scale: curve,
-          child: _dialogError(buildContext, ref),
-        );
-      },
-      transitionDuration: const Duration(milliseconds: 300),
-    );
-  }
+  final ConnectivityResult connectivityData;
+  final MainScreenData mainScreenData;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final connectivityData = ref.watch(statusConnectionProvider);
-    final mainScreenData = ref.watch(mainScreenProvider);
-    if (ref.watch(errorStoringDatabaseStatus)) {
-      _scaleDialogError(context, ref);
-    }
     if (statusResponse == 0) {
       return const ShimmerList();
     } else if (statusResponse == 1 && kanjisFromApi.isNotEmpty) {

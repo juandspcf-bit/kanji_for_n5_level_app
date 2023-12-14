@@ -11,44 +11,14 @@ import 'package:kanji_for_n5_level_app/providers/main_screen_provider.dart';
 import 'package:kanji_for_n5_level_app/screens/navigation_bar_screens/favorite_screen.dart';
 import 'package:kanji_for_n5_level_app/screens/navigation_bar_screens/search_screen.dart';
 import 'package:kanji_for_n5_level_app/screens/navigation_bar_screens/sections_screen/sections_screen.dart';
+import 'package:kanji_for_n5_level_app/screens/status_operations_dialogs.dart';
 import 'package:logger/logger.dart';
 
 Dio dio = Dio();
 final logger = Logger();
 
-class MainContent extends ConsumerWidget {
+class MainContent extends ConsumerWidget with StatusDBStoringDialogs {
   const MainContent({super.key});
-
-  Widget _dialog(BuildContext context) {
-    return AlertDialog(
-      title: const Text("Please wait!!"),
-      content: const Text('Please wait until all the operations are completed'),
-      actions: <Widget>[
-        TextButton(
-            onPressed: () {
-              Navigator.of(context).pop();
-            },
-            child: const Text("Okay"))
-      ],
-    );
-  }
-
-  void _scaleDialog(BuildContext context) {
-    showGeneralDialog(
-      context: context,
-      pageBuilder: (ctx, a1, a2) {
-        return Container();
-      },
-      transitionBuilder: (ctx, a1, a2, child) {
-        var curve = Curves.easeInOut.transform(a1.value);
-        return Transform.scale(
-          scale: curve,
-          child: _dialog(ctx),
-        );
-      },
-      transitionDuration: const Duration(milliseconds: 300),
-    );
-  }
 
   Widget selectScreen(int selectedPageIndex) {
     switch (selectedPageIndex) {
@@ -135,7 +105,7 @@ class MainContent extends ConsumerWidget {
         selectPage: (index) {
           ref
               .read(mainScreenProvider.notifier)
-              .selectPage(index, context, _scaleDialog);
+              .selectPage(index, context, statusDBStoringDialog);
         },
         selectedPageIndex: mainScreenData.selection,
       ),

@@ -140,7 +140,7 @@ class KanjiListProvider extends Notifier<KanjiListData> {
             updateStatusKanjiComputeVersion(
                 StatusStorage.errorDeleting, true, kanjiFromApi));
       }
-      ref.read(errorStoringDatabaseStatus.notifier).setError(true);
+      ref.read(errorDatabaseStatusProvider.notifier).setDeletingError(true);
 
       logger.e('error deleting');
       logger.e(e.toString());

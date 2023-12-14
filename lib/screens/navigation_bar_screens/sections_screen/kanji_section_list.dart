@@ -3,54 +3,23 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kanji_for_n5_level_app/models/kanji_from_api.dart';
 import 'package:kanji_for_n5_level_app/models/secction_model.dart';
+import 'package:kanji_for_n5_level_app/providers/error_storing_database_status.dart';
 import 'package:kanji_for_n5_level_app/providers/kanjis_list_provider.dart';
+import 'package:kanji_for_n5_level_app/providers/main_screen_provider.dart';
 import 'package:kanji_for_n5_level_app/providers/quiz_kanji_list_provider.dart';
 import 'package:kanji_for_n5_level_app/providers/status_connection_provider.dart';
 import 'package:kanji_for_n5_level_app/providers/status_stored_provider.dart';
 import 'package:kanji_for_n5_level_app/screens/body_list/body_list.dart';
+import 'package:kanji_for_n5_level_app/screens/navigation_bar_screens/db_dialog_error_message.dart';
 
 import 'package:kanji_for_n5_level_app/screens/quiz_screen/quizz_screen.dart';
+import 'package:kanji_for_n5_level_app/screens/status_operations_dialogs.dart';
 
-class KanjiSectionList extends ConsumerStatefulWidget {
-  const KanjiSectionList({
+class KanjiListSectionScreen extends ConsumerWidget
+    with DialogErrorInDB, StatusDBStoringDialogs {
+  const KanjiListSectionScreen({
     super.key,
   });
-
-  @override
-  ConsumerState<KanjiSectionList> createState() => _KanjiSectionListState();
-}
-
-class _KanjiSectionListState extends ConsumerState<KanjiSectionList> {
-  Widget _dialog(BuildContext context) {
-    return AlertDialog(
-      title: const Text("Please wait!!"),
-      content: const Text('Please wait until all the operations are completed'),
-      actions: <Widget>[
-        TextButton(
-            onPressed: () {
-              Navigator.of(context).pop();
-            },
-            child: const Text("Okay"))
-      ],
-    );
-  }
-
-  void _scaleDialog(BuildContext context) {
-    showGeneralDialog(
-      context: context,
-      pageBuilder: (ctx, a1, a2) {
-        return Container();
-      },
-      transitionBuilder: (ctx, a1, a2, child) {
-        var curve = Curves.easeInOut.transform(a1.value);
-        return Transform.scale(
-          scale: curve,
-          child: _dialog(ctx),
-        );
-      },
-      transitionDuration: const Duration(milliseconds: 300),
-    );
-  }
 
   bool isAnyProcessingData(List<KanjiFromApi> list) {
     try {
@@ -67,7 +36,12 @@ class _KanjiSectionListState extends ConsumerState<KanjiSectionList> {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final connectivityData = ref.watch(statusConnectionProvider);
+    final mainScreenData = ref.watch(mainScreenProvider);
+    if (ref.watch(errorDatabaseStatusProvider)) {
+      dbDeletingErrorDialog(context, ref);
+    }
     var kanjiListData = ref.watch(kanjiListProvider);
     final statusConnectionData = ref.watch(statusConnectionProvider);
     if (statusConnectionData == ConnectivityResult.none) {
@@ -83,7 +57,7 @@ class _KanjiSectionListState extends ConsumerState<KanjiSectionList> {
       canPop: !isAnyProcessingData(kanjiListData.kanjiList),
       onPopInvoked: (didPop) {
         if (isAnyProcessingData(kanjiListData.kanjiList)) {
-          _scaleDialog(context);
+          statusDBStoringDialog(context);
           return;
         }
       },
@@ -121,6 +95,8 @@ class _KanjiSectionListState extends ConsumerState<KanjiSectionList> {
         body: BodyKanjisList(
           kanjisFromApi: kanjiListData.kanjiList,
           statusResponse: kanjiListData.status,
+          connectivityData: connectivityData,
+          mainScreenData: mainScreenData,
         ),
       ),
     );
