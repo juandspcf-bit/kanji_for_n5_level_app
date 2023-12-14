@@ -138,6 +138,7 @@ class _BodiKanjiListState extends ConsumerState<BodyKanjisList> {
               );
         },
         child: ListView(
+          shrinkWrap: true,
           //mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Expanded(
