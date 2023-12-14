@@ -24,6 +24,20 @@ class KanjiListProvider extends Notifier<KanjiListData> {
     state = KanjiListData(kanjiList: [], status: 2, section: state.section);
   }
 
+  bool isAnyProcessingData() {
+    try {
+      state.kanjiList.firstWhere(
+        (element) =>
+            element.statusStorage == StatusStorage.proccessingStoring ||
+            element.statusStorage == StatusStorage.proccessingDeleting,
+      );
+
+      return true;
+    } on StateError {
+      return false;
+    }
+  }
+
   void updateKanji(KanjiFromApi storedKanji) {
     final copyState = [...state.kanjiList];
 

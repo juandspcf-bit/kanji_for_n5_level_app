@@ -1,14 +1,12 @@
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:kanji_for_n5_level_app/models/kanji_from_api.dart';
 import 'package:kanji_for_n5_level_app/models/secction_model.dart';
 import 'package:kanji_for_n5_level_app/providers/error_storing_database_status.dart';
 import 'package:kanji_for_n5_level_app/providers/kanjis_list_provider.dart';
 import 'package:kanji_for_n5_level_app/providers/main_screen_provider.dart';
 import 'package:kanji_for_n5_level_app/providers/quiz_kanji_list_provider.dart';
 import 'package:kanji_for_n5_level_app/providers/status_connection_provider.dart';
-import 'package:kanji_for_n5_level_app/providers/status_stored_provider.dart';
 import 'package:kanji_for_n5_level_app/screens/body_list/body_list.dart';
 import 'package:kanji_for_n5_level_app/screens/navigation_bar_screens/db_dialog_error_message.dart';
 
@@ -20,20 +18,6 @@ class KanjiListSectionScreen extends ConsumerWidget
   const KanjiListSectionScreen({
     super.key,
   });
-
-  bool isAnyProcessingData(List<KanjiFromApi> list) {
-    try {
-      list.firstWhere(
-        (element) =>
-            element.statusStorage == StatusStorage.proccessingStoring ||
-            element.statusStorage == StatusStorage.proccessingDeleting,
-      );
-
-      return true;
-    } on StateError {
-      return false;
-    }
-  }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -50,13 +34,16 @@ class KanjiListSectionScreen extends ConsumerWidget
           .getOfflineKanjiList(kanjiListData);
     }
 
-    final accesToQuiz = !isAnyProcessingData(kanjiListData.kanjiList) &&
+    final isAnyProcessingDataFunc =
+        ref.read(kanjiListProvider.notifier).isAnyProcessingData;
+
+    final accesToQuiz = !isAnyProcessingDataFunc() &&
         !(statusConnectionData == ConnectivityResult.none);
 
     return PopScope(
-      canPop: !isAnyProcessingData(kanjiListData.kanjiList),
+      canPop: !isAnyProcessingDataFunc(),
       onPopInvoked: (didPop) {
-        if (isAnyProcessingData(kanjiListData.kanjiList)) {
+        if (isAnyProcessingDataFunc()) {
           statusDBStoringDialog(context);
           return;
         }

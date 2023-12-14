@@ -40,7 +40,7 @@ class Sections extends StatelessWidget {
   }
 }
 
-class Section extends ConsumerStatefulWidget {
+class Section extends ConsumerWidget {
   const Section({
     super.key,
     required this.sectionData,
@@ -49,12 +49,7 @@ class Section extends ConsumerStatefulWidget {
   final SectionModel sectionData;
 
   @override
-  ConsumerState<Section> createState() => _SectionState();
-}
-
-class _SectionState extends ConsumerState<Section> {
-  @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Container(
       padding: const EdgeInsets.only(left: 10, right: 10),
       child: Material(
@@ -63,8 +58,12 @@ class _SectionState extends ConsumerState<Section> {
         color: Theme.of(context).colorScheme.primaryContainer,
         child: InkWell(
           borderRadius: const BorderRadius.all(Radius.circular(20)),
-          onTap: () async {
-            if (!context.mounted) return;
+          onTap: () {
+            ref.read(kanjiListProvider.notifier).fetchKanjis(
+                  kanjisCharacters: sectionData.kanjisCharacters,
+                  sectionNumber: sectionData.sectionNumber,
+                );
+
             Navigator.of(context).push(
               MaterialPageRoute(
                 builder: (ctx) {
@@ -72,10 +71,6 @@ class _SectionState extends ConsumerState<Section> {
                 },
               ),
             );
-            await ref.read(kanjiListProvider.notifier).fetchKanjis(
-                  kanjisCharacters: widget.sectionData.kanjisCharacters,
-                  sectionNumber: widget.sectionData.sectionNumber,
-                );
           },
           splashColor: Colors.black12,
           child: Container(
@@ -85,7 +80,7 @@ class _SectionState extends ConsumerState<Section> {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Text(
-                  widget.sectionData.title,
+                  sectionData.title,
                   style: Theme.of(context).textTheme.titleLarge?.copyWith(
                       fontWeight: FontWeight.bold,
                       color: Theme.of(context).colorScheme.onSecondaryContainer,
@@ -93,7 +88,7 @@ class _SectionState extends ConsumerState<Section> {
                   textAlign: TextAlign.center,
                 ),
                 Text(
-                  "Seccion ${widget.sectionData.sectionNumber}",
+                  "Seccion ${sectionData.sectionNumber}",
                   style: Theme.of(context).textTheme.titleMedium?.copyWith(
                       color: Theme.of(context).colorScheme.onSecondaryContainer,
                       fontFamily: GoogleFonts.roboto().fontFamily),
