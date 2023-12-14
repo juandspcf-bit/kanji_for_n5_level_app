@@ -30,14 +30,14 @@ class KanjiDetailsProvider extends Notifier<KanjiDetailsData?> {
 
   void storeToFavorites(KanjiFromApi kanjiFromApi) {
     final queryKanji = ref
-        .read(favoritesListProvider.notifier)
+        .read(favoriteskanjisProvider.notifier)
         .searchInFavorites(kanjiFromApi.kanjiCharacter);
 
     if (queryKanji == "") {
       insertFavorite(kanjiFromApi.kanjiCharacter).then((value) {
         final storedItems =
             ref.read(storedKanjisProvider.notifier).getStoresItems();
-        ref.read(favoritesListProvider.notifier).addItem(
+        ref.read(favoriteskanjisProvider.notifier).addItem(
             storedItems.values.fold([], (previousValue, element) {
               previousValue.addAll(element);
               return previousValue;
@@ -47,7 +47,7 @@ class KanjiDetailsProvider extends Notifier<KanjiDetailsData?> {
       });
     } else {
       deleteFavorite(kanjiFromApi.kanjiCharacter).then((value) {
-        ref.read(favoritesListProvider.notifier).removeItem(kanjiFromApi);
+        ref.read(favoriteskanjisProvider.notifier).removeItem(kanjiFromApi);
         setFavorites(queryKanji == "");
       });
     }

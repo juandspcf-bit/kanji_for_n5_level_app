@@ -109,7 +109,7 @@ class KanjiListProvider extends Notifier<KanjiListData> {
   void updateProviders(KanjiFromApi kanjiFromApiStored, int selection) {
     ref.read(storedKanjisProvider.notifier).addItem(kanjiFromApiStored);
 
-    ref.read(favoritesListProvider.notifier).updateKanji(kanjiFromApiStored);
+    ref.read(favoriteskanjisProvider.notifier).updateKanji(kanjiFromApiStored);
 
     if (selection == 0) {
       updateKanji(kanjiFromApiStored);
@@ -126,13 +126,13 @@ class KanjiListProvider extends Notifier<KanjiListData> {
       ref.read(storedKanjisProvider.notifier).deleteItem(kanjiFromApi);
 
       final kanjiList = await updateKanjiWithOnliVersion(kanjiFromApi);
-      ref.read(favoritesListProvider.notifier).updateKanji(kanjiList[0]);
+      ref.read(favoriteskanjisProvider.notifier).updateKanji(kanjiList[0]);
       if (selection == 0) {
         ref.read(kanjiListProvider.notifier).updateKanji(kanjiList[0]);
       }
       logger.d('success deleting from db');
     } catch (e) {
-      ref.read(favoritesListProvider.notifier).updateKanji(
+      ref.read(favoriteskanjisProvider.notifier).updateKanji(
           updateStatusKanjiComputeVersion(
               StatusStorage.errorDeleting, true, kanjiFromApi));
       if (selection == 0) {

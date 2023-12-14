@@ -1,5 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kanji_for_n5_level_app/main.dart';
+import 'package:kanji_for_n5_level_app/providers/main_screen_provider.dart';
+import 'package:kanji_for_n5_level_app/repositories/local_database/db_favorites.dart';
 import 'package:kanji_for_n5_level_app/repositories/local_database/db_inserting_data.dart';
 import 'package:kanji_for_n5_level_app/models/kanji_from_api.dart';
 import 'package:kanji_for_n5_level_app/providers/status_stored_provider.dart';
@@ -23,6 +25,28 @@ class FavoritesListProvider extends Notifier<(List<KanjiFromApi>, int)> {
         storedKanjis,
         myFavoritesCached,
         section,
+      );
+      onSuccesRequest(kanjiList);
+    } catch (e) {
+      onErrorRequest();
+    }
+  }
+
+  Future<void> fetchFavoritesOnRefresh() async {
+    state = ([], 0);
+    List<KanjiFromApi> storedKanjis =
+        await ref.read(mainScreenProvider.notifier).loadStoredKanjis();
+    final favoritesKanjis = await loadFavorites();
+    if (favoritesKanjis.isEmpty) {
+      state = ([], 1);
+      return;
+    }
+
+    try {
+      final kanjiList = await applicationApiService.requestKanjiListToApi(
+        storedKanjis,
+        favoritesKanjis,
+        10,
       );
       onSuccesRequest(kanjiList);
     } catch (e) {
@@ -117,10 +141,10 @@ class FavoritesListProvider extends Notifier<(List<KanjiFromApi>, int)> {
   void updateProviders(KanjiFromApi kanjiFromApiStored) {
     ref.read(storedKanjisProvider.notifier).addItem(kanjiFromApiStored);
 
-    ref.read(favoritesListProvider.notifier).updateKanji(kanjiFromApiStored);
+    ref.read(favoriteskanjisProvider.notifier).updateKanji(kanjiFromApiStored);
   }
 }
 
-final favoritesListProvider =
+final favoriteskanjisProvider =
     NotifierProvider<FavoritesListProvider, (List<KanjiFromApi>, int)>(
         FavoritesListProvider.new);

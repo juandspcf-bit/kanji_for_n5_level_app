@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kanji_for_n5_level_app/models/kanji_from_api.dart';
 import 'package:kanji_for_n5_level_app/models/secction_model.dart';
 import 'package:kanji_for_n5_level_app/providers/error_storing_database_status.dart';
+import 'package:kanji_for_n5_level_app/providers/favorites_kanjis_provider.dart';
 import 'package:kanji_for_n5_level_app/providers/kanjis_list_provider.dart';
 import 'package:kanji_for_n5_level_app/providers/listen_connection_provider.dart';
 import 'package:kanji_for_n5_level_app/providers/main_screen_provider.dart';
@@ -79,8 +80,7 @@ class _BodiKanjiListState extends ConsumerState<BodyKanjisList> {
     if (widget.statusResponse == 0) {
       return const ShimmerList();
     } else if (widget.statusResponse == 1 && widget.kanjisFromApi.isNotEmpty) {
-      return connectivityData == ConnectivityResult.none ||
-              mainScreenData.selection == 1
+      return connectivityData == ConnectivityResult.none
           ? ListView.builder(
               itemCount: widget.kanjisFromApi.length,
               itemBuilder: (ctx, index) {
@@ -94,8 +94,14 @@ class _BodiKanjiListState extends ConsumerState<BodyKanjisList> {
               onRefresh: () async {
                 if (connectivityData == ConnectivityResult.none) return;
 
+                if (mainScreenData.selection == 1) {
+                  await ref
+                      .read(favoriteskanjisProvider.notifier)
+                      .fetchFavoritesOnRefresh();
+                  return;
+                }
+
                 final kanjiListData = ref.read(kanjiListProvider);
-                logger.d('the sections is ${kanjiListData.section}');
                 final sectionModel = listSections[kanjiListData.section - 1];
                 ref.read(kanjiListProvider.notifier).fetchKanjis(
                       kanjisCharacters: sectionModel.kanjisCharacters,

@@ -19,23 +19,23 @@ class FavoriteScreen extends ConsumerStatefulWidget {
 class _FavoriteScreenState extends ConsumerState<FavoriteScreen> {
   @override
   Widget build(BuildContext context) {
-    var kanjiList = ref.watch(favoritesListProvider);
+    var kanjiFavoritesList = ref.watch(favoriteskanjisProvider);
     final resultStatus = ref.watch(statusConnectionProvider);
 
     if (resultStatus == ConnectivityResult.none) {
-      final favoritesKanjisStored = kanjiList.$1
+      final favoritesKanjisStored = kanjiFavoritesList.$1
           .where((element) => element.statusStorage == StatusStorage.stored)
           .toList();
       if (favoritesKanjisStored.isNotEmpty) {
-        kanjiList = (favoritesKanjisStored, 1);
+        kanjiFavoritesList = (favoritesKanjisStored, 1);
       } else {
-        kanjiList = (<KanjiFromApi>[], 1);
+        kanjiFavoritesList = (<KanjiFromApi>[], 1);
       }
     }
 
     return BodyKanjisList(
-      statusResponse: kanjiList.$2,
-      kanjisFromApi: kanjiList.$1,
+      statusResponse: kanjiFavoritesList.$2,
+      kanjisFromApi: kanjiFavoritesList.$1,
     );
   }
 }

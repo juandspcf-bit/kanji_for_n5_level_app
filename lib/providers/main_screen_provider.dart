@@ -44,7 +44,7 @@ class MainScreenProvider extends Notifier<MainScreenData> {
   }
 
   bool isAnyProcessingData() {
-    final listFavorites = ref.read(favoritesListProvider);
+    final listFavorites = ref.read(favoriteskanjisProvider);
     try {
       listFavorites.$1.firstWhere(
         (element) =>
@@ -92,14 +92,14 @@ class MainScreenProvider extends Notifier<MainScreenData> {
   Future<void> getOnlineData() async {
     List<KanjiFromApi> listOfValidStoredKanjis = await loadStoredKanjis();
     final favoritesKanjis = await loadFavorites();
-    ref.read(favoritesListProvider.notifier).setInitialFavoritesOnline(
+    ref.read(favoriteskanjisProvider.notifier).setInitialFavoritesOnline(
         listOfValidStoredKanjis, favoritesKanjis, 10);
   }
 
   Future<void> getOfflineData() async {
     List<KanjiFromApi> listOfValidStoredKanjis = await loadStoredKanjis();
     final favoritesKanjis = await loadFavorites();
-    ref.read(favoritesListProvider.notifier).setInitialFavoritesOffline(
+    ref.read(favoriteskanjisProvider.notifier).setInitialFavoritesOffline(
         listOfValidStoredKanjis, favoritesKanjis, 10);
   }
 
