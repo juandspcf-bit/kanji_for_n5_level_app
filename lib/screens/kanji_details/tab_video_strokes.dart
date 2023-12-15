@@ -1,10 +1,15 @@
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:kanji_for_n5_level_app/providers/kanji_details_provider.dart';
+import 'package:kanji_for_n5_level_app/providers/status_connection_provider.dart';
+import 'package:kanji_for_n5_level_app/providers/status_stored_provider.dart';
 import 'package:kanji_for_n5_level_app/providers/video_status_playing.dart';
+import 'package:kanji_for_n5_level_app/screens/kanji_details/error_connection_tabs.dart';
 import 'package:kanji_for_n5_level_app/screens/kanji_details/image_meaning_kanji.dart';
 import 'package:kanji_for_n5_level_app/screens/kanji_details/meaning_definition.dart';
+import 'package:kanji_for_n5_level_app/screens/kanji_details/tab_examples.dart';
 import 'package:video_player/video_player.dart';
 
 class TabVideoStrokes extends ConsumerStatefulWidget {
@@ -38,39 +43,44 @@ class _TabVideoStrokes extends ConsumerState<TabVideoStrokes> {
 
   @override
   Widget build(BuildContext context) {
+    final connectivityData = ref.watch(statusConnectionProvider);
     final kanjiFromApi = ref.watch(kanjiDetailsProvider)!.kanjiFromApi;
-    return SingleChildScrollView(
-      child: Column(
-        children: [
-          const SizedBox(
-            height: 10,
-          ),
-          FutureBuilder(
-              future: initializadedVideoPlayer,
-              builder: (ctx, snapShot) {
-                if (snapShot.connectionState == ConnectionState.done &&
-                    !snapShot.hasError) {
-                  _videoController.setLooping(true);
-                  _videoController.play();
-                }
-                return VideoSection(
-                  videoController: _videoController,
-                  connectionState: snapShot.connectionState,
-                  hasError: snapShot.hasError,
-                );
-              }),
-          const Divider(
-            height: 4,
-          ),
-          MeaningAndDefinition(
-            englishMeaning: kanjiFromApi.englishMeaning,
-            hiraganaMeaning: kanjiFromApi.hiraganaMeaning,
-            katakanaMeaning: kanjiFromApi.katakanaMeaning,
-          ),
-          const ImageMeaningKanji(),
-        ],
-      ),
-    );
+
+    return connectivityData == ConnectivityResult.none &&
+            kanjiFromApi.statusStorage == StatusStorage.onlyOnline
+        ? const ErrorConnectionTabsScreen()
+        : SingleChildScrollView(
+            child: Column(
+              children: [
+                const SizedBox(
+                  height: 10,
+                ),
+                FutureBuilder(
+                    future: initializadedVideoPlayer,
+                    builder: (ctx, snapShot) {
+                      if (snapShot.connectionState == ConnectionState.done &&
+                          !snapShot.hasError) {
+                        _videoController.setLooping(true);
+                        _videoController.play();
+                      }
+                      return VideoSection(
+                        videoController: _videoController,
+                        connectionState: snapShot.connectionState,
+                        hasError: snapShot.hasError,
+                      );
+                    }),
+                const Divider(
+                  height: 4,
+                ),
+                MeaningAndDefinition(
+                  englishMeaning: kanjiFromApi.englishMeaning,
+                  hiraganaMeaning: kanjiFromApi.hiraganaMeaning,
+                  katakanaMeaning: kanjiFromApi.katakanaMeaning,
+                ),
+                const ImageMeaningKanji(),
+              ],
+            ),
+          );
   }
 }
 
