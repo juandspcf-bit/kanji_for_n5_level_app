@@ -5,22 +5,43 @@ import 'package:kanji_for_n5_level_app/main.dart';
 class LoginProvider extends Notifier<LogingData> {
   @override
   LogingData build() {
-    return LogingData(statusFetching: 1);
+    return LogingData(
+      statusFetching: 1,
+      email: '',
+      password: '',
+    );
   }
 
   void setStatus(int status) async {
-    state = LogingData(statusFetching: status);
+    state = LogingData(
+      statusFetching: status,
+      email: state.email,
+      password: state.password,
+    );
   }
 
-  Future<StatusLogingRequest> onValidate(
-    String email,
-    String password,
-  ) async {
+  void setEmail(String email) {
+    state = LogingData(
+      statusFetching: state.statusFetching,
+      email: email,
+      password: state.password,
+    );
+  }
+
+  void setPassword(String password) {
+    state = LogingData(
+      statusFetching: state.statusFetching,
+      email: state.email,
+      password: password,
+    );
+  }
+
+  Future<StatusLogingRequest> onValidate() async {
     setStatus(0);
 
     try {
-      await FirebaseAuth.instance
-          .signInWithEmailAndPassword(email: email, password: password);
+      await FirebaseAuth.instance.signInWithEmailAndPassword(
+          email: state.email, password: state.password);
       return StatusLogingRequest.success;
     } on FirebaseAuthException catch (e) {
       logger.e(e.code);
@@ -47,8 +68,13 @@ final loginProvider =
 
 class LogingData {
   final int statusFetching;
-
-  LogingData({required this.statusFetching});
+  final String email;
+  final String password;
+  LogingData({
+    required this.statusFetching,
+    required this.email,
+    required this.password,
+  });
 }
 
 enum StatusLogingRequest {
@@ -68,22 +94,3 @@ enum StatusLogingRequest {
   @override
   String toString() => message;
 }
-
-/* class InvalidCredentialsException implements Exception {
-  final String message;
-
-  const InvalidCredentialsException([this.message = 'Invalid credentials']);
-}
-
-class UserNotFoundException implements Exception {
-  final String message;
-
-  const UserNotFoundException([this.message = 'The user was not found']);
-}
-
-class WrongPasswordException implements Exception {
-  final String message;
-
-  const WrongPasswordException([this.message = 'The password is wrong']);
-}
- */

@@ -63,7 +63,7 @@ class AuthFlow extends ConsumerWidget {
           if (user != null) {
             return toLoggedUserScreen(connectionWifiState, ref);
           } else {
-            return const ToLoginFormScreen();
+            return ToLoginFormScreen();
           }
         });
   }

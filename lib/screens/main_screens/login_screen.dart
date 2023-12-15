@@ -2,23 +2,15 @@ import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:kanji_for_n5_level_app/main.dart';
 import 'package:kanji_for_n5_level_app/providers/login_provider.dart';
 import 'package:kanji_for_n5_level_app/providers/modal_email_reset_password_provider.dart';
 import 'package:kanji_for_n5_level_app/providers/sign_up_provider.dart';
 import 'package:kanji_for_n5_level_app/screens/main_screens/sing_up_screen.dart';
 
-class ToLoginFormScreen extends ConsumerStatefulWidget {
-  const ToLoginFormScreen({super.key});
+class ToLoginFormScreen extends ConsumerWidget {
+  ToLoginFormScreen({super.key});
 
-  @override
-  ConsumerState<ToLoginFormScreen> createState() => _LoginFormState();
-}
-
-class _LoginFormState extends ConsumerState<ToLoginFormScreen> {
   final _formKey = GlobalKey<FormState>();
-  String email = '';
-  String password = '';
 
   Widget _dialog(BuildContext context, String text) {
     return AlertDialog(
@@ -51,17 +43,12 @@ class _LoginFormState extends ConsumerState<ToLoginFormScreen> {
     );
   }
 
-  void onValidate(WidgetRef ref) async {
+  void onValidate(BuildContext context, WidgetRef ref) async {
     final currenState = _formKey.currentState;
     if (currenState == null) return;
     if (currenState.validate()) {
       currenState.save();
-      final result = await ref.read(loginProvider.notifier).onValidate(
-            email,
-            password,
-          );
-
-      logger.d(result);
+      final result = await ref.read(loginProvider.notifier).onValidate();
       switch (result) {
         case StatusLogingRequest.invalidCredentials:
         case StatusLogingRequest.userNotFound:
@@ -93,10 +80,11 @@ class _LoginFormState extends ConsumerState<ToLoginFormScreen> {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     Future.delayed(const Duration(milliseconds: 500), () {
       if (context.mounted) FlutterNativeSplash.remove();
     });
+    final loginFormData = ref.watch(loginProvider);
     final dataState = ref.watch(loginProvider);
     return Scaffold(
       body: Padding(
@@ -136,7 +124,7 @@ class _LoginFormState extends ConsumerState<ToLoginFormScreen> {
                     child: Column(
                       children: [
                         TextFormField(
-                          initialValue: email,
+                          initialValue: loginFormData.email,
                           decoration: const InputDecoration().copyWith(
                               border: const OutlineInputBorder(),
                               prefixIcon: const Icon(Icons.email),
@@ -152,14 +140,14 @@ class _LoginFormState extends ConsumerState<ToLoginFormScreen> {
                           },
                           onSaved: (value) {
                             if (value == null) return;
-                            email = value;
+                            ref.read(loginProvider.notifier).setEmail(value);
                           },
                         ),
                         const SizedBox(
                           height: 10,
                         ),
                         TextFormField(
-                          initialValue: password,
+                          initialValue: loginFormData.password,
                           decoration: const InputDecoration().copyWith(
                             border: const OutlineInputBorder(),
                             prefixIcon: const Icon(Icons.key),
@@ -178,7 +166,7 @@ class _LoginFormState extends ConsumerState<ToLoginFormScreen> {
                           },
                           onSaved: (value) {
                             if (value == null) return;
-                            password = value;
+                            ref.read(loginProvider.notifier).setPassword(value);
                           },
                         ),
                         const SizedBox(
@@ -220,7 +208,7 @@ class _LoginFormState extends ConsumerState<ToLoginFormScreen> {
                       if (!currentFocus.hasPrimaryFocus) {
                         currentFocus.unfocus();
                       }
-                      onValidate(ref);
+                      onValidate(context, ref);
                     },
                     style: ElevatedButton.styleFrom().copyWith(
                       minimumSize: const MaterialStatePropertyAll(
