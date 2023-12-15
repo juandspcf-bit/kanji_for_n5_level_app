@@ -48,7 +48,10 @@ class _TabVideoStrokes extends ConsumerState<TabVideoStrokes> {
 
     return connectivityData == ConnectivityResult.none &&
             kanjiFromApi.statusStorage == StatusStorage.onlyOnline
-        ? const ErrorConnectionTabsScreen()
+        ? const ErrorConnectionScreen(
+            message:
+                'No internet connection, you will be able to acces the info when the connection is restored',
+          )
         : SingleChildScrollView(
             child: Column(
               children: [

@@ -21,7 +21,10 @@ class TabStrokes extends ConsumerWidget {
     final statusStorage = kanjiDetailsData.statusStorage;
     return connectivityData == ConnectivityResult.none &&
             kanjiFromApi.statusStorage == StatusStorage.onlyOnline
-        ? const ErrorConnectionTabsScreen()
+        ? const ErrorConnectionScreen(
+            message:
+                'No internet connection, you will be able to acces the info when the connection is restored',
+          )
         : StrokesImages(
             kanjiFromApi: kanjiFromApi,
             statusStorage: statusStorage,

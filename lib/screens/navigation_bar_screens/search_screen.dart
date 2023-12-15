@@ -6,6 +6,7 @@ import 'package:kanji_for_n5_level_app/models/kanji_from_api.dart';
 import 'package:kanji_for_n5_level_app/providers/search_screen_provider.dart';
 import 'package:kanji_for_n5_level_app/providers/status_connection_provider.dart';
 import 'package:kanji_for_n5_level_app/providers/status_stored_provider.dart';
+import 'package:kanji_for_n5_level_app/screens/kanji_details/error_connection_tabs.dart';
 import 'package:kanji_for_n5_level_app/screens/kanji_details/examples_audios.dart';
 import 'package:kanji_for_n5_level_app/screens/kanji_details/meaning_definition.dart';
 
@@ -52,43 +53,14 @@ class SearchScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final searchScreenState = ref.watch(searchScreenProvider);
     final statusConnectionState = ref.watch(statusConnectionProvider);
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 30),
-      child: statusConnectionState == ConnectivityResult.none
-          ? Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Expanded(
-                        child: Text(
-                          'No internet connection, you will be able to search when the connection is restored',
-                          style: Theme.of(context).textTheme.titleLarge,
-                          textAlign: TextAlign.center,
-                          maxLines: 3,
-                        ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(
-                    height: 25,
-                  ),
-                  const Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Icon(
-                        Icons.wifi_off,
-                        color: Colors.amber,
-                        size: 80,
-                      ),
-                    ],
-                  )
-                ],
-              ),
-            )
-          : Column(
+    return statusConnectionState == ConnectivityResult.none
+        ? const ErrorConnectionScreen(
+            message:
+                'No internet connection, you will be able to search when the connection is restored',
+          )
+        : Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 30),
+            child: Column(
               children: [
                 Form(
                   key: _formKey,
@@ -136,7 +108,7 @@ class SearchScreen extends ConsumerWidget {
                 )
               ],
             ),
-    );
+          );
   }
 }
 

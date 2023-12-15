@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
-class ErrorConnectionTabsScreen extends StatelessWidget {
-  const ErrorConnectionTabsScreen({
-    super.key,
-  });
+class ErrorConnectionScreen extends StatelessWidget {
+  const ErrorConnectionScreen({super.key, required this.message});
+
+  final String message;
 
   @override
   Widget build(BuildContext context) {
@@ -18,7 +18,7 @@ class ErrorConnectionTabsScreen extends StatelessWidget {
               children: [
                 Expanded(
                   child: Text(
-                    'No internet connection, you will be able to acces the info when the connection is restored',
+                    message,
                     style: Theme.of(context).textTheme.titleLarge,
                     textAlign: TextAlign.center,
                     maxLines: 3,
