@@ -9,7 +9,6 @@ import 'package:kanji_for_n5_level_app/providers/video_status_playing.dart';
 import 'package:kanji_for_n5_level_app/screens/kanji_details/error_connection_tabs.dart';
 import 'package:kanji_for_n5_level_app/screens/kanji_details/image_meaning_kanji.dart';
 import 'package:kanji_for_n5_level_app/screens/kanji_details/meaning_definition.dart';
-import 'package:kanji_for_n5_level_app/screens/kanji_details/tab_examples.dart';
 import 'package:video_player/video_player.dart';
 
 class TabVideoStrokes extends ConsumerStatefulWidget {

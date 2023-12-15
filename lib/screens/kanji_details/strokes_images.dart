@@ -199,6 +199,6 @@ class StrokesImages extends ConsumerWidget {
           height: 10,
         ),
       ],
-    ); // TODO: implement build
+    );
   }
 }
