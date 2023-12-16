@@ -4,7 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kanji_for_n5_level_app/models/kanji_from_api.dart';
 import 'package:kanji_for_n5_level_app/providers/quiz_kanji_list_provider.dart';
 import 'package:kanji_for_n5_level_app/providers/status_connection_provider.dart';
-import 'package:kanji_for_n5_level_app/screens/quiz_screen/internet_connection_error_screen.dart';
+import 'package:kanji_for_n5_level_app/screens/kanji_details/error_connection_tabs.dart';
 import 'package:kanji_for_n5_level_app/screens/quiz_screen/quiz_question_screen.dart';
 import 'package:kanji_for_n5_level_app/screens/quiz_screen/score_body.dart';
 import 'package:kanji_for_n5_level_app/screens/quiz_screen/welcome_kanji_list_quiz_screen.dart';
@@ -34,7 +34,9 @@ class _QuizScreenState extends ConsumerState<QuizScreen> {
 
   Widget getScreen(ConnectivityResult resultStatus, QuizDataValues quizState) {
     if (resultStatus == ConnectivityResult.none) {
-      return const Center(child: InternetConnectionErrorScreen());
+      return const ErrorConnectionScreen(
+        message: 'The internet connection has gone, restart the quiz later',
+      );
     } else if (quizState.currentScreenType == Screens.score) {
       return Center(
         child: ScoreBody(
@@ -71,9 +73,9 @@ class _QuizScreenState extends ConsumerState<QuizScreen> {
   Widget build(BuildContext context) {
     final resultStatus = ref.watch(statusConnectionProvider);
     final quizState = ref.watch(quizDataValuesProvider);
-    if (resultStatus == ConnectivityResult.none) {
+/*     if (resultStatus == ConnectivityResult.none) {
       ref.read(quizDataValuesProvider.notifier).resetTheQuiz();
-    }
+    } */
 
     return Scaffold(
       appBar: AppBar(title: const Text("Test your knowledge")),
