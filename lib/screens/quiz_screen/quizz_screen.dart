@@ -73,9 +73,6 @@ class _QuizScreenState extends ConsumerState<QuizScreen> {
   Widget build(BuildContext context) {
     final resultStatus = ref.watch(statusConnectionProvider);
     final quizState = ref.watch(quizDataValuesProvider);
-/*     if (resultStatus == ConnectivityResult.none) {
-      ref.read(quizDataValuesProvider.notifier).resetTheQuiz();
-    } */
 
     return Scaffold(
       appBar: AppBar(title: const Text("Test your knowledge")),
