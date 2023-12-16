@@ -9,7 +9,7 @@ import 'package:kanji_for_n5_level_app/screens/quiz_screen/quiz_question_screen.
 import 'package:kanji_for_n5_level_app/screens/quiz_screen/score_body.dart';
 import 'package:kanji_for_n5_level_app/screens/quiz_screen/welcome_kanji_list_quiz_screen.dart';
 
-class QuizScreen extends ConsumerStatefulWidget {
+class QuizScreen extends ConsumerWidget {
   const QuizScreen({
     super.key,
     required this.kanjisFromApi,
@@ -17,22 +17,8 @@ class QuizScreen extends ConsumerStatefulWidget {
 
   final List<KanjiFromApi> kanjisFromApi;
 
-  @override
-  ConsumerState<QuizScreen> createState() => _QuizScreenState();
-}
-
-class _QuizScreenState extends ConsumerState<QuizScreen> {
-  void showSnackBarQuizz(String message, int duration) {
-    ScaffoldMessenger.of(context).clearSnackBars();
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        duration: Duration(seconds: duration),
-        content: Text(message),
-      ),
-    );
-  }
-
-  Widget getScreen(ConnectivityResult resultStatus, QuizDataValues quizState) {
+  Widget getScreen(ConnectivityResult resultStatus, QuizDataValues quizState,
+      WidgetRef ref) {
     if (resultStatus == ConnectivityResult.none) {
       return const ErrorConnectionScreen(
         message: 'The internet connection has gone, restart the quiz later',
@@ -70,7 +56,7 @@ class _QuizScreenState extends ConsumerState<QuizScreen> {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final resultStatus = ref.watch(statusConnectionProvider);
     final quizState = ref.watch(quizDataValuesProvider);
 
@@ -83,7 +69,7 @@ class _QuizScreenState extends ConsumerState<QuizScreen> {
           right: 30,
           left: 30,
         ),
-        child: getScreen(resultStatus, quizState),
+        child: getScreen(resultStatus, quizState, ref),
       ),
     );
   }
