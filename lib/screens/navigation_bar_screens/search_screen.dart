@@ -86,7 +86,7 @@ class SearchScreen extends ConsumerWidget {
                     validator: (text) {
                       if (text != null &&
                           text.isNotEmpty &&
-                          validCharacters.hasMatch(text)) {
+                          validCharacters.hasMatch(text.trim())) {
                         return null;
                       } else {
                         return 'Not a valid word';

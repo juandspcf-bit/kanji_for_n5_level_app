@@ -11,9 +11,10 @@ class SearchScreenProvider extends Notifier<SearchScreenData> {
   }
 
   void setWord(String word) {
+    final trimWord = word.trim();
     state = SearchScreenData(
-        word: word, kanjiFromApi: null, searchState: SearchState.searching);
-    _getKanjiFromEnglishWord(word);
+        word: trimWord, kanjiFromApi: null, searchState: SearchState.searching);
+    _getKanjiFromEnglishWord(trimWord);
   }
 
   void setOnErrorTextField() {
