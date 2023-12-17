@@ -69,9 +69,12 @@ class BodyKanjisList extends ConsumerWidget {
     } else if (statusResponse == 2) {
       return LayoutBuilder(
         builder: (contx, viewportConstraints) {
+          final isAnyProcessingDataFunc =
+              ref.read(kanjiListProvider.notifier).isAnyProcessingData;
           return RefreshIndicator(
             onRefresh: () async {
-              if (connectivityData == ConnectivityResult.none) return;
+              if (connectivityData == ConnectivityResult.none ||
+                  isAnyProcessingDataFunc()) return;
 
               if (mainScreenData.selection == 1) {
                 await ref

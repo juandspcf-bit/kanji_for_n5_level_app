@@ -177,6 +177,7 @@ class InfoStatusSearch extends StatelessWidget {
               message,
               style: Theme.of(context).textTheme.titleLarge,
               maxLines: 3,
+              textAlign: TextAlign.center,
             ),
           ),
         ],
