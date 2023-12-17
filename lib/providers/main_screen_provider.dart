@@ -57,6 +57,11 @@ class MainScreenProvider extends Notifier<MainScreenData> {
     }
   }
 
+  void setLinkAvatar(String link) {
+    state = MainScreenData(
+        selection: state.selection, avatarLink: link, fullName: state.fullName);
+  }
+
   void selectPage(int index, BuildContext context,
       void Function(BuildContext context) scaleDialog) {
     if (index == 0 && isAnyProcessingData()) {

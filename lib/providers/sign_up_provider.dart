@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kanji_for_n5_level_app/main.dart';
+import 'package:kanji_for_n5_level_app/providers/main_screen_provider.dart';
 
 class SingUpProvider extends Notifier<SingUpData> {
   @override
@@ -32,17 +33,22 @@ class SingUpProvider extends Notifier<SingUpData> {
 
       final user = credential.user;
 
-      if (user != null) {
-        user.updateDisplayName(fullName);
-        user.updateEmail(emailAddress);
-      }
+      if (user == null) return;
+
+      await user.updateDisplayName(fullName);
+      await user.updateEmail(emailAddress);
 
       if (pathProfileUser.isNotEmpty) {
         try {
-          final userPhoto =
-              storageRef.child("userImages/${credential.user!.uid}.jpg");
+          final userPhoto = storageRef.child("userImages/${user.uid}.jpg");
 
           await userPhoto.putFile(File(pathProfileUser));
+
+          final link = await userPhoto.getDownloadURL();
+
+          ref.read(mainScreenProvider.notifier).setAvatarLink(link);
+
+          logger.d('photo stored succefully');
         } catch (e) {
           logger.e('error');
           logger.e(e);
