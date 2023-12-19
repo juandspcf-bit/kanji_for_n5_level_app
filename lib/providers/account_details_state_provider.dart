@@ -5,6 +5,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kanji_for_n5_level_app/main.dart';
+import 'package:kanji_for_n5_level_app/providers/login_provider.dart';
 import 'package:kanji_for_n5_level_app/providers/main_screen_provider.dart';
 
 class PersonalInfoProvider extends Notifier<PersonalInfoData> {
@@ -114,10 +115,24 @@ class PersonalInfoProvider extends Notifier<PersonalInfoData> {
     currentFormState.save();
     final accountDetailsData = ref.read(personalInfoProvider);
     setStatus(1);
-    await FirebaseAuth.instance.currentUser!
-        .updateDisplayName(accountDetailsData.name);
-    await FirebaseAuth.instance.currentUser!
-        .updateEmail(accountDetailsData.email);
+    final user = FirebaseAuth.instance.currentUser;
+    if (user == null) return;
+    try {
+      await user.updateDisplayName(accountDetailsData.name);
+
+/*      if (userCredential == null) return;
+
+      final authCredential = userCredential.credential;
+      if (authCredential == null) return;
+      userCredential = await user.reauthenticateWithCredential(authCredential);
+      ref.read(loginProvider.notifier).setUserCredentials(userCredential);
+
+      await user.updateEmail(accountDetailsData.email); */
+    } on FirebaseAuthException catch (e) {
+      logger.e('error changing email with ${e.code} and message $e');
+      return;
+    }
+
     if (accountDetailsData.pathProfileTemporal.isNotEmpty) {
       try {
         final userPhoto = storageRef

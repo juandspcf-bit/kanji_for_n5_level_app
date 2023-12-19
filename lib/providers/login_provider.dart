@@ -9,6 +9,7 @@ class LoginProvider extends Notifier<LogingData> {
       statusFetching: 1,
       email: '',
       password: '',
+      credential: null,
     );
   }
 
@@ -17,6 +18,7 @@ class LoginProvider extends Notifier<LogingData> {
       statusFetching: status,
       email: state.email,
       password: state.password,
+      credential: state.credential,
     );
   }
 
@@ -25,23 +27,30 @@ class LoginProvider extends Notifier<LogingData> {
       statusFetching: state.statusFetching,
       email: email,
       password: state.password,
+      credential: state.credential,
     );
   }
 
   void setPassword(String password) {
     state = LogingData(
-      statusFetching: state.statusFetching,
-      email: state.email,
-      password: password,
-    );
+        statusFetching: state.statusFetching,
+        email: state.email,
+        password: password,
+        credential: state.credential);
   }
 
   Future<StatusLogingRequest> onValidate() async {
     setStatus(0);
 
     try {
-      await FirebaseAuth.instance.signInWithEmailAndPassword(
-          email: state.email, password: state.password);
+      UserCredential credential = await FirebaseAuth.instance
+          .signInWithEmailAndPassword(
+              email: state.email, password: state.password);
+      state = LogingData(
+          statusFetching: state.statusFetching,
+          email: state.email,
+          password: state.password,
+          credential: credential);
       return StatusLogingRequest.success;
     } on FirebaseAuthException catch (e) {
       logger.e(e.code);
@@ -61,6 +70,15 @@ class LoginProvider extends Notifier<LogingData> {
       return StatusLogingRequest.error;
     }
   }
+
+  void setUserCredentials(UserCredential userCredential) {
+    state = LogingData(
+      statusFetching: state.statusFetching,
+      email: state.email,
+      password: state.password,
+      credential: userCredential,
+    );
+  }
 }
 
 final loginProvider =
@@ -70,10 +88,12 @@ class LogingData {
   final int statusFetching;
   final String email;
   final String password;
+  final UserCredential? credential;
   LogingData({
     required this.statusFetching,
     required this.email,
     required this.password,
+    required this.credential,
   });
 }
 

@@ -1,6 +1,6 @@
 #!/bin/sh
 # This is a generated file; do not edit or check into version control.
-export "FLUTTER_ROOT=/home/juan/flutter_projects/flutter"
+export "FLUTTER_ROOT=/home/juan/flutter_projects/sdk/flutter"
 export "FLUTTER_APPLICATION_PATH=/home/juan/flutter_projects/kanji_for_n5_level_app"
 export "COCOAPODS_PARALLEL_CODE_SIGN=true"
 export "FLUTTER_BUILD_DIR=build"

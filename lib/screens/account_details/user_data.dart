@@ -9,6 +9,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:kanji_for_n5_level_app/main.dart';
 import 'package:kanji_for_n5_level_app/providers/account_details_state_provider.dart';
+import 'package:kanji_for_n5_level_app/providers/main_screen_provider.dart';
 import 'package:kanji_for_n5_level_app/providers/status_connection_provider.dart';
 
 class UserData extends ConsumerWidget {
@@ -96,6 +97,10 @@ class UserData extends ConsumerWidget {
                       return 'Not a valid email';
                     }
                   },
+                  onSaved: (text) {
+                    if (text == null) return;
+                    ref.read(personalInfoProvider.notifier).setEmail(text);
+                  },
                 ),
                 const SizedBox(
                   height: 20,
@@ -107,6 +112,7 @@ class UserData extends ConsumerWidget {
                           ref
                               .read(personalInfoProvider.notifier)
                               .onValidate(_formKey, ref);
+                          //TODO add here user credendials?
                         },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Theme.of(context).colorScheme.primary,
