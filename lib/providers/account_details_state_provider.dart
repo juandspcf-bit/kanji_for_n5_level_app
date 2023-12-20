@@ -127,6 +127,7 @@ class PersonalInfoProvider extends Notifier<PersonalInfoData> {
     if (currentFormState == null) return;
     if (!currentFormState.validate()) return;
     currentFormState.save();
+
     state = PersonalInfoData(
         pathProfileUser: state.pathProfileUser,
         pathProfileTemporal: state.pathProfileTemporal,
@@ -136,7 +137,7 @@ class PersonalInfoProvider extends Notifier<PersonalInfoData> {
         showPasswordRequest: true);
   }
 
-  void updateUserData(String password) async {
+  void updateUserData(String password, void Function() action) async {
     setStatus(1);
     final user = FirebaseAuth.instance.currentUser;
     if (user == null) {
@@ -147,13 +148,6 @@ class PersonalInfoProvider extends Notifier<PersonalInfoData> {
     final personalInfoData = state;
     try {
       await user.updateDisplayName(personalInfoData.name);
-      state = PersonalInfoData(
-          pathProfileUser: state.pathProfileUser,
-          pathProfileTemporal: state.pathProfileTemporal,
-          name: state.name,
-          email: state.email,
-          statusFetching: state.statusFetching,
-          showPasswordRequest: true);
       final authCredential = EmailAuthProvider.credential(
         email: user.email!,
         password: password,
@@ -163,6 +157,7 @@ class PersonalInfoProvider extends Notifier<PersonalInfoData> {
     } on FirebaseAuthException catch (e) {
       logger.e('error changing email with ${e.code} and message $e');
       setStatus(3);
+
       return;
     }
 
@@ -175,14 +170,15 @@ class PersonalInfoProvider extends Notifier<PersonalInfoData> {
         final url = await userPhoto.getDownloadURL();
         setProfilePath(url);
         ref.read(mainScreenProvider.notifier).setAvatarLink(url);
-        setStatus(2);
+        setStatus(4);
       } catch (e) {
         setStatus(3);
+
         logger.e('error');
         logger.e(e);
       }
     } else {
-      setStatus(2);
+      setStatus(4);
     }
   }
 }

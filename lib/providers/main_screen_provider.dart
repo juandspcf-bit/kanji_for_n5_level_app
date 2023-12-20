@@ -127,18 +127,14 @@ class MainScreenProvider extends Notifier<MainScreenData> {
     final uuid = FirebaseAuth.instance.currentUser!.uid;
     final fullName = FirebaseAuth.instance.currentUser!.displayName;
 
-    logger.d('The full name is 1 $fullName');
-
     try {
       final userPhoto = storageRef.child("userImages/$uuid.jpg");
 
       final link = await userPhoto.getDownloadURL();
-      logger.d(link);
       state = MainScreenData(
           selection: 0, avatarLink: link, fullName: fullName ?? '');
     } catch (e) {
       logger.e('error reading profile photo');
-      logger.d('The full name is 2 $fullName');
       state = MainScreenData(
           selection: 0, avatarLink: '', fullName: fullName ?? '');
     }

@@ -26,14 +26,13 @@ class KanjiListSectionScreen extends ConsumerWidget
     if (ref.watch(errorDatabaseStatusProvider)) {
       errorDialog(
         context,
-        ref,
+        () {
+          ref
+              .read(errorDatabaseStatusProvider.notifier)
+              .setDeletingError(false);
+        },
         'An issue happened when deleting this item, please go back to the section'
         ' list and access the content again to see the updated content.',
-        const Icon(
-          Icons.error_rounded,
-          color: Colors.amberAccent,
-          size: 70,
-        ),
       );
     }
     var kanjiListData = ref.watch(kanjiListProvider);

@@ -1,5 +1,4 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:kanji_for_n5_level_app/main.dart';
 import 'package:kanji_for_n5_level_app/repositories/local_database/db_definitions.dart';
 
 Future<List<String>> loadFavorites() async {
@@ -8,8 +7,6 @@ Future<List<String>> loadFavorites() async {
   if (user == null) {
     return Future(() => []);
   }
-
-  logger.d(user.displayName);
 
   final db = await kanjiFromApiDatabase;
   final data = await db
