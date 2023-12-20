@@ -10,7 +10,7 @@ import 'package:kanji_for_n5_level_app/providers/status_stored_provider.dart';
 import 'package:kanji_for_n5_level_app/screens/body_list/body_list.dart';
 import 'package:kanji_for_n5_level_app/screens/navigation_bar_screens/db_dialog_error_message.dart';
 
-class FavoriteScreen extends ConsumerWidget with DialogErrorInDB {
+class FavoriteScreen extends ConsumerWidget with MyDialogs {
   const FavoriteScreen({
     super.key,
   });
@@ -20,7 +20,17 @@ class FavoriteScreen extends ConsumerWidget with DialogErrorInDB {
     final connectivityData = ref.watch(statusConnectionProvider);
     final mainScreenData = ref.watch(mainScreenProvider);
     if (ref.watch(errorDatabaseStatusProvider)) {
-      dbDeletingErrorDialog(context, ref);
+      errorDialog(
+        context,
+        ref,
+        'An issue happened when deleting this item, please go back to the section'
+        ' list and access the content again to see the updated content.',
+        const Icon(
+          Icons.error_rounded,
+          color: Colors.amberAccent,
+          size: 70,
+        ),
+      );
     }
     var kanjiFavoritesList = ref.watch(favoriteskanjisProvider);
     final resultStatus = ref.watch(statusConnectionProvider);

@@ -5,7 +5,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kanji_for_n5_level_app/main.dart';
-import 'package:kanji_for_n5_level_app/providers/login_provider.dart';
 import 'package:kanji_for_n5_level_app/providers/main_screen_provider.dart';
 
 class PersonalInfoProvider extends Notifier<PersonalInfoData> {
@@ -16,7 +15,8 @@ class PersonalInfoProvider extends Notifier<PersonalInfoData> {
         pathProfileTemporal: '',
         name: '',
         email: '',
-        statusFetching: 0);
+        statusFetching: 0,
+        showPasswordRequest: false);
   }
 
   void resetData() {
@@ -25,7 +25,8 @@ class PersonalInfoProvider extends Notifier<PersonalInfoData> {
         pathProfileTemporal: '',
         name: '',
         email: '',
-        statusFetching: 0);
+        statusFetching: 0,
+        showPasswordRequest: state.showPasswordRequest);
   }
 
   Future<void> getInitialPersonalInfoData() async {
@@ -41,23 +42,23 @@ class PersonalInfoProvider extends Notifier<PersonalInfoData> {
       final photoLink =
           await userPhoto.getDownloadURL().timeout(const Duration(seconds: 10));
       state = PersonalInfoData(
-        pathProfileUser: photoLink,
-        pathProfileTemporal: '',
-        name: fullName ?? '',
-        email: email ?? '',
-        statusFetching: 2,
-      );
+          pathProfileUser: photoLink,
+          pathProfileTemporal: '',
+          name: fullName ?? '',
+          email: email ?? '',
+          statusFetching: 2,
+          showPasswordRequest: state.showPasswordRequest);
     } on TimeoutException {
       logger.e('error reading profile photo');
       logger.d(fullName);
       logger.d(email);
       state = PersonalInfoData(
-        pathProfileUser: '',
-        pathProfileTemporal: '',
-        name: fullName ?? 'no name',
-        email: email ?? 'no data',
-        statusFetching: 2,
-      );
+          pathProfileUser: '',
+          pathProfileTemporal: '',
+          name: fullName ?? 'no name',
+          email: email ?? 'no data',
+          statusFetching: 2,
+          showPasswordRequest: state.showPasswordRequest);
     }
   }
 
@@ -67,7 +68,8 @@ class PersonalInfoProvider extends Notifier<PersonalInfoData> {
         pathProfileTemporal: path,
         name: state.name,
         email: state.email,
-        statusFetching: state.statusFetching);
+        statusFetching: state.statusFetching,
+        showPasswordRequest: state.showPasswordRequest);
   }
 
   void setProfilePath(String path) async {
@@ -76,27 +78,28 @@ class PersonalInfoProvider extends Notifier<PersonalInfoData> {
         pathProfileTemporal: state.pathProfileTemporal,
         name: state.name,
         email: state.email,
-        statusFetching: state.statusFetching);
+        statusFetching: state.statusFetching,
+        showPasswordRequest: state.showPasswordRequest);
   }
 
   void setName(String name) async {
-    //await FirebaseAuth.instance.currentUser!.updateDisplayName(name);
     state = PersonalInfoData(
         pathProfileUser: state.pathProfileUser,
         pathProfileTemporal: state.pathProfileTemporal,
         name: name,
         email: state.email,
-        statusFetching: state.statusFetching);
+        statusFetching: state.statusFetching,
+        showPasswordRequest: state.showPasswordRequest);
   }
 
   void setEmail(String email) async {
-    //await FirebaseAuth.instance.currentUser!.updateEmail(email);
     state = PersonalInfoData(
         pathProfileUser: state.pathProfileUser,
         pathProfileTemporal: state.pathProfileTemporal,
         name: state.name,
         email: email,
-        statusFetching: state.statusFetching);
+        statusFetching: state.statusFetching,
+        showPasswordRequest: state.showPasswordRequest);
   }
 
   void setStatus(int status) async {
@@ -105,51 +108,82 @@ class PersonalInfoProvider extends Notifier<PersonalInfoData> {
         pathProfileTemporal: state.pathProfileTemporal,
         name: state.name,
         email: state.email,
-        statusFetching: status);
+        statusFetching: status,
+        showPasswordRequest: state.showPasswordRequest);
   }
 
-  void onValidate(GlobalKey<FormState> formKey, WidgetRef ref) async {
+  void setShowPasswordRequest(bool status) async {
+    state = PersonalInfoData(
+        pathProfileUser: state.pathProfileUser,
+        pathProfileTemporal: state.pathProfileTemporal,
+        name: state.name,
+        email: state.email,
+        statusFetching: state.statusFetching,
+        showPasswordRequest: status);
+  }
+
+  void onValidate(GlobalKey<FormState> formKey) async {
     final currentFormState = formKey.currentState;
     if (currentFormState == null) return;
     if (!currentFormState.validate()) return;
     currentFormState.save();
-    final accountDetailsData = ref.read(personalInfoProvider);
+    state = PersonalInfoData(
+        pathProfileUser: state.pathProfileUser,
+        pathProfileTemporal: state.pathProfileTemporal,
+        name: state.name,
+        email: state.email,
+        statusFetching: state.statusFetching,
+        showPasswordRequest: true);
+  }
+
+  void updateUserData(String password) async {
     setStatus(1);
     final user = FirebaseAuth.instance.currentUser;
-    if (user == null) return;
-    try {
-      await user.updateDisplayName(accountDetailsData.name);
-
-/*      if (userCredential == null) return;
-
-      final authCredential = userCredential.credential;
-      if (authCredential == null) return;
-      userCredential = await user.reauthenticateWithCredential(authCredential);
-      ref.read(loginProvider.notifier).setUserCredentials(userCredential);
-
-      await user.updateEmail(accountDetailsData.email); */
-    } on FirebaseAuthException catch (e) {
-      logger.e('error changing email with ${e.code} and message $e');
+    if (user == null) {
+      setStatus(2);
       return;
     }
 
-    if (accountDetailsData.pathProfileTemporal.isNotEmpty) {
+    final personalInfoData = state;
+    try {
+      await user.updateDisplayName(personalInfoData.name);
+      state = PersonalInfoData(
+          pathProfileUser: state.pathProfileUser,
+          pathProfileTemporal: state.pathProfileTemporal,
+          name: state.name,
+          email: state.email,
+          statusFetching: state.statusFetching,
+          showPasswordRequest: true);
+      final authCredential = EmailAuthProvider.credential(
+        email: user.email!,
+        password: password,
+      );
+      await user.reauthenticateWithCredential(authCredential);
+      await user.updateEmail(personalInfoData.email);
+    } on FirebaseAuthException catch (e) {
+      logger.e('error changing email with ${e.code} and message $e');
+      setStatus(3);
+      return;
+    }
+
+    if (personalInfoData.pathProfileTemporal.isNotEmpty) {
       try {
         final userPhoto = storageRef
             .child("userImages/${FirebaseAuth.instance.currentUser!.uid}.jpg");
 
-        await userPhoto.putFile(File(accountDetailsData.pathProfileTemporal));
+        await userPhoto.putFile(File(personalInfoData.pathProfileTemporal));
         final url = await userPhoto.getDownloadURL();
         setProfilePath(url);
         ref.read(mainScreenProvider.notifier).setAvatarLink(url);
+        setStatus(2);
       } catch (e) {
+        setStatus(3);
         logger.e('error');
         logger.e(e);
       }
+    } else {
+      setStatus(2);
     }
-    setName(accountDetailsData.name);
-    setEmail(accountDetailsData.email);
-    setStatus(2);
   }
 }
 
@@ -163,11 +197,13 @@ class PersonalInfoData {
   final String name;
   final String email;
   final int statusFetching;
+  final bool showPasswordRequest;
 
   PersonalInfoData(
       {required this.pathProfileUser,
       required this.pathProfileTemporal,
       required this.name,
       required this.email,
-      required this.statusFetching});
+      required this.statusFetching,
+      required this.showPasswordRequest});
 }

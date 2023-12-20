@@ -14,7 +14,7 @@ import 'package:kanji_for_n5_level_app/screens/quiz_screen/quizz_screen.dart';
 import 'package:kanji_for_n5_level_app/screens/status_operations_dialogs.dart';
 
 class KanjiListSectionScreen extends ConsumerWidget
-    with DialogErrorInDB, StatusDBStoringDialogs {
+    with MyDialogs, StatusDBStoringDialogs {
   const KanjiListSectionScreen({
     super.key,
   });
@@ -24,7 +24,17 @@ class KanjiListSectionScreen extends ConsumerWidget
     final connectivityData = ref.watch(statusConnectionProvider);
     final mainScreenData = ref.watch(mainScreenProvider);
     if (ref.watch(errorDatabaseStatusProvider)) {
-      dbDeletingErrorDialog(context, ref);
+      errorDialog(
+        context,
+        ref,
+        'An issue happened when deleting this item, please go back to the section'
+        ' list and access the content again to see the updated content.',
+        const Icon(
+          Icons.error_rounded,
+          color: Colors.amberAccent,
+          size: 70,
+        ),
+      );
     }
     var kanjiListData = ref.watch(kanjiListProvider);
     final statusConnectionData = ref.watch(statusConnectionProvider);
