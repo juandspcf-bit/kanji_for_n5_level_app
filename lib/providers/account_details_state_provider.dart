@@ -128,32 +128,41 @@ class PersonalInfoProvider extends Notifier<PersonalInfoData> {
     if (!currentFormState.validate()) return;
     currentFormState.save();
 
-    state = PersonalInfoData(
-        pathProfileUser: state.pathProfileUser,
-        pathProfileTemporal: state.pathProfileTemporal,
-        name: state.name,
-        email: state.email,
-        statusFetching: state.statusFetching,
-        showPasswordRequest: true);
+    setShowPasswordRequest(true);
   }
 
-  void updateUserData(String password, void Function() action) async {
-    setStatus(1);
+  void updateUserData(String password) async {
     final user = FirebaseAuth.instance.currentUser;
     if (user == null) {
       setStatus(2);
       return;
     }
-
     final personalInfoData = state;
+    final name = user.displayName;
+    final email = user.email;
+    if (name != null &&
+        name.trim() == personalInfoData.name.trim() &&
+        email != null &&
+        email.trim() == personalInfoData.email.trim() &&
+        personalInfoData.pathProfileTemporal.isEmpty) {
+      setStatus(5);
+      return;
+    }
+    setStatus(1);
+
     try {
-      await user.updateDisplayName(personalInfoData.name);
-      final authCredential = EmailAuthProvider.credential(
-        email: user.email!,
-        password: password,
-      );
-      await user.reauthenticateWithCredential(authCredential);
-      await user.updateEmail(personalInfoData.email);
+      if (name != null && name != personalInfoData.name.trim()) {
+        await user.updateDisplayName(personalInfoData.name);
+      }
+
+      if (email != null && email != personalInfoData.email.trim()) {
+        final authCredential = EmailAuthProvider.credential(
+          email: user.email!,
+          password: password,
+        );
+        await user.reauthenticateWithCredential(authCredential);
+        await user.updateEmail(personalInfoData.email);
+      }
     } on FirebaseAuthException catch (e) {
       logger.e('error changing email with ${e.code} and message $e');
       setStatus(3);

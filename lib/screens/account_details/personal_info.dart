@@ -18,13 +18,11 @@ class PersonalInfo extends ConsumerWidget with MyDialogs {
       if (currenState == null) return;
       if (currenState.validate()) {
         currenState.save();
-        ref.read(personalInfoProvider.notifier).setShowPasswordRequest(false);
-        ref.read(personalInfoProvider.notifier).updateUserData(textPassword,
-            () {
-          errorDialog(context, () {}, 'errorrrrr');
-        });
-
         Navigator.of(context).pop();
+        ref.read(personalInfoProvider.notifier).setShowPasswordRequest(false);
+        ref.read(personalInfoProvider.notifier).updateUserData(
+              textPassword,
+            );
       }
     }
 
@@ -135,6 +133,24 @@ class PersonalInfo extends ConsumerWidget with MyDialogs {
                 .setShowPasswordRequest(false);
           },
           'succeful updating process',
+        );
+      }
+
+      if (current.statusFetching == 5) {
+        scaleDialog(
+          context,
+          () {
+            ref.read(personalInfoProvider.notifier).setStatus(2);
+            ref
+                .read(personalInfoProvider.notifier)
+                .setShowPasswordRequest(false);
+          },
+          'nothing to update',
+          const Icon(
+            Icons.gpp_maybe_rounded,
+            color: Colors.amberAccent,
+            size: 70,
+          ),
         );
       }
     });

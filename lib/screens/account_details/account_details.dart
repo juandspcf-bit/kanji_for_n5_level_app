@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kanji_for_n5_level_app/providers/account_details_state_provider.dart';
 import 'package:kanji_for_n5_level_app/providers/login_provider.dart';
 import 'package:kanji_for_n5_level_app/providers/main_screen_provider.dart';
+import 'package:kanji_for_n5_level_app/screens/account_details/password_change_flow.dart';
 import 'package:kanji_for_n5_level_app/screens/account_details/personal_info.dart';
 
 class AccountDetails extends ConsumerWidget {
@@ -55,6 +56,27 @@ class AccountDetails extends ConsumerWidget {
                     height: 10,
                   ),
                   ListTile(
+                    onTap: () {
+                      Navigator.of(context)
+                          .push(MaterialPageRoute(builder: (ctx) {
+                        return const PasswordChangeFlow();
+                      }));
+                    },
+                    contentPadding:
+                        const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                    shape: OutlineInputBorder(
+                      borderSide:
+                          const BorderSide().copyWith(color: Colors.white30),
+                      borderRadius:
+                          const BorderRadius.all(Radius.circular(12.0)),
+                    ),
+                    title: const Text('Password'),
+                    trailing: const Icon(Icons.arrow_forward_ios),
+                  ),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  ListTile(
                     onTap: () async {
                       await FirebaseAuth.instance.signOut();
                       ref
@@ -75,7 +97,7 @@ class AccountDetails extends ConsumerWidget {
                     ),
                     title: const Text('Logout'),
                     trailing: const Icon(Icons.arrow_forward_ios),
-                  )
+                  ),
                 ],
               ),
             )
