@@ -161,7 +161,7 @@ class ToLoginFormScreen extends ConsumerWidget {
                                 text.length <= 20) {
                               return null;
                             } else {
-                              return 'Password should be between 10 and 4 characters';
+                              return 'Password should be between 20 and 4 characters';
                             }
                           },
                           onSaved: (value) {

@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kanji_for_n5_level_app/providers/account_details_state_provider.dart';
 import 'package:kanji_for_n5_level_app/providers/login_provider.dart';
 import 'package:kanji_for_n5_level_app/providers/main_screen_provider.dart';
+import 'package:kanji_for_n5_level_app/providers/password_change_flow_provider.dart';
 import 'package:kanji_for_n5_level_app/screens/account_details/password_change_flow.dart';
 import 'package:kanji_for_n5_level_app/screens/account_details/personal_info.dart';
 
@@ -57,6 +58,9 @@ class AccountDetails extends ConsumerWidget {
                   ),
                   ListTile(
                     onTap: () {
+                      ref
+                          .read(passwordChangeFlowProvider.notifier)
+                          .resetState();
                       Navigator.of(context)
                           .push(MaterialPageRoute(builder: (ctx) {
                         return const PasswordChangeFlow();
