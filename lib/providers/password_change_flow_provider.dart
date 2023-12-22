@@ -9,6 +9,8 @@ class PasswordChangeFlowProvider extends Notifier<PasswordChangeFlowData> {
       statusProcessing: StatusProcessingPasswordChangeFlow.form,
       password: '',
       confirmPassword: '',
+      isVisiblePassword: false,
+      isVisibleConfirmPassword: false,
     );
   }
 
@@ -17,6 +19,8 @@ class PasswordChangeFlowProvider extends Notifier<PasswordChangeFlowData> {
       statusProcessing: StatusProcessingPasswordChangeFlow.form,
       password: '',
       confirmPassword: '',
+      isVisiblePassword: false,
+      isVisibleConfirmPassword: false,
     );
   }
 
@@ -25,6 +29,8 @@ class PasswordChangeFlowProvider extends Notifier<PasswordChangeFlowData> {
       statusProcessing: state.statusProcessing,
       password: password,
       confirmPassword: state.confirmPassword,
+      isVisiblePassword: state.isVisiblePassword,
+      isVisibleConfirmPassword: state.isVisibleConfirmPassword,
     );
   }
 
@@ -33,6 +39,8 @@ class PasswordChangeFlowProvider extends Notifier<PasswordChangeFlowData> {
       statusProcessing: state.statusProcessing,
       password: state.password,
       confirmPassword: confirmPassword,
+      isVisiblePassword: state.isVisiblePassword,
+      isVisibleConfirmPassword: state.isVisibleConfirmPassword,
     );
   }
 
@@ -41,6 +49,8 @@ class PasswordChangeFlowProvider extends Notifier<PasswordChangeFlowData> {
       statusProcessing: status,
       password: state.password,
       confirmPassword: state.confirmPassword,
+      isVisiblePassword: state.isVisiblePassword,
+      isVisibleConfirmPassword: state.isVisibleConfirmPassword,
     );
   }
 
@@ -73,17 +83,41 @@ class PasswordChangeFlowProvider extends Notifier<PasswordChangeFlowData> {
       return;
     }
   }
+
+  void toggleVisibilityPassword() {
+    state = PasswordChangeFlowData(
+      statusProcessing: state.statusProcessing,
+      password: state.password,
+      confirmPassword: state.confirmPassword,
+      isVisiblePassword: !state.isVisiblePassword,
+      isVisibleConfirmPassword: state.isVisibleConfirmPassword,
+    );
+  }
+
+  void toggleConfirmVisibilityPassword() {
+    state = PasswordChangeFlowData(
+      statusProcessing: state.statusProcessing,
+      password: state.password,
+      confirmPassword: state.confirmPassword,
+      isVisiblePassword: state.isVisiblePassword,
+      isVisibleConfirmPassword: !state.isVisibleConfirmPassword,
+    );
+  }
 }
 
 class PasswordChangeFlowData {
   final StatusProcessingPasswordChangeFlow statusProcessing;
   final String password;
   final String confirmPassword;
+  final bool isVisiblePassword;
+  final bool isVisibleConfirmPassword;
 
   PasswordChangeFlowData({
     required this.statusProcessing,
     required this.password,
     required this.confirmPassword,
+    required this.isVisiblePassword,
+    required this.isVisibleConfirmPassword,
   });
 }
 

@@ -7,10 +7,14 @@ class PassworChange extends ConsumerWidget {
     super.key,
     required this.initPassword,
     required this.initConfirmPassword,
+    required this.isVisiblePassword,
+    required this.isVisibleConfirmPassword,
   });
 
   final String initPassword;
   final String initConfirmPassword;
+  final bool isVisiblePassword;
+  final bool isVisibleConfirmPassword;
 
   void onValidation(WidgetRef ref) async {
     final currentState = _formKey.currentState;
@@ -45,11 +49,23 @@ class PassworChange extends ConsumerWidget {
               children: [
                 TextFormField(
                   initialValue: initPassword,
-                  obscureText: true,
-                  decoration: const InputDecoration(
-                    label: Text('password'),
-                    suffixIcon: Icon(Icons.key),
-                    border: OutlineInputBorder(),
+                  obscureText: !isVisiblePassword,
+                  decoration: InputDecoration(
+                    label: const Text('password'),
+                    suffixIcon: GestureDetector(
+                      onTap: () {
+                        final currentState = _formKey.currentState;
+                        if (currentState == null) return;
+                        currentState.save();
+                        ref
+                            .read(passwordChangeFlowProvider.notifier)
+                            .toggleVisibilityPassword();
+                      },
+                      child: isVisiblePassword
+                          ? const Icon(Icons.visibility_off)
+                          : const Icon(Icons.visibility),
+                    ),
+                    border: const OutlineInputBorder(),
                   ),
                   validator: (text) {
                     if (text != null && text.length >= 4 && text.length <= 20) {
@@ -69,11 +85,23 @@ class PassworChange extends ConsumerWidget {
                 ),
                 TextFormField(
                   initialValue: initConfirmPassword,
-                  obscureText: true,
-                  decoration: const InputDecoration(
-                    label: Text('confirm your password'),
-                    suffixIcon: Icon(Icons.key),
-                    border: OutlineInputBorder(),
+                  obscureText: !isVisibleConfirmPassword,
+                  decoration: InputDecoration(
+                    label: const Text('confirm your password'),
+                    suffixIcon: GestureDetector(
+                      onTap: () {
+                        final currentState = _formKey.currentState;
+                        if (currentState == null) return;
+                        currentState.save();
+                        ref
+                            .read(passwordChangeFlowProvider.notifier)
+                            .toggleConfirmVisibilityPassword();
+                      },
+                      child: isVisibleConfirmPassword
+                          ? const Icon(Icons.visibility_off)
+                          : const Icon(Icons.visibility),
+                    ),
+                    border: const OutlineInputBorder(),
                   ),
                   validator: (text) {
                     if (text != null && text.length >= 4 && text.length <= 20) {

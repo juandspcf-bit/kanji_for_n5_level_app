@@ -1,6 +1,7 @@
 // ignore: implementation_imports
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:kanji_for_n5_level_app/main.dart';
 import 'package:kanji_for_n5_level_app/providers/password_change_flow_provider.dart';
 import 'package:kanji_for_n5_level_app/screens/account_details/password_change.dart';
 import 'package:kanji_for_n5_level_app/screens/account_details/updating_data.dart';
@@ -94,9 +95,14 @@ class PasswordChangeFlow extends ConsumerWidget with MyDialogs {
         StatusProcessingPasswordChangeFlow.updating) {
       return const Center(child: UpdatingData());
     }
+
+    logger.d(
+        'visible:${passwordChangeFlowData.isVisiblePassword}, password:${passwordChangeFlowData.password}');
     return PassworChange(
       initPassword: passwordChangeFlowData.password,
       initConfirmPassword: passwordChangeFlowData.confirmPassword,
+      isVisibleConfirmPassword: passwordChangeFlowData.isVisibleConfirmPassword,
+      isVisiblePassword: passwordChangeFlowData.isVisiblePassword,
     );
   }
 
