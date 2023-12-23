@@ -6,19 +6,28 @@ class LoginProvider extends Notifier<LogingData> {
   @override
   LogingData build() {
     return LogingData(
-      statusFetching: 1,
+      statusFetching: StatusProcessingLoggingFlow.form,
       email: '',
       password: '',
-      credential: null,
+      isVisiblePassword: false,
     );
   }
 
-  void setStatus(int status) async {
+  void resetData() {
+    state = LogingData(
+      statusFetching: StatusProcessingLoggingFlow.form,
+      email: '',
+      password: '',
+      isVisiblePassword: false,
+    );
+  }
+
+  void setStatus(StatusProcessingLoggingFlow status) async {
     state = LogingData(
       statusFetching: status,
       email: state.email,
       password: state.password,
-      credential: state.credential,
+      isVisiblePassword: state.isVisiblePassword,
     );
   }
 
@@ -27,34 +36,44 @@ class LoginProvider extends Notifier<LogingData> {
       statusFetching: state.statusFetching,
       email: email,
       password: state.password,
-      credential: state.credential,
+      isVisiblePassword: state.isVisiblePassword,
     );
   }
 
   void setPassword(String password) {
     state = LogingData(
-        statusFetching: state.statusFetching,
-        email: state.email,
-        password: password,
-        credential: state.credential);
+      statusFetching: state.statusFetching,
+      email: state.email,
+      password: password,
+      isVisiblePassword: state.isVisiblePassword,
+    );
+  }
+
+  void toggleVisibility() {
+    state = LogingData(
+      statusFetching: state.statusFetching,
+      email: state.email,
+      password: state.password,
+      isVisiblePassword: !state.isVisiblePassword,
+    );
   }
 
   Future<StatusLogingRequest> onValidate() async {
-    setStatus(0);
+    setStatus(StatusProcessingLoggingFlow.logging);
 
     try {
-      UserCredential credential = await FirebaseAuth.instance
-          .signInWithEmailAndPassword(
-              email: state.email, password: state.password);
+      await FirebaseAuth.instance.signInWithEmailAndPassword(
+          email: state.email, password: state.password);
       state = LogingData(
-          statusFetching: state.statusFetching,
-          email: state.email,
-          password: state.password,
-          credential: credential);
+        statusFetching: state.statusFetching,
+        email: state.email,
+        password: state.password,
+        isVisiblePassword: state.isVisiblePassword,
+      );
       return StatusLogingRequest.success;
     } on FirebaseAuthException catch (e) {
       logger.e(e.code);
-      setStatus(1);
+      setStatus(StatusProcessingLoggingFlow.form);
       if (e.code == 'INVALID_LOGIN_CREDENTIALS' ||
           e.code == 'invalid-credential') {
         return StatusLogingRequest.invalidCredentials;
@@ -76,7 +95,7 @@ class LoginProvider extends Notifier<LogingData> {
       statusFetching: state.statusFetching,
       email: state.email,
       password: state.password,
-      credential: userCredential,
+      isVisiblePassword: state.isVisiblePassword,
     );
   }
 }
@@ -85,15 +104,16 @@ final loginProvider =
     NotifierProvider<LoginProvider, LogingData>(LoginProvider.new);
 
 class LogingData {
-  final int statusFetching;
+  final StatusProcessingLoggingFlow statusFetching;
   final String email;
   final String password;
-  final UserCredential? credential;
+  final bool isVisiblePassword;
+
   LogingData({
     required this.statusFetching,
     required this.email,
     required this.password,
-    required this.credential,
+    required this.isVisiblePassword,
   });
 }
 

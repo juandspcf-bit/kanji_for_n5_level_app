@@ -85,11 +85,10 @@ class ToLoginFormScreen extends ConsumerWidget {
       if (context.mounted) FlutterNativeSplash.remove();
     });
     final loginFormData = ref.watch(loginProvider);
-    final dataState = ref.watch(loginProvider);
     return Scaffold(
       body: Padding(
         padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 15),
-        child: dataState.statusFetching == 0
+        child: loginFormData.statusFetching != StatusProcessingLoggingFlow.form
             ? Center(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -126,10 +125,10 @@ class ToLoginFormScreen extends ConsumerWidget {
                         TextFormField(
                           initialValue: loginFormData.email,
                           decoration: const InputDecoration().copyWith(
-                              border: const OutlineInputBorder(),
-                              prefixIcon: const Icon(Icons.email),
-                              labelText: 'Email',
-                              hintText: '***@***.com'),
+                            border: const OutlineInputBorder(),
+                            prefixIcon: const Icon(Icons.email),
+                            labelText: 'Email',
+                          ),
                           keyboardType: TextInputType.emailAddress,
                           validator: (text) {
                             if (text != null && EmailValidator.validate(text)) {
@@ -151,10 +150,26 @@ class ToLoginFormScreen extends ConsumerWidget {
                           decoration: const InputDecoration().copyWith(
                             border: const OutlineInputBorder(),
                             prefixIcon: const Icon(Icons.key),
+                            suffixIcon: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: GestureDetector(
+                                onTap: () {
+                                  final currentState = _formKey.currentState;
+                                  if (currentState == null) return;
+                                  currentState.save();
+                                  ref
+                                      .read(loginProvider.notifier)
+                                      .toggleVisibility();
+                                },
+                                child: loginFormData.isVisiblePassword
+                                    ? const Icon(Icons.visibility_off)
+                                    : const Icon(Icons.visibility),
+                              ),
+                            ),
                             labelText: 'Password',
                           ),
                           keyboardType: TextInputType.visiblePassword,
-                          obscureText: true,
+                          obscureText: !loginFormData.isVisiblePassword,
                           validator: (text) {
                             if (text != null &&
                                 text.length >= 4 &&
