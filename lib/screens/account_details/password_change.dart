@@ -52,18 +52,21 @@ class PassworChange extends ConsumerWidget {
                   obscureText: !isVisiblePassword,
                   decoration: InputDecoration(
                     label: const Text('password'),
-                    suffixIcon: GestureDetector(
-                      onTap: () {
-                        final currentState = _formKey.currentState;
-                        if (currentState == null) return;
-                        currentState.save();
-                        ref
-                            .read(passwordChangeFlowProvider.notifier)
-                            .toggleVisibilityPassword();
-                      },
-                      child: isVisiblePassword
-                          ? const Icon(Icons.visibility_off)
-                          : const Icon(Icons.visibility),
+                    suffixIcon: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: GestureDetector(
+                        onTap: () {
+                          final currentState = _formKey.currentState;
+                          if (currentState == null) return;
+                          currentState.save();
+                          ref
+                              .read(passwordChangeFlowProvider.notifier)
+                              .toggleVisibilityPassword();
+                        },
+                        child: isVisiblePassword
+                            ? const Icon(Icons.visibility_off)
+                            : const Icon(Icons.visibility),
+                      ),
                     ),
                     border: const OutlineInputBorder(),
                   ),
@@ -88,18 +91,21 @@ class PassworChange extends ConsumerWidget {
                   obscureText: !isVisibleConfirmPassword,
                   decoration: InputDecoration(
                     label: const Text('confirm your password'),
-                    suffixIcon: GestureDetector(
-                      onTap: () {
-                        final currentState = _formKey.currentState;
-                        if (currentState == null) return;
-                        currentState.save();
-                        ref
-                            .read(passwordChangeFlowProvider.notifier)
-                            .toggleConfirmVisibilityPassword();
-                      },
-                      child: isVisibleConfirmPassword
-                          ? const Icon(Icons.visibility_off)
-                          : const Icon(Icons.visibility),
+                    suffixIcon: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: GestureDetector(
+                        onTap: () {
+                          final currentState = _formKey.currentState;
+                          if (currentState == null) return;
+                          currentState.save();
+                          ref
+                              .read(passwordChangeFlowProvider.notifier)
+                              .toggleConfirmVisibilityPassword();
+                        },
+                        child: isVisibleConfirmPassword
+                            ? const Icon(Icons.visibility_off)
+                            : const Icon(Icons.visibility),
+                      ),
                     ),
                     border: const OutlineInputBorder(),
                   ),

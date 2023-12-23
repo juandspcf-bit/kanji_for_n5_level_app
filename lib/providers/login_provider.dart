@@ -114,3 +114,10 @@ enum StatusLogingRequest {
   @override
   String toString() => message;
 }
+
+enum StatusProcessingLoggingFlow {
+  logging,
+  error,
+  succsess,
+  form,
+}
