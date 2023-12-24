@@ -4,17 +4,21 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 class ModalEmailResetProvider extends Notifier<ModalEmailResetData> {
   @override
   ModalEmailResetData build() {
-    return const ModalEmailResetData(email: '');
+    return const ModalEmailResetData(
+        email: '', requestStatus: StatusSendingRequest.notStarted);
   }
 
-  Future<StatusResetPasswordRequest> onValidate() async {
+  Future<StatusResetPasswordRequest> sendPasswordResetEmail() async {
+    setRequestStatus(StatusSendingRequest.sending);
     try {
       await FirebaseAuth.instance.sendPasswordResetEmail(email: state.email);
+      setRequestStatus(StatusSendingRequest.finished);
       return StatusResetPasswordRequest.success;
     } on FirebaseAuthException catch (e) {
-      if (e.code == 'auth/invalid-email') {
+      setRequestStatus(StatusSendingRequest.finished);
+      if (e.code == 'invalid-email') {
         return StatusResetPasswordRequest.emailInvalid;
-      } else if (e.code == 'auth/user-not-found') {
+      } else if (e.code == 'user-not-found') {
         return StatusResetPasswordRequest.userNotFound;
       }
       return StatusResetPasswordRequest.error;
@@ -22,7 +26,18 @@ class ModalEmailResetProvider extends Notifier<ModalEmailResetData> {
   }
 
   void setEmail(String email) {
-    state = ModalEmailResetData(email: email);
+    state =
+        ModalEmailResetData(email: email, requestStatus: state.requestStatus);
+  }
+
+  void setRequestStatus(StatusSendingRequest requestStatus) {
+    state =
+        ModalEmailResetData(email: state.email, requestStatus: requestStatus);
+  }
+
+  void resetData() {
+    state = const ModalEmailResetData(
+        email: '', requestStatus: StatusSendingRequest.notStarted);
   }
 }
 
@@ -32,8 +47,9 @@ final modalEmailResetProvider =
 
 class ModalEmailResetData {
   final String email;
+  final StatusSendingRequest requestStatus;
 
-  const ModalEmailResetData({required this.email});
+  const ModalEmailResetData({required this.email, required this.requestStatus});
 }
 
 enum StatusResetPasswordRequest {
@@ -51,4 +67,10 @@ enum StatusResetPasswordRequest {
 
   @override
   String toString() => message;
+}
+
+enum StatusSendingRequest {
+  notStarted,
+  sending,
+  finished,
 }

@@ -74,7 +74,7 @@ class LoginProvider extends Notifier<LogingData> {
     );
   }
 
-  Future<StatusLogingRequest> onValidate() async {
+  Future<StatusLogingRequest> toLoging() async {
     setStatus(StatusProcessingLoggingFlow.logging);
 
     try {
