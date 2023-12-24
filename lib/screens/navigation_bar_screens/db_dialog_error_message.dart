@@ -4,7 +4,10 @@ mixin MyDialogs {
   Widget _myBaseDialog(BuildContext buildContext, void Function() action,
       String message, Icon icon) {
     return AlertDialog(
-      title: Text(message),
+      title: Text(
+        message,
+        textAlign: TextAlign.center,
+      ),
       content: icon,
       actions: <Widget>[
         TextButton(
