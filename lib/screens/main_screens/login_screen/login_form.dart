@@ -176,15 +176,17 @@ class ModalEmailResetPassword extends ConsumerWidget with MyDialogs {
           Container(
             alignment: Alignment.centerRight,
             child: IconButton(
-              onPressed: () {
-                FocusScopeNode currentFocus = FocusScope.of(context);
+              onPressed: modalEmailResetData.requestStatus ==
+                      StatusSendingRequest.sending
+                  ? null
+                  : () {
+                      FocusScopeNode currentFocus = FocusScope.of(context);
 
-                if (!currentFocus.hasPrimaryFocus) {
-                  currentFocus.unfocus();
-                }
-
-                Navigator.of(context).pop();
-              },
+                      if (!currentFocus.hasPrimaryFocus) {
+                        currentFocus.unfocus();
+                      }
+                      Navigator.of(context).pop();
+                    },
               icon: const Icon(Icons.close_outlined),
             ),
           ),
@@ -234,14 +236,22 @@ class ModalEmailResetPassword extends ConsumerWidget with MyDialogs {
             height: 20,
           ),
           Expanded(
-            child: Text(
-              'Click above to reset your password and an email will be sent to your inbox'
-              ' with some instructions.',
-              style: Theme.of(context).textTheme.bodyLarge,
-              softWrap: false,
-              maxLines: 3,
-              overflow: TextOverflow.ellipsis, // new
-            ),
+            child: modalEmailResetData.requestStatus ==
+                    StatusSendingRequest.sending
+                ? Text(
+                    'sending link',
+                    style: Theme.of(context).textTheme.bodyLarge,
+                    textAlign: TextAlign.center,
+                  )
+                : Text(
+                    'Click above to reset your password and an email will be sent to your inbox'
+                    ' with some instructions.',
+                    style: Theme.of(context).textTheme.bodyLarge,
+                    softWrap: false,
+                    maxLines: 3,
+                    overflow: TextOverflow.ellipsis,
+                    textAlign: TextAlign.justify, // new
+                  ),
           ),
         ],
       )),
