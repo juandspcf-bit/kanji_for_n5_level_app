@@ -5,76 +5,55 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kanji_for_n5_level_app/providers/login_provider.dart';
 import 'package:kanji_for_n5_level_app/providers/modal_email_reset_password_provider.dart';
 import 'package:kanji_for_n5_level_app/providers/sign_up_provider.dart';
+import 'package:kanji_for_n5_level_app/screens/common_widgets/password_widget.dart';
+import 'package:kanji_for_n5_level_app/screens/main_screens/login_screen/login_progress.dart';
 import 'package:kanji_for_n5_level_app/screens/main_screens/sing_up_screen.dart';
+import 'package:kanji_for_n5_level_app/screens/navigation_bar_screens/db_dialog_error_message.dart';
 
-class ToLoginFormScreen extends ConsumerWidget {
+class ToLoginFormScreen extends ConsumerWidget with MyDialogs {
   ToLoginFormScreen({super.key});
 
   final _formKey = GlobalKey<FormState>();
-
-  Widget _dialog(BuildContext context, String text) {
-    return AlertDialog(
-      title: const Text("Errro in login!!"),
-      content: Text(text),
-      actions: <Widget>[
-        TextButton(
-            onPressed: () {
-              Navigator.of(context).pop();
-            },
-            child: const Text("Okay"))
-      ],
-    );
-  }
-
-  void _dialogErrorInLogin(BuildContext context, String text) {
-    showGeneralDialog(
-      context: context,
-      pageBuilder: (ctx, a1, a2) {
-        return Container();
-      },
-      transitionBuilder: (ctx, a1, a2, child) {
-        var curve = Curves.easeInOut.transform(a1.value);
-        return Transform.scale(
-          scale: curve,
-          child: _dialog(ctx, text),
-        );
-      },
-      transitionDuration: const Duration(milliseconds: 300),
-    );
-  }
 
   void onValidate(BuildContext context, WidgetRef ref) async {
     final currenState = _formKey.currentState;
     if (currenState == null) return;
     if (currenState.validate()) {
       currenState.save();
+      ref.read(loginProvider.notifier).onValidate();
       final result = await ref.read(loginProvider.notifier).onValidate();
+
+      var loginErrorText = '';
       switch (result) {
         case StatusLogingRequest.invalidCredentials:
+          {
+            loginErrorText = 'Your email and password are wrong';
+            break;
+          }
         case StatusLogingRequest.userNotFound:
+          {
+            loginErrorText = 'Your email was not found';
+            break;
+          }
         case StatusLogingRequest.wrongPassword:
           {
-            if (context.mounted) {
-              var snackBar = SnackBar(
-                content: Text(result.message),
-                duration: const Duration(seconds: 3),
-              );
-              ScaffoldMessenger.of(context).showSnackBar(snackBar);
-            }
+            loginErrorText = 'Your password is wrong';
+            break;
           }
         case StatusLogingRequest.tooManyRequest:
           {
-            if (context.mounted) {
-              const text =
-                  'Access to this account has been temporarily disabled '
-                  'due to many failed login attempts. You can immediately restore it by '
-                  'resetting your password or you can try again later.';
-              _dialogErrorInLogin(context, text);
-            }
+            loginErrorText =
+                'Access to this account has been temporarily disabled '
+                'due to many failed login attempts. You can immediately restore it by '
+                'resetting your password or you can try again later.';
+            break;
           }
-
-          break;
         default:
+          loginErrorText = 'An unexpected error has happened';
+      }
+
+      if (context.mounted) {
+        errorDialog(context, () {}, loginErrorText);
       }
     }
   }
@@ -85,29 +64,12 @@ class ToLoginFormScreen extends ConsumerWidget {
       if (context.mounted) FlutterNativeSplash.remove();
     });
     final loginFormData = ref.watch(loginProvider);
+
     return Scaffold(
       body: Padding(
         padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 15),
         child: loginFormData.statusFetching != StatusProcessingLoggingFlow.form
-            ? Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      'Login to your account',
-                      style: Theme.of(context).textTheme.titleLarge,
-                    ),
-                    const SizedBox(
-                      height: 25,
-                    ),
-                    const SizedBox(
-                      height: 100,
-                      width: 100,
-                      child: CircularProgressIndicator(),
-                    ),
-                  ],
-                ),
-              )
+            ? const LoginProgress()
             : Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -145,44 +107,19 @@ class ToLoginFormScreen extends ConsumerWidget {
                         const SizedBox(
                           height: 10,
                         ),
-                        TextFormField(
+                        PasswordTextField(
                           initialValue: loginFormData.password,
-                          decoration: const InputDecoration().copyWith(
-                            border: const OutlineInputBorder(),
-                            prefixIcon: const Icon(Icons.key),
-                            suffixIcon: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: GestureDetector(
-                                onTap: () {
-                                  final currentState = _formKey.currentState;
-                                  if (currentState == null) return;
-                                  currentState.save();
-                                  ref
-                                      .read(loginProvider.notifier)
-                                      .toggleVisibility();
-                                },
-                                child: loginFormData.isVisiblePassword
-                                    ? const Icon(Icons.visibility_off)
-                                    : const Icon(Icons.visibility),
-                              ),
-                            ),
-                            labelText: 'Password',
-                          ),
-                          keyboardType: TextInputType.visiblePassword,
-                          obscureText: !loginFormData.isVisiblePassword,
-                          validator: (text) {
-                            if (text != null &&
-                                text.length >= 4 &&
-                                text.length <= 20) {
-                              return null;
-                            } else {
-                              return 'Password should be between 20 and 4 characters';
-                            }
-                          },
-                          onSaved: (value) {
+                          onSave: (value) {
                             if (value == null) return;
                             ref.read(loginProvider.notifier).setPassword(value);
                           },
+                          onToggleVisibility: () {
+                            final currentState = _formKey.currentState;
+                            if (currentState == null) return;
+                            currentState.save();
+                            ref.read(loginProvider.notifier).toggleVisibility();
+                          },
+                          isPasswordVisible: loginFormData.isVisiblePassword,
                         ),
                         const SizedBox(
                           height: 10,
