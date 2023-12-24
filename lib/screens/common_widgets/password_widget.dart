@@ -1,23 +1,36 @@
 import 'package:flutter/material.dart';
 
-class PasswordTextField extends StatelessWidget {
+class PasswordTextField extends StatefulWidget {
   const PasswordTextField({
     super.key,
     required this.initialValue,
     required this.onSave,
-    required this.onToggleVisibility,
-    required this.isPasswordVisible,
+    required this.formKey,
   });
 
+  final GlobalKey<FormState> formKey;
   final String initialValue;
   final void Function(String? text) onSave;
-  final Function() onToggleVisibility;
-  final bool isPasswordVisible;
+
+  @override
+  State<PasswordTextField> createState() {
+    return _PasswordTextField();
+  }
+}
+
+class _PasswordTextField extends State<PasswordTextField> {
+  late bool isPasswordVisible;
+
+  @override
+  void initState() {
+    isPasswordVisible = false;
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
     return TextFormField(
-      initialValue: initialValue,
+      initialValue: widget.initialValue,
       decoration: const InputDecoration().copyWith(
         border: const OutlineInputBorder(),
         prefixIcon: const Icon(Icons.key),
@@ -25,7 +38,12 @@ class PasswordTextField extends StatelessWidget {
           padding: const EdgeInsets.all(8.0),
           child: GestureDetector(
             onTap: () {
-              onToggleVisibility();
+              final currentState = widget.formKey.currentState;
+              if (currentState == null) return;
+              currentState.save();
+              setState(() {
+                isPasswordVisible = !isPasswordVisible;
+              });
             },
             child: isPasswordVisible
                 ? const Icon(Icons.visibility_off)
@@ -44,7 +62,7 @@ class PasswordTextField extends StatelessWidget {
         }
       },
       onSaved: (value) {
-        onSave(value);
+        widget.onSave(value);
       },
     );
   }

@@ -109,17 +109,11 @@ class ToLoginFormScreen extends ConsumerWidget with MyDialogs {
                         ),
                         PasswordTextField(
                           initialValue: loginFormData.password,
+                          formKey: _formKey,
                           onSave: (value) {
                             if (value == null) return;
                             ref.read(loginProvider.notifier).setPassword(value);
                           },
-                          onToggleVisibility: () {
-                            final currentState = _formKey.currentState;
-                            if (currentState == null) return;
-                            currentState.save();
-                            ref.read(loginProvider.notifier).toggleVisibility();
-                          },
-                          isPasswordVisible: loginFormData.isVisiblePassword,
                         ),
                         const SizedBox(
                           height: 10,
