@@ -1,7 +1,10 @@
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kanji_for_n5_level_app/providers/login_provider.dart';
+import 'package:kanji_for_n5_level_app/providers/status_connection_provider.dart';
+import 'package:kanji_for_n5_level_app/screens/kanji_details/error_connection_tabs.dart';
 import 'package:kanji_for_n5_level_app/screens/main_screens/login_screen/login_form.dart';
 import 'package:kanji_for_n5_level_app/screens/main_screens/login_screen/login_progress.dart';
 import 'package:kanji_for_n5_level_app/screens/navigation_bar_screens/db_dialog_error_message.dart';
@@ -52,27 +55,37 @@ class ToLoginFormScreen extends ConsumerWidget with MyDialogs {
       if (context.mounted) FlutterNativeSplash.remove();
     });
     final loginFormData = ref.watch(loginProvider);
+    final statusConnectionData = ref.watch(statusConnectionProvider);
 
     return Scaffold(
       body: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 15),
-        child: loginFormData.statusFetching != StatusProcessingLoggingFlow.form
-            ? const LoginProgress()
-            : LoginForm(
-                loginFormData: loginFormData,
-                setEmail: (value) {
-                  if (value == null) return;
-                  ref.read(loginProvider.notifier).setEmail(value);
-                },
-                setPassword: (value) {
-                  if (value == null) return;
-                  ref.read(loginProvider.notifier).setPassword(value);
-                },
-                onValidate: () {
-                  toLoging(context, ref);
-                },
-              ),
-      ),
+          padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 15),
+          child: Builder(builder: (ctx) {
+            if (statusConnectionData == ConnectivityResult.none) {
+              return const ErrorConnectionScreen(
+                message:
+                    'The internet connection has gone, restart the quiz later',
+              );
+            }
+
+            return loginFormData.statusFetching !=
+                    StatusProcessingLoggingFlow.form
+                ? const LoginProgress()
+                : LoginForm(
+                    loginFormData: loginFormData,
+                    setEmail: (value) {
+                      if (value == null) return;
+                      ref.read(loginProvider.notifier).setEmail(value);
+                    },
+                    setPassword: (value) {
+                      if (value == null) return;
+                      ref.read(loginProvider.notifier).setPassword(value);
+                    },
+                    onValidate: () {
+                      toLoging(context, ref);
+                    },
+                  );
+          })),
     );
   }
 }
