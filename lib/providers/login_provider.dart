@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kanji_for_n5_level_app/main.dart';
@@ -78,8 +80,12 @@ class LoginProvider extends Notifier<LogingData> {
     setStatus(StatusProcessingLoggingFlow.logging);
 
     try {
-      await FirebaseAuth.instance.signInWithEmailAndPassword(
-          email: state.email, password: state.password);
+      await FirebaseAuth.instance
+          .signInWithEmailAndPassword(
+              email: state.email, password: state.password)
+          .timeout(
+            const Duration(seconds: 15),
+          );
       state = LogingData(
         statusLogingRequest: state.statusLogingRequest,
         statusFetching: state.statusFetching,
@@ -96,20 +102,20 @@ class LoginProvider extends Notifier<LogingData> {
           e.code == 'invalid-credential') {
         setStatusLogingRequest(StatusLogingRequest.invalidCredentials);
         return StatusLogingRequest.invalidCredentials;
-        //throw const InvalidCredentialsException();
       } else if (e.code == 'user-not-found') {
         setStatusLogingRequest(StatusLogingRequest.userNotFound);
         return StatusLogingRequest.userNotFound;
-        //throw const UserNotFoundException();
       } else if (e.code == 'wrong-password') {
         setStatusLogingRequest(StatusLogingRequest.wrongPassword);
         return StatusLogingRequest.wrongPassword;
-        //throw const WrongPasswordException();
       } else if (e.code == 'too-many-requests') {
         setStatusLogingRequest(StatusLogingRequest.tooManyRequest);
         return StatusLogingRequest.tooManyRequest;
       }
 
+      return StatusLogingRequest.error;
+    } on TimeoutException {
+      setStatusLogingRequest(StatusLogingRequest.error);
       return StatusLogingRequest.error;
     }
   }

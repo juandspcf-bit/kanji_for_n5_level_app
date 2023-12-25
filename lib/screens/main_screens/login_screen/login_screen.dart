@@ -63,8 +63,7 @@ class ToLoginFormScreen extends ConsumerWidget with MyDialogs {
           child: Builder(builder: (ctx) {
             if (statusConnectionData == ConnectivityResult.none) {
               return const ErrorConnectionScreen(
-                message:
-                    'The internet connection has gone, restart the quiz later',
+                message: 'No internet connection, try again later',
               );
             }
 
