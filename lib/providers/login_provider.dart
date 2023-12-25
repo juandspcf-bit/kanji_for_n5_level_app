@@ -8,8 +8,9 @@ class LoginProvider extends Notifier<LogingData> {
   @override
   LogingData build() {
     return LogingData(
-      statusFetching: StatusProcessingLoggingFlow.form,
+      statusLogingFlow: StatusProcessingLoggingFlow.form,
       statusLogingRequest: StatusLogingRequest.notStarted,
+      statusResetEmail: StatusResetEmail.notStarted,
       email: '',
       password: '',
       isVisiblePassword: false,
@@ -19,7 +20,8 @@ class LoginProvider extends Notifier<LogingData> {
   void resetData() {
     state = LogingData(
       statusLogingRequest: StatusLogingRequest.notStarted,
-      statusFetching: StatusProcessingLoggingFlow.form,
+      statusLogingFlow: StatusProcessingLoggingFlow.form,
+      statusResetEmail: StatusResetEmail.notStarted,
       email: '',
       password: '',
       isVisiblePassword: false,
@@ -29,17 +31,30 @@ class LoginProvider extends Notifier<LogingData> {
   void setStatusLogingRequest(StatusLogingRequest status) {
     state = LogingData(
       statusLogingRequest: status,
-      statusFetching: state.statusFetching,
+      statusLogingFlow: state.statusLogingFlow,
+      statusResetEmail: state.statusResetEmail,
       email: state.email,
       password: state.password,
       isVisiblePassword: state.isVisiblePassword,
     );
   }
 
-  void setStatus(StatusProcessingLoggingFlow status) async {
+  void setStatusLoggingFlow(StatusProcessingLoggingFlow status) async {
     state = LogingData(
       statusLogingRequest: state.statusLogingRequest,
-      statusFetching: status,
+      statusLogingFlow: status,
+      statusResetEmail: state.statusResetEmail,
+      email: state.email,
+      password: state.password,
+      isVisiblePassword: state.isVisiblePassword,
+    );
+  }
+
+  void setStatusResetEmail(StatusResetEmail status) async {
+    state = LogingData(
+      statusLogingRequest: state.statusLogingRequest,
+      statusLogingFlow: state.statusLogingFlow,
+      statusResetEmail: status,
       email: state.email,
       password: state.password,
       isVisiblePassword: state.isVisiblePassword,
@@ -49,7 +64,8 @@ class LoginProvider extends Notifier<LogingData> {
   void setEmail(String email) {
     state = LogingData(
       statusLogingRequest: state.statusLogingRequest,
-      statusFetching: state.statusFetching,
+      statusLogingFlow: state.statusLogingFlow,
+      statusResetEmail: state.statusResetEmail,
       email: email,
       password: state.password,
       isVisiblePassword: state.isVisiblePassword,
@@ -59,7 +75,8 @@ class LoginProvider extends Notifier<LogingData> {
   void setPassword(String password) {
     state = LogingData(
       statusLogingRequest: state.statusLogingRequest,
-      statusFetching: state.statusFetching,
+      statusLogingFlow: state.statusLogingFlow,
+      statusResetEmail: state.statusResetEmail,
       email: state.email,
       password: password,
       isVisiblePassword: state.isVisiblePassword,
@@ -69,7 +86,8 @@ class LoginProvider extends Notifier<LogingData> {
   void toggleVisibility() {
     state = LogingData(
       statusLogingRequest: state.statusLogingRequest,
-      statusFetching: state.statusFetching,
+      statusLogingFlow: state.statusLogingFlow,
+      statusResetEmail: state.statusResetEmail,
       email: state.email,
       password: state.password,
       isVisiblePassword: !state.isVisiblePassword,
@@ -77,7 +95,7 @@ class LoginProvider extends Notifier<LogingData> {
   }
 
   Future<StatusLogingRequest> toLoging() async {
-    setStatus(StatusProcessingLoggingFlow.logging);
+    setStatusLoggingFlow(StatusProcessingLoggingFlow.logging);
 
     try {
       await FirebaseAuth.instance
@@ -86,18 +104,11 @@ class LoginProvider extends Notifier<LogingData> {
           .timeout(
             const Duration(seconds: 15),
           );
-      state = LogingData(
-        statusLogingRequest: state.statusLogingRequest,
-        statusFetching: state.statusFetching,
-        email: state.email,
-        password: state.password,
-        isVisiblePassword: state.isVisiblePassword,
-      );
       setStatusLogingRequest(StatusLogingRequest.success);
       return StatusLogingRequest.success;
     } on FirebaseAuthException catch (e) {
       logger.e(e.code);
-      setStatus(StatusProcessingLoggingFlow.form);
+      setStatusLoggingFlow(StatusProcessingLoggingFlow.form);
       if (e.code == 'INVALID_LOGIN_CREDENTIALS' ||
           e.code == 'invalid-credential') {
         setStatusLogingRequest(StatusLogingRequest.invalidCredentials);
@@ -125,15 +136,17 @@ final loginProvider =
     NotifierProvider<LoginProvider, LogingData>(LoginProvider.new);
 
 class LogingData {
-  final StatusProcessingLoggingFlow statusFetching;
+  final StatusProcessingLoggingFlow statusLogingFlow;
   final StatusLogingRequest statusLogingRequest;
+  final StatusResetEmail statusResetEmail;
   final String email;
   final String password;
   final bool isVisiblePassword;
 
   LogingData({
-    required this.statusFetching,
+    required this.statusLogingFlow,
     required this.statusLogingRequest,
+    required this.statusResetEmail,
     required this.email,
     required this.password,
     required this.isVisiblePassword,
@@ -144,7 +157,7 @@ enum StatusLogingRequest {
   notStarted('Not started'),
   success('Success'),
   invalidCredentials('Invalid credentials'),
-  userNotFound('The user was not found'),
+  userNotFound('The email was not found'),
   wrongPassword('The password is wrong'),
   tooManyRequest('Too many failed login attempts'),
   error('The was an error in the server');
@@ -165,3 +178,5 @@ enum StatusProcessingLoggingFlow {
   succsess,
   form,
 }
+
+enum StatusResetEmail { notStarted, success, error }

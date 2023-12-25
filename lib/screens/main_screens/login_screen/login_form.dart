@@ -15,13 +15,13 @@ class LoginForm extends ConsumerWidget {
     required this.loginFormData,
     required this.setEmail,
     required this.setPassword,
-    required this.onValidate,
+    required this.onSuccefulValidation,
   });
   final _formKey = GlobalKey<FormState>();
   final LogingData loginFormData;
   final void Function(String? value) setEmail;
   final void Function(String? value) setPassword;
-  final void Function() onValidate;
+  final void Function() onSuccefulValidation;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -97,7 +97,7 @@ class LoginForm extends ConsumerWidget {
             if (currenState == null) return;
             if (currenState.validate()) {
               currenState.save();
-              onValidate();
+              onSuccefulValidation();
             }
           },
           style: ElevatedButton.styleFrom().copyWith(
@@ -153,13 +153,15 @@ class ModalEmailResetPassword extends ConsumerWidget with MyDialogs {
         .sendPasswordResetEmail()
         .then((result) {
       if (result == StatusResetPasswordRequest.success) {
-        successDialog(context, () {}, result.message);
         Navigator.of(context).pop();
+        ref
+            .read(loginProvider.notifier)
+            .setStatusResetEmail(StatusResetEmail.success);
       } else {
         logger.e(result.message);
-        if (context.mounted) {
-          errorDialog(context, () {}, result.message);
-        }
+        ref
+            .read(loginProvider.notifier)
+            .setStatusResetEmail(StatusResetEmail.error);
       }
     });
     return true;

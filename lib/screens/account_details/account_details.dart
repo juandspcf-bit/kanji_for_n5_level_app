@@ -87,9 +87,8 @@ class AccountDetails extends ConsumerWidget {
                           .read(mainScreenProvider.notifier)
                           .resetMainScreenState();
                       ref.read(loginProvider.notifier).resetData();
-                      ref
-                          .read(loginProvider.notifier)
-                          .setStatus(StatusProcessingLoggingFlow.form);
+                      ref.read(loginProvider.notifier).setStatusLoggingFlow(
+                          StatusProcessingLoggingFlow.form);
                       if (context.mounted) {
                         Navigator.pop(context);
                       }
