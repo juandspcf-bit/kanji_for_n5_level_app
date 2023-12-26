@@ -2,13 +2,14 @@ import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:kanji_for_n5_level_app/main.dart';
-import 'package:kanji_for_n5_level_app/providers/login_provider.dart';
+import 'package:kanji_for_n5_level_app/screens/main_screens/login_screen/login_provider.dart';
 import 'package:kanji_for_n5_level_app/providers/status_connection_provider.dart';
 import 'package:kanji_for_n5_level_app/screens/kanji_details/error_connection_tabs.dart';
 import 'package:kanji_for_n5_level_app/screens/main_screens/login_screen/login_form.dart';
 import 'package:kanji_for_n5_level_app/screens/main_screens/login_screen/login_progress.dart';
 import 'package:kanji_for_n5_level_app/screens/navigation_bar_screens/db_dialog_error_message.dart';
+import 'package:kanji_for_n5_level_app/use_cases/sing_in_user_contract.dart';
+import 'package:kanji_for_n5_level_app/use_cases/sing_in_user_firebase.dart';
 
 class ToLoginFormScreen extends ConsumerWidget with MyDialogs {
   ToLoginFormScreen({super.key});
@@ -26,31 +27,8 @@ class ToLoginFormScreen extends ConsumerWidget with MyDialogs {
         {
           return;
         }
-      case StatusLogingRequest.invalidCredentials:
-        {
-          loginErrorText = 'Your email and password are wrong';
-          break;
-        }
-      case StatusLogingRequest.userNotFound:
-        {
-          loginErrorText = 'Your email was not found';
-          break;
-        }
-      case StatusLogingRequest.wrongPassword:
-        {
-          loginErrorText = 'Your password is wrong';
-          break;
-        }
-      case StatusLogingRequest.tooManyRequest:
-        {
-          loginErrorText =
-              'Access to this account has been temporarily disabled '
-              'due to many failed login attempts. You can immediately restore it by '
-              'resetting your password or you can try again later.';
-          break;
-        }
       default:
-        loginErrorText = 'An unexpected error has happened';
+        loginErrorText = result.message;
     }
 
     errorDialog(context, () {
@@ -65,18 +43,29 @@ class ToLoginFormScreen extends ConsumerWidget with MyDialogs {
 
   void showResetEmailMessageDialog(
       BuildContext context, StatusResetEmail result, WidgetRef ref) {
-    if (result == StatusResetEmail.error) {
-      errorDialog(context, () {
-        ref
-            .read(loginProvider.notifier)
-            .setStatusResetEmail(StatusResetEmail.notStarted);
-      }, 'There is no corresponding user for this email');
-    } else if (result == StatusResetEmail.success) {
-      successDialog(context, () {
-        ref
-            .read(loginProvider.notifier)
-            .setStatusResetEmail(StatusResetEmail.notStarted);
-      }, 'The reset email link was succefully sent');
+    switch (result) {
+      case StatusResetEmail.notStarted:
+        {
+          break;
+        }
+      case StatusResetEmail.success:
+        {
+          successDialog(context, () {
+            ref
+                .read(loginProvider.notifier)
+                .setStatusResetEmail(StatusResetEmail.notStarted);
+          }, result.message);
+          break;
+        }
+      case StatusResetEmail.error:
+        {
+          errorDialog(context, () {
+            ref
+                .read(loginProvider.notifier)
+                .setStatusResetEmail(StatusResetEmail.notStarted);
+          }, result.message);
+          break;
+        }
     }
   }
 
@@ -89,7 +78,6 @@ class ToLoginFormScreen extends ConsumerWidget with MyDialogs {
     final statusConnectionData = ref.watch(statusConnectionProvider);
 
     ref.listen<LogingData>(loginProvider, (previuos, current) {
-      logger.e(current.statusLogingRequest);
       showLoginResultMessageDialog(context, current.statusLogingRequest, ref);
       showResetEmailMessageDialog(context, current.statusResetEmail, ref);
     });

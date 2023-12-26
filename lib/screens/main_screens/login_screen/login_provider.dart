@@ -3,6 +3,9 @@ import 'dart:async';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kanji_for_n5_level_app/main.dart';
+import 'package:kanji_for_n5_level_app/use_cases/sing_in_user_contract.dart';
+import 'package:kanji_for_n5_level_app/use_cases/sing_in_user_firebase.dart';
+import 'package:kanji_for_n5_level_app/use_cases/sing_in_user_firebase.dart';
 
 class LoginProvider extends Notifier<LogingData> {
   @override
@@ -97,38 +100,13 @@ class LoginProvider extends Notifier<LogingData> {
   Future<StatusLogingRequest> toLoging() async {
     setStatusLoggingFlow(StatusProcessingLoggingFlow.logging);
 
-    try {
-      await FirebaseAuth.instance
-          .signInWithEmailAndPassword(
-              email: state.email, password: state.password)
-          .timeout(
-            const Duration(seconds: 15),
-          );
-      setStatusLogingRequest(StatusLogingRequest.success);
-      return StatusLogingRequest.success;
-    } on FirebaseAuthException catch (e) {
-      logger.e(e.code);
+    final result = await authService.singInWithEmailAndPassword(
+        email: state.email, password: state.email);
+    if (result != StatusLogingRequest.success) {
       setStatusLoggingFlow(StatusProcessingLoggingFlow.form);
-      if (e.code == 'INVALID_LOGIN_CREDENTIALS' ||
-          e.code == 'invalid-credential') {
-        setStatusLogingRequest(StatusLogingRequest.invalidCredentials);
-        return StatusLogingRequest.invalidCredentials;
-      } else if (e.code == 'user-not-found') {
-        setStatusLogingRequest(StatusLogingRequest.userNotFound);
-        return StatusLogingRequest.userNotFound;
-      } else if (e.code == 'wrong-password') {
-        setStatusLogingRequest(StatusLogingRequest.wrongPassword);
-        return StatusLogingRequest.wrongPassword;
-      } else if (e.code == 'too-many-requests') {
-        setStatusLogingRequest(StatusLogingRequest.tooManyRequest);
-        return StatusLogingRequest.tooManyRequest;
-      }
-
-      return StatusLogingRequest.error;
-    } on TimeoutException {
-      setStatusLogingRequest(StatusLogingRequest.error);
-      return StatusLogingRequest.error;
     }
+    setStatusLogingRequest(result);
+    return result;
   }
 }
 
@@ -153,16 +131,19 @@ class LogingData {
   });
 }
 
-enum StatusLogingRequest {
-  notStarted('Not started'),
-  success('Success'),
-  invalidCredentials('Invalid credentials'),
-  userNotFound('The email was not found'),
-  wrongPassword('The password is wrong'),
-  tooManyRequest('Too many failed login attempts'),
-  error('The was an error in the server');
+enum StatusProcessingLoggingFlow {
+  logging,
+  error,
+  succsess,
+  form,
+}
 
-  const StatusLogingRequest(
+enum StatusResetEmail {
+  notStarted('no request started'),
+  success('The reset email link was succefully sent'),
+  error('There is no corresponding user for this email');
+
+  const StatusResetEmail(
     this.message,
   );
 
@@ -171,12 +152,3 @@ enum StatusLogingRequest {
   @override
   String toString() => message;
 }
-
-enum StatusProcessingLoggingFlow {
-  logging,
-  error,
-  succsess,
-  form,
-}
-
-enum StatusResetEmail { notStarted, success, error }
