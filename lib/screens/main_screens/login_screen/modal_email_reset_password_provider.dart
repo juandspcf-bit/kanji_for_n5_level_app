@@ -1,6 +1,6 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kanji_for_n5_level_app/use_cases/reset_email_contract.dart';
+import 'package:kanji_for_n5_level_app/use_cases/reset_email_firebase.dart';
 
 class ModalEmailResetProvider extends Notifier<ModalEmailResetData> {
   @override
@@ -11,19 +11,10 @@ class ModalEmailResetProvider extends Notifier<ModalEmailResetData> {
 
   Future<StatusResetPasswordRequest> sendPasswordResetEmail() async {
     setRequestStatus(StatusSendingRequest.sending);
-    try {
-      await FirebaseAuth.instance.sendPasswordResetEmail(email: state.email);
-      setRequestStatus(StatusSendingRequest.finished);
-      return StatusResetPasswordRequest.success;
-    } on FirebaseAuthException catch (e) {
-      setRequestStatus(StatusSendingRequest.finished);
-      if (e.code == 'invalid-email') {
-        return StatusResetPasswordRequest.emailInvalid;
-      } else if (e.code == 'user-not-found') {
-        return StatusResetPasswordRequest.userNotFound;
-      }
-      return StatusResetPasswordRequest.error;
-    }
+    final result =
+        await resetEmailService.sendPasswordResetEmail(email: state.email);
+    setRequestStatus(StatusSendingRequest.finished);
+    return result;
   }
 
   void setEmail(String email) {

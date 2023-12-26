@@ -1,10 +1,7 @@
 import 'dart:async';
 
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:kanji_for_n5_level_app/main.dart';
 import 'package:kanji_for_n5_level_app/use_cases/sing_in_user_contract.dart';
-import 'package:kanji_for_n5_level_app/use_cases/sing_in_user_firebase.dart';
 import 'package:kanji_for_n5_level_app/use_cases/sing_in_user_firebase.dart';
 
 class LoginProvider extends Notifier<LogingData> {
@@ -101,7 +98,7 @@ class LoginProvider extends Notifier<LogingData> {
     setStatusLoggingFlow(StatusProcessingLoggingFlow.logging);
 
     final result = await authService.singInWithEmailAndPassword(
-        email: state.email, password: state.email);
+        email: state.email, password: state.password);
     if (result != StatusLogingRequest.success) {
       setStatusLoggingFlow(StatusProcessingLoggingFlow.form);
     }

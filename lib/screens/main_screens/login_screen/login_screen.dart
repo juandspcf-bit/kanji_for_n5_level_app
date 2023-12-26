@@ -9,7 +9,6 @@ import 'package:kanji_for_n5_level_app/screens/main_screens/login_screen/login_f
 import 'package:kanji_for_n5_level_app/screens/main_screens/login_screen/login_progress.dart';
 import 'package:kanji_for_n5_level_app/screens/navigation_bar_screens/db_dialog_error_message.dart';
 import 'package:kanji_for_n5_level_app/use_cases/sing_in_user_contract.dart';
-import 'package:kanji_for_n5_level_app/use_cases/sing_in_user_firebase.dart';
 
 class ToLoginFormScreen extends ConsumerWidget with MyDialogs {
   ToLoginFormScreen({super.key});

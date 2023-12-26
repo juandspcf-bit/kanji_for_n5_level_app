@@ -1,4 +1,7 @@
-abstract class ResetEmail {}
+abstract class ResetEmail {
+  Future<StatusResetPasswordRequest> sendPasswordResetEmail(
+      {required String email});
+}
 
 enum StatusResetPasswordRequest {
   success('Success'),

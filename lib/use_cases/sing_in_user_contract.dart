@@ -1,6 +1,6 @@
 abstract class SingInUser {
   Future<StatusLogingRequest> singInWithEmailAndPassword(
-      {required email, required password});
+      {required String email, required String password});
 }
 
 enum StatusLogingRequest {

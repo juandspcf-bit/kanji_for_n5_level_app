@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:kanji_for_n5_level_app/main.dart';
 import 'package:kanji_for_n5_level_app/use_cases/sing_in_user_contract.dart';
 
 final storageRef = FirebaseStorage.instance.ref();
@@ -11,8 +12,9 @@ final SingInUser authService = FirebaseSingInUser();
 class FirebaseSingInUser implements SingInUser {
   @override
   Future<StatusLogingRequest> singInWithEmailAndPassword(
-      {required email, required password}) async {
+      {required String email, required String password}) async {
     try {
+      logger.d(password);
       await FirebaseAuth.instance
           .signInWithEmailAndPassword(email: email, password: password)
           .timeout(
@@ -21,6 +23,7 @@ class FirebaseSingInUser implements SingInUser {
 
       return StatusLogingRequest.success;
     } on FirebaseAuthException catch (e) {
+      logger.e(e.code);
       if (e.code == 'INVALID_LOGIN_CREDENTIALS' ||
           e.code == 'invalid-credential') {
         return StatusLogingRequest.invalidCredentials;
