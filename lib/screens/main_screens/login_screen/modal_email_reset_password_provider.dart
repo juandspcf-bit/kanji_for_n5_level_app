@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:kanji_for_n5_level_app/use_cases/reset_email_contract.dart';
 
 class ModalEmailResetProvider extends Notifier<ModalEmailResetData> {
   @override
@@ -50,23 +51,6 @@ class ModalEmailResetData {
   final StatusSendingRequest requestStatus;
 
   const ModalEmailResetData({required this.email, required this.requestStatus});
-}
-
-enum StatusResetPasswordRequest {
-  success('Success'),
-  invalidCredentials('Invalid credentials'),
-  emailInvalid('The email is invalid'),
-  userNotFound('There is no corresponding user for this email'),
-  error('The was an error in the server');
-
-  const StatusResetPasswordRequest(
-    this.message,
-  );
-
-  final String message;
-
-  @override
-  String toString() => message;
 }
 
 enum StatusSendingRequest {
