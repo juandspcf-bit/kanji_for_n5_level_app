@@ -6,7 +6,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:kanji_for_n5_level_app/auth_flow.dart';
 import 'package:kanji_for_n5_level_app/providers/on_boarding_provider.dart';
-import 'package:kanji_for_n5_level_app/repositories/application_layer.dart';
+import 'package:kanji_for_n5_level_app/aplication_layer/application_layer.dart';
 import 'package:kanji_for_n5_level_app/screens/onBoarding_screen/my_page_viewer.dart';
 import 'package:logger/logger.dart';
 import 'firebase_options.dart';

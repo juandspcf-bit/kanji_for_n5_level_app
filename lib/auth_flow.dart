@@ -2,11 +2,11 @@ import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:kanji_for_n5_level_app/aplication_layer/auth_firebase_impl/sing_in_user_firebase.dart';
 import 'package:kanji_for_n5_level_app/providers/main_screen_provider.dart';
 import 'package:kanji_for_n5_level_app/providers/status_connection_provider.dart';
 import 'package:kanji_for_n5_level_app/screens/main_screens/login_screen/login_screen.dart';
 import 'package:kanji_for_n5_level_app/screens/main_screens/main_content.dart';
-import 'package:kanji_for_n5_level_app/use_cases/sing_in_user_firebase.dart';
 
 class AuthFlow extends ConsumerWidget {
   const AuthFlow({super.key});

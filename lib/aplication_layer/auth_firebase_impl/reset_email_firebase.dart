@@ -1,5 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:kanji_for_n5_level_app/use_cases/reset_email_contract.dart';
+import 'package:kanji_for_n5_level_app/aplication_layer/auth_contract/reset_email_contract.dart';
 
 final ResetEmail resetEmailService = ResetEmailFirebase();
 

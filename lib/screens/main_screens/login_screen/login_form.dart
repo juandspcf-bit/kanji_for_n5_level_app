@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:kanji_for_n5_level_app/aplication_layer/auth_contract/reset_email_contract.dart';
 import 'package:kanji_for_n5_level_app/main.dart';
 import 'package:kanji_for_n5_level_app/screens/main_screens/login_screen/login_provider.dart';
 import 'package:kanji_for_n5_level_app/screens/main_screens/login_screen/modal_email_reset_password_provider.dart';
@@ -8,7 +9,6 @@ import 'package:kanji_for_n5_level_app/screens/common_widgets/password_widget.da
 import 'package:kanji_for_n5_level_app/screens/main_screens/login_screen/email_widget.dart';
 import 'package:kanji_for_n5_level_app/screens/main_screens/sing_up_screen.dart';
 import 'package:kanji_for_n5_level_app/screens/navigation_bar_screens/db_dialog_error_message.dart';
-import 'package:kanji_for_n5_level_app/use_cases/reset_email_contract.dart';
 
 class LoginForm extends ConsumerWidget {
   LoginForm({

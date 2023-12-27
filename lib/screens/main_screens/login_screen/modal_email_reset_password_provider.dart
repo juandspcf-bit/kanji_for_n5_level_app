@@ -1,6 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:kanji_for_n5_level_app/use_cases/reset_email_contract.dart';
-import 'package:kanji_for_n5_level_app/use_cases/reset_email_firebase.dart';
+import 'package:kanji_for_n5_level_app/aplication_layer/auth_contract/reset_email_contract.dart';
+import 'package:kanji_for_n5_level_app/aplication_layer/auth_firebase_impl/reset_email_firebase.dart';
 
 class ModalEmailResetProvider extends Notifier<ModalEmailResetData> {
   @override
