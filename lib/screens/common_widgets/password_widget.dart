@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:kanji_for_n5_level_app/main.dart';
 
 class PasswordTextField extends StatefulWidget {
   const PasswordTextField({
@@ -24,6 +25,7 @@ class _PasswordTextField extends State<PasswordTextField> {
   @override
   void initState() {
     isPasswordVisible = false;
+    logger.d('in initState $isPasswordVisible');
     super.initState();
   }
 
@@ -39,10 +41,15 @@ class _PasswordTextField extends State<PasswordTextField> {
           child: GestureDetector(
             onTap: () {
               final currentState = widget.formKey.currentState;
-              if (currentState == null) return;
-              currentState.save();
+
+              if (currentState == null) {
+                return;
+              }
+
+              //currentState.save();
               setState(() {
                 isPasswordVisible = !isPasswordVisible;
+                logger.d(isPasswordVisible);
               });
             },
             child: isPasswordVisible
@@ -67,24 +74,3 @@ class _PasswordTextField extends State<PasswordTextField> {
     );
   }
 }
-
-/* class PasswordTextFieldProvider extends Notifier<PasswordTextFieldData> {
-  @override
-  build() {
-    return PasswordTextFieldData(isPaswwordVisible: false);
-  }
-
-  void toggleVisibility() {
-
-  }
-}
-
-final passwordTextFieldProvider =
-    NotifierProvider<PasswordTextFieldProvider, PasswordTextFieldData>(
-        PasswordTextFieldProvider.new);
-
-class PasswordTextFieldData {
-  final bool isPaswwordVisible;
-
-  PasswordTextFieldData({required this.isPaswwordVisible});
-} */
