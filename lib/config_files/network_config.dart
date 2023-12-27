@@ -1,0 +1,1 @@
+const timeOutValue = 15;

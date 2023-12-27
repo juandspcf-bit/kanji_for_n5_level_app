@@ -46,7 +46,6 @@ class _PasswordTextField extends State<PasswordTextField> {
                 return;
               }
 
-              //currentState.save();
               setState(() {
                 isPasswordVisible = !isPasswordVisible;
                 logger.d(isPasswordVisible);

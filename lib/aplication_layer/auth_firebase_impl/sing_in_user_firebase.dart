@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:kanji_for_n5_level_app/aplication_layer/auth_contract/sign_in_user_contract.dart';
+import 'package:kanji_for_n5_level_app/config_files/network_config.dart';
 import 'package:kanji_for_n5_level_app/main.dart';
 
 final storageRef = FirebaseStorage.instance.ref();
@@ -18,7 +19,7 @@ class FirebaseSingInUser implements SingInUser {
       await FirebaseAuth.instance
           .signInWithEmailAndPassword(email: email, password: password)
           .timeout(
-            const Duration(seconds: 15),
+            const Duration(seconds: timeOutValue),
           );
 
       return StatusLogingRequest.success;
