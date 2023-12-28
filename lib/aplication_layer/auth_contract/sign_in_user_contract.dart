@@ -1,4 +1,4 @@
-abstract class SingInUser {
+abstract class SignInUser {
   Future<StatusLogingRequest> singInWithEmailAndPassword(
       {required String email, required String password});
 }

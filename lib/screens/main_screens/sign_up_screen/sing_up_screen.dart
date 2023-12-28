@@ -1,21 +1,21 @@
 import 'dart:io';
 
-import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:kanji_for_n5_level_app/main.dart';
-import 'package:kanji_for_n5_level_app/providers/sign_up_provider.dart';
+import 'package:kanji_for_n5_level_app/screens/main_screens/sign_up_screen/sign_up_provider.dart';
+import 'package:kanji_for_n5_level_app/screens/main_screens/login_screen/email_widget.dart';
 
-class SingUpForm extends ConsumerStatefulWidget {
-  const SingUpForm({super.key});
+class SignUpForm extends ConsumerStatefulWidget {
+  const SignUpForm({super.key});
 
   @override
-  ConsumerState<SingUpForm> createState() => _SingUpFormState();
+  ConsumerState<SignUpForm> createState() => _SingUpFormState();
 }
 
-class _SingUpFormState extends ConsumerState<SingUpForm> {
+class _SingUpFormState extends ConsumerState<SignUpForm> {
   final _formKey = GlobalKey<FormState>();
 
   late String fullName;
@@ -29,7 +29,7 @@ class _SingUpFormState extends ConsumerState<SingUpForm> {
 
   Widget _dialog(BuildContext context) {
     return AlertDialog(
-      title: const Text("Please wait!!"),
+      title: const Text("Error!!"),
       content: const Text('There is a error in the user creation, try again'),
       actions: <Widget>[
         TextButton(
@@ -92,12 +92,12 @@ class _SingUpFormState extends ConsumerState<SingUpForm> {
 
   @override
   Widget build(BuildContext context) {
-    //FlutterNativeSplash.remove();
-    final dataState = ref.watch(singUpProvider);
+    final singUpData = ref.watch(singUpProvider);
     return Scaffold(
       appBar: AppBar(),
       body: SafeArea(
-        child: dataState.statusFetching == 0
+        child: singUpData.statusFetching ==
+                StatusProcessingSignUpFlow.signUpProccessing
             ? Center(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -183,23 +183,13 @@ class _SingUpFormState extends ConsumerState<SingUpForm> {
                             const SizedBox(
                               height: 10,
                             ),
-                            TextFormField(
-                              decoration: const InputDecoration().copyWith(
-                                  border: const OutlineInputBorder(),
-                                  prefixIcon: const Icon(Icons.email),
-                                  labelText: 'Email',
-                                  hintText: '***@***.com'),
-                              keyboardType: TextInputType.emailAddress,
-                              validator: (text) {
-                                if (text != null &&
-                                    EmailValidator.validate(text)) {
-                                  return null;
-                                } else {
-                                  return 'Not a valid email';
-                                }
-                              },
-                              onSaved: (value) {
-                                emailAddress = value ?? '';
+                            EmailTextField(
+                              initialValue: singUpData.emailAddress,
+                              setEmail: (email) {
+                                if (email == null) return;
+                                ref
+                                    .read(singUpProvider.notifier)
+                                    .setEmail(email);
                               },
                             ),
                             const SizedBox(

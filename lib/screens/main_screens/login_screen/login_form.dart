@@ -4,10 +4,10 @@ import 'package:kanji_for_n5_level_app/aplication_layer/auth_contract/reset_emai
 import 'package:kanji_for_n5_level_app/main.dart';
 import 'package:kanji_for_n5_level_app/screens/main_screens/login_screen/login_provider.dart';
 import 'package:kanji_for_n5_level_app/screens/main_screens/login_screen/modal_email_reset_password_provider.dart';
-import 'package:kanji_for_n5_level_app/providers/sign_up_provider.dart';
+import 'package:kanji_for_n5_level_app/screens/main_screens/sign_up_screen/sign_up_provider.dart';
 import 'package:kanji_for_n5_level_app/screens/common_widgets/password_widget.dart';
 import 'package:kanji_for_n5_level_app/screens/main_screens/login_screen/email_widget.dart';
-import 'package:kanji_for_n5_level_app/screens/main_screens/sing_up_screen.dart';
+import 'package:kanji_for_n5_level_app/screens/main_screens/sign_up_screen/sing_up_screen.dart';
 import 'package:kanji_for_n5_level_app/screens/navigation_bar_screens/db_dialog_error_message.dart';
 
 class LoginForm extends ConsumerWidget {
@@ -119,10 +119,10 @@ class LoginForm extends ConsumerWidget {
               currentFocus.unfocus();
             }
 
-            ref.read(singUpProvider.notifier).setStatus(1);
+            ref.read(singUpProvider.notifier).resetStatus();
 
             Navigator.of(context).push(MaterialPageRoute(builder: (ctx) {
-              return const SingUpForm();
+              return const SignUpForm();
             }));
           },
           style: ElevatedButton.styleFrom().copyWith(
@@ -130,7 +130,7 @@ class LoginForm extends ConsumerWidget {
               Size.fromHeight(40),
             ),
           ),
-          child: const Text('Sing Up'),
+          child: const Text('Sign Up'),
         ),
       ],
     );

@@ -8,9 +8,9 @@ import 'package:kanji_for_n5_level_app/main.dart';
 
 final storageRef = FirebaseStorage.instance.ref();
 final streamAuth = FirebaseAuth.instance.userChanges();
-final SingInUser authService = FirebaseSingInUser();
+final SignInUser authService = FirebaseSignInUser();
 
-class FirebaseSingInUser implements SingInUser {
+class FirebaseSignInUser implements SignInUser {
   @override
   Future<StatusLogingRequest> singInWithEmailAndPassword(
       {required String email, required String password}) async {
