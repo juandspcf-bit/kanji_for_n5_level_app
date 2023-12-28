@@ -41,12 +41,56 @@ class SingUpProvider extends Notifier<SingUpData> {
     );
   }
 
+  void setFullName(String fullName) {
+    state = SingUpData(
+      statusFetching: state.statusFetching,
+      pathProfileUser: state.pathProfileUser,
+      fullName: fullName,
+      emailAddress: state.emailAddress,
+      password: state.password,
+      confirmPassword: state.confirmPassword,
+    );
+  }
+
   void setEmail(String email) {
     state = SingUpData(
       statusFetching: state.statusFetching,
       pathProfileUser: state.pathProfileUser,
       fullName: state.fullName,
       emailAddress: email,
+      password: state.password,
+      confirmPassword: state.confirmPassword,
+    );
+  }
+
+  void setPassword(String password) {
+    state = SingUpData(
+      statusFetching: state.statusFetching,
+      pathProfileUser: state.pathProfileUser,
+      fullName: state.fullName,
+      emailAddress: state.emailAddress,
+      password: password,
+      confirmPassword: state.confirmPassword,
+    );
+  }
+
+  void setConfirmPassword(String confirmPassword) {
+    state = SingUpData(
+      statusFetching: state.statusFetching,
+      pathProfileUser: state.pathProfileUser,
+      fullName: state.fullName,
+      emailAddress: state.emailAddress,
+      password: state.password,
+      confirmPassword: confirmPassword,
+    );
+  }
+
+  void setPathProfileUser(String pathProfileUser) {
+    state = SingUpData(
+      statusFetching: state.statusFetching,
+      pathProfileUser: pathProfileUser,
+      fullName: state.fullName,
+      emailAddress: state.emailAddress,
       password: state.password,
       confirmPassword: state.confirmPassword,
     );

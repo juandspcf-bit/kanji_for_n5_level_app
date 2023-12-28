@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:kanji_for_n5_level_app/main.dart';
+import 'package:kanji_for_n5_level_app/screens/common_widgets/password_widget.dart';
 import 'package:kanji_for_n5_level_app/screens/main_screens/sign_up_screen/sign_up_provider.dart';
 import 'package:kanji_for_n5_level_app/screens/main_screens/login_screen/email_widget.dart';
 
@@ -161,6 +162,7 @@ class _SingUpFormState extends ConsumerState<SignUpForm> {
                         child: Column(
                           children: [
                             TextFormField(
+                              initialValue: singUpData.fullName,
                               decoration: const InputDecoration().copyWith(
                                 border: const OutlineInputBorder(),
                                 prefixIcon: const Icon(Icons.person),
@@ -177,7 +179,10 @@ class _SingUpFormState extends ConsumerState<SignUpForm> {
                                 }
                               },
                               onSaved: (value) {
-                                fullName = value ?? '';
+                                if (value == null) return;
+                                ref
+                                    .read(singUpProvider.notifier)
+                                    .setFullName(value);
                               },
                             ),
                             const SizedBox(
@@ -195,51 +200,29 @@ class _SingUpFormState extends ConsumerState<SignUpForm> {
                             const SizedBox(
                               height: 10,
                             ),
-                            TextFormField(
-                              decoration: const InputDecoration().copyWith(
-                                border: const OutlineInputBorder(),
-                                prefixIcon: const Icon(Icons.key),
-                                labelText: 'Password',
-                              ),
-                              keyboardType: TextInputType.visiblePassword,
-                              obscureText: true,
-                              validator: (text) {
-                                if (text != null &&
-                                    text.length >= 4 &&
-                                    text.length <= 15) {
-                                  return null;
-                                } else {
-                                  return 'Password should be between 15 and 4 characters';
-                                }
-                              },
-                              onSaved: (value) {
-                                password1 = value ?? '';
+                            PasswordTextField(
+                              initialValue: singUpData.password,
+                              formKey: _formKey,
+                              onSave: (value) {
+                                if (value == null) return;
+                                ref
+                                    .read(singUpProvider.notifier)
+                                    .setPassword(value);
                               },
                             ),
                             const SizedBox(
                               height: 10,
                             ),
-                            TextFormField(
-                              decoration: const InputDecoration().copyWith(
-                                border: const OutlineInputBorder(),
-                                prefixIcon: const Icon(Icons.key),
-                                labelText: 'Confirm Password',
-                              ),
-                              keyboardType: TextInputType.visiblePassword,
-                              obscureText: true,
-                              validator: (text) {
-                                if (text != null &&
-                                    text.length >= 4 &&
-                                    text.length <= 15) {
-                                  return null;
-                                } else {
-                                  return 'Password should be between 15 and 4 characters';
-                                }
+                            PasswordTextField(
+                              initialValue: singUpData.password,
+                              formKey: _formKey,
+                              onSave: (value) {
+                                if (value == null) return;
+                                ref
+                                    .read(singUpProvider.notifier)
+                                    .setConfirmPassword(value);
                               },
-                              onSaved: (value) {
-                                password2 = value ?? '';
-                              },
-                            )
+                            ),
                           ],
                         ),
                       ),
