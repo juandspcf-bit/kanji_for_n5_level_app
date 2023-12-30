@@ -167,6 +167,7 @@ class _SingUpFormState extends ConsumerState<SignUpForm> with MyDialogs {
                                     .read(singUpProvider.notifier)
                                     .setPassword(value);
                               },
+                              labelText: 'password',
                             ),
                             const SizedBox(
                               height: 10,
@@ -180,6 +181,7 @@ class _SingUpFormState extends ConsumerState<SignUpForm> with MyDialogs {
                                     .read(singUpProvider.notifier)
                                     .setConfirmPassword(value);
                               },
+                              labelText: 'confirm password',
                             ),
                           ],
                         ),

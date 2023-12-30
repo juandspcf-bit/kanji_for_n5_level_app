@@ -53,6 +53,7 @@ class LoginForm extends ConsumerWidget {
                 initialValue: loginFormData.password,
                 formKey: _formKey,
                 onSave: setPassword,
+                labelText: 'password',
               ),
               const SizedBox(
                 height: 10,

@@ -7,11 +7,13 @@ class PasswordTextField extends StatefulWidget {
     required this.initialValue,
     required this.onSave,
     required this.formKey,
+    required this.labelText,
   });
 
   final GlobalKey<FormState> formKey;
   final String initialValue;
   final void Function(String? text) onSave;
+  final String labelText;
 
   @override
   State<PasswordTextField> createState() {
@@ -56,7 +58,7 @@ class _PasswordTextField extends State<PasswordTextField> {
                 : const Icon(Icons.visibility),
           ),
         ),
-        labelText: 'Password',
+        labelText: widget.labelText,
       ),
       keyboardType: TextInputType.visiblePassword,
       obscureText: !isPasswordVisible,
