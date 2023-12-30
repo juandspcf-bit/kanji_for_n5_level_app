@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kanji_for_n5_level_app/aplication_layer/auth_firebase_impl/sing_in_user_firebase.dart';
 import 'package:kanji_for_n5_level_app/main.dart';
@@ -10,7 +11,8 @@ class SingUpProvider extends Notifier<SingUpData> {
   @override
   SingUpData build() {
     return SingUpData(
-      statusFetching: StatusProcessingSignUpFlow.form,
+      statusFlow: StatusProcessingSignUpFlow.form,
+      statusCreatingUser: StatusCreatingUser.notStarted,
       pathProfileUser: '',
       fullName: '',
       emailAddress: '',
@@ -19,9 +21,22 @@ class SingUpProvider extends Notifier<SingUpData> {
     );
   }
 
-  void setStatus(StatusProcessingSignUpFlow status) async {
+  void setStatusFlow(StatusProcessingSignUpFlow status) async {
     state = SingUpData(
-      statusFetching: status,
+      statusFlow: status,
+      statusCreatingUser: state.statusCreatingUser,
+      pathProfileUser: state.pathProfileUser,
+      fullName: state.fullName,
+      emailAddress: state.emailAddress,
+      password: state.password,
+      confirmPassword: state.confirmPassword,
+    );
+  }
+
+  void setStatusCreatingUser(StatusCreatingUser statusCreatingUser) async {
+    state = SingUpData(
+      statusFlow: state.statusFlow,
+      statusCreatingUser: statusCreatingUser,
       pathProfileUser: state.pathProfileUser,
       fullName: state.fullName,
       emailAddress: state.emailAddress,
@@ -32,7 +47,8 @@ class SingUpProvider extends Notifier<SingUpData> {
 
   void resetStatus() {
     state = SingUpData(
-      statusFetching: StatusProcessingSignUpFlow.form,
+      statusFlow: StatusProcessingSignUpFlow.form,
+      statusCreatingUser: StatusCreatingUser.notStarted,
       pathProfileUser: '',
       fullName: '',
       emailAddress: '',
@@ -43,7 +59,8 @@ class SingUpProvider extends Notifier<SingUpData> {
 
   void setFullName(String fullName) {
     state = SingUpData(
-      statusFetching: state.statusFetching,
+      statusFlow: state.statusFlow,
+      statusCreatingUser: state.statusCreatingUser,
       pathProfileUser: state.pathProfileUser,
       fullName: fullName,
       emailAddress: state.emailAddress,
@@ -54,7 +71,8 @@ class SingUpProvider extends Notifier<SingUpData> {
 
   void setEmail(String email) {
     state = SingUpData(
-      statusFetching: state.statusFetching,
+      statusFlow: state.statusFlow,
+      statusCreatingUser: state.statusCreatingUser,
       pathProfileUser: state.pathProfileUser,
       fullName: state.fullName,
       emailAddress: email,
@@ -65,7 +83,8 @@ class SingUpProvider extends Notifier<SingUpData> {
 
   void setPassword(String password) {
     state = SingUpData(
-      statusFetching: state.statusFetching,
+      statusFlow: state.statusFlow,
+      statusCreatingUser: state.statusCreatingUser,
       pathProfileUser: state.pathProfileUser,
       fullName: state.fullName,
       emailAddress: state.emailAddress,
@@ -76,7 +95,8 @@ class SingUpProvider extends Notifier<SingUpData> {
 
   void setConfirmPassword(String confirmPassword) {
     state = SingUpData(
-      statusFetching: state.statusFetching,
+      statusFlow: state.statusFlow,
+      statusCreatingUser: state.statusCreatingUser,
       pathProfileUser: state.pathProfileUser,
       fullName: state.fullName,
       emailAddress: state.emailAddress,
@@ -87,7 +107,8 @@ class SingUpProvider extends Notifier<SingUpData> {
 
   void setPathProfileUser(String pathProfileUser) {
     state = SingUpData(
-      statusFetching: state.statusFetching,
+      statusFlow: state.statusFlow,
+      statusCreatingUser: state.statusCreatingUser,
       pathProfileUser: pathProfileUser,
       fullName: state.fullName,
       emailAddress: state.emailAddress,
@@ -96,34 +117,33 @@ class SingUpProvider extends Notifier<SingUpData> {
     );
   }
 
-  Future<void> createUser(
-    String pathProfileUser,
-    String fullName,
-    String emailAddress,
-    String password1,
-    String password2,
-  ) async {
-    setStatus(StatusProcessingSignUpFlow.signUpProccessing);
+  Future<void> toCreateUser(BuildContext context) async {
+    if (state.password != state.confirmPassword) {
+      setStatusCreatingUser(StatusCreatingUser.passworfMisMatch);
+      return;
+    }
+
+    setStatusFlow(StatusProcessingSignUpFlow.signUpProccessing);
 
     try {
       final credential =
           await FirebaseAuth.instance.createUserWithEmailAndPassword(
-        email: emailAddress,
-        password: password1,
+        email: state.emailAddress,
+        password: state.password,
       );
 
       final user = credential.user;
 
       if (user == null) return;
 
-      await user.updateDisplayName(fullName);
-      await user.updateEmail(emailAddress);
+      await user.updateDisplayName(state.fullName);
+      await user.updateEmail(state.emailAddress);
 
-      if (pathProfileUser.isNotEmpty) {
+      if (state.pathProfileUser.isNotEmpty) {
         try {
           final userPhoto = storageRef.child("userImages/${user.uid}.jpg");
 
-          await userPhoto.putFile(File(pathProfileUser));
+          await userPhoto.putFile(File(state.pathProfileUser));
 
           final link = await userPhoto.getDownloadURL();
 
@@ -135,22 +155,18 @@ class SingUpProvider extends Notifier<SingUpData> {
           logger.e(e);
         }
       }
-    } on FirebaseAuthException catch (e) {
-      setStatus(StatusProcessingSignUpFlow.error);
-      if (e.code == 'weak-password') {
-        logger.d('The password provided is too weak.');
-      } else if (e.code == 'email-already-in-use') {
-        logger.d('The account already exists for that email.');
-      }
 
-      throw const ErrorDataBaseException(
-          message: 'Error with creation of account');
-    } catch (e) {
-      setStatus(StatusProcessingSignUpFlow.error);
-      logger.e(e);
-      throw const ErrorDataBaseException(
-          message: 'Error with creation of account');
-    } finally {}
+      setStatusCreatingUser(StatusCreatingUser.success);
+    } on FirebaseAuthException catch (e) {
+      setStatusFlow(StatusProcessingSignUpFlow.form);
+      if (e.code == 'weak-password') {
+        setStatusCreatingUser(StatusCreatingUser.weakPassword);
+      } else if (e.code == 'email-already-in-use') {
+        setStatusCreatingUser(StatusCreatingUser.emailAlreadyInUse);
+      } else {
+        setStatusCreatingUser(StatusCreatingUser.error);
+      }
+    }
   }
 }
 
@@ -158,7 +174,8 @@ final singUpProvider =
     NotifierProvider<SingUpProvider, SingUpData>(SingUpProvider.new);
 
 class SingUpData {
-  final StatusProcessingSignUpFlow statusFetching;
+  final StatusProcessingSignUpFlow statusFlow;
+  final StatusCreatingUser statusCreatingUser;
   final String pathProfileUser;
   final String fullName;
   final String emailAddress;
@@ -166,7 +183,8 @@ class SingUpData {
   final String confirmPassword;
 
   SingUpData({
-    required this.statusFetching,
+    required this.statusFlow,
+    required this.statusCreatingUser,
     required this.pathProfileUser,
     required this.fullName,
     required this.emailAddress,
@@ -188,9 +206,10 @@ enum StatusProcessingSignUpFlow {
   form,
 }
 
-enum StatusSignUpgRequest {
+enum StatusCreatingUser {
   notStarted('Not started'),
   success('Success'),
+  passworfMisMatch('the passwords are not the same'),
   invalidEmail('Your email address is not valid'),
   emailAlreadyInUse(
       'there already exists an account with the given email address'),
@@ -198,7 +217,7 @@ enum StatusSignUpgRequest {
   weakPassword('Your password is weak'),
   error('An unexpected error has happened');
 
-  const StatusSignUpgRequest(
+  const StatusCreatingUser(
     this.message,
   );
 

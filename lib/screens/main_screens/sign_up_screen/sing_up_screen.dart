@@ -8,6 +8,7 @@ import 'package:kanji_for_n5_level_app/main.dart';
 import 'package:kanji_for_n5_level_app/screens/common_widgets/password_widget.dart';
 import 'package:kanji_for_n5_level_app/screens/main_screens/sign_up_screen/sign_up_provider.dart';
 import 'package:kanji_for_n5_level_app/screens/main_screens/login_screen/email_widget.dart';
+import 'package:kanji_for_n5_level_app/screens/navigation_bar_screens/db_dialog_error_message.dart';
 
 class SignUpForm extends ConsumerStatefulWidget {
   const SignUpForm({super.key});
@@ -16,88 +17,45 @@ class SignUpForm extends ConsumerStatefulWidget {
   ConsumerState<SignUpForm> createState() => _SingUpFormState();
 }
 
-class _SingUpFormState extends ConsumerState<SignUpForm> {
+class _SingUpFormState extends ConsumerState<SignUpForm> with MyDialogs {
   final _formKey = GlobalKey<FormState>();
 
-  late String fullName;
-  late String emailAddress;
-  late String password1;
-  late String password2;
-
-  String pathAssetUser = 'assets/images/user.png';
-  String pathProfileUser = '';
+  static const String pathAssetUser = 'assets/images/user.png';
   final ImagePicker picker = ImagePicker();
-
-  Widget _dialog(BuildContext context) {
-    return AlertDialog(
-      title: const Text("Error!!"),
-      content: const Text('There is a error in the user creation, try again'),
-      actions: <Widget>[
-        TextButton(
-            onPressed: () {
-              Navigator.of(context).pop();
-            },
-            child: const Text("Okay"))
-      ],
-    );
-  }
-
-  void _scaleDialogForUserCreationError(BuildContext context) {
-    showGeneralDialog(
-      context: context,
-      pageBuilder: (ctx, a1, a2) {
-        return Container();
-      },
-      transitionBuilder: (ctx, a1, a2, child) {
-        var curve = Curves.easeInOut.transform(a1.value);
-        return Transform.scale(
-          scale: curve,
-          child: _dialog(ctx),
-        );
-      },
-      transitionDuration: const Duration(milliseconds: 300),
-    );
-  }
 
   void onValidation() async {
     final currentState = _formKey.currentState;
     if (currentState == null || !currentState.validate()) return;
     currentState.save();
-    if (password1 == password2) {
-      try {
-        await ref.read(singUpProvider.notifier).createUser(
-              pathProfileUser,
-              fullName,
-              emailAddress,
-              password1,
-              password2,
-            );
-        if (context.mounted) {
-          Navigator.of(context).pop();
-        }
-      } on ErrorDataBaseException catch (e) {
-        logger.e(e.toString());
-        if (context.mounted) {
-          _scaleDialogForUserCreationError(context);
-        }
-      }
-    } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Passwords should match'),
-          duration: Duration(seconds: 3),
-        ),
-      );
+
+    try {
+      await ref.read(singUpProvider.notifier).toCreateUser(context);
+    } catch (e) {
+      logger.e(e.toString());
+      if (context.mounted) {}
     }
   }
 
   @override
   Widget build(BuildContext context) {
     final singUpData = ref.watch(singUpProvider);
+
+    ref.listen<SingUpData>(singUpProvider, (prev, current) {
+      if (current.statusCreatingUser != StatusCreatingUser.notStarted &&
+          current.statusCreatingUser != StatusCreatingUser.success) {
+        showMessageError(context, current.statusCreatingUser.message);
+        return;
+      }
+
+      if (current.statusCreatingUser == StatusCreatingUser.success) {
+        Navigator.of(context).pop();
+      }
+    });
+
     return Scaffold(
       appBar: AppBar(),
       body: SafeArea(
-        child: singUpData.statusFetching ==
+        child: singUpData.statusFlow ==
                 StatusProcessingSignUpFlow.signUpProccessing
             ? Center(
                 child: Column(
@@ -137,20 +95,20 @@ class _SingUpFormState extends ConsumerState<SignUpForm> {
                           try {
                             final XFile? photo = await picker.pickImage(
                                 source: ImageSource.camera);
-                            setState(() {
-                              if (photo != null) {
-                                pathProfileUser = photo.path;
-                              }
-                            });
+                            if (photo != null) {
+                              ref
+                                  .read(singUpProvider.notifier)
+                                  .setPathProfileUser(photo.path);
+                            }
                           } on PlatformException catch (e) {
                             logger.e('Failed to pick image: $e');
                           }
                         },
                         child: CircleAvatar(
                           radius: 80,
-                          backgroundImage: pathProfileUser.isEmpty
-                              ? AssetImage(pathAssetUser)
-                              : FileImage(File(pathProfileUser))
+                          backgroundImage: singUpData.pathProfileUser.isEmpty
+                              ? const AssetImage(pathAssetUser)
+                              : FileImage(File(singUpData.pathProfileUser))
                                   as ImageProvider,
                         ),
                       ),
@@ -253,5 +211,13 @@ class _SingUpFormState extends ConsumerState<SignUpForm> {
               ),
       ),
     );
+  }
+
+  void showMessageError(BuildContext context, String message) {
+    errorDialog(context, () {
+      ref
+          .read(singUpProvider.notifier)
+          .setStatusCreatingUser(StatusCreatingUser.notStarted);
+    }, message);
   }
 }
