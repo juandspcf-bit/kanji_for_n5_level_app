@@ -50,7 +50,7 @@ class PersonalInfoProvider extends Notifier<PersonalInfoData> {
           statusFetching: 2,
           showPasswordRequest: state.showPasswordRequest);
     } on TimeoutException {
-      logger.e('error reading profile photo');
+      logger.e('time out exception');
       logger.d(fullName);
       logger.d(email);
       state = PersonalInfoData(
@@ -58,6 +58,15 @@ class PersonalInfoProvider extends Notifier<PersonalInfoData> {
           pathProfileTemporal: '',
           name: fullName ?? 'no name',
           email: email ?? 'no data',
+          statusFetching: 2,
+          showPasswordRequest: state.showPasswordRequest);
+    } catch (e) {
+      logger.e('error reading profile photo');
+      state = PersonalInfoData(
+          pathProfileUser: '',
+          pathProfileTemporal: '',
+          name: fullName ?? '',
+          email: email ?? '',
           statusFetching: 2,
           showPasswordRequest: state.showPasswordRequest);
     }
