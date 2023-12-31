@@ -90,27 +90,99 @@ class _SingUpFormState extends ConsumerState<SignUpForm> with MyDialogs {
                       const SizedBox(
                         height: 40,
                       ),
-                      InkWell(
-                        onTap: () async {
-                          try {
-                            final XFile? photo = await picker.pickImage(
-                                source: ImageSource.camera);
-                            if (photo != null) {
-                              ref
-                                  .read(singUpProvider.notifier)
-                                  .setPathProfileUser(photo.path);
-                            }
-                          } on PlatformException catch (e) {
-                            logger.e('Failed to pick image: $e');
-                          }
-                        },
-                        child: CircleAvatar(
-                          radius: 80,
-                          backgroundImage: singUpData.pathProfileUser.isEmpty
-                              ? const AssetImage(pathAssetUser)
-                              : FileImage(File(singUpData.pathProfileUser))
-                                  as ImageProvider,
-                        ),
+                      Stack(
+                        alignment: Alignment.center,
+                        children: [
+                          Container(
+                            padding: const EdgeInsets.all(20),
+                            height: 250,
+                            width: 250,
+                            child: CircleAvatar(
+                              //radius: 80,
+                              maxRadius: 80,
+                              backgroundImage: singUpData
+                                      .pathProfileUser.isEmpty
+                                  ? const AssetImage(pathAssetUser)
+                                  : FileImage(File(singUpData.pathProfileUser))
+                                      as ImageProvider,
+                            ),
+                          ),
+                          Positioned(
+                            bottom: 50,
+                            right: -0,
+                            child: IconButton(
+                              onPressed: () {
+                                showModalBottomSheet(
+                                  /* isScrollControlled: true,
+                                  useSafeArea: true, */
+                                  context: context,
+                                  builder: (ctx) {
+                                    return Column(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        ListTile(
+                                          onTap: () async {
+                                            Navigator.of(context).pop();
+                                            try {
+                                              final XFile? photo =
+                                                  await picker.pickImage(
+                                                      source:
+                                                          ImageSource.camera);
+                                              if (photo != null) {
+                                                ref
+                                                    .read(
+                                                        singUpProvider.notifier)
+                                                    .setPathProfileUser(
+                                                        photo.path);
+                                              }
+                                            } on PlatformException catch (e) {
+                                              logger.e(
+                                                  'Failed to pick image: $e');
+                                            }
+                                          },
+                                          leading:
+                                              const Icon(Icons.photo_camera),
+                                          title: const Text('Take a picture'),
+                                        ),
+                                        const Divider(
+                                          height: 2,
+                                        ),
+                                        ListTile(
+                                          onTap: () async {
+                                            Navigator.of(context).pop();
+                                            try {
+                                              final XFile? photo =
+                                                  await picker.pickImage(
+                                                      source:
+                                                          ImageSource.gallery);
+                                              if (photo != null) {
+                                                ref
+                                                    .read(
+                                                        singUpProvider.notifier)
+                                                    .setPathProfileUser(
+                                                        photo.path);
+                                              }
+                                            } on PlatformException catch (e) {
+                                              logger.e(
+                                                  'Failed to pick image: $e');
+                                            }
+                                          },
+                                          leading: const Icon(
+                                              Icons.photo_size_select_actual),
+                                          title: const Text('Select a picture'),
+                                        ),
+                                      ],
+                                    );
+                                  },
+                                );
+                              },
+                              icon: const Icon(
+                                Icons.image_search,
+                                size: 40,
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
                       const SizedBox(
                         height: 20,
