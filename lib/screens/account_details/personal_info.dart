@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kanji_for_n5_level_app/main.dart';
-import 'package:kanji_for_n5_level_app/providers/account_details_state_provider.dart';
+import 'package:kanji_for_n5_level_app/screens/account_details/account_details_state_provider.dart';
 import 'package:kanji_for_n5_level_app/screens/account_details/fetchin_data.dart';
 import 'package:kanji_for_n5_level_app/screens/account_details/updating_data.dart';
 import 'package:kanji_for_n5_level_app/screens/account_details/user_data.dart';

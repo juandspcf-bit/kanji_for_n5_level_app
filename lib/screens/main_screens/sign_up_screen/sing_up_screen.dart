@@ -6,6 +6,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:kanji_for_n5_level_app/main.dart';
 import 'package:kanji_for_n5_level_app/screens/common_widgets/password_widget.dart';
+import 'package:kanji_for_n5_level_app/screens/main_screens/sign_up_screen/profile_picture_widget.dart';
 import 'package:kanji_for_n5_level_app/screens/main_screens/sign_up_screen/sign_up_provider.dart';
 import 'package:kanji_for_n5_level_app/screens/main_screens/login_screen/email_widget.dart';
 import 'package:kanji_for_n5_level_app/screens/navigation_bar_screens/db_dialog_error_message.dart';
@@ -90,99 +91,13 @@ class _SingUpFormState extends ConsumerState<SignUpForm> with MyDialogs {
                       const SizedBox(
                         height: 40,
                       ),
-                      Stack(
-                        alignment: Alignment.center,
-                        children: [
-                          Container(
-                            padding: const EdgeInsets.all(20),
-                            height: 250,
-                            width: 250,
-                            child: CircleAvatar(
-                              //radius: 80,
-                              maxRadius: 80,
-                              backgroundImage: singUpData
-                                      .pathProfileUser.isEmpty
-                                  ? const AssetImage(pathAssetUser)
-                                  : FileImage(File(singUpData.pathProfileUser))
-                                      as ImageProvider,
-                            ),
-                          ),
-                          Positioned(
-                            bottom: 50,
-                            right: -0,
-                            child: IconButton(
-                              onPressed: () {
-                                showModalBottomSheet(
-                                  /* isScrollControlled: true,
-                                  useSafeArea: true, */
-                                  context: context,
-                                  builder: (ctx) {
-                                    return Column(
-                                      mainAxisSize: MainAxisSize.min,
-                                      children: [
-                                        ListTile(
-                                          onTap: () async {
-                                            Navigator.of(context).pop();
-                                            try {
-                                              final XFile? photo =
-                                                  await picker.pickImage(
-                                                      source:
-                                                          ImageSource.camera);
-                                              if (photo != null) {
-                                                ref
-                                                    .read(
-                                                        singUpProvider.notifier)
-                                                    .setPathProfileUser(
-                                                        photo.path);
-                                              }
-                                            } on PlatformException catch (e) {
-                                              logger.e(
-                                                  'Failed to pick image: $e');
-                                            }
-                                          },
-                                          leading:
-                                              const Icon(Icons.photo_camera),
-                                          title: const Text('Take a picture'),
-                                        ),
-                                        const Divider(
-                                          height: 2,
-                                        ),
-                                        ListTile(
-                                          onTap: () async {
-                                            Navigator.of(context).pop();
-                                            try {
-                                              final XFile? photo =
-                                                  await picker.pickImage(
-                                                      source:
-                                                          ImageSource.gallery);
-                                              if (photo != null) {
-                                                ref
-                                                    .read(
-                                                        singUpProvider.notifier)
-                                                    .setPathProfileUser(
-                                                        photo.path);
-                                              }
-                                            } on PlatformException catch (e) {
-                                              logger.e(
-                                                  'Failed to pick image: $e');
-                                            }
-                                          },
-                                          leading: const Icon(
-                                              Icons.photo_size_select_actual),
-                                          title: const Text('Select a picture'),
-                                        ),
-                                      ],
-                                    );
-                                  },
-                                );
-                              },
-                              icon: const Icon(
-                                Icons.image_search,
-                                size: 40,
-                              ),
-                            ),
-                          ),
-                        ],
+                      ProfilePicture(
+                        pathProfileUser: singUpData.pathProfileUser,
+                        setPathProfileUser: (path) {
+                          ref
+                              .read(singUpProvider.notifier)
+                              .setPathProfileUser(path);
+                        },
                       ),
                       const SizedBox(
                         height: 20,
