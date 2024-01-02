@@ -19,25 +19,17 @@ class ToLoginFormScreen extends ConsumerWidget with MyDialogs {
 
   void showLoginResultMessageDialog(
       BuildContext context, StatusLogingRequest result, WidgetRef ref) {
-    var loginErrorText = '';
-    switch (result) {
-      case StatusLogingRequest.success:
-      case StatusLogingRequest.notStarted:
-        {
-          return;
-        }
-      default:
-        loginErrorText = result.message;
+    if (result != StatusLogingRequest.success &&
+        result != StatusLogingRequest.notStarted) {
+      errorDialog(context, () {
+        ref
+            .read(loginProvider.notifier)
+            .setStatusLogingRequest(StatusLogingRequest.notStarted);
+        ref
+            .read(loginProvider.notifier)
+            .setStatusResetEmail(StatusResetEmail.notStarted);
+      }, result.message);
     }
-
-    errorDialog(context, () {
-      ref
-          .read(loginProvider.notifier)
-          .setStatusLogingRequest(StatusLogingRequest.notStarted);
-      ref
-          .read(loginProvider.notifier)
-          .setStatusResetEmail(StatusResetEmail.notStarted);
-    }, loginErrorText);
   }
 
   void showResetEmailMessageDialog(
