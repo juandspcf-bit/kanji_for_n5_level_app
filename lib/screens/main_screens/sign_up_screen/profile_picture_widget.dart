@@ -5,10 +5,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:kanji_for_n5_level_app/config_files/screen_config.dart';
 import 'package:kanji_for_n5_level_app/main.dart';
 
 class ProfilePictureWidget extends ConsumerWidget {
-  ProfilePictureWidget({
+  const ProfilePictureWidget({
     super.key,
     required this.setPathProfileUser,
     required this.avatarWidget,
@@ -17,30 +18,47 @@ class ProfilePictureWidget extends ConsumerWidget {
   final void Function(String path) setPathProfileUser;
   final Widget avatarWidget;
 
-  static const String pathAssetUser = 'assets/images/user.png';
-  final ImagePicker picker = ImagePicker();
-
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final sizeScreen = getScreenSizeWidth(context);
+    int avatarSize;
+    int iconSize;
+    switch (sizeScreen) {
+      case ScreenSizeWidth.extraLarge:
+        {
+          avatarSize = 256;
+          iconSize = 50;
+        }
+      case ScreenSizeWidth.large:
+        {
+          avatarSize = 256;
+          iconSize = 50;
+        }
+      case _:
+        {
+          avatarSize = 160;
+          iconSize = 30;
+        }
+    }
+
     return Stack(
       alignment: Alignment.center,
       children: [
-        Container(
-          padding: const EdgeInsets.all(20),
-          height: 250,
-          width: 250,
+        SizedBox(
+          height: avatarSize.toDouble(),
+          width: avatarSize.toDouble(),
           child: avatarWidget,
         ),
         Positioned(
-          bottom: 50,
-          right: -0,
+          bottom: 0,
+          right: 0,
           child: IconButton(
             onPressed: () {
               modalSelectionSourcePictureWidget(context, setPathProfileUser);
             },
-            icon: const Icon(
+            icon: Icon(
               Icons.image_search,
-              size: 40,
+              size: iconSize.toDouble(),
             ),
           ),
         ),
