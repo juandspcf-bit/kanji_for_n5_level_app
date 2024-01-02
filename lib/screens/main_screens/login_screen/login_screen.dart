@@ -95,19 +95,21 @@ class ToLoginFormScreen extends ConsumerWidget with MyDialogs {
             return loginFormData.statusLogingFlow !=
                     StatusProcessingLoggingFlow.form
                 ? const LoginProgress()
-                : LoginForm(
-                    loginFormData: loginFormData,
-                    setEmail: (value) {
-                      if (value == null) return;
-                      ref.read(loginProvider.notifier).setEmail(value);
-                    },
-                    setPassword: (value) {
-                      if (value == null) return;
-                      ref.read(loginProvider.notifier).setPassword(value);
-                    },
-                    onSuccefulValidation: () {
-                      toLoging(context, ref);
-                    },
+                : SafeArea(
+                    child: LoginForm(
+                      loginFormData: loginFormData,
+                      setEmail: (value) {
+                        if (value == null) return;
+                        ref.read(loginProvider.notifier).setEmail(value);
+                      },
+                      setPassword: (value) {
+                        if (value == null) return;
+                        ref.read(loginProvider.notifier).setPassword(value);
+                      },
+                      onSuccefulValidation: () {
+                        toLoging(context, ref);
+                      },
+                    ),
                   );
           },
         ),

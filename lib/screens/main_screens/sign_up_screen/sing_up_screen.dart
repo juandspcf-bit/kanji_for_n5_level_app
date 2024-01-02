@@ -1,7 +1,4 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:kanji_for_n5_level_app/main.dart';
@@ -91,8 +88,11 @@ class _SingUpFormState extends ConsumerState<SignUpForm> with MyDialogs {
                       const SizedBox(
                         height: 40,
                       ),
-                      ProfilePicture(
-                        pathProfileUser: singUpData.pathProfileUser,
+                      ProfilePictureWidget(
+                        avatarWidget: CircleAvatarImage(
+                          pathProfileUser: singUpData.pathProfileUser,
+                          pathAssetUser: pathAssetUser,
+                        ),
                         setPathProfileUser: (path) {
                           ref
                               .read(singUpProvider.notifier)

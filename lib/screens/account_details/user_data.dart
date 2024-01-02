@@ -1,15 +1,12 @@
-import 'dart:io';
-
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:image_picker/image_picker.dart';
+import 'package:kanji_for_n5_level_app/config_files/assets_paths.dart';
 import 'package:kanji_for_n5_level_app/main.dart';
-import 'package:kanji_for_n5_level_app/screens/account_details/account_details_state_provider.dart';
+import 'package:kanji_for_n5_level_app/screens/account_details/personal_info_provider.dart';
 import 'package:kanji_for_n5_level_app/providers/status_connection_provider.dart';
+import 'package:kanji_for_n5_level_app/screens/main_screens/sign_up_screen/profile_picture_widget.dart';
 
 class UserData extends ConsumerWidget {
   UserData({
@@ -18,10 +15,6 @@ class UserData extends ConsumerWidget {
   });
 
   final PersonalInfoData accountDetailsData;
-
-  final ImagePicker picker = ImagePicker();
-  final String pathAssetUser = 'assets/images/user.png';
-  final String pathErrorImage = 'assets/images/computer.png';
 
   final _formKey = GlobalKey<FormState>();
 
@@ -32,25 +25,7 @@ class UserData extends ConsumerWidget {
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
-        InkWell(
-          onTap: () async {
-            try {
-              final XFile? photo =
-                  await picker.pickImage(source: ImageSource.camera);
-              if (photo != null) {
-                ref
-                    .read(personalInfoProvider.notifier)
-                    .setProfileTemporalPath(photo.path);
-              }
-            } on PlatformException catch (e) {
-              logger.e('Failed to pick image: $e');
-            }
-          },
-          child: ClipRRect(
-            borderRadius: BorderRadius.circular(300),
-            child: getImageProfileWidget(accountDetailsData),
-          ),
-        ),
+        getImageProfileWidget(accountDetailsData, ref),
         const SizedBox(
           height: 20,
         ),
@@ -130,30 +105,28 @@ class UserData extends ConsumerWidget {
     );
   }
 
-  Widget getImageProfileWidget(PersonalInfoData accountDetailsData) {
-    if (accountDetailsData.pathProfileUser.isNotEmpty) {
-      return CachedNetworkImage(
-        width: 128,
-        height: 128,
-        fit: BoxFit.cover,
-        placeholder: (context, url) => const CircularProgressIndicator(),
-        imageUrl: accountDetailsData.pathProfileUser,
-        errorWidget: (context, url, error) => Image.asset(pathErrorImage),
+  Widget getImageProfileWidget(
+      PersonalInfoData accountDetailsData, WidgetRef ref) {
+    logger.d(accountDetailsData.pathProfileTemporal);
+    if (accountDetailsData.pathProfileTemporal.isNotEmpty) {
+      return ProfilePictureWidget(
+        avatarWidget: CircleAvatarImage(
+          pathProfileUser: accountDetailsData.pathProfileTemporal,
+          pathAssetUser: pathAssetUser,
+        ),
+        setPathProfileUser: (path) {
+          ref.read(personalInfoProvider.notifier).setProfileTemporalPath(path);
+        },
       );
-    } else if (accountDetailsData.pathProfileTemporal.isNotEmpty) {
-      return FadeInImage(
-          width: 128,
-          height: 128,
-          fit: BoxFit.cover,
-          placeholder: AssetImage(pathAssetUser),
-          image: FileImage(File(accountDetailsData.pathProfileTemporal)));
     } else {
-      return FadeInImage(
-          width: 128,
-          height: 128,
-          fit: BoxFit.cover,
-          placeholder: AssetImage(pathAssetUser),
-          image: AssetImage(pathAssetUser));
+      return ProfilePictureWidget(
+        avatarWidget: CircularAvatarNetworkImage(
+            pathProfileUser: accountDetailsData.pathProfileUser,
+            pathErrorImage: pathErrorImage),
+        setPathProfileUser: (path) {
+          ref.read(personalInfoProvider.notifier).setProfileTemporalPath(path);
+        },
+      );
     }
   }
 }

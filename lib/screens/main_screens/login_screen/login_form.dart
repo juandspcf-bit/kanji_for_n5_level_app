@@ -26,114 +26,116 @@ class LoginForm extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        const Icon(
-          Icons.person,
-          size: 80,
-        ),
-        const SizedBox(
-          height: 40,
-        ),
-        Form(
-          key: _formKey,
-          child: Column(
-            children: [
-              EmailTextField(
-                initialValue: loginFormData.email,
-                setEmail: (text) {
-                  setEmail(text);
+    return SingleChildScrollView(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          const Icon(
+            Icons.person,
+            size: 80,
+          ),
+          const SizedBox(
+            height: 40,
+          ),
+          Form(
+            key: _formKey,
+            child: Column(
+              children: [
+                EmailTextField(
+                  initialValue: loginFormData.email,
+                  setEmail: (text) {
+                    setEmail(text);
+                  },
+                ),
+                const SizedBox(
+                  height: 10,
+                ),
+                PasswordTextField(
+                  initialValue: loginFormData.password,
+                  formKey: _formKey,
+                  onSave: setPassword,
+                  labelText: 'password',
+                ),
+                const SizedBox(
+                  height: 10,
+                ),
+              ],
+            ),
+          ),
+          Container(
+            alignment: Alignment.centerRight,
+            child: Padding(
+              padding: const EdgeInsets.only(top: 10, bottom: 10),
+              child: TextButton(
+                onPressed: () async {
+                  ref.read(modalEmailResetProvider.notifier).resetData();
+                  showModalBottomSheet(
+                      isScrollControlled: true,
+                      useSafeArea: true,
+                      context: context,
+                      builder: (ctx) {
+                        return ModalEmailResetPassword();
+                      });
                 },
-              ),
-              const SizedBox(
-                height: 10,
-              ),
-              PasswordTextField(
-                initialValue: loginFormData.password,
-                formKey: _formKey,
-                onSave: setPassword,
-                labelText: 'password',
-              ),
-              const SizedBox(
-                height: 10,
-              ),
-            ],
-          ),
-        ),
-        Container(
-          alignment: Alignment.centerRight,
-          child: Padding(
-            padding: const EdgeInsets.only(top: 10, bottom: 10),
-            child: TextButton(
-              onPressed: () async {
-                ref.read(modalEmailResetProvider.notifier).resetData();
-                showModalBottomSheet(
-                    isScrollControlled: true,
-                    useSafeArea: true,
-                    context: context,
-                    builder: (ctx) {
-                      return ModalEmailResetPassword();
-                    });
-              },
-              style: TextButton.styleFrom(
-                foregroundColor:
-                    Theme.of(context).colorScheme.onBackground, //Text Color
-              ),
-              child: Text(
-                'Forgotten password?',
-                style: Theme.of(context).textTheme.bodyLarge,
+                style: TextButton.styleFrom(
+                  foregroundColor:
+                      Theme.of(context).colorScheme.onBackground, //Text Color
+                ),
+                child: Text(
+                  'Forgotten password?',
+                  style: Theme.of(context).textTheme.bodyLarge,
+                ),
               ),
             ),
           ),
-        ),
-        ElevatedButton(
-          onPressed: () {
-            FocusScopeNode currentFocus = FocusScope.of(context);
+          ElevatedButton(
+            onPressed: () {
+              FocusScopeNode currentFocus = FocusScope.of(context);
 
-            if (!currentFocus.hasPrimaryFocus) {
-              currentFocus.unfocus();
-            }
+              if (!currentFocus.hasPrimaryFocus) {
+                currentFocus.unfocus();
+              }
 
-            final currenState = _formKey.currentState;
-            if (currenState == null) return;
-            if (currenState.validate()) {
-              currenState.save();
-              onSuccefulValidation();
-            }
-          },
-          style: ElevatedButton.styleFrom().copyWith(
-            minimumSize: const MaterialStatePropertyAll(
-              Size.fromHeight(40),
+              final currenState = _formKey.currentState;
+              if (currenState == null) return;
+              if (currenState.validate()) {
+                currenState.save();
+                onSuccefulValidation();
+              }
+            },
+            style: ElevatedButton.styleFrom().copyWith(
+              minimumSize: const MaterialStatePropertyAll(
+                Size.fromHeight(40),
+              ),
             ),
+            child: const Text('Login'),
           ),
-          child: const Text('Login'),
-        ),
-        const SizedBox(
-          height: 10,
-        ),
-        ElevatedButton(
-          onPressed: () {
-            FocusScopeNode currentFocus = FocusScope.of(context);
+          const SizedBox(
+            height: 10,
+          ),
+          ElevatedButton(
+            onPressed: () {
+              FocusScopeNode currentFocus = FocusScope.of(context);
 
-            if (!currentFocus.hasPrimaryFocus) {
-              currentFocus.unfocus();
-            }
+              if (!currentFocus.hasPrimaryFocus) {
+                currentFocus.unfocus();
+              }
 
-            ref.read(singUpProvider.notifier).resetStatus();
+              ref.read(singUpProvider.notifier).resetStatus();
 
-            Navigator.of(context).push(MaterialPageRoute(builder: (ctx) {
-              return const SignUpForm();
-            }));
-          },
-          style: ElevatedButton.styleFrom().copyWith(
-            minimumSize: const MaterialStatePropertyAll(
-              Size.fromHeight(40),
+              Navigator.of(context).push(MaterialPageRoute(builder: (ctx) {
+                return const SignUpForm();
+              }));
+            },
+            style: ElevatedButton.styleFrom().copyWith(
+              minimumSize: const MaterialStatePropertyAll(
+                Size.fromHeight(40),
+              ),
             ),
+            child: const Text('Sign Up'),
           ),
-          child: const Text('Sign Up'),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }
