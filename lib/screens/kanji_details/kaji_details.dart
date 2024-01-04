@@ -89,6 +89,7 @@ class KanjiDetails extends ConsumerWidget {
                       icon: const Icon(Icons.quiz)),
                   IconButton(
                       onPressed: () {
+                        //ref.read(kanjiDetailsProvider.notifier).setStoringToFavoritesStatus(StoringToFavoritesStatus.noStarted);
                         ref
                             .read(kanjiDetailsProvider.notifier)
                             .storeToFavorites(kanjiFromApi);

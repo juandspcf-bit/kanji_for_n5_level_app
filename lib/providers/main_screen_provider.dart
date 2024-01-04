@@ -19,15 +19,13 @@ import 'package:kanji_for_n5_level_app/providers/status_stored_provider.dart';
 class MainScreenProvider extends Notifier<MainScreenData> {
   @override
   MainScreenData build() {
-    //getInitData();
-
     Connectivity().checkConnectivity().then((result) =>
         ref.read(statusConnectionProvider.notifier).setInitialStatus(result));
-    //getAvatar();
-    return MainScreenData(selection: 0, avatarLink: '', fullName: '');
+    return MainScreenData(
+        selection: ScreenSelection.kanjiSections, avatarLink: '', fullName: '');
   }
 
-  void setScreen(int screen) {
+  void setScreen(ScreenSelection screen) {
     state = MainScreenData(
         selection: screen,
         avatarLink: state.avatarLink,
@@ -39,7 +37,7 @@ class MainScreenProvider extends Notifier<MainScreenData> {
         selection: state.selection, avatarLink: link, fullName: state.fullName);
   }
 
-  int getScreenSelection() {
+  ScreenSelection getScreenSelection() {
     return state.selection;
   }
 
@@ -71,11 +69,17 @@ class MainScreenProvider extends Notifier<MainScreenData> {
     }
 
     if (index == 0) {
-      ref.read(mainScreenProvider.notifier).setScreen(0);
+      ref
+          .read(mainScreenProvider.notifier)
+          .setScreen(ScreenSelection.kanjiSections);
     } else if (index == 1) {
-      ref.read(mainScreenProvider.notifier).setScreen(1);
+      ref
+          .read(mainScreenProvider.notifier)
+          .setScreen(ScreenSelection.favoritesKanjis);
     } else {
-      ref.read(mainScreenProvider.notifier).setScreen(2);
+      ref
+          .read(mainScreenProvider.notifier)
+          .setScreen(ScreenSelection.searchKanji);
     }
   }
 
@@ -133,11 +137,15 @@ class MainScreenProvider extends Notifier<MainScreenData> {
 
       final link = await userPhoto.getDownloadURL();
       state = MainScreenData(
-          selection: 0, avatarLink: link, fullName: fullName ?? '');
+          selection: ScreenSelection.kanjiSections,
+          avatarLink: link,
+          fullName: fullName ?? '');
     } catch (e) {
       logger.e('error reading profile photo');
       state = MainScreenData(
-          selection: 0, avatarLink: '', fullName: fullName ?? '');
+          selection: ScreenSelection.kanjiSections,
+          avatarLink: '',
+          fullName: fullName ?? '');
     }
   }
 
@@ -146,12 +154,15 @@ class MainScreenProvider extends Notifier<MainScreenData> {
 
     logger.d('The full name is 1 $fullName');
 
-    state =
-        MainScreenData(selection: 0, avatarLink: '', fullName: fullName ?? '');
+    state = MainScreenData(
+        selection: ScreenSelection.kanjiSections,
+        avatarLink: '',
+        fullName: fullName ?? '');
   }
 
   void resetMainScreenState() {
-    state = MainScreenData(selection: 0, avatarLink: '', fullName: '');
+    state = MainScreenData(
+        selection: ScreenSelection.kanjiSections, avatarLink: '', fullName: '');
   }
 }
 
@@ -159,7 +170,7 @@ final mainScreenProvider = NotifierProvider<MainScreenProvider, MainScreenData>(
     MainScreenProvider.new);
 
 class MainScreenData {
-  final int selection;
+  final ScreenSelection selection;
   final String avatarLink;
   final String fullName;
 
@@ -169,7 +180,7 @@ class MainScreenData {
       required this.fullName});
 }
 
-enum ScreenSelection { kanjiSections, favoritesKanjis }
+enum ScreenSelection { kanjiSections, favoritesKanjis, searchKanji }
 
 Future<(List<(KanjiFromApi, bool)>, List<(KanjiFromApi, bool)>)>
     cleanInvalidStoredFiles(List<KanjiFromApi> listOfStoredKanjis) async {

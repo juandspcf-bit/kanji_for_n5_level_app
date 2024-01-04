@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:kanji_for_n5_level_app/providers/main_screen_provider.dart';
 
 class CustomBottomNavigationBar extends ConsumerWidget {
   const CustomBottomNavigationBar(
@@ -10,7 +11,7 @@ class CustomBottomNavigationBar extends ConsumerWidget {
       required this.iconSize,
       required this.selectPage});
 
-  final int selectedPageIndex;
+  final ScreenSelection selectedPageIndex;
   final double iconSize;
   final void Function(
     int index,
@@ -29,7 +30,7 @@ class CustomBottomNavigationBar extends ConsumerWidget {
         unselectedItemColor:
             Theme.of(context).colorScheme.onPrimaryContainer.withAlpha(100),
         onTap: selectPage,
-        currentIndex: selectedPageIndex,
+        currentIndex: selectedPageIndex.index,
         items: [
           BottomNavigationBarItem(
             icon: Icon(

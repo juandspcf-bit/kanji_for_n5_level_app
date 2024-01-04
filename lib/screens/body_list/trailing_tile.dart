@@ -68,9 +68,9 @@ class TrailingTile extends ConsumerWidget {
     return countActivesDownloads >= 3;
   }
 
-  void setToProccesingStatus(
-      StatusStorage proccessingStoring, int selection, WidgetRef ref) {
-    if (selection == 1) {
+  void setToProccesingStatus(StatusStorage proccessingStoring,
+      ScreenSelection selection, WidgetRef ref) {
+    if (selection == ScreenSelection.favoritesKanjis) {
       ref.read(favoriteskanjisProvider.notifier).updateKanji(
             updateStatusKanji(proccessingStoring, false, kanjiFromApi),
           );
@@ -99,13 +99,14 @@ class TrailingTile extends ConsumerWidget {
           setToProccesingStatus(
               StatusStorage.proccessingStoring, dataMainScreen.selection, ref);
 
-          if (dataMainScreen.selection == 0) {
+          if (dataMainScreen.selection == ScreenSelection.kanjiSections) {
             ref
                 .read(kanjiListProvider.notifier)
                 .insertKanjiToStorage(kanjiFromApi, dataMainScreen.selection);
           } else {
-            ref.read(favoriteskanjisProvider.notifier).insertKanjiToStorage(
-                setCorrectSection(kanjiFromApi), dataMainScreen.selection);
+            ref
+                .read(favoriteskanjisProvider.notifier)
+                .insertKanjiToStorage(setCorrectSection(kanjiFromApi));
           }
         } else if (kanjiFromApi.statusStorage == StatusStorage.stored) {
           setToProccesingStatus(

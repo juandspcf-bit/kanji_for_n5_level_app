@@ -99,13 +99,14 @@ class FavoritesListProvider extends Notifier<(List<KanjiFromApi>, int)> {
     state = ([...copyState], state.$2);
   }
 
-  String searchInFavorites(String kanji) {
+  bool searchInFavorites(String kanji) {
     final copyState = [...state.$1];
     final mappedCopyState = copyState.map((e) => e.kanjiCharacter).toList();
-    return mappedCopyState.firstWhere(
+    final searchResult = mappedCopyState.firstWhere(
       (element) => element == kanji,
       orElse: () => '',
     );
+    return searchResult != '';
   }
 
   void updateKanji(KanjiFromApi storedKanji) {
@@ -118,7 +119,7 @@ class FavoritesListProvider extends Notifier<(List<KanjiFromApi>, int)> {
     state = (copyState, state.$2);
   }
 
-  void insertKanjiToStorage(KanjiFromApi kanjiFromApi, int selection) async {
+  void insertKanjiToStorage(KanjiFromApi kanjiFromApi) async {
     try {
       final kanjiFromApiStored = await storeKanjiToSqlDB(kanjiFromApi);
 

@@ -18,22 +18,35 @@ class KanjiDetailsProvider extends Notifier<KanjiDetailsData?> {
     state = KanjiDetailsData(
         favoriteStatus: favoriteStatus,
         kanjiFromApi: kanjiFromApi,
-        statusStorage: statusStorage);
+        statusStorage: statusStorage,
+        storingToFavoritesStatus: StoringToFavoritesStatus.noStarted);
   }
 
   void setFavorites(bool value) {
     state = KanjiDetailsData(
         favoriteStatus: value,
         kanjiFromApi: state!.kanjiFromApi,
-        statusStorage: state!.statusStorage);
+        statusStorage: state!.statusStorage,
+        storingToFavoritesStatus: state!.storingToFavoritesStatus);
+  }
+
+  void setStoringToFavoritesStatus(
+      StoringToFavoritesStatus storingToFavoritesStatus) {
+    state = KanjiDetailsData(
+      favoriteStatus: state!.favoriteStatus,
+      kanjiFromApi: state!.kanjiFromApi,
+      statusStorage: state!.statusStorage,
+      storingToFavoritesStatus: storingToFavoritesStatus,
+    );
   }
 
   void storeToFavorites(KanjiFromApi kanjiFromApi) {
+    //setStoringToFavoritesStatus(StoringToFavoritesStatus.processing);
     final queryKanji = ref
         .read(favoriteskanjisProvider.notifier)
         .searchInFavorites(kanjiFromApi.kanjiCharacter);
 
-    if (queryKanji == "") {
+    if (!queryKanji) {
       insertFavorite(kanjiFromApi.kanjiCharacter).then((value) {
         final storedItems =
             ref.read(storedKanjisProvider.notifier).getStoresItems();
@@ -43,16 +56,18 @@ class KanjiDetailsProvider extends Notifier<KanjiDetailsData?> {
               return previousValue;
             }),
             kanjiFromApi);
-        setFavorites(queryKanji == "");
+        setFavorites(!queryKanji);
       });
     } else {
       deleteFavorite(kanjiFromApi.kanjiCharacter).then((value) {
         ref.read(favoriteskanjisProvider.notifier).removeItem(kanjiFromApi);
-        setFavorites(queryKanji == "");
+        setFavorites(!queryKanji);
       });
     }
   }
 }
+
+enum StoringToFavoritesStatus { noStarted, processing, succes, error }
 
 final kanjiDetailsProvider =
     NotifierProvider<KanjiDetailsProvider, KanjiDetailsData?>(
@@ -62,10 +77,12 @@ class KanjiDetailsData {
   final KanjiFromApi kanjiFromApi;
   final StatusStorage statusStorage;
   final bool favoriteStatus;
+  final StoringToFavoritesStatus storingToFavoritesStatus;
 
   KanjiDetailsData({
     required this.kanjiFromApi,
     required this.statusStorage,
     required this.favoriteStatus,
+    required this.storingToFavoritesStatus,
   });
 }

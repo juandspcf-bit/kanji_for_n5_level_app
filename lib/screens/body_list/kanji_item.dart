@@ -39,7 +39,7 @@ class _KanjiItemState extends ConsumerState<KanjiItem> {
     var queryKanji = ref
         .read(favoriteskanjisProvider.notifier)
         .searchInFavorites(widget.kanjiFromApi.kanjiCharacter);
-    final favoriteStatus = queryKanji != "";
+    final favoriteStatus = queryKanji;
     ref.read(kanjiDetailsProvider.notifier).setInitValues(
         kanjiFromApi, kanjiFromApi.statusStorage, favoriteStatus);
     ref.read(examplesAudiosProvider).assetsAudioPlayer.stop();

@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kanji_for_n5_level_app/models/kanji_from_api.dart';
 import 'package:kanji_for_n5_level_app/models/secction_model.dart';
 import 'package:kanji_for_n5_level_app/providers/favorites_kanjis_provider.dart';
+import 'package:kanji_for_n5_level_app/providers/kanji_details_provider.dart';
 import 'package:kanji_for_n5_level_app/providers/kanjis_list_provider.dart';
 import 'package:kanji_for_n5_level_app/providers/main_screen_provider.dart';
 import 'package:kanji_for_n5_level_app/screens/body_list/kanji_item.dart';
@@ -32,17 +33,28 @@ class BodyKanjisList extends ConsumerWidget {
           ? ListView.builder(
               itemCount: kanjisFromApi.length,
               itemBuilder: (ctx, index) {
-                return KanjiItem(
-                  key: ValueKey(kanjisFromApi[index].kanjiCharacter),
-                  kanjiFromApi: kanjisFromApi[index],
-                );
+                if (mainScreenData.selection == ScreenSelection.kanjiSections) {
+                  return KanjiItem(
+                    key: ValueKey(kanjisFromApi[index].kanjiCharacter),
+                    kanjiFromApi: kanjisFromApi[index],
+                  );
+                } else {
+                  return Dismissible(
+                    key: Key(kanjisFromApi[index].kanjiCharacter),
+                    child: KanjiItem(
+                      key: ValueKey(kanjisFromApi[index].kanjiCharacter),
+                      kanjiFromApi: kanjisFromApi[index],
+                    ),
+                  );
+                }
               },
             )
           : RefreshIndicator(
               onRefresh: () async {
                 if (connectivityData == ConnectivityResult.none) return;
 
-                if (mainScreenData.selection == 1) {
+                if (mainScreenData.selection ==
+                    ScreenSelection.favoritesKanjis) {
                   await ref
                       .read(favoriteskanjisProvider.notifier)
                       .fetchFavoritesOnRefresh();
@@ -59,10 +71,26 @@ class BodyKanjisList extends ConsumerWidget {
               child: ListView.builder(
                 itemCount: kanjisFromApi.length,
                 itemBuilder: (ctx, index) {
-                  return KanjiItem(
-                    key: ValueKey(kanjisFromApi[index].kanjiCharacter),
-                    kanjiFromApi: kanjisFromApi[index],
-                  );
+                  if (mainScreenData.selection ==
+                      ScreenSelection.kanjiSections) {
+                    return KanjiItem(
+                      key: ValueKey(kanjisFromApi[index].kanjiCharacter),
+                      kanjiFromApi: kanjisFromApi[index],
+                    );
+                  } else {
+                    return Dismissible(
+                      key: Key(kanjisFromApi[index].kanjiCharacter),
+                      child: KanjiItem(
+                        key: ValueKey(kanjisFromApi[index].kanjiCharacter),
+                        kanjiFromApi: kanjisFromApi[index],
+                      ),
+                      onDismissed: (direction) {
+                        ref
+                            .read(kanjiDetailsProvider.notifier)
+                            .storeToFavorites(kanjisFromApi[index]);
+                      },
+                    );
+                  }
                 },
               ),
             );
@@ -76,7 +104,7 @@ class BodyKanjisList extends ConsumerWidget {
               if (connectivityData == ConnectivityResult.none ||
                   isAnyProcessingDataFunc()) return;
 
-              if (mainScreenData.selection == 1) {
+              if (mainScreenData.selection == ScreenSelection.favoritesKanjis) {
                 await ref
                     .read(favoriteskanjisProvider.notifier)
                     .fetchFavoritesOnRefresh();

@@ -1,5 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kanji_for_n5_level_app/main.dart';
+import 'package:kanji_for_n5_level_app/providers/main_screen_provider.dart';
 import 'package:kanji_for_n5_level_app/repositories/local_database/db_deleting_data.dart';
 import 'package:kanji_for_n5_level_app/models/kanji_from_api.dart';
 import 'package:kanji_for_n5_level_app/providers/error_storing_database_status.dart';
@@ -102,7 +103,8 @@ class KanjiListProvider extends Notifier<KanjiListData> {
     state = KanjiListData(kanjiList: [], status: 0, section: section);
   }
 
-  void insertKanjiToStorage(KanjiFromApi kanjiFromApi, int selection) async {
+  void insertKanjiToStorage(
+      KanjiFromApi kanjiFromApi, ScreenSelection selection) async {
     try {
       final kanjiFromApiStored =
           await applicationDBService.storeKanjiToLocalDatabase(kanjiFromApi);
@@ -119,19 +121,20 @@ class KanjiListProvider extends Notifier<KanjiListData> {
     }
   }
 
-  void updateProviders(KanjiFromApi kanjiFromApiStored, int selection) {
+  void updateProviders(
+      KanjiFromApi kanjiFromApiStored, ScreenSelection selection) {
     ref.read(storedKanjisProvider.notifier).addItem(kanjiFromApiStored);
 
     ref.read(favoriteskanjisProvider.notifier).updateKanji(kanjiFromApiStored);
 
-    if (selection == 0) {
+    if (selection == ScreenSelection.favoritesKanjis) {
       updateKanji(kanjiFromApiStored);
     }
   }
 
   void deleteKanjiFromStorage(
     KanjiFromApi kanjiFromApi,
-    int selection,
+    ScreenSelection selection,
   ) async {
     try {
       await applicationDBService.deleteKanjiFromLocalDatabase(kanjiFromApi);
@@ -140,7 +143,7 @@ class KanjiListProvider extends Notifier<KanjiListData> {
 
       final kanjiList = await updateKanjiWithOnliVersion(kanjiFromApi);
       ref.read(favoriteskanjisProvider.notifier).updateKanji(kanjiList[0]);
-      if (selection == 0) {
+      if (selection == ScreenSelection.kanjiSections) {
         ref.read(kanjiListProvider.notifier).updateKanji(kanjiList[0]);
       }
       logger.d('success deleting from db');
@@ -148,7 +151,7 @@ class KanjiListProvider extends Notifier<KanjiListData> {
       ref.read(favoriteskanjisProvider.notifier).updateKanji(
           updateStatusKanjiComputeVersion(
               StatusStorage.errorDeleting, true, kanjiFromApi));
-      if (selection == 0) {
+      if (selection == ScreenSelection.kanjiSections) {
         ref.read(kanjiListProvider.notifier).updateKanji(
             updateStatusKanjiComputeVersion(
                 StatusStorage.errorDeleting, true, kanjiFromApi));

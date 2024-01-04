@@ -15,9 +15,9 @@ import 'package:kanji_for_n5_level_app/screens/status_operations_dialogs.dart';
 class MainContent extends ConsumerWidget with StatusDBStoringDialogs {
   const MainContent({super.key});
 
-  Widget selectScreen(int selectedPageIndex) {
+  Widget selectScreen(ScreenSelection selectedPageIndex) {
     switch (selectedPageIndex) {
-      case 0:
+      case ScreenSelection.kanjiSections:
         return const Column(
           children: [
             Expanded(
@@ -25,9 +25,9 @@ class MainContent extends ConsumerWidget with StatusDBStoringDialogs {
             ),
           ],
         );
-      case 1:
+      case ScreenSelection.favoritesKanjis:
         return const FavoriteScreen();
-      case 2:
+      case ScreenSelection.searchKanji:
         return SearchScreen();
 
       default:
@@ -44,7 +44,9 @@ class MainContent extends ConsumerWidget with StatusDBStoringDialogs {
 
     String scaffoldTitle = 'Welcome \n ${mainScreenData.fullName}';
 
-    if (mainScreenData.selection == 1) scaffoldTitle = "Favorites";
+    if (mainScreenData.selection == ScreenSelection.favoritesKanjis) {
+      scaffoldTitle = "Favorites";
+    }
 
     final sizeScreen = getScreenSizeWidth(context);
     double iconSize;
