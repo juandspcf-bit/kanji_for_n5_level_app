@@ -1,6 +1,7 @@
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:kanji_for_n5_level_app/main.dart';
 import 'package:kanji_for_n5_level_app/models/kanji_from_api.dart';
 import 'package:kanji_for_n5_level_app/providers/examples_audios_provider.dart';
 import 'package:kanji_for_n5_level_app/providers/flash_card_quiz_provider.dart';
@@ -88,15 +89,17 @@ class KanjiDetails extends ConsumerWidget {
                       },
                       icon: const Icon(Icons.quiz)),
                   IconButton(
-                      onPressed: () {
-                        //ref.read(kanjiDetailsProvider.notifier).setStoringToFavoritesStatus(StoringToFavoritesStatus.noStarted);
-                        ref
-                            .read(kanjiDetailsProvider.notifier)
-                            .storeToFavorites(kanjiFromApi);
-                      },
-                      icon: Icon(ref.watch(kanjiDetailsProvider)!.favoriteStatus
-                          ? Icons.favorite
-                          : Icons.favorite_border_outlined))
+                    onPressed: () {
+                      ref
+                          .read(kanjiDetailsProvider.notifier)
+                          .storeToFavorites(kanjiFromApi);
+                    },
+                    icon:
+                        const IconFavorites() /* Icon(ref.watch(kanjiDetailsProvider)!.favoriteStatus
+                        ? Icons.favorite
+                        : Icons.favorite_border_outlined) */
+                    ,
+                  )
                 ],
                 bottom: const TabBar(
                   tabs: <Widget>[
@@ -123,6 +126,37 @@ class KanjiDetails extends ConsumerWidget {
           );
         },
       ),
+    );
+  }
+}
+
+class IconFavorites extends ConsumerWidget {
+  const IconFavorites({super.key});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final kanjiDetailsData = ref.watch(kanjiDetailsProvider);
+    return Builder(
+      builder: (context) {
+        if (kanjiDetailsData!.storingToFavoritesStatus ==
+            StoringToFavoritesStatus.processing) {
+          return LayoutBuilder(
+            builder: (ctx, constrains) {
+              final height = constrains.maxHeight;
+              logger.d(height);
+              return SizedBox(
+                width: height - 15,
+                height: height - 15,
+                child: const CircularProgressIndicator(),
+              );
+            },
+          );
+        }
+
+        return Icon(kanjiDetailsData.favoriteStatus
+            ? Icons.favorite
+            : Icons.favorite_border_outlined);
+      },
     );
   }
 }

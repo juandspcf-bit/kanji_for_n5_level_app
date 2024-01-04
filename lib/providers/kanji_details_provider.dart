@@ -41,33 +41,53 @@ class KanjiDetailsProvider extends Notifier<KanjiDetailsData?> {
   }
 
   void storeToFavorites(KanjiFromApi kanjiFromApi) {
-    //setStoringToFavoritesStatus(StoringToFavoritesStatus.processing);
+    setStoringToFavoritesStatus(StoringToFavoritesStatus.processing);
     final queryKanji = ref
         .read(favoriteskanjisProvider.notifier)
         .searchInFavorites(kanjiFromApi.kanjiCharacter);
 
     if (!queryKanji) {
-      insertFavorite(kanjiFromApi.kanjiCharacter).then((value) {
-        final storedItems =
-            ref.read(storedKanjisProvider.notifier).getStoresItems();
-        ref.read(favoriteskanjisProvider.notifier).addItem(
-            storedItems.values.fold([], (previousValue, element) {
-              previousValue.addAll(element);
-              return previousValue;
-            }),
-            kanjiFromApi);
-        setFavorites(!queryKanji);
+      insertFavorite(kanjiFromApi.kanjiCharacter).then(
+        (value) {
+          final storedItems =
+              ref.read(storedKanjisProvider.notifier).getStoresItems();
+          ref.read(favoriteskanjisProvider.notifier).addItem(
+              storedItems.values.fold([], (previousValue, element) {
+                previousValue.addAll(element);
+                return previousValue;
+              }),
+              kanjiFromApi);
+          Future.delayed(
+              const Duration(
+                seconds: 1,
+              ), () {
+            setStoringToFavoritesStatus(StoringToFavoritesStatus.noStarted);
+            setFavorites(!queryKanji);
+          });
+        },
+      ).catchError((error) {
+        setStoringToFavoritesStatus(StoringToFavoritesStatus.noStarted);
       });
     } else {
-      deleteFavorite(kanjiFromApi.kanjiCharacter).then((value) {
-        ref.read(favoriteskanjisProvider.notifier).removeItem(kanjiFromApi);
-        setFavorites(!queryKanji);
+      deleteFavorite(kanjiFromApi.kanjiCharacter).then(
+        (value) {
+          ref.read(favoriteskanjisProvider.notifier).removeItem(kanjiFromApi);
+          Future.delayed(
+              const Duration(
+                seconds: 1,
+              ), () {
+            setStoringToFavoritesStatus(StoringToFavoritesStatus.noStarted);
+            setFavorites(!queryKanji);
+          });
+        },
+      ).catchError((error) {
+        setStoringToFavoritesStatus(StoringToFavoritesStatus.noStarted);
       });
     }
   }
 }
 
-enum StoringToFavoritesStatus { noStarted, processing, succes, error }
+enum StoringToFavoritesStatus { noStarted, processing }
 
 final kanjiDetailsProvider =
     NotifierProvider<KanjiDetailsProvider, KanjiDetailsData?>(
