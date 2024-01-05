@@ -31,6 +31,25 @@ class KanjiDetails extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final statusConnectionData = ref.watch(statusConnectionProvider);
+
+    ref.listen<KanjiDetailsData?>(kanjiDetailsProvider, (prev, current) {
+      if (current!.storingToFavoritesStatus ==
+              StoringToFavoritesStatus.successAdded ||
+          current.storingToFavoritesStatus ==
+              StoringToFavoritesStatus.successRemoved ||
+          current.storingToFavoritesStatus == StoringToFavoritesStatus.error) {
+        ScaffoldMessenger.of(context).clearSnackBars();
+        var snackBar = SnackBar(
+          content: Text(current.storingToFavoritesStatus.message),
+          duration: const Duration(seconds: 3),
+        );
+        ScaffoldMessenger.of(context).showSnackBar(snackBar);
+        ref
+            .read(kanjiDetailsProvider.notifier)
+            .setStoringToFavoritesStatus(StoringToFavoritesStatus.noStarted);
+      }
+    });
+
     return DefaultTabController(
       initialIndex: 0,
       length: 3,
@@ -94,11 +113,7 @@ class KanjiDetails extends ConsumerWidget {
                           .read(kanjiDetailsProvider.notifier)
                           .storeToFavorites(kanjiFromApi);
                     },
-                    icon:
-                        const IconFavorites() /* Icon(ref.watch(kanjiDetailsProvider)!.favoriteStatus
-                        ? Icons.favorite
-                        : Icons.favorite_border_outlined) */
-                    ,
+                    icon: const IconFavorites(),
                   )
                 ],
                 bottom: const TabBar(

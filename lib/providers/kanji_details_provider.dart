@@ -61,7 +61,7 @@ class KanjiDetailsProvider extends Notifier<KanjiDetailsData?> {
               const Duration(
                 seconds: 1,
               ), () {
-            setStoringToFavoritesStatus(StoringToFavoritesStatus.noStarted);
+            setStoringToFavoritesStatus(StoringToFavoritesStatus.successAdded);
             setFavorites(!queryKanji);
           });
         },
@@ -76,7 +76,8 @@ class KanjiDetailsProvider extends Notifier<KanjiDetailsData?> {
               const Duration(
                 seconds: 1,
               ), () {
-            setStoringToFavoritesStatus(StoringToFavoritesStatus.noStarted);
+            setStoringToFavoritesStatus(
+                StoringToFavoritesStatus.successRemoved);
             setFavorites(!queryKanji);
           });
         },
@@ -87,7 +88,18 @@ class KanjiDetailsProvider extends Notifier<KanjiDetailsData?> {
   }
 }
 
-enum StoringToFavoritesStatus { noStarted, processing }
+enum StoringToFavoritesStatus {
+  noStarted('Not started'),
+  processing('Processing'),
+  successAdded('Added to favorites!'),
+  successRemoved('Removed from favorites'),
+  error('error in storing');
+
+  const StoringToFavoritesStatus(this.message);
+  final String message;
+  @override
+  String toString() => message;
+}
 
 final kanjiDetailsProvider =
     NotifierProvider<KanjiDetailsProvider, KanjiDetailsData?>(

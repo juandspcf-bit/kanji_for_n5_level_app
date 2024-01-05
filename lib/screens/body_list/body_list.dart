@@ -24,6 +24,28 @@ class BodyKanjisList extends ConsumerWidget {
   final ConnectivityResult connectivityData;
   final MainScreenData mainScreenData;
 
+  Widget getKanjiItem(int index, WidgetRef ref) {
+    if (mainScreenData.selection == ScreenSelection.kanjiSections) {
+      return KanjiItem(
+        key: ValueKey(kanjisFromApi[index].kanjiCharacter),
+        kanjiFromApi: kanjisFromApi[index],
+      );
+    } else {
+      return Dismissible(
+        key: Key(kanjisFromApi[index].kanjiCharacter),
+        child: KanjiItem(
+          key: ValueKey(kanjisFromApi[index].kanjiCharacter),
+          kanjiFromApi: kanjisFromApi[index],
+        ),
+        onDismissed: (direction) {
+          ref
+              .read(kanjiDetailsProvider.notifier)
+              .storeToFavorites(kanjisFromApi[index]);
+        },
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     if (statusResponse == 0) {
@@ -33,20 +55,7 @@ class BodyKanjisList extends ConsumerWidget {
           ? ListView.builder(
               itemCount: kanjisFromApi.length,
               itemBuilder: (ctx, index) {
-                if (mainScreenData.selection == ScreenSelection.kanjiSections) {
-                  return KanjiItem(
-                    key: ValueKey(kanjisFromApi[index].kanjiCharacter),
-                    kanjiFromApi: kanjisFromApi[index],
-                  );
-                } else {
-                  return Dismissible(
-                    key: Key(kanjisFromApi[index].kanjiCharacter),
-                    child: KanjiItem(
-                      key: ValueKey(kanjisFromApi[index].kanjiCharacter),
-                      kanjiFromApi: kanjisFromApi[index],
-                    ),
-                  );
-                }
+                return getKanjiItem(index, ref);
               },
             )
           : RefreshIndicator(
@@ -71,26 +80,7 @@ class BodyKanjisList extends ConsumerWidget {
               child: ListView.builder(
                 itemCount: kanjisFromApi.length,
                 itemBuilder: (ctx, index) {
-                  if (mainScreenData.selection ==
-                      ScreenSelection.kanjiSections) {
-                    return KanjiItem(
-                      key: ValueKey(kanjisFromApi[index].kanjiCharacter),
-                      kanjiFromApi: kanjisFromApi[index],
-                    );
-                  } else {
-                    return Dismissible(
-                      key: Key(kanjisFromApi[index].kanjiCharacter),
-                      child: KanjiItem(
-                        key: ValueKey(kanjisFromApi[index].kanjiCharacter),
-                        kanjiFromApi: kanjisFromApi[index],
-                      ),
-                      onDismissed: (direction) {
-                        ref
-                            .read(kanjiDetailsProvider.notifier)
-                            .storeToFavorites(kanjisFromApi[index]);
-                      },
-                    );
-                  }
+                  return getKanjiItem(index, ref);
                 },
               ),
             );
