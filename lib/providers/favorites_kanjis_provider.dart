@@ -145,6 +145,24 @@ class FavoritesListProvider extends Notifier<(List<KanjiFromApi>, int)> {
   }
 }
 
+class FavoritesKanjisData {
+  const FavoritesKanjisData({
+    required this.kanjisFromApi,
+    required this.favoritesFetchingStatus,
+  });
+  final List<KanjiFromApi> kanjisFromApi;
+  final FavoritesFetchingStatus favoritesFetchingStatus;
+}
+
+enum FavoritesFetchingStatus {
+  noStarted('no started'),
+  succefulFecth('Your favorites were succefully fetched'),
+  errorFetch('Error in fecthing favorites');
+
+  const FavoritesFetchingStatus(this.message);
+  final String message;
+}
+
 final favoriteskanjisProvider =
     NotifierProvider<FavoritesListProvider, (List<KanjiFromApi>, int)>(
         FavoritesListProvider.new);
