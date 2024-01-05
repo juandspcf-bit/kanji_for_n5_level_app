@@ -11,7 +11,9 @@ Future<List<String>> loadFavorites() async {
   final db = await kanjiFromApiDatabase;
   final data = await db
       .query('user_favorites', where: 'uuid = ?', whereArgs: [user.uid]);
-  return data.map((e) => e['kanjiCharacter'] as String).toList();
+  return data.map((e) {
+    return e['kanjiCharacter'] as String;
+  }).toList();
 }
 
 Future<int> insertFavorite(String kanji) async {
@@ -24,6 +26,7 @@ Future<int> insertFavorite(String kanji) async {
   return db.insert("user_favorites", {
     'kanjiCharacter': kanji,
     'uuid': user.uid,
+    'timeStamp': DateTime.now().millisecondsSinceEpoch,
   });
 }
 

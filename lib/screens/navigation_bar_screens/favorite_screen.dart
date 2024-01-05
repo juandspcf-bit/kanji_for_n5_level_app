@@ -62,8 +62,26 @@ class FavoriteScreen extends ConsumerWidget with MyDialogs {
 
         var snackBar = SnackBar(
           content: Text(current.onDismissibleActionStatus.message),
-          duration: const Duration(seconds: 3),
-          action: SnackBarAction(label: 'Undo', onPressed: () {}),
+          duration: const Duration(seconds: 20),
+          action: SnackBarAction(
+              label: 'Undo',
+              onPressed: () async {
+                logger.d('restoring kanji');
+                final dissmisedKanji =
+                    ref.read(favoriteskanjisProvider).dissmisedKanji;
+
+                if (dissmisedKanji == null) {
+                  logger.d('it is null');
+                  return;
+                }
+
+                await ref
+                    .read(favoriteskanjisProvider.notifier)
+                    .restoreFavorite(
+                      dissmisedKanji.kanjiFromApiFromDismisibleAction,
+                      dissmisedKanji.index,
+                    );
+              }),
         );
 
         ScaffoldMessenger.of(context).showSnackBar(snackBar);

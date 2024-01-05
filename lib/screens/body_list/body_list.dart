@@ -39,7 +39,7 @@ class BodyKanjisList extends ConsumerWidget {
         onDismissed: (direction) async {
           await ref
               .read(favoriteskanjisProvider.notifier)
-              .storeToFavorites(kanjisFromApi[index]);
+              .dismissisFavorite(kanjisFromApi[index]);
         },
       );
     }

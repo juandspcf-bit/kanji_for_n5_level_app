@@ -174,44 +174,68 @@ class FavoritesListProvider extends Notifier<FavoritesKanjisData> {
     ref.read(favoriteskanjisProvider.notifier).updateKanji(kanjiFromApiStored);
   }
 
-  Future<void> storeToFavorites(KanjiFromApi kanjiFromApi) async {
+  Future<void> dismissisFavorite(KanjiFromApi kanjiFromApi) async {
     setOnDismissibleActionStatus(OnDismissibleActionStatus.processing);
-    final queryKanji = ref
-        .read(favoriteskanjisProvider.notifier)
-        .searchInFavorites(kanjiFromApi.kanjiCharacter);
+    int index = state.kanjisFromApi.indexWhere(
+        (element) => kanjiFromApi.kanjiCharacter == element.kanjiCharacter);
+    if (index == -1) {
+      //TODO improve the logic
+      return;
+    }
 
-    if (!queryKanji) {
-      try {
-        await insertFavorite(kanjiFromApi.kanjiCharacter);
-        final storedItems =
-            ref.read(storedKanjisProvider.notifier).getStoresItems();
-        addItem(
-            storedItems.values.fold([], (previousValue, element) {
-              previousValue.addAll(element);
-              return previousValue;
-            }),
-            kanjiFromApi);
-        setOnDismissibleActionStatus(OnDismissibleActionStatus.successAdded);
-      } catch (e) {
-        setOnDismissibleActionStatus(OnDismissibleActionStatus.noStarted);
-      }
-    } else {
-      try {
-        removeItem(kanjiFromApi);
-        await deleteFavorite(kanjiFromApi.kanjiCharacter);
-        setOnDismissibleActionStatus(OnDismissibleActionStatus.successRemoved);
-      } catch (e) {
-        logger.e(e);
-        setOnDismissibleActionStatus(OnDismissibleActionStatus.noStarted);
-      }
+    try {
+      removeItem(kanjiFromApi);
+      setDismissedKanji(kanjiFromApi, index);
+      await deleteFavorite(kanjiFromApi.kanjiCharacter);
+      setOnDismissibleActionStatus(OnDismissibleActionStatus.successRemoved);
+    } catch (e) {
+      logger.e(e);
+      setOnDismissibleActionStatus(OnDismissibleActionStatus.noStarted);
+    }
+  }
+
+  Future<void> restoreFavorite(KanjiFromApi kanjiFromApi, int index) async {
+    try {
+      await insertFavorite(kanjiFromApi.kanjiCharacter);
+      final kanjiList = state.kanjisFromApi;
+      logger.d('kanjiList: $kanjiList , $index');
+
+      kanjiList.insert(index, kanjiFromApi);
+      logger.d('kanjiList: $kanjiList , ');
+
+      state = FavoritesKanjisData(
+        kanjisFromApi: kanjiList,
+        favoritesFetchingStatus: state.favoritesFetchingStatus,
+        dissmisedKanji: state.dissmisedKanji,
+        onDismissibleActionStatus: state.onDismissibleActionStatus,
+      );
+
+      setOnDismissibleActionStatus(OnDismissibleActionStatus.successAdded);
+    } catch (e) {
+      logger.e(e);
+      setOnDismissibleActionStatus(OnDismissibleActionStatus.noStarted);
     }
   }
 
   void setOnDismissibleActionStatus(OnDismissibleActionStatus status) {
     state = FavoritesKanjisData(
-        kanjisFromApi: state.kanjisFromApi,
-        favoritesFetchingStatus: state.favoritesFetchingStatus,
-        onDismissibleActionStatus: status);
+      kanjisFromApi: state.kanjisFromApi,
+      favoritesFetchingStatus: state.favoritesFetchingStatus,
+      dissmisedKanji: state.dissmisedKanji,
+      onDismissibleActionStatus: status,
+    );
+  }
+
+  void setDismissedKanji(KanjiFromApi kanjiFromApi, int index) {
+    state = FavoritesKanjisData(
+      kanjisFromApi: state.kanjisFromApi,
+      favoritesFetchingStatus: state.favoritesFetchingStatus,
+      dissmisedKanji: DissmisedKanji(
+        kanjiFromApiFromDismisibleAction: kanjiFromApi,
+        index: index,
+      ),
+      onDismissibleActionStatus: state.onDismissibleActionStatus,
+    );
   }
 }
 
@@ -232,11 +256,20 @@ class FavoritesKanjisData {
   const FavoritesKanjisData({
     required this.kanjisFromApi,
     required this.favoritesFetchingStatus,
+    this.dissmisedKanji,
     this.onDismissibleActionStatus = OnDismissibleActionStatus.noStarted,
   });
   final List<KanjiFromApi> kanjisFromApi;
   final FavoritesFetchingStatus favoritesFetchingStatus;
   final OnDismissibleActionStatus onDismissibleActionStatus;
+  final DissmisedKanji? dissmisedKanji;
+}
+
+class DissmisedKanji {
+  DissmisedKanji(
+      {required this.kanjiFromApiFromDismisibleAction, required this.index});
+  final KanjiFromApi kanjiFromApiFromDismisibleAction;
+  final int index;
 }
 
 enum FavoritesFetchingStatus {
