@@ -44,7 +44,7 @@ class MainScreenProvider extends Notifier<MainScreenData> {
   bool isAnyProcessingData() {
     final listFavorites = ref.read(favoriteskanjisProvider);
     try {
-      listFavorites.$1.firstWhere(
+      listFavorites.kanjisFromApi.firstWhere(
         (element) =>
             element.statusStorage == StatusStorage.proccessingStoring ||
             element.statusStorage == StatusStorage.proccessingDeleting,

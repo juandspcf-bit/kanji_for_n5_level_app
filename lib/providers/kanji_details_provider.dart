@@ -22,7 +22,7 @@ class KanjiDetailsProvider extends Notifier<KanjiDetailsData?> {
         storingToFavoritesStatus: StoringToFavoritesStatus.noStarted);
   }
 
-  void setFavorites(bool value) {
+  void setFavoritesStatusInKanjiDetailsData(bool value) {
     state = KanjiDetailsData(
         favoriteStatus: value,
         kanjiFromApi: state!.kanjiFromApi,
@@ -40,50 +40,52 @@ class KanjiDetailsProvider extends Notifier<KanjiDetailsData?> {
     );
   }
 
-  void storeToFavorites(KanjiFromApi kanjiFromApi) {
+  void storeToFavorites(KanjiFromApi kanjiFromApi) async {
     setStoringToFavoritesStatus(StoringToFavoritesStatus.processing);
     final queryKanji = ref
         .read(favoriteskanjisProvider.notifier)
         .searchInFavorites(kanjiFromApi.kanjiCharacter);
 
     if (!queryKanji) {
-      insertFavorite(kanjiFromApi.kanjiCharacter).then(
-        (value) {
-          final storedItems =
-              ref.read(storedKanjisProvider.notifier).getStoresItems();
-          ref.read(favoriteskanjisProvider.notifier).addItem(
-              storedItems.values.fold([], (previousValue, element) {
-                previousValue.addAll(element);
-                return previousValue;
-              }),
-              kanjiFromApi);
-          Future.delayed(
-              const Duration(
-                seconds: 1,
-              ), () {
+      try {
+        await insertFavorite(kanjiFromApi.kanjiCharacter);
+        final storedItems =
+            ref.read(storedKanjisProvider.notifier).getStoresItems();
+        ref.read(favoriteskanjisProvider.notifier).addItem(
+            storedItems.values.fold([], (previousValue, element) {
+              previousValue.addAll(element);
+              return previousValue;
+            }),
+            kanjiFromApi);
+        Future.delayed(
+          const Duration(
+            seconds: 1,
+          ),
+          () {
             setStoringToFavoritesStatus(StoringToFavoritesStatus.successAdded);
-            setFavorites(!queryKanji);
-          });
-        },
-      ).catchError((error) {
+            setFavoritesStatusInKanjiDetailsData(!queryKanji);
+          },
+        );
+      } catch (e) {
         setStoringToFavoritesStatus(StoringToFavoritesStatus.noStarted);
-      });
+      }
     } else {
-      deleteFavorite(kanjiFromApi.kanjiCharacter).then(
-        (value) {
-          ref.read(favoriteskanjisProvider.notifier).removeItem(kanjiFromApi);
-          Future.delayed(
-              const Duration(
-                seconds: 1,
-              ), () {
+      try {
+        await deleteFavorite(kanjiFromApi.kanjiCharacter);
+        ref.read(favoriteskanjisProvider.notifier).removeItem(kanjiFromApi);
+        Future.delayed(
+          const Duration(
+            seconds: 1,
+          ),
+          () {
             setStoringToFavoritesStatus(
                 StoringToFavoritesStatus.successRemoved);
-            setFavorites(!queryKanji);
-          });
-        },
-      ).catchError((error) {
+            setFavoritesStatusInKanjiDetailsData(!queryKanji);
+          },
+        );
+      } catch (e) {
         setStoringToFavoritesStatus(StoringToFavoritesStatus.noStarted);
-      });
+      }
     }
   }
 }

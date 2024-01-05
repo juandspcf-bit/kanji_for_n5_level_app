@@ -1,7 +1,7 @@
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:kanji_for_n5_level_app/models/kanji_from_api.dart';
+import 'package:kanji_for_n5_level_app/main.dart';
 import 'package:kanji_for_n5_level_app/providers/error_storing_database_status.dart';
 import 'package:kanji_for_n5_level_app/providers/favorites_kanjis_provider.dart';
 import 'package:kanji_for_n5_level_app/providers/main_screen_provider.dart';
@@ -17,7 +17,6 @@ class FavoriteScreen extends ConsumerWidget with MyDialogs {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final connectivityData = ref.watch(statusConnectionProvider);
     final mainScreenData = ref.watch(mainScreenProvider);
     if (ref.watch(errorDatabaseStatusProvider)) {
       errorDialog(
@@ -32,22 +31,51 @@ class FavoriteScreen extends ConsumerWidget with MyDialogs {
       );
     }
     var kanjiFavoritesList = ref.watch(favoriteskanjisProvider);
-    final resultStatus = ref.watch(statusConnectionProvider);
+    final connectivityData = ref.watch(statusConnectionProvider);
 
-    if (resultStatus == ConnectivityResult.none) {
-      final favoritesKanjisStored = kanjiFavoritesList.$1
+    if (connectivityData == ConnectivityResult.none) {
+      final favoritesKanjisStored = kanjiFavoritesList.kanjisFromApi
           .where((element) => element.statusStorage == StatusStorage.stored)
           .toList();
       if (favoritesKanjisStored.isNotEmpty) {
-        kanjiFavoritesList = (favoritesKanjisStored, 1);
+        kanjiFavoritesList = FavoritesKanjisData(
+          kanjisFromApi: favoritesKanjisStored,
+          favoritesFetchingStatus: FavoritesFetchingStatus.succefulFecth,
+        );
       } else {
-        kanjiFavoritesList = (<KanjiFromApi>[], 1);
+        kanjiFavoritesList = const FavoritesKanjisData(
+          kanjisFromApi: [],
+          favoritesFetchingStatus: FavoritesFetchingStatus.succefulFecth,
+        );
       }
     }
 
+    ref.listen<FavoritesKanjisData>(favoriteskanjisProvider, (prev, current) {
+      logger.d(current.onDismissibleActionStatus.message);
+      if (current.onDismissibleActionStatus ==
+              OnDismissibleActionStatus.successAdded ||
+          current.onDismissibleActionStatus ==
+              OnDismissibleActionStatus.successRemoved ||
+          current.onDismissibleActionStatus ==
+              OnDismissibleActionStatus.error) {
+        ScaffoldMessenger.of(context).clearSnackBars();
+
+        var snackBar = SnackBar(
+          content: Text(current.onDismissibleActionStatus.message),
+          duration: const Duration(seconds: 3),
+          action: SnackBarAction(label: 'Undo', onPressed: () {}),
+        );
+
+        ScaffoldMessenger.of(context).showSnackBar(snackBar);
+        ref
+            .read(favoriteskanjisProvider.notifier)
+            .setOnDismissibleActionStatus(OnDismissibleActionStatus.noStarted);
+      }
+    });
+
     return BodyKanjisList(
-      statusResponse: kanjiFavoritesList.$2,
-      kanjisFromApi: kanjiFavoritesList.$1,
+      statusResponse: kanjiFavoritesList.favoritesFetchingStatus.index,
+      kanjisFromApi: kanjiFavoritesList.kanjisFromApi,
       connectivityData: connectivityData,
       mainScreenData: mainScreenData,
     );

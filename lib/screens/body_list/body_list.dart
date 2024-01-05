@@ -4,7 +4,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kanji_for_n5_level_app/models/kanji_from_api.dart';
 import 'package:kanji_for_n5_level_app/models/secction_model.dart';
 import 'package:kanji_for_n5_level_app/providers/favorites_kanjis_provider.dart';
-import 'package:kanji_for_n5_level_app/providers/kanji_details_provider.dart';
 import 'package:kanji_for_n5_level_app/providers/kanjis_list_provider.dart';
 import 'package:kanji_for_n5_level_app/providers/main_screen_provider.dart';
 import 'package:kanji_for_n5_level_app/screens/body_list/kanji_item.dart';
@@ -37,9 +36,9 @@ class BodyKanjisList extends ConsumerWidget {
           key: ValueKey(kanjisFromApi[index].kanjiCharacter),
           kanjiFromApi: kanjisFromApi[index],
         ),
-        onDismissed: (direction) {
-          ref
-              .read(kanjiDetailsProvider.notifier)
+        onDismissed: (direction) async {
+          await ref
+              .read(favoriteskanjisProvider.notifier)
               .storeToFavorites(kanjisFromApi[index]);
         },
       );
