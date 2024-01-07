@@ -1,7 +1,6 @@
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:kanji_for_n5_level_app/main.dart';
 import 'package:kanji_for_n5_level_app/models/kanji_from_api.dart';
 import 'package:kanji_for_n5_level_app/models/secction_model.dart';
 import 'package:kanji_for_n5_level_app/providers/status_stored_provider.dart';
@@ -34,7 +33,6 @@ class BodyKanjisList extends ConsumerWidget {
         kanjiFromApi: kanjisFromApi[index],
       );
     } else {
-      logger.d(kanjisFromApi[index].statusStorage);
       if (kanjisFromApi[index].statusStorage ==
               StatusStorage.proccessingStoring ||
           kanjisFromApi[index].statusStorage ==

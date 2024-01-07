@@ -72,6 +72,7 @@ class KanjiDetails extends ConsumerWidget {
               if (!didPop) return;
               ref.read(examplesAudiosProvider).assetsAudioPlayer.stop();
               ref.read(examplesAudiosProvider.notifier).setIsPlaying(false);
+              ScaffoldMessenger.of(context).clearSnackBars();
             },
             child: Scaffold(
               appBar: AppBar(

@@ -100,6 +100,7 @@ class MainContent extends ConsumerWidget with StatusDBStoringDialogs {
       bottomNavigationBar: CustomBottomNavigationBar(
         iconSize: iconSize,
         selectPage: (index) {
+          ScaffoldMessenger.of(context).clearSnackBars();
           ref
               .read(mainScreenProvider.notifier)
               .selectPage(index, context, statusDBStoringDialog);
