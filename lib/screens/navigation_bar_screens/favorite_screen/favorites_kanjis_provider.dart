@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kanji_for_n5_level_app/main.dart';
 import 'package:kanji_for_n5_level_app/providers/main_screen_provider.dart';
@@ -10,16 +11,17 @@ class FavoritesListProvider extends Notifier<FavoritesKanjisData> {
   @override
   FavoritesKanjisData build() {
     return const FavoritesKanjisData(
-      kanjisFromApi: [],
+      favoritesKanjisFromApi: [],
       favoritesFetchingStatus: FavoritesFetchingStatus.noStarted,
     );
   }
 
   void setInitialFavoritesOnline(List<KanjiFromApi> storedKanjis,
-      List<String> myFavoritesCached, int section) async {
+      List<Favorite> myFavoritesCached, int section) async {
+    logger.d('set initial favorites online');
     if (myFavoritesCached.isEmpty) {
       state = const FavoritesKanjisData(
-        kanjisFromApi: [],
+        favoritesKanjisFromApi: [],
         favoritesFetchingStatus: FavoritesFetchingStatus.succefulFecth,
       );
       return;
@@ -28,48 +30,76 @@ class FavoritesListProvider extends Notifier<FavoritesKanjisData> {
     try {
       final kanjiList = await applicationApiService.requestKanjiListToApi(
         storedKanjis,
-        myFavoritesCached,
+        myFavoritesCached.map((e) => e.kanjis).toList(),
         section,
       );
-      onSuccesRequest(kanjiList);
+
+      final List<FavoriteKanji> favoritesKanjiList = [];
+      for (var i = 0; i < kanjiList.length; i++) {
+        favoritesKanjiList.add(
+          FavoriteKanji(
+              kanjiFromApi: kanjiList[i],
+              timeStamp: myFavoritesCached[i].timeStamp),
+        );
+      }
+
+      favoritesKanjiList.sort((a, b) => a.timeStamp.compareTo(b.timeStamp));
+
+      logger.d('the initial favorites kanjilist is: $favoritesKanjiList');
+
+      onSuccesRequest(favoritesKanjiList);
     } catch (e) {
+      logger.e(e);
       onErrorRequest();
     }
   }
 
   Future<void> fetchFavoritesOnRefresh() async {
     state = const FavoritesKanjisData(
-      kanjisFromApi: [],
+      favoritesKanjisFromApi: [],
       favoritesFetchingStatus: FavoritesFetchingStatus.noStarted,
     );
     List<KanjiFromApi> storedKanjis =
         await ref.read(mainScreenProvider.notifier).loadStoredKanjis();
-    final favoritesKanjis = await loadFavorites();
-    if (favoritesKanjis.isEmpty) {
+    final favoritesKanjisFromDB = await loadFavorites();
+    if (favoritesKanjisFromDB.isEmpty) {
       state = const FavoritesKanjisData(
-        kanjisFromApi: [],
+        favoritesKanjisFromApi: [],
         favoritesFetchingStatus: FavoritesFetchingStatus.succefulFecth,
       );
       return;
     }
 
     try {
-      final kanjiList = await applicationApiService.requestKanjiListToApi(
+      final kanjiListFromAPI =
+          await applicationApiService.requestKanjiListToApi(
         storedKanjis,
-        favoritesKanjis,
+        favoritesKanjisFromDB.map((e) => e.kanjis).toList(),
         10,
       );
-      onSuccesRequest(kanjiList);
+
+      final List<FavoriteKanji> favoritesKanjiList = [];
+      for (var i = 0; i < favoritesKanjisFromDB.length; i++) {
+        favoritesKanjiList.add(
+          FavoriteKanji(
+              kanjiFromApi: kanjiListFromAPI[i],
+              timeStamp: favoritesKanjisFromDB[i].timeStamp),
+        );
+      }
+
+      favoritesKanjiList.sort((a, b) => a.timeStamp.compareTo(b.timeStamp));
+
+      onSuccesRequest(favoritesKanjiList);
     } catch (e) {
       onErrorRequest();
     }
   }
 
   void setInitialFavoritesOffline(List<KanjiFromApi> storedKanjis,
-      List<String> myFavoritesCached, int section) {
+      List<Favorite> myFavoritesCached, int section) {
     if (myFavoritesCached.isEmpty) {
       state = const FavoritesKanjisData(
-        kanjisFromApi: [],
+        favoritesKanjisFromApi: [],
         favoritesFetchingStatus: FavoritesFetchingStatus.succefulFecth,
       );
       return;
@@ -80,55 +110,70 @@ class FavoritesListProvider extends Notifier<FavoritesKanjisData> {
     for (var favorite in myFavoritesCached) {
       try {
         final favoriteStored =
-            storedKanjis.firstWhere((e) => e.kanjiCharacter == favorite);
+            storedKanjis.firstWhere((e) => e.kanjiCharacter == favorite.kanjis);
         favoriteKanjisStored.add(favoriteStored);
       } catch (e) {
         continue;
       }
     }
 
-    onSuccesRequest(favoriteKanjisStored);
+    final List<FavoriteKanji> favoritesKanjiList = [];
+    for (var i = 0; i < favoriteKanjisStored.length; i++) {
+      favoritesKanjiList.add(
+        FavoriteKanji(
+            kanjiFromApi: favoriteKanjisStored[i],
+            timeStamp: myFavoritesCached[i].timeStamp),
+      );
+    }
+
+    favoritesKanjiList.sort((a, b) => a.timeStamp.compareTo(b.timeStamp));
+
+    onSuccesRequest(favoritesKanjiList);
   }
 
-  void onSuccesRequest(List<KanjiFromApi> kanjisFromApi) {
+  void onSuccesRequest(List<FavoriteKanji> kanjisFromApi) {
     state = FavoritesKanjisData(
-      kanjisFromApi: kanjisFromApi,
+      favoritesKanjisFromApi: kanjisFromApi,
       favoritesFetchingStatus: FavoritesFetchingStatus.succefulFecth,
     );
   }
 
   void onErrorRequest() {
     state = const FavoritesKanjisData(
-      kanjisFromApi: [],
+      favoritesKanjisFromApi: [],
       favoritesFetchingStatus: FavoritesFetchingStatus.errorFetch,
     );
   }
 
-  List<KanjiFromApi> getFavorites() {
-    return state.kanjisFromApi;
+  List<FavoriteKanji> getFavorites() {
+    return state.favoritesKanjisFromApi;
   }
 
-  void addItem(List<KanjiFromApi> storedItems, KanjiFromApi kanjiFromApi) {
+  void addItem(List<KanjiFromApi> storedItems, FavoriteKanji kanjiFromApi) {
     state = FavoritesKanjisData(
-      kanjisFromApi: [...state.kanjisFromApi, kanjiFromApi],
+      favoritesKanjisFromApi: [...state.favoritesKanjisFromApi, kanjiFromApi],
       favoritesFetchingStatus: state.favoritesFetchingStatus,
     );
   }
 
   void removeItem(KanjiFromApi favoritekanjiFromApi) {
-    final copyState = [...state.kanjisFromApi];
+    final copyState = [...state.favoritesKanjisFromApi];
     int index = copyState.indexWhere((element) =>
-        element.kanjiCharacter == favoritekanjiFromApi.kanjiCharacter);
+        element.kanjiFromApi.kanjiCharacter ==
+        favoritekanjiFromApi.kanjiCharacter);
     copyState.removeAt(index);
     state = FavoritesKanjisData(
-      kanjisFromApi: [...copyState],
+      favoritesKanjisFromApi: [...copyState],
       favoritesFetchingStatus: state.favoritesFetchingStatus,
+      dissmisedKanji: state.dissmisedKanji,
+      onDismissibleActionStatus: state.onDismissibleActionStatus,
     );
   }
 
   bool searchInFavorites(String kanji) {
-    final copyState = [...state.kanjisFromApi];
-    final mappedCopyState = copyState.map((e) => e.kanjiCharacter).toList();
+    final copyState = [...state.favoritesKanjisFromApi];
+    final mappedCopyState =
+        copyState.map((e) => e.kanjiFromApi.kanjiCharacter).toList();
     final searchResult = mappedCopyState.firstWhere(
       (element) => element == kanji,
       orElse: () => '',
@@ -137,14 +182,17 @@ class FavoritesListProvider extends Notifier<FavoritesKanjisData> {
   }
 
   void updateKanji(KanjiFromApi storedKanji) {
-    final copyState = [...state.kanjisFromApi];
+    final copyState = [...state.favoritesKanjisFromApi];
 
-    final kanjiIndex = copyState.indexWhere(
-        (element) => element.kanjiCharacter == storedKanji.kanjiCharacter);
-    if (kanjiIndex == -1) return;
-    copyState[kanjiIndex] = storedKanji;
+    final index = copyState.indexWhere((element) =>
+        element.kanjiFromApi.kanjiCharacter == storedKanji.kanjiCharacter);
+    if (index == -1) return;
+    copyState[index] = FavoriteKanji(
+      kanjiFromApi: storedKanji,
+      timeStamp: state.favoritesKanjisFromApi[index].timeStamp,
+    );
     state = FavoritesKanjisData(
-      kanjisFromApi: copyState,
+      favoritesKanjisFromApi: copyState,
       favoritesFetchingStatus: state.favoritesFetchingStatus,
     );
   }
@@ -154,9 +202,6 @@ class FavoritesListProvider extends Notifier<FavoritesKanjisData> {
       final kanjiFromApiStored = await storeKanjiToSqlDB(kanjiFromApi);
 
       if (kanjiFromApiStored == null) return;
-
-      logger.d(
-          '${kanjiFromApiStored.section}, ${kanjiFromApiStored.kanjiCharacter} , ${kanjiFromApiStored.statusStorage}');
 
       updateProviders(kanjiFromApiStored);
 
@@ -176,16 +221,18 @@ class FavoritesListProvider extends Notifier<FavoritesKanjisData> {
 
   Future<void> dismissisFavorite(KanjiFromApi kanjiFromApi) async {
     setOnDismissibleActionStatus(OnDismissibleActionStatus.processing);
-    int index = state.kanjisFromApi.indexWhere(
-        (element) => kanjiFromApi.kanjiCharacter == element.kanjiCharacter);
+    int index = state.favoritesKanjisFromApi.indexWhere((element) =>
+        kanjiFromApi.kanjiCharacter == element.kanjiFromApi.kanjiCharacter);
     if (index == -1) {
+      logger.d('index -1');
       //TODO improve the logic
       return;
     }
-
+    logger.d('index found $index');
     try {
+      setDismissedKanji(state.favoritesKanjisFromApi[index], index);
       removeItem(kanjiFromApi);
-      setDismissedKanji(kanjiFromApi, index);
+
       await deleteFavorite(kanjiFromApi.kanjiCharacter);
       setOnDismissibleActionStatus(OnDismissibleActionStatus.successRemoved);
     } catch (e) {
@@ -194,17 +241,34 @@ class FavoritesListProvider extends Notifier<FavoritesKanjisData> {
     }
   }
 
-  Future<void> restoreFavorite(KanjiFromApi kanjiFromApi, int index) async {
+  void setOnDismissibleActionStatus(OnDismissibleActionStatus status) {
+    state = FavoritesKanjisData(
+      favoritesKanjisFromApi: state.favoritesKanjisFromApi,
+      favoritesFetchingStatus: state.favoritesFetchingStatus,
+      dissmisedKanji: state.dissmisedKanji,
+      onDismissibleActionStatus: status,
+    );
+  }
+
+  Future<void> restoreFavorite(FavoriteKanji favoriteKanji, int index) async {
     try {
-      await insertFavorite(kanjiFromApi.kanjiCharacter);
-      final kanjiList = state.kanjisFromApi;
+      await insertFavorite(
+        favoriteKanji.kanjiFromApi.kanjiCharacter,
+        favoriteKanji.timeStamp,
+      );
+      final kanjiList = state.favoritesKanjisFromApi;
       logger.d('kanjiList: $kanjiList , $index');
 
-      kanjiList.insert(index, kanjiFromApi);
-      logger.d('kanjiList: $kanjiList , ');
+      kanjiList.insert(
+        index,
+        FavoriteKanji(
+          kanjiFromApi: favoriteKanji.kanjiFromApi,
+          timeStamp: favoriteKanji.timeStamp,
+        ),
+      );
 
       state = FavoritesKanjisData(
-        kanjisFromApi: kanjiList,
+        favoritesKanjisFromApi: kanjiList,
         favoritesFetchingStatus: state.favoritesFetchingStatus,
         dissmisedKanji: state.dissmisedKanji,
         onDismissibleActionStatus: state.onDismissibleActionStatus,
@@ -217,18 +281,9 @@ class FavoritesListProvider extends Notifier<FavoritesKanjisData> {
     }
   }
 
-  void setOnDismissibleActionStatus(OnDismissibleActionStatus status) {
+  void setDismissedKanji(FavoriteKanji kanjiFromApi, int index) {
     state = FavoritesKanjisData(
-      kanjisFromApi: state.kanjisFromApi,
-      favoritesFetchingStatus: state.favoritesFetchingStatus,
-      dissmisedKanji: state.dissmisedKanji,
-      onDismissibleActionStatus: status,
-    );
-  }
-
-  void setDismissedKanji(KanjiFromApi kanjiFromApi, int index) {
-    state = FavoritesKanjisData(
-      kanjisFromApi: state.kanjisFromApi,
+      favoritesKanjisFromApi: state.favoritesKanjisFromApi,
       favoritesFetchingStatus: state.favoritesFetchingStatus,
       dissmisedKanji: DissmisedKanji(
         kanjiFromApiFromDismisibleAction: kanjiFromApi,
@@ -236,6 +291,22 @@ class FavoritesListProvider extends Notifier<FavoritesKanjisData> {
       ),
       onDismissibleActionStatus: state.onDismissibleActionStatus,
     );
+  }
+
+  bool isAnyProcessingData() {
+    try {
+      state.favoritesKanjisFromApi.firstWhere(
+        (element) =>
+            element.kanjiFromApi.statusStorage ==
+                StatusStorage.proccessingStoring ||
+            element.kanjiFromApi.statusStorage ==
+                StatusStorage.proccessingDeleting,
+      );
+
+      return true;
+    } on StateError {
+      return false;
+    }
   }
 }
 
@@ -254,21 +325,33 @@ enum OnDismissibleActionStatus {
 
 class FavoritesKanjisData {
   const FavoritesKanjisData({
-    required this.kanjisFromApi,
+    required this.favoritesKanjisFromApi,
     required this.favoritesFetchingStatus,
     this.dissmisedKanji,
     this.onDismissibleActionStatus = OnDismissibleActionStatus.noStarted,
   });
-  final List<KanjiFromApi> kanjisFromApi;
+  final List<FavoriteKanji> favoritesKanjisFromApi;
   final FavoritesFetchingStatus favoritesFetchingStatus;
   final OnDismissibleActionStatus onDismissibleActionStatus;
   final DissmisedKanji? dissmisedKanji;
 }
 
+class FavoriteKanji {
+  final KanjiFromApi kanjiFromApi;
+  final int timeStamp;
+
+  FavoriteKanji({required this.kanjiFromApi, required this.timeStamp});
+
+  @override
+  String toString() {
+    return '${kanjiFromApi.kanjiCharacter}, ${DateTime.fromMillisecondsSinceEpoch(timeStamp)}';
+  }
+}
+
 class DissmisedKanji {
   DissmisedKanji(
       {required this.kanjiFromApiFromDismisibleAction, required this.index});
-  final KanjiFromApi kanjiFromApiFromDismisibleAction;
+  final FavoriteKanji kanjiFromApiFromDismisibleAction;
   final int index;
 }
 

@@ -12,7 +12,7 @@ import 'package:kanji_for_n5_level_app/repositories/local_database/db_favorites.
 import 'package:kanji_for_n5_level_app/main.dart';
 import 'package:kanji_for_n5_level_app/providers/score_kanji_list_provider.dart';
 import 'package:kanji_for_n5_level_app/models/kanji_from_api.dart';
-import 'package:kanji_for_n5_level_app/providers/favorites_kanjis_provider.dart';
+import 'package:kanji_for_n5_level_app/screens/navigation_bar_screens/favorite_screen/favorites_kanjis_provider.dart';
 import 'package:kanji_for_n5_level_app/providers/status_connection_provider.dart';
 import 'package:kanji_for_n5_level_app/providers/status_stored_provider.dart';
 
@@ -41,21 +41,6 @@ class MainScreenProvider extends Notifier<MainScreenData> {
     return state.selection;
   }
 
-  bool isAnyProcessingData() {
-    final listFavorites = ref.read(favoriteskanjisProvider);
-    try {
-      listFavorites.kanjisFromApi.firstWhere(
-        (element) =>
-            element.statusStorage == StatusStorage.proccessingStoring ||
-            element.statusStorage == StatusStorage.proccessingDeleting,
-      );
-
-      return true;
-    } on StateError {
-      return false;
-    }
-  }
-
   void setLinkAvatar(String link) {
     state = MainScreenData(
         selection: state.selection, avatarLink: link, fullName: state.fullName);
@@ -63,7 +48,8 @@ class MainScreenProvider extends Notifier<MainScreenData> {
 
   void selectPage(int index, BuildContext context,
       void Function(BuildContext context) scaleDialog) {
-    if (index == 0 && isAnyProcessingData()) {
+    if (index != 1 &&
+        ref.read(favoriteskanjisProvider.notifier).isAnyProcessingData()) {
       scaleDialog(context);
       return;
     }

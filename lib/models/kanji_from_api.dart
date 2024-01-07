@@ -28,7 +28,7 @@ class KanjiFromApi {
 
   @override
   String toString() {
-    return 'kanji character $kanjiCharacter, : meaning: $englishMeaning, image link: $kanjiImageLink';
+    return 'kanji character $kanjiCharacter, : meaning: $englishMeaning, image link: $kanjiImageLink, statusStorage:$statusStorage ';
   }
 }
 

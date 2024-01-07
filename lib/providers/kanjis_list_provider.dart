@@ -4,7 +4,7 @@ import 'package:kanji_for_n5_level_app/providers/main_screen_provider.dart';
 import 'package:kanji_for_n5_level_app/repositories/local_database/db_deleting_data.dart';
 import 'package:kanji_for_n5_level_app/models/kanji_from_api.dart';
 import 'package:kanji_for_n5_level_app/providers/error_storing_database_status.dart';
-import 'package:kanji_for_n5_level_app/providers/favorites_kanjis_provider.dart';
+import 'package:kanji_for_n5_level_app/screens/navigation_bar_screens/favorite_screen/favorites_kanjis_provider.dart';
 import 'package:kanji_for_n5_level_app/providers/status_stored_provider.dart';
 
 class KanjiListProvider extends Notifier<KanjiListData> {
@@ -36,17 +36,6 @@ class KanjiListProvider extends Notifier<KanjiListData> {
     } on StateError {
       return false;
     }
-  }
-
-  void updateKanji(KanjiFromApi storedKanji) {
-    final copyState = [...state.kanjiList];
-
-    final kanjiIndex = copyState.indexWhere(
-        (element) => element.kanjiCharacter == storedKanji.kanjiCharacter);
-    if (kanjiIndex == -1) return;
-    copyState[kanjiIndex] = storedKanji;
-    state = KanjiListData(
-        kanjiList: copyState, status: state.status, section: state.section);
   }
 
   KanjiListData getOfflineKanjiList(KanjiListData kanjiList) {
@@ -126,10 +115,18 @@ class KanjiListProvider extends Notifier<KanjiListData> {
     ref.read(storedKanjisProvider.notifier).addItem(kanjiFromApiStored);
 
     ref.read(favoriteskanjisProvider.notifier).updateKanji(kanjiFromApiStored);
+    updateKanji(kanjiFromApiStored);
+  }
 
-    if (selection == ScreenSelection.favoritesKanjis) {
-      updateKanji(kanjiFromApiStored);
-    }
+  void updateKanji(KanjiFromApi storedKanji) {
+    final copyState = [...state.kanjiList];
+
+    final kanjiIndex = copyState.indexWhere(
+        (element) => element.kanjiCharacter == storedKanji.kanjiCharacter);
+    if (kanjiIndex == -1) return;
+    copyState[kanjiIndex] = storedKanji;
+    state = KanjiListData(
+        kanjiList: copyState, status: state.status, section: state.section);
   }
 
   void deleteKanjiFromStorage(

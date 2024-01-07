@@ -1,7 +1,8 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:kanji_for_n5_level_app/main.dart';
 import 'package:kanji_for_n5_level_app/repositories/local_database/db_favorites.dart';
 import 'package:kanji_for_n5_level_app/models/kanji_from_api.dart';
-import 'package:kanji_for_n5_level_app/providers/favorites_kanjis_provider.dart';
+import 'package:kanji_for_n5_level_app/screens/navigation_bar_screens/favorite_screen/favorites_kanjis_provider.dart';
 import 'package:kanji_for_n5_level_app/providers/status_stored_provider.dart';
 
 class KanjiDetailsProvider extends Notifier<KanjiDetailsData?> {
@@ -48,15 +49,19 @@ class KanjiDetailsProvider extends Notifier<KanjiDetailsData?> {
 
     if (!queryKanji) {
       try {
-        await insertFavorite(kanjiFromApi.kanjiCharacter);
+        final timeStamp = DateTime.now().millisecondsSinceEpoch;
+        await insertFavorite(kanjiFromApi.kanjiCharacter, timeStamp);
         final storedItems =
             ref.read(storedKanjisProvider.notifier).getStoresItems();
         ref.read(favoriteskanjisProvider.notifier).addItem(
-            storedItems.values.fold([], (previousValue, element) {
-              previousValue.addAll(element);
-              return previousValue;
-            }),
-            kanjiFromApi);
+            storedItems.values.fold(
+              [],
+              (previousValue, element) {
+                previousValue.addAll(element);
+                return previousValue;
+              },
+            ),
+            FavoriteKanji(kanjiFromApi: kanjiFromApi, timeStamp: timeStamp));
         Future.delayed(
           const Duration(
             seconds: 1,
@@ -67,6 +72,7 @@ class KanjiDetailsProvider extends Notifier<KanjiDetailsData?> {
           },
         );
       } catch (e) {
+        logger.e(e);
         setStoringToFavoritesStatus(StoringToFavoritesStatus.noStarted);
       }
     } else {
@@ -84,6 +90,7 @@ class KanjiDetailsProvider extends Notifier<KanjiDetailsData?> {
           },
         );
       } catch (e) {
+        logger.e(e);
         setStoringToFavoritesStatus(StoringToFavoritesStatus.noStarted);
       }
     }

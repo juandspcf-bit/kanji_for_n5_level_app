@@ -8,7 +8,7 @@ Future<Database> get kanjiFromApiDatabase async {
     path.join(dbPath, "downloadkanjis.db"),
     onCreate: (db, version) async {
       await db.execute(
-          'CREATE TABLE user_favorites(id INTEGER PRIMARY KEY AUTOINCREMENT, kanjiCharacter TEXT, uuid TEXT, int timeStamp)');
+          'CREATE TABLE user_favorites(id INTEGER PRIMARY KEY AUTOINCREMENT, kanjiCharacter TEXT, uuid TEXT, timeStamp INTEGER )');
       await db.execute(
           'CREATE TABLE strokes(id INTEGER PRIMARY KEY AUTOINCREMENT, strokeImageLink TEXT,'
           ' kanjiCharacter TEXT, uuid TEXT)');

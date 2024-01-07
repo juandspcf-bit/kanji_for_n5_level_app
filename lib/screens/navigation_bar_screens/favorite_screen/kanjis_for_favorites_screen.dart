@@ -3,15 +3,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kanji_for_n5_level_app/main.dart';
 import 'package:kanji_for_n5_level_app/providers/error_storing_database_status.dart';
-import 'package:kanji_for_n5_level_app/providers/favorites_kanjis_provider.dart';
+import 'package:kanji_for_n5_level_app/screens/navigation_bar_screens/favorite_screen/favorites_kanjis_provider.dart';
 import 'package:kanji_for_n5_level_app/providers/main_screen_provider.dart';
 import 'package:kanji_for_n5_level_app/providers/status_connection_provider.dart';
 import 'package:kanji_for_n5_level_app/providers/status_stored_provider.dart';
 import 'package:kanji_for_n5_level_app/screens/body_list/body_list.dart';
 import 'package:kanji_for_n5_level_app/screens/navigation_bar_screens/db_dialog_error_message.dart';
 
-class FavoriteScreen extends ConsumerWidget with MyDialogs {
-  const FavoriteScreen({
+class KanjisForFavoritesScreen extends ConsumerWidget with MyDialogs {
+  const KanjisForFavoritesScreen({
     super.key,
   });
 
@@ -34,17 +34,18 @@ class FavoriteScreen extends ConsumerWidget with MyDialogs {
     final connectivityData = ref.watch(statusConnectionProvider);
 
     if (connectivityData == ConnectivityResult.none) {
-      final favoritesKanjisStored = kanjiFavoritesList.kanjisFromApi
-          .where((element) => element.statusStorage == StatusStorage.stored)
+      final favoritesKanjisStored = kanjiFavoritesList.favoritesKanjisFromApi
+          .where((element) =>
+              element.kanjiFromApi.statusStorage == StatusStorage.stored)
           .toList();
       if (favoritesKanjisStored.isNotEmpty) {
         kanjiFavoritesList = FavoritesKanjisData(
-          kanjisFromApi: favoritesKanjisStored,
+          favoritesKanjisFromApi: favoritesKanjisStored,
           favoritesFetchingStatus: FavoritesFetchingStatus.succefulFecth,
         );
       } else {
         kanjiFavoritesList = const FavoritesKanjisData(
-          kanjisFromApi: [],
+          favoritesKanjisFromApi: [],
           favoritesFetchingStatus: FavoritesFetchingStatus.succefulFecth,
         );
       }
@@ -63,25 +64,28 @@ class FavoriteScreen extends ConsumerWidget with MyDialogs {
         var snackBar = SnackBar(
           content: Text(current.onDismissibleActionStatus.message),
           duration: const Duration(seconds: 20),
-          action: SnackBarAction(
-              label: 'Undo',
-              onPressed: () async {
-                logger.d('restoring kanji');
-                final dissmisedKanji =
-                    ref.read(favoriteskanjisProvider).dissmisedKanji;
+          action: current.onDismissibleActionStatus ==
+                  OnDismissibleActionStatus.successAdded
+              ? null
+              : SnackBarAction(
+                  label: 'Undo',
+                  onPressed: () async {
+                    logger.d('restoring kanji');
+                    final dissmisedKanji =
+                        ref.read(favoriteskanjisProvider).dissmisedKanji;
 
-                if (dissmisedKanji == null) {
-                  logger.d('it is null');
-                  return;
-                }
+                    if (dissmisedKanji == null) {
+                      logger.d('it is null');
+                      return;
+                    }
 
-                await ref
-                    .read(favoriteskanjisProvider.notifier)
-                    .restoreFavorite(
-                      dissmisedKanji.kanjiFromApiFromDismisibleAction,
-                      dissmisedKanji.index,
-                    );
-              }),
+                    await ref
+                        .read(favoriteskanjisProvider.notifier)
+                        .restoreFavorite(
+                          dissmisedKanji.kanjiFromApiFromDismisibleAction,
+                          dissmisedKanji.index,
+                        );
+                  }),
         );
 
         ScaffoldMessenger.of(context).showSnackBar(snackBar);
@@ -93,7 +97,9 @@ class FavoriteScreen extends ConsumerWidget with MyDialogs {
 
     return BodyKanjisList(
       statusResponse: kanjiFavoritesList.favoritesFetchingStatus.index,
-      kanjisFromApi: kanjiFavoritesList.kanjisFromApi,
+      kanjisFromApi: kanjiFavoritesList.favoritesKanjisFromApi
+          .map((e) => e.kanjiFromApi)
+          .toList(),
       connectivityData: connectivityData,
       mainScreenData: mainScreenData,
     );

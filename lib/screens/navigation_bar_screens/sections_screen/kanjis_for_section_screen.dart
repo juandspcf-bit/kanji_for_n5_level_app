@@ -13,9 +13,9 @@ import 'package:kanji_for_n5_level_app/screens/navigation_bar_screens/db_dialog_
 import 'package:kanji_for_n5_level_app/screens/quiz_screen/quizz_screen.dart';
 import 'package:kanji_for_n5_level_app/screens/status_operations_dialogs.dart';
 
-class KanjiListSectionScreen extends ConsumerWidget
+class KanjiForSectionScreen extends ConsumerWidget
     with MyDialogs, StatusDBStoringDialogs {
-  const KanjiListSectionScreen({
+  const KanjiForSectionScreen({
     super.key,
   });
 
@@ -36,8 +36,8 @@ class KanjiListSectionScreen extends ConsumerWidget
       );
     }
     var kanjiListData = ref.watch(kanjiListProvider);
-    final statusConnectionData = ref.watch(statusConnectionProvider);
-    if (statusConnectionData == ConnectivityResult.none) {
+
+    if (connectivityData == ConnectivityResult.none) {
       kanjiListData = ref
           .read(kanjiListProvider.notifier)
           .getOfflineKanjiList(kanjiListData);
@@ -47,7 +47,7 @@ class KanjiListSectionScreen extends ConsumerWidget
         ref.read(kanjiListProvider.notifier).isAnyProcessingData;
 
     final accesToQuiz = !isAnyProcessingDataFunc() &&
-        !(statusConnectionData == ConnectivityResult.none);
+        !(connectivityData == ConnectivityResult.none);
 
     return PopScope(
       canPop: !isAnyProcessingDataFunc(),
@@ -63,7 +63,7 @@ class KanjiListSectionScreen extends ConsumerWidget
           actions: [
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 10),
-              child: statusConnectionData == ConnectivityResult.none
+              child: connectivityData == ConnectivityResult.none
                   ? const Icon(Icons.cloud_off)
                   : const Icon(Icons.cloud_done_rounded),
             ),

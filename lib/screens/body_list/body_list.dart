@@ -1,9 +1,11 @@
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:kanji_for_n5_level_app/main.dart';
 import 'package:kanji_for_n5_level_app/models/kanji_from_api.dart';
 import 'package:kanji_for_n5_level_app/models/secction_model.dart';
-import 'package:kanji_for_n5_level_app/providers/favorites_kanjis_provider.dart';
+import 'package:kanji_for_n5_level_app/providers/status_stored_provider.dart';
+import 'package:kanji_for_n5_level_app/screens/navigation_bar_screens/favorite_screen/favorites_kanjis_provider.dart';
 import 'package:kanji_for_n5_level_app/providers/kanjis_list_provider.dart';
 import 'package:kanji_for_n5_level_app/providers/main_screen_provider.dart';
 import 'package:kanji_for_n5_level_app/screens/body_list/kanji_item.dart';
@@ -30,6 +32,16 @@ class BodyKanjisList extends ConsumerWidget {
         kanjiFromApi: kanjisFromApi[index],
       );
     } else {
+      logger.d(kanjisFromApi[index].statusStorage);
+      if (kanjisFromApi[index].statusStorage ==
+              StatusStorage.proccessingStoring ||
+          kanjisFromApi[index].statusStorage ==
+              StatusStorage.proccessingDeleting) {
+        return KanjiItem(
+          key: ValueKey(kanjisFromApi[index].kanjiCharacter),
+          kanjiFromApi: kanjisFromApi[index],
+        );
+      }
       return Dismissible(
         key: Key(kanjisFromApi[index].kanjiCharacter),
         child: KanjiItem(
@@ -45,12 +57,28 @@ class BodyKanjisList extends ConsumerWidget {
     }
   }
 
+  bool isAnyProcessingData() {
+    try {
+      kanjisFromApi.firstWhere(
+        (element) =>
+            element.statusStorage == StatusStorage.proccessingStoring ||
+            element.statusStorage == StatusStorage.proccessingDeleting,
+      );
+
+      return true;
+    } on StateError {
+      return false;
+    }
+  }
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final isAny = isAnyProcessingData();
+
     if (statusResponse == 0) {
       return const ShimmerList();
     } else if (statusResponse == 1 && kanjisFromApi.isNotEmpty) {
-      return connectivityData == ConnectivityResult.none
+      return (connectivityData == ConnectivityResult.none)
           ? ListView.builder(
               itemCount: kanjisFromApi.length,
               itemBuilder: (ctx, index) {
@@ -58,9 +86,8 @@ class BodyKanjisList extends ConsumerWidget {
               },
             )
           : RefreshIndicator(
+              notificationPredicate: isAny ? (_) => false : (_) => true,
               onRefresh: () async {
-                if (connectivityData == ConnectivityResult.none) return;
-
                 if (mainScreenData.selection ==
                     ScreenSelection.favoritesKanjis) {
                   await ref
@@ -86,13 +113,8 @@ class BodyKanjisList extends ConsumerWidget {
     } else if (statusResponse == 2) {
       return LayoutBuilder(
         builder: (contx, viewportConstraints) {
-          final isAnyProcessingDataFunc =
-              ref.read(kanjiListProvider.notifier).isAnyProcessingData;
           return RefreshIndicator(
             onRefresh: () async {
-              if (connectivityData == ConnectivityResult.none ||
-                  isAnyProcessingDataFunc()) return;
-
               if (mainScreenData.selection == ScreenSelection.favoritesKanjis) {
                 await ref
                     .read(favoriteskanjisProvider.notifier)
