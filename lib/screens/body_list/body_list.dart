@@ -5,6 +5,8 @@ import 'package:kanji_for_n5_level_app/main.dart';
 import 'package:kanji_for_n5_level_app/models/kanji_from_api.dart';
 import 'package:kanji_for_n5_level_app/models/secction_model.dart';
 import 'package:kanji_for_n5_level_app/providers/status_stored_provider.dart';
+import 'package:kanji_for_n5_level_app/screens/body_list/error_fetching_kanjis.dart';
+import 'package:kanji_for_n5_level_app/screens/body_list/no_data_to_shown_screen.dart';
 import 'package:kanji_for_n5_level_app/screens/navigation_bar_screens/favorite_screen/favorites_kanjis_provider.dart';
 import 'package:kanji_for_n5_level_app/providers/kanjis_list_provider.dart';
 import 'package:kanji_for_n5_level_app/providers/main_screen_provider.dart';
@@ -111,120 +113,9 @@ class BodyKanjisList extends ConsumerWidget {
               ),
             );
     } else if (statusResponse == 2) {
-      return LayoutBuilder(
-        builder: (contx, viewportConstraints) {
-          return RefreshIndicator(
-            onRefresh: () async {
-              if (mainScreenData.selection == ScreenSelection.favoritesKanjis) {
-                await ref
-                    .read(favoriteskanjisProvider.notifier)
-                    .fetchFavoritesOnRefresh();
-                return;
-              }
-
-              final kanjiListData = ref.read(kanjiListProvider);
-              final sectionModel = listSections[kanjiListData.section - 1];
-              ref.read(kanjiListProvider.notifier).fetchKanjis(
-                    kanjisCharacters: sectionModel.kanjisCharacters,
-                    sectionNumber: kanjiListData.section,
-                  );
-            },
-            child: ListView(
-              children: [
-                ConstrainedBox(
-                  constraints: viewportConstraints.copyWith(
-                    minHeight: viewportConstraints.maxHeight,
-                    maxHeight: double.infinity,
-                  ),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            'An error has occurr',
-                            style: Theme.of(context).textTheme.titleLarge,
-                          ),
-                        ],
-                      ),
-                      const SizedBox(
-                        height: 25,
-                      ),
-                      const Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Icon(
-                            Icons.error_outline,
-                            color: Colors.amber,
-                            size: 80,
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                )
-              ],
-            ),
-          );
-        },
-      );
-    } else if (statusResponse == 1 && kanjisFromApi.isEmpty) {
-      return Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text(
-                'No data to show',
-                style: Theme.of(context).textTheme.titleLarge,
-              ),
-            ],
-          ),
-          const SizedBox(
-            height: 25,
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Icon(
-                Icons.data_usage,
-                color: Theme.of(context).colorScheme.primary,
-                size: 80,
-              ),
-            ],
-          )
-        ],
-      );
-    } else {
-      return Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text(
-                'No state to match',
-                style: Theme.of(context).textTheme.titleLarge,
-              ),
-            ],
-          ),
-          const SizedBox(
-            height: 25,
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Icon(
-                Icons.question_mark,
-                color: Theme.of(context).colorScheme.primary,
-                size: 80,
-              ),
-            ],
-          )
-        ],
-      );
+      return ErrorFetchingKanjisScreen(mainScreenData: mainScreenData);
+    } else /* if (statusResponse == 1 && kanjisFromApi.isEmpty) */ {
+      return const NoDataToShownScreen();
     }
   }
 }
