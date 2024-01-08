@@ -7,12 +7,16 @@ class StatusConnectionProvider extends Notifier<ConnectivityResult> {
   StreamSubscription? subscription;
   @override
   ConnectivityResult build() {
-    subscription = Connectivity()
-        .onConnectivityChanged
-        .listen((ConnectivityResult result) {
-      state = result;
+    final connectionState = Connectivity();
+
+    connectionState.checkConnectivity().then((value) {
+      subscription = connectionState.onConnectivityChanged
+          .listen((ConnectivityResult result) {
+        state = result;
+      });
+      state = value;
     });
-    return ConnectivityResult.none;
+    return ConnectivityResult.other;
   }
 
   void setInitialStatus(ConnectivityResult result) {

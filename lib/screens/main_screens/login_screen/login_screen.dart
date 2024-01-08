@@ -3,9 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kanji_for_n5_level_app/aplication_layer/auth_contract/sign_in_user_contract.dart';
+import 'package:kanji_for_n5_level_app/main.dart';
+import 'package:kanji_for_n5_level_app/screens/common_screens.dart/loading_screen.dart';
 import 'package:kanji_for_n5_level_app/screens/main_screens/login_screen/login_provider.dart';
 import 'package:kanji_for_n5_level_app/providers/status_connection_provider.dart';
-import 'package:kanji_for_n5_level_app/screens/kanji_details/error_connection_tabs.dart';
+import 'package:kanji_for_n5_level_app/screens/common_screens.dart/error_connection_screen.dart';
 import 'package:kanji_for_n5_level_app/screens/main_screens/login_screen/login_form.dart';
 import 'package:kanji_for_n5_level_app/screens/main_screens/login_screen/login_progress.dart';
 import 'package:kanji_for_n5_level_app/screens/navigation_bar_screens/db_dialog_error_message.dart';
@@ -78,7 +80,11 @@ class ToLoginFormScreen extends ConsumerWidget with MyDialogs {
         padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 15),
         child: Builder(
           builder: (ctx) {
-            if (statusConnectionData == ConnectivityResult.none) {
+            if (statusConnectionData == ConnectivityResult.other) {
+              return const ProcessProgress(
+                message: 'Welcome!!',
+              );
+            } else if (statusConnectionData == ConnectivityResult.none) {
               return const ErrorConnectionScreen(
                 message: 'No internet connection, try again later',
               );
@@ -86,7 +92,9 @@ class ToLoginFormScreen extends ConsumerWidget with MyDialogs {
 
             return loginFormData.statusLogingFlow !=
                     StatusProcessingLoggingFlow.form
-                ? const LoginProgress()
+                ? const ProcessProgress(
+                    message: 'Login to your account',
+                  )
                 : SafeArea(
                     child: LoginForm(
                       loginFormData: loginFormData,
