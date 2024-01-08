@@ -63,7 +63,7 @@ class KanjisForFavoritesScreen extends ConsumerWidget with MyDialogs {
 
         var snackBar = SnackBar(
           content: Text(current.onDismissibleActionStatus.message),
-          duration: const Duration(seconds: 20),
+          duration: const Duration(seconds: 3),
           action: current.onDismissibleActionStatus ==
                   OnDismissibleActionStatus.successAdded
               ? null
