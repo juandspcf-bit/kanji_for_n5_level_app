@@ -5,8 +5,8 @@ import 'package:kanji_for_n5_level_app/providers/on_boarding_provider.dart';
 import 'package:kanji_for_n5_level_app/screens/onBoarding_screen/pages.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
-class MyPageViewer extends ConsumerStatefulWidget {
-  const MyPageViewer({super.key});
+class OnBoardingFlow extends ConsumerStatefulWidget {
+  const OnBoardingFlow({super.key});
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() => _MyPageViewerState();
@@ -79,7 +79,7 @@ class _MyPageViewerState extends ConsumerState {
                       }
                       _controller.nextPage(
                           duration: const Duration(milliseconds: 500),
-                          curve: Curves.bounceIn);
+                          curve: Curves.ease);
                     },
                     child: Text(texNext),
                   ),
