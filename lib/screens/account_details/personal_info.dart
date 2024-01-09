@@ -5,6 +5,7 @@ import 'package:kanji_for_n5_level_app/screens/account_details/personal_info_pro
 import 'package:kanji_for_n5_level_app/screens/account_details/fetchin_data.dart';
 import 'package:kanji_for_n5_level_app/screens/account_details/updating_data.dart';
 import 'package:kanji_for_n5_level_app/screens/account_details/user_data.dart';
+import 'package:kanji_for_n5_level_app/screens/common_screens.dart/loading_screen.dart';
 import 'package:kanji_for_n5_level_app/screens/navigation_bar_screens/db_dialog_error_message.dart';
 
 class PersonalInfo extends ConsumerWidget with MyDialogs {
@@ -90,7 +91,7 @@ class PersonalInfo extends ConsumerWidget with MyDialogs {
 
   Widget getWidgetBody(PersonalInfoData accountDetailsData) {
     if (accountDetailsData.statusFetching == 0) {
-      return const FetchingData();
+      return const ProcessProgress(message: 'Fetching data');
     } else if (accountDetailsData.statusFetching == 1) {
       return const UpdatingData();
     } else {
