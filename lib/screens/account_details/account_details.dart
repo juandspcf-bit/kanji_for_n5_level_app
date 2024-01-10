@@ -104,6 +104,22 @@ class AccountDetails extends ConsumerWidget {
                     title: const Text('Logout'),
                     trailing: const Icon(Icons.arrow_forward_ios),
                   ),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  ListTile(
+                    onTap: () async {},
+                    contentPadding:
+                        const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                    shape: OutlineInputBorder(
+                      borderSide:
+                          const BorderSide().copyWith(color: Colors.white30),
+                      borderRadius:
+                          const BorderRadius.all(Radius.circular(12.0)),
+                    ),
+                    title: const Text('Close Account'),
+                    trailing: const Icon(Icons.arrow_forward_ios),
+                  ),
                 ],
               ),
             )
