@@ -20,7 +20,7 @@ class AccountDetails extends ConsumerWidget {
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
             Text(
-              'Account details',
+              'Account settings',
               style: Theme.of(context).textTheme.titleLarge,
             ),
             const SizedBox(
