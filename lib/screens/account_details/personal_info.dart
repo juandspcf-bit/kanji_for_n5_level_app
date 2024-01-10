@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kanji_for_n5_level_app/main.dart';
 import 'package:kanji_for_n5_level_app/screens/account_details/personal_info_provider.dart';
-import 'package:kanji_for_n5_level_app/screens/account_details/updating_data.dart';
 import 'package:kanji_for_n5_level_app/screens/account_details/user_data.dart';
 import 'package:kanji_for_n5_level_app/screens/common_screens.dart/loading_screen.dart';
 import 'package:kanji_for_n5_level_app/screens/navigation_bar_screens/db_dialog_error_message.dart';
@@ -89,10 +88,12 @@ class PersonalInfo extends ConsumerWidget with MyDialogs {
   }
 
   Widget getWidgetBody(PersonalInfoData accountDetailsData) {
-    if (accountDetailsData.statusFetching == 0) {
+    if (accountDetailsData.fetchingStatus ==
+        PersonalInfoFetchinStatus.processing) {
       return const ProcessProgress(message: 'Fetching data');
-    } else if (accountDetailsData.statusFetching == 1) {
-      return const UpdatingData();
+    } else if (accountDetailsData.updatingStatus ==
+        PersonalInfoUpdatingStatus.updating) {
+      return const ProcessProgress(message: 'Updating data');
     } else {
       return UserData(accountDetailsData: accountDetailsData);
     }
@@ -103,18 +104,18 @@ class PersonalInfo extends ConsumerWidget with MyDialogs {
     final personalInfoData = ref.watch(personalInfoProvider);
 
     ref.listen<PersonalInfoData>(personalInfoProvider, (previous, current) {
-      logger.d('status ${current.statusFetching} is called');
       if (current.showPasswordRequest) {
         logger.d('called password dialog');
         passworRequestDialog(context, ref);
       }
 
-      if (current.statusFetching == 3) {
-        logger.d('status 3 is called');
+      if (current.updatingStatus == PersonalInfoUpdatingStatus.error) {
         errorDialog(
           context,
           () {
-            ref.read(personalInfoProvider.notifier).setStatus(2);
+            ref
+                .read(personalInfoProvider.notifier)
+                .setUpdatingStatus(PersonalInfoUpdatingStatus.noStarted);
             ref
                 .read(personalInfoProvider.notifier)
                 .setShowPasswordRequest(false);
@@ -123,11 +124,13 @@ class PersonalInfo extends ConsumerWidget with MyDialogs {
         );
       }
 
-      if (current.statusFetching == 4) {
+      if (current.updatingStatus == PersonalInfoUpdatingStatus.succes) {
         successDialog(
           context,
           () {
-            ref.read(personalInfoProvider.notifier).setStatus(2);
+            ref
+                .read(personalInfoProvider.notifier)
+                .setUpdatingStatus(PersonalInfoUpdatingStatus.noStarted);
             ref
                 .read(personalInfoProvider.notifier)
                 .setShowPasswordRequest(false);
@@ -136,11 +139,13 @@ class PersonalInfo extends ConsumerWidget with MyDialogs {
         );
       }
 
-      if (current.statusFetching == 5) {
+      if (current.updatingStatus == PersonalInfoUpdatingStatus.noUpdate) {
         scaleDialog(
           context,
           () {
-            ref.read(personalInfoProvider.notifier).setStatus(2);
+            ref
+                .read(personalInfoProvider.notifier)
+                .setUpdatingStatus(PersonalInfoUpdatingStatus.noStarted);
             ref
                 .read(personalInfoProvider.notifier)
                 .setShowPasswordRequest(false);
@@ -157,9 +162,7 @@ class PersonalInfo extends ConsumerWidget with MyDialogs {
 
     return Scaffold(
       appBar: AppBar(),
-      body: Center(
-        child: getWidgetBody(personalInfoData),
-      ),
+      body: getWidgetBody(personalInfoData),
     );
   }
 }

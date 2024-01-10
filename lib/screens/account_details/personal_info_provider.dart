@@ -16,7 +16,8 @@ class PersonalInfoProvider extends Notifier<PersonalInfoData> {
         pathProfileTemporal: '',
         name: '',
         email: '',
-        statusFetching: 0,
+        updatingStatus: PersonalInfoUpdatingStatus.noStarted,
+        fetchingStatus: PersonalInfoFetchinStatus.noStarted,
         showPasswordRequest: false);
   }
 
@@ -26,7 +27,8 @@ class PersonalInfoProvider extends Notifier<PersonalInfoData> {
         pathProfileTemporal: '',
         name: '',
         email: '',
-        statusFetching: 0,
+        updatingStatus: PersonalInfoUpdatingStatus.noStarted,
+        fetchingStatus: PersonalInfoFetchinStatus.noStarted,
         showPasswordRequest: state.showPasswordRequest);
   }
 
@@ -36,6 +38,8 @@ class PersonalInfoProvider extends Notifier<PersonalInfoData> {
     final email = FirebaseAuth.instance.currentUser!.email;
 
     try {
+      setFetchingStatus(PersonalInfoFetchinStatus.processing);
+
       final userPhoto = storageRef.child("userImages/$uuid.jpg");
 
       logger.e('reading profile photo');
@@ -47,7 +51,8 @@ class PersonalInfoProvider extends Notifier<PersonalInfoData> {
           pathProfileTemporal: '',
           name: fullName ?? '',
           email: email ?? '',
-          statusFetching: 2,
+          updatingStatus: state.updatingStatus,
+          fetchingStatus: PersonalInfoFetchinStatus.success,
           showPasswordRequest: state.showPasswordRequest);
     } on TimeoutException {
       logger.e('time out exception');
@@ -58,7 +63,8 @@ class PersonalInfoProvider extends Notifier<PersonalInfoData> {
           pathProfileTemporal: '',
           name: fullName ?? 'no name',
           email: email ?? 'no data',
-          statusFetching: 2,
+          updatingStatus: state.updatingStatus,
+          fetchingStatus: PersonalInfoFetchinStatus.error,
           showPasswordRequest: state.showPasswordRequest);
     } catch (e) {
       logger.e('error reading profile photo');
@@ -67,7 +73,8 @@ class PersonalInfoProvider extends Notifier<PersonalInfoData> {
           pathProfileTemporal: '',
           name: fullName ?? '',
           email: email ?? '',
-          statusFetching: 2,
+          updatingStatus: state.updatingStatus,
+          fetchingStatus: PersonalInfoFetchinStatus.error,
           showPasswordRequest: state.showPasswordRequest);
     }
   }
@@ -78,7 +85,8 @@ class PersonalInfoProvider extends Notifier<PersonalInfoData> {
         pathProfileTemporal: path,
         name: state.name,
         email: state.email,
-        statusFetching: state.statusFetching,
+        updatingStatus: state.updatingStatus,
+        fetchingStatus: state.fetchingStatus,
         showPasswordRequest: state.showPasswordRequest);
   }
 
@@ -88,7 +96,8 @@ class PersonalInfoProvider extends Notifier<PersonalInfoData> {
         pathProfileTemporal: state.pathProfileTemporal,
         name: state.name,
         email: state.email,
-        statusFetching: state.statusFetching,
+        updatingStatus: state.updatingStatus,
+        fetchingStatus: state.fetchingStatus,
         showPasswordRequest: state.showPasswordRequest);
   }
 
@@ -98,7 +107,8 @@ class PersonalInfoProvider extends Notifier<PersonalInfoData> {
         pathProfileTemporal: state.pathProfileTemporal,
         name: name,
         email: state.email,
-        statusFetching: state.statusFetching,
+        updatingStatus: state.updatingStatus,
+        fetchingStatus: state.fetchingStatus,
         showPasswordRequest: state.showPasswordRequest);
   }
 
@@ -108,17 +118,30 @@ class PersonalInfoProvider extends Notifier<PersonalInfoData> {
         pathProfileTemporal: state.pathProfileTemporal,
         name: state.name,
         email: email,
-        statusFetching: state.statusFetching,
+        updatingStatus: state.updatingStatus,
+        fetchingStatus: state.fetchingStatus,
         showPasswordRequest: state.showPasswordRequest);
   }
 
-  void setStatus(int status) async {
+  void setUpdatingStatus(PersonalInfoUpdatingStatus updatingStatus) async {
     state = PersonalInfoData(
         pathProfileUser: state.pathProfileUser,
         pathProfileTemporal: state.pathProfileTemporal,
         name: state.name,
         email: state.email,
-        statusFetching: status,
+        updatingStatus: updatingStatus,
+        fetchingStatus: state.fetchingStatus,
+        showPasswordRequest: state.showPasswordRequest);
+  }
+
+  void setFetchingStatus(PersonalInfoFetchinStatus fetchingStatus) {
+    state = PersonalInfoData(
+        pathProfileUser: state.pathProfileUser,
+        pathProfileTemporal: state.pathProfileTemporal,
+        name: state.name,
+        email: state.email,
+        updatingStatus: state.updatingStatus,
+        fetchingStatus: fetchingStatus,
         showPasswordRequest: state.showPasswordRequest);
   }
 
@@ -128,7 +151,8 @@ class PersonalInfoProvider extends Notifier<PersonalInfoData> {
         pathProfileTemporal: state.pathProfileTemporal,
         name: state.name,
         email: state.email,
-        statusFetching: state.statusFetching,
+        updatingStatus: state.updatingStatus,
+        fetchingStatus: state.fetchingStatus,
         showPasswordRequest: status);
   }
 
@@ -144,7 +168,7 @@ class PersonalInfoProvider extends Notifier<PersonalInfoData> {
   void updateUserData(String password) async {
     final user = FirebaseAuth.instance.currentUser;
     if (user == null) {
-      setStatus(3);
+      setUpdatingStatus(PersonalInfoUpdatingStatus.error);
       return;
     }
     final personalInfoData = state;
@@ -155,10 +179,10 @@ class PersonalInfoProvider extends Notifier<PersonalInfoData> {
         email != null &&
         email.trim() == personalInfoData.email.trim() &&
         personalInfoData.pathProfileTemporal.isEmpty) {
-      setStatus(5);
+      setUpdatingStatus(PersonalInfoUpdatingStatus.noUpdate);
       return;
     }
-    setStatus(1);
+    setUpdatingStatus(PersonalInfoUpdatingStatus.updating);
 
     try {
       if (name != null && name != personalInfoData.name.trim()) {
@@ -175,7 +199,7 @@ class PersonalInfoProvider extends Notifier<PersonalInfoData> {
       }
     } on FirebaseAuthException catch (e) {
       logger.e('error changing email with ${e.code} and message $e');
-      setStatus(3);
+      setUpdatingStatus(PersonalInfoUpdatingStatus.error);
 
       return;
     }
@@ -189,15 +213,15 @@ class PersonalInfoProvider extends Notifier<PersonalInfoData> {
         final url = await userPhoto.getDownloadURL();
         setProfilePath(url);
         ref.read(mainScreenProvider.notifier).setAvatarLink(url);
-        setStatus(4);
+        setUpdatingStatus(PersonalInfoUpdatingStatus.succes);
       } catch (e) {
-        setStatus(3);
+        setUpdatingStatus(PersonalInfoUpdatingStatus.error);
 
         logger.e('error');
         logger.e(e);
       }
     } else {
-      setStatus(4);
+      setUpdatingStatus(PersonalInfoUpdatingStatus.succes);
     }
   }
 }
@@ -206,8 +230,19 @@ final personalInfoProvider =
     NotifierProvider<PersonalInfoProvider, PersonalInfoData>(
         PersonalInfoProvider.new);
 
-enum PersonalInfoUpdatingStatus {
+enum PersonalInfoFetchinStatus {
+  noStarted('no started'),
   processing('proccessing'),
+  error('error fetching data'),
+  success('succeful fetching data');
+
+  const PersonalInfoFetchinStatus(this.message);
+  final String message;
+}
+
+enum PersonalInfoUpdatingStatus {
+  noStarted('no started'),
+  updating('updating'),
   noUpdate('nothing to update'),
   succes('succeful updating process'),
   error('an error happend during updating process');
@@ -222,7 +257,8 @@ class PersonalInfoData {
   final String pathProfileTemporal;
   final String name;
   final String email;
-  final int statusFetching;
+  final PersonalInfoUpdatingStatus updatingStatus;
+  final PersonalInfoFetchinStatus fetchingStatus;
   final bool showPasswordRequest;
 
   PersonalInfoData(
@@ -230,6 +266,7 @@ class PersonalInfoData {
       required this.pathProfileTemporal,
       required this.name,
       required this.email,
-      required this.statusFetching,
+      required this.updatingStatus,
+      required this.fetchingStatus,
       required this.showPasswordRequest});
 }

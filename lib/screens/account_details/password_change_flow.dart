@@ -4,7 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kanji_for_n5_level_app/main.dart';
 import 'package:kanji_for_n5_level_app/providers/password_change_flow_provider.dart';
 import 'package:kanji_for_n5_level_app/screens/account_details/password_change.dart';
-import 'package:kanji_for_n5_level_app/screens/account_details/updating_data.dart';
+import 'package:kanji_for_n5_level_app/screens/common_screens.dart/loading_screen.dart';
 import 'package:kanji_for_n5_level_app/screens/navigation_bar_screens/db_dialog_error_message.dart';
 
 class PasswordChangeFlow extends ConsumerWidget with MyDialogs {
@@ -93,7 +93,7 @@ class PasswordChangeFlow extends ConsumerWidget with MyDialogs {
   Widget getScreen(PasswordChangeFlowData passwordChangeFlowData) {
     if (passwordChangeFlowData.statusProcessing ==
         StatusProcessingPasswordChangeFlow.updating) {
-      return const Center(child: UpdatingData());
+      return const ProcessProgress(message: 'Updating Password');
     }
 
     logger.d(
