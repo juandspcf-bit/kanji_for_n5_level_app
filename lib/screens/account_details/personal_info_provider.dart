@@ -144,7 +144,7 @@ class PersonalInfoProvider extends Notifier<PersonalInfoData> {
   void updateUserData(String password) async {
     final user = FirebaseAuth.instance.currentUser;
     if (user == null) {
-      setStatus(2);
+      setStatus(3);
       return;
     }
     final personalInfoData = state;
@@ -205,6 +205,17 @@ class PersonalInfoProvider extends Notifier<PersonalInfoData> {
 final personalInfoProvider =
     NotifierProvider<PersonalInfoProvider, PersonalInfoData>(
         PersonalInfoProvider.new);
+
+enum PersonalInfoUpdatingStatus {
+  processing('proccessing'),
+  noUpdate('nothing to update'),
+  succes('succeful updating process'),
+  error('an error happend during updating process');
+
+  const PersonalInfoUpdatingStatus(this.message);
+
+  final String message;
+}
 
 class PersonalInfoData {
   final String pathProfileUser;
