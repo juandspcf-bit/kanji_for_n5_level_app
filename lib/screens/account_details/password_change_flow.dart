@@ -77,13 +77,15 @@ class PasswordChangeFlow extends ConsumerWidget with MyDialogs {
     showGeneralDialog(
       context: buildContext,
       pageBuilder: (ctx, a1, a2) {
-        return Container();
+        return _dialogPassworRequest(buildContext, ref);
       },
       transitionBuilder: (ctx, a1, a2, child) {
-        var curve = Curves.easeInOut.transform(a1.value);
+        final transformedAnimation =
+            a1.drive(CurveTween(curve: Curves.decelerate));
+        final value = transformedAnimation.value;
         return Transform.scale(
-          scale: curve,
-          child: _dialogPassworRequest(buildContext, ref),
+          scale: value,
+          child: child,
         );
       },
       transitionDuration: const Duration(milliseconds: 300),

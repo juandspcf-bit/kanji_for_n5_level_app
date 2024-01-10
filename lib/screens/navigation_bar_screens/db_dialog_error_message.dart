@@ -29,13 +29,16 @@ mixin MyDialogs {
     showGeneralDialog(
       context: buildContext,
       pageBuilder: (ctx, a1, a2) {
-        return Container();
+        return _myBaseDialog(ctx, action, message, icon);
       },
       transitionBuilder: (ctx, a1, a2, child) {
-        var curve = Curves.easeInOut.transform(a1.value);
+        final transformedAnimation =
+            a1.drive(CurveTween(curve: Curves.decelerate));
+        final value = transformedAnimation.value;
+        //var value = Curves.easeInOut.transform(a1.value);
         return Transform.scale(
-          scale: curve,
-          child: _myBaseDialog(ctx, action, message, icon),
+          scale: value,
+          child: child,
         );
       },
       transitionDuration: const Duration(milliseconds: 300),
