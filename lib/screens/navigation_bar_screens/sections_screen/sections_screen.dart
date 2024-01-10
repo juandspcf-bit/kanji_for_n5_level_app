@@ -51,11 +51,22 @@ class Section extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Container(
-      padding: const EdgeInsets.only(left: 10, right: 10),
+      decoration: BoxDecoration(
+        borderRadius: const BorderRadius.all(Radius.circular(20)),
+        border: Border.all(color: Colors.grey[800]!),
+        gradient: LinearGradient(
+          begin: Alignment.bottomLeft,
+          end: Alignment.topRight,
+          colors: [
+            Colors.grey[900]!,
+            Colors.grey[800]!,
+          ],
+        ),
+      ),
       child: Material(
         clipBehavior: Clip.antiAlias,
         borderRadius: const BorderRadius.all(Radius.circular(20)),
-        color: Theme.of(context).colorScheme.primaryContainer,
+        color: Colors.transparent,
         child: InkWell(
           borderRadius: const BorderRadius.all(Radius.circular(20)),
           onTap: () {
