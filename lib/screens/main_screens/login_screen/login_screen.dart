@@ -8,7 +8,7 @@ import 'package:kanji_for_n5_level_app/screens/main_screens/login_screen/login_p
 import 'package:kanji_for_n5_level_app/providers/status_connection_provider.dart';
 import 'package:kanji_for_n5_level_app/screens/common_screens.dart/error_connection_screen.dart';
 import 'package:kanji_for_n5_level_app/screens/main_screens/login_screen/login_form.dart';
-import 'package:kanji_for_n5_level_app/screens/navigation_bar_screens/db_dialog_error_message.dart';
+import 'package:kanji_for_n5_level_app/screens/common_widgets/my_dialogs.dart';
 
 class ToLoginFormScreen extends ConsumerWidget with MyDialogs {
   ToLoginFormScreen({super.key});

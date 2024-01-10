@@ -8,7 +8,7 @@ import 'package:kanji_for_n5_level_app/providers/main_screen_provider.dart';
 import 'package:kanji_for_n5_level_app/providers/status_connection_provider.dart';
 import 'package:kanji_for_n5_level_app/providers/status_stored_provider.dart';
 import 'package:kanji_for_n5_level_app/screens/body_list/body_list.dart';
-import 'package:kanji_for_n5_level_app/screens/navigation_bar_screens/db_dialog_error_message.dart';
+import 'package:kanji_for_n5_level_app/screens/common_widgets/my_dialogs.dart';
 
 class KanjisForFavoritesScreen extends ConsumerWidget with MyDialogs {
   const KanjisForFavoritesScreen({
