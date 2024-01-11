@@ -64,12 +64,13 @@ class FirebaseSignInUser implements AuthService {
   }
 
   @override
-  Future<DeleteUserStatus> deleteUser({required String password}) async {
+  Future<(DeleteUserStatus, String)> deleteUser(
+      {required String password}) async {
     final user = FirebaseAuth.instance.currentUser;
     if (user == null) {
-      return DeleteUserStatus.error;
+      return (DeleteUserStatus.error, '');
     }
-
+    final uuid = user.uid;
     try {
       final email = user.email;
       if (email != null) {
@@ -81,10 +82,17 @@ class FirebaseSignInUser implements AuthService {
         await user.updateEmail(email);
       }
       await user.delete();
-      return DeleteUserStatus.success;
+      return (DeleteUserStatus.success, uuid);
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'wrong-password') {
+        return (DeleteUserStatus.wrongPassword, uuid);
+      } else {
+        logger.e(e);
+        return (DeleteUserStatus.error, uuid);
+      }
     } catch (e) {
       logger.e(e);
-      return DeleteUserStatus.error;
+      return (DeleteUserStatus.error, uuid);
     }
   }
 }

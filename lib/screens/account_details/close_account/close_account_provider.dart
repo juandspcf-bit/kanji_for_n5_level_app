@@ -27,13 +27,6 @@ class CloseAccountProvider extends Notifier<CloseAccountData> {
         showPasswordRequest: showPasswordRequest);
   }
 
-  void deleteUser({required String password}) async {
-    setDeleteRequestStatus(DeleteRequestStatus.process);
-    final deleteUserStatus = await authService.deleteUser(password: password);
-    setDeleteRequestStatus(DeleteRequestStatus.noStarted);
-    setDeleteUserStatus(deleteUserStatus);
-  }
-
   void setDeleteRequestStatus(DeleteRequestStatus deleteRequestStatus) {
     state = CloseAccountData(
         deleteRequestStatus: deleteRequestStatus,
@@ -46,6 +39,17 @@ class CloseAccountProvider extends Notifier<CloseAccountData> {
         deleteRequestStatus: state.deleteRequestStatus,
         deleteUserStatus: deleteUserStatus,
         showPasswordRequest: state.showPasswordRequest);
+  }
+
+  void deleteUser({required String password}) async {
+    setDeleteRequestStatus(DeleteRequestStatus.process);
+    final (deleteUserStatus, _) =
+        await authService.deleteUser(password: password);
+    await Future.delayed(
+      const Duration(seconds: 2),
+    );
+    setDeleteRequestStatus(DeleteRequestStatus.noStarted);
+    setDeleteUserStatus(deleteUserStatus);
   }
 }
 

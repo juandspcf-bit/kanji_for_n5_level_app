@@ -17,7 +17,6 @@ class FavoritesListProvider extends Notifier<FavoritesKanjisData> {
 
   void setInitialFavoritesOnline(List<KanjiFromApi> storedKanjis,
       List<Favorite> myFavoritesCached, int section) async {
-    logger.d('set initial favorites online');
     if (myFavoritesCached.isEmpty) {
       state = const FavoritesKanjisData(
         favoritesKanjisFromApi: [],

@@ -5,7 +5,7 @@ abstract class AuthService {
   Future<StatusResetPasswordRequest> sendPasswordResetEmail(
       {required String email});
 
-  Future<DeleteUserStatus> deleteUser({required String password});
+  Future<(DeleteUserStatus, String)> deleteUser({required String password});
 }
 
 enum StatusLogingRequest {
@@ -49,6 +49,7 @@ enum StatusResetPasswordRequest {
 enum DeleteUserStatus {
   success('Success'),
   notStarted('Not started'),
+  wrongPassword('The password is invalid'),
   error('There was an error in the server');
 
   const DeleteUserStatus(this.message);
