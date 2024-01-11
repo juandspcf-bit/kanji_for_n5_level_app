@@ -1,12 +1,14 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:kanji_for_n5_level_app/screens/account_details/personal_info_provider.dart';
+import 'package:kanji_for_n5_level_app/screens/account_details/close_account/close_account.dart';
+import 'package:kanji_for_n5_level_app/screens/account_details/close_account/close_account_provider.dart';
+import 'package:kanji_for_n5_level_app/screens/account_details/personal_info/personal_info_provider.dart';
 import 'package:kanji_for_n5_level_app/screens/main_screens/login_screen/login_provider.dart';
 import 'package:kanji_for_n5_level_app/providers/main_screen_provider.dart';
 import 'package:kanji_for_n5_level_app/providers/password_change_flow_provider.dart';
 import 'package:kanji_for_n5_level_app/screens/account_details/password_change_flow.dart';
-import 'package:kanji_for_n5_level_app/screens/account_details/personal_info.dart';
+import 'package:kanji_for_n5_level_app/screens/account_details/personal_info/personal_info.dart';
 
 class AccountDetails extends ConsumerWidget {
   const AccountDetails({super.key});
@@ -108,7 +110,14 @@ class AccountDetails extends ConsumerWidget {
                     height: 10,
                   ),
                   ListTile(
-                    onTap: () async {},
+                    onTap: () async {
+                      ref.read(closeAccountProvider.notifier).resetStatus();
+                      Navigator.of(context).push(
+                        MaterialPageRoute(builder: (ctx) {
+                          return const CloseAccountScreen();
+                        }),
+                      );
+                    },
                     contentPadding:
                         const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
                     shape: OutlineInputBorder(

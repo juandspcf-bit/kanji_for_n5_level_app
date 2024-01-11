@@ -79,3 +79,6 @@ mixin MyDialogs {
     );
   }
 }
+
+void showPasswordRequestTextField(
+    {required Function() okayAction, required Function() cancelAction}) {}
