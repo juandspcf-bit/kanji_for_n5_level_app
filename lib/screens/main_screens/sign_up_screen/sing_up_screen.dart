@@ -51,7 +51,10 @@ class _SingUpFormState extends ConsumerState<SignUpForm> with MyDialogs {
     });
 
     return Scaffold(
-      appBar: AppBar(),
+      appBar:
+          singUpData.statusFlow == StatusProcessingSignUpFlow.signUpProccessing
+              ? null
+              : AppBar(),
       body: SafeArea(
         child: singUpData.statusFlow ==
                 StatusProcessingSignUpFlow.signUpProccessing
