@@ -50,157 +50,162 @@ class _SingUpFormState extends ConsumerState<SignUpForm> with MyDialogs {
       }
     });
 
-    return Scaffold(
-      appBar:
-          singUpData.statusFlow == StatusProcessingSignUpFlow.signUpProccessing
-              ? null
-              : AppBar(),
-      body: SafeArea(
-        child: singUpData.statusFlow ==
+    return PopScope(
+      canPop:
+          singUpData.statusFlow != StatusProcessingSignUpFlow.signUpProccessing,
+      child: Scaffold(
+        appBar: singUpData.statusFlow ==
                 StatusProcessingSignUpFlow.signUpProccessing
-            ? Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      'Creating user',
-                      style: Theme.of(context).textTheme.titleLarge,
-                    ),
-                    const SizedBox(
-                      height: 25,
-                    ),
-                    const SizedBox(
-                      height: 100,
-                      width: 100,
-                      child: CircularProgressIndicator(),
-                    ),
-                  ],
-                ),
-              )
-            : SingleChildScrollView(
-                child: Padding(
-                  padding:
-                      const EdgeInsets.symmetric(vertical: 25, horizontal: 15),
+            ? null
+            : AppBar(),
+        body: SafeArea(
+          child: singUpData.statusFlow ==
+                  StatusProcessingSignUpFlow.signUpProccessing
+              ? Center(
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(
-                        'Sign Up to Kanji for N5',
+                        'Creating user',
                         style: Theme.of(context).textTheme.titleLarge,
                       ),
                       const SizedBox(
-                        height: 40,
-                      ),
-                      ProfilePictureWidget(
-                        avatarWidget: CircleAvatarImage(
-                          pathProfileUser: singUpData.pathProfileUser,
-                          pathAssetUser: pathAssetUser,
-                        ),
-                        setPathProfileUser: (path) {
-                          ref
-                              .read(singUpProvider.notifier)
-                              .setPathProfileUser(path);
-                        },
+                        height: 25,
                       ),
                       const SizedBox(
-                        height: 20,
-                      ),
-                      Form(
-                        key: _formKey,
-                        child: Column(
-                          children: [
-                            TextFormField(
-                              initialValue: singUpData.fullName,
-                              decoration: const InputDecoration().copyWith(
-                                border: const OutlineInputBorder(),
-                                prefixIcon: const Icon(Icons.person),
-                                labelText: 'Full Name',
-                              ),
-                              keyboardType: TextInputType.name,
-                              validator: (text) {
-                                if (text != null &&
-                                    text.isNotEmpty &&
-                                    text.length > 2) {
-                                  return null;
-                                } else {
-                                  return 'Please provide a not to short name';
-                                }
-                              },
-                              onSaved: (value) {
-                                if (value == null) return;
-                                ref
-                                    .read(singUpProvider.notifier)
-                                    .setFullName(value);
-                              },
-                            ),
-                            const SizedBox(
-                              height: 10,
-                            ),
-                            EmailTextField(
-                              initialValue: singUpData.emailAddress,
-                              setEmail: (email) {
-                                if (email == null) return;
-                                ref
-                                    .read(singUpProvider.notifier)
-                                    .setEmail(email);
-                              },
-                            ),
-                            const SizedBox(
-                              height: 10,
-                            ),
-                            PasswordTextField(
-                              initialValue: singUpData.password,
-                              formKey: _formKey,
-                              onSave: (value) {
-                                if (value == null) return;
-                                ref
-                                    .read(singUpProvider.notifier)
-                                    .setPassword(value);
-                              },
-                              labelText: 'password',
-                            ),
-                            const SizedBox(
-                              height: 10,
-                            ),
-                            PasswordTextField(
-                              initialValue: singUpData.password,
-                              formKey: _formKey,
-                              onSave: (value) {
-                                if (value == null) return;
-                                ref
-                                    .read(singUpProvider.notifier)
-                                    .setConfirmPassword(value);
-                              },
-                              labelText: 'confirm password',
-                            ),
-                          ],
-                        ),
-                      ),
-                      const SizedBox(
-                        height: 10,
-                      ),
-                      ElevatedButton(
-                        onPressed: () {
-                          FocusScopeNode currentFocus = FocusScope.of(context);
-
-                          if (!currentFocus.hasPrimaryFocus) {
-                            currentFocus.unfocus();
-                          }
-                          onValidation();
-                        },
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor:
-                              Theme.of(context).colorScheme.primary,
-                          foregroundColor:
-                              Theme.of(context).colorScheme.onPrimary,
-                          minimumSize: const Size.fromHeight(40), // NEW
-                        ),
-                        child: const Text('Sing Up'),
+                        height: 100,
+                        width: 100,
+                        child: CircularProgressIndicator(),
                       ),
                     ],
                   ),
+                )
+              : SingleChildScrollView(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 25, horizontal: 15),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          'Sign Up to Kanji for N5',
+                          style: Theme.of(context).textTheme.titleLarge,
+                        ),
+                        const SizedBox(
+                          height: 40,
+                        ),
+                        ProfilePictureWidget(
+                          avatarWidget: CircleAvatarImage(
+                            pathProfileUser: singUpData.pathProfileUser,
+                            pathAssetUser: pathAssetUser,
+                          ),
+                          setPathProfileUser: (path) {
+                            ref
+                                .read(singUpProvider.notifier)
+                                .setPathProfileUser(path);
+                          },
+                        ),
+                        const SizedBox(
+                          height: 20,
+                        ),
+                        Form(
+                          key: _formKey,
+                          child: Column(
+                            children: [
+                              TextFormField(
+                                initialValue: singUpData.fullName,
+                                decoration: const InputDecoration().copyWith(
+                                  border: const OutlineInputBorder(),
+                                  prefixIcon: const Icon(Icons.person),
+                                  labelText: 'Full Name',
+                                ),
+                                keyboardType: TextInputType.name,
+                                validator: (text) {
+                                  if (text != null &&
+                                      text.isNotEmpty &&
+                                      text.length > 2) {
+                                    return null;
+                                  } else {
+                                    return 'Please provide a not to short name';
+                                  }
+                                },
+                                onSaved: (value) {
+                                  if (value == null) return;
+                                  ref
+                                      .read(singUpProvider.notifier)
+                                      .setFullName(value);
+                                },
+                              ),
+                              const SizedBox(
+                                height: 10,
+                              ),
+                              EmailTextField(
+                                initialValue: singUpData.emailAddress,
+                                setEmail: (email) {
+                                  if (email == null) return;
+                                  ref
+                                      .read(singUpProvider.notifier)
+                                      .setEmail(email);
+                                },
+                              ),
+                              const SizedBox(
+                                height: 10,
+                              ),
+                              PasswordTextField(
+                                initialValue: singUpData.password,
+                                formKey: _formKey,
+                                onSave: (value) {
+                                  if (value == null) return;
+                                  ref
+                                      .read(singUpProvider.notifier)
+                                      .setPassword(value);
+                                },
+                                labelText: 'password',
+                              ),
+                              const SizedBox(
+                                height: 10,
+                              ),
+                              PasswordTextField(
+                                initialValue: singUpData.password,
+                                formKey: _formKey,
+                                onSave: (value) {
+                                  if (value == null) return;
+                                  ref
+                                      .read(singUpProvider.notifier)
+                                      .setConfirmPassword(value);
+                                },
+                                labelText: 'confirm password',
+                              ),
+                            ],
+                          ),
+                        ),
+                        const SizedBox(
+                          height: 10,
+                        ),
+                        ElevatedButton(
+                          onPressed: () {
+                            FocusScopeNode currentFocus =
+                                FocusScope.of(context);
+
+                            if (!currentFocus.hasPrimaryFocus) {
+                              currentFocus.unfocus();
+                            }
+                            onValidation();
+                          },
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor:
+                                Theme.of(context).colorScheme.primary,
+                            foregroundColor:
+                                Theme.of(context).colorScheme.onPrimary,
+                            minimumSize: const Size.fromHeight(40), // NEW
+                          ),
+                          child: const Text('Sing Up'),
+                        ),
+                      ],
+                    ),
+                  ),
                 ),
-              ),
+        ),
       ),
     );
   }
