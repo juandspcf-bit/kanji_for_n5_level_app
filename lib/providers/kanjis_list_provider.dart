@@ -1,4 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:kanji_for_n5_level_app/aplication_layer/repository_contract/db_sqflite_impl.dart';
 import 'package:kanji_for_n5_level_app/main.dart';
 import 'package:kanji_for_n5_level_app/providers/main_screen_provider.dart';
 import 'package:kanji_for_n5_level_app/repositories/local_database/db_deleting_data.dart';
@@ -96,7 +97,7 @@ class KanjiListProvider extends Notifier<KanjiListData> {
       KanjiFromApi kanjiFromApi, ScreenSelection selection) async {
     try {
       final kanjiFromApiStored =
-          await applicationDBService.storeKanjiToLocalDatabase(kanjiFromApi);
+          await localDBService.storeKanjiToLocalDatabase(kanjiFromApi);
 
       if (kanjiFromApiStored == null) return;
 
@@ -134,7 +135,7 @@ class KanjiListProvider extends Notifier<KanjiListData> {
     ScreenSelection selection,
   ) async {
     try {
-      await applicationDBService.deleteKanjiFromLocalDatabase(kanjiFromApi);
+      await localDBService.deleteKanjiFromLocalDatabase(kanjiFromApi);
 
       ref.read(storedKanjisProvider.notifier).deleteItem(kanjiFromApi);
 

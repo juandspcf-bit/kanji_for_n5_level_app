@@ -1,6 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kanji_for_n5_level_app/aplication_layer/auth_contract/auth_service_contract.dart';
 import 'package:kanji_for_n5_level_app/aplication_layer/auth_firebase_impl/auth_service_firebase.dart';
+import 'package:kanji_for_n5_level_app/aplication_layer/repository_contract/db_sqflite_impl.dart';
 
 class CloseAccountProvider extends Notifier<CloseAccountData> {
   @override
@@ -43,8 +44,9 @@ class CloseAccountProvider extends Notifier<CloseAccountData> {
 
   void deleteUser({required String password}) async {
     setDeleteRequestStatus(DeleteRequestStatus.process);
-    final (deleteUserStatus, _) =
+    final (deleteUserStatus, uuid) =
         await authService.deleteUser(password: password);
+    await localDBService.deleteUserData(uuid);
     await Future.delayed(
       const Duration(seconds: 2),
     );
