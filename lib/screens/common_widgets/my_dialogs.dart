@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:kanji_for_n5_level_app/text_asset/text_assets.dart';
 
 mixin MyDialogs {
   Widget _myBaseDialog(BuildContext buildContext, void Function() action,
@@ -36,7 +37,6 @@ mixin MyDialogs {
         final transformedAnimation =
             a1.drive(CurveTween(curve: Curves.decelerate));
         final value = transformedAnimation.value;
-        //var value = Curves.easeInOut.transform(a1.value);
         return Transform.scale(
           scale: value,
           child: child,
@@ -125,14 +125,14 @@ Widget _dialogPassworRequest({
   }
 
   return AlertDialog(
-    title: const Text('Type your password'),
+    title: const Text(typeYourPasswordText),
     content: Form(
       key: dialogFormKey,
       child: TextFormField(
         obscureText: true,
         keyboardType: TextInputType.text,
         decoration: const InputDecoration(
-          label: Text('password'),
+          label: Text(passwordText),
           suffixIcon: Icon(Icons.key),
           border: OutlineInputBorder(),
         ),
@@ -140,7 +140,7 @@ Widget _dialogPassworRequest({
           if (text != null && text.length >= 4 && text.length <= 20) {
             return null;
           } else {
-            return 'Invalid password';
+            return invalidPassword;
           }
         },
         onSaved: (value) {
@@ -155,7 +155,7 @@ Widget _dialogPassworRequest({
           cancelAction();
           Navigator.of(context).pop();
         },
-        child: const Text("Cancel"),
+        child: const Text(cancelText),
       ),
       TextButton(
         onPressed: () {
@@ -164,7 +164,7 @@ Widget _dialogPassworRequest({
             Navigator.of(context).pop();
           }
         },
-        child: const Text("Okay"),
+        child: const Text(okayText),
       ),
     ],
   );
