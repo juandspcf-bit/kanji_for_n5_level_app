@@ -35,9 +35,6 @@ void main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
 
-/*   final SharedPreferences prefs = await SharedPreferences.getInstance();
-  final bool? isOnBoardingDone = prefs.getBool('isOnBoardingDone'); */
-
   runApp(
     const ProviderScope(
       child: MyApp(),

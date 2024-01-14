@@ -75,7 +75,6 @@ class KanjisForFavoritesScreen extends ConsumerWidget with MyDialogs {
                         ref.read(favoriteskanjisProvider).dissmisedKanji;
 
                     if (dissmisedKanji == null) {
-                      logger.d('it is null');
                       return;
                     }
 

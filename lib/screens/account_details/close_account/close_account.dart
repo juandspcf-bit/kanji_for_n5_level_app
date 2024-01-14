@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kanji_for_n5_level_app/aplication_layer/auth_contract/auth_service_contract.dart';
 import 'package:kanji_for_n5_level_app/auth_flow.dart';
-import 'package:kanji_for_n5_level_app/main.dart';
 import 'package:kanji_for_n5_level_app/screens/account_details/close_account/close_account_provider.dart';
 import 'package:kanji_for_n5_level_app/screens/common_widgets/my_dialogs.dart';
 import 'package:kanji_for_n5_level_app/text_asset/text_assets.dart';
