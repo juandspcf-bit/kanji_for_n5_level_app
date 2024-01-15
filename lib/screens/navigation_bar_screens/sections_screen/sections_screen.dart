@@ -6,6 +6,7 @@ import 'package:kanji_for_n5_level_app/main.dart';
 import 'package:kanji_for_n5_level_app/models/secction_model.dart';
 import 'package:kanji_for_n5_level_app/providers/kanjis_list_provider.dart';
 import 'package:kanji_for_n5_level_app/screens/navigation_bar_screens/sections_screen/kanjis_for_section_screen.dart';
+import 'package:kanji_for_n5_level_app/screens/navigation_bar_screens/sections_screen/section_screen_provider.dart';
 
 class Sections extends StatelessWidget {
   const Sections({super.key});
@@ -74,6 +75,9 @@ class Section extends ConsumerWidget {
                   kanjisCharacters: sectionData.kanjisCharacters,
                   sectionNumber: sectionData.sectionNumber,
                 );
+            ref
+                .read(sectionProvider.notifier)
+                .setSection(sectionData.sectionNumber);
 
             Navigator.of(context).push(
               MaterialPageRoute(

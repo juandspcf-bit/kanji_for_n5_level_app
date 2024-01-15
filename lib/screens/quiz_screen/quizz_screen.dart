@@ -7,7 +7,7 @@ import 'package:kanji_for_n5_level_app/providers/status_connection_provider.dart
 import 'package:kanji_for_n5_level_app/screens/common_screens.dart/error_connection_screen.dart';
 import 'package:kanji_for_n5_level_app/screens/quiz_screen/quiz_question_screen.dart';
 import 'package:kanji_for_n5_level_app/screens/quiz_screen/score_body.dart';
-import 'package:kanji_for_n5_level_app/screens/quiz_screen/welcome_kanji_list_quiz_screen.dart';
+import 'package:kanji_for_n5_level_app/screens/quiz_screen/welcome_screen/welcome_kanji_list_quiz_screen.dart';
 
 class QuizScreen extends ConsumerWidget {
   const QuizScreen({

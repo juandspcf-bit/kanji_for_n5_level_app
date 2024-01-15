@@ -12,6 +12,9 @@ final AuthService authService = FirebaseSignInUser();
 
 class FirebaseSignInUser implements AuthService {
   @override
+  final String? user = FirebaseAuth.instance.currentUser?.uid;
+
+  @override
   Future<StatusLogingRequest> singInWithEmailAndPassword(
       {required String email, required String password}) async {
     try {
@@ -94,5 +97,10 @@ class FirebaseSignInUser implements AuthService {
       logger.e(e);
       return (DeleteUserStatus.error, uuid);
     }
+  }
+
+  @override
+  set user(String? newUser) {
+    user = newUser;
   }
 }

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kanji_for_n5_level_app/providers/quiz_kanji_list_provider.dart';
+import 'package:kanji_for_n5_level_app/screens/quiz_screen/welcome_screen/last_score_provider.dart';
 
 class WelcomeKanjiListQuizScreen extends ConsumerWidget {
   const WelcomeKanjiListQuizScreen({super.key});
@@ -13,6 +14,10 @@ class WelcomeKanjiListQuizScreen extends ConsumerWidget {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
+        const LastScore(),
+        const SizedBox(
+          height: 20,
+        ),
         SizedBox(
           height: 250,
           child: Image.asset(
@@ -52,6 +57,32 @@ class WelcomeKanjiListQuizScreen extends ConsumerWidget {
           child: const Text('Start the quiz'),
         )
       ],
+    );
+  }
+}
+
+class LastScore extends ConsumerWidget {
+  const LastScore({super.key});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final lastScoreData = ref.watch(lastScoreProvider);
+
+    return lastScoreData.when(
+      data: (data) => data.$3
+          ? Text(
+              'Hello you have completed this quiz ',
+              style: Theme.of(context).textTheme.titleLarge,
+            )
+          : Text(
+              'Hello complete de quiz!!',
+              style: Theme.of(context).textTheme.titleLarge,
+            ),
+      error: (error, stack) => Text(
+        'Oops, something unexpected happened',
+        style: Theme.of(context).textTheme.titleLarge,
+      ),
+      loading: () => const CircularProgressIndicator(),
     );
   }
 }
