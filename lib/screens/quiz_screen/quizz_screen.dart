@@ -6,7 +6,7 @@ import 'package:kanji_for_n5_level_app/providers/quiz_kanji_list_provider.dart';
 import 'package:kanji_for_n5_level_app/providers/status_connection_provider.dart';
 import 'package:kanji_for_n5_level_app/screens/common_screens.dart/error_connection_screen.dart';
 import 'package:kanji_for_n5_level_app/screens/quiz_screen/quiz_question_screen.dart';
-import 'package:kanji_for_n5_level_app/screens/quiz_screen/score_body.dart';
+import 'package:kanji_for_n5_level_app/screens/quiz_screen/score_screen/score_body.dart';
 import 'package:kanji_for_n5_level_app/screens/quiz_screen/welcome_screen/welcome_kanji_list_quiz_screen.dart';
 
 class QuizScreen extends ConsumerWidget {
@@ -17,6 +17,29 @@ class QuizScreen extends ConsumerWidget {
 
   final List<KanjiFromApi> kanjisFromApi;
 
+  (int, int, int) getCounts(
+    List<bool> isCorrectAnswer,
+    List<bool> isOmittedAnswer,
+  ) {
+    int countCorrects = isCorrectAnswer.map((e) {
+      if (e == true) {
+        return 1;
+      }
+      return 0;
+    }).reduce((value, element) => value + element);
+
+    int countOmited = isOmittedAnswer.map((e) {
+      if (e == true) {
+        return 1;
+      }
+      return 0;
+    }).reduce((value, element) => value + element);
+
+    int countIncorrects = isCorrectAnswer.length - countCorrects - countOmited;
+
+    return (countCorrects, countIncorrects, countOmited);
+  }
+
   Widget getScreen(ConnectivityResult resultStatus, QuizDataValues quizState,
       WidgetRef ref) {
     if (resultStatus == ConnectivityResult.none) {
@@ -24,10 +47,15 @@ class QuizScreen extends ConsumerWidget {
         message: 'The internet connection has gone, restart the quiz later',
       );
     } else if (quizState.currentScreenType == Screens.score) {
+      final (countCorrects, countIncorrects, countOmited) = getCounts(
+        quizState.isCorrectAnswer,
+        quizState.isOmittedAnswer,
+      );
       return Center(
         child: ScoreBody(
-          isCorrectAnswer: quizState.isCorrectAnswer,
-          isOmittedAnswer: quizState.isOmittedAnswer,
+          countCorrects: countCorrects,
+          countIncorrects: countIncorrects,
+          countOmited: countOmited,
           resetTheQuiz: ref.read(quizDataValuesProvider.notifier).resetTheQuiz,
         ),
       );

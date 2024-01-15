@@ -2,19 +2,21 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kanji_for_n5_level_app/providers/quiz_kanji_list_provider.dart';
 import 'package:kanji_for_n5_level_app/providers/score_kanji_list_provider.dart';
-import 'package:kanji_for_n5_level_app/screens/quiz_screen/screen_chart.dart';
+import 'package:kanji_for_n5_level_app/screens/quiz_screen/score_screen/screen_chart.dart';
 import 'package:lottie/lottie.dart';
 
 class ScoreBody extends ConsumerStatefulWidget {
   const ScoreBody({
     super.key,
-    required this.isCorrectAnswer,
-    required this.isOmittedAnswer,
+    required this.countCorrects,
+    required this.countIncorrects,
+    required this.countOmited,
     required this.resetTheQuiz,
-  });
+  },);
 
-  final List<bool> isCorrectAnswer;
-  final List<bool> isOmittedAnswer;
+  final int countCorrects;
+  final int countIncorrects;
+  final int countOmited;
   final Function() resetTheQuiz;
 
   @override
@@ -22,29 +24,6 @@ class ScoreBody extends ConsumerStatefulWidget {
 }
 
 class _ScoreBodyState extends ConsumerState<ScoreBody> {
-  int countCorrects = 0, countIncorrects = 0, countOmited = 0;
-
-  (int, int, int) getCounts() {
-    int countCorrects = widget.isCorrectAnswer.map((e) {
-      if (e == true) {
-        return 1;
-      }
-      return 0;
-    }).reduce((value, element) => value + element);
-
-    int countOmited = widget.isOmittedAnswer.map((e) {
-      if (e == true) {
-        return 1;
-      }
-      return 0;
-    }).reduce((value, element) => value + element);
-
-    int countIncorrects =
-        widget.isCorrectAnswer.length - countCorrects - countOmited;
-
-    return (countCorrects, countIncorrects, countOmited);
-  }
-
   double _opacity = 1.0;
   bool _visibility = true;
   @override
@@ -59,7 +38,6 @@ class _ScoreBodyState extends ConsumerState<ScoreBody> {
 
   @override
   Widget build(BuildContext context) {
-    final (countCorrects, countIncorrects, countOmited) = getCounts();
     final lottieFilesState = ref.watch(lottieFilesProvider);
     return Stack(alignment: Alignment.topCenter, children: [
       Column(
