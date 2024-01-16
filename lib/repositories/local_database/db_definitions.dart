@@ -9,8 +9,10 @@ Future<Database> get kanjiFromApiDatabase async {
     onCreate: (db, version) async {
       await db.execute(
           'CREATE TABLE kanji_quiz(id INTEGER PRIMARY KEY AUTOINCREMENT,'
-          ' section INTEGER, allCorrectAnswersQuizKanji INTEGER,'
-          ' isFinishedKanjiQuizz INTEGER, uuid TEXT )');
+          ' allCorrectAnswersQuizKanji INTEGER,'
+          ' isFinishedKanjiQuizz INTEGER,'
+          ' countCorrects INTEGER, countIncorrects INTEGER,'
+          ' countOmited INTEGER, section INTEGER, uuid TEXT)');
 
       await db.execute(
           'CREATE TABLE kanji_audio_example_quiz(id INTEGER PRIMARY KEY AUTOINCREMENT,'

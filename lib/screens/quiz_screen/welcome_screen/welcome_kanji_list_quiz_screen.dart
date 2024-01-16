@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:kanji_for_n5_level_app/main.dart';
 import 'package:kanji_for_n5_level_app/screens/quiz_screen/quiz_kanji_list_provider.dart';
 import 'package:kanji_for_n5_level_app/screens/quiz_screen/welcome_screen/last_score_provider.dart';
 
@@ -70,9 +71,10 @@ class LastScore extends ConsumerWidget {
 
     return lastScoreData.when(
       data: (data) => Builder(builder: (context) {
-        return data.$3
+        logger.d('data ${data.section}');
+        return data.isFinishedKanjiQuizz
             ? Text(
-                'Hello you have completed this quiz ',
+                'Hello you have completed this quiz ${data.countCorrects}, ${data.countIncorrects}',
                 style: Theme.of(context).textTheme.titleLarge,
               )
             : Text(

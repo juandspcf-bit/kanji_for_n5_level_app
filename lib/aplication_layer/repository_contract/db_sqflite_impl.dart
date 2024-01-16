@@ -25,7 +25,45 @@ class SqliteDBService implements LocalDBService {
   }
 
   @override
-  Future<(int, bool, bool)> getKanjiQuizLastScore(int section, String uuid) {
+  Future<SingleQuizSectionData> getKanjiQuizLastScore(
+      int section, String uuid) {
     return getSingleQuizSectionData(section, uuid);
+  }
+
+  @override
+  void setKanjiQuizLastScore({
+    int section = -1,
+    String uuid = '',
+    int countCorrects = 0,
+    int countIncorrects = 0,
+    int countOmited = 0,
+  }) {
+    updateSingleQuizSectionData(
+      section,
+      uuid,
+      countIncorrects == 0 && countOmited == 0,
+      true,
+      countCorrects,
+      countIncorrects,
+      countOmited,
+    );
+  }
+
+  @override
+  void insertSingleQuizSectionData(
+    int section,
+    String uuid,
+    int countCorrects,
+    int countIncorrects,
+    int countOmited,
+  ) {
+    insertSingleQuizSectionDataDB(
+        section,
+        uuid,
+        countIncorrects == 0 && countOmited == 0,
+        true,
+        countCorrects,
+        countIncorrects,
+        countOmited);
   }
 }

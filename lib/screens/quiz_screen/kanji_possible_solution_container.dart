@@ -31,7 +31,6 @@ class _KanjiDragTargetCorrectState extends State<KanjiDragTargetCorrect> {
   double scale = 1.0;
 
   void _scaleWidget() {
-    logger.d('change scale $scale , $isDown');
     if (isDown) {
       scale = 1;
       isDown = false;
