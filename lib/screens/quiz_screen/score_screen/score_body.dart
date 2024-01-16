@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:kanji_for_n5_level_app/providers/quiz_kanji_list_provider.dart';
+import 'package:kanji_for_n5_level_app/screens/quiz_screen/quiz_kanji_list_provider.dart';
 import 'package:kanji_for_n5_level_app/providers/score_kanji_list_provider.dart';
 import 'package:kanji_for_n5_level_app/screens/quiz_screen/score_screen/screen_chart.dart';
 import 'package:lottie/lottie.dart';
@@ -12,7 +12,7 @@ class ScoreBody extends ConsumerStatefulWidget {
     required this.countIncorrects,
     required this.countOmited,
     required this.resetTheQuiz,
-  },);
+  });
 
   final int countCorrects;
   final int countIncorrects;
@@ -66,7 +66,7 @@ class _ScoreBodyState extends ConsumerState<ScoreBody> {
                     color: Color.fromARGB(255, 229, 243, 33),
                   ),
                   Text(
-                    'Correct\n answers:\n $countCorrects',
+                    'Correct\n answers:\n ${widget.countCorrects}',
                     textAlign: TextAlign.center,
                   ),
                 ],
@@ -79,7 +79,7 @@ class _ScoreBodyState extends ConsumerState<ScoreBody> {
                     color: Color.fromARGB(255, 194, 88, 27),
                   ),
                   Text(
-                    'Incorrect\n answers:\n $countIncorrects',
+                    'Incorrect\n answers:\n ${widget.countIncorrects}',
                     textAlign: TextAlign.center,
                   ),
                 ],
@@ -92,7 +92,7 @@ class _ScoreBodyState extends ConsumerState<ScoreBody> {
                     color: Color.fromARGB(255, 33, 72, 243),
                   ),
                   Text(
-                    'Omited\n answers:\n $countOmited',
+                    'Omited\n answers:\n ${widget.countOmited}',
                     textAlign: TextAlign.center,
                   ),
                 ],
@@ -103,9 +103,9 @@ class _ScoreBodyState extends ConsumerState<ScoreBody> {
             height: 40,
           ),
           ScreenChart(
-            countCorrects: countCorrects,
-            countIncorrects: countIncorrects,
-            countOmited: countOmited,
+            countCorrects: widget.countCorrects,
+            countIncorrects: widget.countIncorrects,
+            countOmited: widget.countOmited,
           ),
           const SizedBox(
             height: 40,
@@ -122,7 +122,9 @@ class _ScoreBodyState extends ConsumerState<ScoreBody> {
         ],
       ),
       Visibility(
-        visible: (_visibility && countIncorrects == 0 && countOmited == 0),
+        visible: (_visibility &&
+            widget.countIncorrects == 0 &&
+            widget.countOmited == 0),
         child: AnimatedOpacity(
           opacity: _opacity,
           duration: const Duration(seconds: 3),

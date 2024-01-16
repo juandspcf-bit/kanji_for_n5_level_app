@@ -2,7 +2,7 @@ import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kanji_for_n5_level_app/models/kanji_from_api.dart';
-import 'package:kanji_for_n5_level_app/providers/quiz_kanji_list_provider.dart';
+import 'package:kanji_for_n5_level_app/screens/quiz_screen/quiz_kanji_list_provider.dart';
 import 'package:kanji_for_n5_level_app/providers/status_connection_provider.dart';
 import 'package:kanji_for_n5_level_app/screens/common_screens.dart/error_connection_screen.dart';
 import 'package:kanji_for_n5_level_app/screens/quiz_screen/quiz_question_screen.dart';

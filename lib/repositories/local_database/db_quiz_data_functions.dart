@@ -11,7 +11,7 @@ Future<(int, bool, bool)> getSingleQuizSectionData(
 
   if (listQuery.isEmpty) {
     return (
-      section,
+      -1,
       false,
       false,
     );
