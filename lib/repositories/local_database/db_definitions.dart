@@ -16,8 +16,10 @@ Future<Database> get kanjiFromApiDatabase async {
 
       await db.execute(
           'CREATE TABLE kanji_audio_example_quiz(id INTEGER PRIMARY KEY AUTOINCREMENT,'
-          ' kanjiCharacter TEXT, allCorrectAnswersAudioExamples INTEGER,'
-          '  isFinishedQuizAudio INTEGER, uuid TEXT )');
+          ' allCorrectAnswersQuizKanji INTEGER,'
+          ' isFinishedKanjiQuizz INTEGER,'
+          ' countCorrects INTEGER, countIncorrects INTEGER,'
+          ' countOmited INTEGER, section INTEGER, uuid TEXT)');
 
       await db.execute(
           'CREATE TABLE kanji_flashcard_quiz(id INTEGER PRIMARY KEY AUTOINCREMENT,'

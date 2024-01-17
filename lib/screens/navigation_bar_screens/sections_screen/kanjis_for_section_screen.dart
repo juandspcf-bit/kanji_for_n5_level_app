@@ -79,7 +79,7 @@ class KanjiForSectionScreen extends ConsumerWidget
                                 kanjiListData.kanjiList.length,
                                 kanjiListData.kanjiList);
                         ref
-                            .read(lastScoreProvider.notifier)
+                            .read(lastScoreKanjiQuizProvider.notifier)
                             .getKanjiQuizLastScore(
                               ref.read(sectionProvider),
                               authService.user ?? '',

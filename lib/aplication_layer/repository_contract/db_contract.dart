@@ -29,6 +29,27 @@ abstract class LocalDBService {
     int countIncorrects,
     int countOmited,
   );
+
+  Future<SingleQuizSectionData> getSingleQuizSectionAudioExampleDB(
+    int section,
+    String uuid,
+  );
+
+  void setDetailsQuizLastScore({
+    int section = -1,
+    String uuid = '',
+    int countCorrects = 0,
+    int countIncorrects = 0,
+    int countOmited = 0,
+  });
+
+  void insertSingleDetailsSectionData(
+    int section,
+    String uuid,
+    int countCorrects,
+    int countIncorrects,
+    int countOmited,
+  );
 }
 
 class SingleQuizSectionData {

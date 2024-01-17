@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:kanji_for_n5_level_app/main.dart';
 import 'package:kanji_for_n5_level_app/screens/quiz_screen/quiz_kanji_list_provider.dart';
 import 'package:kanji_for_n5_level_app/screens/quiz_screen/welcome_screen/last_score_provider.dart';
 
@@ -15,7 +14,7 @@ class WelcomeKanjiListQuizScreen extends ConsumerWidget {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        const LastScore(),
+        const LastScoreKanjiQuiz(),
         const SizedBox(
           height: 20,
         ),
@@ -62,19 +61,18 @@ class WelcomeKanjiListQuizScreen extends ConsumerWidget {
   }
 }
 
-class LastScore extends ConsumerWidget {
-  const LastScore({super.key});
+class LastScoreKanjiQuiz extends ConsumerWidget {
+  const LastScoreKanjiQuiz({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final lastScoreData = ref.watch(lastScoreProvider);
+    final lastScoreData = ref.watch(lastScoreKanjiQuizProvider);
 
     return lastScoreData.when(
       data: (data) => Builder(builder: (context) {
-        logger.d('data ${data.section}');
         return data.isFinishedKanjiQuizz
             ? Text(
-                'Hello you have completed this quiz ${data.countCorrects}, ${data.countIncorrects}',
+                'Hello you have completed this quiz with ${data.countCorrects}/ ${data.countIncorrects} correct, incorrect anwers',
                 style: Theme.of(context).textTheme.titleLarge,
               )
             : Text(

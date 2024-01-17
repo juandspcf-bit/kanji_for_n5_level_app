@@ -58,12 +58,51 @@ class SqliteDBService implements LocalDBService {
     int countOmited,
   ) {
     insertSingleQuizSectionDataDB(
-        section,
-        uuid,
-        countIncorrects == 0 && countOmited == 0,
-        true,
-        countCorrects,
-        countIncorrects,
-        countOmited);
+      section,
+      uuid,
+      countIncorrects == 0 && countOmited == 0,
+      true,
+      countCorrects,
+      countIncorrects,
+      countOmited,
+    );
+  }
+
+  @override
+  Future<SingleQuizSectionData> getSingleQuizSectionAudioExampleDB(
+      int section, String uuid) {
+    return getSingleQuizSectionAudioExamplerData(section, uuid);
+  }
+
+  @override
+  void insertSingleDetailsSectionData(int section, String uuid,
+      int countCorrects, int countIncorrects, int countOmited) {
+    insertSingleDetailsQuizSectionDataDB(
+      section,
+      uuid,
+      countIncorrects == 0 && countOmited == 0,
+      true,
+      countCorrects,
+      countIncorrects,
+      countOmited,
+    );
+  }
+
+  @override
+  void setDetailsQuizLastScore(
+      {int section = -1,
+      String uuid = '',
+      int countCorrects = 0,
+      int countIncorrects = 0,
+      int countOmited = 0}) {
+    updateSingleDetailsQuizSectionData(
+      section,
+      uuid,
+      countIncorrects == 0 && countOmited == 0,
+      true,
+      countCorrects,
+      countIncorrects,
+      countOmited,
+    );
   }
 }

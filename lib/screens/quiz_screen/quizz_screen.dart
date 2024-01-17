@@ -56,8 +56,7 @@ class QuizScreen extends ConsumerWidget {
         quizState.isOmittedAnswer,
       );
 
-      logger.d('data quiz ${ref.read(sectionProvider)}');
-      ref.read(lastScoreProvider.notifier).setFinishedQuiz(
+      ref.read(lastScoreKanjiQuizProvider.notifier).setFinishedQuiz(
             section: ref.read(sectionProvider),
             uuid: authService.user ?? '',
             countCorrects: countCorrects,

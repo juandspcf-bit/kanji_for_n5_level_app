@@ -4,7 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kanji_for_n5_level_app/aplication_layer/repository_contract/db_contract.dart';
 import 'package:kanji_for_n5_level_app/aplication_layer/repository_contract/db_sqflite_impl.dart';
 
-class LastScoreKanjiQuizProvider extends AsyncNotifier<SingleQuizSectionData> {
+class LastScoreDetailsProvider extends AsyncNotifier<SingleQuizSectionData> {
   @override
   FutureOr<SingleQuizSectionData> build() {
     return SingleQuizSectionData(
@@ -17,14 +17,14 @@ class LastScoreKanjiQuizProvider extends AsyncNotifier<SingleQuizSectionData> {
     );
   }
 
-  void getKanjiQuizLastScore(int section, String uuid) async {
+  void getDetailsQuizLastScore(int section, String uuid) async {
     state = const AsyncLoading();
     state = await AsyncValue.guard((() {
       return localDBService.getKanjiQuizLastScore(section, uuid);
     }));
   }
 
-  void setFinishedQuiz({
+/*   void setFinishedQuiz({
     int section = -1,
     String uuid = '',
     int countCorrects = 0,
@@ -44,9 +44,9 @@ class LastScoreKanjiQuizProvider extends AsyncNotifier<SingleQuizSectionData> {
       countIncorrects: countIncorrects,
       countOmited: countOmited,
     );
-  }
+  } */
 }
 
-final lastScoreKanjiQuizProvider =
-    AsyncNotifierProvider<LastScoreKanjiQuizProvider, SingleQuizSectionData>(
-        LastScoreKanjiQuizProvider.new);
+final lastScoreDetailsProvider =
+    AsyncNotifierProvider<LastScoreDetailsProvider, SingleQuizSectionData>(
+        LastScoreDetailsProvider.new);

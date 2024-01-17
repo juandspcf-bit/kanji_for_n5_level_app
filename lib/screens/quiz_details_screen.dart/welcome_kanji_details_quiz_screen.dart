@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kanji_for_n5_level_app/providers/select_quiz_details_screen.dart';
+import 'package:kanji_for_n5_level_app/screens/quiz_details_screen.dart/last_score_details_provider.dart';
 
 class WelcomeKanjiDetailsQuizScreen extends ConsumerWidget {
   const WelcomeKanjiDetailsQuizScreen({super.key});
@@ -75,6 +76,34 @@ class WelcomeKanjiDetailsQuizScreen extends ConsumerWidget {
           )
         ],
       ),
+    );
+  }
+}
+
+class LastScoreDetailsScreen extends ConsumerWidget {
+  const LastScoreDetailsScreen({super.key});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final lastScoreData = ref.watch(lastScoreDetailsProvider);
+
+    return lastScoreData.when(
+      data: (data) => Builder(builder: (context) {
+        return data.isFinishedKanjiQuizz
+            ? Text(
+                'Hello you have completed this quiz with ${data.countCorrects}/ ${data.countIncorrects} correct, incorrect anwers',
+                style: Theme.of(context).textTheme.titleLarge,
+              )
+            : Text(
+                'Hello complete de quiz!!',
+                style: Theme.of(context).textTheme.titleLarge,
+              );
+      }),
+      error: (error, stack) => Text(
+        'Oops, something unexpected happened',
+        style: Theme.of(context).textTheme.titleLarge,
+      ),
+      loading: () => const CircularProgressIndicator(),
     );
   }
 }
