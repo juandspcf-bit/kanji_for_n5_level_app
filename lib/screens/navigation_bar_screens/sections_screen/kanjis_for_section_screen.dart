@@ -12,7 +12,7 @@ import 'package:kanji_for_n5_level_app/screens/body_list/body_list.dart';
 import 'package:kanji_for_n5_level_app/screens/common_widgets/my_dialogs.dart';
 import 'package:kanji_for_n5_level_app/screens/navigation_bar_screens/sections_screen/section_screen_provider.dart';
 
-import 'package:kanji_for_n5_level_app/screens/quiz_screen/quizz_screen.dart';
+import 'package:kanji_for_n5_level_app/screens/quiz_screen/kanji_quiz_screen.dart';
 import 'package:kanji_for_n5_level_app/screens/quiz_screen/welcome_screen/last_score_provider.dart';
 import 'package:kanji_for_n5_level_app/screens/status_operations_dialogs.dart';
 
@@ -87,7 +87,7 @@ class KanjiForSectionScreen extends ConsumerWidget
                         Navigator.of(context).push(
                           MaterialPageRoute(
                             builder: (ctx) {
-                              return QuizScreen(
+                              return KanjiQuizScreen(
                                   kanjisFromApi: kanjiListData.kanjiList);
                             },
                           ),

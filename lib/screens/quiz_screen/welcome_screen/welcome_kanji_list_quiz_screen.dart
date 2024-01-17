@@ -70,7 +70,7 @@ class LastScoreKanjiQuiz extends ConsumerWidget {
 
     return lastScoreData.when(
       data: (data) => Builder(builder: (context) {
-        return data.isFinishedKanjiQuizz
+        return data.isFinishedQuiz
             ? Text(
                 'Hello you have completed this quiz with ${data.countCorrects}/ ${data.countIncorrects} correct, incorrect anwers',
                 style: Theme.of(context).textTheme.titleLarge,

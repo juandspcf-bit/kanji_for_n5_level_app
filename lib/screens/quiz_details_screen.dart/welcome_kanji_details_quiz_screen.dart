@@ -17,6 +17,10 @@ class WelcomeKanjiDetailsQuizScreen extends ConsumerWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
+          const LastScoreAudioExampleScreen(),
+          const SizedBox(
+            height: 20,
+          ),
           SizedBox(
             height: 250,
             child: Image.asset(
@@ -80,8 +84,8 @@ class WelcomeKanjiDetailsQuizScreen extends ConsumerWidget {
   }
 }
 
-class LastScoreDetailsScreen extends ConsumerWidget {
-  const LastScoreDetailsScreen({super.key});
+class LastScoreAudioExampleScreen extends ConsumerWidget {
+  const LastScoreAudioExampleScreen({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -89,13 +93,13 @@ class LastScoreDetailsScreen extends ConsumerWidget {
 
     return lastScoreData.when(
       data: (data) => Builder(builder: (context) {
-        return data.isFinishedKanjiQuizz
+        return data.isFinishedQuiz
             ? Text(
-                'Hello you have completed this quiz with ${data.countCorrects}/ ${data.countIncorrects} correct, incorrect anwers',
+                'Hello you have completed the audio quiz with ${data.countCorrects}/ ${data.countIncorrects} correct, incorrect anwers',
                 style: Theme.of(context).textTheme.titleLarge,
               )
             : Text(
-                'Hello complete de quiz!!',
+                'Hello complete de audio quiz!!',
                 style: Theme.of(context).textTheme.titleLarge,
               );
       }),

@@ -7,19 +7,24 @@ Future<Database> get kanjiFromApiDatabase async {
   final db = await sql.openDatabase(
     path.join(dbPath, "downloadkanjis.db"),
     onCreate: (db, version) async {
-      await db.execute(
-          'CREATE TABLE kanji_quiz(id INTEGER PRIMARY KEY AUTOINCREMENT,'
+      await db.execute('CREATE TABLE kanji_quiz('
+          ' id INTEGER PRIMARY KEY AUTOINCREMENT,'
           ' allCorrectAnswersQuizKanji INTEGER,'
           ' isFinishedKanjiQuizz INTEGER,'
           ' countCorrects INTEGER, countIncorrects INTEGER,'
-          ' countOmited INTEGER, section INTEGER, uuid TEXT)');
+          ' countOmited INTEGER,'
+          ' section INTEGER,'
+          ' uuid TEXT)');
 
-      await db.execute(
-          'CREATE TABLE kanji_audio_example_quiz(id INTEGER PRIMARY KEY AUTOINCREMENT,'
-          ' allCorrectAnswersQuizKanji INTEGER,'
-          ' isFinishedKanjiQuizz INTEGER,'
-          ' countCorrects INTEGER, countIncorrects INTEGER,'
-          ' countOmited INTEGER, section INTEGER, uuid TEXT)');
+      await db.execute('CREATE TABLE kanji_audio_example_quiz('
+          ' id INTEGER PRIMARY KEY AUTOINCREMENT,'
+          ' allCorrectAnswers INTEGER,'
+          ' isFinishedQuiz INTEGER,'
+          ' countCorrects INTEGER,'
+          ' countIncorrects INTEGER,'
+          ' countOmited INTEGER,'
+          ' section INTEGER,'
+          ' uuid TEXT)');
 
       await db.execute(
           'CREATE TABLE kanji_flashcard_quiz(id INTEGER PRIMARY KEY AUTOINCREMENT,'

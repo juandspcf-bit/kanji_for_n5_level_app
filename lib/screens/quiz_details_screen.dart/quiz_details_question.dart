@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kanji_for_n5_level_app/main.dart';
 import 'package:kanji_for_n5_level_app/models/kanji_from_api.dart';
-import 'package:kanji_for_n5_level_app/providers/quiz_details_providers.dart';
+import 'package:kanji_for_n5_level_app/screens/quiz_details_screen.dart/details_quiz_provider.dart';
 import 'package:kanji_for_n5_level_app/screens/quiz_details_screen.dart/big_play_button.dart';
 
 class QuestionScreen extends ConsumerWidget {

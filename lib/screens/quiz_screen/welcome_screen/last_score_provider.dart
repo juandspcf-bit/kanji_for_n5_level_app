@@ -9,8 +9,8 @@ class LastScoreKanjiQuizProvider extends AsyncNotifier<SingleQuizSectionData> {
   FutureOr<SingleQuizSectionData> build() {
     return SingleQuizSectionData(
       section: -1,
-      allCorrectAnswersQuizKanji: false,
-      isFinishedKanjiQuizz: false,
+      allCorrectAnswers: false,
+      isFinishedQuiz: false,
       countCorrects: 0,
       countIncorrects: 0,
       countOmited: 0,

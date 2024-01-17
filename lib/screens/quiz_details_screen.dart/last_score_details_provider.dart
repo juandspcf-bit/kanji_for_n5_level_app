@@ -9,8 +9,8 @@ class LastScoreDetailsProvider extends AsyncNotifier<SingleQuizSectionData> {
   FutureOr<SingleQuizSectionData> build() {
     return SingleQuizSectionData(
       section: -1,
-      allCorrectAnswersQuizKanji: false,
-      isFinishedKanjiQuizz: false,
+      allCorrectAnswers: false,
+      isFinishedQuiz: false,
       countCorrects: 0,
       countIncorrects: 0,
       countOmited: 0,
@@ -20,11 +20,11 @@ class LastScoreDetailsProvider extends AsyncNotifier<SingleQuizSectionData> {
   void getDetailsQuizLastScore(int section, String uuid) async {
     state = const AsyncLoading();
     state = await AsyncValue.guard((() {
-      return localDBService.getKanjiQuizLastScore(section, uuid);
+      return localDBService.getSingleAudioExampleQuizDataDB(section, uuid);
     }));
   }
 
-/*   void setFinishedQuiz({
+  void setFinishedQuiz({
     int section = -1,
     String uuid = '',
     int countCorrects = 0,
@@ -32,19 +32,19 @@ class LastScoreDetailsProvider extends AsyncNotifier<SingleQuizSectionData> {
     int countOmited = 0,
   }) {
     if (state.value?.section == -1) {
-      localDBService.insertSingleQuizSectionData(
+      localDBService.insertAudioExampleScore(
           section, uuid, countCorrects, countIncorrects, countOmited);
       return;
     }
 
-    localDBService.setKanjiQuizLastScore(
+    localDBService.setAudioExampleLastScore(
       section: section,
       uuid: uuid,
       countCorrects: countCorrects,
       countIncorrects: countIncorrects,
       countOmited: countOmited,
     );
-  } */
+  }
 }
 
 final lastScoreDetailsProvider =

@@ -1,5 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:kanji_for_n5_level_app/providers/quiz_details_providers.dart';
+import 'package:kanji_for_n5_level_app/screens/quiz_details_screen.dart/details_quiz_provider.dart';
 
 class QuizDetailsScoreProvider extends Notifier<
     ({

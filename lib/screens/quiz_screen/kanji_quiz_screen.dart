@@ -2,7 +2,6 @@ import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kanji_for_n5_level_app/aplication_layer/auth_firebase_impl/auth_service_firebase.dart';
-import 'package:kanji_for_n5_level_app/main.dart';
 import 'package:kanji_for_n5_level_app/models/kanji_from_api.dart';
 import 'package:kanji_for_n5_level_app/screens/navigation_bar_screens/sections_screen/section_screen_provider.dart';
 import 'package:kanji_for_n5_level_app/screens/quiz_screen/quiz_kanji_list_provider.dart';
@@ -13,8 +12,8 @@ import 'package:kanji_for_n5_level_app/screens/quiz_screen/score_screen/score_bo
 import 'package:kanji_for_n5_level_app/screens/quiz_screen/welcome_screen/last_score_provider.dart';
 import 'package:kanji_for_n5_level_app/screens/quiz_screen/welcome_screen/welcome_kanji_list_quiz_screen.dart';
 
-class QuizScreen extends ConsumerWidget {
-  const QuizScreen({
+class KanjiQuizScreen extends ConsumerWidget {
+  const KanjiQuizScreen({
     super.key,
     required this.kanjisFromApi,
   });

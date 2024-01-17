@@ -14,8 +14,8 @@ Future<SingleQuizSectionData> getSingleQuizSectionData(
   if (listQuery.isEmpty) {
     return SingleQuizSectionData(
       section: -1,
-      allCorrectAnswersQuizKanji: false,
-      isFinishedKanjiQuizz: false,
+      allCorrectAnswers: false,
+      isFinishedQuiz: false,
       countCorrects: 0,
       countIncorrects: 0,
       countOmited: 0,
@@ -24,9 +24,8 @@ Future<SingleQuizSectionData> getSingleQuizSectionData(
 
   return SingleQuizSectionData(
     section: listQuery[0]['section'] as int,
-    allCorrectAnswersQuizKanji:
-        (listQuery[0]['allCorrectAnswersQuizKanji'] as int) == 1,
-    isFinishedKanjiQuizz: (listQuery[0]['isFinishedKanjiQuizz'] as int) == 1,
+    allCorrectAnswers: (listQuery[0]['allCorrectAnswersQuizKanji'] as int) == 1,
+    isFinishedQuiz: (listQuery[0]['isFinishedKanjiQuizz'] as int) == 1,
     countCorrects: listQuery[0]['countCorrects'] as int,
     countIncorrects: listQuery[0]['countIncorrects'] as int,
     countOmited: listQuery[0]['countOmited'] as int,
@@ -86,9 +85,8 @@ void insertSingleQuizSectionDataDB(
   int countIncorrects,
   int countOmited,
 ) async {
-  logger.d('data $section');
   final db = await kanjiFromApiDatabase;
-  final id1 = await db.rawInsert(
+  await db.rawInsert(
       'INSERT INTO kanji_quiz(allCorrectAnswersQuizKanji,'
       ' isFinishedKanjiQuizz, countCorrects, countIncorrects, countOmited, section, uuid)'
       ' VALUES(?,?,?,?,?,?,?)',
@@ -101,7 +99,6 @@ void insertSingleQuizSectionDataDB(
         section,
         uuid
       ]);
-  logger.d('the id is $id1');
 }
 
 Future<SingleQuizSectionData> getSingleQuizSectionAudioExamplerData(
@@ -116,8 +113,8 @@ Future<SingleQuizSectionData> getSingleQuizSectionAudioExamplerData(
   if (listQuery.isEmpty) {
     return SingleQuizSectionData(
       section: -1,
-      allCorrectAnswersQuizKanji: false,
-      isFinishedKanjiQuizz: false,
+      allCorrectAnswers: false,
+      isFinishedQuiz: false,
       countCorrects: 0,
       countIncorrects: 0,
       countOmited: 0,
@@ -126,11 +123,68 @@ Future<SingleQuizSectionData> getSingleQuizSectionAudioExamplerData(
 
   return SingleQuizSectionData(
     section: listQuery[0]['section'] as int,
-    allCorrectAnswersQuizKanji:
-        (listQuery[0]['allCorrectAnswersQuizKanji'] as int) == 1,
-    isFinishedKanjiQuizz: (listQuery[0]['isFinishedKanjiQuizz'] as int) == 1,
+    allCorrectAnswers: (listQuery[0]['allCorrectAnswers'] as int) == 1,
+    isFinishedQuiz: (listQuery[0]['isFinishedQuiz'] as int) == 1,
     countCorrects: listQuery[0]['countCorrects'] as int,
     countIncorrects: listQuery[0]['countIncorrects'] as int,
     countOmited: listQuery[0]['countOmited'] as int,
   );
+}
+
+void updateSingleAudioExampleQuizSectionData(
+  int section,
+  String uuid,
+  bool allCorrectAnswers,
+  bool isFinishedQuiz,
+  int countCorrects,
+  int countIncorrects,
+  int countOmited,
+) async {
+  final db = await kanjiFromApiDatabase;
+  logger.d('uuid: $uuid, allCorrectAnwers: $allCorrectAnswers,'
+      ' isFinishedQuiz: $isFinishedQuiz, corrects: $countCorrects');
+  await db.rawUpdate(
+      'UPDATE kanji_audio_example_quiz SET allCorrectAnswers = ?,'
+      ' isFinishedQuiz = ?, countCorrects = ?,'
+      ' countIncorrects = ?, countOmited = ?  WHERE section = ? AND uuid = ?',
+      [
+        allCorrectAnswers ? 1 : 0,
+        isFinishedQuiz ? 1 : 0,
+        countCorrects,
+        countIncorrects,
+        countOmited,
+        section,
+        uuid,
+      ]);
+}
+
+void insertSingleAudioExampleQuizSectionDataDB(
+  int section,
+  String uuid,
+  bool allCorrectAnswers,
+  bool isFinishedQuiz,
+  int countCorrects,
+  int countIncorrects,
+  int countOmited,
+) async {
+  logger.d('uuid: $uuid, corrects: $countCorrects,'
+      ' countIncorrects: $countIncorrects, countOmited: $countOmited');
+  final db = await kanjiFromApiDatabase;
+  try {
+    await db.rawInsert(
+        'INSERT INTO kanji_audio_example_quiz(allCorrectAnswers,'
+        ' isFinishedQuiz, countCorrects, countIncorrects, countOmited, section, uuid)'
+        ' VALUES(?,?,?,?,?,?,?)',
+        [
+          allCorrectAnswers ? 1 : 0,
+          isFinishedQuiz ? 1 : 0,
+          countCorrects,
+          countIncorrects,
+          countOmited,
+          section,
+          uuid
+        ]);
+  } catch (e) {
+    logger.e(e);
+  }
 }
