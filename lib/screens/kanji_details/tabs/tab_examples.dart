@@ -5,7 +5,7 @@ import 'package:kanji_for_n5_level_app/screens/kanji_details/kanji_details_provi
 import 'package:kanji_for_n5_level_app/providers/status_connection_provider.dart';
 import 'package:kanji_for_n5_level_app/providers/status_stored_provider.dart';
 import 'package:kanji_for_n5_level_app/screens/common_screens.dart/error_connection_screen.dart';
-import 'package:kanji_for_n5_level_app/screens/kanji_details/examples_audios.dart';
+import 'package:kanji_for_n5_level_app/screens/kanji_details/tabs/examples_audios.dart';
 
 class TabExamples extends ConsumerWidget {
   const TabExamples({
