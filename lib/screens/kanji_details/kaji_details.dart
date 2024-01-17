@@ -8,15 +8,15 @@ import 'package:kanji_for_n5_level_app/providers/examples_audios_provider.dart';
 import 'package:kanji_for_n5_level_app/providers/flash_card_quiz_provider.dart';
 import 'package:kanji_for_n5_level_app/screens/kanji_details/kanji_details_provider.dart';
 import 'package:kanji_for_n5_level_app/screens/navigation_bar_screens/sections_screen/section_screen_provider.dart';
-import 'package:kanji_for_n5_level_app/screens/quiz_details_screen.dart/details_quiz_provider.dart';
+import 'package:kanji_for_n5_level_app/screens/kanji_details/quiz_details_screen.dart/details_quiz_provider.dart';
 import 'package:kanji_for_n5_level_app/providers/select_quiz_details_screen.dart';
 import 'package:kanji_for_n5_level_app/providers/status_connection_provider.dart';
 import 'package:kanji_for_n5_level_app/providers/status_stored_provider.dart';
 import 'package:kanji_for_n5_level_app/screens/kanji_details/tab_examples.dart';
 import 'package:kanji_for_n5_level_app/screens/kanji_details/tab_strokes.dart';
 import 'package:kanji_for_n5_level_app/screens/kanji_details/tab_video_strokes.dart';
-import 'package:kanji_for_n5_level_app/screens/quiz_details_screen.dart/details_quizz_screen.dart';
-import 'package:kanji_for_n5_level_app/screens/quiz_details_screen.dart/last_score_details_provider.dart';
+import 'package:kanji_for_n5_level_app/screens/kanji_details/quiz_details_screen.dart/details_quizz_screen.dart';
+import 'package:kanji_for_n5_level_app/screens/kanji_details/quiz_details_screen.dart/last_score_details_provider.dart';
 
 class KanjiDetails extends ConsumerWidget {
   const KanjiDetails(
