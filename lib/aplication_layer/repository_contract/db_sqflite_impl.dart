@@ -69,7 +69,7 @@ class SqliteDBService implements LocalDBService {
   }
 
   @override
-  Future<SingleQuizAusioExampleData> getSingleAudioExampleQuizDataDB(
+  Future<SingleQuizAudioExampleData> getSingleAudioExampleQuizDataDB(
     String kanjiCharacter,
     int section,
     String uuid,

@@ -101,7 +101,7 @@ void insertSingleQuizSectionDataDB(
       ]);
 }
 
-Future<SingleQuizAusioExampleData> getSingleQuizSectionAudioExamplerData(
+Future<SingleQuizAudioExampleData> getSingleQuizSectionAudioExamplerData(
   String kanjiCharacter,
   int section,
   String uuid,
@@ -113,7 +113,7 @@ Future<SingleQuizAusioExampleData> getSingleQuizSectionAudioExamplerData(
       [kanjiCharacter, section, uuid]);
 
   if (listQuery.isEmpty) {
-    return SingleQuizAusioExampleData(
+    return SingleQuizAudioExampleData(
       kanjiCharacter: '',
       section: -1,
       allCorrectAnswers: false,
@@ -124,7 +124,7 @@ Future<SingleQuizAusioExampleData> getSingleQuizSectionAudioExamplerData(
     );
   }
 
-  return SingleQuizAusioExampleData(
+  return SingleQuizAudioExampleData(
     kanjiCharacter: listQuery[0]['kanjiCharacter'] as String,
     section: listQuery[0]['section'] as int,
     allCorrectAnswers: (listQuery[0]['allCorrectAnswers'] as int) == 1,
@@ -187,7 +187,7 @@ void insertSingleAudioExampleQuizSectionDataDB(
   try {
     await db.rawInsert(
         'INSERT INTO kanji_audio_example_quiz('
-        ' kanjiCharacter TEXT,'
+        ' kanjiCharacter,'
         ' allCorrectAnswers,'
         ' isFinishedQuiz,'
         ' countCorrects,'
@@ -195,8 +195,9 @@ void insertSingleAudioExampleQuizSectionDataDB(
         ' countOmited,'
         ' section,'
         ' uuid)'
-        ' VALUES(?,?,?,?,?,?,?)',
+        ' VALUES(?,?,?,?,?,?,?,?)',
         [
+          kanjiCharacter,
           allCorrectAnswers ? 1 : 0,
           isFinishedQuiz ? 1 : 0,
           countCorrects,

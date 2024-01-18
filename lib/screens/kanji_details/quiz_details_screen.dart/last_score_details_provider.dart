@@ -5,10 +5,10 @@ import 'package:kanji_for_n5_level_app/aplication_layer/repository_contract/db_c
 import 'package:kanji_for_n5_level_app/aplication_layer/repository_contract/db_sqflite_impl.dart';
 
 class LastScoreDetailsProvider
-    extends AsyncNotifier<SingleQuizAusioExampleData> {
+    extends AsyncNotifier<SingleQuizAudioExampleData> {
   @override
-  FutureOr<SingleQuizAusioExampleData> build() {
-    return SingleQuizAusioExampleData(
+  FutureOr<SingleQuizAudioExampleData> build() {
+    return SingleQuizAudioExampleData(
       kanjiCharacter: '',
       section: -1,
       allCorrectAnswers: false,
@@ -66,5 +66,5 @@ class LastScoreDetailsProvider
 }
 
 final lastScoreDetailsProvider =
-    AsyncNotifierProvider<LastScoreDetailsProvider, SingleQuizAusioExampleData>(
+    AsyncNotifierProvider<LastScoreDetailsProvider, SingleQuizAudioExampleData>(
         LastScoreDetailsProvider.new);

@@ -17,10 +17,6 @@ class WelcomeKanjiDetailsQuizScreen extends ConsumerWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          const LastScoreAudioExampleScreen(),
-          const SizedBox(
-            height: 20,
-          ),
           SizedBox(
             height: 250,
             child: Image.asset(
@@ -50,15 +46,23 @@ class WelcomeKanjiDetailsQuizScreen extends ConsumerWidget {
           ),
           RadioListTile(
             value: 0,
-            title: const Text('Multi optional answers'),
+            title: Text(
+              'Multi optional answers',
+              style: Theme.of(context).textTheme.bodyLarge,
+            ),
             groupValue: screenNumber.selectedOption,
             onChanged: ((value) {
               ref.read(selectQuizDetailsProvider.notifier).setOption(value);
             }),
           ),
+          const LastScoreAudioExampleScreen(),
+          const SizedBox(
+            height: 20,
+          ),
           RadioListTile(
             value: 1,
-            title: const Text('Flash cards'),
+            title: Text('Flash cards',
+                style: Theme.of(context).textTheme.bodyLarge),
             groupValue: screenNumber.selectedOption,
             onChanged: ((value) {
               ref.read(selectQuizDetailsProvider.notifier).setOption(value);
@@ -95,12 +99,13 @@ class LastScoreAudioExampleScreen extends ConsumerWidget {
       data: (data) => Builder(builder: (context) {
         return data.isFinishedQuiz
             ? Text(
-                'Hello you have completed the audio quiz with ${data.countCorrects}/ ${data.countIncorrects} correct, incorrect anwers',
-                style: Theme.of(context).textTheme.titleLarge,
+                'Last score: ${data.countCorrects} questions correct out of '
+                '${data.countCorrects + data.countIncorrects + data.countOmited}',
+                style: Theme.of(context).textTheme.bodySmall,
               )
             : Text(
-                'Hello complete de audio quiz!!',
-                style: Theme.of(context).textTheme.titleLarge,
+                'Not started the audio quiz!!',
+                style: Theme.of(context).textTheme.bodySmall,
               );
       }),
       error: (error, stack) => Text(
