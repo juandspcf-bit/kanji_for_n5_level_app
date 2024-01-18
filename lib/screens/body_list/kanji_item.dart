@@ -12,7 +12,7 @@ import 'package:kanji_for_n5_level_app/screens/body_list/leading_tile.dart';
 import 'package:kanji_for_n5_level_app/screens/body_list/subtitle_tile.dart';
 import 'package:kanji_for_n5_level_app/screens/body_list/title_tile.dart';
 import 'package:kanji_for_n5_level_app/screens/body_list/trailing_tile.dart';
-import 'package:kanji_for_n5_level_app/screens/kanji_details/kaji_details.dart';
+import 'package:kanji_for_n5_level_app/screens/kanji_details/kaji_details_screen.dart';
 
 class KanjiItem extends ConsumerStatefulWidget {
   const KanjiItem({

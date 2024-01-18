@@ -2,13 +2,14 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:kanji_for_n5_level_app/main.dart';
+import 'package:kanji_for_n5_level_app/screens/kanji_details/quiz_details_screen.dart/flash_card/flash_card_quiz_provider.dart';
 
 class FlashCardWidget extends ConsumerStatefulWidget {
   final String japanese;
   final String english;
   final double height;
   final double width;
+  final int index;
 
   const FlashCardWidget({
     super.key,
@@ -16,6 +17,7 @@ class FlashCardWidget extends ConsumerStatefulWidget {
     required this.english,
     required this.height,
     required this.width,
+    required this.index,
   });
 
   @override
@@ -79,8 +81,8 @@ class _FlashCardWidgetState extends ConsumerState<FlashCardWidget> {
     BuildContext context,
   ) {
     final firtsIndex = japanese.indexOf('（');
-    logger.d('the firtsIndex is $firtsIndex of $japanese');
     final subString = japanese.substring(0, firtsIndex).trim();
+    ref.read(flashCardProvider.notifier).answers[widget.index] = true;
 
     return Container(
       key: const ValueKey(false),
@@ -154,7 +156,6 @@ class _FlashCardWidgetState extends ConsumerState<FlashCardWidget> {
     return GestureDetector(
       onTap: () => setState(() {
         showFrontSide = !showFrontSide;
-        logger.d('$showFrontSide');
       }),
       child: Container(
         constraints: BoxConstraints.tight(Size(widget.width, widget.height)),

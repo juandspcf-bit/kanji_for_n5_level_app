@@ -12,6 +12,8 @@ class FlashCardProvider extends Notifier<FlashCardData> {
         english: []);
   }
 
+  List<bool> answers = [];
+
   void initTheQuiz(KanjiFromApi kanjiFromApi) {
     final dataInit = kanjiFromApi.example
         .map((e) => (

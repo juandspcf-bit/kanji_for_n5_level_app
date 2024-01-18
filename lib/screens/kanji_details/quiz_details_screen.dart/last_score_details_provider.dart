@@ -4,10 +4,12 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kanji_for_n5_level_app/aplication_layer/repository_contract/db_contract.dart';
 import 'package:kanji_for_n5_level_app/aplication_layer/repository_contract/db_sqflite_impl.dart';
 
-class LastScoreDetailsProvider extends AsyncNotifier<SingleQuizSectionData> {
+class LastScoreDetailsProvider
+    extends AsyncNotifier<SingleQuizAusioExampleData> {
   @override
-  FutureOr<SingleQuizSectionData> build() {
-    return SingleQuizSectionData(
+  FutureOr<SingleQuizAusioExampleData> build() {
+    return SingleQuizAusioExampleData(
+      kanjiCharacter: '',
       section: -1,
       allCorrectAnswers: false,
       isFinishedQuiz: false,
@@ -17,27 +19,43 @@ class LastScoreDetailsProvider extends AsyncNotifier<SingleQuizSectionData> {
     );
   }
 
-  void getDetailsQuizLastScore(int section, String uuid) async {
+  void getDetailsQuizLastScore(
+    String kanjiCharacter,
+    int section,
+    String uuid,
+  ) async {
     state = const AsyncLoading();
     state = await AsyncValue.guard((() {
-      return localDBService.getSingleAudioExampleQuizDataDB(section, uuid);
+      return localDBService.getSingleAudioExampleQuizDataDB(
+        kanjiCharacter,
+        section,
+        uuid,
+      );
     }));
   }
 
   void setFinishedQuiz({
     int section = -1,
     String uuid = '',
+    String kanjiCharacter = '',
     int countCorrects = 0,
     int countIncorrects = 0,
     int countOmited = 0,
   }) {
     if (state.value?.section == -1) {
       localDBService.insertAudioExampleScore(
-          section, uuid, countCorrects, countIncorrects, countOmited);
+        section,
+        uuid,
+        kanjiCharacter,
+        countCorrects,
+        countIncorrects,
+        countOmited,
+      );
       return;
     }
 
     localDBService.setAudioExampleLastScore(
+      kanjiCharacter: kanjiCharacter,
       section: section,
       uuid: uuid,
       countCorrects: countCorrects,
@@ -48,5 +66,5 @@ class LastScoreDetailsProvider extends AsyncNotifier<SingleQuizSectionData> {
 }
 
 final lastScoreDetailsProvider =
-    AsyncNotifierProvider<LastScoreDetailsProvider, SingleQuizSectionData>(
+    AsyncNotifierProvider<LastScoreDetailsProvider, SingleQuizAusioExampleData>(
         LastScoreDetailsProvider.new);

@@ -5,7 +5,7 @@ import 'package:kanji_for_n5_level_app/aplication_layer/auth_firebase_impl/auth_
 import 'package:kanji_for_n5_level_app/main.dart';
 import 'package:kanji_for_n5_level_app/models/kanji_from_api.dart';
 import 'package:kanji_for_n5_level_app/providers/examples_audios_provider.dart';
-import 'package:kanji_for_n5_level_app/providers/flash_card_quiz_provider.dart';
+import 'package:kanji_for_n5_level_app/screens/kanji_details/quiz_details_screen.dart/flash_card/flash_card_quiz_provider.dart';
 import 'package:kanji_for_n5_level_app/screens/kanji_details/kanji_details_provider.dart';
 import 'package:kanji_for_n5_level_app/screens/navigation_bar_screens/sections_screen/section_screen_provider.dart';
 import 'package:kanji_for_n5_level_app/screens/kanji_details/quiz_details_screen.dart/details_quiz_provider.dart';
@@ -105,6 +105,7 @@ class KanjiDetails extends ConsumerWidget {
                         ref
                             .read(lastScoreDetailsProvider.notifier)
                             .getDetailsQuizLastScore(
+                              kanjiFromApi.kanjiCharacter,
                               ref.read(sectionProvider),
                               authService.user ?? '',
                             );

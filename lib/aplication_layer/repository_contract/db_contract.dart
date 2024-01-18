@@ -30,12 +30,14 @@ abstract class LocalDBService {
     int countOmited,
   );
 
-  Future<SingleQuizSectionData> getSingleAudioExampleQuizDataDB(
+  Future<SingleQuizAusioExampleData> getSingleAudioExampleQuizDataDB(
+    String kanjiCharacter,
     int section,
     String uuid,
   );
 
   void setAudioExampleLastScore({
+    String kanjiCharacter = '',
     int section = -1,
     String uuid = '',
     int countCorrects = 0,
@@ -46,6 +48,7 @@ abstract class LocalDBService {
   void insertAudioExampleScore(
     int section,
     String uuid,
+    String kanjiCharacter,
     int countCorrects,
     int countIncorrects,
     int countOmited,
@@ -61,6 +64,26 @@ class SingleQuizSectionData {
   final int countOmited;
 
   SingleQuizSectionData({
+    required this.section,
+    required this.allCorrectAnswers,
+    required this.isFinishedQuiz,
+    required this.countCorrects,
+    required this.countIncorrects,
+    required this.countOmited,
+  });
+}
+
+class SingleQuizAusioExampleData {
+  final String kanjiCharacter;
+  final int section;
+  final bool allCorrectAnswers;
+  final bool isFinishedQuiz;
+  final int countCorrects;
+  final int countIncorrects;
+  final int countOmited;
+
+  SingleQuizAusioExampleData({
+    required this.kanjiCharacter,
     required this.section,
     required this.allCorrectAnswers,
     required this.isFinishedQuiz,

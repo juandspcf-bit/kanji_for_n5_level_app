@@ -69,19 +69,27 @@ class SqliteDBService implements LocalDBService {
   }
 
   @override
-  Future<SingleQuizSectionData> getSingleAudioExampleQuizDataDB(
-      int section, String uuid) {
-    return getSingleQuizSectionAudioExamplerData(section, uuid);
+  Future<SingleQuizAusioExampleData> getSingleAudioExampleQuizDataDB(
+    String kanjiCharacter,
+    int section,
+    String uuid,
+  ) {
+    return getSingleQuizSectionAudioExamplerData(
+      kanjiCharacter,
+      section,
+      uuid,
+    );
   }
 
   @override
-  void insertAudioExampleScore(int section, String uuid, int countCorrects,
-      int countIncorrects, int countOmited) {
+  void insertAudioExampleScore(int section, String uuid, String kanjiCharacter,
+      int countCorrects, int countIncorrects, int countOmited) {
 /*     logger.d('uuid: $uuid, corrects: $countCorrects,'
         ' countIncorrects: $countIncorrects, countOmited: $countOmited'); */
     insertSingleAudioExampleQuizSectionDataDB(
       section,
       uuid,
+      kanjiCharacter,
       countIncorrects == 0 && countOmited == 0,
       true,
       countCorrects,
@@ -92,7 +100,8 @@ class SqliteDBService implements LocalDBService {
 
   @override
   void setAudioExampleLastScore(
-      {int section = -1,
+      {String kanjiCharacter = '',
+      int section = -1,
       String uuid = '',
       int countCorrects = 0,
       int countIncorrects = 0,
@@ -100,6 +109,7 @@ class SqliteDBService implements LocalDBService {
 /*     logger.d('uuid: $uuid, corrects: $countCorrects,'
         ' countIncorrects: $countIncorrects, countOmited: $countOmited'); */
     updateSingleAudioExampleQuizSectionData(
+      kanjiCharacter,
       section,
       uuid,
       countIncorrects == 0 && countOmited == 0,

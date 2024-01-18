@@ -101,17 +101,20 @@ void insertSingleQuizSectionDataDB(
       ]);
 }
 
-Future<SingleQuizSectionData> getSingleQuizSectionAudioExamplerData(
+Future<SingleQuizAusioExampleData> getSingleQuizSectionAudioExamplerData(
+  String kanjiCharacter,
   int section,
   String uuid,
 ) async {
   final db = await kanjiFromApiDatabase;
   final listQuery = await db.rawQuery(
-      'SELECT * FROM kanji_audio_example_quiz WHERE section = ? AND uuid = ?',
-      [section, uuid]);
+      'SELECT * FROM kanji_audio_example_quiz'
+      ' WHERE kanjiCharacter = ? AND section = ? AND uuid = ?',
+      [kanjiCharacter, section, uuid]);
 
   if (listQuery.isEmpty) {
-    return SingleQuizSectionData(
+    return SingleQuizAusioExampleData(
+      kanjiCharacter: '',
       section: -1,
       allCorrectAnswers: false,
       isFinishedQuiz: false,
@@ -121,7 +124,8 @@ Future<SingleQuizSectionData> getSingleQuizSectionAudioExamplerData(
     );
   }
 
-  return SingleQuizSectionData(
+  return SingleQuizAusioExampleData(
+    kanjiCharacter: listQuery[0]['kanjiCharacter'] as String,
     section: listQuery[0]['section'] as int,
     allCorrectAnswers: (listQuery[0]['allCorrectAnswers'] as int) == 1,
     isFinishedQuiz: (listQuery[0]['isFinishedQuiz'] as int) == 1,
@@ -132,6 +136,7 @@ Future<SingleQuizSectionData> getSingleQuizSectionAudioExamplerData(
 }
 
 void updateSingleAudioExampleQuizSectionData(
+  String kanjiCharacter,
   int section,
   String uuid,
   bool allCorrectAnswers,
@@ -144,15 +149,23 @@ void updateSingleAudioExampleQuizSectionData(
   logger.d('uuid: $uuid, allCorrectAnwers: $allCorrectAnswers,'
       ' isFinishedQuiz: $isFinishedQuiz, corrects: $countCorrects');
   await db.rawUpdate(
-      'UPDATE kanji_audio_example_quiz SET allCorrectAnswers = ?,'
-      ' isFinishedQuiz = ?, countCorrects = ?,'
-      ' countIncorrects = ?, countOmited = ?  WHERE section = ? AND uuid = ?',
+      'UPDATE'
+      ' kanji_audio_example_quiz '
+      'SET'
+      ' allCorrectAnswers = ?,'
+      ' isFinishedQuiz = ?,'
+      ' countCorrects = ?,'
+      ' countIncorrects = ?,'
+      ' countOmited = ? '
+      'WHERE'
+      ' kanjiCharacter = ? AND section = ? AND uuid = ?',
       [
         allCorrectAnswers ? 1 : 0,
         isFinishedQuiz ? 1 : 0,
         countCorrects,
         countIncorrects,
         countOmited,
+        kanjiCharacter,
         section,
         uuid,
       ]);
@@ -161,6 +174,7 @@ void updateSingleAudioExampleQuizSectionData(
 void insertSingleAudioExampleQuizSectionDataDB(
   int section,
   String uuid,
+  String kanjiCharacter,
   bool allCorrectAnswers,
   bool isFinishedQuiz,
   int countCorrects,
@@ -172,8 +186,15 @@ void insertSingleAudioExampleQuizSectionDataDB(
   final db = await kanjiFromApiDatabase;
   try {
     await db.rawInsert(
-        'INSERT INTO kanji_audio_example_quiz(allCorrectAnswers,'
-        ' isFinishedQuiz, countCorrects, countIncorrects, countOmited, section, uuid)'
+        'INSERT INTO kanji_audio_example_quiz('
+        ' kanjiCharacter TEXT,'
+        ' allCorrectAnswers,'
+        ' isFinishedQuiz,'
+        ' countCorrects,'
+        ' countIncorrects,'
+        ' countOmited,'
+        ' section,'
+        ' uuid)'
         ' VALUES(?,?,?,?,?,?,?)',
         [
           allCorrectAnswers ? 1 : 0,
