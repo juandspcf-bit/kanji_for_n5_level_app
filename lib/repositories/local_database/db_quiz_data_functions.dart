@@ -62,9 +62,14 @@ void updateSingleQuizSectionData(
 ) async {
   final db = await kanjiFromApiDatabase;
   await db.rawUpdate(
-      'UPDATE kanji_quiz SET allCorrectAnswersQuizKanji = ?,'
-      ' isFinishedKanjiQuizz = ?, countCorrects = ?,'
-      ' countIncorrects = ?, countOmited = ?  WHERE section = ? AND uuid = ?',
+      'UPDATE kanji_quiz '
+      'SET'
+      ' allCorrectAnswersQuizKanji = ?,'
+      ' isFinishedKanjiQuizz = ?,'
+      ' countCorrects = ?,'
+      ' countIncorrects = ?,'
+      ' countOmited = ? '
+      'WHERE section = ? AND uuid = ?',
       [
         allCorrectAnswersQuizKanji ? 1 : 0,
         isFinishedKanjiQuizz ? 1 : 0,
@@ -87,9 +92,16 @@ void insertSingleQuizSectionDataDB(
 ) async {
   final db = await kanjiFromApiDatabase;
   await db.rawInsert(
-      'INSERT INTO kanji_quiz(allCorrectAnswersQuizKanji,'
-      ' isFinishedKanjiQuizz, countCorrects, countIncorrects, countOmited, section, uuid)'
-      ' VALUES(?,?,?,?,?,?,?)',
+      'INSERT INTO kanji_quiz('
+      ' allCorrectAnswersQuizKanji,'
+      ' isFinishedKanjiQuizz,'
+      ' countCorrects,'
+      ' countIncorrects,'
+      ' countOmited,'
+      ' section,'
+      ' uuid'
+      ') '
+      'VALUES(?,?,?,?,?,?,?)',
       [
         allCorrectAnswersQuizKanji ? 1 : 0,
         isFinishedKanjiQuizz ? 1 : 0,
@@ -167,6 +179,9 @@ void updateSingleAudioExampleQuizSectionData(
         countCorrects,
         countIncorrects,
         countOmited,
+        kanjiCharacter,
+        section,
+        uuid
       ]);
 }
 
@@ -208,4 +223,85 @@ void insertSingleAudioExampleQuizSectionDataDB(
   } catch (e) {
     logger.e(e);
   }
+}
+
+Future<SingleQuizFlashCardData> getSingleFlashCardData(
+  String kanjiCharacter,
+  String uuid,
+) async {
+  final db = await kanjiFromApiDatabase;
+  final listQuery = await db.rawQuery(
+      'SELECT * FROM kanji_flashcard_quiz '
+      'WHERE'
+      ' section = ? AND uuid = ?',
+      [kanjiCharacter, uuid]);
+
+  if (listQuery.isEmpty) {
+    return SingleQuizFlashCardData(
+      kanjiCharacter: '',
+      section: -1,
+      uuid: '',
+      allRevisedFlashCards: false,
+    );
+  }
+
+  return SingleQuizFlashCardData(
+    kanjiCharacter: listQuery[0]['kanjiCharacter'] as String,
+    uuid: listQuery[0]['uuid'] as String,
+    section: listQuery[0]['section'] as int,
+    allRevisedFlashCards: (listQuery[0]['allRevisedFlashCards'] as int) == 1,
+  );
+}
+
+void insertSingleFlashCardData(
+  String kanjiCharacter,
+  int section,
+  String uuid,
+  bool allRevisedFlashCards,
+) async {
+  //logger.d('uuid: $uuid, corrects: $countCorrects,'
+  //  ' countIncorrects: $countIncorrects, countOmited: $countOmited');
+  final db = await kanjiFromApiDatabase;
+  try {
+    await db.rawInsert(
+        'INSERT INTO kanji_flashcard_quiz('
+        ' kanjiCharacter,'
+        ' section,'
+        ' uuid,'
+        ' allRevisedFlashCard'
+        ')'
+        ' VALUES(?,?,?,?)',
+        [
+          kanjiCharacter,
+          section,
+          uuid,
+          allRevisedFlashCards ? 1 : 0,
+        ]);
+  } catch (e) {
+    logger.e(e);
+  }
+}
+
+void updateSingleFlashCardData(
+  String kanjiCharacter,
+  int section,
+  String uuid,
+  bool allRevisedFlashCards,
+) async {
+  final db = await kanjiFromApiDatabase;
+  //logger.d('uuid: $uuid, allCorrectAnwers: $allCorrectAnswers,'
+  //    ' isFinishedQuiz: $isFinishedQuiz, corrects: $countCorrects');
+  await db.rawUpdate(
+      'UPDATE'
+      ' kanji_flashcard_quiz '
+      'SET'
+      ' allRevisedFlashCards = ?,'
+      'WHERE'
+      ' kanjiCharacter = ? AND section = ? AND uuid = ?',
+      [
+        allRevisedFlashCards ? 1 : 0,
+        kanjiCharacter,
+        section,
+        uuid,
+      ]);
 }

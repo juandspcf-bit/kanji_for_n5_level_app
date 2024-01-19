@@ -31,6 +31,7 @@ Future<Database> get kanjiFromApiDatabase async {
         'CREATE TABLE kanji_flashcard_quiz('
         ' id INTEGER PRIMARY KEY AUTOINCREMENT,'
         ' kanjiCharacter TEXT,'
+        ' section INTEGER,'
         ' uuid TEXT'
         ' allRevisedFlashCards INTEGER'
         ' )',

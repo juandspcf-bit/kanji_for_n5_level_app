@@ -117,4 +117,47 @@ class SqliteDBService implements LocalDBService {
       countOmited,
     );
   }
+
+  Future<SingleQuizFlashCardData> getSingleFlashCardDataDB(
+    String kanjiCharacter,
+    int section,
+    String uuid,
+  ) {
+    return getSingleFlashCardData(
+      kanjiCharacter,
+      uuid,
+    );
+  }
+
+  void insertSingleFlashCardDataDB(
+    String kanjiCharacter,
+    int section,
+    String uuid,
+    int countUnWatched,
+  ) {
+/*     logger.d('uuid: $uuid, corrects: $countCorrects,'
+        ' countIncorrects: $countIncorrects, countOmited: $countOmited'); */
+    insertSingleFlashCardData(
+      kanjiCharacter,
+      section,
+      uuid,
+      countUnWatched == 0,
+    );
+  }
+
+  void setSingleFlashCardDataDB(
+    String kanjiCharacter,
+    int section,
+    String uuid,
+    int countUnWatched,
+  ) {
+/*     logger.d('uuid: $uuid, corrects: $countCorrects,'
+        ' countIncorrects: $countIncorrects, countOmited: $countOmited'); */
+    updateSingleFlashCardData(
+      kanjiCharacter,
+      section,
+      uuid,
+      countUnWatched == 0,
+    );
+  }
 }

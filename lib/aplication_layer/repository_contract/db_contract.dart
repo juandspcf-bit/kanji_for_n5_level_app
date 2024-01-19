@@ -53,6 +53,26 @@ abstract class LocalDBService {
     int countIncorrects,
     int countOmited,
   );
+
+  Future<SingleQuizFlashCardData> getSingleFlashCardDataDB(
+    String kanjiCharacter,
+    int section,
+    String uuid,
+  );
+
+  void insertSingleFlashCardDataDB(
+    String kanjiCharacter,
+    int section,
+    String uuid,
+    int countUnWatched,
+  );
+
+  void setSingleFlashCardDataDB(
+    String kanjiCharacter,
+    int section,
+    String uuid,
+    int countUnWatched,
+  );
 }
 
 class SingleQuizSectionData {
@@ -97,5 +117,27 @@ class SingleQuizAudioExampleData {
   @override
   String toString() {
     return 'kanjiCharacter;$kanjiCharacter, section:$section, uuid:$uuid isFinished:$isFinishedQuiz';
+  }
+}
+
+class SingleQuizFlashCardData {
+  final String kanjiCharacter;
+  final int section;
+  final String uuid;
+  final bool allRevisedFlashCards;
+
+  SingleQuizFlashCardData({
+    required this.kanjiCharacter,
+    required this.section,
+    required this.uuid,
+    required this.allRevisedFlashCards,
+  });
+
+  @override
+  String toString() {
+    return 'kanjiCharacter;$kanjiCharacter, '
+        'section:$section, '
+        'uuid:$uuid, '
+        'allRevisedFlashCards:$allRevisedFlashCards';
   }
 }
