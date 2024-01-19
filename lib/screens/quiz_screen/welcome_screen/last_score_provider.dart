@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kanji_for_n5_level_app/aplication_layer/repository_contract/db_contract.dart';
-import 'package:kanji_for_n5_level_app/aplication_layer/repository_contract/db_sqflite_impl.dart';
+import 'package:kanji_for_n5_level_app/main.dart';
 
 class LastScoreKanjiQuizProvider extends AsyncNotifier<SingleQuizSectionData> {
   @override

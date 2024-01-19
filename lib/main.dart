@@ -4,6 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:kanji_for_n5_level_app/aplication_layer/auth_contract/auth_service_contract.dart';
+import 'package:kanji_for_n5_level_app/aplication_layer/auth_firebase_impl/auth_service_firebase.dart';
+import 'package:kanji_for_n5_level_app/aplication_layer/repository_contract/db_contract.dart';
+import 'package:kanji_for_n5_level_app/aplication_layer/repository_contract/db_sqflite_impl.dart';
 import 'package:kanji_for_n5_level_app/aplication_layer/repository_contract/kanji_api_contract.dart';
 import 'package:kanji_for_n5_level_app/aplication_layer/repository_contract/kanji_kanji_alive_api_impl.dart';
 import 'package:kanji_for_n5_level_app/auth_flow.dart';
@@ -18,6 +22,8 @@ final KanjiApiService applicationApiService = AppAplicationApiService();
 
 final dio = Dio();
 final logger = Logger();
+final LocalDBService localDBService = SqliteDBService();
+final AuthService authService = FirebaseSignInUser();
 
 var kColorScheme = ColorScheme.fromSeed(
   seedColor: const Color.fromARGB(255, 96, 59, 181),

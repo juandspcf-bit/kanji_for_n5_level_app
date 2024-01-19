@@ -8,11 +8,15 @@ import 'package:kanji_for_n5_level_app/main.dart';
 
 final storageRef = FirebaseStorage.instance.ref();
 final streamAuth = FirebaseAuth.instance.userChanges();
-final AuthService authService = FirebaseSignInUser();
 
 class FirebaseSignInUser implements AuthService {
   @override
-  final String? user = FirebaseAuth.instance.currentUser?.uid;
+  String? user = '';
+
+  @override
+  void setLoggedUser() {
+    user = FirebaseAuth.instance.currentUser?.uid;
+  }
 
   @override
   Future<StatusLogingRequest> singInWithEmailAndPassword(
@@ -97,10 +101,5 @@ class FirebaseSignInUser implements AuthService {
       logger.e(e);
       return (DeleteUserStatus.error, uuid);
     }
-  }
-
-  @override
-  set user(String? newUser) {
-    user = newUser;
   }
 }

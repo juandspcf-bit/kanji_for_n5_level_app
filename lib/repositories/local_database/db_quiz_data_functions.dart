@@ -116,6 +116,7 @@ Future<SingleQuizAudioExampleData> getSingleQuizSectionAudioExamplerData(
     return SingleQuizAudioExampleData(
       kanjiCharacter: '',
       section: -1,
+      uuid: '',
       allCorrectAnswers: false,
       isFinishedQuiz: false,
       countCorrects: 0,
@@ -127,6 +128,7 @@ Future<SingleQuizAudioExampleData> getSingleQuizSectionAudioExamplerData(
   return SingleQuizAudioExampleData(
     kanjiCharacter: listQuery[0]['kanjiCharacter'] as String,
     section: listQuery[0]['section'] as int,
+    uuid: listQuery[0]['uuid'] as String,
     allCorrectAnswers: (listQuery[0]['allCorrectAnswers'] as int) == 1,
     isFinishedQuiz: (listQuery[0]['isFinishedQuiz'] as int) == 1,
     countCorrects: listQuery[0]['countCorrects'] as int,
@@ -165,9 +167,6 @@ void updateSingleAudioExampleQuizSectionData(
         countCorrects,
         countIncorrects,
         countOmited,
-        kanjiCharacter,
-        section,
-        uuid,
       ]);
 }
 

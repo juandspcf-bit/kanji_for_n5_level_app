@@ -1,6 +1,8 @@
 abstract class AuthService {
   String? user;
 
+  void setLoggedUser();
+
   Future<StatusLogingRequest> singInWithEmailAndPassword(
       {required String email, required String password});
 

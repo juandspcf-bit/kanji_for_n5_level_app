@@ -28,10 +28,13 @@ Future<Database> get kanjiFromApiDatabase async {
           ' uuid TEXT)');
 
       await db.execute(
-          'CREATE TABLE kanji_flashcard_quiz(id INTEGER PRIMARY KEY AUTOINCREMENT,'
-          ' kanjiCharacter TEXT,'
-          ' allRevisedFlashCards INTEGER,'
-          ' uuid TEXT )');
+        'CREATE TABLE kanji_flashcard_quiz('
+        ' id INTEGER PRIMARY KEY AUTOINCREMENT,'
+        ' kanjiCharacter TEXT,'
+        ' uuid TEXT'
+        ' allRevisedFlashCards INTEGER'
+        ' )',
+      );
 
       await db.execute(
           'CREATE TABLE user_favorites(id INTEGER PRIMARY KEY AUTOINCREMENT,'

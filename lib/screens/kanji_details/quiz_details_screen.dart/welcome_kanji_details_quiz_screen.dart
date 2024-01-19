@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:kanji_for_n5_level_app/main.dart';
 import 'package:kanji_for_n5_level_app/providers/select_quiz_details_screen.dart';
 import 'package:kanji_for_n5_level_app/screens/kanji_details/quiz_details_screen.dart/last_score_details_provider.dart';
 
@@ -97,6 +98,7 @@ class LastScoreAudioExampleScreen extends ConsumerWidget {
 
     return lastScoreData.when(
       data: (data) => Builder(builder: (context) {
+        logger.d(data);
         return data.isFinishedQuiz
             ? Text(
                 'Last score: ${data.countCorrects} questions correct out of '

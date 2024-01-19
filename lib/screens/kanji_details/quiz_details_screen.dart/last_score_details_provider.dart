@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kanji_for_n5_level_app/aplication_layer/repository_contract/db_contract.dart';
-import 'package:kanji_for_n5_level_app/aplication_layer/repository_contract/db_sqflite_impl.dart';
+import 'package:kanji_for_n5_level_app/main.dart';
 
 class LastScoreDetailsProvider
     extends AsyncNotifier<SingleQuizAudioExampleData> {
@@ -11,6 +11,7 @@ class LastScoreDetailsProvider
     return SingleQuizAudioExampleData(
       kanjiCharacter: '',
       section: -1,
+      uuid: '',
       allCorrectAnswers: false,
       isFinishedQuiz: false,
       countCorrects: 0,
@@ -19,11 +20,12 @@ class LastScoreDetailsProvider
     );
   }
 
-  void getDetailsQuizLastScore(
+  void getSingleAudioExampleQuizDataDB(
     String kanjiCharacter,
     int section,
     String uuid,
   ) async {
+    logger.d('$kanjiCharacter, $section, $uuid');
     state = const AsyncLoading();
     state = await AsyncValue.guard((() {
       return localDBService.getSingleAudioExampleQuizDataDB(

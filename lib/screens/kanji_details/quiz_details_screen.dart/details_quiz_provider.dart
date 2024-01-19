@@ -103,7 +103,7 @@ class QuizDetailsProvider extends Notifier<
 
     posibleAnswers.shuffle();
 
-    logger.d('the possible answers are $posibleAnswers');
+    //logger.d('the possible answers are $posibleAnswers');
 
     ({
       int indexQuestion,
@@ -144,7 +144,7 @@ class QuizDetailsProvider extends Notifier<
     dataInit.shuffle();
     _dataQuiz = dataInit;
     _answers = List.filled(_dataQuiz.length, StateAnswersQuizDetails.ommitted);
-    logger.d(_dataQuiz);
+    //logger.d(_dataQuiz);
     //mp3Audios = mp3AudiosInit;
   }
 
