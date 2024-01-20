@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kanji_for_n5_level_app/main.dart';
 import 'package:kanji_for_n5_level_app/models/kanji_from_api.dart';
-import 'package:kanji_for_n5_level_app/screens/kanji_details/quiz_details_screen.dart/flash_card/flash_card_quiz_provider.dart';
-import 'package:kanji_for_n5_level_app/screens/kanji_details/quiz_details_screen.dart/flash_card/flash_card_widget.dart';
+import 'package:kanji_for_n5_level_app/screens/kanji_details/quiz_details_screen/flash_card/flash_card_quiz_provider.dart';
+import 'package:kanji_for_n5_level_app/screens/kanji_details/quiz_details_screen/flash_card/flash_card_widget.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 class FlassCardScreen extends ConsumerStatefulWidget {

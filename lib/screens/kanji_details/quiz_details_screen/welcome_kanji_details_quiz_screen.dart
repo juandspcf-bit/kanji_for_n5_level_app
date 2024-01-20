@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kanji_for_n5_level_app/main.dart';
 import 'package:kanji_for_n5_level_app/providers/select_quiz_details_screen.dart';
-import 'package:kanji_for_n5_level_app/screens/kanji_details/quiz_details_screen.dart/last_score_details_provider.dart';
+import 'package:kanji_for_n5_level_app/screens/kanji_details/quiz_details_screen/last_score_details_provider.dart';
+import 'package:kanji_for_n5_level_app/screens/kanji_details/quiz_details_screen/last_score_flash_card_provider.dart';
 
 class WelcomeKanjiDetailsQuizScreen extends ConsumerWidget {
   const WelcomeKanjiDetailsQuizScreen({super.key});
@@ -69,6 +70,7 @@ class WelcomeKanjiDetailsQuizScreen extends ConsumerWidget {
               ref.read(selectQuizDetailsProvider.notifier).setOption(value);
             }),
           ),
+          const LastFlashCardScore(),
           const SizedBox(
             height: 10,
           ),
@@ -107,6 +109,35 @@ class LastScoreAudioExampleScreen extends ConsumerWidget {
               )
             : Text(
                 'Not started the audio quiz!!',
+                style: Theme.of(context).textTheme.bodySmall,
+              );
+      }),
+      error: (error, stack) => Text(
+        'Oops, something unexpected happened',
+        style: Theme.of(context).textTheme.titleLarge,
+      ),
+      loading: () => const CircularProgressIndicator(),
+    );
+  }
+}
+
+class LastFlashCardScore extends ConsumerWidget {
+  const LastFlashCardScore({super.key});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final lastScoreData = ref.watch(lastScoreFlashCardProvider);
+
+    return lastScoreData.when(
+      data: (data) => Builder(builder: (context) {
+        logger.d(data);
+        return data.allRevisedFlashCards
+            ? Text(
+                'You have revised all flash cards',
+                style: Theme.of(context).textTheme.bodySmall,
+              )
+            : Text(
+                'No revised the flash cards!!',
                 style: Theme.of(context).textTheme.bodySmall,
               );
       }),

@@ -118,6 +118,7 @@ class SqliteDBService implements LocalDBService {
     );
   }
 
+  @override
   Future<SingleQuizFlashCardData> getSingleFlashCardDataDB(
     String kanjiCharacter,
     int section,
@@ -129,6 +130,7 @@ class SqliteDBService implements LocalDBService {
     );
   }
 
+  @override
   void insertSingleFlashCardDataDB(
     String kanjiCharacter,
     int section,
@@ -145,6 +147,7 @@ class SqliteDBService implements LocalDBService {
     );
   }
 
+  @override
   void setSingleFlashCardDataDB(
     String kanjiCharacter,
     int section,
