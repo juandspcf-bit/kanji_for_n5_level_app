@@ -1,12 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kanji_for_n5_level_app/main.dart';
+import 'package:kanji_for_n5_level_app/models/kanji_from_api.dart';
 import 'package:kanji_for_n5_level_app/providers/select_quiz_details_screen.dart';
+import 'package:kanji_for_n5_level_app/screens/kanji_details/quiz_details_screen/flash_card/flash_card_screen.dart';
 import 'package:kanji_for_n5_level_app/screens/kanji_details/quiz_details_screen/last_score_details_provider.dart';
 import 'package:kanji_for_n5_level_app/screens/kanji_details/quiz_details_screen/last_score_flash_card_provider.dart';
+import 'package:kanji_for_n5_level_app/screens/kanji_details/quiz_details_screen/quiz_details_question.dart';
 
 class WelcomeKanjiDetailsQuizScreen extends ConsumerWidget {
-  const WelcomeKanjiDetailsQuizScreen({super.key});
+  const WelcomeKanjiDetailsQuizScreen({super.key, required this.kanjiFromApi});
+
+  final KanjiFromApi kanjiFromApi;
 
   final welcomeMessage = 'Select the quiz type '
       'you would like to try.';
@@ -76,7 +81,20 @@ class WelcomeKanjiDetailsQuizScreen extends ConsumerWidget {
           ),
           ElevatedButton(
             onPressed: () {
-              ref.read(selectQuizDetailsProvider.notifier).selectScreen();
+              //ref.read(selectQuizDetailsProvider.notifier).selectScreen();
+              if (ref.read(selectQuizDetailsProvider).selectedOption == 0) {
+                Navigator.of(context).push(
+                  MaterialPageRoute(builder: (ctx) {
+                    return QuestionScreen(kanjiFromApi: kanjiFromApi);
+                  }),
+                );
+              } else if (ref.read(selectQuizDetailsProvider).selectedOption ==
+                  1) {
+                Navigator.of(context).push(MaterialPageRoute(builder: (cxt) {
+                  return FlashCardScreen(kanjiFromApi: kanjiFromApi);
+                }));
+              }
+              ref.read(selectQuizDetailsProvider.notifier).setOption(2);
             },
             style: ElevatedButton.styleFrom().copyWith(
               minimumSize: const MaterialStatePropertyAll(

@@ -2,7 +2,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kanji_for_n5_level_app/main.dart';
 import 'package:kanji_for_n5_level_app/models/kanji_from_api.dart';
 import 'package:kanji_for_n5_level_app/providers/quiz_details_score_screen.dart';
-import 'package:kanji_for_n5_level_app/providers/select_quiz_details_screen.dart';
 
 class QuizDetailsProvider extends Notifier<
     ({
@@ -51,16 +50,17 @@ class QuizDetailsProvider extends Notifier<
     return _dataQuiz.length;
   }
 
-  void onNext() {
+  bool onNext() {
     if (isQuizDataLenghtReached()) {
       ref.read(quizDetailsScoreProvider.notifier).setAnswers();
-      ref
+/*       ref
           .read(selectQuizDetailsProvider.notifier)
-          .setScreen(ScreensQuizDetail.scoreSelections);
-      return;
+          .setScreen(ScreensQuizDetail.scoreSelections); */
+      return true;
     }
 
     setQuizState(getQuizStateCurrentIndex() + 1);
+    return false;
   }
 
   bool isQuizDataLenghtReached() {

@@ -73,7 +73,7 @@ class DetailsQuizScreen extends ConsumerWidget {
               );
             } else if (screenNumber.screensQuizDetail ==
                 ScreensQuizDetail.welcome) {
-              return const WelcomeKanjiDetailsQuizScreen();
+              return WelcomeKanjiDetailsQuizScreen(kanjiFromApi: kanjiFromApi);
             } else if (screenNumber.screensQuizDetail ==
                 ScreensQuizDetail.quizSelections) {
               return QuestionScreen(kanjiFromApi: kanjiFromApi);
@@ -94,7 +94,7 @@ class DetailsQuizScreen extends ConsumerWidget {
                   kanjiFromApi.example.length, false,
                   growable: true);
               logger.d(ref.read(flashCardProvider.notifier).answers.length);
-              return FlassCardScreen(kanjiFromApi: kanjiFromApi);
+              return FlashCardScreen(kanjiFromApi: kanjiFromApi);
             } else {
               return const Center(
                 child: Text('Error'),
