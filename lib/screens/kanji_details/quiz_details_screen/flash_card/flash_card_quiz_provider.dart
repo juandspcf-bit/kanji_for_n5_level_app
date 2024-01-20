@@ -23,6 +23,8 @@ class FlashCardProvider extends Notifier<FlashCardData> {
             ))
         .toList();
     dataInit.shuffle();
+    answers =
+        List<bool>.filled(kanjiFromApi.example.length, false, growable: true);
     state = FlashCardData(
         indexQuestion: 0,
         dataInit: dataInit,
