@@ -80,11 +80,16 @@ class SqliteDBService implements LocalDBService {
   }
 
   @override
-  void insertAudioExampleScore(int section, String uuid, String kanjiCharacter,
-      int countCorrects, int countIncorrects, int countOmited) {
+  Future<int> insertAudioExampleScore(
+      int section,
+      String uuid,
+      String kanjiCharacter,
+      int countCorrects,
+      int countIncorrects,
+      int countOmited) {
 /*     logger.d('uuid: $uuid, corrects: $countCorrects,'
         ' countIncorrects: $countIncorrects, countOmited: $countOmited'); */
-    insertSingleAudioExampleQuizSectionDataDB(
+    return insertSingleAudioExampleQuizSectionDataDB(
       section,
       uuid,
       kanjiCharacter,
@@ -97,7 +102,7 @@ class SqliteDBService implements LocalDBService {
   }
 
   @override
-  void setAudioExampleLastScore(
+  Future<int> setAudioExampleLastScore(
       {String kanjiCharacter = '',
       int section = -1,
       String uuid = '',
@@ -106,7 +111,7 @@ class SqliteDBService implements LocalDBService {
       int countOmited = 0}) {
 /*     logger.d('uuid: $uuid, corrects: $countCorrects,'
         ' countIncorrects: $countIncorrects, countOmited: $countOmited'); */
-    updateSingleAudioExampleQuizSectionData(
+    return updateSingleAudioExampleQuizSectionData(
       kanjiCharacter,
       section,
       uuid,

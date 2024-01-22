@@ -149,7 +149,7 @@ Future<SingleQuizAudioExampleData> getSingleQuizSectionAudioExamplerData(
   );
 }
 
-void updateSingleAudioExampleQuizSectionData(
+Future<int> updateSingleAudioExampleQuizSectionData(
   String kanjiCharacter,
   int section,
   String uuid,
@@ -162,7 +162,7 @@ void updateSingleAudioExampleQuizSectionData(
   final db = await kanjiFromApiDatabase;
   logger.d('uuid: $uuid, allCorrectAnwers: $allCorrectAnswers,'
       ' isFinishedQuiz: $isFinishedQuiz, corrects: $countCorrects');
-  await db.rawUpdate(
+  return db.rawUpdate(
       'UPDATE'
       ' kanji_audio_example_quiz '
       'SET'
@@ -185,7 +185,7 @@ void updateSingleAudioExampleQuizSectionData(
       ]);
 }
 
-void insertSingleAudioExampleQuizSectionDataDB(
+Future<int> insertSingleAudioExampleQuizSectionDataDB(
   int section,
   String uuid,
   String kanjiCharacter,
@@ -199,7 +199,7 @@ void insertSingleAudioExampleQuizSectionDataDB(
       ' countIncorrects: $countIncorrects, countOmited: $countOmited');
   final db = await kanjiFromApiDatabase;
   try {
-    await db.rawInsert(
+    return await db.rawInsert(
         'INSERT INTO kanji_audio_example_quiz('
         ' kanjiCharacter,'
         ' allCorrectAnswers,'
@@ -222,6 +222,7 @@ void insertSingleAudioExampleQuizSectionDataDB(
         ]);
   } catch (e) {
     logger.e(e);
+    return Future(() => 0);
   }
 }
 

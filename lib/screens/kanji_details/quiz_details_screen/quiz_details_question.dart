@@ -112,6 +112,8 @@ class QuestionScreen extends ConsumerWidget {
                           countOmited: scores.omitted.length,
                         );
 
+                    ref.read(quizDetailsProvider.notifier).resetValues();
+
                     Navigator.of(context)
                         .push(MaterialPageRoute(builder: (ctx) {
                       return const QuizDetailsScore();

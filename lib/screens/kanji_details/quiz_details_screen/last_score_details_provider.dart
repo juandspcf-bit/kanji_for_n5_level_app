@@ -43,9 +43,9 @@ class LastScoreDetailsProvider
     int countCorrects = 0,
     int countIncorrects = 0,
     int countOmited = 0,
-  }) {
+  }) async {
     if (state.value?.section == -1) {
-      localDBService.insertAudioExampleScore(
+      final numberOfRows = await localDBService.insertAudioExampleScore(
         section,
         uuid,
         kanjiCharacter,
@@ -53,10 +53,28 @@ class LastScoreDetailsProvider
         countIncorrects,
         countOmited,
       );
+      if (numberOfRows != 0) {
+        state = await AsyncValue.guard(
+          () {
+            return Future(
+              () => SingleQuizAudioExampleData(
+                kanjiCharacter: kanjiCharacter,
+                section: section,
+                uuid: uuid,
+                isFinishedQuiz: true,
+                countCorrects: countCorrects,
+                countIncorrects: countIncorrects,
+                countOmited: countOmited,
+                allCorrectAnswers: countCorrects == 0 && countOmited == 0,
+              ),
+            );
+          },
+        );
+      }
       return;
     }
 
-    localDBService.setAudioExampleLastScore(
+    final numberOfRows = await localDBService.setAudioExampleLastScore(
       kanjiCharacter: kanjiCharacter,
       section: section,
       uuid: uuid,
@@ -64,6 +82,25 @@ class LastScoreDetailsProvider
       countIncorrects: countIncorrects,
       countOmited: countOmited,
     );
+
+    if (numberOfRows != 0) {
+      state = await AsyncValue.guard(
+        () {
+          return Future(
+            () => SingleQuizAudioExampleData(
+              kanjiCharacter: kanjiCharacter,
+              section: section,
+              uuid: uuid,
+              isFinishedQuiz: true,
+              countCorrects: countCorrects,
+              countIncorrects: countIncorrects,
+              countOmited: countOmited,
+              allCorrectAnswers: countCorrects == 0 && countOmited == 0,
+            ),
+          );
+        },
+      );
+    }
   }
 }
 

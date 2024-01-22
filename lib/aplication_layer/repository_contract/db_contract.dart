@@ -36,7 +36,7 @@ abstract class LocalDBService {
     String uuid,
   );
 
-  void setAudioExampleLastScore({
+  Future<int> setAudioExampleLastScore({
     String kanjiCharacter = '',
     int section = -1,
     String uuid = '',
@@ -45,7 +45,7 @@ abstract class LocalDBService {
     int countOmited = 0,
   });
 
-  void insertAudioExampleScore(
+  Future<int> insertAudioExampleScore(
     int section,
     String uuid,
     String kanjiCharacter,
