@@ -268,7 +268,7 @@ void insertSingleFlashCardData(
         ' kanjiCharacter,'
         ' section,'
         ' uuid,'
-        ' allRevisedFlashCard'
+        ' allRevisedFlashCards'
         ')'
         ' VALUES(?,?,?,?)',
         [
