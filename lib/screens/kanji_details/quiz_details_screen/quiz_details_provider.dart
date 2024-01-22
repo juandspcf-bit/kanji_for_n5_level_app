@@ -53,9 +53,6 @@ class QuizDetailsProvider extends Notifier<
   bool onNext() {
     if (isQuizDataLenghtReached()) {
       ref.read(quizDetailsScoreProvider.notifier).setAnswers();
-/*       ref
-          .read(selectQuizDetailsProvider.notifier)
-          .setScreen(ScreensQuizDetail.scoreSelections); */
       return true;
     }
 
