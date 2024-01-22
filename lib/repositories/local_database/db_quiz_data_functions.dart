@@ -227,6 +227,7 @@ void insertSingleAudioExampleQuizSectionDataDB(
 
 Future<SingleQuizFlashCardData> getSingleFlashCardData(
   String kanjiCharacter,
+  int section,
   String uuid,
 ) async {
   final db = await kanjiFromApiDatabase;
@@ -234,7 +235,8 @@ Future<SingleQuizFlashCardData> getSingleFlashCardData(
       'SELECT * FROM kanji_flashcard_quiz '
       'WHERE'
       ' section = ? AND uuid = ?',
-      [kanjiCharacter, uuid]);
+      [section, uuid]);
+  logger.d('getttin flash card data out: $listQuery');
 
   if (listQuery.isEmpty) {
     return SingleQuizFlashCardData(
@@ -253,17 +255,17 @@ Future<SingleQuizFlashCardData> getSingleFlashCardData(
   );
 }
 
-void insertSingleFlashCardData(
+Future<int> insertSingleFlashCardData(
   String kanjiCharacter,
   int section,
   String uuid,
   bool allRevisedFlashCards,
 ) async {
-  //logger.d('uuid: $uuid, corrects: $countCorrects,'
-  //  ' countIncorrects: $countIncorrects, countOmited: $countOmited');
+  logger.d('inserting: kanji: $kanjiCharacter, section:$section, uuid:$uuid,'
+      ' revised?:$allRevisedFlashCards');
   final db = await kanjiFromApiDatabase;
   try {
-    await db.rawInsert(
+    return await db.rawInsert(
         'INSERT INTO kanji_flashcard_quiz('
         ' kanjiCharacter,'
         ' section,'
@@ -279,10 +281,11 @@ void insertSingleFlashCardData(
         ]);
   } catch (e) {
     logger.e(e);
+    return Future(() => 0);
   }
 }
 
-void updateSingleFlashCardData(
+Future<int> updateSingleFlashCardData(
   String kanjiCharacter,
   int section,
   String uuid,
@@ -291,7 +294,7 @@ void updateSingleFlashCardData(
   final db = await kanjiFromApiDatabase;
   //logger.d('uuid: $uuid, allCorrectAnwers: $allCorrectAnswers,'
   //    ' isFinishedQuiz: $isFinishedQuiz, corrects: $countCorrects');
-  await db.rawUpdate(
+  return await db.rawUpdate(
       'UPDATE'
       ' kanji_flashcard_quiz '
       'SET'

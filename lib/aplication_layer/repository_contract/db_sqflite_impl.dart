@@ -126,12 +126,13 @@ class SqliteDBService implements LocalDBService {
   ) {
     return getSingleFlashCardData(
       kanjiCharacter,
+      section,
       uuid,
     );
   }
 
   @override
-  void insertSingleFlashCardDataDB(
+  Future<int> insertSingleFlashCardDataDB(
     String kanjiCharacter,
     int section,
     String uuid,
@@ -139,7 +140,7 @@ class SqliteDBService implements LocalDBService {
   ) {
 /*     logger.d('uuid: $uuid, corrects: $countCorrects,'
         ' countIncorrects: $countIncorrects, countOmited: $countOmited'); */
-    insertSingleFlashCardData(
+    return insertSingleFlashCardData(
       kanjiCharacter,
       section,
       uuid,
@@ -148,7 +149,7 @@ class SqliteDBService implements LocalDBService {
   }
 
   @override
-  void setSingleFlashCardDataDB(
+  Future<int> setSingleFlashCardDataDB(
     String kanjiCharacter,
     int section,
     String uuid,
@@ -156,7 +157,7 @@ class SqliteDBService implements LocalDBService {
   ) {
 /*     logger.d('uuid: $uuid, corrects: $countCorrects,'
         ' countIncorrects: $countIncorrects, countOmited: $countOmited'); */
-    updateSingleFlashCardData(
+    return updateSingleFlashCardData(
       kanjiCharacter,
       section,
       uuid,

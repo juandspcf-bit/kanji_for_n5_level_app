@@ -60,14 +60,14 @@ abstract class LocalDBService {
     String uuid,
   );
 
-  void insertSingleFlashCardDataDB(
+  Future<int> insertSingleFlashCardDataDB(
     String kanjiCharacter,
     int section,
     String uuid,
     int countUnWatched,
   );
 
-  void setSingleFlashCardDataDB(
+  Future<int> setSingleFlashCardDataDB(
     String kanjiCharacter,
     int section,
     String uuid,

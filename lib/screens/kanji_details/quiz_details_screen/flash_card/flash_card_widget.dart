@@ -40,7 +40,7 @@ class _FlashCardWidgetState extends ConsumerState<FlashCardWidget> {
       decoration: BoxDecoration(
         shape: BoxShape.rectangle,
         borderRadius: BorderRadius.circular(20.0),
-        color: Theme.of(context).colorScheme.primaryContainer,
+        color: Colors.deepPurple,
       ),
       child: Center(
         child: Padding(
@@ -52,10 +52,10 @@ class _FlashCardWidgetState extends ConsumerState<FlashCardWidget> {
                 'What is the meaning of?',
                 textAlign: TextAlign.center,
                 maxLines: 2,
-                style: Theme.of(context)
-                    .textTheme
-                    .titleLarge!
-                    .copyWith(fontWeight: FontWeight.bold),
+                style: Theme.of(context).textTheme.titleLarge!.copyWith(
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
+                    ),
               ),
               const SizedBox(
                 height: 20,
@@ -63,10 +63,10 @@ class _FlashCardWidgetState extends ConsumerState<FlashCardWidget> {
               Text(
                 subString,
                 textAlign: TextAlign.center,
-                style: Theme.of(context)
-                    .textTheme
-                    .titleLarge!
-                    .copyWith(fontWeight: FontWeight.bold),
+                style: Theme.of(context).textTheme.titleLarge!.copyWith(
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
+                    ),
               ),
             ],
           ),
@@ -89,7 +89,7 @@ class _FlashCardWidgetState extends ConsumerState<FlashCardWidget> {
       decoration: BoxDecoration(
         shape: BoxShape.rectangle,
         borderRadius: BorderRadius.circular(20.0),
-        color: Theme.of(context).colorScheme.primaryContainer,
+        color: const Color.fromARGB(255, 130, 235, 10),
       ),
       child: Center(
         child: Column(
@@ -99,10 +99,10 @@ class _FlashCardWidgetState extends ConsumerState<FlashCardWidget> {
               'The meaning is:',
               textAlign: TextAlign.center,
               maxLines: 2,
-              style: Theme.of(context)
-                  .textTheme
-                  .titleLarge!
-                  .copyWith(fontWeight: FontWeight.bold),
+              style: Theme.of(context).textTheme.titleLarge!.copyWith(
+                    fontWeight: FontWeight.bold,
+                    color: Colors.deepPurple,
+                  ),
             ),
             const SizedBox(
               height: 20,
@@ -110,10 +110,10 @@ class _FlashCardWidgetState extends ConsumerState<FlashCardWidget> {
             Text(
               subString,
               textAlign: TextAlign.center,
-              style: Theme.of(context)
-                  .textTheme
-                  .titleLarge!
-                  .copyWith(fontWeight: FontWeight.bold),
+              style: Theme.of(context).textTheme.titleLarge!.copyWith(
+                    fontWeight: FontWeight.bold,
+                    color: Colors.deepPurple,
+                  ),
             ),
             const SizedBox(
               height: 10,
@@ -121,10 +121,10 @@ class _FlashCardWidgetState extends ConsumerState<FlashCardWidget> {
             Text(
               english,
               textAlign: TextAlign.center,
-              style: Theme.of(context)
-                  .textTheme
-                  .titleLarge!
-                  .copyWith(fontWeight: FontWeight.bold),
+              style: Theme.of(context).textTheme.titleLarge!.copyWith(
+                    fontWeight: FontWeight.bold,
+                    color: Colors.deepPurple,
+                  ),
             ),
           ],
         ),

@@ -21,15 +21,18 @@ class LastScoreFlashCardProvider
     int section,
     String uuid,
   ) async {
-    logger.d('$kanjiCharacter, $section, $uuid');
+    logger.d(
+        'getttin flash card data input: kanji;$kanjiCharacter, section:$section, uuid:$uuid');
     state = const AsyncLoading();
-    state = await AsyncValue.guard((() {
-      return localDBService.getSingleFlashCardDataDB(
-        kanjiCharacter,
-        section,
-        uuid,
-      );
-    }));
+    state = await AsyncValue.guard(
+      () {
+        return localDBService.getSingleFlashCardDataDB(
+          kanjiCharacter,
+          section,
+          uuid,
+        );
+      },
+    );
   }
 
   void setFinishedFlashCard({
@@ -37,23 +40,48 @@ class LastScoreFlashCardProvider
     required int section,
     required String uuid,
     required int countUnWatched,
-  }) {
+  }) async {
     if (state.value?.section == -1) {
-      localDBService.insertSingleFlashCardDataDB(
+      final numberOfRows = await localDBService.insertSingleFlashCardDataDB(
         kanjiCharacter,
         section,
         uuid,
         countUnWatched,
       );
+      if (numberOfRows != 0) {
+        state = await AsyncValue.guard(
+          () {
+            return Future(() => SingleQuizFlashCardData(
+                  kanjiCharacter: kanjiCharacter,
+                  section: section,
+                  uuid: uuid,
+                  allRevisedFlashCards: countUnWatched == 0,
+                ));
+          },
+        );
+      }
       return;
     }
 
-    localDBService.setSingleFlashCardDataDB(
+    final numberOfRows = await localDBService.setSingleFlashCardDataDB(
       kanjiCharacter,
       section,
       uuid,
       countUnWatched,
     );
+
+    if (numberOfRows != 0) {
+      state = await AsyncValue.guard(
+        () {
+          return Future(() => SingleQuizFlashCardData(
+                kanjiCharacter: kanjiCharacter,
+                section: section,
+                uuid: uuid,
+                allRevisedFlashCards: countUnWatched == 0,
+              ));
+        },
+      );
+    }
   }
 }
 
