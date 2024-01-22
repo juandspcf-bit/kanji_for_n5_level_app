@@ -33,10 +33,10 @@ class LastScoreFlashCardProvider
   }
 
   void setFinishedFlashCard({
-    String kanjiCharacter = '',
-    int section = -1,
-    String uuid = '',
-    int countUnWatched = 1,
+    required String kanjiCharacter,
+    required int section,
+    required String uuid,
+    required int countUnWatched,
   }) {
     if (state.value?.section == -1) {
       localDBService.insertSingleFlashCardDataDB(
