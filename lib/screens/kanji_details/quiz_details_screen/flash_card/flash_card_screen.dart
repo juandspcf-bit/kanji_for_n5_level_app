@@ -44,7 +44,7 @@ class _FlassCardScreenState extends ConsumerState<FlashCardScreen> {
       },
       child: Scaffold(
         appBar: AppBar(
-          title: const Text('Review your knowleged'),
+          title: const Text('Review your knowledge'),
         ),
         body: Padding(
           padding: const EdgeInsets.symmetric(
