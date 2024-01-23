@@ -9,14 +9,18 @@ class ResetQuestionButton extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 5),
-      child: ElevatedButton(
+      child: ElevatedButton.icon(
         onPressed: () {
           ref.read(quizDataValuesProvider.notifier).onResetQuestion();
         },
         style: ElevatedButton.styleFrom(
-          minimumSize: const Size.fromHeight(40),
+          minimumSize: const Size.fromHeight(60),
         ),
-        child: const Text("Reset question"),
+        icon: const Icon(Icons.arrow_circle_right),
+        label: const Text(
+          "Reset question",
+          textAlign: TextAlign.center,
+        ),
       ),
     );
   }

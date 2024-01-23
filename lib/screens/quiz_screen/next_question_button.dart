@@ -14,7 +14,7 @@ class NextQuestionButton extends ConsumerWidget {
           ref.read(quizDataValuesProvider.notifier).onNext();
         },
         style: ElevatedButton.styleFrom(
-          minimumSize: const Size.fromHeight(40),
+          minimumSize: const Size.fromHeight(60),
         ),
         icon: const Icon(Icons.arrow_circle_right),
         label: const Text('Next'),
