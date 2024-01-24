@@ -1,5 +1,6 @@
 import 'package:kanji_for_n5_level_app/aplication_layer/repository_contract/db_contract.dart';
 import 'package:kanji_for_n5_level_app/main.dart';
+import 'package:kanji_for_n5_level_app/models/secction_model.dart';
 import 'package:kanji_for_n5_level_app/repositories/local_database/db_definitions.dart';
 
 Future<SingleQuizSectionData> getSingleQuizSectionData(
@@ -32,23 +33,83 @@ Future<SingleQuizSectionData> getSingleQuizSectionData(
   );
 }
 
-Future<(bool, bool)> getAllQuizSectionData(
+Future<void> getAllQuizSectionData(
   String uuid,
 ) async {
   final db = await kanjiFromApiDatabase;
-  final listQuery =
-      await db.rawQuery('SELECT * FROM kanji_quiz WHERE uuid = ?', [uuid]);
-  if (listQuery.isEmpty) {
-    return (
-      false,
-      false,
-    );
-  }
-
-  return (
-    (listQuery[0]['allCorrectAnswersQuizKanji'] as int) == 1,
-    (listQuery[0]['isFinishedKanjiQuizz'] as int) == 1,
+  final listKanjiQuizQuery = await db.rawQuery(
+    'SELECT * FROM kanji_quiz '
+    'WHERE'
+    ' uuid = ? '
+    'ORDER BY section',
+    [uuid],
   );
+
+  final sectionList = listSections.map((sectionData) {
+    final list = listKanjiQuizQuery.where((element) {
+      return element['section'] == sectionData.sectionNumber;
+    }).toList();
+
+    if (list.isNotEmpty) {
+      final mapData = list[0];
+      return SingleQuizSectionData(
+        section: mapData['section'] as int,
+        allCorrectAnswers: (mapData['allCorrectAnswersQuizKanji'] as int) == 1,
+        isFinishedQuiz: (mapData['isFinishedKanjiQuizz'] as int) == 1,
+        countCorrects: mapData['countCorrects'] as int,
+        countIncorrects: mapData['countIncorrects'] as int,
+        countOmited: mapData['countOmited'] as int,
+      );
+    } else {
+      return SingleQuizSectionData(
+        section: sectionData.sectionNumber,
+        allCorrectAnswers: false,
+        isFinishedQuiz: false,
+        countCorrects: 0,
+        countIncorrects: 0,
+        countOmited: 0,
+      );
+    }
+  }).toList();
+
+  logger.d(sectionList);
+
+  final listAudioQuizQuery = await db.rawQuery(
+      'SELECT * FROM kanji_audio_example_quiz'
+      ' WHERE uuid = ?'
+      'ORDER BY section',
+      [uuid]);
+
+  final sectionAudioQuizData = listSections
+      .map(
+        (sectionData) {
+          return listAudioQuizQuery.where(
+            (element) {
+              return element['section'] == sectionData.sectionNumber;
+            },
+          ).toList();
+        },
+      )
+      .toList()
+      .map(
+        (sectionListData) {
+          return sectionListData.map(
+            (mapData) {
+              return SingleQuizAudioExampleData(
+                kanjiCharacter: mapData['kanjiCharacter'] as String,
+                section: mapData['section'] as int,
+                uuid: uuid,
+                allCorrectAnswers: (mapData['allCorrectAnswers'] as int) == 1,
+                isFinishedQuiz: (mapData['isFinishedQuiz'] as int) == 1,
+                countCorrects: mapData['countCorrects'] as int,
+                countIncorrects: mapData['countIncorrects'] as int,
+                countOmited: mapData['countOmited'] as int,
+              );
+            },
+          ).toList();
+        },
+      )
+      .toList();
 }
 
 void updateSingleQuizSectionData(

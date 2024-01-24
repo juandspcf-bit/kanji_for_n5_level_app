@@ -3,7 +3,9 @@ import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kanji_for_n5_level_app/config_files/screen_config.dart';
+import 'package:kanji_for_n5_level_app/main.dart';
 import 'package:kanji_for_n5_level_app/providers/status_connection_provider.dart';
+import 'package:kanji_for_n5_level_app/repositories/local_database/db_quiz_data_functions.dart';
 import 'package:kanji_for_n5_level_app/screens/account_details/account_details.dart';
 import 'package:kanji_for_n5_level_app/screens/navigation_bar_screens/bottom_navigation_bar.dart';
 import 'package:kanji_for_n5_level_app/providers/main_screen_provider.dart';
@@ -16,6 +18,8 @@ class MainContent extends ConsumerWidget with StatusDBStoringDialogs {
   const MainContent({super.key});
 
   Widget selectScreen(ScreenSelection selectedPageIndex) {
+    getAllQuizSectionData(authService.user ?? '');
+
     switch (selectedPageIndex) {
       case ScreenSelection.kanjiSections:
         return const Column(
