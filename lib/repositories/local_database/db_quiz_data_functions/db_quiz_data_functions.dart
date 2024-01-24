@@ -2,6 +2,7 @@ import 'package:kanji_for_n5_level_app/aplication_layer/repository_contract/db_c
 import 'package:kanji_for_n5_level_app/main.dart';
 import 'package:kanji_for_n5_level_app/models/secction_model.dart';
 import 'package:kanji_for_n5_level_app/repositories/local_database/db_definitions.dart';
+import 'package:kanji_for_n5_level_app/repositories/local_database/db_quiz_data_functions/utils.dart';
 
 Future<SingleQuizSectionData> getSingleQuizSectionData(
   int section,
@@ -45,34 +46,32 @@ Future<void> getAllQuizSectionData(
     [uuid],
   );
 
-  final sectionKanjiQuizList = listSections.map((sectionData) {
-    final list = listKanjiQuizQuery.where((element) {
-      return element['section'] == sectionData.sectionNumber;
-    }).toList();
+  final sectionKanjiQuizList = getSectionKanjiQuizList(
+    listSections,
+    listKanjiQuizQuery,
+  );
 
-    if (list.isNotEmpty) {
-      final mapData = list[0];
-      return SingleQuizSectionData(
-        section: mapData['section'] as int,
-        allCorrectAnswers: (mapData['allCorrectAnswersQuizKanji'] as int) == 1,
-        isFinishedQuiz: (mapData['isFinishedKanjiQuizz'] as int) == 1,
-        countCorrects: mapData['countCorrects'] as int,
-        countIncorrects: mapData['countIncorrects'] as int,
-        countOmited: mapData['countOmited'] as int,
-      );
-    } else {
-      return SingleQuizSectionData(
-        section: sectionData.sectionNumber,
-        allCorrectAnswers: false,
-        isFinishedQuiz: false,
-        countCorrects: 0,
-        countIncorrects: 0,
-        countOmited: 0,
-      );
+  //logger.d(sectionKanjiQuizList);
+
+  List<bool> allKanjiQuizFinishedList = List.generate(
+      sectionKanjiQuizList.length, (index) => false,
+      growable: false);
+  List<bool> allKanjiQuizCorrectList = List.generate(
+      sectionKanjiQuizList.length, (index) => false,
+      growable: false);
+
+  for (int i = 0; i < sectionKanjiQuizList.length; i++) {
+    var element = sectionKanjiQuizList[i];
+    if (element.allCorrectAnswers) {
+      allKanjiQuizCorrectList[i] = true;
     }
-  }).toList();
+    if (element.isFinishedQuiz) {
+      allKanjiQuizFinishedList[i] = true;
+    }
+  }
 
-  logger.d(sectionKanjiQuizList);
+  logger.d(allKanjiQuizFinishedList);
+  logger.d(allKanjiQuizCorrectList);
 
   final listAudioQuizQuery = await db.rawQuery(
       'SELECT * FROM kanji_audio_example_quiz '
@@ -81,36 +80,11 @@ Future<void> getAllQuizSectionData(
       'ORDER BY section',
       [uuid]);
 
-  final sectionAudioQuizData = listSections
-      .map(
-        (sectionData) {
-          return listAudioQuizQuery.where(
-            (element) {
-              return element['section'] == sectionData.sectionNumber;
-            },
-          ).toList();
-        },
-      )
-      .toList()
-      .map(
-        (sectionListData) {
-          return sectionListData.map(
-            (mapData) {
-              return SingleQuizAudioExampleData(
-                kanjiCharacter: mapData['kanjiCharacter'] as String,
-                section: mapData['section'] as int,
-                uuid: uuid,
-                allCorrectAnswers: (mapData['allCorrectAnswers'] as int) == 1,
-                isFinishedQuiz: (mapData['isFinishedQuiz'] as int) == 1,
-                countCorrects: mapData['countCorrects'] as int,
-                countIncorrects: mapData['countIncorrects'] as int,
-                countOmited: mapData['countOmited'] as int,
-              );
-            },
-          ).toList();
-        },
-      )
-      .toList();
+  final sectionAudioQuizData = getSectionAudioQuizList(
+    listSections,
+    listAudioQuizQuery,
+    uuid,
+  );
 
   final listFlahsCardQuery = await db.rawQuery(
       'SELECT * FROM kanji_flashcard_quiz '
@@ -118,33 +92,11 @@ Future<void> getAllQuizSectionData(
       ' uuid = ?',
       [uuid]);
 
-  final sectionFlashCardData = listSections
-      .map(
-        (sectionData) {
-          return listFlahsCardQuery.where(
-            (element) {
-              return element['section'] == sectionData.sectionNumber;
-            },
-          ).toList();
-        },
-      )
-      .toList()
-      .map(
-        (sectionListData) {
-          return sectionListData.map(
-            (mapData) {
-              return SingleQuizFlashCardData(
-                kanjiCharacter: mapData['kanjiCharacter'] as String,
-                section: mapData['section'] as int,
-                uuid: uuid,
-                allRevisedFlashCards:
-                    (mapData['allRevisedFlashCards'] as int) == 1,
-              );
-            },
-          ).toList();
-        },
-      )
-      .toList();
+  final sectionFlashCardData = getSectionFlashCardList(
+    listSections,
+    listFlahsCardQuery,
+    uuid,
+  );
 }
 
 void updateSingleQuizSectionData(
