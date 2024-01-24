@@ -45,7 +45,7 @@ Future<void> getAllQuizSectionData(
     [uuid],
   );
 
-  final sectionList = listSections.map((sectionData) {
+  final sectionKanjiQuizList = listSections.map((sectionData) {
     final list = listKanjiQuizQuery.where((element) {
       return element['section'] == sectionData.sectionNumber;
     }).toList();
@@ -72,7 +72,7 @@ Future<void> getAllQuizSectionData(
     }
   }).toList();
 
-  logger.d(sectionList);
+  logger.d(sectionKanjiQuizList);
 
   final listAudioQuizQuery = await db.rawQuery(
       'SELECT * FROM kanji_audio_example_quiz '

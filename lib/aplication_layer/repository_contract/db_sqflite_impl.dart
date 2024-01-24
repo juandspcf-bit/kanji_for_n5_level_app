@@ -3,7 +3,7 @@ import 'package:kanji_for_n5_level_app/models/kanji_from_api.dart';
 import 'package:kanji_for_n5_level_app/repositories/local_database/db_delete_user.dart';
 import 'package:kanji_for_n5_level_app/repositories/local_database/db_deleting_data.dart';
 import 'package:kanji_for_n5_level_app/repositories/local_database/db_inserting_data.dart';
-import 'package:kanji_for_n5_level_app/repositories/local_database/db_quiz_data_functions.dart';
+import 'package:kanji_for_n5_level_app/repositories/local_database/db_quiz_data_functions/db_quiz_data_functions.dart';
 
 class SqliteDBService implements LocalDBService {
   @override
