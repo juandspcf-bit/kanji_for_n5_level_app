@@ -75,8 +75,9 @@ Future<void> getAllQuizSectionData(
   logger.d(sectionList);
 
   final listAudioQuizQuery = await db.rawQuery(
-      'SELECT * FROM kanji_audio_example_quiz'
-      ' WHERE uuid = ?'
+      'SELECT * FROM kanji_audio_example_quiz '
+      'WHERE'
+      ' uuid = ? '
       'ORDER BY section',
       [uuid]);
 
@@ -104,6 +105,40 @@ Future<void> getAllQuizSectionData(
                 countCorrects: mapData['countCorrects'] as int,
                 countIncorrects: mapData['countIncorrects'] as int,
                 countOmited: mapData['countOmited'] as int,
+              );
+            },
+          ).toList();
+        },
+      )
+      .toList();
+
+  final listFlahsCardQuery = await db.rawQuery(
+      'SELECT * FROM kanji_flashcard_quiz '
+      'WHERE'
+      ' uuid = ?',
+      [uuid]);
+
+  final sectionFlashCardData = listSections
+      .map(
+        (sectionData) {
+          return listFlahsCardQuery.where(
+            (element) {
+              return element['section'] == sectionData.sectionNumber;
+            },
+          ).toList();
+        },
+      )
+      .toList()
+      .map(
+        (sectionListData) {
+          return sectionListData.map(
+            (mapData) {
+              return SingleQuizFlashCardData(
+                kanjiCharacter: mapData['kanjiCharacter'] as String,
+                section: mapData['section'] as int,
+                uuid: uuid,
+                allRevisedFlashCards:
+                    (mapData['allRevisedFlashCards'] as int) == 1,
               );
             },
           ).toList();
