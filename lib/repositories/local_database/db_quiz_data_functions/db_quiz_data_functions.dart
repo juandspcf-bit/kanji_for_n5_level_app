@@ -52,23 +52,13 @@ Future<void> getAllQuizSectionData(
   );
 
   //logger.d(sectionKanjiQuizList);
+  List<bool> allKanjiQuizFinishedList;
+  List<bool> allKanjiQuizCorrectList;
 
-  List<bool> allKanjiQuizFinishedList = List.generate(
-      sectionKanjiQuizList.length, (index) => false,
-      growable: false);
-  List<bool> allKanjiQuizCorrectList = List.generate(
-      sectionKanjiQuizList.length, (index) => false,
-      growable: false);
-
-  for (int i = 0; i < sectionKanjiQuizList.length; i++) {
-    var element = sectionKanjiQuizList[i];
-    if (element.allCorrectAnswers) {
-      allKanjiQuizCorrectList[i] = true;
-    }
-    if (element.isFinishedQuiz) {
-      allKanjiQuizFinishedList[i] = true;
-    }
-  }
+  (
+    allKanjiQuizFinishedList,
+    allKanjiQuizCorrectList,
+  ) = getStatusAllQuizKanjis(sectionKanjiQuizList);
 
   logger.d(allKanjiQuizFinishedList);
   logger.d(allKanjiQuizCorrectList);

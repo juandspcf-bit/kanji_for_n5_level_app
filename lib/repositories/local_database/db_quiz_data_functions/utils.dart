@@ -103,3 +103,27 @@ List<List<SingleQuizFlashCardData>> getSectionFlashCardList(
       )
       .toList();
 }
+
+(List<bool>, List<bool>) getStatusAllQuizKanjis(sectionKanjiQuizList) {
+  List<bool> allKanjiQuizFinishedList = List.generate(
+      sectionKanjiQuizList.length, (index) => false,
+      growable: false);
+  List<bool> allKanjiQuizCorrectList = List.generate(
+      sectionKanjiQuizList.length, (index) => false,
+      growable: false);
+
+  for (int i = 0; i < sectionKanjiQuizList.length; i++) {
+    var element = sectionKanjiQuizList[i];
+    if (element.allCorrectAnswers) {
+      allKanjiQuizCorrectList[i] = true;
+    }
+    if (element.isFinishedQuiz) {
+      allKanjiQuizFinishedList[i] = true;
+    }
+  }
+
+  return (
+    allKanjiQuizFinishedList,
+    allKanjiQuizCorrectList,
+  );
+}
