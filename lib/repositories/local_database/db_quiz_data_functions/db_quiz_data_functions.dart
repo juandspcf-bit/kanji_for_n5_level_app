@@ -52,16 +52,16 @@ Future<void> getAllQuizSectionData(
   );
 
   //logger.d(sectionKanjiQuizList);
-  List<bool> allKanjiQuizFinishedList;
-  List<bool> allKanjiQuizCorrectList;
+  List<bool> allKanjiQuizFinishedStatusList;
+  List<bool> allKanjiQuizCorrectStatusList;
 
   (
-    allKanjiQuizFinishedList,
-    allKanjiQuizCorrectList,
+    allKanjiQuizFinishedStatusList,
+    allKanjiQuizCorrectStatusList,
   ) = getStatusAllQuizKanjis(sectionKanjiQuizList);
 
-  logger.d(allKanjiQuizFinishedList);
-  logger.d(allKanjiQuizCorrectList);
+  logger.d(allKanjiQuizFinishedStatusList);
+  logger.d(allKanjiQuizCorrectStatusList);
 
   final listAudioQuizQuery = await db.rawQuery(
       'SELECT * FROM kanji_audio_example_quiz '
@@ -76,32 +76,13 @@ Future<void> getAllQuizSectionData(
     uuid,
   );
 
-  List<bool> allAudioQuizFinishedList = List.generate(
-      sectionAudioQuizData.length, (index) => true,
-      growable: false);
-  List<bool> allAudioQuizCorrectList = List.generate(
-      sectionAudioQuizData.length, (index) => true,
-      growable: false);
+  List<bool> allAudioQuizFinishedStatusList;
+  List<bool> allAudioQuizCorrectStatusList;
 
-  for (int j = 0; j < sectionAudioQuizData.length; j++) {
-    var element = sectionAudioQuizData[j];
-
-    final allCorrectAnswers = element.where((element) {
-      return element.allCorrectAnswers == false;
-    }).length;
-
-    if (allCorrectAnswers > 0) {
-      allAudioQuizCorrectList[j] = false;
-    }
-
-    final allIsFinishedQuiz = element.where((element) {
-      return element.isFinishedQuiz == false;
-    }).length;
-
-    if (allIsFinishedQuiz > 0) {
-      allAudioQuizFinishedList[j] = false;
-    }
-  }
+  (
+    allAudioQuizFinishedStatusList,
+    allAudioQuizCorrectStatusList,
+  ) = getStatusAllAudioQuiz(sectionAudioQuizData);
 
   final listFlahsCardQuery = await db.rawQuery(
       'SELECT * FROM kanji_flashcard_quiz '
@@ -115,22 +96,8 @@ Future<void> getAllQuizSectionData(
     uuid,
   );
 
-  List<bool> allRevisedFlashCards = List.generate(
-    sectionFlashCardData.length,
-    (index) => true,
-    growable: false,
-  );
-
-  for (int k = 0; k < sectionFlashCardData.length; k++) {
-    var element = sectionFlashCardData[k];
-    final allRevisedFlashCardsFalse = element.where((element) {
-      return element.allRevisedFlashCards == false;
-    }).length;
-
-    if (allRevisedFlashCardsFalse > 0) {
-      allRevisedFlashCards[k] = false;
-    }
-  }
+  List<bool> allRevisedFlashCardsStatusList =
+      getAllFlashCardStatus(sectionFlashCardData);
 }
 
 void updateSingleQuizSectionData(
