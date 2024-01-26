@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kanji_for_n5_level_app/screens/quiz_screen/quiz_kanji_list_provider.dart';
 import 'package:kanji_for_n5_level_app/screens/quiz_screen/welcome_screen/last_score_provider.dart';
+import 'package:kanji_for_n5_level_app/text_asset/text_assets.dart';
 
 class WelcomeKanjiListQuizScreen extends ConsumerWidget {
   const WelcomeKanjiListQuizScreen({super.key});
@@ -64,14 +65,13 @@ class LastScoreKanjiQuiz extends ConsumerWidget {
                 textAlign: TextAlign.center,
               )
             : Text(
-                'Guess the correct meaning by dragging '
-                'the kanji to one of the empty boxes.',
+                noFinishedQuizMessage,
                 style: Theme.of(context).textTheme.titleLarge,
                 textAlign: TextAlign.center,
               );
       }),
       error: (error, stack) => Text(
-        'Oops, something unexpected happened',
+        errorFinishedQuizMessage,
         style: Theme.of(context).textTheme.titleLarge,
       ),
       loading: () => const CircularProgressIndicator(),

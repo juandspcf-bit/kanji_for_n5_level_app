@@ -16,3 +16,9 @@ const cancelText = 'Cancel';
 const passwordText = 'password';
 const invalidPassword = 'Invalid password';
 const typeYourPasswordText = 'Type your password';
+
+//welcome kanji quiz screen
+
+const noFinishedQuizMessage = 'Guess the correct meaning by dragging '
+    'the kanji to one of the empty boxes.';
+const errorFinishedQuizMessage = 'Oops, something unexpected happened';
