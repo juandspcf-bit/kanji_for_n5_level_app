@@ -52,16 +52,11 @@ Future<void> getAllQuizSectionData(
   );
 
   //logger.d(sectionKanjiQuizList);
-  List<bool> allKanjiQuizFinishedStatusList;
-  List<bool> allKanjiQuizCorrectStatusList;
 
-  (
+  var (
     allKanjiQuizFinishedStatusList,
     allKanjiQuizCorrectStatusList,
   ) = getStatusAllQuizKanjis(sectionKanjiQuizList);
-
-  logger.d(allKanjiQuizFinishedStatusList);
-  logger.d(allKanjiQuizCorrectStatusList);
 
   final listAudioQuizQuery = await db.rawQuery(
       'SELECT * FROM kanji_audio_example_quiz '
@@ -76,10 +71,7 @@ Future<void> getAllQuizSectionData(
     uuid,
   );
 
-  List<bool> allAudioQuizFinishedStatusList;
-  List<bool> allAudioQuizCorrectStatusList;
-
-  (
+  var (
     allAudioQuizFinishedStatusList,
     allAudioQuizCorrectStatusList,
   ) = getStatusAllAudioQuiz(sectionAudioQuizData);
@@ -98,6 +90,12 @@ Future<void> getAllQuizSectionData(
 
   List<bool> allRevisedFlashCardsStatusList =
       getAllFlashCardStatus(sectionFlashCardData);
+
+  logger.d(allKanjiQuizFinishedStatusList.length);
+  logger.d(allKanjiQuizCorrectStatusList.length);
+  logger.d(allAudioQuizFinishedStatusList.length);
+  logger.d(allAudioQuizCorrectStatusList.length);
+  logger.d(allRevisedFlashCardsStatusList.length);
 }
 
 void updateSingleQuizSectionData(
