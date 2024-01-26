@@ -14,6 +14,9 @@ class WelcomeKanjiListQuizScreen extends ConsumerWidget {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
+        const SizedBox(
+          height: 20,
+        ),
         const LastScoreKanjiQuiz(),
         const SizedBox(
           height: 20,
@@ -24,23 +27,6 @@ class WelcomeKanjiListQuizScreen extends ConsumerWidget {
             'assets/images/quiz.png',
             fit: BoxFit.fitHeight,
           ),
-        ),
-        const SizedBox(
-          height: 20,
-        ),
-        Row(
-          children: [
-            Expanded(
-              child: Text(
-                welcomeMessage,
-                style: Theme.of(context).textTheme.titleLarge,
-                softWrap: false,
-                maxLines: 3,
-                textAlign: TextAlign.center,
-                overflow: TextOverflow.ellipsis,
-              ),
-            ),
-          ],
         ),
         const SizedBox(
           height: 20,
@@ -72,12 +58,16 @@ class LastScoreKanjiQuiz extends ConsumerWidget {
       data: (data) => Builder(builder: (context) {
         return data.isFinishedQuiz
             ? Text(
-                'Hello you have completed this quiz with ${data.countCorrects}/ ${data.countIncorrects} correct, incorrect anwers',
+                'You have completed this quiz with ${data.countCorrects}'
+                ' questions correct\nout of ${data.countCorrects + data.countIncorrects + data.countOmited}',
                 style: Theme.of(context).textTheme.titleLarge,
+                textAlign: TextAlign.center,
               )
             : Text(
-                'Hello complete de quiz!!',
+                'Guess the correct meaning by dragging '
+                'the kanji to one of the empty boxes.',
                 style: Theme.of(context).textTheme.titleLarge,
+                textAlign: TextAlign.center,
               );
       }),
       error: (error, stack) => Text(
