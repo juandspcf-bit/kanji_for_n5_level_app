@@ -62,10 +62,14 @@ class MainScreenProvider extends Notifier<MainScreenData> {
       ref
           .read(mainScreenProvider.notifier)
           .setScreen(ScreenSelection.favoritesKanjis);
-    } else {
+    } else if (index == 2) {
       ref
           .read(mainScreenProvider.notifier)
           .setScreen(ScreenSelection.searchKanji);
+    } else {
+      ref
+          .read(mainScreenProvider.notifier)
+          .setScreen(ScreenSelection.progressTimeLine);
     }
   }
 
@@ -166,7 +170,12 @@ class MainScreenData {
       required this.fullName});
 }
 
-enum ScreenSelection { kanjiSections, favoritesKanjis, searchKanji }
+enum ScreenSelection {
+  kanjiSections,
+  favoritesKanjis,
+  searchKanji,
+  progressTimeLine
+}
 
 Future<(List<(KanjiFromApi, bool)>, List<(KanjiFromApi, bool)>)>
     cleanInvalidStoredFiles(List<KanjiFromApi> listOfStoredKanjis) async {

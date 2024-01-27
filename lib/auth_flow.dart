@@ -4,7 +4,7 @@ import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kanji_for_n5_level_app/aplication_layer/auth_firebase_impl/auth_service_firebase.dart';
 import 'package:kanji_for_n5_level_app/main.dart';
-import 'package:kanji_for_n5_level_app/providers/main_screen_provider.dart';
+import 'package:kanji_for_n5_level_app/screens/main_screens/main_content_provider.dart';
 import 'package:kanji_for_n5_level_app/providers/status_connection_provider.dart';
 import 'package:kanji_for_n5_level_app/screens/main_screens/login_screen/login_screen.dart';
 import 'package:kanji_for_n5_level_app/screens/main_screens/main_content.dart';

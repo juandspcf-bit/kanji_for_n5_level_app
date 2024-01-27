@@ -8,7 +8,7 @@ import 'package:kanji_for_n5_level_app/screens/body_list/error_fetching_kanjis.d
 import 'package:kanji_for_n5_level_app/screens/body_list/no_data_to_shown_screen.dart';
 import 'package:kanji_for_n5_level_app/screens/navigation_bar_screens/favorite_screen/favorites_kanjis_provider.dart';
 import 'package:kanji_for_n5_level_app/providers/kanjis_list_provider.dart';
-import 'package:kanji_for_n5_level_app/providers/main_screen_provider.dart';
+import 'package:kanji_for_n5_level_app/screens/main_screens/main_content_provider.dart';
 import 'package:kanji_for_n5_level_app/screens/body_list/kanji_item.dart';
 import 'package:kanji_for_n5_level_app/screens/body_list/shimmer_list.dart';
 

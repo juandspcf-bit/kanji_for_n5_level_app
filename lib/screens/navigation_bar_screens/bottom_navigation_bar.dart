@@ -2,7 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:kanji_for_n5_level_app/providers/main_screen_provider.dart';
+import 'package:kanji_for_n5_level_app/screens/main_screens/main_content_provider.dart';
 
 class CustomBottomNavigationBar extends ConsumerWidget {
   const CustomBottomNavigationBar(
@@ -27,8 +27,9 @@ class CustomBottomNavigationBar extends ConsumerWidget {
                   .white38) //Border(top: BorderSide(color: Colors.white38, width: 1)),
           ),
       child: BottomNavigationBar(
-        unselectedItemColor:
-            Theme.of(context).colorScheme.onPrimaryContainer.withAlpha(100),
+        unselectedItemColor: Colors.white30,
+        selectedItemColor: Colors.white70,
+        //Theme.of(context).colorScheme.onPrimaryContainer.withAlpha(100),
         onTap: selectPage,
         currentIndex: selectedPageIndex.index,
         items: [
@@ -52,6 +53,13 @@ class CustomBottomNavigationBar extends ConsumerWidget {
               size: iconSize,
             ),
             label: "basic search",
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(
+              Icons.timeline,
+              size: iconSize,
+            ),
+            label: "progress",
           ),
         ],
       ),

@@ -1,6 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kanji_for_n5_level_app/main.dart';
-import 'package:kanji_for_n5_level_app/providers/main_screen_provider.dart';
+import 'package:kanji_for_n5_level_app/screens/main_screens/main_content_provider.dart';
 import 'package:kanji_for_n5_level_app/repositories/local_database/db_deleting_data.dart';
 import 'package:kanji_for_n5_level_app/models/kanji_from_api.dart';
 import 'package:kanji_for_n5_level_app/providers/error_storing_database_status.dart';

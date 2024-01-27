@@ -8,7 +8,7 @@ import 'package:kanji_for_n5_level_app/providers/status_connection_provider.dart
 import 'package:kanji_for_n5_level_app/repositories/local_database/db_quiz_data_functions/db_quiz_data_functions.dart';
 import 'package:kanji_for_n5_level_app/screens/account_details/account_details.dart';
 import 'package:kanji_for_n5_level_app/screens/navigation_bar_screens/bottom_navigation_bar.dart';
-import 'package:kanji_for_n5_level_app/providers/main_screen_provider.dart';
+import 'package:kanji_for_n5_level_app/screens/main_screens/main_content_provider.dart';
 import 'package:kanji_for_n5_level_app/screens/navigation_bar_screens/favorite_screen/kanjis_for_favorites_screen.dart';
 import 'package:kanji_for_n5_level_app/screens/navigation_bar_screens/search_screen.dart';
 import 'package:kanji_for_n5_level_app/screens/navigation_bar_screens/sections_screen/sections_screen.dart';

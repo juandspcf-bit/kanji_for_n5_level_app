@@ -5,7 +5,7 @@ import 'package:kanji_for_n5_level_app/screens/account_details/close_account/clo
 import 'package:kanji_for_n5_level_app/screens/account_details/close_account/close_account_provider.dart';
 import 'package:kanji_for_n5_level_app/screens/account_details/personal_info/personal_info_provider.dart';
 import 'package:kanji_for_n5_level_app/screens/main_screens/login_screen/login_provider.dart';
-import 'package:kanji_for_n5_level_app/providers/main_screen_provider.dart';
+import 'package:kanji_for_n5_level_app/screens/main_screens/main_content_provider.dart';
 import 'package:kanji_for_n5_level_app/providers/password_change_flow_provider.dart';
 import 'package:kanji_for_n5_level_app/screens/account_details/password_change_flow.dart';
 import 'package:kanji_for_n5_level_app/screens/account_details/personal_info/personal_info.dart';
