@@ -1,4 +1,3 @@
-import 'package:kanji_for_n5_level_app/aplication_layer/repository_contract/db_contract.dart';
 import 'package:kanji_for_n5_level_app/main.dart';
 import 'package:kanji_for_n5_level_app/models/progress_time_line_d_b_data.dart';
 import 'package:kanji_for_n5_level_app/models/secction_model.dart';
