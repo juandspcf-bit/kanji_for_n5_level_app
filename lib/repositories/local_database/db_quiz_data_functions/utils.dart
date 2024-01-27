@@ -1,4 +1,5 @@
 import 'package:kanji_for_n5_level_app/aplication_layer/repository_contract/db_contract.dart';
+import 'package:kanji_for_n5_level_app/main.dart';
 import 'package:kanji_for_n5_level_app/models/secction_model.dart';
 import 'package:kanji_for_n5_level_app/models/single_quiz_audio_example_data.dart';
 import 'package:kanji_for_n5_level_app/models/single_quiz_flash_card_data.dart';
@@ -41,36 +42,36 @@ List<List<SingleQuizAudioExampleData>> getSectionAudioQuizList(
   List<Map<String, Object?>> listAudioQuizQuery,
   String uuid,
 ) {
-  return listSections
-      .map(
-        (sectionData) {
-          return listAudioQuizQuery.where(
-            (element) {
-              return element['section'] == sectionData.sectionNumber;
-            },
-          ).toList();
+  final firts = listSections.map(
+    (sectionData) {
+      return listAudioQuizQuery.where(
+        (element) {
+          return element['section'] == sectionData.sectionNumber;
         },
-      )
-      .toList()
-      .map(
-        (sectionListData) {
-          return sectionListData.map(
-            (mapData) {
-              return SingleQuizAudioExampleData(
-                kanjiCharacter: mapData['kanjiCharacter'] as String,
-                section: mapData['section'] as int,
-                uuid: uuid,
-                allCorrectAnswers: (mapData['allCorrectAnswers'] as int) == 1,
-                isFinishedQuiz: (mapData['isFinishedQuiz'] as int) == 1,
-                countCorrects: mapData['countCorrects'] as int,
-                countIncorrects: mapData['countIncorrects'] as int,
-                countOmited: mapData['countOmited'] as int,
-              );
-            },
-          ).toList();
+      ).toList();
+    },
+  ).toList();
+
+  logger.d(firts);
+
+  return firts.map(
+    (sectionListData) {
+      return sectionListData.map(
+        (mapData) {
+          return SingleQuizAudioExampleData(
+            kanjiCharacter: mapData['kanjiCharacter'] as String,
+            section: mapData['section'] as int,
+            uuid: uuid,
+            allCorrectAnswers: (mapData['allCorrectAnswers'] as int) == 1,
+            isFinishedQuiz: (mapData['isFinishedQuiz'] as int) == 1,
+            countCorrects: mapData['countCorrects'] as int,
+            countIncorrects: mapData['countIncorrects'] as int,
+            countOmited: mapData['countOmited'] as int,
+          );
         },
-      )
-      .toList();
+      ).toList();
+    },
+  ).toList();
 }
 
 List<List<SingleQuizFlashCardData>> getSectionFlashCardList(
@@ -107,7 +108,8 @@ List<List<SingleQuizFlashCardData>> getSectionFlashCardList(
       .toList();
 }
 
-(List<bool>, List<bool>) getStatusAllQuizKanjis(sectionKanjiQuizList) {
+(List<bool>, List<bool>) getStatusAllQuizKanjis(
+    List<SingleQuizSectionData> sectionKanjiQuizList) {
   List<bool> allKanjiQuizFinishedList = List.generate(
       sectionKanjiQuizList.length, (index) => false,
       growable: false);
@@ -131,7 +133,8 @@ List<List<SingleQuizFlashCardData>> getSectionFlashCardList(
   );
 }
 
-(List<bool>, List<bool>) getStatusAllAudioQuiz(sectionAudioQuizData) {
+(List<bool>, List<bool>) getStatusAllAudioQuiz(
+    List<List<SingleQuizAudioExampleData>> sectionAudioQuizData) {
   List<bool> allAudioQuizFinishedList = List.generate(
       sectionAudioQuizData.length, (index) => true,
       growable: false);
@@ -158,13 +161,18 @@ List<List<SingleQuizFlashCardData>> getSectionFlashCardList(
       allAudioQuizFinishedList[j] = false;
     }
   }
+
+/*   logger.d(allAudioQuizFinishedList);
+  logger.d(allAudioQuizCorrectList); */
+
   return (
     allAudioQuizFinishedList,
     allAudioQuizCorrectList,
   );
 }
 
-List<bool> getAllFlashCardStatus(sectionFlashCardData) {
+List<bool> getAllFlashCardStatus(
+    List<List<SingleQuizFlashCardData>> sectionFlashCardData) {
   List<bool> allRevisedFlashCards = List.generate(
     sectionFlashCardData.length,
     (index) => true,
@@ -182,4 +190,14 @@ List<bool> getAllFlashCardStatus(sectionFlashCardData) {
     }
   }
   return allRevisedFlashCards;
+}
+
+void printAudioData(Map<String, Object?> mapData) {
+  logger.d(mapData['kanjiCharacter']);
+  logger.d(mapData['section']);
+  logger.d(mapData['allCorrectAnswers']);
+  logger.d(mapData['isFinishedQuiz']);
+  logger.d(mapData['countCorrects']);
+  logger.d(mapData['countIncorrects']);
+  logger.d(mapData['countOmited']);
 }

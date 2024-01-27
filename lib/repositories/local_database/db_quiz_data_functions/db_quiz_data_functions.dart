@@ -95,17 +95,17 @@ Future<ProgressTimeLineDBData> getAllQuizSectionData(
   List<bool> allRevisedFlashCardsStatusList =
       getAllFlashCardStatus(sectionFlashCardData);
 
-  logger.d(allKanjiQuizFinishedStatusList.length);
-  logger.d(allKanjiQuizCorrectStatusList.length);
-  logger.d(allAudioQuizFinishedStatusList.length);
-  logger.d(allAudioQuizCorrectStatusList.length);
-  logger.d(allRevisedFlashCardsStatusList.length);
+/*   logger.d(allKanjiQuizFinishedStatusList);
+  logger.d(allKanjiQuizCorrectStatusList);
+  logger.d(allAudioQuizFinishedStatusList);
+  logger.d(allAudioQuizCorrectStatusList);
+  logger.d(allRevisedFlashCardsStatusList); */
 
   return ProgressTimeLineDBData(
     allKanjiQuizFinishedStatusList: allKanjiQuizFinishedStatusList,
     allKanjiQuizCorrectStatusList: allKanjiQuizCorrectStatusList,
     allAudioQuizFinishedStatusList: allAudioQuizFinishedStatusList,
-    allAudioQuizCorrectStatusList: allKanjiQuizCorrectStatusList,
+    allAudioQuizCorrectStatusList: allAudioQuizCorrectStatusList,
     allRevisedFlashCardsStatusList: allRevisedFlashCardsStatusList,
   );
 }

@@ -15,6 +15,7 @@ import 'package:kanji_for_n5_level_app/models/kanji_from_api.dart';
 import 'package:kanji_for_n5_level_app/screens/navigation_bar_screens/favorite_screen/favorites_kanjis_provider.dart';
 import 'package:kanji_for_n5_level_app/providers/status_connection_provider.dart';
 import 'package:kanji_for_n5_level_app/providers/status_stored_provider.dart';
+import 'package:kanji_for_n5_level_app/screens/navigation_bar_screens/pogress_screen/progress_screen_provider.dart';
 
 class MainScreenProvider extends Notifier<MainScreenData> {
   @override
@@ -67,6 +68,9 @@ class MainScreenProvider extends Notifier<MainScreenData> {
           .read(mainScreenProvider.notifier)
           .setScreen(ScreenSelection.searchKanji);
     } else {
+      ref
+          .read(progressTimelineProvider.notifier)
+          .getAllQuizSectionData(authService.user ?? '');
       ref
           .read(mainScreenProvider.notifier)
           .setScreen(ScreenSelection.progressTimeLine);
