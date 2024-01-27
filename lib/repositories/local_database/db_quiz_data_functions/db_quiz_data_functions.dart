@@ -1,6 +1,10 @@
 import 'package:kanji_for_n5_level_app/aplication_layer/repository_contract/db_contract.dart';
 import 'package:kanji_for_n5_level_app/main.dart';
+import 'package:kanji_for_n5_level_app/models/progress_time_line_d_b_data.dart';
 import 'package:kanji_for_n5_level_app/models/secction_model.dart';
+import 'package:kanji_for_n5_level_app/models/single_quiz_audio_example_data.dart';
+import 'package:kanji_for_n5_level_app/models/single_quiz_flash_card_data.dart';
+import 'package:kanji_for_n5_level_app/models/single_quiz_section_data.dart';
 import 'package:kanji_for_n5_level_app/repositories/local_database/db_definitions.dart';
 import 'package:kanji_for_n5_level_app/repositories/local_database/db_quiz_data_functions/utils.dart';
 
@@ -34,7 +38,7 @@ Future<SingleQuizSectionData> getSingleQuizSectionData(
   );
 }
 
-Future<void> getAllQuizSectionData(
+Future<ProgressTimeLineDBData> getAllQuizSectionData(
   String uuid,
 ) async {
   final db = await kanjiFromApiDatabase;
@@ -96,6 +100,14 @@ Future<void> getAllQuizSectionData(
   logger.d(allAudioQuizFinishedStatusList.length);
   logger.d(allAudioQuizCorrectStatusList.length);
   logger.d(allRevisedFlashCardsStatusList.length);
+
+  return ProgressTimeLineDBData(
+    allKanjiQuizFinishedStatusList: allKanjiQuizFinishedStatusList,
+    allKanjiQuizCorrectStatusList: allKanjiQuizCorrectStatusList,
+    allAudioQuizFinishedStatusList: allAudioQuizFinishedStatusList,
+    allAudioQuizCorrectStatusList: allKanjiQuizCorrectStatusList,
+    allRevisedFlashCardsStatusList: allRevisedFlashCardsStatusList,
+  );
 }
 
 void updateSingleQuizSectionData(
