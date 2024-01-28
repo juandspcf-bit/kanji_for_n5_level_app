@@ -51,7 +51,7 @@ List<List<SingleQuizAudioExampleData>> getSectionAudioQuizList(
     },
   ).toList();
 
-  logger.d(firts);
+  logger.d('audio quiz data: $firts');
 
   return firts.map(
     (sectionListData) {
