@@ -17,6 +17,8 @@ class ProgressTimelineProvider extends Notifier<ProgressTimeLineData> {
     String uuid,
   ) async {
     final data = await localDBService.getAllQuizSectionDBData(uuid);
+    logger.d(data.allAudioQuizCorrectStatusList);
+    logger.d(data.allAudioQuizFinishedStatusList);
     state = ProgressTimeLineData(
       allKanjiQuizFinishedStatusList: data.allKanjiQuizFinishedStatusList,
       allKanjiQuizCorrectStatusList: data.allKanjiQuizCorrectStatusList,

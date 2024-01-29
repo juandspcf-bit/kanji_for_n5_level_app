@@ -41,19 +41,34 @@ List<List<SingleQuizAudioExampleData>> getSectionAudioQuizList(
   List<Map<String, Object?>> listAudioQuizQuery,
   String uuid,
 ) {
-  final firts = listSections.map(
-    (sectionData) {
-      return listAudioQuizQuery.where(
-        (element) {
-          return element['section'] == sectionData.sectionNumber;
-        },
-      ).toList();
-    },
-  ).toList();
+  final listMap =
+      List.generate(listSections.length, (index) => <Map<String, Object?>>[]);
 
-  logger.d('audio quiz data: $firts');
+  for (var section in listSections) {
+    for (var kanjiCharacter in section.kanjisCharacters) {
+      final mapDataList = listAudioQuizQuery
+          .where((mapData) => mapData['kanjiCharacter'] == kanjiCharacter)
+          .toList();
+      if (mapDataList.isEmpty) {
+        final myMap = {
+          'kanjiCharacter': kanjiCharacter,
+          'section': section.sectionNumber,
+          'allCorrectAnswers': 0,
+          'isFinishedQuiz': 0,
+          'countCorrects': 0,
+          'countIncorrects': 0,
+          'countOmited': 0,
+        };
+        listMap[section.sectionNumber - 1].add(myMap);
+      } else {
+        listMap[section.sectionNumber - 1].add(mapDataList[0]);
+      }
+    }
+  }
 
-  return firts.map(
+  logger.d('audio quiz data: $listMap');
+
+  final listSingleQuizAudioExampleData = listMap.map(
     (sectionListData) {
       return sectionListData.map(
         (mapData) {
@@ -71,6 +86,10 @@ List<List<SingleQuizAudioExampleData>> getSectionAudioQuizList(
       ).toList();
     },
   ).toList();
+
+  //logger.d(listSingleQuizAudioExampleData);
+
+  return listSingleQuizAudioExampleData;
 }
 
 List<List<SingleQuizFlashCardData>> getSectionFlashCardList(
@@ -160,9 +179,9 @@ List<List<SingleQuizFlashCardData>> getSectionFlashCardList(
       allAudioQuizFinishedList[j] = false;
     }
   }
+  logger.d(allAudioQuizFinishedList);
 
-/*   logger.d(allAudioQuizFinishedList);
-  logger.d(allAudioQuizCorrectList); */
+  logger.d(allAudioQuizCorrectList);
 
   return (
     allAudioQuizFinishedList,

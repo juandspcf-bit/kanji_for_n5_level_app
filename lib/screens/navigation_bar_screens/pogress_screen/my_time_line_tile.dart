@@ -126,7 +126,7 @@ class MyTimeLineTile extends StatelessWidget {
               ),
               MyTile(
                 icon: Icon(
-                  isFinishedKanjiQuizSection ? Icons.done_rounded : Icons.close,
+                  isFinishedAudioQuizSection ? Icons.done_rounded : Icons.close,
                   color: colorText,
                 ),
                 text: Text(
@@ -138,7 +138,7 @@ class MyTimeLineTile extends StatelessWidget {
               ),
               MyTile(
                 icon: Icon(
-                  isAllCorrectKanjiQuizSection
+                  isAllCorrectAudioQuizSection
                       ? Icons.done_rounded
                       : Icons.close,
                   color: colorText,

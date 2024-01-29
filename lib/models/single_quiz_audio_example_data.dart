@@ -21,6 +21,6 @@ class SingleQuizAudioExampleData {
 
   @override
   String toString() {
-    return 'kanjiCharacter;$kanjiCharacter, section:$section, uuid:$uuid isFinished:$isFinishedQuiz';
+    return 'kanjiCharacter;$kanjiCharacter, allCorrectAnswers:$allCorrectAnswers, isFinished:$isFinishedQuiz';
   }
 }

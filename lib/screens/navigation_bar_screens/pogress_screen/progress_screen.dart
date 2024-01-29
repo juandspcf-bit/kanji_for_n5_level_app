@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:kanji_for_n5_level_app/main.dart';
 import 'package:kanji_for_n5_level_app/screens/navigation_bar_screens/pogress_screen/my_time_line_tile.dart';
 import 'package:kanji_for_n5_level_app/screens/navigation_bar_screens/pogress_screen/progress_screen_provider.dart';
 
@@ -9,6 +10,8 @@ class ProgressScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final progressTimelineData = ref.watch(progressTimelineProvider);
+    logger.d(progressTimelineData.allAudioQuizCorrectStatusList);
+    logger.d(progressTimelineData.allAudioQuizFinishedStatusList);
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
       child: ListView(
