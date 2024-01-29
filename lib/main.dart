@@ -6,6 +6,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:kanji_for_n5_level_app/aplication_layer/auth_contract/auth_service_contract.dart';
 import 'package:kanji_for_n5_level_app/aplication_layer/auth_firebase_impl/auth_service_firebase.dart';
+import 'package:kanji_for_n5_level_app/aplication_layer/repository_contract/cloud_repo/cloud_db_contract.dart';
+import 'package:kanji_for_n5_level_app/aplication_layer/repository_contract/cloud_repo/cloud_db_firestore_impl.dart';
 import 'package:kanji_for_n5_level_app/aplication_layer/repository_contract/local_repo/db_contract.dart';
 import 'package:kanji_for_n5_level_app/aplication_layer/repository_contract/local_repo/db_sqflite_impl.dart';
 import 'package:kanji_for_n5_level_app/aplication_layer/repository_contract/api_repo/kanji_api_contract.dart';
@@ -19,6 +21,7 @@ import 'firebase_options.dart';
 final dbFirebase = FirebaseFirestore.instance;
 
 final KanjiApiService applicationApiService = AppAplicationApiService();
+CloudDBService cloudDBService = FireStoreDBService();
 
 final dio = Dio();
 final logger = Logger();

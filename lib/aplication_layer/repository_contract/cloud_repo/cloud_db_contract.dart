@@ -1,5 +1,7 @@
 abstract class CloudDBService {
-  Future<void> storeKanjiToCloudDatabase(
+  Future<void> insertFavoriteCloudDB(
     String kanjiCharacter,
+    int timeStamp,
+    String uuid,
   );
 }

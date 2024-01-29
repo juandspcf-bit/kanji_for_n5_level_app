@@ -41,7 +41,7 @@ class KanjiDetailsProvider extends Notifier<KanjiDetailsData?> {
     );
   }
 
-  ///initial point function for stroing a kanji in favorites
+  ///initial point function for storing a kanji in favorites
   void storeToFavorites(KanjiFromApi kanjiFromApi) async {
     setStoringToFavoritesStatus(StoringToFavoritesStatus.processing);
     final queryKanji = ref
@@ -51,6 +51,11 @@ class KanjiDetailsProvider extends Notifier<KanjiDetailsData?> {
     if (!queryKanji) {
       try {
         final timeStamp = DateTime.now().millisecondsSinceEpoch;
+        await cloudDBService.insertFavoriteCloudDB(
+          kanjiFromApi.kanjiCharacter,
+          timeStamp,
+          authService.user ?? '',
+        );
         await insertFavorite(kanjiFromApi.kanjiCharacter, timeStamp);
         final storedItems =
             ref.read(storedKanjisProvider.notifier).getStoresItems();
