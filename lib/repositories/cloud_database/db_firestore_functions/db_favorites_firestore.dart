@@ -12,5 +12,4 @@ Future<void> insertFavorite(
   };
 
   return dbFirebase.collection("favorites").doc(kanjiCharacter).set(data);
-  //.onError((e, _) => logger.d("Error writing document: $e"));
 }
