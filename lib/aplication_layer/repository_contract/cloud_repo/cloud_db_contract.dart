@@ -4,4 +4,9 @@ abstract class CloudDBService {
     int timeStamp,
     String uuid,
   );
+
+  Future<void> deleteFavoriteCloudDB(
+    String kanjiCharacter,
+    String uuid,
+  );
 }

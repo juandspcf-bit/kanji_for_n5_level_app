@@ -41,7 +41,7 @@ class KanjiDetailsProvider extends Notifier<KanjiDetailsData?> {
     );
   }
 
-  ///initial point function for storing a kanji in favorites
+  ///initial point function for storing or deleting a kanji in favorites
   void storeToFavorites(KanjiFromApi kanjiFromApi) async {
     setStoringToFavoritesStatus(StoringToFavoritesStatus.processing);
     final queryKanji = ref
@@ -83,6 +83,10 @@ class KanjiDetailsProvider extends Notifier<KanjiDetailsData?> {
       }
     } else {
       try {
+        await cloudDBService.deleteFavoriteCloudDB(
+          kanjiFromApi.kanjiCharacter,
+          authService.user ?? '',
+        );
         await deleteFavorite(kanjiFromApi.kanjiCharacter);
         ref.read(favoriteskanjisProvider.notifier).removeItem(kanjiFromApi);
         Future.delayed(

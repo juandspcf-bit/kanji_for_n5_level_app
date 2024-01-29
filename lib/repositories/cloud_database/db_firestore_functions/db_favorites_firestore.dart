@@ -13,3 +13,19 @@ Future<void> insertFavorite(
 
   return dbFirebase.collection("favorites").doc(kanjiCharacter).set(data);
 }
+
+Future<void> deleteFavorite(
+  String kanjiCharacter,
+  String uuid,
+) async {
+  final querySnapshot = await dbFirebase
+      .collection("favorites")
+      .where("uuid", isEqualTo: uuid)
+      .where("kanjiCharacter", isEqualTo: kanjiCharacter)
+      .get();
+
+  logger.d("Successfully completed");
+  for (var docSnapshot in querySnapshot.docs) {
+    await docSnapshot.reference.delete();
+  }
+}

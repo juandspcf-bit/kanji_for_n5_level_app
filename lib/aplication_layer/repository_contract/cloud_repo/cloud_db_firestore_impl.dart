@@ -10,4 +10,12 @@ class FireStoreDBService extends CloudDBService {
   ) {
     return insertFavorite(kanjiCharacter, timeStamp, uuid);
   }
+
+  @override
+  Future<void> deleteFavoriteCloudDB(String kanjiCharacter, String uuid) {
+    return deleteFavorite(
+      kanjiCharacter,
+      uuid,
+    );
+  }
 }
