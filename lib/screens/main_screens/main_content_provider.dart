@@ -7,7 +7,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kanji_for_n5_level_app/aplication_layer/auth_firebase_impl/auth_service_firebase.dart';
 import 'package:kanji_for_n5_level_app/repositories/local_database/db_loading_data.dart';
-import 'package:kanji_for_n5_level_app/repositories/local_database/db_favorites.dart';
 import 'package:kanji_for_n5_level_app/main.dart';
 import 'package:kanji_for_n5_level_app/providers/score_kanji_list_provider.dart';
 import 'package:kanji_for_n5_level_app/models/kanji_from_api.dart';
@@ -81,6 +80,7 @@ class MainScreenProvider extends Notifier<MainScreenData> {
     return await compute(cleanInvalidStoredFiles, listOfStoredKanjis);
   }
 
+  ///edpoint where the app is initilizated with online connection
   Future<void> initAppOnline() async {
     await getOnlineData();
     await getAppBarData();
@@ -93,14 +93,16 @@ class MainScreenProvider extends Notifier<MainScreenData> {
 
   Future<void> getOnlineData() async {
     List<KanjiFromApi> listOfValidStoredKanjis = await loadStoredKanjis();
-    final favoritesKanjis = await loadFavorites();
+    final favoritesKanjis =
+        await localDBService.loadFavoritesDatabase(authService.user ?? '');
     ref.read(favoriteskanjisProvider.notifier).setInitialFavoritesOnline(
         listOfValidStoredKanjis, favoritesKanjis, 10);
   }
 
   Future<void> getOfflineData() async {
     List<KanjiFromApi> listOfValidStoredKanjis = await loadStoredKanjis();
-    final favoritesKanjis = await loadFavorites();
+    final favoritesKanjis =
+        await localDBService.loadFavoritesDatabase(authService.user ?? '');
     ref.read(favoriteskanjisProvider.notifier).setInitialFavoritesOffline(
         listOfValidStoredKanjis, favoritesKanjis, 10);
   }

@@ -21,11 +21,12 @@ import 'firebase_options.dart';
 final dbFirebase = FirebaseFirestore.instance;
 
 final KanjiApiService applicationApiService = AppAplicationApiService();
-CloudDBService cloudDBService = FireStoreDBService();
+final CloudDBService cloudDBService = FireStoreDBService();
+final LocalDBService localDBService = SqliteDBService();
 
 final dio = Dio();
 final logger = Logger();
-final LocalDBService localDBService = SqliteDBService();
+
 final AuthService authService = FirebaseSignInUser();
 
 var kColorScheme = ColorScheme.fromSeed(

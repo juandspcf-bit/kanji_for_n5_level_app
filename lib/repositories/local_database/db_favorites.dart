@@ -1,16 +1,10 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:kanji_for_n5_level_app/repositories/local_database/db_definitions.dart';
 
-Future<List<Favorite>> loadFavorites() async {
-  final user = FirebaseAuth.instance.currentUser;
-
-  if (user == null) {
-    return Future(() => []);
-  }
-
+Future<List<Favorite>> loadFavorites(String uid) async {
   final db = await kanjiFromApiDatabase;
-  final data = await db
-      .query('user_favorites', where: 'uuid = ?', whereArgs: [user.uid]);
+  final data =
+      await db.query('user_favorites', where: 'uuid = ?', whereArgs: [uid]);
   return data.map((e) {
     return Favorite(
       kanjis: e['kanjiCharacter'] as String,
