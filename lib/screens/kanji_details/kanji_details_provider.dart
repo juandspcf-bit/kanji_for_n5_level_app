@@ -41,6 +41,7 @@ class KanjiDetailsProvider extends Notifier<KanjiDetailsData?> {
     );
   }
 
+  ///initial point function for stroing a kanji in favorites
   void storeToFavorites(KanjiFromApi kanjiFromApi) async {
     setStoringToFavoritesStatus(StoringToFavoritesStatus.processing);
     final queryKanji = ref
