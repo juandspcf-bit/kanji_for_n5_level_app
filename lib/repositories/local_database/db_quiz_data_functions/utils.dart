@@ -97,33 +97,41 @@ List<List<SingleQuizFlashCardData>> getSectionFlashCardList(
   List<Map<String, Object?>> listFlahsCardQuery,
   String uuid,
 ) {
-  return listSections
-      .map(
-        (sectionData) {
-          return listFlahsCardQuery.where(
-            (element) {
-              return element['section'] == sectionData.sectionNumber;
-            },
-          ).toList();
+  final listMap =
+      List.generate(listSections.length, (index) => <Map<String, Object?>>[]);
+
+  for (var section in listSections) {
+    for (var kanjiCharacter in section.kanjisCharacters) {
+      final mapDataList = listFlahsCardQuery
+          .where((mapData) => mapData['kanjiCharacter'] == kanjiCharacter)
+          .toList();
+      if (mapDataList.isEmpty) {
+        final myMap = {
+          'kanjiCharacter': kanjiCharacter,
+          'section': section.sectionNumber,
+          'allRevisedFlashCards': 0,
+        };
+        listMap[section.sectionNumber - 1].add(myMap);
+      } else {
+        listMap[section.sectionNumber - 1].add(mapDataList[0]);
+      }
+    }
+  }
+
+  return listMap.map(
+    (sectionListData) {
+      return sectionListData.map(
+        (mapData) {
+          return SingleQuizFlashCardData(
+            kanjiCharacter: mapData['kanjiCharacter'] as String,
+            section: mapData['section'] as int,
+            uuid: uuid,
+            allRevisedFlashCards: (mapData['allRevisedFlashCards'] as int) == 1,
+          );
         },
-      )
-      .toList()
-      .map(
-        (sectionListData) {
-          return sectionListData.map(
-            (mapData) {
-              return SingleQuizFlashCardData(
-                kanjiCharacter: mapData['kanjiCharacter'] as String,
-                section: mapData['section'] as int,
-                uuid: uuid,
-                allRevisedFlashCards:
-                    (mapData['allRevisedFlashCards'] as int) == 1,
-              );
-            },
-          ).toList();
-        },
-      )
-      .toList();
+      ).toList();
+    },
+  ).toList();
 }
 
 (List<bool>, List<bool>) getStatusAllQuizKanjis(
