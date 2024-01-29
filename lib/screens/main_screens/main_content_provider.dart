@@ -113,7 +113,7 @@ class MainScreenProvider extends Notifier<MainScreenData> {
         validAndInvalidKanjis.$1.map((e) => e.$1).toList();
     final listOfInvalidStoredKanjis =
         validAndInvalidKanjis.$2.map((e) => e.$1).toList();
-    cleanInvaliDbRecords(listOfInvalidStoredKanjis);
+    localDBService.cleanInvalidDBRecords(listOfInvalidStoredKanjis);
     ref.read(lottieFilesProvider.notifier).initLottieFile();
 
     ref
@@ -249,20 +249,6 @@ Future<(List<(KanjiFromApi, bool)>, List<(KanjiFromApi, bool)>)>
     listKanjisRecords.where((element) => element.$2 == true).toList(),
     listKanjisRecords.where((element) => element.$2 == false).toList()
   );
-}
-
-Future<void> cleanInvaliDbRecords(
-    List<KanjiFromApi> listOfInavlidKanjis) async {
-  final db = await kanjiFromApiDatabase;
-
-  for (var kanjiFromApi in listOfInavlidKanjis) {
-    await db.rawDelete('DELETE FROM kanji_FromApi WHERE kanjiCharacter = ?',
-        [kanjiFromApi.kanjiCharacter]);
-    await db.rawDelete('DELETE FROM examples WHERE kanjiCharacter = ?',
-        [kanjiFromApi.kanjiCharacter]);
-    await db.rawDelete('DELETE FROM strokes WHERE kanjiCharacter = ?',
-        [kanjiFromApi.kanjiCharacter]);
-  }
 }
 
 Future<bool> checkFileIfExists(String audioPath) async {

@@ -82,4 +82,6 @@ abstract class LocalDBService {
   Future<ProgressTimeLineDBData> getAllQuizSectionDBData(
     String uuid,
   );
+
+  Future<void> cleanInvalidDBRecords(List<KanjiFromApi> listOfInvalidKanjis);
 }

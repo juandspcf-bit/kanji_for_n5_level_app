@@ -182,4 +182,9 @@ class SqliteDBService implements LocalDBService {
       uuid,
     );
   }
+
+  @override
+  Future<void> cleanInvalidDBRecords(List<KanjiFromApi> listOfInvalidKanjis) {
+    return cleanInvalidRecords(listOfInvalidKanjis);
+  }
 }

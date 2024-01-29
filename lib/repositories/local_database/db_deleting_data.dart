@@ -166,3 +166,16 @@ KanjiFromApi updateStatusKanjiComputeVersion(
       example: kanjiFromApi.example,
       strokes: kanjiFromApi.strokes);
 }
+
+Future<void> cleanInvalidRecords(List<KanjiFromApi> listOfInvalidKanjis) async {
+  final db = await kanjiFromApiDatabase;
+
+  for (var kanjiFromApi in listOfInvalidKanjis) {
+    await db.rawDelete('DELETE FROM kanji_FromApi WHERE kanjiCharacter = ?',
+        [kanjiFromApi.kanjiCharacter]);
+    await db.rawDelete('DELETE FROM examples WHERE kanjiCharacter = ?',
+        [kanjiFromApi.kanjiCharacter]);
+    await db.rawDelete('DELETE FROM strokes WHERE kanjiCharacter = ?',
+        [kanjiFromApi.kanjiCharacter]);
+  }
+}
