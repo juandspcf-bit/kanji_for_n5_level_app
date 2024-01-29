@@ -1,4 +1,4 @@
-import 'package:kanji_for_n5_level_app/aplication_layer/repository_contract/kanji_api_contract.dart';
+import 'package:kanji_for_n5_level_app/aplication_layer/repository_contract/api_repo/kanji_api_contract.dart';
 import 'package:kanji_for_n5_level_app/models/kanji_from_api.dart';
 import 'package:kanji_for_n5_level_app/repositories/apis/kanji_alive/request_kanji_list_api.dart';
 
