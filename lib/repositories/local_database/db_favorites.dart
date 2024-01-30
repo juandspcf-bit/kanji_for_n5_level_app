@@ -1,4 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:kanji_for_n5_level_app/models/favorite.dart';
 import 'package:kanji_for_n5_level_app/repositories/local_database/db_definitions.dart';
 
 Future<List<Favorite>> loadFavorites(String uid) async {
@@ -37,12 +38,4 @@ Future<int> deleteFavorite(String kanji) async {
   final db = await kanjiFromApiDatabase;
   return await db.delete("user_favorites",
       where: 'kanjiCharacter= ? AND uuid= ?', whereArgs: [kanji, user.uid]);
-}
-
-class Favorite {
-  final String kanjis;
-  final String uuid;
-  final int timeStamp;
-
-  Favorite({required this.kanjis, required this.uuid, required this.timeStamp});
 }

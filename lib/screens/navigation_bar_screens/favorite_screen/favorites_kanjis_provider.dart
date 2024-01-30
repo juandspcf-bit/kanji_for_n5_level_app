@@ -1,5 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kanji_for_n5_level_app/main.dart';
+import 'package:kanji_for_n5_level_app/models/favorite.dart';
 import 'package:kanji_for_n5_level_app/screens/main_screens/main_content_provider.dart';
 import 'package:kanji_for_n5_level_app/repositories/local_database/db_favorites.dart';
 import 'package:kanji_for_n5_level_app/repositories/local_database/db_inserting_data.dart';

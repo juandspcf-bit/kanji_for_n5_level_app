@@ -1,4 +1,5 @@
 import 'package:kanji_for_n5_level_app/aplication_layer/repository_contract/cloud_repo/cloud_db_contract.dart';
+import 'package:kanji_for_n5_level_app/models/favorite.dart';
 import 'package:kanji_for_n5_level_app/repositories/cloud_database/db_firestore_functions/db_favorites_firestore.dart';
 
 class FireStoreDBService extends CloudDBService {
@@ -17,5 +18,12 @@ class FireStoreDBService extends CloudDBService {
       kanjiCharacter,
       uuid,
     );
+  }
+
+  @override
+  Future<List<Favorite>> loadFavoritesCloudDB(
+    String uuid,
+  ) {
+    return loadFavoriteKanjis(uuid);
   }
 }

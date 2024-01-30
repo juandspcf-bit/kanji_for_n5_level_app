@@ -1,9 +1,9 @@
+import 'package:kanji_for_n5_level_app/models/favorite.dart';
 import 'package:kanji_for_n5_level_app/models/kanji_from_api.dart';
 import 'package:kanji_for_n5_level_app/models/progress_time_line_d_b_data.dart';
 import 'package:kanji_for_n5_level_app/models/single_quiz_audio_example_data.dart';
 import 'package:kanji_for_n5_level_app/models/single_quiz_flash_card_data.dart';
 import 'package:kanji_for_n5_level_app/models/single_quiz_section_data.dart';
-import 'package:kanji_for_n5_level_app/repositories/local_database/db_favorites.dart';
 
 abstract class LocalDBService {
   Future<KanjiFromApi?> storeKanjiToLocalDatabase(

@@ -1,4 +1,25 @@
 import 'package:kanji_for_n5_level_app/main.dart';
+import 'package:kanji_for_n5_level_app/models/favorite.dart';
+
+Future<List<Favorite>> loadFavoriteKanjis(
+  String uuid,
+) async {
+  List<Favorite> listFavorites = [];
+  final querySnapshot = await dbFirebase
+      .collection("favorites")
+      .where("uuid", isEqualTo: uuid)
+      .get();
+  for (var docSnapshot in querySnapshot.docs) {
+    final favoriteMap = docSnapshot.data();
+    listFavorites.add(Favorite(
+      kanjis: favoriteMap['kanjiCharacter'],
+      uuid: favoriteMap['timeStamp'],
+      timeStamp: favoriteMap['uuid'],
+    ));
+  }
+
+  return listFavorites;
+}
 
 Future<void> insertFavorite(
   String kanjiCharacter,

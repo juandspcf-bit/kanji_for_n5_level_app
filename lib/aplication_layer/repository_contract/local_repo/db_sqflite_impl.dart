@@ -1,4 +1,5 @@
 import 'package:kanji_for_n5_level_app/aplication_layer/repository_contract/local_repo/db_contract.dart';
+import 'package:kanji_for_n5_level_app/models/favorite.dart';
 import 'package:kanji_for_n5_level_app/models/kanji_from_api.dart';
 import 'package:kanji_for_n5_level_app/models/progress_time_line_d_b_data.dart';
 import 'package:kanji_for_n5_level_app/models/single_quiz_audio_example_data.dart';

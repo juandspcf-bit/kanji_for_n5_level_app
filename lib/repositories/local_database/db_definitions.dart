@@ -14,7 +14,8 @@ Future<Database> get kanjiFromApiDatabase async {
           ' countCorrects INTEGER, countIncorrects INTEGER,'
           ' countOmited INTEGER,'
           ' section INTEGER,'
-          ' uuid TEXT)');
+          ' uuid TEXT'
+          ')');
 
       await db.execute('CREATE TABLE kanji_audio_example_quiz('
           ' id INTEGER PRIMARY KEY AUTOINCREMENT,'
@@ -25,7 +26,8 @@ Future<Database> get kanjiFromApiDatabase async {
           ' countIncorrects INTEGER,'
           ' countOmited INTEGER,'
           ' section INTEGER,'
-          ' uuid TEXT)');
+          ' uuid TEXT'
+          ')');
 
       await db.execute(
         'CREATE TABLE kanji_flashcard_quiz('

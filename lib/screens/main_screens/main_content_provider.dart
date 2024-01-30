@@ -14,6 +14,7 @@ import 'package:kanji_for_n5_level_app/screens/navigation_bar_screens/favorite_s
 import 'package:kanji_for_n5_level_app/providers/status_connection_provider.dart';
 import 'package:kanji_for_n5_level_app/providers/status_stored_provider.dart';
 import 'package:kanji_for_n5_level_app/screens/navigation_bar_screens/pogress_screen/progress_screen_provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class MainScreenProvider extends Notifier<MainScreenData> {
   @override
@@ -93,6 +94,10 @@ class MainScreenProvider extends Notifier<MainScreenData> {
 
   Future<void> getOnlineData() async {
     List<KanjiFromApi> listOfValidStoredKanjis = await loadStoredKanjis();
+    SharedPreferences.getInstance().then((prefs) {
+      final bool? isFirtsLoged = prefs.getBool('isFirtsLoged');
+      if (isFirtsLoged == null) {}
+    }).onError((error, stackTrace) {});
     final favoritesKanjis =
         await localDBService.loadFavoritesDatabase(authService.user ?? '');
     ref.read(favoriteskanjisProvider.notifier).setInitialFavoritesOnline(
