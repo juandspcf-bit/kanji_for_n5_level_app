@@ -1,5 +1,6 @@
 import 'package:kanji_for_n5_level_app/aplication_layer/repository_contract/local_repo/db_contract.dart';
 import 'package:kanji_for_n5_level_app/models/favorite.dart';
+import 'package:kanji_for_n5_level_app/models/first_time_logged.dart';
 import 'package:kanji_for_n5_level_app/models/kanji_from_api.dart';
 import 'package:kanji_for_n5_level_app/models/progress_time_line_d_b_data.dart';
 import 'package:kanji_for_n5_level_app/models/single_quiz_audio_example_data.dart';
@@ -8,6 +9,7 @@ import 'package:kanji_for_n5_level_app/models/single_quiz_section_data.dart';
 import 'package:kanji_for_n5_level_app/repositories/local_database/db_delete_user.dart';
 import 'package:kanji_for_n5_level_app/repositories/local_database/db_deleting_data.dart';
 import 'package:kanji_for_n5_level_app/repositories/local_database/db_favorites.dart';
+import 'package:kanji_for_n5_level_app/repositories/local_database/db_firts_time_logged_functions.dart';
 import 'package:kanji_for_n5_level_app/repositories/local_database/db_inserting_data.dart';
 import 'package:kanji_for_n5_level_app/repositories/local_database/db_quiz_data_functions/db_quiz_data_functions.dart';
 
@@ -193,5 +195,15 @@ class SqliteDBService implements LocalDBService {
   @override
   Future<List<Favorite>> loadFavoritesDatabase(String uid) {
     return loadFavorites(uid);
+  }
+
+  @override
+  Future<FirtsTimeLogged> getAllFirtsTimeLOggedDBData(String uuid) {
+    return loadFirtsTimeLoggedData(uuid);
+  }
+
+  @override
+  Future<int> setAllFirtsTimeLOggedDBData(String uuid) {
+    return insertFirtsTimeLogged(uuid);
   }
 }

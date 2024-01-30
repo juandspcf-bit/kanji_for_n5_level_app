@@ -150,25 +150,26 @@ void insertSingleQuizSectionDataDB(
 ) async {
   final db = await kanjiFromApiDatabase;
   await db.rawInsert(
-      'INSERT INTO kanji_quiz('
-      ' allCorrectAnswersQuizKanji,'
-      ' isFinishedKanjiQuizz,'
-      ' countCorrects,'
-      ' countIncorrects,'
-      ' countOmited,'
-      ' section,'
-      ' uuid'
-      ') '
-      'VALUES(?,?,?,?,?,?,?)',
-      [
-        allCorrectAnswersQuizKanji ? 1 : 0,
-        isFinishedKanjiQuizz ? 1 : 0,
-        countCorrects,
-        countIncorrects,
-        countOmited,
-        section,
-        uuid
-      ]);
+    'INSERT INTO kanji_quiz('
+    ' allCorrectAnswersQuizKanji,'
+    ' isFinishedKanjiQuizz,'
+    ' countCorrects,'
+    ' countIncorrects,'
+    ' countOmited,'
+    ' section,'
+    ' uuid'
+    ') '
+    'VALUES(?,?,?,?,?,?,?)',
+    [
+      allCorrectAnswersQuizKanji ? 1 : 0,
+      isFinishedKanjiQuizz ? 1 : 0,
+      countCorrects,
+      countIncorrects,
+      countOmited,
+      section,
+      uuid
+    ],
+  );
 }
 
 Future<SingleQuizAudioExampleData> getSingleQuizSectionAudioExamplerData(
