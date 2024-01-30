@@ -9,13 +9,15 @@ Future<List<Favorite>> loadFavoriteKanjis(
       .collection("favorites")
       .where("uuid", isEqualTo: uuid)
       .get();
-  for (var docSnapshot in querySnapshot.docs) {
-    final favoriteMap = docSnapshot.data();
-    listFavorites.add(Favorite(
-      kanjis: favoriteMap['kanjiCharacter'],
-      uuid: favoriteMap['timeStamp'],
-      timeStamp: favoriteMap['uuid'],
-    ));
+  if (querySnapshot.docs.isNotEmpty) {
+    for (var docSnapshot in querySnapshot.docs) {
+      final favoriteMap = docSnapshot.data();
+      listFavorites.add(Favorite(
+        kanjis: favoriteMap['kanjiCharacter'],
+        uuid: favoriteMap['uuid'],
+        timeStamp: favoriteMap['timeStamp'],
+      ));
+    }
   }
 
   return listFavorites;

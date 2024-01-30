@@ -6,6 +6,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kanji_for_n5_level_app/aplication_layer/auth_firebase_impl/auth_service_firebase.dart';
+import 'package:kanji_for_n5_level_app/models/favorite.dart';
 import 'package:kanji_for_n5_level_app/repositories/local_database/db_loading_data.dart';
 import 'package:kanji_for_n5_level_app/main.dart';
 import 'package:kanji_for_n5_level_app/providers/score_kanji_list_provider.dart';
@@ -99,13 +100,15 @@ class MainScreenProvider extends Notifier<MainScreenData> {
       authService.user ?? '',
     );
 
+    List<Favorite> favoritesKanjis;
     if (firtsTimeLogged.isFirstTimeLogged == null) {
-      final favoritesKanjis =
+      favoritesKanjis =
           await cloudDBService.loadFavoritesCloudDB(authService.user ?? '');
+    } else {
+      favoritesKanjis =
+          await localDBService.loadFavoritesDatabase(authService.user ?? '');
     }
 
-    final favoritesKanjis =
-        await localDBService.loadFavoritesDatabase(authService.user ?? '');
     ref.read(favoriteskanjisProvider.notifier).setInitialFavoritesOnline(
         listOfValidStoredKanjis, favoritesKanjis, 10);
   }
