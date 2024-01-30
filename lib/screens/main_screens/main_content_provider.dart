@@ -94,10 +94,16 @@ class MainScreenProvider extends Notifier<MainScreenData> {
 
   Future<void> getOnlineData() async {
     List<KanjiFromApi> listOfValidStoredKanjis = await loadStoredKanjis();
-    SharedPreferences.getInstance().then((prefs) {
-      final bool? isFirtsLoged = prefs.getBool('isFirtsLoged');
-      if (isFirtsLoged == null) {}
-    }).onError((error, stackTrace) {});
+
+    final firtsTimeLogged = await localDBService.getAllFirtsTimeLOggedDBData(
+      authService.user ?? '',
+    );
+
+    if (firtsTimeLogged.isFirstTimeLogged == null) {
+      final favoritesKanjis =
+          await cloudDBService.loadFavoritesCloudDB(authService.user ?? '');
+    }
+
     final favoritesKanjis =
         await localDBService.loadFavoritesDatabase(authService.user ?? '');
     ref.read(favoriteskanjisProvider.notifier).setInitialFavoritesOnline(
