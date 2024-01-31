@@ -49,17 +49,13 @@ Future<int> deleteFavorite(String kanji) async {
 Future<void> storeAllFavorites(List<Favorite> favorites) async {
   try {
     final db = await kanjiFromApiDatabase;
-    final batch = db.batch();
-    await batch.commit(noResult: true);
     for (var favorite in favorites) {
-      batch.insert('user_favorites', {
+      db.insert("user_favorites", {
         'kanjiCharacter': favorite.kanjis,
         'uuid': favorite.uuid,
         'timeStamp': favorite.timeStamp,
       });
     }
-
-    await batch.commit();
   } catch (e) {
     logger.e(e);
   }

@@ -209,7 +209,6 @@ class SqliteDBService implements LocalDBService {
 
   @override
   Future<void> storeAllFavoritesFromCloud(List<Favorite> favorites) {
-    // TODO: implement storeAllFavoritesFromCloud
-    throw UnimplementedError();
+    return storeAllFavorites(favorites);
   }
 }

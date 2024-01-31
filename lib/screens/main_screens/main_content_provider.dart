@@ -106,6 +106,7 @@ class MainScreenProvider extends Notifier<MainScreenData> {
       await localDBService.setAllFirtsTimeLOggedDBData(authService.user ?? '');
       await localDBService.storeAllFavoritesFromCloud(favoritesKanjis);
     } else {
+      logger.d('from local database');
       favoritesKanjis =
           await localDBService.loadFavoritesDatabase(authService.user ?? '');
     }
