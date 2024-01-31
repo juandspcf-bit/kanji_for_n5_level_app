@@ -36,11 +36,11 @@ Future<int> insertFirtsTimeLogged(String uuid) async {
   const isLogged = true;
   final db = await kanjiFromApiDatabase;
   return await db.rawInsert(
-    'INSERT INTO kanji_quiz('
+    'INSERT INTO firts_logging_status('
     ' isLogged,'
     ' uuid'
     ') '
-    'VALUES(?,?,?,?,?,?,?)',
+    'VALUES(?,?)',
     [isLogged, uuid],
   );
 }

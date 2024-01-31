@@ -206,4 +206,10 @@ class SqliteDBService implements LocalDBService {
   Future<int> setAllFirtsTimeLOggedDBData(String uuid) {
     return insertFirtsTimeLogged(uuid);
   }
+
+  @override
+  Future<void> storeAllFavoritesFromCloud(List<Favorite> favorites) {
+    // TODO: implement storeAllFavoritesFromCloud
+    throw UnimplementedError();
+  }
 }

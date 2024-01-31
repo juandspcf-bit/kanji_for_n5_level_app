@@ -97,4 +97,6 @@ abstract class LocalDBService {
   Future<int> setAllFirtsTimeLOggedDBData(
     String uuid,
   );
+
+  Future<void> storeAllFavoritesFromCloud(List<Favorite> favorites);
 }
