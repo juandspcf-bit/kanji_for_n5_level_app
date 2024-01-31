@@ -5,19 +5,23 @@ Future<List<Favorite>> loadFavoriteKanjis(
   String uuid,
 ) async {
   List<Favorite> listFavorites = [];
-  final querySnapshot = await dbFirebase
-      .collection("favorites")
-      .where("uuid", isEqualTo: uuid)
-      .get();
-  if (querySnapshot.docs.isNotEmpty) {
-    for (var docSnapshot in querySnapshot.docs) {
-      final favoriteMap = docSnapshot.data();
-      listFavorites.add(Favorite(
-        kanjis: favoriteMap['kanjiCharacter'],
-        uuid: favoriteMap['uuid'],
-        timeStamp: favoriteMap['timeStamp'],
-      ));
+  try {
+    final querySnapshot = await dbFirebase
+        .collection("favorites")
+        .where("uuid", isEqualTo: uuid)
+        .get();
+    if (querySnapshot.docs.isNotEmpty) {
+      for (var docSnapshot in querySnapshot.docs) {
+        final favoriteMap = docSnapshot.data();
+        listFavorites.add(Favorite(
+          kanjis: favoriteMap['kanjiCharacter'],
+          uuid: favoriteMap['uuid'],
+          timeStamp: favoriteMap['timeStamp'],
+        ));
+      }
     }
+  } catch (e) {
+    logger.e('error reading cloud db favorites');
   }
 
   return listFavorites;
