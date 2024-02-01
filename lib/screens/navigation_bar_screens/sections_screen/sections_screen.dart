@@ -54,13 +54,13 @@ class Section extends ConsumerWidget {
     return Container(
       decoration: BoxDecoration(
         borderRadius: const BorderRadius.all(Radius.circular(20)),
-        border: Border.all(color: Colors.grey[800]!),
-        gradient: LinearGradient(
+        border: Border.all(color: Colors.white10),
+        gradient: const LinearGradient(
           begin: Alignment.bottomLeft,
           end: Alignment.topRight,
           colors: [
-            Colors.grey[900]!,
-            Colors.grey[800]!,
+            Color.fromARGB(255, 101, 172, 207), //Colors.grey[900]!,
+            Color.fromARGB(255, 86, 169, 211), //Colors.grey[800]!,
           ],
         ),
       ),
@@ -98,15 +98,16 @@ class Section extends ConsumerWidget {
                   sectionData.title,
                   style: Theme.of(context).textTheme.titleLarge?.copyWith(
                       fontWeight: FontWeight.bold,
-                      color: Theme.of(context).colorScheme.onSecondaryContainer,
+                      color: Colors.white,
                       fontFamily: GoogleFonts.roboto().fontFamily),
                   textAlign: TextAlign.center,
                 ),
                 Text(
                   "Seccion ${sectionData.sectionNumber}",
                   style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                      color: Theme.of(context).colorScheme.onSecondaryContainer,
-                      fontFamily: GoogleFonts.roboto().fontFamily),
+                        color: Colors.white,
+                        fontFamily: GoogleFonts.roboto().fontFamily,
+                      ),
                   textAlign: TextAlign.center,
                 ),
               ],
