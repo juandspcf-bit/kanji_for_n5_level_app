@@ -38,7 +38,7 @@ Future<void> insertFavorite(
     'uuid': uuid,
   };
 
-  return dbFirebase.collection("favorites").doc(kanjiCharacter).set(data);
+  return dbFirebase.collection("favorites").add(data);
 }
 
 Future<void> deleteFavorite(
