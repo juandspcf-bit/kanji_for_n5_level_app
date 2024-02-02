@@ -15,4 +15,9 @@ abstract class CloudDBService {
     String kanjiCharacter,
     String uuid,
   );
+
+  Future<void> addUserData(
+    String email,
+    String uuid,
+  );
 }

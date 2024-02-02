@@ -138,6 +138,7 @@ class SingUpProvider extends Notifier<SingUpData> {
 
       await user.updateDisplayName(state.fullName);
       await user.updateEmail(state.emailAddress);
+      await cloudDBService.addUserData(state.emailAddress, user.uid);
 
       if (state.pathProfileUser.isNotEmpty) {
         try {

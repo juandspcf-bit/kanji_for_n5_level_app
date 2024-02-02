@@ -99,7 +99,8 @@ class LoginProvider extends Notifier<LogingData> {
 
     final result = await authService.singInWithEmailAndPassword(
         email: state.email, password: state.password);
-    if (result != StatusLogingRequest.success) {
+    if (result == StatusLogingRequest.success) {
+    } else {
       setStatusLoggingFlow(StatusProcessingLoggingFlow.form);
     }
     setStatusLogingRequest(result);
