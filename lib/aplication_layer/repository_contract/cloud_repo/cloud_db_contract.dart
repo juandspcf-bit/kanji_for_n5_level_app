@@ -20,4 +20,24 @@ abstract class CloudDBService {
     String email,
     String uuid,
   );
+
+  Future<void> updateQuizSectionScore(
+    bool allCorrectAnswersQuizKanji,
+    bool isFinishedKanjiQuiz,
+    int countCorrects,
+    int countIncorrects,
+    int countOmited,
+    int section,
+    String uuid,
+  );
+
+  Future<void> insertQuizSectionScore(
+    bool allCorrectAnswersQuizKanji,
+    bool isFinishedKanjiQuiz,
+    int countCorrects,
+    int countIncorrects,
+    int countOmited,
+    int section,
+    String uuid,
+  );
 }

@@ -1,6 +1,7 @@
 import 'package:kanji_for_n5_level_app/aplication_layer/repository_contract/cloud_repo/cloud_db_contract.dart';
 import 'package:kanji_for_n5_level_app/models/favorite.dart';
 import 'package:kanji_for_n5_level_app/repositories/cloud_database/db_firestore_functions/db_favorites_firestore.dart';
+import 'package:kanji_for_n5_level_app/repositories/cloud_database/db_firestore_functions/db_quiz_score_firestore.dart';
 import 'package:kanji_for_n5_level_app/repositories/cloud_database/db_firestore_functions/db_user_data_firestore.dart';
 
 class FireStoreDBService extends CloudDBService {
@@ -32,6 +33,48 @@ class FireStoreDBService extends CloudDBService {
   Future<void> addUserData(String email, String uuid) {
     return insertUserData(
       email,
+      uuid,
+    );
+  }
+
+  @override
+  Future<void> updateQuizSectionScore(
+    bool allCorrectAnswersQuizKanji,
+    bool isFinishedKanjiQuiz,
+    int countCorrects,
+    int countIncorrects,
+    int countOmited,
+    int section,
+    String uuid,
+  ) {
+    return setQuizSectionScore(
+      allCorrectAnswersQuizKanji,
+      isFinishedKanjiQuiz,
+      countCorrects,
+      countIncorrects,
+      countOmited,
+      section,
+      uuid,
+    );
+  }
+
+  @override
+  Future<void> insertQuizSectionScore(
+    bool allCorrectAnswersQuizKanji,
+    bool isFinishedKanjiQuiz,
+    int countCorrects,
+    int countIncorrects,
+    int countOmited,
+    int section,
+    String uuid,
+  ) {
+    return insertQuizSectionScoreFire(
+      allCorrectAnswersQuizKanji,
+      isFinishedKanjiQuiz,
+      countCorrects,
+      countIncorrects,
+      countOmited,
+      section,
       uuid,
     );
   }
