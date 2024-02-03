@@ -78,4 +78,9 @@ class FireStoreDBService extends CloudDBService {
       uuid,
     );
   }
+
+  @override
+  Future<void> createQuizScoreMap(String uuid) {
+    return createQuizScoreMapCloud(uuid);
+  }
 }

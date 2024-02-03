@@ -37,7 +37,7 @@ class LastScoreKanjiQuizProvider extends AsyncNotifier<SingleQuizSectionData> {
       return;
     }
 
-    cloudDBService.insertQuizSectionScore(
+    cloudDBService.updateQuizSectionScore(
       countIncorrects == 0 && countOmited == 0,
       true,
       countCorrects,

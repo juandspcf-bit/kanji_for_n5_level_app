@@ -21,6 +21,8 @@ abstract class CloudDBService {
     String uuid,
   );
 
+  Future<void> createQuizScoreMap(String uuid);
+
   Future<void> updateQuizSectionScore(
     bool allCorrectAnswersQuizKanji,
     bool isFinishedKanjiQuiz,
