@@ -33,6 +33,17 @@ abstract class CloudDBService {
     String uuid,
   );
 
+  Future<void> updateQuizDetailScore(
+    String kanjiCharacter,
+    bool allCorrectAnswers,
+    bool isFinishedQuiz,
+    int countCorrects,
+    int countIncorrects,
+    int countOmited,
+    int section,
+    String uuid,
+  );
+
   Future<void> insertQuizSectionScore(
     bool allCorrectAnswersQuizKanji,
     bool isFinishedKanjiQuiz,

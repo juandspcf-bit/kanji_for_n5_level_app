@@ -83,4 +83,27 @@ class FireStoreDBService extends CloudDBService {
   Future<void> createQuizScoreMap(String uuid) {
     return createQuizScoreMapCloud(uuid);
   }
+
+  @override
+  Future<void> updateQuizDetailScore(
+    String kanjiCharacter,
+    bool allCorrectAnswers,
+    bool isFinishedQuiz,
+    int countCorrects,
+    int countIncorrects,
+    int countOmited,
+    int section,
+    String uuid,
+  ) {
+    return updateQuizDetailScoreFire(
+      kanjiCharacter,
+      allCorrectAnswers,
+      isFinishedQuiz,
+      countCorrects,
+      countIncorrects,
+      countOmited,
+      section,
+      uuid,
+    );
+  }
 }

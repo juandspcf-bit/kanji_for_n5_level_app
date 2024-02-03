@@ -171,7 +171,7 @@ class QuizDetailsProvider extends Notifier<
       ),
     );
 
-    logger.d('answer type: $stateCopy');
+    //logger.d('answer type: $stateCopy');
 
     final correct = _dataQuiz.firstWhere(
         (element) => element.audioQuestion == stateCopy.audioQuestion);

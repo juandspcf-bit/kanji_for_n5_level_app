@@ -31,21 +31,25 @@ class LastScoreKanjiQuizProvider extends AsyncNotifier<SingleQuizSectionData> {
     int countIncorrects = 0,
     int countOmited = 0,
   }) {
+    try {
+      cloudDBService.updateQuizSectionScore(
+        countIncorrects == 0 && countOmited == 0,
+        true,
+        countCorrects,
+        countIncorrects,
+        countOmited,
+        section,
+        uuid,
+      );
+    } catch (e) {
+      logger.e(e);
+    }
+
     if (state.value?.section == -1) {
       localDBService.insertSingleQuizSectionData(
           section, uuid, countCorrects, countIncorrects, countOmited);
       return;
     }
-
-    cloudDBService.updateQuizSectionScore(
-      countIncorrects == 0 && countOmited == 0,
-      true,
-      countCorrects,
-      countIncorrects,
-      countOmited,
-      section,
-      uuid,
-    );
 
     localDBService.setKanjiQuizLastScore(
       section: section,
