@@ -44,6 +44,20 @@ class LastScoreDetailsProvider
     int countIncorrects = 0,
     int countOmited = 0,
   }) async {
+    try {
+      cloudDBService.updateQuizDetailScore(
+          kanjiCharacter,
+          countCorrects == 0 && countOmited == 0,
+          true,
+          countCorrects,
+          countIncorrects,
+          countOmited,
+          section,
+          uuid);
+    } catch (e) {
+      logger.e(e);
+    }
+
     if (state.value?.section == -1) {
       final numberOfRows = await localDBService.insertAudioExampleScore(
         section,
