@@ -59,27 +59,6 @@ class FireStoreDBService extends CloudDBService {
   }
 
   @override
-  Future<void> insertQuizSectionScore(
-    bool allCorrectAnswersQuizKanji,
-    bool isFinishedKanjiQuiz,
-    int countCorrects,
-    int countIncorrects,
-    int countOmited,
-    int section,
-    String uuid,
-  ) {
-    return insertQuizSectionScoreFire(
-      allCorrectAnswersQuizKanji,
-      isFinishedKanjiQuiz,
-      countCorrects,
-      countIncorrects,
-      countOmited,
-      section,
-      uuid,
-    );
-  }
-
-  @override
   Future<void> createQuizScoreMap(String uuid) {
     return createQuizScoreMapCloud(uuid);
   }
@@ -102,6 +81,21 @@ class FireStoreDBService extends CloudDBService {
       countCorrects,
       countIncorrects,
       countOmited,
+      section,
+      uuid,
+    );
+  }
+
+  @override
+  Future<void> updateQuizFlashCardScore(
+    String kanjiCharacter,
+    bool allRevisedFlashCards,
+    int section,
+    String uuid,
+  ) {
+    return updateQuizFlashCardFire(
+      kanjiCharacter,
+      allRevisedFlashCards,
       section,
       uuid,
     );

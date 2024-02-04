@@ -53,7 +53,8 @@ Future<Database> get kanjiFromApiDatabase async {
       );
 
       await db.execute(
-        'CREATE TABLE user_favorites(id INTEGER PRIMARY KEY AUTOINCREMENT,'
+        'CREATE TABLE user_favorites('
+        ' id INTEGER PRIMARY KEY AUTOINCREMENT,'
         ' kanjiCharacter TEXT,'
         ' uuid TEXT,'
         ' timeStamp INTEGER '

@@ -41,6 +41,13 @@ class LastScoreFlashCardProvider
     required String uuid,
     required int countUnWatched,
   }) async {
+    cloudDBService.updateQuizFlashCardScore(
+      kanjiCharacter,
+      countUnWatched == 0,
+      section,
+      uuid,
+    );
+
     if (state.value?.section == -1) {
       final numberOfRows = await localDBService.insertSingleFlashCardDataDB(
         kanjiCharacter,

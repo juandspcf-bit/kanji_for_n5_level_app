@@ -44,12 +44,9 @@ abstract class CloudDBService {
     String uuid,
   );
 
-  Future<void> insertQuizSectionScore(
-    bool allCorrectAnswersQuizKanji,
-    bool isFinishedKanjiQuiz,
-    int countCorrects,
-    int countIncorrects,
-    int countOmited,
+  Future<void> updateQuizFlashCardScore(
+    String kanjiCharacter,
+    bool allRevisedFlashCards,
     int section,
     String uuid,
   );
