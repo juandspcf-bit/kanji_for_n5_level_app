@@ -50,4 +50,8 @@ abstract class CloudDBService {
     int section,
     String uuid,
   );
+
+  Future<void> deleteQuizScoreData(
+    String uuid,
+  );
 }

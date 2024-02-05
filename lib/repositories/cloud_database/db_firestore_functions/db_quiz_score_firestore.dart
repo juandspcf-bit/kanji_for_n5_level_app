@@ -68,6 +68,25 @@ Future<void> updateQuizFlashCardFire(
   });
 }
 
+Future<void> deleteQuizScoreDataFire(
+  String uuid,
+) async {
+  final docRef = dbFirebase.collection("quiz_score").doc(uuid);
+  final docRefUserData = dbFirebase.collection("user_data").doc(uuid);
+  await docRef.delete();
+  await docRefUserData.delete();
+
+  final docRefFavorites = await dbFirebase
+      .collection("favorites")
+      .where("uuid", isEqualTo: uuid)
+      .get();
+
+  //logger.d("Successfully completed");
+  for (var docSnapshot in docRefFavorites.docs) {
+    await docSnapshot.reference.delete();
+  }
+}
+
 Future<void> createQuizScoreMapCloud(String uuid) async {
   final docRef = dbFirebase.collection("quiz_score").doc(uuid);
   docRef.set(

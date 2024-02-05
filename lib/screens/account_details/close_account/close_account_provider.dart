@@ -46,6 +46,9 @@ class CloseAccountProvider extends Notifier<CloseAccountData> {
     final (deleteUserStatus, uuid) =
         await authService.deleteUser(password: password);
     await localDBService.deleteUserData(uuid);
+
+    await cloudDBService.deleteQuizScoreData(uuid);
+
     await Future.delayed(
       const Duration(seconds: 2),
     );

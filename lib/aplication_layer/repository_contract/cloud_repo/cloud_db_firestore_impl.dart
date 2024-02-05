@@ -100,4 +100,11 @@ class FireStoreDBService extends CloudDBService {
       uuid,
     );
   }
+
+  @override
+  Future<void> deleteQuizScoreData(String uuid) {
+    return deleteQuizScoreDataFire(
+      uuid,
+    );
+  }
 }
