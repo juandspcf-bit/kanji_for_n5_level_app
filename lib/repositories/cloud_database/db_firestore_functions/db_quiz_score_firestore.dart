@@ -1,7 +1,7 @@
 import 'package:kanji_for_n5_level_app/main.dart';
 import 'package:kanji_for_n5_level_app/models/secction_model.dart';
 
-Future<Map<String, Object?>> loadQuizScoreData(String uuid) async {
+Future<Map<String, Object>> loadQuizScoreDataFire(String uuid) async {
   final docRef = dbFirebase.collection("quiz_score").doc(uuid);
   final documentSnapshot = await docRef.get();
   final data = documentSnapshot.data();
@@ -12,34 +12,46 @@ Future<Map<String, Object?>> loadQuizScoreData(String uuid) async {
 
   final Map<String, Object> scoresFinal = {};
   for (var section in sections) {
-    scoresFinal['quizScore_$section'] = {
-      data['quizScore_$section']['allCorrectAnswersQuizKanji'] as bool,
-      data['quizScore_$section']['isFinishedKanjiQuizz'] as bool,
-      data['quizScore_$section']['countCorrects'] as int,
-      data['quizScore_$section']['countIncorrects'] as int,
-      data['quizScore_$section']['countOmited'] as int,
-      data['quizScore_$section']['section'] as int,
-      data['quizScore_$section']['uuid'] as String,
-    };
+    logger.d(data['quizScore_$section']['isFinishedkanjiQuiz']);
+    if (data['quizScore_$section']['isFinishedkanjiQuiz'] != null) {
+      logger.d('pass');
+      logger.d(data['quizScore_$section']);
+      scoresFinal['quizScore_$section'] = {
+        'allCorrectAnswersQuizKanji':
+            data['quizScore_$section']['allCorrectAnswersQuizkanji'] as bool,
+        'isFinishedKanjiQuiz':
+            data['quizScore_$section']['isFinishedkanjiQuiz'] as bool,
+        'countCorrects': data['quizScore_$section']['countCorrects'] as int,
+        'countIncorrects': data['quizScore_$section']['countIncorrects'] as int,
+        'countOmited': data['quizScore_$section']['countOmited'] as int,
+        'section': data['quizScore_$section']['section'] as int,
+      };
+    }
 
-    scoresFinal['list_quiz_details_$section'] = <Map<String, Object>>{};
+    Map<String, Object> init = {};
+    scoresFinal['list_quiz_details_$section'] = init;
 
     for (var i = 0; i < sectionsKanjis['section$section']!.length; i++) {
       final scoreFinalRef =
           scoresFinal['list_quiz_details_$section'] as Map<String, Object>;
-      final dataFinalRef =
-          data['list_quiz_details_$section'] as Map<String, Object>;
+      final dataFinalRef = data['list_quiz_details_$section']['kanji_${i + 1}'];
 
-      scoreFinalRef['kanji_${i + 1}'] = {
-        'kanjiCharacter': dataFinalRef['kanjiCharacter'] as String,
-        'allCorrectAnswers': dataFinalRef['allCorrectAnswers'] as bool,
-        'isFinishedQuiz': dataFinalRef['isFinishedQuiz'] as bool,
-        'countCorrects': dataFinalRef['countCorrects'] as int,
-        'countIncorrects': dataFinalRef['countIncorrects'] as int,
-        'countOmited': dataFinalRef['countOmited'] as int,
-        'section': dataFinalRef['section'] as int,
-        'uuid': dataFinalRef['uuid'] as String,
-      };
+      if (dataFinalRef['isFinishedQuiz'] != null) {
+        scoreFinalRef['kanji_${i + 1}'] = {
+          'kanjiCharacter': dataFinalRef['kanjiCharacter'] as String,
+          'allCorrectAnswers': dataFinalRef['allCorrectAnswers'] as bool,
+          'isFinishedQuiz': dataFinalRef['isFinishedQuiz'] as bool,
+          'countCorrects': dataFinalRef['countCorrects'] as int,
+          'countIncorrects': dataFinalRef['countIncorrects'] as int,
+          'countOmited': dataFinalRef['countOmited'] as int,
+          'section': dataFinalRef['section'] as int,
+        };
+      }
+    }
+
+    if ((scoresFinal['list_quiz_details_$section'] as Map<String, Object>)
+        .isEmpty) {
+      scoresFinal.remove('list_quiz_details_$section');
     }
   }
   logger.d(scoresFinal);

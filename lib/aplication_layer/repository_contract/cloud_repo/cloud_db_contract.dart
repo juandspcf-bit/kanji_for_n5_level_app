@@ -54,4 +54,6 @@ abstract class CloudDBService {
   Future<void> deleteQuizScoreData(
     String uuid,
   );
+
+  Future<Map<String, Object>> loadQuizScoreData(String uuid);
 }

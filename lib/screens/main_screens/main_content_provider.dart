@@ -7,7 +7,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kanji_for_n5_level_app/aplication_layer/auth_firebase_impl/auth_service_firebase.dart';
 import 'package:kanji_for_n5_level_app/models/favorite.dart';
-import 'package:kanji_for_n5_level_app/repositories/cloud_database/db_firestore_functions/db_quiz_score_firestore.dart';
 import 'package:kanji_for_n5_level_app/repositories/local_database/db_loading_data.dart';
 import 'package:kanji_for_n5_level_app/main.dart';
 import 'package:kanji_for_n5_level_app/providers/score_kanji_list_provider.dart';
@@ -101,7 +100,7 @@ class MainScreenProvider extends Notifier<MainScreenData> {
     );
 
     try {
-      loadQuizScoreData(authService.user ?? '');
+      cloudDBService.loadQuizScoreData(authService.user ?? '');
     } catch (e) {
       logger.e('error loading quiz score $e');
     }
