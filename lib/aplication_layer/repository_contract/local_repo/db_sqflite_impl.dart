@@ -211,4 +211,9 @@ class SqliteDBService implements LocalDBService {
   Future<void> storeAllFavoritesFromCloud(List<Favorite> favorites) {
     return storeAllFavorites(favorites);
   }
+
+  @override
+  Future<void> storeQuizScoreFromCloud(Map<String, Object> quizScoreData) {
+    return storeQuizScore(quizScoreData);
+  }
 }

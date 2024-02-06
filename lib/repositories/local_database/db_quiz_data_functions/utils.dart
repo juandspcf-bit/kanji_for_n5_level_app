@@ -66,7 +66,7 @@ List<List<SingleQuizAudioExampleData>> getSectionAudioQuizList(
     }
   }
 
-  logger.d('audio quiz data: $listMap');
+  //logger.d('audio quiz data: $listMap');
 
   final listSingleQuizAudioExampleData = listMap.map(
     (sectionListData) {
@@ -187,9 +187,9 @@ List<List<SingleQuizFlashCardData>> getSectionFlashCardList(
       allAudioQuizFinishedList[j] = false;
     }
   }
-  logger.d(allAudioQuizFinishedList);
+  //logger.d(allAudioQuizFinishedList);
 
-  logger.d(allAudioQuizCorrectList);
+  //logger.d(allAudioQuizCorrectList);
 
   return (
     allAudioQuizFinishedList,

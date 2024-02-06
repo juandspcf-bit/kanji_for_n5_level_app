@@ -12,10 +12,10 @@ Future<Map<String, Object>> loadQuizScoreDataFire(String uuid) async {
 
   final Map<String, Object> scoresFinal = {};
   for (var section in sections) {
-    logger.d(data['quizScore_$section']['isFinishedkanjiQuiz']);
+    //logger.d(data['quizScore_$section']['isFinishedkanjiQuiz']);
     if (data['quizScore_$section']['isFinishedkanjiQuiz'] != null) {
-      logger.d('pass');
-      logger.d(data['quizScore_$section']);
+      //logger.d('pass');
+      //logger.d(data['quizScore_$section']);
       scoresFinal['quizScore_$section'] = {
         'allCorrectAnswersQuizKanji':
             data['quizScore_$section']['allCorrectAnswersQuizkanji'] as bool,
@@ -53,8 +53,30 @@ Future<Map<String, Object>> loadQuizScoreDataFire(String uuid) async {
         .isEmpty) {
       scoresFinal.remove('list_quiz_details_$section');
     }
+
+    Map<String, Object> initFlashCardData = {};
+    scoresFinal['list_quiz_flash_cards_$section'] = initFlashCardData;
+
+    for (var i = 0; i < sectionsKanjis['section$section']!.length; i++) {
+      final scoreFinalRef =
+          scoresFinal['list_quiz_flash_cards_$section'] as Map<String, Object>;
+      final dataFinalRef =
+          data['list_quiz_flash_cards_$section']['kanji_${i + 1}'];
+
+      if (dataFinalRef['allRevisedFlashCards'] != null) {
+        scoreFinalRef['kanji_${i + 1}'] = {
+          'kanjiCharacter': dataFinalRef['kanjiCharacter'] as String,
+          'allRevisedFlashCards': dataFinalRef['allRevisedFlashCards'] as bool,
+          'section': dataFinalRef['section'] as int,
+        };
+      }
+    }
+
+    if ((scoresFinal['list_quiz_flash_cards_$section'] as Map<String, Object>)
+        .isEmpty) {
+      scoresFinal.remove('list_quiz_flash_cards_$section');
+    }
   }
-  logger.d(scoresFinal);
   return scoresFinal;
 }
 

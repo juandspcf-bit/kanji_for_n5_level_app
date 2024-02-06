@@ -368,3 +368,7 @@ Future<int> updateSingleFlashCardData(
         uuid,
       ]);
 }
+
+Future<void> storeQuizScore(Map<String, Object> quizScoreData) async {
+  logger.d(quizScoreData);
+}

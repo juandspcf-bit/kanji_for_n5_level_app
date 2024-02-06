@@ -100,7 +100,9 @@ class MainScreenProvider extends Notifier<MainScreenData> {
     );
 
     try {
-      cloudDBService.loadQuizScoreData(authService.user ?? '');
+      final quizScoreData =
+          await cloudDBService.loadQuizScoreData(authService.user ?? '');
+      localDBService.storeQuizScoreFromCloud(quizScoreData);
     } catch (e) {
       logger.e('error loading quiz score $e');
     }
