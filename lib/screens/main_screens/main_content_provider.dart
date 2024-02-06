@@ -99,21 +99,27 @@ class MainScreenProvider extends Notifier<MainScreenData> {
       authService.user ?? '',
     );
 
-    try {
-      final quizScoreData =
-          await cloudDBService.loadQuizScoreData(authService.user ?? '');
-/*       localDBService.storeQuizScoreFromCloud(
-          quizScoreData, authService.user ?? ''); */
-    } catch (e) {
-      logger.e('error loading quiz score $e');
-    }
-
     List<Favorite> favoritesKanjis;
     if (firtsTimeLogged.isFirstTimeLogged == null) {
-      favoritesKanjis =
-          await cloudDBService.loadFavoritesCloudDB(authService.user ?? '');
-      await localDBService.setAllFirtsTimeLOggedDBData(authService.user ?? '');
-      await localDBService.storeAllFavoritesFromCloud(favoritesKanjis);
+      try {
+        favoritesKanjis =
+            await cloudDBService.loadFavoritesCloudDB(authService.user ?? '');
+        await localDBService
+            .setAllFirtsTimeLOggedDBData(authService.user ?? '');
+        await localDBService.storeAllFavoritesFromCloud(favoritesKanjis);
+      } catch (e) {
+        favoritesKanjis = [];
+        logger.e('error loading favorites $e');
+      }
+
+      try {
+        final quizScoreData =
+            await cloudDBService.loadQuizScoreData(authService.user ?? '');
+        localDBService.storeQuizScoreFromCloud(
+            quizScoreData, authService.user ?? '');
+      } catch (e) {
+        logger.e('error loading quiz score $e');
+      }
     } else {
       favoritesKanjis =
           await localDBService.loadFavoritesDatabase(authService.user ?? '');

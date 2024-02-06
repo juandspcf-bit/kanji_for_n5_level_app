@@ -77,6 +77,8 @@ Future<Map<String, Object>> loadQuizScoreDataFire(String uuid) async {
       scoresFinal.remove('list_quiz_flash_cards_$section');
     }
   }
+
+  logger.d(scoresFinal);
   return scoresFinal;
 }
 

@@ -139,7 +139,7 @@ void updateSingleQuizSectionData(
       ]);
 }
 
-void insertSingleQuizSectionDataDB(
+Future<void> insertSingleQuizSectionDataDB(
   int section,
   String uuid,
   bool allCorrectAnswersQuizKanji,
@@ -378,7 +378,7 @@ Future<void> storeQuizScore(
     final quizScore =
         quizScoreData['quizScore_$section'] as Map<String, Object>;
     if (quizScore['isFinishedKanjiQuiz'] != null) {
-      insertSingleQuizSectionDataDB(
+      await insertSingleQuizSectionDataDB(
         int.parse(section),
         uuid,
         quizScore['allCorrectAnswersQuizKanji'] as bool,
@@ -387,6 +387,43 @@ Future<void> storeQuizScore(
         quizScore['countIncorrects'] as int,
         quizScore['countOmited'] as int,
       );
+    }
+
+    if (quizScoreData['list_quiz_details_$section'] != null) {
+      final lisQuizData =
+          quizScoreData['list_quiz_details_$section'] as Map<String, Object>;
+      for (var i = 0; i < sectionsKanjis['section$section']!.length; i++) {
+        if (lisQuizData['kanji_${i + 1}'] != null) {
+          final quizData = lisQuizData['kanji_${i + 1}'] as Map<String, Object>;
+          await insertSingleAudioExampleQuizSectionDataDB(
+            int.parse(section),
+            uuid,
+            quizData['kanjiCharacter'] as String,
+            quizData['allCorrectAnswers'] as bool,
+            quizData['isFinishedQuiz'] as bool,
+            quizData['countCorrects'] as int,
+            quizData['countIncorrects'] as int,
+            quizData['countOmited'] as int,
+          );
+        }
+      }
+    }
+
+    if (quizScoreData['list_quiz_flash_cards_$section'] != null) {
+      final listFlashCardData = quizScoreData['list_quiz_flash_cards_$section']
+          as Map<String, Object>;
+      for (var i = 0; i < sectionsKanjis['section$section']!.length; i++) {
+        if (listFlashCardData['kanji_${i + 1}'] != null) {
+          final kanjiFlashCardData =
+              listFlashCardData['kanji_${i + 1}'] as Map<String, Object>;
+          await insertSingleFlashCardData(
+            kanjiFlashCardData['kanjiCharacter'] as String,
+            int.parse(section),
+            uuid,
+            kanjiFlashCardData['allRevisedFlashCards'] as bool,
+          );
+        }
+      }
     }
   }
 }
