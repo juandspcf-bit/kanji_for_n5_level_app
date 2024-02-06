@@ -369,6 +369,24 @@ Future<int> updateSingleFlashCardData(
       ]);
 }
 
-Future<void> storeQuizScore(Map<String, Object> quizScoreData) async {
+Future<void> storeQuizScore(
+    Map<String, Object> quizScoreData, String uuid) async {
   logger.d(quizScoreData);
+  final sections = ['1', '2', '3', '4', '5', '6', '7', '8', '9'];
+
+  for (String section in sections) {
+    final quizScore =
+        quizScoreData['quizScore_$section'] as Map<String, Object>;
+    if (quizScore['isFinishedKanjiQuiz'] != null) {
+      insertSingleQuizSectionDataDB(
+        int.parse(section),
+        uuid,
+        quizScore['allCorrectAnswersQuizKanji'] as bool,
+        quizScore['isFinishedKanjiQuiz'] as bool,
+        quizScore['countCorrects'] as int,
+        quizScore['countIncorrects'] as int,
+        quizScore['countOmited'] as int,
+      );
+    }
+  }
 }

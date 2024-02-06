@@ -102,7 +102,8 @@ class MainScreenProvider extends Notifier<MainScreenData> {
     try {
       final quizScoreData =
           await cloudDBService.loadQuizScoreData(authService.user ?? '');
-      localDBService.storeQuizScoreFromCloud(quizScoreData);
+/*       localDBService.storeQuizScoreFromCloud(
+          quizScoreData, authService.user ?? ''); */
     } catch (e) {
       logger.e('error loading quiz score $e');
     }
