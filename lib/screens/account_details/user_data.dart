@@ -124,7 +124,7 @@ class UserData extends ConsumerWidget {
       return ProfilePictureWidget(
         avatarWidget: CircularAvatarNetworkImage(
             pathProfileUser: accountDetailsData.pathProfileUser,
-            pathErrorImage: pathErrorImage),
+            pathErrorImage: pathAssetUser),
         setPathProfileUser: (path) {
           ref.read(personalInfoProvider.notifier).setProfileTemporalPath(path);
         },

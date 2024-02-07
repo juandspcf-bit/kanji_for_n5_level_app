@@ -87,18 +87,6 @@ class PersonalInfo extends ConsumerWidget with MyDialogs {
     );
   }
 
-  Widget getWidgetBody(PersonalInfoData accountDetailsData) {
-    if (accountDetailsData.fetchingStatus ==
-        PersonalInfoFetchinStatus.processing) {
-      return const ProcessProgress(message: 'Fetching data');
-    } else if (accountDetailsData.updatingStatus ==
-        PersonalInfoUpdatingStatus.updating) {
-      return const ProcessProgress(message: 'Updating data');
-    } else {
-      return UserData(accountDetailsData: accountDetailsData);
-    }
-  }
-
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final personalInfoData = ref.watch(personalInfoProvider);
@@ -162,7 +150,17 @@ class PersonalInfo extends ConsumerWidget with MyDialogs {
 
     return Scaffold(
       appBar: AppBar(),
-      body: getWidgetBody(personalInfoData),
+      body: Builder(builder: (ctx) {
+        if (personalInfoData.fetchingStatus ==
+            PersonalInfoFetchinStatus.processing) {
+          return const ProcessProgress(message: 'Fetching data');
+        } else if (personalInfoData.updatingStatus ==
+            PersonalInfoUpdatingStatus.updating) {
+          return const ProcessProgress(message: 'Updating data');
+        } else {
+          return UserData(accountDetailsData: personalInfoData);
+        }
+      }),
     );
   }
 }
