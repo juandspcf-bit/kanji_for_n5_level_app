@@ -56,3 +56,17 @@ Future<void> deleteFavorite(
     await docSnapshot.reference.delete();
   }
 }
+
+Future<void> deleteAllFavorites(
+  String uuid,
+) async {
+  final querySnapshot = await dbFirebase
+      .collection("favorites")
+      .where("uuid", isEqualTo: uuid)
+      .get();
+
+  //logger.d("Successfully completed");
+  for (var docSnapshot in querySnapshot.docs) {
+    await docSnapshot.reference.delete();
+  }
+}

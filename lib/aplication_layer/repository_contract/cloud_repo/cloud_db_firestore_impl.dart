@@ -23,6 +23,13 @@ class FireStoreDBService extends CloudDBService {
   }
 
   @override
+  Future<void> deleteAllFavoritesCloudDB(String uuid) {
+    return deleteAllFavorites(
+      uuid,
+    );
+  }
+
+  @override
   Future<List<Favorite>> loadFavoritesCloudDB(
     String uuid,
   ) {
