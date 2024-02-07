@@ -21,7 +21,7 @@ class ExamplesAudiosProvider extends Notifier<ExamplesAudiosData> {
         track = 0;
       }
 
-      logger.d(track);
+      //logger.d(track);
       state = ExamplesAudiosData(
           track: track,
           isPlaying: state.isPlaying,

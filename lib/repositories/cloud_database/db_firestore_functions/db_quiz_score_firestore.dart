@@ -78,7 +78,7 @@ Future<Map<String, Object>> loadQuizScoreDataFire(String uuid) async {
     }
   }
 
-  logger.d(scoresFinal);
+  //logger.d(scoresFinal);
   return scoresFinal;
 }
 

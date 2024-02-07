@@ -294,9 +294,9 @@ Future<SingleQuizFlashCardData> getSingleFlashCardData(
   final listQuery = await db.rawQuery(
       'SELECT * FROM kanji_flashcard_quiz '
       'WHERE'
-      ' section = ? AND uuid = ?',
-      [section, uuid]);
-  logger.d('getttin flash card data out: $listQuery');
+      ' kanjiCharacter = ? AND uuid = ?',
+      [kanjiCharacter, uuid]);
+  //logger.d('gettting flash card data out: $listQuery');
 
   if (listQuery.isEmpty) {
     return SingleQuizFlashCardData(
@@ -371,13 +371,13 @@ Future<int> updateSingleFlashCardData(
 
 Future<void> storeQuizScore(
     Map<String, Object> quizScoreData, String uuid) async {
-  logger.d(quizScoreData);
+  //logger.d(quizScoreData);
   final sections = ['1', '2', '3', '4', '5', '6', '7', '8', '9'];
 
   for (String section in sections) {
-    final quizScore =
-        quizScoreData['quizScore_$section'] as Map<String, Object>;
-    if (quizScore['isFinishedKanjiQuiz'] != null) {
+    if (quizScoreData['quizScore_$section'] != null) {
+      final quizScore =
+          quizScoreData['quizScore_$section'] as Map<String, Object>;
       await insertSingleQuizSectionDataDB(
         int.parse(section),
         uuid,
@@ -416,6 +416,7 @@ Future<void> storeQuizScore(
         if (listFlashCardData['kanji_${i + 1}'] != null) {
           final kanjiFlashCardData =
               listFlashCardData['kanji_${i + 1}'] as Map<String, Object>;
+          logger.d(kanjiFlashCardData);
           await insertSingleFlashCardData(
             kanjiFlashCardData['kanjiCharacter'] as String,
             int.parse(section),
