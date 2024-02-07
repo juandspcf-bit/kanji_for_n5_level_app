@@ -8,7 +8,7 @@ Future<Map<String, Object>> loadQuizScoreDataFire(String uuid) async {
 
   if (data == null) return {};
 
-  final sections = ['1', '2', '3', '4', '5', '6', '7', '8', '9'];
+  final sections = listSections.map((e) => e.sectionNumber.toString()).toList();
 
   final Map<String, Object> scoresFinal = {};
   for (var section in sections) {

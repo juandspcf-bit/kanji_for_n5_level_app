@@ -372,7 +372,7 @@ Future<int> updateSingleFlashCardData(
 Future<void> storeQuizScore(
     Map<String, Object> quizScoreData, String uuid) async {
   //logger.d(quizScoreData);
-  final sections = ['1', '2', '3', '4', '5', '6', '7', '8', '9'];
+  final sections = listSections.map((e) => e.sectionNumber.toString()).toList();
 
   for (String section in sections) {
     if (quizScoreData['quizScore_$section'] != null) {
