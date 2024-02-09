@@ -6,6 +6,13 @@ import 'package:kanji_for_n5_level_app/providers/quiz_details_score_screen.dart'
 import 'package:kanji_for_n5_level_app/providers/score_kanji_list_provider.dart';
 import 'package:lottie/lottie.dart';
 
+class QuizDetailsScore extends ConsumerStatefulWidget {
+  const QuizDetailsScore({super.key});
+
+  @override
+  ConsumerState<QuizDetailsScore> createState() => _QuizDetailsScore();
+}
+
 class _QuizDetailsScore extends ConsumerState<QuizDetailsScore> {
   Widget getTitles(double value, TitleMeta meta) {
     const style = TextStyle(
@@ -257,6 +264,21 @@ class _QuizDetailsScore extends ConsumerState<QuizDetailsScore> {
                       label: const Text('Restart quiz'),
                     ),
                   ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: ElevatedButton.icon(
+                      onPressed: () {
+                        ref.read(quizDetailsProvider.notifier).resetValues();
+                        Navigator.of(context).pop();
+                        Navigator.of(context).pop();
+                      },
+                      style: ElevatedButton.styleFrom(
+                        minimumSize: const Size.fromHeight(40),
+                      ),
+                      icon: const Icon(Icons.arrow_circle_right),
+                      label: const Text('To quiz type selector'),
+                    ),
+                  ),
                 ],
               ),
               Visibility(
@@ -283,11 +305,4 @@ class _QuizDetailsScore extends ConsumerState<QuizDetailsScore> {
       ),
     );
   }
-}
-
-class QuizDetailsScore extends ConsumerStatefulWidget {
-  const QuizDetailsScore({super.key});
-
-  @override
-  ConsumerState<QuizDetailsScore> createState() => _QuizDetailsScore();
 }
