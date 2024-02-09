@@ -100,9 +100,6 @@ abstract class LocalDBService {
 
   Future<void> storeAllFavoritesFromCloud(List<Favorite> favorites);
 
-  Future<void> storeQuizScoreFromCloud(
-      Map<String, Object> quizScoreData, String uuid);
-
   Future<void> updateQuizScoreFromCloud(
       Map<String, Object> quizScoreData, String uuid);
 }

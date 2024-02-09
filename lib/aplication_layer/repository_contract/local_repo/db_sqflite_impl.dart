@@ -213,12 +213,6 @@ class SqliteDBService implements LocalDBService {
   }
 
   @override
-  Future<void> storeQuizScoreFromCloud(
-      Map<String, Object> quizScoreData, String uuid) {
-    return storeQuizScore(quizScoreData, uuid);
-  }
-
-  @override
   Future<void> updateQuizScoreFromCloud(
       Map<String, Object> quizScoreData, String uuid) {
     return updateQuizScore(quizScoreData, uuid);

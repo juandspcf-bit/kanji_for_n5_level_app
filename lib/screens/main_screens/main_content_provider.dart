@@ -95,44 +95,23 @@ class MainScreenProvider extends Notifier<MainScreenData> {
   Future<void> getOnlineData() async {
     List<KanjiFromApi> listOfValidStoredKanjis = await loadStoredKanjis();
 
-    final firtsTimeLogged = await localDBService.getAllFirtsTimeLOggedDBData(
-      authService.user ?? '',
-    );
+    try {
+      final quizScoreData =
+          await cloudDBService.loadQuizScoreData(authService.user ?? '');
+      localDBService.updateQuizScoreFromCloud(
+          quizScoreData, authService.user ?? '');
+    } catch (e) {
+      logger.e('error loading quiz score $e');
+    }
 
     List<Favorite> favoritesKanjis;
-    if (firtsTimeLogged.isFirstTimeLogged == null) {
-      try {
-        favoritesKanjis =
-            await cloudDBService.loadFavoritesCloudDB(authService.user ?? '');
-        await localDBService
-            .setAllFirtsTimeLOggedDBData(authService.user ?? '');
-        await localDBService.storeAllFavoritesFromCloud(favoritesKanjis);
-      } catch (e) {
-        favoritesKanjis = [];
-        logger.e('error loading favorites $e');
-      }
-
-      try {
-        final quizScoreData =
-            await cloudDBService.loadQuizScoreData(authService.user ?? '');
-        localDBService.storeQuizScoreFromCloud(
-            quizScoreData, authService.user ?? '');
-      } catch (e) {
-        logger.e('error loading quiz score $e');
-      }
-    } else {
-      ///update the data quiz score cached
-      try {
-        final quizScoreData =
-            await cloudDBService.loadQuizScoreData(authService.user ?? '');
-        localDBService.updateQuizScoreFromCloud(
-            quizScoreData, authService.user ?? '');
-      } catch (e) {
-        logger.e('error loading quiz score $e');
-      }
-
+    try {
       favoritesKanjis =
-          await localDBService.loadFavoritesDatabase(authService.user ?? '');
+          await cloudDBService.loadFavoritesCloudDB(authService.user ?? '');
+      await localDBService.storeAllFavoritesFromCloud(favoritesKanjis);
+    } catch (e) {
+      favoritesKanjis = [];
+      logger.e('error loading favorites $e');
     }
 
     ref.read(favoriteskanjisProvider.notifier).setInitialFavoritesOnline(

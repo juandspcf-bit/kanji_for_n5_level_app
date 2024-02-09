@@ -21,6 +21,37 @@ Future<List<Favorite>> loadFavorites(String uid) async {
   }
 }
 
+Future<Favorite> loadSingleFavorite(String kanjiCharacter, String uid) async {
+  try {
+    final db = await kanjiFromApiDatabase;
+    final data = await db.query('user_favorites',
+        where: 'uuid = ? AND kanjiCharacter= ?',
+        whereArgs: [uid, kanjiCharacter]);
+    final dataQuery = data.map((e) {
+      return Favorite(
+        kanjis: e['kanjiCharacter'] as String,
+        uuid: e['uuid'] as String,
+        timeStamp: e['timeStamp'] as int,
+      );
+    }).toList();
+    if (data.isEmpty) {
+      return Favorite(
+        kanjis: '',
+        uuid: '',
+        timeStamp: -1,
+      );
+    }
+    return dataQuery[0];
+  } catch (e) {
+    logger.e(e);
+    return Favorite(
+      kanjis: '',
+      uuid: '',
+      timeStamp: -1,
+    );
+  }
+}
+
 Future<int> insertFavorite(String kanji, int timeStamp) async {
   final user = FirebaseAuth.instance.currentUser;
 
@@ -50,11 +81,16 @@ Future<void> storeAllFavorites(List<Favorite> favorites) async {
   try {
     final db = await kanjiFromApiDatabase;
     for (var favorite in favorites) {
-      db.insert("user_favorites", {
-        'kanjiCharacter': favorite.kanjis,
-        'uuid': favorite.uuid,
-        'timeStamp': favorite.timeStamp,
-      });
+      final favoriteDB =
+          await loadSingleFavorite(favorite.kanjis, favorite.uuid);
+
+      if (favoriteDB.kanjis == '') {
+        db.insert("user_favorites", {
+          'kanjiCharacter': favorite.kanjis,
+          'uuid': favorite.uuid,
+          'timeStamp': favorite.timeStamp,
+        });
+      }
     }
   } catch (e) {
     logger.e(e);
