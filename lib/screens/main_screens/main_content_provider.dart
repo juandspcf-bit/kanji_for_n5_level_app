@@ -121,6 +121,16 @@ class MainScreenProvider extends Notifier<MainScreenData> {
         logger.e('error loading quiz score $e');
       }
     } else {
+      ///update the data quiz score cached
+      try {
+        final quizScoreData =
+            await cloudDBService.loadQuizScoreData(authService.user ?? '');
+        localDBService.updateQuizScoreFromCloud(
+            quizScoreData, authService.user ?? '');
+      } catch (e) {
+        logger.e('error loading quiz score $e');
+      }
+
       favoritesKanjis =
           await localDBService.loadFavoritesDatabase(authService.user ?? '');
     }

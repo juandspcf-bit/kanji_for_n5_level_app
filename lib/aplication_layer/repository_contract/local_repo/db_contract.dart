@@ -102,4 +102,7 @@ abstract class LocalDBService {
 
   Future<void> storeQuizScoreFromCloud(
       Map<String, Object> quizScoreData, String uuid);
+
+  Future<void> updateQuizScoreFromCloud(
+      Map<String, Object> quizScoreData, String uuid);
 }

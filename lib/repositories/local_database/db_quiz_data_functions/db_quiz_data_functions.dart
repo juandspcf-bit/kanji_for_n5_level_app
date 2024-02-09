@@ -358,7 +358,7 @@ Future<int> updateSingleFlashCardData(
       'UPDATE'
       ' kanji_flashcard_quiz '
       'SET'
-      ' allRevisedFlashCards = ?,'
+      ' allRevisedFlashCards = ? '
       'WHERE'
       ' kanjiCharacter = ? AND section = ? AND uuid = ?',
       [
@@ -418,6 +418,102 @@ Future<void> storeQuizScore(
               listFlashCardData['kanji_${i + 1}'] as Map<String, Object>;
           logger.d(kanjiFlashCardData);
           await insertSingleFlashCardData(
+            kanjiFlashCardData['kanjiCharacter'] as String,
+            int.parse(section),
+            uuid,
+            kanjiFlashCardData['allRevisedFlashCards'] as bool,
+          );
+        }
+      }
+    }
+  }
+}
+
+Future<void> updateQuizScore(
+    Map<String, Object> quizScoreData, String uuid) async {
+  //logger.d(quizScoreData);
+  final sections = listSections.map((e) => e.sectionNumber.toString()).toList();
+
+  for (String section in sections) {
+    if (quizScoreData['quizScore_$section'] != null) {
+      final quizScore =
+          quizScoreData['quizScore_$section'] as Map<String, Object>;
+      final dataQuiz = await getSingleQuizSectionData(
+        int.parse(section),
+        uuid,
+      );
+      if (dataQuiz.section == -1) {
+        insertSingleQuizSectionDataDB(
+          int.parse(section),
+          uuid,
+          quizScore['allCorrectAnswersQuizKanji'] as bool,
+          quizScore['isFinishedKanjiQuiz'] as bool,
+          quizScore['countCorrects'] as int,
+          quizScore['countIncorrects'] as int,
+          quizScore['countOmited'] as int,
+        );
+      } else {
+        updateSingleQuizSectionData(
+          int.parse(section),
+          uuid,
+          quizScore['allCorrectAnswersQuizKanji'] as bool,
+          quizScore['isFinishedKanjiQuiz'] as bool,
+          quizScore['countCorrects'] as int,
+          quizScore['countIncorrects'] as int,
+          quizScore['countOmited'] as int,
+        );
+      }
+    }
+
+    if (quizScoreData['list_quiz_details_$section'] != null) {
+      final lisQuizData =
+          quizScoreData['list_quiz_details_$section'] as Map<String, Object>;
+      for (var i = 0; i < sectionsKanjis['section$section']!.length; i++) {
+        if (lisQuizData['kanji_${i + 1}'] != null) {
+          final quizData = lisQuizData['kanji_${i + 1}'] as Map<String, Object>;
+
+          final dataQuizDetails = await getSingleQuizSectionAudioExamplerData(
+            quizData['kanjiCharacter'] as String,
+            int.parse(section),
+            uuid,
+          );
+
+          if (dataQuizDetails.section == -1) {
+            await insertSingleAudioExampleQuizSectionDataDB(
+              int.parse(section),
+              uuid,
+              quizData['kanjiCharacter'] as String,
+              quizData['allCorrectAnswers'] as bool,
+              quizData['isFinishedQuiz'] as bool,
+              quizData['countCorrects'] as int,
+              quizData['countIncorrects'] as int,
+              quizData['countOmited'] as int,
+            );
+          } else {
+            await updateSingleAudioExampleQuizSectionData(
+              quizData['kanjiCharacter'] as String,
+              int.parse(section),
+              uuid,
+              quizData['allCorrectAnswers'] as bool,
+              quizData['isFinishedQuiz'] as bool,
+              quizData['countCorrects'] as int,
+              quizData['countIncorrects'] as int,
+              quizData['countOmited'] as int,
+            );
+          }
+        }
+      }
+    }
+
+    if (quizScoreData['list_quiz_flash_cards_$section'] != null) {
+      final listFlashCardData = quizScoreData['list_quiz_flash_cards_$section']
+          as Map<String, Object>;
+      for (var i = 0; i < sectionsKanjis['section$section']!.length; i++) {
+        if (listFlashCardData['kanji_${i + 1}'] != null) {
+          final kanjiFlashCardData =
+              listFlashCardData['kanji_${i + 1}'] as Map<String, Object>;
+          logger.d(kanjiFlashCardData);
+          await updateSingleFlashCardData(
             kanjiFlashCardData['kanjiCharacter'] as String,
             int.parse(section),
             uuid,
