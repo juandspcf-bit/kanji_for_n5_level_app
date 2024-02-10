@@ -110,7 +110,7 @@ Future<ProgressTimeLineDBData> getAllQuizSectionData(
   );
 }
 
-void updateSingleQuizSectionData(
+Future<void> updateSingleQuizSectionData(
   int section,
   String uuid,
   bool allCorrectAnswersQuizKanji,
@@ -389,6 +389,8 @@ Future<void> updateQuizScore(
 
   final dataQuizList = await futureQuizScoreGroup.future;
 
+  FutureGroup<void> futureQuizScoreCacheGroup = FutureGroup<void>();
+
   for (int i = 0; i < dataQuizList.length; i++) {
     int sectionNumber = i + 1;
     if (quizScoreData['quizScore_$sectionNumber'] != null) {
@@ -397,28 +399,35 @@ Future<void> updateQuizScore(
       logger.d('data quiz data ${dataQuizList[i].section}');
 
       if (dataQuizList[i].section == -1) {
-        insertSingleQuizSectionDataDB(
-          sectionNumber,
-          uuid,
-          quizScore['allCorrectAnswersQuizKanji'] as bool,
-          quizScore['isFinishedKanjiQuiz'] as bool,
-          quizScore['countCorrects'] as int,
-          quizScore['countIncorrects'] as int,
-          quizScore['countOmited'] as int,
+        futureQuizScoreCacheGroup.add(
+          insertSingleQuizSectionDataDB(
+            sectionNumber,
+            uuid,
+            quizScore['allCorrectAnswersQuizKanji'] as bool,
+            quizScore['isFinishedKanjiQuiz'] as bool,
+            quizScore['countCorrects'] as int,
+            quizScore['countIncorrects'] as int,
+            quizScore['countOmited'] as int,
+          ),
         );
       } else {
-        updateSingleQuizSectionData(
-          sectionNumber,
-          uuid,
-          quizScore['allCorrectAnswersQuizKanji'] as bool,
-          quizScore['isFinishedKanjiQuiz'] as bool,
-          quizScore['countCorrects'] as int,
-          quizScore['countIncorrects'] as int,
-          quizScore['countOmited'] as int,
+        futureQuizScoreCacheGroup.add(
+          updateSingleQuizSectionData(
+            sectionNumber,
+            uuid,
+            quizScore['allCorrectAnswersQuizKanji'] as bool,
+            quizScore['isFinishedKanjiQuiz'] as bool,
+            quizScore['countCorrects'] as int,
+            quizScore['countIncorrects'] as int,
+            quizScore['countOmited'] as int,
+          ),
         );
       }
     }
   }
+
+  futureQuizScoreCacheGroup.close();
+  await futureQuizScoreCacheGroup.future;
 
 /*   FutureGroup<SingleQuizAudioExampleData> futureQuizDetailsGroup =
       FutureGroup<SingleQuizAudioExampleData>();
@@ -431,18 +440,32 @@ Future<void> updateQuizScore(
     if (quizScoreData['list_quiz_details_$section'] != null) {
       final lisQuizData =
           quizScoreData['list_quiz_details_$section'] as Map<String, Object>;
+
+      FutureGroup<SingleQuizAudioExampleData> futureQuizDetailsGroup =
+          FutureGroup<SingleQuizAudioExampleData>();
+
       for (var i = 0; i < sectionsKanjis['section$section']!.length; i++) {
         if (lisQuizData['kanji_${i + 1}'] != null) {
           final quizData = lisQuizData['kanji_${i + 1}'] as Map<String, Object>;
-
-          final dataQuizDetails = await getSingleQuizSectionAudioExamplerData(
+          futureQuizDetailsGroup.add(getSingleQuizSectionAudioExamplerData(
             quizData['kanjiCharacter'] as String,
             int.parse(section),
             uuid,
-          );
+          ));
+        }
+      }
 
-          if (dataQuizDetails.section == -1) {
-            await insertSingleAudioExampleQuizSectionDataDB(
+      futureQuizDetailsGroup.close();
+      final quizDetailsDataList = await futureQuizDetailsGroup.future;
+
+      FutureGroup<int> futureQuizDetailsCachedGroup = FutureGroup<int>();
+
+      for (var i = 0; i < sectionsKanjis['section$section']!.length; i++) {
+        if (lisQuizData['kanji_${i + 1}'] != null) {
+          final quizData = lisQuizData['kanji_${i + 1}'] as Map<String, Object>;
+          if (quizDetailsDataList[i].section == -1) {
+            futureQuizDetailsCachedGroup
+                .add(insertSingleAudioExampleQuizSectionDataDB(
               int.parse(section),
               uuid,
               quizData['kanjiCharacter'] as String,
@@ -451,9 +474,10 @@ Future<void> updateQuizScore(
               quizData['countCorrects'] as int,
               quizData['countIncorrects'] as int,
               quizData['countOmited'] as int,
-            );
+            ));
           } else {
-            await updateSingleAudioExampleQuizSectionData(
+            futureQuizDetailsCachedGroup
+                .add(updateSingleAudioExampleQuizSectionData(
               quizData['kanjiCharacter'] as String,
               int.parse(section),
               uuid,
@@ -462,12 +486,58 @@ Future<void> updateQuizScore(
               quizData['countCorrects'] as int,
               quizData['countIncorrects'] as int,
               quizData['countOmited'] as int,
-            );
+            ));
           }
         }
       }
-    }
 
+      futureQuizDetailsCachedGroup.close();
+      await futureQuizDetailsCachedGroup.future;
+    }
+  }
+
+  for (String section in sections) {
+    /* if (quizScoreData['list_quiz_details_$section'] != null) {
+        final lisQuizData =
+            quizScoreData['list_quiz_details_$section'] as Map<String, Object>;
+        for (var i = 0; i < sectionsKanjis['section$section']!.length; i++) {
+          if (lisQuizData['kanji_${i + 1}'] != null) {
+            final quizData =
+                lisQuizData['kanji_${i + 1}'] as Map<String, Object>;
+
+            final dataQuizDetails = await getSingleQuizSectionAudioExamplerData(
+              quizData['kanjiCharacter'] as String,
+              int.parse(section),
+              uuid,
+            );
+
+            if (dataQuizDetails.section == -1) {
+              await insertSingleAudioExampleQuizSectionDataDB(
+                int.parse(section),
+                uuid,
+                quizData['kanjiCharacter'] as String,
+                quizData['allCorrectAnswers'] as bool,
+                quizData['isFinishedQuiz'] as bool,
+                quizData['countCorrects'] as int,
+                quizData['countIncorrects'] as int,
+                quizData['countOmited'] as int,
+              );
+            } else {
+              await updateSingleAudioExampleQuizSectionData(
+                quizData['kanjiCharacter'] as String,
+                int.parse(section),
+                uuid,
+                quizData['allCorrectAnswers'] as bool,
+                quizData['isFinishedQuiz'] as bool,
+                quizData['countCorrects'] as int,
+                quizData['countIncorrects'] as int,
+                quizData['countOmited'] as int,
+              );
+            }
+          }
+        }
+      }
+ */
     if (quizScoreData['list_quiz_flash_cards_$section'] != null) {
       final listFlashCardData = quizScoreData['list_quiz_flash_cards_$section']
           as Map<String, Object>;
