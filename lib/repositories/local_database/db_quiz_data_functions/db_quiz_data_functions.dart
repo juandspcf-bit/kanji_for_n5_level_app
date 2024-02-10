@@ -531,7 +531,7 @@ Future<void> cacheQuizKanji(List<String> sections, String uuid,
     if (quizScoreData['quizScore_$sectionNumber'] != null) {
       final quizScore =
           quizScoreData['quizScore_$sectionNumber'] as Map<String, Object>;
-      logger.d('data quiz data ${dataQuizList[i].section}');
+      //logger.d('data quiz data ${dataQuizList[i].section}');
 
       if (dataQuizList[i].section == -1) {
         futureQuizScoreCacheGroup.add(

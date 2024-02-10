@@ -44,7 +44,7 @@ class FavoritesListProvider extends Notifier<FavoritesKanjisData> {
 
       favoritesKanjiList.sort((a, b) => a.timeStamp.compareTo(b.timeStamp));
 
-      logger.d('the initial favorites kanjilist is: $favoritesKanjiList');
+      //logger.d('the initial favorites kanjilist is: $favoritesKanjiList');
 
       onSuccesRequest(favoritesKanjiList);
     } catch (e) {
