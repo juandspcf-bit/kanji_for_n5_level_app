@@ -456,6 +456,59 @@ Future<void> updateQuizScore(
   }
 }
 
+Future<void> cacheFlashCardsScore(List<String> sections,
+    Map<String, Object> quizScoreData, String uuid) async {
+  for (String section in sections) {
+    if (quizScoreData['list_quiz_details_$section'] != null) {
+      final lisQuizData =
+          quizScoreData['list_quiz_details_$section'] as Map<String, Object>;
+
+      FutureGroup<SingleQuizFlashCardData> futureFlashcardsGroup =
+          FutureGroup<SingleQuizFlashCardData>();
+
+      for (var i = 0; i < sectionsKanjis['section$section']!.length; i++) {
+        if (lisQuizData['kanji_${i + 1}'] != null) {
+          final quizData = lisQuizData['kanji_${i + 1}'] as Map<String, Object>;
+          futureFlashcardsGroup.add(getSingleFlashCardData(
+            quizData['kanjiCharacter'] as String,
+            int.parse(section),
+            uuid,
+          ));
+        }
+      }
+
+      futureFlashcardsGroup.close();
+      final quizDetailsDataList = await futureFlashcardsGroup.future;
+
+      FutureGroup<int> futureFlashCardsCachedGroup = FutureGroup<int>();
+
+      for (var i = 0; i < sectionsKanjis['section$section']!.length; i++) {
+        if (lisQuizData['kanji_${i + 1}'] != null) {
+          final quizData = lisQuizData['kanji_${i + 1}'] as Map<String, Object>;
+          if (quizDetailsDataList[i].section == -1) {
+            futureFlashCardsCachedGroup.add(insertSingleFlashCardData(
+              quizData['kanjiCharacter'] as String,
+              int.parse(section),
+              uuid,
+              quizData['allRevisedFlashCards'] as bool,
+            ));
+          } else {
+            futureFlashCardsCachedGroup.add(updateSingleFlashCardData(
+              quizData['kanjiCharacter'] as String,
+              int.parse(section),
+              uuid,
+              quizData['allRevisedFlashCards'] as bool,
+            ));
+          }
+        }
+      }
+
+      futureFlashCardsCachedGroup.close();
+      await futureFlashCardsCachedGroup.future;
+    }
+  }
+}
+
 Future<void> cacheQuizDetails(List<String> sections,
     Map<String, Object> quizScoreData, String uuid) async {
   for (String section in sections) {
