@@ -377,98 +377,25 @@ Future<void> updateQuizScore(
 
   await cacheQuizKanji(sections, uuid, quizScoreData);
   await cacheQuizDetails(sections, quizScoreData, uuid);
-
-  for (String section in sections) {
-    /* if (quizScoreData['list_quiz_details_$section'] != null) {
-        final lisQuizData =
-            quizScoreData['list_quiz_details_$section'] as Map<String, Object>;
-        for (var i = 0; i < sectionsKanjis['section$section']!.length; i++) {
-          if (lisQuizData['kanji_${i + 1}'] != null) {
-            final quizData =
-                lisQuizData['kanji_${i + 1}'] as Map<String, Object>;
-
-            final dataQuizDetails = await getSingleQuizSectionAudioExamplerData(
-              quizData['kanjiCharacter'] as String,
-              int.parse(section),
-              uuid,
-            );
-
-            if (dataQuizDetails.section == -1) {
-              await insertSingleAudioExampleQuizSectionDataDB(
-                int.parse(section),
-                uuid,
-                quizData['kanjiCharacter'] as String,
-                quizData['allCorrectAnswers'] as bool,
-                quizData['isFinishedQuiz'] as bool,
-                quizData['countCorrects'] as int,
-                quizData['countIncorrects'] as int,
-                quizData['countOmited'] as int,
-              );
-            } else {
-              await updateSingleAudioExampleQuizSectionData(
-                quizData['kanjiCharacter'] as String,
-                int.parse(section),
-                uuid,
-                quizData['allCorrectAnswers'] as bool,
-                quizData['isFinishedQuiz'] as bool,
-                quizData['countCorrects'] as int,
-                quizData['countIncorrects'] as int,
-                quizData['countOmited'] as int,
-              );
-            }
-          }
-        }
-      }
- */
-    if (quizScoreData['list_quiz_flash_cards_$section'] != null) {
-      final listFlashCardData = quizScoreData['list_quiz_flash_cards_$section']
-          as Map<String, Object>;
-      for (var i = 0; i < sectionsKanjis['section$section']!.length; i++) {
-        if (listFlashCardData['kanji_${i + 1}'] != null) {
-          final kanjiFlashCardData =
-              listFlashCardData['kanji_${i + 1}'] as Map<String, Object>;
-          //logger.d(kanjiFlashCardData);
-
-          final flashCardData = await getSingleFlashCardData(
-            kanjiFlashCardData['kanjiCharacter'] as String,
-            int.parse(section),
-            uuid,
-          );
-
-          if (flashCardData.section == -1) {
-            await insertSingleFlashCardData(
-              kanjiFlashCardData['kanjiCharacter'] as String,
-              int.parse(section),
-              uuid,
-              kanjiFlashCardData['allRevisedFlashCards'] as bool,
-            );
-          } else {
-            await updateSingleFlashCardData(
-              kanjiFlashCardData['kanjiCharacter'] as String,
-              int.parse(section),
-              uuid,
-              kanjiFlashCardData['allRevisedFlashCards'] as bool,
-            );
-          }
-        }
-      }
-    }
-  }
+  await cacheFlashCardsScore(sections, quizScoreData, uuid);
 }
 
 Future<void> cacheFlashCardsScore(List<String> sections,
     Map<String, Object> quizScoreData, String uuid) async {
   for (String section in sections) {
-    if (quizScoreData['list_quiz_details_$section'] != null) {
-      final lisQuizData =
-          quizScoreData['list_quiz_details_$section'] as Map<String, Object>;
+    if (quizScoreData['list_quiz_flash_cards_$section'] != null) {
+      final listFlashCardsData = quizScoreData['list_quiz_flash_cards_$section']
+          as Map<String, Object>;
 
       FutureGroup<SingleQuizFlashCardData> futureFlashcardsGroup =
           FutureGroup<SingleQuizFlashCardData>();
 
+      /// read current cached data
       for (var i = 0; i < sectionsKanjis['section$section']!.length; i++) {
-        if (lisQuizData['kanji_${i + 1}'] != null) {
-          final quizData = lisQuizData['kanji_${i + 1}'] as Map<String, Object>;
+        int kanjiNumber = i + 1;
+        if (listFlashCardsData['kanji_$kanjiNumber'] != null) {
+          final quizData =
+              listFlashCardsData['kanji_$kanjiNumber'] as Map<String, Object>;
           futureFlashcardsGroup.add(getSingleFlashCardData(
             quizData['kanjiCharacter'] as String,
             int.parse(section),
@@ -482,9 +409,12 @@ Future<void> cacheFlashCardsScore(List<String> sections,
 
       FutureGroup<int> futureFlashCardsCachedGroup = FutureGroup<int>();
 
+      /// update cache
       for (var i = 0; i < sectionsKanjis['section$section']!.length; i++) {
-        if (lisQuizData['kanji_${i + 1}'] != null) {
-          final quizData = lisQuizData['kanji_${i + 1}'] as Map<String, Object>;
+        int kanjiNumber = i + 1;
+        if (listFlashCardsData['kanji_$kanjiNumber'] != null) {
+          final quizData =
+              listFlashCardsData['kanji_$kanjiNumber'] as Map<String, Object>;
           if (quizDetailsDataList[i].section == -1) {
             futureFlashCardsCachedGroup.add(insertSingleFlashCardData(
               quizData['kanjiCharacter'] as String,
@@ -519,9 +449,12 @@ Future<void> cacheQuizDetails(List<String> sections,
       FutureGroup<SingleQuizAudioExampleData> futureQuizDetailsGroup =
           FutureGroup<SingleQuizAudioExampleData>();
 
+      /// read current cached data
       for (var i = 0; i < sectionsKanjis['section$section']!.length; i++) {
-        if (lisQuizData['kanji_${i + 1}'] != null) {
-          final quizData = lisQuizData['kanji_${i + 1}'] as Map<String, Object>;
+        int kanjiNumber = i + 1;
+        if (lisQuizData['kanji_$kanjiNumber'] != null) {
+          final quizData =
+              lisQuizData['kanji_$kanjiNumber'] as Map<String, Object>;
           futureQuizDetailsGroup.add(getSingleQuizSectionAudioExamplerData(
             quizData['kanjiCharacter'] as String,
             int.parse(section),
@@ -535,9 +468,12 @@ Future<void> cacheQuizDetails(List<String> sections,
 
       FutureGroup<int> futureQuizDetailsCachedGroup = FutureGroup<int>();
 
+      /// update cache
       for (var i = 0; i < sectionsKanjis['section$section']!.length; i++) {
-        if (lisQuizData['kanji_${i + 1}'] != null) {
-          final quizData = lisQuizData['kanji_${i + 1}'] as Map<String, Object>;
+        int kanjiNumber = i + 1;
+        if (lisQuizData['kanji_$kanjiNumber'] != null) {
+          final quizData =
+              lisQuizData['kanji_$kanjiNumber'] as Map<String, Object>;
           if (quizDetailsDataList[i].section == -1) {
             futureQuizDetailsCachedGroup
                 .add(insertSingleAudioExampleQuizSectionDataDB(
