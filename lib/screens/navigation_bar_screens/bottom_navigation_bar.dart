@@ -19,50 +19,67 @@ class CustomBottomNavigationBar extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return Container(
-      foregroundDecoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(20),
-          border: Border.all(
-              color: Colors
-                  .white38) //Border(top: BorderSide(color: Colors.white38, width: 1)),
-          ),
-      child: BottomNavigationBar(
-        unselectedItemColor: Colors.white30,
-        selectedItemColor: Colors.white70,
-        //Theme.of(context).colorScheme.onPrimaryContainer.withAlpha(100),
-        onTap: selectPage,
-        currentIndex: selectedPageIndex.index,
-        items: [
-          BottomNavigationBarItem(
-            icon: Icon(
+    return NavigationBar(
+      indicatorColor: Colors.transparent,
+      onDestinationSelected: selectPage,
+      selectedIndex: selectedPageIndex.index,
+      destinations: [
+        NavigationDestination(
+          icon: Container(
+            decoration: BoxDecoration(
+              color: selectedPageIndex.index == 0
+                  ? Theme.of(context).colorScheme.primaryContainer
+                  : Colors.transparent,
+              borderRadius: const BorderRadius.horizontal(
+                left: Radius.elliptical(20, 20),
+                right: Radius.elliptical(20, 20),
+              ),
+            ),
+            height: iconSize,
+            width: iconSize,
+            child: Icon(
               Icons.book,
-              size: iconSize,
+              size: iconSize, //iconSize,
             ),
-            label: "Sections",
           ),
-          BottomNavigationBarItem(
-            icon: Icon(
-              Icons.star,
-              size: iconSize,
-            ),
-            label: "Favorites",
+          selectedIcon: Container(
+              decoration: BoxDecoration(
+                color: Theme.of(context).colorScheme.primaryContainer,
+                borderRadius: const BorderRadius.horizontal(
+                  left: Radius.elliptical(20, 20),
+                  right: Radius.elliptical(20, 20),
+                ),
+              ),
+              height: iconSize,
+              width: iconSize + 30,
+              child: Icon(
+                Icons.book,
+                size: iconSize, //iconSize,
+              )),
+          label: "Sections",
+        ),
+        NavigationDestination(
+          icon: Icon(
+            Icons.star,
+            size: iconSize,
           ),
-          BottomNavigationBarItem(
-            icon: Icon(
-              Icons.search,
-              size: iconSize,
-            ),
-            label: "basic search",
+          label: "Favorites",
+        ),
+        NavigationDestination(
+          icon: Icon(
+            Icons.search,
+            size: iconSize,
           ),
-          BottomNavigationBarItem(
-            icon: Icon(
-              Icons.timeline,
-              size: iconSize,
-            ),
-            label: "progress",
+          label: "basic search",
+        ),
+        NavigationDestination(
+          icon: Icon(
+            Icons.timeline,
+            size: iconSize,
           ),
-        ],
-      ),
+          label: "progress",
+        ),
+      ],
     );
   }
 }
