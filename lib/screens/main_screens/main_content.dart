@@ -2,7 +2,6 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:kanji_for_n5_level_app/config_files/screen_config.dart';
 import 'package:kanji_for_n5_level_app/main.dart';
 import 'package:kanji_for_n5_level_app/providers/status_connection_provider.dart';
 import 'package:kanji_for_n5_level_app/repositories/local_database/db_quiz_data_functions/db_quiz_data_functions.dart';
@@ -55,16 +54,7 @@ class MainContent extends ConsumerWidget with StatusDBStoringDialogs {
       scaffoldTitle = "Favorites";
     }
 
-    final sizeScreen = getScreenSizeWidth(context);
-    double iconSize;
-    switch (sizeScreen) {
-      case ScreenSizeWidth.extraLarge:
-        iconSize = 60;
-      case ScreenSizeWidth.large:
-        iconSize = 40;
-      case _:
-        iconSize = 30;
-    }
+    //final sizeScreen = getScreenSizeWidth(context);
 
     return Scaffold(
       appBar: AppBar(
@@ -105,7 +95,6 @@ class MainContent extends ConsumerWidget with StatusDBStoringDialogs {
       ),
       body: selectScreen(mainScreenData.selection),
       bottomNavigationBar: CustomBottomNavigationBar(
-        iconSize: iconSize,
         selectPage: (index) {
           ScaffoldMessenger.of(context).clearSnackBars();
           ref
