@@ -1,6 +1,7 @@
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:kanji_for_n5_level_app/config_files/screen_config.dart';
 import 'package:kanji_for_n5_level_app/main.dart';
 import 'package:kanji_for_n5_level_app/models/kanji_from_api.dart';
 import 'package:kanji_for_n5_level_app/providers/examples_audios_provider.dart';
@@ -33,6 +34,22 @@ class KanjiDetails extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final orientation = MediaQuery.orientationOf(context);
+    final sizeScreen = getScreenSizeWidth(context);
+    bool tabedScreen = true;
+    switch ((orientation, sizeScreen)) {
+      case (Orientation.landscape, _):
+        {
+          tabedScreen = false;
+        }
+      case (_, ScreenSizeWidth.extraLarge):
+        tabedScreen = true;
+      case (_, ScreenSizeWidth.large):
+        tabedScreen = true;
+      case (_, _):
+        tabedScreen = true;
+    }
+
     final statusConnectionData = ref.watch(statusConnectionProvider);
 
     ref.listen<KanjiDetailsData?>(kanjiDetailsProvider, (prev, current) {
@@ -53,113 +70,148 @@ class KanjiDetails extends ConsumerWidget {
       }
     });
 
-    return DefaultTabController(
-      initialIndex: 0,
-      length: 3,
-      child: Builder(
-        builder: (BuildContext ctx) {
-          final TabController tabController = DefaultTabController.of(ctx);
-          tabController.addListener(() {
-            if (tabController.index != 3) {
-              ref.read(examplesAudiosProvider).assetsAudioPlayer.stop();
-              ref.read(examplesAudiosProvider.notifier).setIsPlaying(false);
-            }
-            if (!tabController.indexIsChanging) {
-              // Your code goes here.
-              // To get index of current tab use tabController.index
-            }
-          });
+    return tabedScreen
+        ? DefaultTabController(
+            initialIndex: 0,
+            length: 3,
+            child: Builder(
+              builder: (BuildContext ctx) {
+                final TabController tabController =
+                    DefaultTabController.of(ctx);
+                tabController.addListener(() {
+                  if (tabController.index != 3) {
+                    ref.read(examplesAudiosProvider).assetsAudioPlayer.stop();
+                    ref
+                        .read(examplesAudiosProvider.notifier)
+                        .setIsPlaying(false);
+                  }
+                  if (!tabController.indexIsChanging) {
+                    // Your code goes here.
+                    // To get index of current tab use tabController.index
+                  }
+                });
 
-          return PopScope(
-            onPopInvoked: (didPop) {
-              if (!didPop) return;
-              ref.read(examplesAudiosProvider).assetsAudioPlayer.stop();
-              ref.read(examplesAudiosProvider.notifier).setIsPlaying(false);
-              ScaffoldMessenger.of(context).clearSnackBars();
-            },
-            child: Scaffold(
-              appBar: AppBar(
-                title: Text(kanjiFromApi.kanjiCharacter),
-                actions: [
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 10),
-                    child: statusConnectionData == ConnectivityResult.none
-                        ? const Icon(Icons.cloud_off)
-                        : const Icon(Icons.cloud_done_rounded),
-                  ),
-                  IconButton(
-                      onPressed: () {
-                        ref
-                            .read(quizDetailsProvider.notifier)
-                            .setDataQuiz(kanjiFromApi);
-                        ref.read(quizDetailsProvider.notifier).setQuizState(0);
-                        ref
-                            .read(selectQuizDetailsProvider.notifier)
-                            .setScreen(ScreensQuizDetail.welcome);
-                        ref
-                            .read(selectQuizDetailsProvider.notifier)
-                            .setOption(2);
-                        ref
-                            .read(flashCardProvider.notifier)
-                            .initTheQuiz(kanjiFromApi);
-                        ref
-                            .read(lastScoreDetailsProvider.notifier)
-                            .getSingleAudioExampleQuizDataDB(
-                              kanjiFromApi.kanjiCharacter,
-                              ref.read(sectionProvider),
-                              authService.user ?? '',
-                            );
-                        ref
-                            .read(lastScoreFlashCardProvider.notifier)
-                            .getSingleFlashCardDataDB(
-                              kanjiFromApi.kanjiCharacter,
-                              ref.read(sectionProvider),
-                              authService.user ?? '',
-                            );
+                return PopScope(
+                  onPopInvoked: (didPop) {
+                    if (!didPop) return;
+                    ref.read(examplesAudiosProvider).assetsAudioPlayer.stop();
+                    ref
+                        .read(examplesAudiosProvider.notifier)
+                        .setIsPlaying(false);
+                    ScaffoldMessenger.of(context).clearSnackBars();
+                  },
+                  child: Scaffold(
+                    appBar: AppBar(
+                      title: Text(kanjiFromApi.kanjiCharacter),
+                      actions: [
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 10),
+                          child: statusConnectionData == ConnectivityResult.none
+                              ? const Icon(Icons.cloud_off)
+                              : const Icon(Icons.cloud_done_rounded),
+                        ),
+                        IconButton(
+                            onPressed: () {
+                              ref
+                                  .read(quizDetailsProvider.notifier)
+                                  .setDataQuiz(kanjiFromApi);
+                              ref
+                                  .read(quizDetailsProvider.notifier)
+                                  .setQuizState(0);
+                              ref
+                                  .read(selectQuizDetailsProvider.notifier)
+                                  .setScreen(ScreensQuizDetail.welcome);
+                              ref
+                                  .read(selectQuizDetailsProvider.notifier)
+                                  .setOption(2);
+                              ref
+                                  .read(flashCardProvider.notifier)
+                                  .initTheQuiz(kanjiFromApi);
+                              ref
+                                  .read(lastScoreDetailsProvider.notifier)
+                                  .getSingleAudioExampleQuizDataDB(
+                                    kanjiFromApi.kanjiCharacter,
+                                    ref.read(sectionProvider),
+                                    authService.user ?? '',
+                                  );
+                              ref
+                                  .read(lastScoreFlashCardProvider.notifier)
+                                  .getSingleFlashCardDataDB(
+                                    kanjiFromApi.kanjiCharacter,
+                                    ref.read(sectionProvider),
+                                    authService.user ?? '',
+                                  );
 
-                        Navigator.of(context).push(MaterialPageRoute(
-                          builder: (context) {
-                            return DetailsQuizScreen(
-                                kanjiFromApi: kanjiFromApi);
+                              Navigator.of(context).push(MaterialPageRoute(
+                                builder: (context) {
+                                  return DetailsQuizScreen(
+                                      kanjiFromApi: kanjiFromApi);
+                                },
+                              ));
+                            },
+                            icon: const Icon(Icons.quiz)),
+                        IconButton(
+                          onPressed: () {
+                            ref
+                                .read(kanjiDetailsProvider.notifier)
+                                .storeToFavorites(kanjiFromApi);
                           },
-                        ));
-                      },
-                      icon: const Icon(Icons.quiz)),
-                  IconButton(
-                    onPressed: () {
-                      ref
-                          .read(kanjiDetailsProvider.notifier)
-                          .storeToFavorites(kanjiFromApi);
-                    },
-                    icon: const IconFavorites(),
-                  )
-                ],
-                bottom: const TabBar(
-                  tabs: <Widget>[
-                    Tab(
+                          icon: const IconFavorites(),
+                        )
+                      ],
+                      bottom: const TabBar(
+                        tabs: <Widget>[
+                          Tab(
+                            icon: Icon(Icons.movie),
+                          ),
+                          Tab(
+                            icon: Icon(Icons.draw),
+                          ),
+                          Tab(
+                            icon: Icon(Icons.play_lesson),
+                          ),
+                        ],
+                      ),
+                    ),
+                    body: const TabBarView(
+                      children: <Widget>[
+                        TabVideoStrokes(),
+                        TabStrokes(),
+                        TabExamples(),
+                      ],
+                    ),
+                  ),
+                );
+              },
+            ),
+          )
+        : Scaffold(
+            body: Row(
+              children: [
+                NavigationRail(
+                  selectedIndex: 0,
+                  groupAlignment: 0.0,
+                  onDestinationSelected: (int index) {},
+                  labelType: NavigationRailLabelType.none,
+                  trailing: null,
+                  destinations: const <NavigationRailDestination>[
+                    NavigationRailDestination(
                       icon: Icon(Icons.movie),
+                      label: Text('movie'),
                     ),
-                    Tab(
+                    NavigationRailDestination(
                       icon: Icon(Icons.draw),
+                      label: Text('draw'),
                     ),
-                    Tab(
+                    NavigationRailDestination(
                       icon: Icon(Icons.play_lesson),
+                      label: Text('Play lesson'),
                     ),
                   ],
-                ),
-              ),
-              body: const TabBarView(
-                children: <Widget>[
-                  TabVideoStrokes(),
-                  TabStrokes(),
-                  TabExamples(),
-                ],
-              ),
+                )
+              ],
             ),
           );
-        },
-      ),
-    );
   }
 }
 
