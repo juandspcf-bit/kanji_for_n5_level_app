@@ -35,13 +35,13 @@ class CustomBottomNavigationBar extends ConsumerWidget {
           icon: Icon(
             Icons.search,
           ),
-          label: "basic search",
+          label: "Basic search",
         ),
         NavigationDestination(
           icon: Icon(
             Icons.timeline,
           ),
-          label: "progress",
+          label: "Progress",
         ),
       ],
     );

@@ -19,7 +19,7 @@ class Sections extends StatelessWidget {
     switch ((orientation, sizeScreen)) {
       case (Orientation.landscape, _):
         {
-          crossAxisCount = 5;
+          crossAxisCount = 4;
         }
       case (_, ScreenSizeWidth.extraLarge):
         crossAxisCount = 4;
