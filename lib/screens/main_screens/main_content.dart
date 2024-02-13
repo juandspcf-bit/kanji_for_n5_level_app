@@ -124,17 +124,8 @@ class MainContent extends ConsumerWidget with StatusDBStoringDialogs {
                 )
               ],
             ),
-      bottomNavigationBar: bottomNavigationBar
-          ? CustomBottomNavigationBar(
-              selectPage: (index) {
-                ScaffoldMessenger.of(context).clearSnackBars();
-                ref
-                    .read(mainScreenProvider.notifier)
-                    .selectPage(index, context, statusDBStoringDialog);
-              },
-              selectedPageIndex: mainScreenData.selection,
-            )
-          : null,
+      bottomNavigationBar:
+          bottomNavigationBar ? const CustomBottomNavigationBar() : null,
     );
   }
 }
