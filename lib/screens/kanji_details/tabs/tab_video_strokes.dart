@@ -57,20 +57,22 @@ class _TabVideoStrokes extends ConsumerState<TabVideoStrokes> {
                 const SizedBox(
                   height: 10,
                 ),
-                FutureBuilder(
-                    future: initializadedVideoPlayer,
-                    builder: (ctx, snapShot) {
-                      if (snapShot.connectionState == ConnectionState.done &&
-                          !snapShot.hasError) {
-                        _videoController.setLooping(true);
-                        _videoController.play();
-                      }
-                      return VideoSection(
-                        videoController: _videoController,
-                        connectionState: snapShot.connectionState,
-                        hasError: snapShot.hasError,
-                      );
-                    }),
+                const VideoWrapper(),
+                /* FutureBuilder(
+                  future: initializadedVideoPlayer,
+                  builder: (ctx, snapShot) {
+                    if (snapShot.connectionState == ConnectionState.done &&
+                        !snapShot.hasError) {
+                      _videoController.setLooping(true);
+                      _videoController.play();
+                    }
+                    return VideoSection(
+                      videoController: _videoController,
+                      connectionState: snapShot.connectionState,
+                      hasError: snapShot.hasError,
+                    );
+                  },
+                ) */
                 const Divider(
                   height: 4,
                 ),
@@ -83,6 +85,53 @@ class _TabVideoStrokes extends ConsumerState<TabVideoStrokes> {
               ],
             ),
           );
+  }
+}
+
+class VideoWrapper extends ConsumerStatefulWidget {
+  const VideoWrapper({super.key});
+
+  @override
+  ConsumerState<VideoWrapper> createState() => _VideoWrapperState();
+}
+
+class _VideoWrapperState extends ConsumerState<VideoWrapper> {
+  late VideoPlayerController _videoController;
+  late Future<void> initializadedVideoPlayer;
+
+  @override
+  void initState() {
+    super.initState();
+    final kanjiDetailsData = ref.read(kanjiDetailsProvider);
+    _videoController = VideoPlayerController.networkUrl(
+        Uri.parse(kanjiDetailsData!.kanjiFromApi.videoLink));
+    initializadedVideoPlayer = _videoController.initialize();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _videoController.pause();
+    _videoController.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return FutureBuilder(
+      future: initializadedVideoPlayer,
+      builder: (ctx, snapShot) {
+        if (snapShot.connectionState == ConnectionState.done &&
+            !snapShot.hasError) {
+          _videoController.setLooping(true);
+          _videoController.play();
+        }
+        return VideoSection(
+          videoController: _videoController,
+          connectionState: snapShot.connectionState,
+          hasError: snapShot.hasError,
+        );
+      },
+    );
   }
 }
 
