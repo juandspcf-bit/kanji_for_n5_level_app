@@ -5,6 +5,8 @@ import 'package:kanji_for_n5_level_app/config_files/screen_config.dart';
 import 'package:kanji_for_n5_level_app/main.dart';
 import 'package:kanji_for_n5_level_app/models/kanji_from_api.dart';
 import 'package:kanji_for_n5_level_app/providers/examples_audios_provider.dart';
+import 'package:kanji_for_n5_level_app/screens/kanji_details/custom_navigation_rails_details/custom_navigation_rails_details.dart';
+import 'package:kanji_for_n5_level_app/screens/kanji_details/custom_navigation_rails_details/custom_navigation_rails_details_provider.dart';
 import 'package:kanji_for_n5_level_app/screens/kanji_details/quiz_details_screen/flash_card/flash_card_quiz_provider.dart';
 import 'package:kanji_for_n5_level_app/screens/kanji_details/kanji_details_provider.dart';
 import 'package:kanji_for_n5_level_app/screens/kanji_details/quiz_details_screen/last_score_flash_card_provider.dart';
@@ -186,43 +188,6 @@ class KanjiDetails extends ConsumerWidget {
             ),
           )
         : const CustomNavigationRailKanjiDetails();
-  }
-}
-
-class CustomNavigationRailKanjiDetails extends ConsumerWidget {
-  const CustomNavigationRailKanjiDetails({
-    super.key,
-  });
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    return Scaffold(
-      body: Row(
-        children: [
-          NavigationRail(
-            selectedIndex: 0,
-            groupAlignment: 0.0,
-            onDestinationSelected: (int index) {},
-            labelType: NavigationRailLabelType.none,
-            trailing: null,
-            destinations: const <NavigationRailDestination>[
-              NavigationRailDestination(
-                icon: Icon(Icons.movie),
-                label: Text('movie'),
-              ),
-              NavigationRailDestination(
-                icon: Icon(Icons.draw),
-                label: Text('draw'),
-              ),
-              NavigationRailDestination(
-                icon: Icon(Icons.play_lesson),
-                label: Text('Play lesson'),
-              ),
-            ],
-          )
-        ],
-      ),
-    );
   }
 }
 
