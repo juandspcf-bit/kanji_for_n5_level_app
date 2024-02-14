@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kanji_for_n5_level_app/main.dart';
 import 'package:kanji_for_n5_level_app/screens/kanji_details/custom_navigation_rails_details/custom_navigation_rails_details_provider.dart';
+import 'package:kanji_for_n5_level_app/screens/kanji_details/quiz_details_screen/landscape_screens/video_strokes.dart';
 
 class CustomNavigationRailKanjiDetails extends ConsumerWidget {
   const CustomNavigationRailKanjiDetails({
@@ -10,7 +11,7 @@ class CustomNavigationRailKanjiDetails extends ConsumerWidget {
 
   Widget getSelection(int selection) {
     if (selection == 0) {
-      return const Center(child: Text('Video'));
+      return const VideoStrolesLandScape();
     } else if (selection == 1) {
       return const Center(child: Text('strokes'));
     } else {
@@ -35,7 +36,12 @@ class CustomNavigationRailKanjiDetails extends ConsumerWidget {
                   .setSelection(selection);
             },
             labelType: NavigationRailLabelType.none,
-            trailing: null,
+            leading: IconButton(
+              icon: const Icon(Icons.arrow_back),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
             destinations: const <NavigationRailDestination>[
               NavigationRailDestination(
                 icon: Icon(Icons.movie),
@@ -51,7 +57,8 @@ class CustomNavigationRailKanjiDetails extends ConsumerWidget {
               ),
             ],
           ),
-          getSelection(customNavigationRailsDetailsData.selection),
+          Expanded(
+              child: getSelection(customNavigationRailsDetailsData.selection)),
         ],
       ),
     );

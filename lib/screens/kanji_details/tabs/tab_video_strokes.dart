@@ -21,25 +21,6 @@ class TabVideoStrokes extends ConsumerStatefulWidget {
 }
 
 class _TabVideoStrokes extends ConsumerState<TabVideoStrokes> {
-  late VideoPlayerController _videoController;
-  late Future<void> initializadedVideoPlayer;
-
-  @override
-  void initState() {
-    super.initState();
-    final kanjiDetailsData = ref.read(kanjiDetailsProvider);
-    _videoController = VideoPlayerController.networkUrl(
-        Uri.parse(kanjiDetailsData!.kanjiFromApi.videoLink));
-    initializadedVideoPlayer = _videoController.initialize();
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-    _videoController.pause();
-    _videoController.dispose();
-  }
-
   @override
   Widget build(BuildContext context) {
     final connectivityData = ref.watch(statusConnectionProvider);
@@ -58,21 +39,6 @@ class _TabVideoStrokes extends ConsumerState<TabVideoStrokes> {
                   height: 10,
                 ),
                 const VideoWrapper(),
-                /* FutureBuilder(
-                  future: initializadedVideoPlayer,
-                  builder: (ctx, snapShot) {
-                    if (snapShot.connectionState == ConnectionState.done &&
-                        !snapShot.hasError) {
-                      _videoController.setLooping(true);
-                      _videoController.play();
-                    }
-                    return VideoSection(
-                      videoController: _videoController,
-                      connectionState: snapShot.connectionState,
-                      hasError: snapShot.hasError,
-                    );
-                  },
-                ) */
                 const Divider(
                   height: 4,
                 ),
@@ -155,6 +121,7 @@ class VideoSection extends ConsumerWidget {
     if (connectionState == ConnectionState.waiting) opacity = 0.0;
 
     return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
       children: [
         LayoutBuilder(
           builder: (ctx, constrains) {
