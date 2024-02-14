@@ -185,33 +185,44 @@ class KanjiDetails extends ConsumerWidget {
               },
             ),
           )
-        : Scaffold(
-            body: Row(
-              children: [
-                NavigationRail(
-                  selectedIndex: 0,
-                  groupAlignment: 0.0,
-                  onDestinationSelected: (int index) {},
-                  labelType: NavigationRailLabelType.none,
-                  trailing: null,
-                  destinations: const <NavigationRailDestination>[
-                    NavigationRailDestination(
-                      icon: Icon(Icons.movie),
-                      label: Text('movie'),
-                    ),
-                    NavigationRailDestination(
-                      icon: Icon(Icons.draw),
-                      label: Text('draw'),
-                    ),
-                    NavigationRailDestination(
-                      icon: Icon(Icons.play_lesson),
-                      label: Text('Play lesson'),
-                    ),
-                  ],
-                )
-              ],
-            ),
-          );
+        : const CustomNavigationRailKanjiDetails();
+  }
+}
+
+class CustomNavigationRailKanjiDetails extends ConsumerWidget {
+  const CustomNavigationRailKanjiDetails({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return Scaffold(
+      body: Row(
+        children: [
+          NavigationRail(
+            selectedIndex: 0,
+            groupAlignment: 0.0,
+            onDestinationSelected: (int index) {},
+            labelType: NavigationRailLabelType.none,
+            trailing: null,
+            destinations: const <NavigationRailDestination>[
+              NavigationRailDestination(
+                icon: Icon(Icons.movie),
+                label: Text('movie'),
+              ),
+              NavigationRailDestination(
+                icon: Icon(Icons.draw),
+                label: Text('draw'),
+              ),
+              NavigationRailDestination(
+                icon: Icon(Icons.play_lesson),
+                label: Text('Play lesson'),
+              ),
+            ],
+          )
+        ],
+      ),
+    );
   }
 }
 
