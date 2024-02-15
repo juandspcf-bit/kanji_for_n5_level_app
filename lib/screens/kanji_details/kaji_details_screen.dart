@@ -6,7 +6,6 @@ import 'package:kanji_for_n5_level_app/main.dart';
 import 'package:kanji_for_n5_level_app/models/kanji_from_api.dart';
 import 'package:kanji_for_n5_level_app/providers/examples_audios_provider.dart';
 import 'package:kanji_for_n5_level_app/screens/kanji_details/custom_navigation_rails_details/custom_navigation_rails_details.dart';
-import 'package:kanji_for_n5_level_app/screens/kanji_details/custom_navigation_rails_details/custom_navigation_rails_details_provider.dart';
 import 'package:kanji_for_n5_level_app/screens/kanji_details/quiz_details_screen/flash_card/flash_card_quiz_provider.dart';
 import 'package:kanji_for_n5_level_app/screens/kanji_details/kanji_details_provider.dart';
 import 'package:kanji_for_n5_level_app/screens/kanji_details/quiz_details_screen/last_score_flash_card_provider.dart';
@@ -187,7 +186,9 @@ class KanjiDetails extends ConsumerWidget {
               },
             ),
           )
-        : const CustomNavigationRailKanjiDetails();
+        : CustomNavigationRailKanjiDetails(
+            kanjiFromApi: kanjiFromApi,
+          );
   }
 }
 

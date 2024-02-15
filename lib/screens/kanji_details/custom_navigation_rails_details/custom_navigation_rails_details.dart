@@ -1,15 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:kanji_for_n5_level_app/main.dart';
+import 'package:kanji_for_n5_level_app/models/kanji_from_api.dart';
 import 'package:kanji_for_n5_level_app/screens/kanji_details/custom_navigation_rails_details/custom_navigation_rails_details_provider.dart';
+import 'package:kanji_for_n5_level_app/screens/kanji_details/kaji_details_screen.dart';
+import 'package:kanji_for_n5_level_app/screens/kanji_details/kanji_details_provider.dart';
 import 'package:kanji_for_n5_level_app/screens/kanji_details/quiz_details_screen/landscape_screens/examples_ladscape.dart';
 import 'package:kanji_for_n5_level_app/screens/kanji_details/quiz_details_screen/landscape_screens/strokes.dart';
 import 'package:kanji_for_n5_level_app/screens/kanji_details/quiz_details_screen/landscape_screens/video_strokes.dart';
 
 class CustomNavigationRailKanjiDetails extends ConsumerWidget {
   const CustomNavigationRailKanjiDetails({
+    required this.kanjiFromApi,
     super.key,
   });
+
+  final KanjiFromApi kanjiFromApi;
 
   Widget getSelection(int selection) {
     if (selection == 0) {
@@ -32,7 +37,6 @@ class CustomNavigationRailKanjiDetails extends ConsumerWidget {
             selectedIndex: customNavigationRailsDetailsData.selection,
             groupAlignment: 0.0,
             onDestinationSelected: (int selection) {
-              logger.d('selection $selection');
               ref
                   .read(customNavigationRailsDetailsProvider.notifier)
                   .setSelection(selection);
@@ -46,6 +50,14 @@ class CustomNavigationRailKanjiDetails extends ConsumerWidget {
                     .setSelection(0);
                 Navigator.of(context).pop();
               },
+            ),
+            trailing: IconButton(
+              onPressed: () {
+                ref
+                    .read(kanjiDetailsProvider.notifier)
+                    .storeToFavorites(kanjiFromApi);
+              },
+              icon: const IconFavorites(),
             ),
             destinations: const <NavigationRailDestination>[
               NavigationRailDestination(
