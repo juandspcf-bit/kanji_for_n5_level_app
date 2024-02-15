@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kanji_for_n5_level_app/main.dart';
-import 'package:kanji_for_n5_level_app/models/kanji_from_api.dart';
 import 'package:kanji_for_n5_level_app/screens/kanji_details/custom_navigation_rails_details/custom_navigation_rails_details_provider.dart';
 import 'package:kanji_for_n5_level_app/screens/kanji_details/quiz_details_screen/landscape_screens/examples_ladscape.dart';
 import 'package:kanji_for_n5_level_app/screens/kanji_details/quiz_details_screen/landscape_screens/strokes.dart';
@@ -18,7 +17,7 @@ class CustomNavigationRailKanjiDetails extends ConsumerWidget {
     } else if (selection == 1) {
       return const StrokesLandScape();
     } else {
-      return const SafeArea(child: ExamplesLandscape());
+      return const ExamplesLandscape();
     }
   }
 
@@ -42,6 +41,9 @@ class CustomNavigationRailKanjiDetails extends ConsumerWidget {
             leading: IconButton(
               icon: const Icon(Icons.arrow_back),
               onPressed: () {
+                ref
+                    .read(customNavigationRailsDetailsProvider.notifier)
+                    .setSelection(0);
                 Navigator.of(context).pop();
               },
             ),

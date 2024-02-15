@@ -23,28 +23,30 @@ class ExamplesLandscape extends ConsumerWidget {
         ? const ErrorConnectionScreen(
             message:
                 'No internet connection, you will be able to acces the info when the connection is restored')
-        : Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Expanded(
-                flex: 1,
-                child: Text(
-                  "Examples",
-                  textAlign: TextAlign.center,
-                  style: Theme.of(context)
-                      .textTheme
-                      .titleLarge!
-                      .copyWith(fontWeight: FontWeight.bold),
+        : SafeArea(
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Expanded(
+                  flex: 1,
+                  child: Text(
+                    "Examples",
+                    textAlign: TextAlign.center,
+                    style: Theme.of(context)
+                        .textTheme
+                        .titleLarge!
+                        .copyWith(fontWeight: FontWeight.bold),
+                  ),
                 ),
-              ),
-              Expanded(
-                flex: 3,
-                child: ExampleAudios(
-                  examples: kanjiFromApi.example,
-                  statusStorage: statusStorage,
+                Expanded(
+                  flex: 3,
+                  child: ExampleAudios(
+                    examples: kanjiFromApi.example,
+                    statusStorage: statusStorage,
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           );
   }
 }
