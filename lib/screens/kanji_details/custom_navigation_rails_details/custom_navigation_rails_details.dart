@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kanji_for_n5_level_app/main.dart';
+import 'package:kanji_for_n5_level_app/models/kanji_from_api.dart';
 import 'package:kanji_for_n5_level_app/screens/kanji_details/custom_navigation_rails_details/custom_navigation_rails_details_provider.dart';
+import 'package:kanji_for_n5_level_app/screens/kanji_details/quiz_details_screen/landscape_screens/strokes.dart';
 import 'package:kanji_for_n5_level_app/screens/kanji_details/quiz_details_screen/landscape_screens/video_strokes.dart';
 
 class CustomNavigationRailKanjiDetails extends ConsumerWidget {
@@ -13,7 +15,7 @@ class CustomNavigationRailKanjiDetails extends ConsumerWidget {
     if (selection == 0) {
       return const VideoStrolesLandScape();
     } else if (selection == 1) {
-      return const Center(child: Text('strokes'));
+      return const StrokesLandScape();
     } else {
       return const Center(child: Text('audio examples'));
     }
