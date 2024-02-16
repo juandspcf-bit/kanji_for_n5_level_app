@@ -5,6 +5,7 @@ import 'package:kanji_for_n5_level_app/screens/kanji_details/custom_navigation_r
 import 'package:kanji_for_n5_level_app/screens/kanji_details/kaji_details_screen.dart';
 import 'package:kanji_for_n5_level_app/screens/kanji_details/kanji_details_provider.dart';
 import 'package:kanji_for_n5_level_app/screens/kanji_details/quiz_details_screen/landscape_screens/examples_ladscape.dart';
+import 'package:kanji_for_n5_level_app/screens/kanji_details/quiz_details_screen/landscape_screens/options.dart';
 import 'package:kanji_for_n5_level_app/screens/kanji_details/quiz_details_screen/landscape_screens/strokes.dart';
 import 'package:kanji_for_n5_level_app/screens/kanji_details/quiz_details_screen/landscape_screens/video_strokes.dart';
 
@@ -21,8 +22,12 @@ class CustomNavigationRailKanjiDetails extends ConsumerWidget {
       return const VideoStrolesLandScape();
     } else if (selection == 1) {
       return const StrokesLandScape();
-    } else {
+    } else if (selection == 2) {
       return const ExamplesLandscape();
+    } else {
+      return OptionsDetails(
+        kanjiFromApi: kanjiFromApi,
+      );
     }
   }
 
@@ -51,14 +56,6 @@ class CustomNavigationRailKanjiDetails extends ConsumerWidget {
                 Navigator.of(context).pop();
               },
             ),
-            trailing: IconButton(
-              onPressed: () {
-                ref
-                    .read(kanjiDetailsProvider.notifier)
-                    .storeToFavorites(kanjiFromApi);
-              },
-              icon: const IconFavorites(),
-            ),
             destinations: const <NavigationRailDestination>[
               NavigationRailDestination(
                 icon: Icon(Icons.movie),
@@ -71,6 +68,10 @@ class CustomNavigationRailKanjiDetails extends ConsumerWidget {
               NavigationRailDestination(
                 icon: Icon(Icons.play_lesson),
                 label: Text('Play lesson'),
+              ),
+              NavigationRailDestination(
+                icon: Icon(Icons.menu),
+                label: Text('options'),
               ),
             ],
           ),
