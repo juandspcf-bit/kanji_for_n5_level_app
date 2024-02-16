@@ -4,6 +4,7 @@ import 'package:kanji_for_n5_level_app/models/kanji_from_api.dart';
 import 'package:kanji_for_n5_level_app/providers/select_quiz_details_screen.dart';
 import 'package:kanji_for_n5_level_app/screens/kanji_details/quiz_details_screen/flash_card/flash_card_screen.dart';
 import 'package:kanji_for_n5_level_app/screens/kanji_details/quiz_details_screen/quiz_details_question.dart';
+import 'package:kanji_for_n5_level_app/screens/kanji_details/quiz_details_screen/quiz_details_question_portrait.dart';
 import 'package:kanji_for_n5_level_app/screens/kanji_details/quiz_details_screen/welcome_screen/welcome_kanji_details_quiz_screen.dart';
 
 class WelcomeKanjiDetailsQuizScreenPortrait extends ConsumerWidget {
@@ -84,7 +85,7 @@ class WelcomeKanjiDetailsQuizScreenPortrait extends ConsumerWidget {
               if (ref.read(selectQuizDetailsProvider).selectedOption == 0) {
                 Navigator.of(context).push(
                   MaterialPageRoute(builder: (ctx) {
-                    return QuestionScreen(kanjiFromApi: kanjiFromApi);
+                    return QuizDetailsScreen(kanjiFromApi: kanjiFromApi);
                   }),
                 );
               } else if (ref.read(selectQuizDetailsProvider).selectedOption ==
