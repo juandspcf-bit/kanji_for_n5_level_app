@@ -94,32 +94,36 @@ class WelcomeKanjiDetailsQuizScreenLandScape extends ConsumerWidget {
               const SizedBox(
                 height: 10,
               ),
-              ElevatedButton(
-                onPressed: () {
-                  //ref.read(selectQuizDetailsProvider.notifier).selectScreen();
-                  if (ref.read(selectQuizDetailsProvider).selectedOption == 0) {
-                    Navigator.of(context).push(
-                      MaterialPageRoute(builder: (ctx) {
-                        return QuestionScreen(kanjiFromApi: kanjiFromApi);
-                      }),
-                    );
-                  } else if (ref
-                          .read(selectQuizDetailsProvider)
-                          .selectedOption ==
-                      1) {
-                    Navigator.of(context)
-                        .push(MaterialPageRoute(builder: (cxt) {
-                      return FlashCardScreen(kanjiFromApi: kanjiFromApi);
-                    }));
-                  }
-                  ref.read(selectQuizDetailsProvider.notifier).setOption(2);
-                },
-                style: ElevatedButton.styleFrom().copyWith(
-                  minimumSize: const MaterialStatePropertyAll(
-                    Size.fromHeight(40),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 8),
+                child: ElevatedButton(
+                  onPressed: () {
+                    //ref.read(selectQuizDetailsProvider.notifier).selectScreen();
+                    if (ref.read(selectQuizDetailsProvider).selectedOption ==
+                        0) {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(builder: (ctx) {
+                          return QuestionScreen(kanjiFromApi: kanjiFromApi);
+                        }),
+                      );
+                    } else if (ref
+                            .read(selectQuizDetailsProvider)
+                            .selectedOption ==
+                        1) {
+                      Navigator.of(context)
+                          .push(MaterialPageRoute(builder: (cxt) {
+                        return FlashCardScreen(kanjiFromApi: kanjiFromApi);
+                      }));
+                    }
+                    ref.read(selectQuizDetailsProvider.notifier).setOption(2);
+                  },
+                  style: ElevatedButton.styleFrom().copyWith(
+                    minimumSize: const MaterialStatePropertyAll(
+                      Size.fromHeight(40),
+                    ),
                   ),
+                  child: const Text('Start the quiz'),
                 ),
-                child: const Text('Start the quiz'),
               ),
             ],
           ),
