@@ -71,8 +71,8 @@ class OptionsDetails extends ConsumerWidget {
                 .read(kanjiDetailsProvider.notifier)
                 .storeToFavorites(kanjiFromApi);
           },
-          icon: const IconFavorites(),
-          label: const Text('add to favorites'),
+          icon: const IconFavoritesButton(),
+          label: const TextFavoritesButton(),
           style: ElevatedButton.styleFrom().copyWith(
             minimumSize: const MaterialStatePropertyAll(
               Size(300, 40),
@@ -81,5 +81,50 @@ class OptionsDetails extends ConsumerWidget {
         ),
       ],
     ));
+  }
+}
+
+class IconFavoritesButton extends ConsumerWidget {
+  const IconFavoritesButton({super.key});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final kanjiDetailsData = ref.watch(kanjiDetailsProvider);
+    return Builder(
+      builder: (context) {
+        if (kanjiDetailsData!.storingToFavoritesStatus ==
+            StoringToFavoritesStatus.processing) {
+          return LayoutBuilder(
+            builder: (ctx, constrains) {
+              final height = constrains.maxHeight;
+              logger.d(height);
+              return SizedBox(
+                width: height - 15,
+                height: height - 15,
+                child: CircularProgressIndicator(
+                  color: Colors.amber,
+                ),
+              );
+            },
+          );
+        }
+
+        return Icon(kanjiDetailsData.favoriteStatus
+            ? Icons.favorite
+            : Icons.favorite_border_outlined);
+      },
+    );
+  }
+}
+
+class TextFavoritesButton extends ConsumerWidget {
+  const TextFavoritesButton({super.key});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final kanjiDetailsData = ref.watch(kanjiDetailsProvider);
+    return kanjiDetailsData!.favoriteStatus
+        ? const Text('remove from favorites')
+        : const Text('add to favorites');
   }
 }
