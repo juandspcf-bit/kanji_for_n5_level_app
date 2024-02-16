@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:kanji_for_n5_level_app/config_files/screen_config.dart';
 import 'package:kanji_for_n5_level_app/main.dart';
 import 'package:kanji_for_n5_level_app/models/kanji_from_api.dart';
 import 'package:kanji_for_n5_level_app/providers/select_quiz_details_screen.dart';
@@ -19,6 +20,19 @@ class WelcomeKanjiDetailsQuizScreenLandScape extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final sizeScreen = getScreenSizeWidth(context);
+    int imageSize = 128;
+    switch (sizeScreen) {
+      case ScreenSizeWidth.extraLarge:
+        imageSize = 512;
+      case ScreenSizeWidth.large:
+        imageSize = 512;
+      case ScreenSizeWidth.normal:
+        imageSize = 256;
+      case (_):
+        imageSize = 170;
+    }
+
     final screenNumber = ref.watch(selectQuizDetailsProvider);
     return Row(
       crossAxisAlignment: CrossAxisAlignment.center,
@@ -26,25 +40,23 @@ class WelcomeKanjiDetailsQuizScreenLandScape extends ConsumerWidget {
       children: [
         Expanded(
           child: Column(
+            mainAxisSize: MainAxisSize.max,
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Expanded(
-                child: Image.asset(
-                  'assets/images/quiz2.png',
-                  fit: BoxFit.fitWidth,
-                ),
+              Image.asset(
+                'assets/images/quiz2.png',
+                height: imageSize.toDouble(),
+                fit: BoxFit.fitWidth,
               ),
-              Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.only(top: 20),
-                  child: Text(
-                    welcomeMessage,
-                    style: Theme.of(context).textTheme.titleSmall,
-                    softWrap: false,
-                    maxLines: 3,
-                    textAlign: TextAlign.center,
-                    overflow: TextOverflow.ellipsis,
-                  ),
+              Padding(
+                padding: const EdgeInsets.only(top: 20),
+                child: Text(
+                  welcomeMessage,
+                  style: Theme.of(context).textTheme.titleSmall,
+                  softWrap: false,
+                  maxLines: 3,
+                  textAlign: TextAlign.center,
+                  overflow: TextOverflow.ellipsis,
                 ),
               ),
             ],
