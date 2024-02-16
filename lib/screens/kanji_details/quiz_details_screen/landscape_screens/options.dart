@@ -3,7 +3,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kanji_for_n5_level_app/main.dart';
 import 'package:kanji_for_n5_level_app/models/kanji_from_api.dart';
 import 'package:kanji_for_n5_level_app/providers/select_quiz_details_screen.dart';
-import 'package:kanji_for_n5_level_app/screens/kanji_details/kaji_details_screen.dart';
 import 'package:kanji_for_n5_level_app/screens/kanji_details/kanji_details_provider.dart';
 import 'package:kanji_for_n5_level_app/screens/kanji_details/quiz_details_screen/details_quizz_screen.dart';
 import 'package:kanji_for_n5_level_app/screens/kanji_details/quiz_details_screen/flash_card/flash_card_quiz_provider.dart';
@@ -94,18 +93,12 @@ class IconFavoritesButton extends ConsumerWidget {
       builder: (context) {
         if (kanjiDetailsData!.storingToFavoritesStatus ==
             StoringToFavoritesStatus.processing) {
-          return LayoutBuilder(
-            builder: (ctx, constrains) {
-              final height = constrains.maxHeight;
-              logger.d(height);
-              return SizedBox(
-                width: height - 15,
-                height: height - 15,
-                child: CircularProgressIndicator(
-                  color: Colors.amber,
-                ),
-              );
-            },
+          return SizedBox(
+            width: 40 - 15,
+            height: 40 - 15,
+            child: CircularProgressIndicator(
+              color: Theme.of(context).colorScheme.onPrimary,
+            ),
           );
         }
 
