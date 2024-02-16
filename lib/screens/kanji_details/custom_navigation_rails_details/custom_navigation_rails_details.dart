@@ -48,9 +48,6 @@ class CustomNavigationRailKanjiDetails extends ConsumerWidget {
             leading: IconButton(
               icon: const Icon(Icons.arrow_back),
               onPressed: () {
-                ref
-                    .read(customNavigationRailsDetailsProvider.notifier)
-                    .setSelection(0);
                 Navigator.of(context).pop();
               },
             ),

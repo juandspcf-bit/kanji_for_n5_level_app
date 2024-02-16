@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kanji_for_n5_level_app/main.dart';
 import 'package:kanji_for_n5_level_app/models/kanji_from_api.dart';
 import 'package:kanji_for_n5_level_app/providers/examples_audios_provider.dart';
+import 'package:kanji_for_n5_level_app/screens/kanji_details/custom_navigation_rails_details/custom_navigation_rails_details_provider.dart';
 import 'package:kanji_for_n5_level_app/screens/navigation_bar_screens/favorite_screen/favorites_kanjis_provider.dart';
 import 'package:kanji_for_n5_level_app/providers/image_meaning_kanji_provider.dart';
 import 'package:kanji_for_n5_level_app/screens/kanji_details/kanji_details_provider.dart';
@@ -34,6 +35,7 @@ class _KanjiItemState extends ConsumerState<KanjiItem> {
     KanjiFromApi? kanjiFromApi,
   ) {
     if (kanjiFromApi == null) return;
+    ref.read(customNavigationRailsDetailsProvider.notifier).setSelection(0);
     ref.read(videoStatusPlaying.notifier).setSpeed(1.0);
     ref.read(videoStatusPlaying.notifier).setIsPlaying(true);
     var queryKanji = ref
