@@ -6,7 +6,8 @@ import 'package:kanji_for_n5_level_app/providers/quiz_details_score_screen.dart'
 import 'package:kanji_for_n5_level_app/screens/kanji_details/quiz_details_screen/last_score_details_provider.dart';
 import 'package:kanji_for_n5_level_app/screens/kanji_details/quiz_details_screen/quiz_details_provider.dart';
 import 'package:kanji_for_n5_level_app/screens/kanji_details/quiz_details_screen/big_play_button.dart';
-import 'package:kanji_for_n5_level_app/screens/kanji_details/quiz_details_screen/quiz_details_score.dart';
+import 'package:kanji_for_n5_level_app/screens/kanji_details/quiz_details_screen/quiz_details_score/quiz_details_score.dart';
+import 'package:kanji_for_n5_level_app/screens/kanji_details/quiz_details_screen/quiz_details_score/quiz_details_score_landscape.dart';
 import 'package:kanji_for_n5_level_app/screens/navigation_bar_screens/sections_screen/section_screen_provider.dart';
 
 class QuestionScreenLandscape extends ConsumerWidget {
@@ -142,7 +143,10 @@ class QuestionScreenLandscape extends ConsumerWidget {
 
                       Navigator.of(context)
                           .push(MaterialPageRoute(builder: (ctx) {
-                        return const QuizDetailsScore();
+                        final orientation = MediaQuery.orientationOf(context);
+                        return Orientation.portrait == orientation
+                            ? const QuizDetailsScore()
+                            : const QuizDetailsScoreLandscape();
                       }));
                     }
                   },
