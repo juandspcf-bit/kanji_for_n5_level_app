@@ -131,12 +131,10 @@ class _QuizDetailsScore extends ConsumerState<QuizDetailsScoreLandscape> {
               Row(
                 children: [
                   Expanded(
-                    flex: 1,
-                    child: Row(
+                    flex: 3,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        const SizedBox(
-                          height: 20,
-                        ),
                         Text(
                           "This is the stats of your quiz",
                           style: Theme.of(context).textTheme.titleMedium,
@@ -191,78 +189,11 @@ class _QuizDetailsScore extends ConsumerState<QuizDetailsScoreLandscape> {
                             ),
                           ],
                         ),
-                        const SizedBox(
-                          height: 20,
-                        ),
-                      ],
-                    ),
-                  ),
-                  Expanded(
-                    flex: 4,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Container(
-                          width: 256,
-                          height: 256,
-                          color: Theme.of(context).scaffoldBackgroundColor,
-                          child: BarChart(
-                            BarChartData(
-                                titlesData: titlesData,
-                                gridData: const FlGridData(show: false),
-                                alignment: BarChartAlignment.spaceAround,
-                                borderData: borderData,
-                                barGroups: [
-                                  BarChartGroupData(
-                                    x: 0,
-                                    barsSpace: 20,
-                                    barRods: [
-                                      BarChartRodData(
-                                          width: 10,
-                                          toY: scores.correctAnswers.length
-                                              .toDouble(),
-                                          //color: Colors.amber,
-                                          gradient: _barsGradientCorrect),
-                                    ],
-                                  ),
-                                  BarChartGroupData(
-                                    x: 1,
-                                    barRods: [
-                                      BarChartRodData(
-                                        width: 10,
-                                        toY: scores.incorrectAnwers.length
-                                            .toDouble(),
-                                        gradient: _barsGradientIncorrect,
-                                      ),
-                                    ],
-                                  ),
-                                  BarChartGroupData(
-                                    x: 2,
-                                    barRods: [
-                                      BarChartRodData(
-                                        width: 10,
-                                        toY: scores.omitted.length.toDouble(),
-                                        gradient: _barsGradientOmited,
-                                      ),
-                                    ],
-                                  )
-                                ]
-                                // read about it in the BarChartData section
-                                ),
-                            swapAnimationDuration:
-                                const Duration(milliseconds: 150), // Optional
-                            swapAnimationCurve: Curves.linear, // Optional
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  Expanded(
-                    flex: 1,
-                    child: Column(
-                      children: [
                         Padding(
-                          padding: const EdgeInsets.all(8.0),
+                          padding: const EdgeInsets.only(
+                            top: 10,
+                            bottom: 5,
+                          ),
                           child: ElevatedButton.icon(
                             onPressed: () {
                               ref
@@ -278,7 +209,7 @@ class _QuizDetailsScore extends ConsumerState<QuizDetailsScoreLandscape> {
                           ),
                         ),
                         Padding(
-                          padding: const EdgeInsets.all(8.0),
+                          padding: const EdgeInsets.only(top: 5, bottom: 5),
                           child: ElevatedButton.icon(
                             onPressed: () {
                               ref
@@ -292,6 +223,73 @@ class _QuizDetailsScore extends ConsumerState<QuizDetailsScoreLandscape> {
                             ),
                             icon: const Icon(Icons.arrow_circle_right),
                             label: const Text('To quiz type selector'),
+                          ),
+                        ),
+                        const SizedBox(
+                          height: 20,
+                        ),
+                      ],
+                    ),
+                  ),
+                  Expanded(
+                    flex: 3,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Container(
+                          width: double.infinity,
+                          height: 256,
+                          color: Theme.of(context).scaffoldBackgroundColor,
+                          child: Padding(
+                            padding: const EdgeInsets.only(left: 10, right: 10),
+                            child: BarChart(
+                              BarChartData(
+                                  titlesData: titlesData,
+                                  gridData: const FlGridData(show: false),
+                                  alignment: BarChartAlignment.spaceAround,
+                                  borderData: borderData,
+                                  barGroups: [
+                                    BarChartGroupData(
+                                      x: 0,
+                                      barsSpace: 20,
+                                      barRods: [
+                                        BarChartRodData(
+                                            width: 10,
+                                            toY: scores.correctAnswers.length
+                                                .toDouble(),
+                                            //color: Colors.amber,
+                                            gradient: _barsGradientCorrect),
+                                      ],
+                                    ),
+                                    BarChartGroupData(
+                                      x: 1,
+                                      barRods: [
+                                        BarChartRodData(
+                                          width: 10,
+                                          toY: scores.incorrectAnwers.length
+                                              .toDouble(),
+                                          gradient: _barsGradientIncorrect,
+                                        ),
+                                      ],
+                                    ),
+                                    BarChartGroupData(
+                                      x: 2,
+                                      barRods: [
+                                        BarChartRodData(
+                                          width: 10,
+                                          toY: scores.omitted.length.toDouble(),
+                                          gradient: _barsGradientOmited,
+                                        ),
+                                      ],
+                                    )
+                                  ]
+                                  // read about it in the BarChartData section
+                                  ),
+                              swapAnimationDuration:
+                                  const Duration(milliseconds: 150), // Optional
+                              swapAnimationCurve: Curves.linear, // Optional
+                            ),
                           ),
                         ),
                       ],

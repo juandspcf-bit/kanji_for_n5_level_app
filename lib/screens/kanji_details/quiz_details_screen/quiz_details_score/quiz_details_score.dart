@@ -126,7 +126,7 @@ class _QuizDetailsScore extends ConsumerState<QuizDetailsScore> {
             left: 30,
           ),
           child: Stack(
-            alignment: Alignment.topCenter,
+            alignment: Alignment.center,
             children: [
               Column(
                 children: [
