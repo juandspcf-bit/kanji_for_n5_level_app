@@ -5,16 +5,11 @@ import 'package:kanji_for_n5_level_app/screens/kanji_details/quiz_details_screen
 import 'package:kanji_for_n5_level_app/screens/kanji_details/quiz_details_screen/quiz_details_score/info_score.dart';
 import 'package:kanji_for_n5_level_app/screens/kanji_details/quiz_details_screen/quiz_details_score/visible_lottie_file.dart';
 
-class QuizDetailsScoreLandscape extends ConsumerStatefulWidget {
+class QuizDetailsScoreLandscape extends ConsumerWidget {
   const QuizDetailsScoreLandscape({super.key});
 
   @override
-  ConsumerState<QuizDetailsScoreLandscape> createState() => _QuizDetailsScore();
-}
-
-class _QuizDetailsScore extends ConsumerState<QuizDetailsScoreLandscape> {
-  @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return PopScope(
       onPopInvoked: (didPop) {
         ref.read(quizDetailsProvider.notifier).resetValues();
