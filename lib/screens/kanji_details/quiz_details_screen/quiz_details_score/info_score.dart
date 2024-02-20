@@ -13,6 +13,7 @@ class InfoScore extends ConsumerWidget {
       flex: 3,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Text(
             "This is the stats of your quiz",
