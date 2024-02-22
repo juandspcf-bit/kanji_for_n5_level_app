@@ -23,6 +23,12 @@ class VisibleLottieFileProvider extends Notifier<VisibleLottieFileData> {
     );
   }
 
+  void setInitialDelay() {
+    Future<double>.delayed(const Duration(seconds: 3), () => 0.0).then((value) {
+      setOpacity(value);
+    });
+  }
+
   void reset() {
     state = VisibleLottieFileData(
       opacity: 1.0,

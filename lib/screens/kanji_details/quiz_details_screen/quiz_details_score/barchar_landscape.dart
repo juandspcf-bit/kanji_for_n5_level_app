@@ -89,8 +89,8 @@ class BarChartLandscape extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final scores = ref.watch(quizDetailsScoreProvider);
-    return Expanded(
-      flex: 3,
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 15),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.center,

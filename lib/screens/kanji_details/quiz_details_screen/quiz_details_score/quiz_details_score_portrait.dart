@@ -6,14 +6,14 @@ import 'package:kanji_for_n5_level_app/providers/quiz_details_score_screen.dart'
 import 'package:kanji_for_n5_level_app/providers/score_kanji_list_provider.dart';
 import 'package:lottie/lottie.dart';
 
-class QuizDetailsScore extends ConsumerStatefulWidget {
-  const QuizDetailsScore({super.key});
+class QuizDetailsScorePortrait extends ConsumerStatefulWidget {
+  const QuizDetailsScorePortrait({super.key});
 
   @override
-  ConsumerState<QuizDetailsScore> createState() => _QuizDetailsScore();
+  ConsumerState<QuizDetailsScorePortrait> createState() => _QuizDetailsScore();
 }
 
-class _QuizDetailsScore extends ConsumerState<QuizDetailsScore> {
+class _QuizDetailsScore extends ConsumerState<QuizDetailsScorePortrait> {
   Widget getTitles(double value, TitleMeta meta) {
     const style = TextStyle(
       color: Colors.white,
