@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kanji_for_n5_level_app/providers/quiz_details_score_screen.dart';
-import 'package:kanji_for_n5_level_app/screens/kanji_details/quiz_details_screen/quiz_details_provider.dart';
-import 'package:kanji_for_n5_level_app/screens/kanji_details/quiz_details_screen/quiz_details_score/visible_lottie_file/visible_lottie_file_provider.dart';
 
 class InfoScore extends ConsumerWidget {
   const InfoScore({super.key});

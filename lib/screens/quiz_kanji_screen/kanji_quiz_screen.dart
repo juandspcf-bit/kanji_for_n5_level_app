@@ -4,13 +4,13 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kanji_for_n5_level_app/main.dart';
 import 'package:kanji_for_n5_level_app/models/kanji_from_api.dart';
 import 'package:kanji_for_n5_level_app/screens/navigation_bar_screens/sections_screen/section_screen_provider.dart';
-import 'package:kanji_for_n5_level_app/screens/quiz_screen/quiz_kanji_list_provider.dart';
+import 'package:kanji_for_n5_level_app/screens/quiz_kanji_screen/quiz_kanji_list_provider.dart';
 import 'package:kanji_for_n5_level_app/providers/status_connection_provider.dart';
 import 'package:kanji_for_n5_level_app/screens/common_screens.dart/error_connection_screen.dart';
-import 'package:kanji_for_n5_level_app/screens/quiz_screen/quiz_question_screen.dart';
-import 'package:kanji_for_n5_level_app/screens/quiz_screen/score_screen/score_body.dart';
-import 'package:kanji_for_n5_level_app/screens/quiz_screen/welcome_screen/last_score_provider.dart';
-import 'package:kanji_for_n5_level_app/screens/quiz_screen/welcome_screen/welcome_kanji_list_quiz_screen.dart';
+import 'package:kanji_for_n5_level_app/screens/quiz_kanji_screen/quiz_question_screen.dart';
+import 'package:kanji_for_n5_level_app/screens/quiz_kanji_screen/score_screen/score_body.dart';
+import 'package:kanji_for_n5_level_app/screens/quiz_kanji_screen/welcome_screen/last_score_provider.dart';
+import 'package:kanji_for_n5_level_app/screens/quiz_kanji_screen/welcome_screen/welcome_kanji_quiz_screen.dart';
 
 class KanjiQuizScreen extends ConsumerWidget {
   const KanjiQuizScreen({

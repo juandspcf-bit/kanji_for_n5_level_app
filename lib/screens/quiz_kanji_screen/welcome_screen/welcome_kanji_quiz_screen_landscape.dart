@@ -1,0 +1,115 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:kanji_for_n5_level_app/config_files/screen_config.dart';
+import 'package:kanji_for_n5_level_app/screens/quiz_kanji_screen/quiz_kanji_list_provider.dart';
+import 'package:kanji_for_n5_level_app/screens/quiz_kanji_screen/welcome_screen/last_score_provider.dart';
+import 'package:kanji_for_n5_level_app/text_asset/text_assets.dart';
+
+class WelcomeKanjiListQuizScreenLandscape extends ConsumerWidget {
+  const WelcomeKanjiListQuizScreenLandscape({super.key});
+
+  final welcomeMessage = 'Guess the correct meaning by dragging '
+      'the kanji to one of the empty boxes.';
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final sizeScreen = getScreenSizeWidth(context);
+    int imageSize = 200;
+    switch (sizeScreen) {
+      case ScreenSizeWidth.extraLarge:
+        imageSize = 512;
+      case ScreenSizeWidth.large:
+        imageSize = 450;
+      case ScreenSizeWidth.normal:
+        imageSize = 256;
+      case (_):
+        imageSize = 200;
+    }
+
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        Expanded(
+          flex: 4,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              const LastScoreKanjiQuiz(),
+              const SizedBox(
+                height: 20,
+              ),
+              SizedBox(
+                height: imageSize.toDouble(),
+                child: Image.asset(
+                  'assets/images/quiz.png',
+                  fit: BoxFit.fitHeight,
+                ),
+              ),
+            ],
+          ),
+        ),
+        Expanded(
+          flex: 2,
+          child: ElevatedButton(
+            onPressed: () {
+              ref.read(quizDataValuesProvider.notifier).setScreen(Screens.quiz);
+            },
+            style: ElevatedButton.styleFrom().copyWith(
+              minimumSize: const MaterialStatePropertyAll(
+                Size.fromHeight(40),
+              ),
+            ),
+            child: const Text('Start the quiz'),
+          ),
+        )
+      ],
+    );
+  }
+}
+
+class LastScoreKanjiQuiz extends ConsumerWidget {
+  const LastScoreKanjiQuiz({super.key});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final textThemeParent = Theme.of(context).textTheme;
+    final sizeScreen = getScreenSizeWidth(context);
+    var textTheme = textThemeParent.titleMedium;
+    switch (sizeScreen) {
+      case ScreenSizeWidth.extraLarge:
+        textTheme = textThemeParent.titleLarge;
+      case ScreenSizeWidth.large:
+        textTheme = textThemeParent.titleLarge;
+      case ScreenSizeWidth.normal:
+        textTheme = textThemeParent.titleMedium;
+      case (_):
+        textTheme = textThemeParent.titleMedium;
+    }
+
+    final lastScoreData = ref.watch(lastScoreKanjiQuizProvider);
+
+    return lastScoreData.when(
+      data: (data) => Builder(builder: (context) {
+        return data.isFinishedQuiz
+            ? Text(
+                'You have completed this quiz with ${data.countCorrects}'
+                ' questions correct\nout of ${data.countCorrects + data.countIncorrects + data.countOmited}',
+                style: textTheme,
+                textAlign: TextAlign.center,
+              )
+            : Text(
+                noFinishedQuizMessage,
+                style: textTheme,
+                textAlign: TextAlign.center,
+              );
+      }),
+      error: (error, stack) => Text(
+        errorFinishedQuizMessage,
+        style: Theme.of(context).textTheme.titleLarge,
+      ),
+      loading: () => const CircularProgressIndicator(),
+    );
+  }
+}

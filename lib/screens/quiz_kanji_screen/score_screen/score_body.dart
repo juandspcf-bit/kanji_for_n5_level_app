@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:kanji_for_n5_level_app/screens/quiz_screen/quiz_kanji_list_provider.dart';
+import 'package:kanji_for_n5_level_app/screens/quiz_kanji_screen/quiz_kanji_list_provider.dart';
 import 'package:kanji_for_n5_level_app/providers/score_kanji_list_provider.dart';
-import 'package:kanji_for_n5_level_app/screens/quiz_screen/score_screen/screen_chart.dart';
+import 'package:kanji_for_n5_level_app/screens/quiz_kanji_screen/score_screen/screen_chart.dart';
 import 'package:lottie/lottie.dart';
 
 class ScoreBody extends ConsumerStatefulWidget {

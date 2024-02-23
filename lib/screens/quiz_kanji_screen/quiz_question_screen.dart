@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kanji_for_n5_level_app/config_files/screen_config.dart';
 import 'package:kanji_for_n5_level_app/models/kanji_from_api.dart';
-import 'package:kanji_for_n5_level_app/screens/quiz_screen/column_drag_targets.dart';
-import 'package:kanji_for_n5_level_app/screens/quiz_screen/draggable_kanji.dart';
-import 'package:kanji_for_n5_level_app/screens/quiz_screen/next_question_button.dart';
-import 'package:kanji_for_n5_level_app/screens/quiz_screen/reset_question_button.dart';
+import 'package:kanji_for_n5_level_app/screens/quiz_kanji_screen/column_drag_targets.dart';
+import 'package:kanji_for_n5_level_app/screens/quiz_kanji_screen/draggable_kanji.dart';
+import 'package:kanji_for_n5_level_app/screens/quiz_kanji_screen/next_question_button.dart';
+import 'package:kanji_for_n5_level_app/screens/quiz_kanji_screen/reset_question_button.dart';
 
 class QuizQuestionScreen extends ConsumerWidget {
   const QuizQuestionScreen({
