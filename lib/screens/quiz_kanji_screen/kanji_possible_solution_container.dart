@@ -57,11 +57,15 @@ class _KanjiDragTargetCorrectState extends State<KanjiDragTargetCorrect> {
       children: [
         Row(
           children: [
-            showIsCorrectAnswerWidget(
-              isDragged: widget.isDragged,
-              randomSolution: widget.randomSolution,
-              imagePathFromDraggedItem: widget.imagePathFromDraggedItem,
-              randomKanjisToAskMeaning: widget.randomKanjisToAskMeaning,
+            SizedBox(
+              height: 45,
+              width: 45,
+              child: showIsCorrectAnswerWidget(
+                isDragged: widget.isDragged,
+                randomSolution: widget.randomSolution,
+                imagePathFromDraggedItem: widget.imagePathFromDraggedItem,
+                randomKanjisToAskMeaning: widget.randomKanjisToAskMeaning,
+              ),
             ),
             const SizedBox(
               width: 10,
@@ -152,11 +156,15 @@ class _KanjiDragTargetWrongState extends State<KanjiDragTargetWrong> {
       children: [
         Row(
           children: [
-            showIsCorrectAnswerWidget(
-              isDragged: widget.isDragged,
-              randomSolution: widget.randomSolution,
-              imagePathFromDraggedItem: widget.imagePathFromDraggedItem,
-              randomKanjisToAskMeaning: widget.randomKanjisToAskMeaning,
+            SizedBox(
+              height: 45,
+              width: 45,
+              child: showIsCorrectAnswerWidget(
+                isDragged: widget.isDragged,
+                randomSolution: widget.randomSolution,
+                imagePathFromDraggedItem: widget.imagePathFromDraggedItem,
+                randomKanjisToAskMeaning: widget.randomKanjisToAskMeaning,
+              ),
             ),
             const SizedBox(
               width: 10,
@@ -229,6 +237,10 @@ class _KanjiDragTargetNormalState extends State<KanjiDragTargetNormal> {
       children: [
         Row(
           children: [
+            const SizedBox(
+              height: 45,
+              width: 45,
+            ),
             const SizedBox(
               width: 10,
             ),

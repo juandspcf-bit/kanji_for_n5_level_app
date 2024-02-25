@@ -8,6 +8,7 @@ import 'package:kanji_for_n5_level_app/screens/quiz_kanji_screen/quiz_kanji_list
 import 'package:kanji_for_n5_level_app/providers/status_connection_provider.dart';
 import 'package:kanji_for_n5_level_app/screens/common_screens.dart/error_connection_screen.dart';
 import 'package:kanji_for_n5_level_app/screens/quiz_kanji_screen/quiz_question_screen.dart';
+import 'package:kanji_for_n5_level_app/screens/quiz_kanji_screen/quiz_question_screen_portrait.dart';
 import 'package:kanji_for_n5_level_app/screens/quiz_kanji_screen/score_screen/score_body.dart';
 import 'package:kanji_for_n5_level_app/screens/quiz_kanji_screen/welcome_screen/last_score_provider.dart';
 import 'package:kanji_for_n5_level_app/screens/quiz_kanji_screen/welcome_screen/welcome_kanji_quiz_screen.dart';
@@ -72,17 +73,10 @@ class KanjiQuizScreen extends ConsumerWidget {
         ),
       );
     } else if (quizState.currentScreenType == Screens.quiz) {
-      return SingleChildScrollView(
+      return const SingleChildScrollView(
         child: Column(
           children: [
-            QuizQuestionScreen(
-              isDraggedStatusList: quizState.isDraggedStatusList,
-              randomSolutions: quizState.randomSolutions,
-              kanjisToAskMeaning: quizState.kanjisToAskMeaning,
-              imagePathFromDraggedItems: quizState.imagePathsFromDraggedItems,
-              initialOpacities: quizState.initialOpacities,
-              index: quizState.index,
-            ),
+            QuizQuestionScreen(),
           ],
         ),
       );
