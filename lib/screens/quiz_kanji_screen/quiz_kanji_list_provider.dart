@@ -1,5 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kanji_for_n5_level_app/models/kanji_from_api.dart';
+import 'package:kanji_for_n5_level_app/screens/quiz_kanji_screen/score_screen/score_kanji_list_provider.dart';
+import 'package:kanji_for_n5_level_app/screens/quiz_kanji_screen/score_screen/visible_lottie_file_kanji_list_provider.dart';
 
 class QuizDataValuesProvider extends Notifier<QuizDataValues> {
   @override
@@ -37,6 +39,12 @@ class QuizDataValuesProvider extends Notifier<QuizDataValues> {
           currentScreenType: state.currentScreenType);
       state = initQuizDataValues;
     } else {
+      ref.read(kanjiListScoreProvider.notifier).setAnswers(
+            state.isCorrectAnswer,
+            state.isOmittedAnswer,
+          );
+      ref.read(visibleLottieFileKanjiListProvider.notifier).setInitialDelay();
+
       final initQuizDataValues = QuizDataValues(
           imagePathsFromDraggedItems: state.imagePathsFromDraggedItems,
           initialOpacities: state.initialOpacities,
