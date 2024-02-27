@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kanji_for_n5_level_app/screens/quiz_kanji_screen/quiz_kanji_list_provider.dart';
-import 'package:kanji_for_n5_level_app/providers/score_kanji_list_provider.dart';
 import 'package:kanji_for_n5_level_app/screens/quiz_kanji_screen/score_screen/info_score_kanji_list.dart';
 import 'package:kanji_for_n5_level_app/screens/quiz_kanji_screen/score_screen/screen_chart.dart';
-import 'package:lottie/lottie.dart';
+import 'package:kanji_for_n5_level_app/screens/quiz_kanji_screen/score_screen/visible_lottie_file_kanji_list.dart';
 
-class ScoreBody extends ConsumerStatefulWidget {
-  const ScoreBody({
+class ScoreKanjiListQuizPortrait extends ConsumerWidget {
+  const ScoreKanjiListQuizPortrait({
     super.key,
     required this.countCorrects,
     required this.countIncorrects,
@@ -21,25 +20,7 @@ class ScoreBody extends ConsumerStatefulWidget {
   final Function() resetTheQuiz;
 
   @override
-  ConsumerState<ScoreBody> createState() => _ScoreBodyState();
-}
-
-class _ScoreBodyState extends ConsumerState<ScoreBody> {
-  double _opacity = 1.0;
-  bool _visibility = true;
-  @override
-  void initState() {
-    super.initState();
-    Future<double>.delayed(const Duration(seconds: 3), () => 0.0).then((value) {
-      setState(() {
-        _opacity = value;
-      });
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final lottieFilesState = ref.watch(lottieFilesProvider);
+  Widget build(BuildContext context, WidgetRef ref) {
     return Stack(
       alignment: Alignment.topCenter,
       children: [
@@ -52,11 +33,7 @@ class _ScoreBodyState extends ConsumerState<ScoreBody> {
             const SizedBox(
               height: 40,
             ),
-            ScreenChart(
-              countCorrects: widget.countCorrects,
-              countIncorrects: widget.countIncorrects,
-              countOmited: widget.countOmited,
-            ),
+            const ScreenChart(),
             const SizedBox(
               height: 40,
             ),
@@ -71,24 +48,7 @@ class _ScoreBodyState extends ConsumerState<ScoreBody> {
             )
           ],
         ),
-        Visibility(
-          visible: (_visibility &&
-              widget.countIncorrects == 0 &&
-              widget.countOmited == 0),
-          child: AnimatedOpacity(
-            opacity: _opacity,
-            duration: const Duration(seconds: 3),
-            // The green box must be a child of the AnimatedOpacity widget.
-            child: Lottie(
-              composition: lottieFilesState.lottieComposition,
-            ),
-            onEnd: () {
-              setState(() {
-                _visibility = false;
-              });
-            },
-          ),
-        ),
+        const VisibleLottieFileKanjiList(),
       ],
     );
   }

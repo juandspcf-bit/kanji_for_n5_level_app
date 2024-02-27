@@ -66,7 +66,7 @@ class KanjiQuizScreen extends ConsumerWidget {
           );
 
       return Center(
-        child: ScoreBody(
+        child: ScoreKanjiListQuizPortrait(
           countCorrects: countCorrects,
           countIncorrects: countIncorrects,
           countOmited: countOmited,

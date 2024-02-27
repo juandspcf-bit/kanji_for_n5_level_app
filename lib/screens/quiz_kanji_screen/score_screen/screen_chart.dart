@@ -1,17 +1,12 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:kanji_for_n5_level_app/screens/quiz_kanji_screen/score_screen/score_kanji_list_provider.dart';
 
-class ScreenChart extends StatelessWidget {
+class ScreenChart extends ConsumerWidget {
   const ScreenChart({
     super.key,
-    required this.countCorrects,
-    required this.countIncorrects,
-    required this.countOmited,
   });
-
-  final int countCorrects;
-  final int countIncorrects;
-  final int countOmited;
 
   Widget getTitles(double value, TitleMeta meta) {
     const style = TextStyle(
@@ -94,12 +89,12 @@ class ScreenChart extends StatelessWidget {
       );
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final kanjiListScoreData = ref.watch(kanjiListScoreProvider);
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Container(
-          //TODO change the size when the screen is big
           width: 256,
           height: 256,
           color: Theme.of(context).scaffoldBackgroundColor,
@@ -116,7 +111,8 @@ class ScreenChart extends StatelessWidget {
                     barRods: [
                       BarChartRodData(
                           width: 10,
-                          toY: countCorrects.toDouble(),
+                          toY: kanjiListScoreData.correctAnswers.length
+                              .toDouble(),
                           //color: Colors.amber,
                           gradient: _barsGradientCorrect),
                     ],
@@ -126,7 +122,8 @@ class ScreenChart extends StatelessWidget {
                     barRods: [
                       BarChartRodData(
                         width: 10,
-                        toY: countIncorrects.toDouble(),
+                        toY: kanjiListScoreData.incorrectAnwers.length
+                            .toDouble(),
                         gradient: _barsGradientIncorrect,
                       ),
                     ],
@@ -136,7 +133,7 @@ class ScreenChart extends StatelessWidget {
                     barRods: [
                       BarChartRodData(
                         width: 10,
-                        toY: countOmited.toDouble(),
+                        toY: kanjiListScoreData.omitted.length.toDouble(),
                         gradient: _barsGradientOmited,
                       ),
                     ],
