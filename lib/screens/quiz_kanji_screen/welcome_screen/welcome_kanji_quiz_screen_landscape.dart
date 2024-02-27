@@ -14,12 +14,12 @@ class WelcomeKanjiListQuizScreenLandscape extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final sizeScreen = getScreenSizeWidth(context);
-    int imageSize = 200;
+    int imageSize = 256;
     switch (sizeScreen) {
       case ScreenSizeWidth.extraLarge:
         imageSize = 512;
       case ScreenSizeWidth.large:
-        imageSize = 450;
+        imageSize = 512;
       case ScreenSizeWidth.normal:
         imageSize = 256;
       case (_):
@@ -36,7 +36,6 @@ class WelcomeKanjiListQuizScreenLandscape extends ConsumerWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              const LastScoreKanjiQuiz(),
               const SizedBox(
                 height: 20,
               ),
@@ -51,17 +50,29 @@ class WelcomeKanjiListQuizScreenLandscape extends ConsumerWidget {
           ),
         ),
         Expanded(
-          flex: 2,
-          child: ElevatedButton(
-            onPressed: () {
-              ref.read(quizDataValuesProvider.notifier).setScreen(Screens.quiz);
-            },
-            style: ElevatedButton.styleFrom().copyWith(
-              minimumSize: const MaterialStatePropertyAll(
-                Size.fromHeight(40),
+          flex: 4,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              const LastScoreKanjiQuiz(),
+              const SizedBox(
+                height: 20,
               ),
-            ),
-            child: const Text('Start the quiz'),
+              ElevatedButton(
+                onPressed: () {
+                  ref
+                      .read(quizDataValuesProvider.notifier)
+                      .setScreen(Screens.quiz);
+                },
+                style: ElevatedButton.styleFrom().copyWith(
+                  minimumSize: const MaterialStatePropertyAll(
+                    Size.fromHeight(40),
+                  ),
+                ),
+                child: const Text('Start the quiz'),
+              ),
+            ],
           ),
         )
       ],
@@ -74,6 +85,7 @@ class LastScoreKanjiQuiz extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final orientation = MediaQuery.orientationOf(context);
     final textThemeParent = Theme.of(context).textTheme;
     final sizeScreen = getScreenSizeWidth(context);
     var textTheme = textThemeParent.titleMedium;
@@ -93,12 +105,19 @@ class LastScoreKanjiQuiz extends ConsumerWidget {
     return lastScoreData.when(
       data: (data) => Builder(builder: (context) {
         return data.isFinishedQuiz
-            ? Text(
-                'You have completed this quiz with ${data.countCorrects}'
-                ' questions correct\nout of ${data.countCorrects + data.countIncorrects + data.countOmited}',
-                style: textTheme,
-                textAlign: TextAlign.center,
-              )
+            ? Orientation.portrait == orientation
+                ? Text(
+                    'You have completed this quiz with ${data.countCorrects}'
+                    ' questions correct\nout of ${data.countCorrects + data.countIncorrects + data.countOmited}',
+                    style: textTheme,
+                    textAlign: TextAlign.center,
+                  )
+                : Text(
+                    'You have completed this quiz with ${data.countCorrects}'
+                    ' questions correct out of ${data.countCorrects + data.countIncorrects + data.countOmited}',
+                    style: textTheme,
+                    textAlign: TextAlign.center,
+                  )
             : Text(
                 noFinishedQuizMessage,
                 style: textTheme,

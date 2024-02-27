@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kanji_for_n5_level_app/providers/score_kanji_list_provider.dart';
-import 'package:kanji_for_n5_level_app/screens/kanji_details/quiz_details_screen/score_quiz_details/visible_lottie_file/visible_lottie_file_provider.dart';
 import 'package:kanji_for_n5_level_app/screens/quiz_kanji_screen/score_screen/score_kanji_list_provider.dart';
 import 'package:kanji_for_n5_level_app/screens/quiz_kanji_screen/score_screen/visible_lottie_file_kanji_list_provider.dart';
 import 'package:lottie/lottie.dart';
@@ -25,7 +24,9 @@ class VisibleLottieFileKanjiList extends ConsumerWidget {
           composition: lottieFilesState.lottieComposition,
         ),
         onEnd: () {
-          ref.read(visibleLottieFileProvider.notifier).setVisibility(false);
+          ref
+              .read(visibleLottieFileKanjiListProvider.notifier)
+              .setVisibility(false);
         },
       ),
     );
