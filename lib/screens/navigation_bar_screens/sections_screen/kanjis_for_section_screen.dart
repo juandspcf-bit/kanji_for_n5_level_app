@@ -14,7 +14,7 @@ import 'package:kanji_for_n5_level_app/screens/navigation_bar_screens/sections_s
 
 import 'package:kanji_for_n5_level_app/screens/quiz_kanji_list_screen/kanji_quiz_screen.dart';
 import 'package:kanji_for_n5_level_app/screens/quiz_kanji_list_screen/welcome_screen/last_score_provider.dart';
-import 'package:kanji_for_n5_level_app/screens/status_operations_dialogs.dart';
+import 'package:kanji_for_n5_level_app/screens/body_list/status_operations_dialogs.dart';
 
 class KanjiForSectionScreen extends ConsumerWidget
     with MyDialogs, StatusDBStoringDialogs {

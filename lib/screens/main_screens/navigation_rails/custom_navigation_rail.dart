@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kanji_for_n5_level_app/screens/account_details/account_details.dart';
 import 'package:kanji_for_n5_level_app/screens/main_screens/main_content_provider.dart';
-import 'package:kanji_for_n5_level_app/screens/status_operations_dialogs.dart';
+import 'package:kanji_for_n5_level_app/screens/body_list/status_operations_dialogs.dart';
 
 class CustomNavigationRail extends ConsumerWidget with StatusDBStoringDialogs {
   const CustomNavigationRail({super.key});

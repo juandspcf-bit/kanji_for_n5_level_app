@@ -14,7 +14,7 @@ import 'package:kanji_for_n5_level_app/screens/navigation_bar_screens/favorite_s
 import 'package:kanji_for_n5_level_app/screens/navigation_bar_screens/pogress_screen/progress_screen.dart';
 import 'package:kanji_for_n5_level_app/screens/navigation_bar_screens/search_screen.dart';
 import 'package:kanji_for_n5_level_app/screens/navigation_bar_screens/sections_screen/sections_screen.dart';
-import 'package:kanji_for_n5_level_app/screens/status_operations_dialogs.dart';
+import 'package:kanji_for_n5_level_app/screens/body_list/status_operations_dialogs.dart';
 
 class MainContent extends ConsumerWidget with StatusDBStoringDialogs {
   const MainContent({super.key});
