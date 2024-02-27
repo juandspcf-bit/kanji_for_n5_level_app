@@ -9,6 +9,7 @@ import 'package:kanji_for_n5_level_app/providers/status_connection_provider.dart
 import 'package:kanji_for_n5_level_app/screens/common_screens.dart/error_connection_screen.dart';
 import 'package:kanji_for_n5_level_app/screens/quiz_kanji_screen/quiz_question_screen.dart';
 import 'package:kanji_for_n5_level_app/screens/quiz_kanji_screen/score_screen/score_body.dart';
+import 'package:kanji_for_n5_level_app/screens/quiz_kanji_screen/score_screen/visible_lottie_file_kanji_list_provider.dart';
 import 'package:kanji_for_n5_level_app/screens/quiz_kanji_screen/welcome_screen/last_score_provider.dart';
 import 'package:kanji_for_n5_level_app/screens/quiz_kanji_screen/welcome_screen/welcome_kanji_quiz_screen.dart';
 
@@ -88,13 +89,19 @@ class KanjiQuizScreen extends ConsumerWidget {
     final resultStatus = ref.watch(statusConnectionProvider);
     final quizState = ref.watch(quizDataValuesProvider);
 
-    return Scaffold(
-      appBar: AppBar(title: const Text("Test your knowledge")),
-      body: Padding(
-        padding: const EdgeInsets.symmetric(
-          horizontal: 20,
+    return PopScope(
+      onPopInvoked: (didPop) {
+        ref.read(quizDataValuesProvider.notifier).resetTheQuiz();
+        ref.read(visibleLottieFileKanjiListProvider.notifier).reset();
+      },
+      child: Scaffold(
+        appBar: AppBar(title: const Text("Test your knowledge")),
+        body: Padding(
+          padding: const EdgeInsets.symmetric(
+            horizontal: 20,
+          ),
+          child: getScreen(resultStatus, quizState, ref),
         ),
-        child: getScreen(resultStatus, quizState, ref),
       ),
     );
   }
