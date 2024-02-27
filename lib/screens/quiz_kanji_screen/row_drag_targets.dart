@@ -31,7 +31,7 @@ class RowDragTargets extends ConsumerWidget {
             indexColumnTargets < randomSolutions.length;
             indexColumnTargets++)
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 15),
+            padding: const EdgeInsets.symmetric(horizontal: 10),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [

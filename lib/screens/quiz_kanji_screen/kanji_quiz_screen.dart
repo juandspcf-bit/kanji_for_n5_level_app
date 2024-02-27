@@ -91,11 +91,8 @@ class KanjiQuizScreen extends ConsumerWidget {
     return Scaffold(
       appBar: AppBar(title: const Text("Test your knowledge")),
       body: Padding(
-        padding: const EdgeInsets.only(
-          top: 0,
-          bottom: 0,
-          right: 30,
-          left: 30,
+        padding: const EdgeInsets.symmetric(
+          horizontal: 20,
         ),
         child: getScreen(resultStatus, quizState, ref),
       ),

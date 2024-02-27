@@ -36,13 +36,10 @@ class QuizQuestionScreenLandscape extends ConsumerWidget {
         );
 
       default:
-        return const Row(
+        return const Column(
           children: [
-            Expanded(child: ResetQuestionButton()),
-            SizedBox(
-              width: 20,
-            ),
-            Expanded(child: NextQuestionButton()),
+            ResetQuestionButton(),
+            NextQuestionButton(),
           ],
         );
     }
@@ -90,6 +87,9 @@ class QuizQuestionScreenLandscape extends ConsumerWidget {
                   Text(
                     'Question ${index + 1} of ${kanjisToAskMeaning.length}',
                     style: Theme.of(context).textTheme.titleLarge,
+                  ),
+                  const SizedBox(
+                    height: 20,
                   ),
                   getButtons(sizeScreen),
                 ],
