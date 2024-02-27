@@ -8,16 +8,7 @@ import 'package:kanji_for_n5_level_app/screens/quiz_kanji_screen/score_screen/vi
 class ScoreKanjiListQuizPortrait extends ConsumerWidget {
   const ScoreKanjiListQuizPortrait({
     super.key,
-    required this.countCorrects,
-    required this.countIncorrects,
-    required this.countOmited,
-    required this.resetTheQuiz,
   });
-
-  final int countCorrects;
-  final int countIncorrects;
-  final int countOmited;
-  final Function() resetTheQuiz;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
