@@ -64,7 +64,7 @@ class KanjiQuizScreen extends ConsumerWidget {
           );
 
       return const Center(
-        child: ScoreKanjiListQuizPortrait(),
+        child: ScoreBodyQuizKanjiList(),
       );
     } else if (quizState.currentScreenType == Screens.quiz) {
       return const SingleChildScrollView(
