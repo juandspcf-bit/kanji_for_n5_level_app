@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kanji_for_n5_level_app/config_files/screen_config.dart';
 import 'package:kanji_for_n5_level_app/models/kanji_from_api.dart';
-import 'package:kanji_for_n5_level_app/screens/quiz_kanji_screen/column_drag_targets.dart';
-import 'package:kanji_for_n5_level_app/screens/quiz_kanji_screen/draggable_kanji.dart';
-import 'package:kanji_for_n5_level_app/screens/quiz_kanji_screen/next_question_button.dart';
-import 'package:kanji_for_n5_level_app/screens/quiz_kanji_screen/reset_question_button.dart';
+import 'package:kanji_for_n5_level_app/screens/quiz_kanji_list_screen/quiz_screen/base_widgets/column_drag_targets.dart';
+import 'package:kanji_for_n5_level_app/screens/quiz_kanji_list_screen/quiz_screen/base_widgets/draggable_kanji.dart';
+import 'package:kanji_for_n5_level_app/screens/quiz_kanji_list_screen/quiz_screen/base_widgets/next_question_button.dart';
+import 'package:kanji_for_n5_level_app/screens/quiz_kanji_list_screen/quiz_screen/base_widgets/reset_question_button.dart';
 
 class QuizQuestionScreenPortrait extends ConsumerWidget {
   const QuizQuestionScreenPortrait({

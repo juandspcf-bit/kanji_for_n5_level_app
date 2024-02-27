@@ -1,7 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kanji_for_n5_level_app/models/kanji_from_api.dart';
-import 'package:kanji_for_n5_level_app/screens/quiz_kanji_screen/score_screen/score_kanji_list_provider.dart';
-import 'package:kanji_for_n5_level_app/screens/quiz_kanji_screen/score_screen/base_widgets/visible_lottie_file_kanji_list_provider.dart';
+import 'package:kanji_for_n5_level_app/screens/quiz_kanji_list_screen/score_screen/score_kanji_list_provider.dart';
+import 'package:kanji_for_n5_level_app/screens/quiz_kanji_list_screen/score_screen/base_widgets/visible_lottie_file_kanji_list_provider.dart';
 
 class QuizDataValuesProvider extends Notifier<QuizDataValues> {
   @override

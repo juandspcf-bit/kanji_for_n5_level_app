@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kanji_for_n5_level_app/main.dart';
 import 'package:kanji_for_n5_level_app/models/kanji_from_api.dart';
-import 'package:kanji_for_n5_level_app/screens/quiz_kanji_screen/kanji_possible_solution_container.dart';
-import 'package:kanji_for_n5_level_app/screens/quiz_kanji_screen/quiz_kanji_list_provider.dart';
+import 'package:kanji_for_n5_level_app/screens/quiz_kanji_list_screen/quiz_screen/base_widgets/kanji_possible_solution_container.dart';
+import 'package:kanji_for_n5_level_app/screens/quiz_kanji_list_screen/quiz_screen/quiz_kanji_list_provider.dart';
 
 class RowDragTargets extends ConsumerWidget {
   const RowDragTargets({

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:kanji_for_n5_level_app/screens/quiz_kanji_screen/quiz_kanji_list_provider.dart';
-import 'package:kanji_for_n5_level_app/screens/quiz_kanji_screen/welcome_screen/last_score_provider.dart';
+import 'package:kanji_for_n5_level_app/screens/quiz_kanji_list_screen/quiz_screen/quiz_kanji_list_provider.dart';
+import 'package:kanji_for_n5_level_app/screens/quiz_kanji_list_screen/welcome_screen/last_score_provider.dart';
 import 'package:kanji_for_n5_level_app/text_asset/text_assets.dart';
 
 class WelcomeKanjiListQuizScreenPortrait extends ConsumerWidget {
