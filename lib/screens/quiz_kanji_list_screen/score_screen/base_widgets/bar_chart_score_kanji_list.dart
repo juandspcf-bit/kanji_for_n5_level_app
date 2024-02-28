@@ -91,59 +91,62 @@ class ScreenChart extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final kanjiListScoreData = ref.watch(kanjiListScoreProvider);
-    return Row(
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.center,
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Container(
-          width: 256,
+          width: double.infinity,
           height: 256,
           color: Theme.of(context).scaffoldBackgroundColor,
-          child: BarChart(
-            BarChartData(
-                titlesData: titlesData,
-                gridData: const FlGridData(show: false),
-                alignment: BarChartAlignment.spaceAround,
-                borderData: borderData,
-                barGroups: [
-                  BarChartGroupData(
-                    x: 0,
-                    barsSpace: 20,
-                    barRods: [
-                      BarChartRodData(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20),
+            child: BarChart(
+              BarChartData(
+                  titlesData: titlesData,
+                  gridData: const FlGridData(show: false),
+                  alignment: BarChartAlignment.spaceAround,
+                  borderData: borderData,
+                  barGroups: [
+                    BarChartGroupData(
+                      x: 0,
+                      barsSpace: 20,
+                      barRods: [
+                        BarChartRodData(
+                            width: 10,
+                            toY: kanjiListScoreData.correctAnswers.length
+                                .toDouble(),
+                            gradient: _barsGradientCorrect),
+                      ],
+                    ),
+                    BarChartGroupData(
+                      x: 1,
+                      barRods: [
+                        BarChartRodData(
                           width: 10,
-                          toY: kanjiListScoreData.correctAnswers.length
+                          toY: kanjiListScoreData.incorrectAnwers.length
                               .toDouble(),
-                          //color: Colors.amber,
-                          gradient: _barsGradientCorrect),
-                    ],
+                          gradient: _barsGradientIncorrect,
+                        ),
+                      ],
+                    ),
+                    BarChartGroupData(
+                      x: 2,
+                      barRods: [
+                        BarChartRodData(
+                          width: 10,
+                          toY: kanjiListScoreData.omitted.length.toDouble(),
+                          gradient: _barsGradientOmited,
+                        ),
+                      ],
+                    )
+                  ]
+                  // read about it in the BarChartData section
                   ),
-                  BarChartGroupData(
-                    x: 1,
-                    barRods: [
-                      BarChartRodData(
-                        width: 10,
-                        toY: kanjiListScoreData.incorrectAnwers.length
-                            .toDouble(),
-                        gradient: _barsGradientIncorrect,
-                      ),
-                    ],
-                  ),
-                  BarChartGroupData(
-                    x: 2,
-                    barRods: [
-                      BarChartRodData(
-                        width: 10,
-                        toY: kanjiListScoreData.omitted.length.toDouble(),
-                        gradient: _barsGradientOmited,
-                      ),
-                    ],
-                  )
-                ]
-                // read about it in the BarChartData section
-                ),
-            swapAnimationDuration:
-                const Duration(milliseconds: 150), // Optional
-            swapAnimationCurve: Curves.linear, // Optional
+              swapAnimationDuration:
+                  const Duration(milliseconds: 150), // Optional
+              swapAnimationCurve: Curves.linear, // Optional
+            ),
           ),
         ),
       ],

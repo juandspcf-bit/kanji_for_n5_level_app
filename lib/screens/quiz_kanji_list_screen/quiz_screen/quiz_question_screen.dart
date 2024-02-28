@@ -14,13 +14,20 @@ class QuizQuestionScreen extends ConsumerWidget {
     final quizState = ref.watch(quizDataValuesProvider);
     final orientation = MediaQuery.orientationOf(context);
     return Orientation.portrait == orientation
-        ? QuizQuestionScreenPortrait(
-            isDraggedStatusList: quizState.isDraggedStatusList,
-            randomSolutions: quizState.randomSolutions,
-            kanjisToAskMeaning: quizState.kanjisToAskMeaning,
-            imagePathFromDraggedItems: quizState.imagePathsFromDraggedItems,
-            initialOpacities: quizState.initialOpacities,
-            index: quizState.index,
+        ? SingleChildScrollView(
+            child: Column(
+              children: [
+                QuizQuestionScreenPortrait(
+                  isDraggedStatusList: quizState.isDraggedStatusList,
+                  randomSolutions: quizState.randomSolutions,
+                  kanjisToAskMeaning: quizState.kanjisToAskMeaning,
+                  imagePathFromDraggedItems:
+                      quizState.imagePathsFromDraggedItems,
+                  initialOpacities: quizState.initialOpacities,
+                  index: quizState.index,
+                ),
+              ],
+            ),
           )
         : QuizQuestionScreenLandscape(
             isDraggedStatusList: quizState.isDraggedStatusList,

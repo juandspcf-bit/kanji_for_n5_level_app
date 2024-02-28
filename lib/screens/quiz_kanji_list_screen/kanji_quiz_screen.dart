@@ -68,13 +68,7 @@ class KanjiQuizScreen extends ConsumerWidget {
         child: ScoreBodyQuizKanjiList(),
       );
     } else if (quizState.currentScreenType == Screens.quiz) {
-      return const SingleChildScrollView(
-        child: Column(
-          children: [
-            QuizQuestionScreen(),
-          ],
-        ),
-      );
+      return const QuizQuestionScreen();
     } else if (quizState.currentScreenType == Screens.welcome) {
       return const Center(child: WelcomeKanjiListQuizScreen());
     } else {

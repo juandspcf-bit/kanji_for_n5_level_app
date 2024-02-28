@@ -29,6 +29,8 @@ class QuizQuestionScreenLandscape extends ConsumerWidget {
     switch (sizeScreen) {
       case ScreenSizeHeight.normal:
         return const Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             ResetQuestionButton(),
             NextQuestionButton(),
@@ -37,6 +39,8 @@ class QuizQuestionScreenLandscape extends ConsumerWidget {
 
       default:
         return const Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             ResetQuestionButton(),
             NextQuestionButton(),
@@ -57,7 +61,7 @@ class QuizQuestionScreenLandscape extends ConsumerWidget {
           Expanded(
             flex: 4,
             child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 const SizedBox(
@@ -83,6 +87,7 @@ class QuizQuestionScreenLandscape extends ConsumerWidget {
           Expanded(
               flex: 2,
               child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
                     'Question ${index + 1} of ${kanjisToAskMeaning.length}',
