@@ -44,6 +44,7 @@ class QuizDataValuesProvider extends Notifier<QuizDataValues> {
             state.isOmittedAnswer,
           );
       ref.read(visibleLottieFileKanjiListProvider.notifier).setInitialDelay();
+      ref.read(visibleLottieFileKanjiListProvider.notifier).reset();
 
       final initQuizDataValues = QuizDataValues(
           imagePathsFromDraggedItems: state.imagePathsFromDraggedItems,

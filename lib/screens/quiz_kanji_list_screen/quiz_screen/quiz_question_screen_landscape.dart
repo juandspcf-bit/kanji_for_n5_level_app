@@ -54,16 +54,16 @@ class QuizQuestionScreenLandscape extends ConsumerWidget {
     final heightScreen = getScreenSizeHeight(context);
     final widhtScreen = getScreenSizeWidth(context);
 
-    int padding = 10;
+    int padding = 8;
     switch (widhtScreen) {
       case ScreenSizeWidth.extraLarge:
         padding = 50;
       case ScreenSizeWidth.large:
         padding = 30;
       case ScreenSizeWidth.normal:
-        padding = 10;
+        padding = 8;
       case (_):
-        padding = 10;
+        padding = 8;
     }
 
     return SizedBox(
@@ -77,8 +77,8 @@ class QuizQuestionScreenLandscape extends ConsumerWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                const SizedBox(
-                  height: 10,
+                SizedBox(
+                  height: padding.toDouble(),
                 ),
                 RowDragTargets(
                   isDragged: isDraggedStatusList[index],
