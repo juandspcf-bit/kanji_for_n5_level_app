@@ -73,18 +73,32 @@ class BodyKanjisList extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final orientation = MediaQuery.orientationOf(context);
     final isAny = isAnyProcessingData();
 
     if (statusResponse == 0) {
       return const ShimmerList();
     } else if (statusResponse == 1 && kanjisFromApi.isNotEmpty) {
       return (connectivityData == ConnectivityResult.none)
-          ? ListView.builder(
-              itemCount: kanjisFromApi.length,
-              itemBuilder: (ctx, index) {
-                return getKanjiItem(index, ref);
-              },
-            )
+          ? Orientation.portrait == orientation
+              ? ListView.builder(
+                  itemCount: kanjisFromApi.length,
+                  itemBuilder: (ctx, index) {
+                    return getKanjiItem(index, ref);
+                  },
+                )
+              : GridView.builder(
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 2,
+                    childAspectRatio: 8 / 3,
+                    crossAxisSpacing: 5,
+                    mainAxisSpacing: 5,
+                  ),
+                  itemCount: kanjisFromApi.length,
+                  itemBuilder: (ctx, index) {
+                    return getKanjiItem(index, ref);
+                  },
+                )
           : RefreshIndicator(
               notificationPredicate: isAny ? (_) => false : (_) => true,
               onRefresh: () async {
@@ -103,12 +117,29 @@ class BodyKanjisList extends ConsumerWidget {
                       sectionNumber: kanjiListData.section,
                     );
               },
-              child: ListView.builder(
-                itemCount: kanjisFromApi.length,
-                itemBuilder: (ctx, index) {
-                  return getKanjiItem(index, ref);
-                },
-              ),
+              child: Orientation.portrait == orientation
+                  ? ListView.builder(
+                      itemCount: kanjisFromApi.length,
+                      itemBuilder: (ctx, index) {
+                        return getKanjiItem(index, ref);
+                      },
+                    )
+                  : GridView.builder(
+                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 2,
+                        childAspectRatio: (mainScreenData.selection ==
+                                    ScreenSelection.favoritesKanjis
+                                ? 6
+                                : 8) /
+                            3,
+                        crossAxisSpacing: 5,
+                        mainAxisSpacing: 5,
+                      ),
+                      itemCount: kanjisFromApi.length,
+                      itemBuilder: (ctx, index) {
+                        return getKanjiItem(index, ref);
+                      },
+                    ),
             );
     } else if (statusResponse == 2) {
       return ErrorFetchingKanjisScreen(mainScreenData: mainScreenData);
