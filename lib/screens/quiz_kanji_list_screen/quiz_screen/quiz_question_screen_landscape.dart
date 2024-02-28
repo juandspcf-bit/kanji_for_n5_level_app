@@ -25,8 +25,8 @@ class QuizQuestionScreenLandscape extends ConsumerWidget {
   final List<double> initialOpacities;
   final int index;
 
-  Widget getButtons(ScreenSizeHeight sizeScreen) {
-    switch (sizeScreen) {
+  Widget getButtons(ScreenSizeHeight heightScreen) {
+    switch (heightScreen) {
       case ScreenSizeHeight.normal:
         return const Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -51,7 +51,20 @@ class QuizQuestionScreenLandscape extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final sizeScreen = getScreenSizeHeight(context);
+    final heightScreen = getScreenSizeHeight(context);
+    final widhtScreen = getScreenSizeWidth(context);
+
+    int padding = 10;
+    switch (widhtScreen) {
+      case ScreenSizeWidth.extraLarge:
+        padding = 50;
+      case ScreenSizeWidth.large:
+        padding = 30;
+      case ScreenSizeWidth.normal:
+        padding = 10;
+      case (_):
+        padding = 10;
+    }
 
     return SizedBox(
       width: MediaQuery.of(context).size.width,
@@ -74,8 +87,8 @@ class QuizQuestionScreenLandscape extends ConsumerWidget {
                   imagePathFromDraggedItem: imagePathFromDraggedItems,
                   initialOpacities: initialOpacities,
                 ),
-                const SizedBox(
-                  height: 10,
+                SizedBox(
+                  height: padding.toDouble(),
                 ),
                 DraggableKanji(
                     isDragged: isDraggedStatusList[index],
@@ -96,7 +109,7 @@ class QuizQuestionScreenLandscape extends ConsumerWidget {
                   const SizedBox(
                     height: 20,
                   ),
-                  getButtons(sizeScreen),
+                  getButtons(heightScreen),
                 ],
               ))
         ],

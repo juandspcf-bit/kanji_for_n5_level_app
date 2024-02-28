@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:kanji_for_n5_level_app/main.dart';
+import 'package:kanji_for_n5_level_app/config_files/screen_config.dart';
 import 'package:kanji_for_n5_level_app/models/kanji_from_api.dart';
-import 'package:kanji_for_n5_level_app/screens/quiz_kanji_list_screen/quiz_screen/base_widgets/kanji_possible_solution_container.dart';
-import 'package:kanji_for_n5_level_app/screens/quiz_kanji_list_screen/quiz_screen/quiz_kanji_list_provider.dart';
+import 'package:kanji_for_n5_level_app/screens/quiz_kanji_list_screen/quiz_screen/base_widgets/custom_drag_target.dart';
 
 class RowDragTargets extends ConsumerWidget {
   const RowDragTargets({
@@ -27,63 +26,43 @@ class RowDragTargets extends ConsumerWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        for (int indexColumnTargets = 0;
-            indexColumnTargets < randomSolutions.length;
-            indexColumnTargets++)
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 10),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                DragTarget<KanjiFromApi>(
-                  onAccept: (data) {
-                    ref
-                        .read(quizDataValuesProvider.notifier)
-                        .onDraggedKanji(indexColumnTargets, data);
-                  },
-                  builder: (ctx, _, __) {
-                    if (isDragged &&
-                        randomSolutions[indexColumnTargets].kanjiCharacter ==
-                            kanjiToAskMeaning.kanjiCharacter &&
-                        imagePathFromDraggedItem[indexColumnTargets] != "") {
-                      //logger.d('correct $indexColumnTargets');
-                      return KanjiDragTargetCorrect(
-                        isDragged: isDragged,
-                        randomSolution: randomSolutions[indexColumnTargets],
-                        imagePathFromDraggedItem:
-                            imagePathFromDraggedItem[indexColumnTargets],
-                        randomKanjisToAskMeaning: kanjiToAskMeaning,
-                        initialOpacitie: initialOpacities[indexColumnTargets],
-                      );
-                    } else if (isDragged &&
-                        randomSolutions[indexColumnTargets].kanjiCharacter !=
-                            kanjiToAskMeaning.kanjiCharacter &&
-                        imagePathFromDraggedItem[indexColumnTargets] != "") {
-                      logger.d('incorrect $indexColumnTargets');
-                      return KanjiDragTargetWrong(
-                        isDragged: isDragged,
-                        randomSolution: randomSolutions[indexColumnTargets],
-                        imagePathFromDraggedItem:
-                            imagePathFromDraggedItem[indexColumnTargets],
-                        randomKanjisToAskMeaning: kanjiToAskMeaning,
-                        initialOpacitie: initialOpacities[indexColumnTargets],
-                      );
-                    } else {
-                      return KanjiDragTargetNormal(
-                        isDragged: isDragged,
-                        randomSolution: randomSolutions[indexColumnTargets],
-                        imagePathFromDraggedItem:
-                            imagePathFromDraggedItem[indexColumnTargets],
-                        randomKanjisToAskMeaning: kanjiToAskMeaning,
-                        initialOpacitie: initialOpacities[indexColumnTargets],
-                      );
-                    }
-                  },
-                ),
-              ],
-            ),
-          ),
+        ...getDragTargets(context),
       ],
     );
+  }
+
+  List<Widget> getDragTargets(BuildContext context) {
+    final widhtScreen = getScreenSizeWidth(context);
+
+    int padding = 0;
+    switch (widhtScreen) {
+      case ScreenSizeWidth.extraLarge:
+        padding = 60;
+      case ScreenSizeWidth.large:
+        padding = 50;
+      case ScreenSizeWidth.normal:
+        padding = 0;
+      case (_):
+        padding = 0;
+    }
+    List<Widget> widgets = [];
+
+    for (int indexColumnTargets = 0;
+        indexColumnTargets < randomSolutions.length;
+        indexColumnTargets++) {
+      if (widhtScreen != ScreenSizeWidth.normal) {
+        widgets.add(SizedBox(
+          width: padding.toDouble(),
+        ));
+      }
+      widgets.add(CustomDragTarget(
+          indexColumnTargets: indexColumnTargets,
+          isDragged: isDragged,
+          randomSolutions: randomSolutions,
+          kanjiToAskMeaning: kanjiToAskMeaning,
+          imagePathFromDraggedItem: imagePathFromDraggedItem,
+          initialOpacities: initialOpacities));
+    }
+    return widgets;
   }
 }
