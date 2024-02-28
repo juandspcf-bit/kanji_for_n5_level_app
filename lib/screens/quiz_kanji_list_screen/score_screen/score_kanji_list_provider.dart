@@ -24,15 +24,19 @@ class KanjiListScoreProvider extends Notifier<
     List<bool> isCorrectAnswer,
     List<bool> isOmittedAnswer,
   ) {
+    final List<StateAnswersQuizDetails> incorrectAnwers = [];
+    for (var i = 0; i < isCorrectAnswer.length; i++) {
+      if (!isCorrectAnswer[i] && !isOmittedAnswer[i]) {
+        incorrectAnwers.add(StateAnswersQuizDetails.incorrect);
+      }
+    }
+
     state = (
       correctAnswers: isCorrectAnswer
           .where((e) => e)
           .map((e) => StateAnswersQuizDetails.correct)
           .toList(),
-      incorrectAnwers: isCorrectAnswer
-          .where((e) => !e)
-          .map((e) => StateAnswersQuizDetails.incorrect)
-          .toList(),
+      incorrectAnwers: incorrectAnwers,
       omitted: isOmittedAnswer
           .where((e) => e)
           .map((e) => StateAnswersQuizDetails.ommitted)
