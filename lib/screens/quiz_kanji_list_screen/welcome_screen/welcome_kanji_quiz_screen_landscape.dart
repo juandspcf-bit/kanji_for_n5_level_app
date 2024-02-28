@@ -51,28 +51,31 @@ class WelcomeKanjiListQuizScreenLandscape extends ConsumerWidget {
         ),
         Expanded(
           flex: 4,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              const LastScoreKanjiQuiz(),
-              const SizedBox(
-                height: 20,
-              ),
-              ElevatedButton(
-                onPressed: () {
-                  ref
-                      .read(quizDataValuesProvider.notifier)
-                      .setScreen(Screens.quiz);
-                },
-                style: ElevatedButton.styleFrom().copyWith(
-                  minimumSize: const MaterialStatePropertyAll(
-                    Size.fromHeight(40),
-                  ),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                const LastScoreKanjiQuiz(),
+                const SizedBox(
+                  height: 20,
                 ),
-                child: const Text('Start the quiz'),
-              ),
-            ],
+                ElevatedButton(
+                  onPressed: () {
+                    ref
+                        .read(quizDataValuesProvider.notifier)
+                        .setScreen(Screens.quiz);
+                  },
+                  style: ElevatedButton.styleFrom().copyWith(
+                    minimumSize: const MaterialStatePropertyAll(
+                      Size.fromHeight(40),
+                    ),
+                  ),
+                  child: const Text('Start the quiz'),
+                ),
+              ],
+            ),
           ),
         )
       ],
