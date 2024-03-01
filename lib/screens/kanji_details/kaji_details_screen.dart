@@ -103,7 +103,10 @@ class KanjiDetails extends ConsumerWidget {
                   },
                   child: Scaffold(
                     appBar: AppBar(
-                      title: Text(kanjiFromApi.kanjiCharacter),
+                      title: SelectableText(
+                        kanjiFromApi.kanjiCharacter,
+                        style: Theme.of(context).textTheme.titleLarge,
+                      ),
                       actions: [
                         Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 10),
