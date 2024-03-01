@@ -78,9 +78,13 @@ class _KanjiItemState extends ConsumerState<KanjiItem> {
         child: Padding(
           padding: const EdgeInsets.all(15.0),
           child: Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               LeadingTile(
                 kanjiFromApi: widget.kanjiFromApi,
+              ),
+              const SizedBox(
+                width: 10,
               ),
               Expanded(
                 child: Padding(
@@ -96,6 +100,7 @@ class _KanjiItemState extends ConsumerState<KanjiItem> {
                       color: Colors.transparent,
                       width: double.infinity,
                       child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           TitleTile(
@@ -113,13 +118,11 @@ class _KanjiItemState extends ConsumerState<KanjiItem> {
                   ),
                 ),
               ),
-              Center(
-                child: Padding(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 5, vertical: 15),
-                  child: TrailingTile(
-                    kanjiFromApi: widget.kanjiFromApi,
-                  ),
+              Padding(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 5, vertical: 15),
+                child: TrailingTile(
+                  kanjiFromApi: widget.kanjiFromApi,
                 ),
               )
             ],
