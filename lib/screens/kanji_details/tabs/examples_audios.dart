@@ -64,7 +64,7 @@ class ExampleAudios extends ConsumerWidget {
                   ),
                   title: Column(
                     children: [
-                      Text(
+                      SelectableText(
                         examples[index].japanese,
                         style: data.track == index && data.isPlaying
                             ? Theme.of(context).textTheme.titleMedium!.copyWith(
@@ -81,7 +81,7 @@ class ExampleAudios extends ConsumerWidget {
                     ],
                   ),
                   subtitle: Column(children: [
-                    Text(
+                    SelectableText(
                       examples[index].meaning.english,
                       style: data.track == index && data.isPlaying
                           ? Theme.of(context)
