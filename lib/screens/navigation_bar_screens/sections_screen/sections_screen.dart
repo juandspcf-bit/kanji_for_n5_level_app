@@ -4,7 +4,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:kanji_for_n5_level_app/config_files/screen_config.dart';
 import 'package:kanji_for_n5_level_app/main.dart';
 import 'package:kanji_for_n5_level_app/models/secction_model.dart';
-import 'package:kanji_for_n5_level_app/providers/kanjis_list_provider.dart';
+import 'package:kanji_for_n5_level_app/screens/body_list/kanjis_list_provider.dart';
 import 'package:kanji_for_n5_level_app/screens/navigation_bar_screens/sections_screen/kanjis_for_section_screen.dart';
 import 'package:kanji_for_n5_level_app/screens/navigation_bar_screens/sections_screen/section_screen_provider.dart';
 
