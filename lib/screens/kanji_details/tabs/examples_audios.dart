@@ -1,6 +1,7 @@
 import 'package:assets_audio_player/assets_audio_player.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:kanji_for_n5_level_app/main.dart';
 import 'package:kanji_for_n5_level_app/models/kanji_from_api.dart';
 import 'package:kanji_for_n5_level_app/providers/examples_audios_provider.dart';
 import 'package:kanji_for_n5_level_app/providers/status_stored_provider.dart';
@@ -105,7 +106,7 @@ class ExampleAudios extends ConsumerWidget {
                       onPressed: () async {
                         await assetsAudioPlayer.stop();
                         if (data.track == index && data.isPlaying) return;
-
+                        logger.d('audio link ${examples[index].audio.mp3}');
                         try {
                           if (statusStorage == StatusStorage.onlyOnline) {
                             await assetsAudioPlayer.open(

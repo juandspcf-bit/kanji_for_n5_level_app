@@ -42,7 +42,7 @@ class MeaningAndDefinition extends ConsumerWidget {
             const SizedBox(
               width: 20,
             ),
-            Text(
+            SelectableText(
               capitalizeString('Meaning: $englishMeaning'),
             ),
           ],
@@ -56,7 +56,7 @@ class MeaningAndDefinition extends ConsumerWidget {
             const SizedBox(
               width: 20,
             ),
-            Text("Kunyomi: $hiraganaMeaning"),
+            SelectableText("Kunyomi: $hiraganaMeaning"),
           ],
         ),
         const SizedBox(
@@ -68,7 +68,7 @@ class MeaningAndDefinition extends ConsumerWidget {
             const SizedBox(
               width: 20,
             ),
-            Text("Onyomi: $katakanaMeaning"),
+            SelectableText("Onyomi: $katakanaMeaning"),
           ],
         ),
         const SizedBox(
