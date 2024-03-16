@@ -52,6 +52,26 @@ class KanjiForSectionScreen extends ConsumerWidget
     final accesToQuiz = !isAnyProcessingDataFunc() &&
         !(connectivityData == ConnectivityResult.none);
 
+    ref.listen<KanjiListData>(kanjiListProvider, (previuos, current) {
+      if (current.errorDownload.status) {
+        ScaffoldMessenger.of(context).clearSnackBars();
+        var snackBar = SnackBar(
+          content: Text(
+              'error downloading kanji ${current.errorDownload.kanjiCharacter}'),
+          duration: const Duration(seconds: 3),
+        );
+
+        ScaffoldMessenger.of(context).showSnackBar(snackBar);
+
+        ref.read(kanjiListProvider.notifier).setErrorDownload(
+              ErrorDownload(
+                kanjiCharacter: '',
+                status: false,
+              ),
+            );
+      }
+    });
+
     return Scaffold(
       appBar: AppBar(
         title: Text(listSections[kanjiListData.section - 1].title),

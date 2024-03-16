@@ -2,6 +2,7 @@ import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kanji_for_n5_level_app/config_files/screen_config.dart';
+import 'package:kanji_for_n5_level_app/main.dart';
 import 'package:kanji_for_n5_level_app/models/kanji_from_api.dart';
 import 'package:kanji_for_n5_level_app/models/secction_model.dart';
 import 'package:kanji_for_n5_level_app/providers/status_stored_provider.dart';
@@ -34,14 +35,6 @@ class BodyKanjisList extends ConsumerWidget {
         kanjiFromApi: kanjisFromApi[index],
       );
     } else {
-      if (ref.read(kanjiListProvider.notifier).isInTheDownloadQueue(index) ||
-          kanjisFromApi[index].statusStorage ==
-              StatusStorage.proccessingDeleting) {
-        return KanjiItem(
-          key: ValueKey(kanjisFromApi[index].kanjiCharacter),
-          kanjiFromApi: kanjisFromApi[index],
-        );
-      }
       return Dismissible(
         key: Key(kanjisFromApi[index].kanjiCharacter),
         child: KanjiItem(
@@ -135,6 +128,8 @@ class BodyKanjisList extends ConsumerWidget {
     final orientation = MediaQuery.orientationOf(context);
     final widhtScreen = getScreenSizeWidth(context);
     final isAny = isAnyProcessingData();
+
+    logger.d('response: $statusResponse');
 
     if (statusResponse == 0) {
       return SafeArea(

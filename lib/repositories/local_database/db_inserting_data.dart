@@ -10,6 +10,8 @@ import 'package:kanji_for_n5_level_app/models/kanji_from_api.dart';
 import 'package:kanji_for_n5_level_app/providers/status_stored_provider.dart';
 import 'package:path_provider/path_provider.dart';
 
+const durationTimeOutMili = 1000 * 60 * 5;
+
 class ParametersCompute {
   final Directory path;
   final KanjiFromApi kanjiFromApi;
@@ -115,7 +117,8 @@ Future<Map<String, String>> downloadExampleComputeVersion(
   group.close();
 
   try {
-    await group.future;
+    await group.future
+        .timeout(const Duration(milliseconds: durationTimeOutMili));
   } catch (e) {
     logger.e('error in examples download');
     logger.e(e);
@@ -151,7 +154,8 @@ Future<List<String>> downloadStrokesData(
   group.close();
 
   try {
-    await group.future;
+    await group.future
+        .timeout(const Duration(milliseconds: durationTimeOutMili));
   } catch (e) {
     logger.e('error in examples download');
     logger.e(e);
@@ -184,7 +188,8 @@ Future<Map<String, String>> downloadKanjidata(
   group.close();
 
   try {
-    await group.future;
+    await group.future
+        .timeout(const Duration(milliseconds: durationTimeOutMili));
   } catch (e) {
     logger.e('error in examples download');
     logger.e(e);

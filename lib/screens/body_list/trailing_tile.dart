@@ -68,23 +68,6 @@ class TrailingTile extends ConsumerWidget {
     return countActivesDownloads >= 3;
   }
 
-  void setToProccesingStatus(StatusStorage proccessingStoring,
-      ScreenSelection selection, WidgetRef ref) {
-    if (selection == ScreenSelection.favoritesKanjis) {
-      ref
-          .read(favoriteskanjisProvider.notifier)
-          .updateKanjiStatusOnVisibleFavoritesList(
-            updateStatusKanji(proccessingStoring, false, kanjiFromApi),
-          );
-    } else {
-      ref
-          .read(kanjiListProvider.notifier)
-          .updateKanjiStatusOnVisibleSectionList(
-            updateStatusKanji(proccessingStoring, false, kanjiFromApi),
-          );
-    }
-  }
-
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return GestureDetector(
