@@ -35,8 +35,14 @@ class SqliteDBService implements LocalDBService {
   }
 
   @override
-  Future<void> deleteKanjiFromLocalDatabase(KanjiFromApi kanjiFromApi) async {
-    return await deleteKanjiFromSqlDB(kanjiFromApi);
+  Future<void> deleteKanjiFromLocalDatabase(
+    KanjiFromApi kanjiFromApi,
+    String uuid,
+  ) async {
+    return await deleteKanjiFromSqlDB(
+      kanjiFromApi,
+      uuid,
+    );
   }
 
   @override

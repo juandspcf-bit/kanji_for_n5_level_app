@@ -19,7 +19,9 @@ abstract class LocalDBService {
 
   Future<void> deleteKanjiFromLocalDatabase(
     KanjiFromApi kanjiFromApi,
+    String uuid,
   );
+
   Future<void> deleteUserData(
     String uuid,
   );

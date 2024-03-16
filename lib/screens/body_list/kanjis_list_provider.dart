@@ -24,6 +24,7 @@ class KanjiListProvider extends Notifier<KanjiListData> {
   }
 
   final List<DownloadKanji> queuDownloadKanjis = [];
+  final List<DeleteKanji> queuDeleteKanjis = [];
 
   void setErrorDownload(ErrorDownload errorDownload) {
     state = KanjiListData(
@@ -274,42 +275,62 @@ class KanjiListProvider extends Notifier<KanjiListData> {
   }
 
   void deleteKanjiFromStorage(
-    KanjiFromApi kanjiFromApi,
+    KanjiFromApi kanjiFromApiStored,
     ScreenSelection selection,
   ) async {
     try {
-      await localDBService.deleteKanjiFromLocalDatabase(kanjiFromApi);
+      final deleteKanji = DeleteKanji();
+      queuDeleteKanjis.add(deleteKanji);
 
-      ref.read(storedKanjisProvider.notifier).deleteItem(kanjiFromApi);
+      updateKanjiStatusOnVisibleSectionList(
+        updateStatusKanji(
+          StatusStorage.proccessingStoring,
+          false,
+          kanjiFromApiStored,
+        ),
+        state.errorDownload,
+      );
 
-      final kanjiList = await updateKanjiWithOnliVersion(kanjiFromApi);
+      await deleteKanji.deleteKanjiFromLocalDatabase(
+          kanjiFromApiStored, selection);
+
+      queuDeleteKanjis.remove(deleteKanji);
+
+      ref.read(storedKanjisProvider.notifier).deleteItem(kanjiFromApiStored);
+
+      final kanjiFromApiOnline =
+          await updateKanjiWithOnliVersion(kanjiFromApiStored);
       ref
           .read(favoriteskanjisProvider.notifier)
-          .updateKanjiStatusOnVisibleFavoritesList(kanjiList[0]);
+          .updateKanjiStatusOnVisibleFavoritesList(kanjiFromApiOnline);
       if (selection == ScreenSelection.kanjiSections) {
         ref
             .read(kanjiListProvider.notifier)
             .updateKanjiStatusOnVisibleSectionList(
-              kanjiList[0],
+              kanjiFromApiOnline,
               ErrorDownload(
-                kanjiCharacter: kanjiFromApi.kanjiCharacter,
+                kanjiCharacter: kanjiFromApiStored.kanjiCharacter,
                 status: false,
               ),
             );
       }
       logger.d('success deleting from db');
     } catch (e) {
-      ref
+/*       ref
           .read(favoriteskanjisProvider.notifier)
           .updateKanjiStatusOnVisibleFavoritesList(
-              updateStatusKanjiComputeVersion(
-                  StatusStorage.errorDeleting, true, kanjiFromApi));
+            updateStatusKanjiComputeVersion(
+              StatusStorage.errorDeleting,
+              true,
+              kanjiFromApiStored,
+            ),
+          );
       if (selection == ScreenSelection.kanjiSections) {
         ref
             .read(kanjiListProvider.notifier)
             .updateKanjiStatusOnVisibleSectionList(
               updateStatusKanjiComputeVersion(
-                  StatusStorage.errorDeleting, true, kanjiFromApi),
+                  StatusStorage.errorDeleting, true, kanjiFromApiStored),
               ErrorDownload(
                 kanjiCharacter: '',
                 status: false,
@@ -319,7 +340,12 @@ class KanjiListProvider extends Notifier<KanjiListData> {
       ref.read(errorDatabaseStatusProvider.notifier).setDeletingError(true);
 
       logger.e('error deleting');
+      logger.e(e.toString()); */
+      logger.e('error deleting');
       logger.e(e.toString());
+    } finally {
+      queuDeleteKanjis.removeWhere((element) =>
+          element.kanjiCharacter == kanjiFromApiStored.kanjiCharacter);
     }
   }
 }
@@ -368,6 +394,21 @@ class ErrorDownload {
   final bool status;
 
   ErrorDownload({required this.kanjiCharacter, required this.status});
+}
+
+class DeleteKanji {
+  late String kanjiCharacter;
+
+  Future<void> deleteKanjiFromLocalDatabase(
+    KanjiFromApi kanjiFromApi,
+    ScreenSelection selection,
+  ) async {
+    kanjiCharacter = kanjiFromApi.kanjiCharacter;
+    await localDBService.deleteKanjiFromLocalDatabase(
+      kanjiFromApi,
+      authService.user ?? '',
+    );
+  }
 }
 
 class NoUserFound implements Exception {

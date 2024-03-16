@@ -1,31 +1,25 @@
 import 'dart:io';
 
 import 'package:async/async.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:kanji_for_n5_level_app/repositories/local_database/db_definitions.dart';
 import 'package:kanji_for_n5_level_app/models/kanji_from_api.dart';
 import 'package:kanji_for_n5_level_app/repositories/apis/kanji_alive/request_kanji_list_api.dart';
 import 'package:kanji_for_n5_level_app/providers/status_stored_provider.dart';
 
-Future<void> deleteKanjiFromSqlDB(KanjiFromApi kanjiFromApi) async {
-  final user = FirebaseAuth.instance.currentUser;
-
-  if (user == null) {
-    return Future(() => []);
-  }
-
+Future<void> deleteKanjiFromSqlDB(
+    KanjiFromApi kanjiFromApi, String uuid) async {
   final db = await kanjiFromApiDatabase;
 
   final listKanjiMapFromDb = await db.rawQuery(
       'SELECT * FROM kanji_FromApi WHERE kanjiCharacter = ? AND uuid = ?',
-      [kanjiFromApi.kanjiCharacter, user.uid]);
+      [kanjiFromApi.kanjiCharacter, uuid]);
   final listMapExamplesFromDb = await db.rawQuery(
       'SELECT * FROM examples WHERE kanjiCharacter = ? AND uuid = ?',
-      [kanjiFromApi.kanjiCharacter, user.uid]);
+      [kanjiFromApi.kanjiCharacter, uuid]);
   final listMapStrokesImagesLisnkFromDb = await db.rawQuery(
       'SELECT * FROM strokes WHERE kanjiCharacter = ? AND uuid = ?',
-      [kanjiFromApi.kanjiCharacter, user.uid]);
+      [kanjiFromApi.kanjiCharacter, uuid]);
 
   final parametersDelete = ParametersDelete(
       listKanjiMapFromDb: listKanjiMapFromDb,
@@ -36,13 +30,13 @@ Future<void> deleteKanjiFromSqlDB(KanjiFromApi kanjiFromApi) async {
 
   await db.rawDelete(
       'DELETE FROM kanji_FromApi WHERE kanjiCharacter = ? AND uuid = ?',
-      [kanjiFromApi.kanjiCharacter, user.uid]);
+      [kanjiFromApi.kanjiCharacter, uuid]);
   await db.rawDelete(
       'DELETE FROM examples WHERE kanjiCharacter = ? AND uuid = ?',
-      [kanjiFromApi.kanjiCharacter, user.uid]);
+      [kanjiFromApi.kanjiCharacter, uuid]);
   await db.rawDelete(
       'DELETE FROM strokes WHERE kanjiCharacter = ? AND uuid = ?',
-      [kanjiFromApi.kanjiCharacter, user.uid]);
+      [kanjiFromApi.kanjiCharacter, uuid]);
 }
 
 class ParametersDelete {
@@ -142,10 +136,11 @@ Future<void> deleteKanjiFromApiComputeVersion(
   }
 }
 
-Future<List<KanjiFromApi>> updateKanjiWithOnliVersion(
-    KanjiFromApi kanjiFromApi) {
-  return KanjiAliveApi.getKanjiList(
+Future<KanjiFromApi> updateKanjiWithOnliVersion(
+    KanjiFromApi kanjiFromApi) async {
+  final kanjiList = await KanjiAliveApi.getKanjiList(
       [], [kanjiFromApi.kanjiCharacter], kanjiFromApi.section);
+  return kanjiList[0];
 }
 
 KanjiFromApi updateStatusKanjiComputeVersion(
