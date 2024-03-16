@@ -71,11 +71,15 @@ class TrailingTile extends ConsumerWidget {
   void setToProccesingStatus(StatusStorage proccessingStoring,
       ScreenSelection selection, WidgetRef ref) {
     if (selection == ScreenSelection.favoritesKanjis) {
-      ref.read(favoriteskanjisProvider.notifier).updateKanji(
+      ref
+          .read(favoriteskanjisProvider.notifier)
+          .updateKanjiStatusOnVisibleFavoritesList(
             updateStatusKanji(proccessingStoring, false, kanjiFromApi),
           );
     } else {
-      ref.read(kanjiListProvider.notifier).updateKanji(
+      ref
+          .read(kanjiListProvider.notifier)
+          .updateKanjiStatusOnVisibleSectionList(
             updateStatusKanji(proccessingStoring, false, kanjiFromApi),
           );
     }
@@ -96,8 +100,8 @@ class TrailingTile extends ConsumerWidget {
 
         final dataMainScreen = ref.read(mainScreenProvider);
         if (kanjiFromApi.statusStorage == StatusStorage.onlyOnline) {
-          setToProccesingStatus(
-              StatusStorage.proccessingStoring, dataMainScreen.selection, ref);
+/*           setToProccesingStatus(
+              StatusStorage.proccessingStoring, dataMainScreen.selection, ref); */
 
           if (dataMainScreen.selection == ScreenSelection.kanjiSections) {
             ref
@@ -109,8 +113,8 @@ class TrailingTile extends ConsumerWidget {
                 .insertKanjiToStorage(setCorrectSection(kanjiFromApi));
           }
         } else if (kanjiFromApi.statusStorage == StatusStorage.stored) {
-          setToProccesingStatus(
-              StatusStorage.proccessingDeleting, dataMainScreen.selection, ref);
+/*           setToProccesingStatus(
+              StatusStorage.proccessingDeleting, dataMainScreen.selection, ref); */
           ref
               .read(kanjiListProvider.notifier)
               .deleteKanjiFromStorage(kanjiFromApi, dataMainScreen.selection);

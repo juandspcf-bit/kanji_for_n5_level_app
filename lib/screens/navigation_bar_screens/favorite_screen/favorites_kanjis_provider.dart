@@ -181,7 +181,7 @@ class FavoritesListProvider extends Notifier<FavoritesKanjisData> {
     return searchResult != '';
   }
 
-  void updateKanji(KanjiFromApi storedKanji) {
+  void updateKanjiStatusOnVisibleFavoritesList(KanjiFromApi storedKanji) {
     final copyState = [...state.favoritesKanjisFromApi];
 
     final index = copyState.indexWhere((element) =>
@@ -199,7 +199,10 @@ class FavoritesListProvider extends Notifier<FavoritesKanjisData> {
 
   void insertKanjiToStorage(KanjiFromApi kanjiFromApi) async {
     try {
-      final kanjiFromApiStored = await storeKanjiToSqlDB(kanjiFromApi);
+      final kanjiFromApiStored = await storeKanjiToSqlDB(
+        kanjiFromApi,
+        authService.user ?? '',
+      );
 
       if (kanjiFromApiStored == null) return;
 
@@ -216,7 +219,9 @@ class FavoritesListProvider extends Notifier<FavoritesKanjisData> {
   void updateProviders(KanjiFromApi kanjiFromApiStored) {
     ref.read(storedKanjisProvider.notifier).addItem(kanjiFromApiStored);
 
-    ref.read(favoriteskanjisProvider.notifier).updateKanji(kanjiFromApiStored);
+    ref
+        .read(favoriteskanjisProvider.notifier)
+        .updateKanjiStatusOnVisibleFavoritesList(kanjiFromApiStored);
   }
 
   Future<void> dismissisFavorite(KanjiFromApi kanjiFromApi) async {

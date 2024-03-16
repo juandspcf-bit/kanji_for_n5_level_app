@@ -34,8 +34,7 @@ class BodyKanjisList extends ConsumerWidget {
         kanjiFromApi: kanjisFromApi[index],
       );
     } else {
-      if (kanjisFromApi[index].statusStorage ==
-              StatusStorage.proccessingStoring ||
+      if (ref.read(kanjiListProvider.notifier).isInTheDownloadQueue(index) ||
           kanjisFromApi[index].statusStorage ==
               StatusStorage.proccessingDeleting) {
         return KanjiItem(

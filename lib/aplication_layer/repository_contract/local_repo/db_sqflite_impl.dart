@@ -12,12 +12,26 @@ import 'package:kanji_for_n5_level_app/repositories/local_database/db_favorites.
 import 'package:kanji_for_n5_level_app/repositories/local_database/db_firts_time_logged_functions.dart';
 import 'package:kanji_for_n5_level_app/repositories/local_database/db_inserting_data.dart';
 import 'package:kanji_for_n5_level_app/repositories/local_database/db_quiz_data_functions/db_quiz_data_functions.dart';
+import 'package:kanji_for_n5_level_app/repositories/local_database/download_data_utils.dart';
 
 class SqliteDBService implements LocalDBService {
   @override
   Future<KanjiFromApi?> storeKanjiToLocalDatabase(
-      KanjiFromApi kanjiFromApi) async {
-    return await storeKanjiToSqlDB(kanjiFromApi);
+    KanjiFromApi kanjiFromApi,
+    String uuid,
+  ) async {
+    return await storeKanjiToSqlDB(kanjiFromApi, uuid);
+  }
+
+  @override
+  Future<KanjiFromApi?> storeKanjiToLocalDatabasev2(
+    KanjiFromApi kanjiFromApi,
+    String uuid,
+  ) async {
+    return await storeKanjiToSqlDBv2(
+      kanjiFromApi,
+      uuid,
+    );
   }
 
   @override

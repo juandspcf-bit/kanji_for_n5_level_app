@@ -76,6 +76,10 @@ class Section extends ConsumerWidget {
         child: InkWell(
           borderRadius: const BorderRadius.all(Radius.circular(20)),
           onTap: () {
+            ref
+                .read(kanjiListProvider.notifier)
+                .clearKanjiList(sectionData.sectionNumber);
+
             ref.read(kanjiListProvider.notifier).fetchKanjis(
                   kanjisCharacters: sectionData.kanjisCharacters,
                   sectionNumber: sectionData.sectionNumber,

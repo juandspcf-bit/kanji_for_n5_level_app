@@ -52,57 +52,48 @@ class KanjiForSectionScreen extends ConsumerWidget
     final accesToQuiz = !isAnyProcessingDataFunc() &&
         !(connectivityData == ConnectivityResult.none);
 
-    return PopScope(
-      canPop: !isAnyProcessingDataFunc(),
-      onPopInvoked: (didPop) {
-        if (isAnyProcessingDataFunc()) {
-          statusDBStoringDialog(context);
-          return;
-        }
-      },
-      child: Scaffold(
-        appBar: AppBar(
-          title: Text(listSections[kanjiListData.section - 1].title),
-          actions: [
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 10),
-              child: connectivityData == ConnectivityResult.none
-                  ? const Icon(Icons.cloud_off)
-                  : const Icon(Icons.cloud_done_rounded),
-            ),
-            IconButton(
-                onPressed: kanjiListData.status == 1 && accesToQuiz
-                    ? () {
-                        ref
-                            .read(quizDataValuesProvider.notifier)
-                            .initTheStateBeforeAccessingQuizScreen(
-                                kanjiListData.kanjiList.length,
-                                kanjiListData.kanjiList);
-                        ref
-                            .read(lastScoreKanjiQuizProvider.notifier)
-                            .getKanjiQuizLastScore(
-                              ref.read(sectionProvider),
-                              authService.user ?? '',
-                            );
-                        Navigator.of(context).push(
-                          MaterialPageRoute(
-                            builder: (ctx) {
-                              return KanjiQuizScreen(
-                                  kanjisFromApi: kanjiListData.kanjiList);
-                            },
-                          ),
-                        );
-                      }
-                    : null,
-                icon: const Icon(Icons.quiz))
-          ],
-        ),
-        body: BodyKanjisList(
-          kanjisFromApi: kanjiListData.kanjiList,
-          statusResponse: kanjiListData.status,
-          connectivityData: connectivityData,
-          mainScreenData: mainScreenData,
-        ),
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(listSections[kanjiListData.section - 1].title),
+        actions: [
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 10),
+            child: connectivityData == ConnectivityResult.none
+                ? const Icon(Icons.cloud_off)
+                : const Icon(Icons.cloud_done_rounded),
+          ),
+          IconButton(
+              onPressed: kanjiListData.status == 1 && accesToQuiz
+                  ? () {
+                      ref
+                          .read(quizDataValuesProvider.notifier)
+                          .initTheStateBeforeAccessingQuizScreen(
+                              kanjiListData.kanjiList.length,
+                              kanjiListData.kanjiList);
+                      ref
+                          .read(lastScoreKanjiQuizProvider.notifier)
+                          .getKanjiQuizLastScore(
+                            ref.read(sectionProvider),
+                            authService.user ?? '',
+                          );
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (ctx) {
+                            return KanjiQuizScreen(
+                                kanjisFromApi: kanjiListData.kanjiList);
+                          },
+                        ),
+                      );
+                    }
+                  : null,
+              icon: const Icon(Icons.quiz))
+        ],
+      ),
+      body: BodyKanjisList(
+        kanjisFromApi: kanjiListData.kanjiList,
+        statusResponse: kanjiListData.status,
+        connectivityData: connectivityData,
+        mainScreenData: mainScreenData,
       ),
     );
   }

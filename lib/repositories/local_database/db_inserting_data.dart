@@ -2,8 +2,8 @@ import 'dart:io';
 
 import 'package:async/async.dart';
 import 'package:dio/dio.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
+import 'package:kanji_for_n5_level_app/main.dart';
 import 'package:kanji_for_n5_level_app/repositories/local_database/db_definitions.dart';
 import 'package:kanji_for_n5_level_app/repositories/local_database/db_utils.dart';
 import 'package:kanji_for_n5_level_app/models/kanji_from_api.dart';
@@ -22,20 +22,20 @@ class ParametersCompute {
   });
 }
 
-Future<KanjiFromApi?> storeKanjiToSqlDB(KanjiFromApi kanjiFromApi) async {
-  final user = FirebaseAuth.instance.currentUser;
-
-  if (user == null) {
-    return null;
-  }
-
+Future<KanjiFromApi?> storeKanjiToSqlDB(
+  KanjiFromApi kanjiFromApi,
+  String uuid,
+) async {
   final dirDocumentPath = await getApplicationDocumentsDirectory();
   final kanjiFromApiDownloaded = await compute(
       downloadKanjiDataFromApiComputeVersion,
       ParametersCompute(
-          kanjiFromApi: kanjiFromApi, path: dirDocumentPath, uuid: user.uid));
+        kanjiFromApi: kanjiFromApi,
+        path: dirDocumentPath,
+        uuid: uuid,
+      ));
 
-  await insertPathsInDB(kanjiFromApiDownloaded, user.uid);
+  await insertPathsInDB(kanjiFromApiDownloaded, uuid);
   return Future(() => kanjiFromApiDownloaded);
 }
 
@@ -114,7 +114,14 @@ Future<Map<String, String>> downloadExampleComputeVersion(
 
   group.close();
 
-  await group.future;
+  try {
+    await group.future;
+  } catch (e) {
+    logger.e('error in examples download');
+    logger.e(e);
+    rethrow;
+  }
+
   return {
     'japanese': example.japanese,
     'meaning': example.meaning.english,
@@ -143,7 +150,13 @@ Future<List<String>> downloadStrokesData(
 
   group.close();
 
-  await group.future;
+  try {
+    await group.future;
+  } catch (e) {
+    logger.e('error in examples download');
+    logger.e(e);
+    rethrow;
+  }
 
   return pathsToDocuments;
 }
@@ -170,7 +183,13 @@ Future<Map<String, String>> downloadKanjidata(
 
   group.close();
 
-  await group.future;
+  try {
+    await group.future;
+  } catch (e) {
+    logger.e('error in examples download');
+    logger.e(e);
+    rethrow;
+  }
 
   return {
     'kanjiCharacter': parametersCompute.kanjiFromApi.kanjiCharacter,

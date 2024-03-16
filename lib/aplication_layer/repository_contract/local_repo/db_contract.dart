@@ -9,7 +9,14 @@ import 'package:kanji_for_n5_level_app/models/single_quiz_section_data.dart';
 abstract class LocalDBService {
   Future<KanjiFromApi?> storeKanjiToLocalDatabase(
     KanjiFromApi kanjiFromApi,
+    String uuid,
   );
+
+  Future<KanjiFromApi?> storeKanjiToLocalDatabasev2(
+    KanjiFromApi kanjiFromApi,
+    String uuid,
+  );
+
   Future<void> deleteKanjiFromLocalDatabase(
     KanjiFromApi kanjiFromApi,
   );
