@@ -70,6 +70,24 @@ class KanjiForSectionScreen extends ConsumerWidget
               ),
             );
       }
+
+      if (current.errorDeleting.status) {
+        ScaffoldMessenger.of(context).clearSnackBars();
+        var snackBar = SnackBar(
+          content: Text(
+              'error removing stored kanji ${current.errorDeleting.kanjiCharacter}'),
+          duration: const Duration(seconds: 3),
+        );
+
+        ScaffoldMessenger.of(context).showSnackBar(snackBar);
+
+        ref.read(kanjiListProvider.notifier).setErrorDelete(
+              ErrorDeleting(
+                kanjiCharacter: '',
+                status: false,
+              ),
+            );
+      }
     });
 
     return Scaffold(
