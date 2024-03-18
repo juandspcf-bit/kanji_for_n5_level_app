@@ -197,6 +197,23 @@ class FavoritesListProvider extends Notifier<FavoritesKanjisData> {
     );
   }
 
+  void updateKanjiStatusOnVisibleFavoritesListFromOthers(
+      KanjiFromApi storedKanji) {
+    final copyState = [...state.favoritesKanjisFromApi];
+
+    final index = copyState.indexWhere((element) =>
+        element.kanjiFromApi.kanjiCharacter == storedKanji.kanjiCharacter);
+    if (index == -1) return;
+    copyState[index] = FavoriteKanji(
+      kanjiFromApi: storedKanji,
+      timeStamp: state.favoritesKanjisFromApi[index].timeStamp,
+    );
+    state = FavoritesKanjisData(
+      favoritesKanjisFromApi: copyState,
+      favoritesFetchingStatus: state.favoritesFetchingStatus,
+    );
+  }
+
   void insertKanjiToStorage(KanjiFromApi kanjiFromApi) async {
     try {
       final kanjiFromApiStored = await storeKanjiToSqlDB(

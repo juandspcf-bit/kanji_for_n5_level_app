@@ -26,8 +26,8 @@ class KanjiListProvider extends Notifier<KanjiListData> {
     );
   }
 
-  final List<DownloadKanji> queuDownloadKanjis = [];
-  final List<DeleteKanji> queuDeleteKanjis = [];
+  final List<DownloadKanji> _queueDownloadKanjis = [];
+  final List<DeleteKanji> _queueDeleteKanjis = [];
 
   void setErrorDownload(ErrorDownload errorDownload) {
     state = KanjiListData(
@@ -171,7 +171,7 @@ class KanjiListProvider extends Notifier<KanjiListData> {
   ) async {
     try {
       final downloadKanji = DownloadKanji();
-      queuDownloadKanjis.add(downloadKanji);
+      _queueDownloadKanjis.add(downloadKanji);
 
       updateKanjiStatusOnVisibleSectionList(
         updateStatusKanji(
@@ -188,7 +188,7 @@ class KanjiListProvider extends Notifier<KanjiListData> {
         selection,
       );
 
-      queuDownloadKanjis.remove(downloadKanji);
+      _queueDownloadKanjis.remove(downloadKanji);
 
       if (kanjiFromApiStored == null) return;
 
@@ -220,13 +220,13 @@ class KanjiListProvider extends Notifier<KanjiListData> {
       logger.e('Error storing');
       logger.e(e.toString());
     } finally {
-      queuDownloadKanjis.removeWhere((element) =>
+      _queueDownloadKanjis.removeWhere((element) =>
           element.kanjiCharacter == kanjiFromApiOnline.kanjiCharacter);
     }
   }
 
   bool isInTheDownloadQueue(KanjiFromApi kanji) {
-    final copyKanjiList = [...queuDownloadKanjis];
+    final copyKanjiList = [..._queueDownloadKanjis];
 
     final kanjiIndex = copyKanjiList.indexWhere((element) {
       return element.kanjiCharacter == kanji.kanjiCharacter;
@@ -289,6 +289,24 @@ class KanjiListProvider extends Notifier<KanjiListData> {
     );
   }
 
+  void updateKanjiStatusOnVisibleSectionListFromOthers(
+    KanjiFromApi kanji,
+  ) {
+    final copyState = [...state.kanjiList];
+
+    final kanjiIndex = copyState.indexWhere(
+        (element) => element.kanjiCharacter == kanji.kanjiCharacter);
+    if (kanjiIndex == -1) return;
+    copyState[kanjiIndex] = kanji;
+    state = KanjiListData(
+      kanjiList: copyState,
+      status: state.status,
+      section: state.section,
+      errorDownload: state.errorDownload,
+      errorDeleting: state.errorDeleting,
+    );
+  }
+
   void updateOnlineKanji(KanjiFromApi storedKanji) {
     final copyState = [...state.kanjiList];
 
@@ -312,7 +330,7 @@ class KanjiListProvider extends Notifier<KanjiListData> {
     KanjiFromApi? kanjiFromApiOnline;
     try {
       final deleteKanji = DeleteKanji();
-      queuDeleteKanjis.add(deleteKanji);
+      _queueDeleteKanjis.add(deleteKanji);
 
       updateKanjiStatusOnVisibleSectionList(
         updateStatusKanji(
@@ -329,7 +347,7 @@ class KanjiListProvider extends Notifier<KanjiListData> {
       await deleteKanji.deleteKanjiFromLocalDatabase(
           kanjiFromApiStored, selection);
 
-      queuDeleteKanjis.remove(deleteKanji);
+      _queueDeleteKanjis.remove(deleteKanji);
 
       ref.read(storedKanjisProvider.notifier).deleteItem(kanjiFromApiStored);
 
@@ -388,7 +406,7 @@ class KanjiListProvider extends Notifier<KanjiListData> {
       logger.e('error deleting');
       logger.e(e.toString());
     } finally {
-      queuDeleteKanjis.removeWhere((element) =>
+      _queueDeleteKanjis.removeWhere((element) =>
           element.kanjiCharacter == kanjiFromApiStored.kanjiCharacter);
     }
   }
