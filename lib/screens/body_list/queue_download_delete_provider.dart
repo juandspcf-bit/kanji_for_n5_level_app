@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kanji_for_n5_level_app/main.dart';
 import 'package:kanji_for_n5_level_app/models/kanji_from_api.dart';
@@ -97,14 +99,30 @@ class QueueDownloadDeleteProvider extends Notifier<QueueData> {
         selection,
       );
 
+      if (kanjiFromApiStored == null) return;
+      logger.i(kanjiFromApiStored);
+      logger.d('success storing to db');
+      ref.read(storedKanjisProvider.notifier).addItem(kanjiFromApiStored);
+
+      ref
+          .read(favoriteskanjisProvider.notifier)
+          .updateKanjiStatusOnVisibleFavoritesList(kanjiFromApiStored);
+      ref
+          .read(kanjiListProvider.notifier)
+          .updateKanjiStatusOnVisibleSectionListFromOthers(
+            updateStatusKanji(
+              StatusStorage.proccessingStoring,
+              false,
+              kanjiFromApiStored,
+            ),
+          );
+
 /*      _queueDownloadKanjis.remove(downloadKanji);
 
       if (kanjiFromApiStored == null) return;
 
       updateProviders(kanjiFromApiStored, selection); 
-
-      logger.i(kanjiFromApiStored);*/
-      logger.d('success storing to db');
+*/
     } on TimeoutException {
 /*       updateKanjiStatusOnVisibleSectionList(
         kanjiFromApiOnline,
@@ -129,8 +147,7 @@ class QueueDownloadDeleteProvider extends Notifier<QueueData> {
       logger.e('Error storing');
       logger.e(e.toString());
     } finally {
-/*       _queueDownloadKanjis.removeWhere((element) =>
-          element.kanjiCharacter == kanjiFromApiOnline.kanjiCharacter); */
+      removeDownload(kanjiFromApiOnline.kanjiCharacter);
     }
   }
 
@@ -161,6 +178,10 @@ class QueueDownloadDeleteProvider extends Notifier<QueueData> {
     );
   }
 }
+
+final queueDownloadDeleteProvider =
+    NotifierProvider<QueueDownloadDeleteProvider, QueueData>(
+        QueueDownloadDeleteProvider.new);
 
 class QueueData {
   final List<DownloadKanji> downloadKankiQueue;

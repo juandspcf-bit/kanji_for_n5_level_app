@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kanji_for_n5_level_app/models/kanji_from_api.dart';
 import 'package:kanji_for_n5_level_app/models/secction_model.dart';
 import 'package:kanji_for_n5_level_app/screens/body_list/kanjis_list_provider.dart';
+import 'package:kanji_for_n5_level_app/screens/body_list/queue_download_delete_provider.dart';
 import 'package:kanji_for_n5_level_app/screens/navigation_bar_screens/favorite_screen/favorites_kanjis_provider.dart';
 import 'package:kanji_for_n5_level_app/screens/main_screens/main_content_provider.dart';
 import 'package:kanji_for_n5_level_app/providers/status_connection_provider.dart';
@@ -88,7 +89,7 @@ class TrailingTile extends ConsumerWidget {
 
           if (dataMainScreen.selection == ScreenSelection.kanjiSections) {
             ref
-                .read(kanjiListProvider.notifier)
+                .read(queueDownloadDeleteProvider.notifier)
                 .insertKanjiToStorage(kanjiFromApi, dataMainScreen.selection);
           } else {
             ref
