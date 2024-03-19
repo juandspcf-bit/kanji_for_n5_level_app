@@ -46,14 +46,11 @@ class MainScreenProvider extends Notifier<MainScreenData> {
         selection: state.selection, avatarLink: link, fullName: state.fullName);
   }
 
-  void selectPage(int index, BuildContext context,
-      void Function(BuildContext context) scaleDialog) {
-    if (index != 1 &&
-        ref.read(favoriteskanjisProvider.notifier).isAnyProcessingData()) {
-      scaleDialog(context);
-      return;
-    }
-
+  void selectPage(
+    int index,
+    BuildContext context,
+    void Function(BuildContext context) scaleDialog,
+  ) {
     if (index == 0) {
       ref
           .read(mainScreenProvider.notifier)
