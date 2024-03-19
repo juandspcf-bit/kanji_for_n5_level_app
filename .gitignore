@@ -45,3 +45,6 @@ app.*.map.json
 
 #API related
 lib/API_Files/key_file_api.dart
+
+#db related
+data.db

@@ -42,7 +42,8 @@ Future<KanjiFromApi?> storeKanjiToSqlDB(
 }
 
 Future<KanjiFromApi> downloadKanjiDataFromApiComputeVersion(
-    ParametersCompute parametersCompute) async {
+  ParametersCompute parametersCompute,
+) async {
   final examplesMap = await downloadExampleData(parametersCompute);
   final strokesPaths = await downloadStrokesData(parametersCompute);
 
@@ -208,8 +209,39 @@ Future<Map<String, String>> downloadKanjidata(
 }
 
 Future<int> insertPathsInDB(KanjiFromApi kanjifromApi, String uuid) async {
+  final kanjiMap = {
+    'kanjiCharacter': kanjifromApi.kanjiCharacter,
+    'englishMeaning': kanjifromApi.englishMeaning,
+    'kanjiImageLink': kanjifromApi.kanjiImageLink,
+    'katakanaMeaning': kanjifromApi.katakanaMeaning,
+    'hiraganaMeaning': kanjifromApi.hiraganaMeaning,
+    'videoLink': kanjifromApi.videoLink,
+    'section': kanjifromApi.section,
+    'uuid': uuid,
+  };
+  final dbKanjiFromApi = await kanjiFromApiDatabase;
+  int id = await dbKanjiFromApi.insert("kanji_FromApi", kanjiMap);
+
+  FutureGroup<int> groupStrokesDb = FutureGroup<int>();
+  final strokes = kanjifromApi.strokes.images.map((e) {
+    return {
+      'strokeImageLink': e,
+      'kanjiCharacter': kanjifromApi.kanjiCharacter,
+      'uuid': uuid,
+      'kanji_id': id,
+    };
+  });
+  final dbStrokes = await kanjiFromApiDatabase;
+  for (var strokesMap in strokes) {
+    groupStrokesDb.add(dbStrokes.insert('strokes', strokesMap));
+  }
+
+  groupStrokesDb.close();
+
+  await groupStrokesDb.future;
+
   final exampleMaps = kanjifromApi.example.map((e) {
-    Map<String, String> mapAudios = {};
+    Map<String, Object> mapAudios = {};
     mapAudios['opus'] = e.audio.opus;
     mapAudios['aac'] = e.audio.aac;
     mapAudios['ogg'] = e.audio.ogg;
@@ -218,6 +250,7 @@ Future<int> insertPathsInDB(KanjiFromApi kanjifromApi, String uuid) async {
     mapAudios['meaning'] = e.meaning.english;
     mapAudios['kanjiCharacter'] = kanjifromApi.kanjiCharacter;
     mapAudios['uuid'] = uuid;
+    mapAudios['kanji_id'] = id;
     return mapAudios;
   });
 
@@ -231,33 +264,5 @@ Future<int> insertPathsInDB(KanjiFromApi kanjifromApi, String uuid) async {
 
   await groupExamplesDb.future;
 
-  FutureGroup<int> groupStrokesDb = FutureGroup<int>();
-  final strokes = kanjifromApi.strokes.images.map((e) {
-    return {
-      'strokeImageLink': e,
-      'kanjiCharacter': kanjifromApi.kanjiCharacter,
-      'uuid': uuid,
-    };
-  });
-  final dbStrokes = await kanjiFromApiDatabase;
-  for (var strokesMap in strokes) {
-    groupStrokesDb.add(dbStrokes.insert('strokes', strokesMap));
-  }
-
-  groupStrokesDb.close();
-
-  await groupStrokesDb.future;
-
-  final kanjiMap = {
-    'kanjiCharacter': kanjifromApi.kanjiCharacter,
-    'englishMeaning': kanjifromApi.englishMeaning,
-    'kanjiImageLink': kanjifromApi.kanjiImageLink,
-    'katakanaMeaning': kanjifromApi.katakanaMeaning,
-    'hiraganaMeaning': kanjifromApi.hiraganaMeaning,
-    'videoLink': kanjifromApi.videoLink,
-    'section': kanjifromApi.section,
-    'uuid': uuid,
-  };
-  final dbKanjiFromApi = await kanjiFromApiDatabase;
-  return await dbKanjiFromApi.insert("kanji_FromApi", kanjiMap);
+  return id;
 }

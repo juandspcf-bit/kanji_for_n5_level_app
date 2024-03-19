@@ -1,0 +1,1 @@
+adb -s emulator-5554 -d shell "run-as com.example.kanji_for_n5_level_app cat /data/data/com.example.kanji_for_n5_level_app/databases/downloadkanjis.db" > data.db
