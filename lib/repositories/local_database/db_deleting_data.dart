@@ -31,12 +31,6 @@ Future<void> deleteKanjiFromSqlDB(
   await db.rawDelete(
       'DELETE FROM kanji_FromApi WHERE kanjiCharacter = ? AND uuid = ?',
       [kanjiFromApi.kanjiCharacter, uuid]);
-  await db.rawDelete(
-      'DELETE FROM examples WHERE kanjiCharacter = ? AND uuid = ?',
-      [kanjiFromApi.kanjiCharacter, uuid]);
-  await db.rawDelete(
-      'DELETE FROM strokes WHERE kanjiCharacter = ? AND uuid = ?',
-      [kanjiFromApi.kanjiCharacter, uuid]);
 }
 
 class ParametersDelete {

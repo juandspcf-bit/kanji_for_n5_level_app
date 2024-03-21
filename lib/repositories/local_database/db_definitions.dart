@@ -2,10 +2,15 @@ import 'package:path/path.dart' as path;
 import 'package:sqflite/sqflite.dart';
 import 'package:sqflite/sqflite.dart' as sql;
 
+Future _onConfigure(Database db) async {
+  await db.execute('PRAGMA foreign_keys = ON');
+}
+
 Future<Database> get kanjiFromApiDatabase async {
   final dbPath = await sql.getDatabasesPath();
   final db = await sql.openDatabase(
     path.join(dbPath, "downloadkanjis.db"),
+    onConfigure: _onConfigure,
     onCreate: (db, version) async {
       await db.execute(
         'CREATE TABLE firts_logging_status('
