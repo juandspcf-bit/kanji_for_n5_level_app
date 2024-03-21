@@ -106,6 +106,8 @@ class KanjiListProvider extends Notifier<KanjiListData> {
       {required List<String> kanjisCharacters,
       required int sectionNumber}) async {
     try {
+      clearKanjiList(sectionNumber);
+
       List<KanjiFromApi> kanjiList = await ref
           .read(kanjiListProvider.notifier)
           .getKanjiListFromRepositories(

@@ -15,4 +15,14 @@ class AppAplicationApiService implements KanjiApiService {
       section,
     );
   }
+
+  @override
+  Future<KanjiFromApi> requestSingleKanjiToApi(
+    String kanjiCharacter,
+    int section,
+  ) async {
+    final kanjiList =
+        await KanjiAliveApi.getKanjiList([], [kanjiCharacter], section);
+    return kanjiList[0];
+  }
 }

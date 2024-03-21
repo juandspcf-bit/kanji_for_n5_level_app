@@ -2,9 +2,9 @@ import 'dart:io';
 
 import 'package:async/async.dart';
 import 'package:flutter/foundation.dart';
+import 'package:kanji_for_n5_level_app/main.dart';
 import 'package:kanji_for_n5_level_app/repositories/local_database/db_definitions.dart';
 import 'package:kanji_for_n5_level_app/models/kanji_from_api.dart';
-import 'package:kanji_for_n5_level_app/repositories/apis/kanji_alive/request_kanji_list_api.dart';
 import 'package:kanji_for_n5_level_app/providers/status_stored_provider.dart';
 
 Future<void> deleteKanjiFromSqlDB(
@@ -132,9 +132,8 @@ Future<void> deleteKanjiFromApiComputeVersion(
 
 Future<KanjiFromApi> updateKanjiWithOnliVersion(
     KanjiFromApi kanjiFromApi) async {
-  final kanjiList = await KanjiAliveApi.getKanjiList(
-      [], [kanjiFromApi.kanjiCharacter], kanjiFromApi.section);
-  return kanjiList[0];
+  return await applicationApiService.requestSingleKanjiToApi(
+      kanjiFromApi.kanjiCharacter, kanjiFromApi.section);
 }
 
 KanjiFromApi updateStatusKanjiComputeVersion(
@@ -161,10 +160,6 @@ Future<void> cleanInvalidRecords(List<KanjiFromApi> listOfInvalidKanjis) async {
 
   for (var kanjiFromApi in listOfInvalidKanjis) {
     await db.rawDelete('DELETE FROM kanji_FromApi WHERE kanjiCharacter = ?',
-        [kanjiFromApi.kanjiCharacter]);
-    await db.rawDelete('DELETE FROM examples WHERE kanjiCharacter = ?',
-        [kanjiFromApi.kanjiCharacter]);
-    await db.rawDelete('DELETE FROM strokes WHERE kanjiCharacter = ?',
         [kanjiFromApi.kanjiCharacter]);
   }
 }

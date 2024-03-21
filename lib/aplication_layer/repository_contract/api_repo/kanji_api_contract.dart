@@ -6,4 +6,9 @@ abstract class KanjiApiService {
     List<String> kanjisCharacteres,
     int section,
   );
+
+  Future<KanjiFromApi> requestSingleKanjiToApi(
+    String kanjisCharacteres,
+    int section,
+  );
 }
