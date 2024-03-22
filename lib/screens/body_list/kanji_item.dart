@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kanji_for_n5_level_app/main.dart';
 import 'package:kanji_for_n5_level_app/models/kanji_from_api.dart';
-import 'package:kanji_for_n5_level_app/providers/examples_audios_provider.dart';
+import 'package:kanji_for_n5_level_app/providers/examples_audios_track_list_provider.dart';
 import 'package:kanji_for_n5_level_app/screens/kanji_details/custom_navigation_rails_details/custom_navigation_rails_details_provider.dart';
 import 'package:kanji_for_n5_level_app/screens/navigation_bar_screens/favorite_screen/favorites_kanjis_provider.dart';
 import 'package:kanji_for_n5_level_app/providers/image_meaning_kanji_provider.dart';
@@ -44,8 +44,8 @@ class _KanjiItemState extends ConsumerState<KanjiItem> {
     final favoriteStatus = queryKanji;
     ref.read(kanjiDetailsProvider.notifier).setInitValues(
         kanjiFromApi, kanjiFromApi.statusStorage, favoriteStatus);
-    ref.read(examplesAudiosProvider).assetsAudioPlayer.stop();
-    ref.read(examplesAudiosProvider.notifier).setIsPlaying(false);
+    ref.read(examplesAudiosTrackListProvider).assetsAudioPlayer.stop();
+    ref.read(examplesAudiosTrackListProvider.notifier).setIsPlaying(false);
 
     ref.read(imageMeaningKanjiProvider.notifier).clearState();
     ref

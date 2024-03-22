@@ -4,7 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kanji_for_n5_level_app/config_files/screen_config.dart';
 import 'package:kanji_for_n5_level_app/main.dart';
 import 'package:kanji_for_n5_level_app/models/kanji_from_api.dart';
-import 'package:kanji_for_n5_level_app/providers/examples_audios_provider.dart';
+import 'package:kanji_for_n5_level_app/providers/examples_audios_track_list_provider.dart';
 import 'package:kanji_for_n5_level_app/screens/kanji_details/custom_navigation_rails_details/custom_navigation_rails_details.dart';
 import 'package:kanji_for_n5_level_app/screens/kanji_details/quiz_details_screen/flash_card/flash_card_quiz_provider.dart';
 import 'package:kanji_for_n5_level_app/screens/kanji_details/kanji_details_provider.dart';
@@ -81,9 +81,12 @@ class KanjiDetails extends ConsumerWidget {
                     DefaultTabController.of(ctx);
                 tabController.addListener(() {
                   if (tabController.index != 3) {
-                    ref.read(examplesAudiosProvider).assetsAudioPlayer.stop();
                     ref
-                        .read(examplesAudiosProvider.notifier)
+                        .read(examplesAudiosTrackListProvider)
+                        .assetsAudioPlayer
+                        .stop();
+                    ref
+                        .read(examplesAudiosTrackListProvider.notifier)
                         .setIsPlaying(false);
                   }
                   if (!tabController.indexIsChanging) {
@@ -95,9 +98,12 @@ class KanjiDetails extends ConsumerWidget {
                 return PopScope(
                   onPopInvoked: (didPop) {
                     if (!didPop) return;
-                    ref.read(examplesAudiosProvider).assetsAudioPlayer.stop();
                     ref
-                        .read(examplesAudiosProvider.notifier)
+                        .read(examplesAudiosTrackListProvider)
+                        .assetsAudioPlayer
+                        .stop();
+                    ref
+                        .read(examplesAudiosTrackListProvider.notifier)
                         .setIsPlaying(false);
                     ScaffoldMessenger.of(context).clearSnackBars();
                   },
