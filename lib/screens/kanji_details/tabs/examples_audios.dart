@@ -78,6 +78,7 @@ class ExampleAudios extends ConsumerWidget {
                       ),
                       onPressed: () async {
                         await assetsAudioPlayer.stop();
+                        if (data.isPlaying) return;
                         if (data.track == index && data.isPlaying) return;
                         try {
                           if (statusStorage == StatusStorage.onlyOnline) {
