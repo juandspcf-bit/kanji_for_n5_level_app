@@ -111,16 +111,20 @@ class MainScreenProvider extends Notifier<MainScreenData> {
       logger.e('error loading favorites $e');
     }
 
-    ref.read(favoriteskanjisProvider.notifier).setInitialFavoritesOnline(
-        listOfValidStoredKanjis, favoritesKanjis, 10);
+    ref
+        .read(favoriteskanjisProvider.notifier)
+        .setInitialFavoritesWithInternetConnection(
+            listOfValidStoredKanjis, favoritesKanjis, 10);
   }
 
   Future<void> getOfflineData() async {
     List<KanjiFromApi> listOfValidStoredKanjis = await loadStoredKanjis();
     final favoritesKanjis =
         await localDBService.loadFavoritesDatabase(authService.user ?? '');
-    ref.read(favoriteskanjisProvider.notifier).setInitialFavoritesOffline(
-        listOfValidStoredKanjis, favoritesKanjis, 10);
+    ref
+        .read(favoriteskanjisProvider.notifier)
+        .setInitialFavoritesWithNoInternetConnection(
+            listOfValidStoredKanjis, favoritesKanjis, 10);
   }
 
   Future<List<KanjiFromApi>> loadStoredKanjis() async {
