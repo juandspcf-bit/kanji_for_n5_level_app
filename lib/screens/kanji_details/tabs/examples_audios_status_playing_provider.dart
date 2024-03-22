@@ -11,6 +11,16 @@ class ExamplesAudiosStatusPlayingProvider
     state =
         ExamplesAudiosPlayingAudioData(isTappedForPlaying: isTappedForPlaying);
   }
+
+  void setTapedPlay(int index) {
+    final copyList = [...state.isTappedForPlaying];
+    copyList[index] = !copyList[index];
+    state = ExamplesAudiosPlayingAudioData(isTappedForPlaying: copyList);
+  }
+
+  bool getTapedPlay(int index) {
+    return state.isTappedForPlaying[index];
+  }
 }
 
 final examplesAudiosPlayingAudioProvider = NotifierProvider<

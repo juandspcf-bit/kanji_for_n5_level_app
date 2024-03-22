@@ -1,9 +1,11 @@
 import 'package:assets_audio_player/assets_audio_player.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:kanji_for_n5_level_app/main.dart';
 import 'package:kanji_for_n5_level_app/models/kanji_from_api.dart';
 import 'package:kanji_for_n5_level_app/providers/examples_audios_track_list_provider.dart';
 import 'package:kanji_for_n5_level_app/providers/status_stored_provider.dart';
+import 'package:kanji_for_n5_level_app/screens/kanji_details/tabs/examples_audios_status_playing_provider.dart';
 
 class ExampleAudios extends ConsumerWidget {
   const ExampleAudios({
@@ -18,7 +20,6 @@ class ExampleAudios extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final data = ref.watch(examplesAudiosTrackListProvider);
-
     return Column(
       children: [
         PlayListButton(
@@ -80,15 +81,28 @@ class ExampleAudios extends ConsumerWidget {
                         await assetsAudioPlayer.stop();
                         if (data.isPlaying) return;
                         if (data.track == index && data.isPlaying) return;
+                        ref
+                            .read(examplesAudiosPlayingAudioProvider.notifier)
+                            .setTapedPlay(index);
                         try {
                           if (statusStorage == StatusStorage.onlyOnline) {
-                            await assetsAudioPlayer.open(
-                              Audio.network(examples[index].audio.mp3),
-                            );
+                            await assetsAudioPlayer
+                                .open(
+                                  Audio.network(examples[index].audio.mp3),
+                                )
+                                .whenComplete(() => ref
+                                    .read(examplesAudiosPlayingAudioProvider
+                                        .notifier)
+                                    .setTapedPlay(index));
                           } else if (statusStorage == StatusStorage.stored) {
-                            await assetsAudioPlayer.open(
-                              Audio.file(examples[index].audio.mp3),
-                            );
+                            await assetsAudioPlayer
+                                .open(
+                                  Audio.file(examples[index].audio.mp3),
+                                )
+                                .whenComplete(() => ref
+                                    .read(examplesAudiosPlayingAudioProvider
+                                        .notifier)
+                                    .setTapedPlay(index));
                           }
                         } catch (t) {
                           //mp3 unreachable
@@ -112,6 +126,7 @@ class ExampleAudios extends ConsumerWidget {
                                   );
                                 }
                                 final bool isPlaying = asyncSnapshot.data!;
+
                                 return Icon(
                                   isPlaying
                                       ? Icons.music_note
