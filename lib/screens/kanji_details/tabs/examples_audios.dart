@@ -106,7 +106,6 @@ class ExampleAudios extends ConsumerWidget {
                       onPressed: () async {
                         await assetsAudioPlayer.stop();
                         if (data.track == index && data.isPlaying) return;
-                        logger.d('audio link ${examples[index].audio.mp3}');
                         try {
                           if (statusStorage == StatusStorage.onlyOnline) {
                             await assetsAudioPlayer.open(
@@ -130,14 +129,6 @@ class ExampleAudios extends ConsumerWidget {
                           : StreamBuilder(
                               stream: assetsAudioPlayer.isPlaying,
                               builder: (context, asyncSnapshot) {
-                                if (asyncSnapshot.data == null) {
-                                  return Icon(
-                                    Icons.play_arrow_rounded,
-                                    size: 30,
-                                    color:
-                                        Theme.of(context).colorScheme.onPrimary,
-                                  );
-                                }
                                 final bool isPlaying = asyncSnapshot.data!;
                                 return Icon(
                                   isPlaying
