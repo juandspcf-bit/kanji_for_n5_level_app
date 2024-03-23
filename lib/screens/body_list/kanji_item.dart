@@ -53,8 +53,9 @@ class _KanjiItemState extends ConsumerState<KanjiItem> {
         .read(imageMeaningKanjiProvider.notifier)
         .fetchData(kanjiFromApi.kanjiCharacter);
 
-    ref.read(examplesAudiosPlayingAudioProvider.notifier).setInitList(
-        List.generate(kanjiFromApi.example.length, (index) => false));
+    ref
+        .read(examplesAudiosPlayingAudioProvider.notifier)
+        .setInitList(kanjiFromApi);
 
     Navigator.of(context).push(
       MaterialPageRoute(builder: (ctx) {
