@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:assets_audio_player/assets_audio_player.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kanji_for_n5_level_app/main.dart';
@@ -46,7 +48,16 @@ class ExamplesAudiosStatusPlayingProvider
               );
             },
           );
+        } on TimeoutException {
+          copyAudioPlayers[index].stop();
+          resetTapStatus(
+            copyIsTappedForPlaying,
+            index,
+            copyAudioPlayers,
+          );
+          logger.e('time delay'); // Prints "throws" after 2 seconds.
         } catch (e) {
+          copyAudioPlayers[index].stop();
           resetTapStatus(
             copyIsTappedForPlaying,
             index,
@@ -69,6 +80,7 @@ class ExamplesAudiosStatusPlayingProvider
             },
           );
         } catch (e) {
+          copyAudioPlayers[index].stop();
           resetTapStatus(
             copyIsTappedForPlaying,
             index,

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:kanji_for_n5_level_app/aplication_layer/auth_contract/auth_service_contract.dart';
 import 'package:kanji_for_n5_level_app/aplication_layer/auth_firebase_impl/auth_service_firebase.dart';
 import 'package:kanji_for_n5_level_app/aplication_layer/repository_contract/cloud_repo/cloud_db_contract.dart';
@@ -38,6 +39,8 @@ var kDarkColorScheme = ColorScheme.fromSeed(
   seedColor: const Color(0xFF006687),
 );
 
+final darkTheme = ThemeData.dark();
+
 void main() async {
   WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
   FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
@@ -62,8 +65,9 @@ class MyApp extends ConsumerWidget {
     return MaterialApp(
       title: 'Flutter Demo',
       debugShowCheckedModeBanner: false,
-      darkTheme: ThemeData.dark().copyWith(
+      darkTheme: darkTheme.copyWith(
         colorScheme: kDarkColorScheme,
+        textTheme: GoogleFonts.latoTextTheme(darkTheme.textTheme),
         elevatedButtonTheme: ElevatedButtonThemeData(
           style: ElevatedButton.styleFrom(
             backgroundColor: kDarkColorScheme.primary,
