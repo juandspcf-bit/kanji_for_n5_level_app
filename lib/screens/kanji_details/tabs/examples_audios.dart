@@ -178,7 +178,7 @@ class ExampleAudios extends ConsumerWidget {
                               ref
                                   .read(examplesAudiosPlayingAudioProvider
                                       .notifier)
-                                  .setTapedPlay(index);
+                                  .setTapedPlay(index, statusStorage);
                             },
                             child: data.track == index && data.isPlaying
                                 ? Icon(

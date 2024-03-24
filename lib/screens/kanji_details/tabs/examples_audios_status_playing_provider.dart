@@ -1,6 +1,8 @@
 import 'package:assets_audio_player/assets_audio_player.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:kanji_for_n5_level_app/main.dart';
 import 'package:kanji_for_n5_level_app/models/kanji_from_api.dart';
+import 'package:kanji_for_n5_level_app/providers/status_stored_provider.dart';
 
 class ExamplesAudiosStatusPlayingProvider
     extends Notifier<ExamplesAudiosPlayingAudioData> {
@@ -23,22 +25,46 @@ class ExamplesAudiosStatusPlayingProvider
         paths: paths);
   }
 
-  void setTapedPlay(int index) {
+  void setTapedPlay(int index, StatusStorage statusStorage) {
     final copyIsTappedForPlaying = [...state.isTappedForPlaying];
     copyIsTappedForPlaying[index] = !copyIsTappedForPlaying[index];
 
     final copyAudioPlayers = [...state.audioPlayers];
 
     if (copyIsTappedForPlaying[index]) {
-      copyAudioPlayers[index]
-          .open(Audio.network(state.paths[index]))
-          .whenComplete(() {
-        copyIsTappedForPlaying[index] = !copyIsTappedForPlaying[index];
-        state = ExamplesAudiosPlayingAudioData(
-            isTappedForPlaying: copyIsTappedForPlaying,
-            audioPlayers: copyAudioPlayers,
-            paths: state.paths);
-      });
+      if (statusStorage == StatusStorage.onlyOnline) {
+        try {
+          copyAudioPlayers[index]
+              .open(Audio.network(state.paths[index]))
+              .whenComplete(
+            () {
+              copyIsTappedForPlaying[index] = !copyIsTappedForPlaying[index];
+              state = ExamplesAudiosPlayingAudioData(
+                  isTappedForPlaying: copyIsTappedForPlaying,
+                  audioPlayers: copyAudioPlayers,
+                  paths: state.paths);
+            },
+          );
+        } catch (e) {
+          logger.e(e);
+        }
+      } else {
+        try {
+          copyAudioPlayers[index]
+              .open(Audio.file(state.paths[index]))
+              .whenComplete(
+            () {
+              copyIsTappedForPlaying[index] = !copyIsTappedForPlaying[index];
+              state = ExamplesAudiosPlayingAudioData(
+                  isTappedForPlaying: copyIsTappedForPlaying,
+                  audioPlayers: copyAudioPlayers,
+                  paths: state.paths);
+            },
+          );
+        } catch (e) {
+          logger.e(e);
+        }
+      }
     }
     state = ExamplesAudiosPlayingAudioData(
         isTappedForPlaying: copyIsTappedForPlaying,
