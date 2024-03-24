@@ -32,14 +32,16 @@ class ExamplesAudiosStatusPlayingProvider
     if (copyIsTappedForPlaying[index]) {
       return;
     }
-    copyIsTappedForPlaying[index] = true;
 
-    final copyAudioPlayers = [...state.audioPlayers];
-
-    if (copyIsTappedForPlaying[index]) {
-      if (statusStorage == StatusStorage.onlyOnline) {
-        try {
-          copyAudioPlayers[index]
+    if (!state.audioPlayers[index].isPlaying.value) {
+      copyIsTappedForPlaying[index] = true;
+      state = ExamplesAudiosPlayingAudioData(
+          isTappedForPlaying: copyIsTappedForPlaying,
+          audioPlayers: state.audioPlayers,
+          paths: state.paths);
+      try {
+        if (statusStorage == StatusStorage.onlyOnline) {
+          state.audioPlayers[index]
               .open(Audio.network(state.paths[index]))
               .timeout(const Duration(seconds: 10))
               .whenComplete(
@@ -47,33 +49,13 @@ class ExamplesAudiosStatusPlayingProvider
               copyIsTappedForPlaying[index] = false;
               state = ExamplesAudiosPlayingAudioData(
                 isTappedForPlaying: copyIsTappedForPlaying,
-                audioPlayers: copyAudioPlayers,
+                audioPlayers: state.audioPlayers,
                 paths: state.paths,
               );
             },
           );
-        } on TimeoutException {
-          copyIsTappedForPlaying[index] = false;
-          copyAudioPlayers[index].stop();
-          state = ExamplesAudiosPlayingAudioData(
-            isTappedForPlaying: copyIsTappedForPlaying,
-            audioPlayers: copyAudioPlayers,
-            paths: state.paths,
-          );
-          logger.e('time delay'); // Prints "throws" after 2 seconds.
-        } catch (e) {
-          copyIsTappedForPlaying[index] = false;
-          copyAudioPlayers[index].stop();
-          state = ExamplesAudiosPlayingAudioData(
-            isTappedForPlaying: copyIsTappedForPlaying,
-            audioPlayers: copyAudioPlayers,
-            paths: state.paths,
-          );
-          logger.e(e);
-        }
-      } else {
-        try {
-          copyAudioPlayers[index]
+        } else {
+          state.audioPlayers[index]
               .open(Audio.file(state.paths[index]))
               .timeout(const Duration(seconds: 10))
               .whenComplete(
@@ -81,32 +63,36 @@ class ExamplesAudiosStatusPlayingProvider
               copyIsTappedForPlaying[index] = false;
               state = ExamplesAudiosPlayingAudioData(
                 isTappedForPlaying: copyIsTappedForPlaying,
-                audioPlayers: copyAudioPlayers,
+                audioPlayers: state.audioPlayers,
                 paths: state.paths,
               );
             },
           );
-        } catch (e) {
-          copyAudioPlayers[index].stop();
-          copyIsTappedForPlaying[index] = false;
-          state = ExamplesAudiosPlayingAudioData(
-            isTappedForPlaying: copyIsTappedForPlaying,
-            audioPlayers: copyAudioPlayers,
-            paths: state.paths,
-          );
-          logger.e(e);
         }
+      } on TimeoutException {
+        copyIsTappedForPlaying[index] = false;
+        state.audioPlayers[index].stop();
+        state = ExamplesAudiosPlayingAudioData(
+          isTappedForPlaying: copyIsTappedForPlaying,
+          audioPlayers: state.audioPlayers,
+          paths: state.paths,
+        );
+        logger.e('time delay'); // Prints "throws" after 2 seconds.
+      } catch (e) {
+        copyIsTappedForPlaying[index] = false;
+        state.audioPlayers[index].stop();
+        state = ExamplesAudiosPlayingAudioData(
+          isTappedForPlaying: copyIsTappedForPlaying,
+          audioPlayers: state.audioPlayers,
+          paths: state.paths,
+        );
+        logger.e(e);
       }
     }
-    state = ExamplesAudiosPlayingAudioData(
-        isTappedForPlaying: copyIsTappedForPlaying,
-        audioPlayers: copyAudioPlayers,
-        paths: state.paths);
   }
 
   void resetTapStatus(
     List<bool> copyIsTappedForPlaying,
-    int index,
     List<AssetsAudioPlayer> copyAudioPlayers,
   ) {
     state = ExamplesAudiosPlayingAudioData(
