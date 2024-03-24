@@ -90,21 +90,6 @@ class ExamplesAudiosStatusPlayingProvider
       }
     }
   }
-
-  void resetTapStatus(
-    List<bool> copyIsTappedForPlaying,
-    List<AssetsAudioPlayer> copyAudioPlayers,
-  ) {
-    state = ExamplesAudiosPlayingAudioData(
-      isTappedForPlaying: copyIsTappedForPlaying,
-      audioPlayers: copyAudioPlayers,
-      paths: state.paths,
-    );
-  }
-
-  bool getTapedPlay(int index) {
-    return state.isTappedForPlaying[index];
-  }
 }
 
 final examplesAudiosPlayingAudioProvider = NotifierProvider<
