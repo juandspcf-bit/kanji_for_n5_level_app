@@ -36,32 +36,44 @@ class ExamplesAudiosStatusPlayingProvider
         try {
           copyAudioPlayers[index]
               .open(Audio.network(state.paths[index]))
+              .timeout(const Duration(seconds: 10))
               .whenComplete(
             () {
-              copyIsTappedForPlaying[index] = !copyIsTappedForPlaying[index];
-              state = ExamplesAudiosPlayingAudioData(
-                  isTappedForPlaying: copyIsTappedForPlaying,
-                  audioPlayers: copyAudioPlayers,
-                  paths: state.paths);
+              resetTapStatus(
+                copyIsTappedForPlaying,
+                index,
+                copyAudioPlayers,
+              );
             },
           );
         } catch (e) {
+          resetTapStatus(
+            copyIsTappedForPlaying,
+            index,
+            copyAudioPlayers,
+          );
           logger.e(e);
         }
       } else {
         try {
           copyAudioPlayers[index]
               .open(Audio.file(state.paths[index]))
+              .timeout(const Duration(seconds: 10))
               .whenComplete(
             () {
-              copyIsTappedForPlaying[index] = !copyIsTappedForPlaying[index];
-              state = ExamplesAudiosPlayingAudioData(
-                  isTappedForPlaying: copyIsTappedForPlaying,
-                  audioPlayers: copyAudioPlayers,
-                  paths: state.paths);
+              resetTapStatus(
+                copyIsTappedForPlaying,
+                index,
+                copyAudioPlayers,
+              );
             },
           );
         } catch (e) {
+          resetTapStatus(
+            copyIsTappedForPlaying,
+            index,
+            copyAudioPlayers,
+          );
           logger.e(e);
         }
       }
@@ -70,6 +82,19 @@ class ExamplesAudiosStatusPlayingProvider
         isTappedForPlaying: copyIsTappedForPlaying,
         audioPlayers: copyAudioPlayers,
         paths: state.paths);
+  }
+
+  void resetTapStatus(
+    List<bool> copyIsTappedForPlaying,
+    int index,
+    List<AssetsAudioPlayer> copyAudioPlayers,
+  ) {
+    copyIsTappedForPlaying[index] = false;
+    state = ExamplesAudiosPlayingAudioData(
+      isTappedForPlaying: copyIsTappedForPlaying,
+      audioPlayers: copyAudioPlayers,
+      paths: state.paths,
+    );
   }
 
   bool getTapedPlay(int index) {
