@@ -34,10 +34,10 @@ class ColumnDragTargets extends ConsumerWidget {
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
               DragTarget<KanjiFromApi>(
-                onAccept: (data) {
+                onAcceptWithDetails: (data) {
                   ref
                       .read(quizDataValuesProvider.notifier)
-                      .onDraggedKanji(indexColumnTargets, data);
+                      .onDraggedKanji(indexColumnTargets, data.data);
                 },
                 builder: (ctx, _, __) {
                   if (isDragged &&

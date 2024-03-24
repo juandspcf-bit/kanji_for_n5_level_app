@@ -31,10 +31,10 @@ class CustomDragTarget extends ConsumerWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           DragTarget<KanjiFromApi>(
-            onAccept: (data) {
+            onAcceptWithDetails: (data) {
               ref
                   .read(quizDataValuesProvider.notifier)
-                  .onDraggedKanji(indexColumnTargets, data);
+                  .onDraggedKanji(indexColumnTargets, data.data);
             },
             builder: (ctx, _, __) {
               if (isDragged &&
