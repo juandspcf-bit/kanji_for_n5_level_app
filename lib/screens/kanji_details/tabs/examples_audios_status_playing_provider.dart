@@ -29,7 +29,10 @@ class ExamplesAudiosStatusPlayingProvider
 
   void setTapedPlay(int index, StatusStorage statusStorage) {
     final copyIsTappedForPlaying = [...state.isTappedForPlaying];
-    copyIsTappedForPlaying[index] = !copyIsTappedForPlaying[index];
+    if (copyIsTappedForPlaying[index]) {
+      return;
+    }
+    copyIsTappedForPlaying[index] = true;
 
     final copyAudioPlayers = [...state.audioPlayers];
 
@@ -41,27 +44,30 @@ class ExamplesAudiosStatusPlayingProvider
               .timeout(const Duration(seconds: 10))
               .whenComplete(
             () {
-              resetTapStatus(
-                copyIsTappedForPlaying,
-                index,
-                copyAudioPlayers,
+              copyIsTappedForPlaying[index] = false;
+              state = ExamplesAudiosPlayingAudioData(
+                isTappedForPlaying: copyIsTappedForPlaying,
+                audioPlayers: copyAudioPlayers,
+                paths: state.paths,
               );
             },
           );
         } on TimeoutException {
+          copyIsTappedForPlaying[index] = false;
           copyAudioPlayers[index].stop();
-          resetTapStatus(
-            copyIsTappedForPlaying,
-            index,
-            copyAudioPlayers,
+          state = ExamplesAudiosPlayingAudioData(
+            isTappedForPlaying: copyIsTappedForPlaying,
+            audioPlayers: copyAudioPlayers,
+            paths: state.paths,
           );
           logger.e('time delay'); // Prints "throws" after 2 seconds.
         } catch (e) {
+          copyIsTappedForPlaying[index] = false;
           copyAudioPlayers[index].stop();
-          resetTapStatus(
-            copyIsTappedForPlaying,
-            index,
-            copyAudioPlayers,
+          state = ExamplesAudiosPlayingAudioData(
+            isTappedForPlaying: copyIsTappedForPlaying,
+            audioPlayers: copyAudioPlayers,
+            paths: state.paths,
           );
           logger.e(e);
         }
@@ -72,19 +78,21 @@ class ExamplesAudiosStatusPlayingProvider
               .timeout(const Duration(seconds: 10))
               .whenComplete(
             () {
-              resetTapStatus(
-                copyIsTappedForPlaying,
-                index,
-                copyAudioPlayers,
+              copyIsTappedForPlaying[index] = false;
+              state = ExamplesAudiosPlayingAudioData(
+                isTappedForPlaying: copyIsTappedForPlaying,
+                audioPlayers: copyAudioPlayers,
+                paths: state.paths,
               );
             },
           );
         } catch (e) {
           copyAudioPlayers[index].stop();
-          resetTapStatus(
-            copyIsTappedForPlaying,
-            index,
-            copyAudioPlayers,
+          copyIsTappedForPlaying[index] = false;
+          state = ExamplesAudiosPlayingAudioData(
+            isTappedForPlaying: copyIsTappedForPlaying,
+            audioPlayers: copyAudioPlayers,
+            paths: state.paths,
           );
           logger.e(e);
         }
@@ -101,7 +109,6 @@ class ExamplesAudiosStatusPlayingProvider
     int index,
     List<AssetsAudioPlayer> copyAudioPlayers,
   ) {
-    copyIsTappedForPlaying[index] = false;
     state = ExamplesAudiosPlayingAudioData(
       isTappedForPlaying: copyIsTappedForPlaying,
       audioPlayers: copyAudioPlayers,
