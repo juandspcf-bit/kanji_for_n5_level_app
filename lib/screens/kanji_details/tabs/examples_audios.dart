@@ -8,7 +8,7 @@ import 'package:kanji_for_n5_level_app/providers/status_stored_provider.dart';
 import 'package:kanji_for_n5_level_app/screens/kanji_details/tabs/example_audio_widget.dart';
 import 'package:kanji_for_n5_level_app/screens/kanji_details/tabs/examples_audios_status_playing_provider.dart';
 
-class ExampleAudios extends ConsumerWidget {
+/* class ExampleAudios extends ConsumerWidget {
   const ExampleAudios({
     super.key,
     required this.examples,
@@ -110,7 +110,7 @@ class ExampleAudios extends ConsumerWidget {
       ],
     );
   }
-}
+} */
 
 /* class ExampleAudios extends ConsumerWidget {
   const ExampleAudios({
@@ -230,7 +230,7 @@ class ExampleAudios extends ConsumerWidget {
   }
 } */
 
-/* class ExampleAudios extends ConsumerWidget {
+class ExampleAudios extends ConsumerWidget {
   const ExampleAudios({
     super.key,
     required this.examples,
@@ -363,7 +363,7 @@ class ExampleAudios extends ConsumerWidget {
       ],
     );
   }
-} */
+}
 
 class SubTitleListTileExample extends StatelessWidget {
   const SubTitleListTileExample({

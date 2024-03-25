@@ -38,9 +38,14 @@ class _ExampleAudioState extends State<ExampleAudio> {
               child: InkWell(
                 splashColor: Colors.black38,
                 onTap: () async {
-                  player.open(Audio.network(widget.example.audio.mp3));
-
-                  isTaped = true;
+                  player
+                      .open(Audio.network(widget.example.audio.mp3))
+                      .whenComplete(() {
+                    isTaped = false;
+                  });
+                  setState(() {
+                    isTaped = true;
+                  });
                 },
                 child: widget.track == widget.index && widget.isPlaying
                     ? Icon(
@@ -69,17 +74,6 @@ class _ExampleAudioState extends State<ExampleAudio> {
                           }
                           final bool isPlaying = asyncSnapshot.data!;
 
-                          if (isTaped && isPlaying) {
-                            return Padding(
-                                padding: const EdgeInsets.all(13.0),
-                                child: Icon(
-                                  Icons.music_note,
-                                  size: 30,
-                                  color:
-                                      Theme.of(context).colorScheme.onPrimary,
-                                ));
-                          }
-
                           if (isTaped && !isPlaying) {
                             return Padding(
                               padding: const EdgeInsets.all(13.0),
@@ -90,7 +84,9 @@ class _ExampleAudioState extends State<ExampleAudio> {
                           }
 
                           return Icon(
-                            Icons.play_arrow_rounded,
+                            isPlaying
+                                ? Icons.music_note
+                                : Icons.play_arrow_rounded,
                             size: 30,
                             color: Theme.of(context).colorScheme.onPrimary,
                           );
