@@ -18,7 +18,7 @@ class ExamplesAudiosStatusPlayingProvider
     final isTappedForPlaying =
         List.generate(kanjiFromApi.example.length, (index) => false);
     final audioPlayers = List.generate(
-        kanjiFromApi.example.length, (index) => AssetsAudioPlayer());
+        kanjiFromApi.example.length, (index) => AssetsAudioPlayer.newPlayer());
     final paths = kanjiFromApi.example.map((e) => e.audio.mp3).toList();
 
     state = ExamplesAudiosPlayingAudioData(
@@ -30,6 +30,7 @@ class ExamplesAudiosStatusPlayingProvider
   void setTapedPlay(int index, StatusStorage statusStorage) {
     final copyIsTappedForPlaying = [...state.isTappedForPlaying];
     if (copyIsTappedForPlaying[index]) {
+      logger.d(copyIsTappedForPlaying[index]);
       return;
     }
 
@@ -41,6 +42,15 @@ class ExamplesAudiosStatusPlayingProvider
           paths: state.paths);
       try {
         if (statusStorage == StatusStorage.onlyOnline) {
+          final subs = state.audioPlayers[index].isPlaying
+              .asBroadcastStream()
+              .listen((event) {});
+          subs.onDone(() {
+            logger.e('done $index');
+          });
+          subs.onError((error) {
+            logger.e('error $index');
+          });
           state.audioPlayers[index]
               .open(Audio.network(state.paths[index]))
               .timeout(const Duration(seconds: 10))

@@ -1,10 +1,116 @@
 import 'package:assets_audio_player/assets_audio_player.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:kanji_for_n5_level_app/main.dart';
 import 'package:kanji_for_n5_level_app/models/kanji_from_api.dart';
 import 'package:kanji_for_n5_level_app/providers/examples_audios_track_list_provider.dart';
 import 'package:kanji_for_n5_level_app/providers/status_stored_provider.dart';
+import 'package:kanji_for_n5_level_app/screens/kanji_details/tabs/example_audio_widget.dart';
 import 'package:kanji_for_n5_level_app/screens/kanji_details/tabs/examples_audios_status_playing_provider.dart';
+
+class ExampleAudios extends ConsumerWidget {
+  const ExampleAudios({
+    super.key,
+    required this.examples,
+    required this.statusStorage,
+  });
+
+  final List<Example> examples;
+  final StatusStorage statusStorage;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final data = ref.watch(examplesAudiosTrackListProvider);
+
+    return Column(
+      children: [
+        PlayListButton(
+          examples: examples,
+          statusStorage: statusStorage,
+        ),
+        Expanded(
+          child: ListView(
+            children: [
+              for (int index = 0; index < examples.length; index++)
+                ListTile(
+                  selected: data.track == index && data.isPlaying,
+                  selectedColor: Colors.amberAccent,
+                  leading: Text(
+                    '${index + 1}._',
+                    style: Theme.of(context).textTheme.titleMedium,
+                  ),
+                  title: TitleListTileExample(
+                    data: data,
+                    examples: examples,
+                    index: index,
+                  ),
+                  subtitle: SubTitleListTileExample(
+                    data: data,
+                    examples: examples,
+                    index: index,
+                  ),
+                  trailing: Builder(builder: (context) {
+                    final assetsAudioPlayer = AssetsAudioPlayer();
+                    return IconButton(
+                      style: ButtonStyle(
+                        overlayColor: MaterialStateProperty.all(Colors.black26),
+                        backgroundColor: MaterialStateProperty.all(
+                            Theme.of(context).colorScheme.primary),
+                      ),
+                      onPressed: () async {
+                        await assetsAudioPlayer.stop();
+                        if (data.track == index && data.isPlaying) return;
+                        try {
+                          if (statusStorage == StatusStorage.onlyOnline) {
+                            await assetsAudioPlayer.open(
+                              Audio.network(examples[index].audio.mp3),
+                            );
+                          } else if (statusStorage == StatusStorage.stored) {
+                            await assetsAudioPlayer.open(
+                              Audio.file(examples[index].audio.mp3),
+                            );
+                          }
+                        } catch (t) {
+                          //mp3 unreachable
+                        }
+                      },
+                      icon: data.track == index && data.isPlaying
+                          ? Icon(
+                              Icons.music_note,
+                              size: 30,
+                              color: Theme.of(context).colorScheme.onPrimary,
+                            )
+                          : StreamBuilder(
+                              stream: assetsAudioPlayer.isPlaying,
+                              builder: (context, asyncSnapshot) {
+                                if (asyncSnapshot.data == null) {
+                                  return Icon(
+                                    Icons.play_arrow_rounded,
+                                    size: 30,
+                                    color:
+                                        Theme.of(context).colorScheme.onPrimary,
+                                  );
+                                }
+                                final bool isPlaying = asyncSnapshot.data!;
+                                return Icon(
+                                  isPlaying
+                                      ? Icons.music_note
+                                      : Icons.play_arrow_rounded,
+                                  size: 30,
+                                  color:
+                                      Theme.of(context).colorScheme.onPrimary,
+                                );
+                              }),
+                    );
+                  }),
+                )
+            ],
+          ),
+        )
+      ],
+    );
+  }
+}
 
 /* class ExampleAudios extends ConsumerWidget {
   const ExampleAudios({
@@ -43,7 +149,7 @@ import 'package:kanji_for_n5_level_app/screens/kanji_details/tabs/examples_audio
                   ),
                   subtitle: SubTitleListTileExample(
                     examples: examples,
-                    index: index,
+                    index: index,SubTitleListTileExample
                     data: data,
                   ),
                   trailing: Builder(builder: (context) {
@@ -124,7 +230,7 @@ import 'package:kanji_for_n5_level_app/screens/kanji_details/tabs/examples_audio
   }
 } */
 
-class ExampleAudios extends ConsumerWidget {
+/* class ExampleAudios extends ConsumerWidget {
   const ExampleAudios({
     super.key,
     required this.examples,
@@ -149,95 +255,115 @@ class ExampleAudios extends ConsumerWidget {
             children: [
               for (int index = 0; index < examples.length; index++)
                 ListTile(
-                  selected: data.track == index && data.isPlaying,
-                  selectedColor: Colors.amberAccent,
-                  leading: Text(
-                    '${index + 1}._',
-                    style: Theme.of(context).textTheme.titleMedium,
-                  ),
-                  title: TitleListTileExample(
-                    examples: examples,
-                    index: index,
-                    data: data,
-                  ),
-                  subtitle: SubTitleListTileExample(
-                    examples: examples,
-                    index: index,
-                    data: data,
-                  ),
-                  trailing: Builder(builder: (context) {
-                    return ClipOval(
-                      child: SizedBox(
-                        width: 50,
-                        height: 50,
-                        child: Material(
-                          color: Theme.of(context).colorScheme.primary,
-                          child: InkWell(
-                            splashColor: Colors.black38,
-                            onTap: () async {
-                              ref
-                                  .read(examplesAudiosPlayingAudioProvider
-                                      .notifier)
-                                  .setTapedPlay(index, statusStorage);
-                            },
-                            child: data.track == index && data.isPlaying
-                                ? Icon(
-                                    Icons.music_note,
-                                    size: 30,
-                                    color:
-                                        Theme.of(context).colorScheme.onPrimary,
-                                  )
-                                : StreamBuilder(
-                                    stream: dataExamples
-                                        .audioPlayers[index].isPlaying,
-                                    builder: (context, asyncSnapshot) {
-                                      if (asyncSnapshot.data == null) {
+                    selected: data.track == index && data.isPlaying,
+                    selectedColor: Colors.amberAccent,
+                    leading: Text(
+                      '${index + 1}._',
+                      style: Theme.of(context).textTheme.titleMedium,
+                    ),
+                    title: TitleListTileExample(
+                      examples: examples,
+                      index: index,
+                      data: data,
+                    ),
+                    subtitle: SubTitleListTileExample(
+                      examples: examples,
+                      index: index,
+                      data: data,
+                    ),
+                    trailing: ExampleAudio(
+                      example: examples[index],
+                      track: data.track,
+                      index: index,
+                      isPlaying: data.isPlaying,
+                    ) /* Builder(
+                    builder: (context) {
+                      return ClipOval(
+                        child: SizedBox(
+                          width: 50,
+                          height: 50,
+                          child: Material(
+                            color: Theme.of(context).colorScheme.primary,
+                            child: InkWell(
+                              splashColor: Colors.black38,
+                              onTap: () async {
+                                ref
+                                    .read(examplesAudiosPlayingAudioProvider
+                                        .notifier)
+                                    .setTapedPlay(index, statusStorage);
+                              },
+                              child: data.track == index && data.isPlaying
+                                  ? Icon(
+                                      Icons.music_note,
+                                      size: 30,
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .onPrimary,
+                                    )
+                                  : StreamBuilder(
+                                      stream: dataExamples
+                                          .audioPlayers[index].isPlaying
+                                          .asBroadcastStream(),
+                                      builder: (context, asyncSnapshot) {
+                                        if (asyncSnapshot.hasError) {
+                                          logger.e('error stream');
+                                          return Icon(
+                                            Icons.play_arrow_rounded,
+                                            size: 30,
+                                            color: Theme.of(context)
+                                                .colorScheme
+                                                .onPrimary,
+                                          );
+                                        }
+
+                                        if (asyncSnapshot.data == null) {
+                                          return Icon(
+                                            Icons.play_arrow_rounded,
+                                            size: 30,
+                                            color: Theme.of(context)
+                                                .colorScheme
+                                                .onPrimary,
+                                          );
+                                        }
+                                        final bool isPlaying =
+                                            asyncSnapshot.data!;
+
+                                        if (dataExamples
+                                                .isTappedForPlaying[index] &&
+                                            !isPlaying) {
+                                          return Padding(
+                                            padding: const EdgeInsets.all(13.0),
+                                            child: CircularProgressIndicator(
+                                                color: Theme.of(context)
+                                                    .colorScheme
+                                                    .onPrimary),
+                                          );
+                                        }
+
                                         return Icon(
-                                          Icons.play_arrow_rounded,
+                                          isPlaying
+                                              ? Icons.music_note
+                                              : Icons.play_arrow_rounded,
                                           size: 30,
                                           color: Theme.of(context)
                                               .colorScheme
                                               .onPrimary,
                                         );
-                                      }
-                                      final bool isPlaying =
-                                          asyncSnapshot.data!;
-
-                                      if (dataExamples
-                                              .isTappedForPlaying[index] &&
-                                          !isPlaying) {
-                                        return Padding(
-                                          padding: const EdgeInsets.all(13.0),
-                                          child: CircularProgressIndicator(
-                                              color: Theme.of(context)
-                                                  .colorScheme
-                                                  .onPrimary),
-                                        );
-                                      }
-
-                                      return Icon(
-                                        isPlaying
-                                            ? Icons.music_note
-                                            : Icons.play_arrow_rounded,
-                                        size: 30,
-                                        color: Theme.of(context)
-                                            .colorScheme
-                                            .onPrimary,
-                                      );
-                                    }),
+                                      }),
+                            ),
                           ),
                         ),
-                      ),
-                    );
-                  }),
-                )
+                      );
+                    },
+                  ), */
+                    )
             ],
           ),
         )
       ],
     );
   }
-}
+} */
 
 class SubTitleListTileExample extends StatelessWidget {
   const SubTitleListTileExample({
