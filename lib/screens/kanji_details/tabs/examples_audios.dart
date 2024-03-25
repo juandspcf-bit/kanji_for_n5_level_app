@@ -51,6 +51,7 @@ class ExampleAudios extends ConsumerWidget {
                     track: data.track,
                     index: index,
                     isPlaying: data.isPlaying,
+                    statusStorage: statusStorage,
                   ),
                 )
             ],

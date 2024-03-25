@@ -2,6 +2,7 @@ import 'package:assets_audio_player/assets_audio_player.dart';
 import 'package:flutter/material.dart';
 import 'package:kanji_for_n5_level_app/main.dart';
 import 'package:kanji_for_n5_level_app/models/kanji_from_api.dart';
+import 'package:kanji_for_n5_level_app/providers/status_stored_provider.dart';
 
 class ExampleAudio extends StatefulWidget {
   const ExampleAudio({
@@ -10,12 +11,14 @@ class ExampleAudio extends StatefulWidget {
     required this.track,
     required this.index,
     required this.isPlaying,
+    required this.statusStorage,
   });
 
   final Example example;
   final int track;
   final int index;
   final bool isPlaying;
+  final StatusStorage statusStorage;
 
   @override
   State<ExampleAudio> createState() => _ExampleAudioState();
@@ -39,7 +42,11 @@ class _ExampleAudioState extends State<ExampleAudio> {
                 splashColor: Colors.black38,
                 onTap: () async {
                   player
-                      .open(Audio.network(widget.example.audio.mp3))
+                      .open(
+                    widget.statusStorage == StatusStorage.onlyOnline
+                        ? Audio.network(widget.example.audio.mp3)
+                        : Audio.file(widget.example.audio.mp3),
+                  )
                       .whenComplete(() {
                     isTaped = false;
                   });
