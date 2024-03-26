@@ -27,6 +27,7 @@ class ExampleAudio extends StatefulWidget {
 class _ExampleAudioState extends State<ExampleAudio> {
   final AssetsAudioPlayer player = AssetsAudioPlayer.newPlayer();
   bool isTaped = false;
+  bool isPlaying = false;
 
   @override
   Widget build(BuildContext context) {
@@ -41,6 +42,8 @@ class _ExampleAudioState extends State<ExampleAudio> {
               child: InkWell(
                 splashColor: Colors.black38,
                 onTap: () async {
+                  isPlaying = false;
+                  player.stop();
                   player
                       .open(
                     widget.statusStorage == StatusStorage.onlyOnline
@@ -48,6 +51,8 @@ class _ExampleAudioState extends State<ExampleAudio> {
                         : Audio.file(widget.example.audio.mp3),
                   )
                       .whenComplete(() {
+                    logger.d('is playing ${player.isPlaying.value}');
+                    isPlaying = true;
                     isTaped = false;
                   });
                   setState(() {
@@ -71,6 +76,9 @@ class _ExampleAudioState extends State<ExampleAudio> {
                               color: Theme.of(context).colorScheme.onPrimary,
                             );
                           }
+
+                          logger.d(
+                              'what is the value ${asyncSnapshot.data ?? -1}');
 
                           if (asyncSnapshot.data == null) {
                             return Icon(

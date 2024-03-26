@@ -24,8 +24,6 @@ class KanjiForSectionScreen extends ConsumerWidget
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final connectivityData = ref.watch(statusConnectionProvider);
-    final mainScreenData = ref.watch(mainScreenProvider);
     if (ref.watch(errorDatabaseStatusProvider)) {
       errorDialog(
         context,
@@ -38,6 +36,9 @@ class KanjiForSectionScreen extends ConsumerWidget
         ' list and access the content again to see the updated content.',
       );
     }
+
+    final connectivityData = ref.watch(statusConnectionProvider);
+    final mainScreenData = ref.watch(mainScreenProvider);
     var kanjiListData = ref.watch(kanjiListProvider);
 
     if (connectivityData == ConnectivityResult.none) {
