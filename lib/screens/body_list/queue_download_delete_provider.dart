@@ -7,6 +7,7 @@ import 'package:kanji_for_n5_level_app/providers/status_stored_provider.dart';
 import 'package:kanji_for_n5_level_app/repositories/local_database/db_deleting_data.dart';
 import 'package:kanji_for_n5_level_app/screens/body_list/kanjis_list_provider.dart';
 import 'package:kanji_for_n5_level_app/screens/navigation_bar_screens/favorite_screen/favorites_kanjis_provider.dart';
+import 'package:kanji_for_n5_level_app/screens/navigation_bar_screens/sections_screen/cache_kanji_list_provider.dart';
 
 class QueueDownloadDeleteProvider extends Notifier<QueueData> {
   void removeDownload(String kanjiCharacter) {
@@ -168,6 +169,7 @@ class QueueDownloadDeleteProvider extends Notifier<QueueData> {
         .updateKanjiStatusOnVisibleSectionListFromOthers(
           kanjiFromApi,
         );
+    ref.read(cacheKanjiListProvider.notifier).updateKanjiOnCache(kanjiFromApi);
   }
 
   KanjiFromApi updateStatusKanji(

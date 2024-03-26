@@ -21,6 +21,19 @@ class CacheKanjiList extends Notifier<Map<int, List<KanjiFromApi>>> {
     return list.isNotEmpty;
   }
 
+  void updateKanjiOnCache(
+    KanjiFromApi kanjiFromApi,
+  ) {
+    final list = state.entries
+        .where((element) => element.value.first.section == kanjiFromApi.section)
+        .toList();
+    if (list.isEmpty) return;
+    final index = list.first.value.indexWhere(
+        (element) => element.kanjiCharacter == kanjiFromApi.kanjiCharacter);
+    list.first.value[index] = kanjiFromApi;
+    state[list.first.key] = list.first.value;
+  }
+
   List<KanjiFromApi> getFromCache(int section) {
     return state.entries
         .where((element) => element.value.first.section == section)

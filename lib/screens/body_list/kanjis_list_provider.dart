@@ -5,7 +5,7 @@ import 'package:kanji_for_n5_level_app/main.dart';
 import 'package:kanji_for_n5_level_app/screens/body_list/queue_download_delete_provider.dart';
 import 'package:kanji_for_n5_level_app/models/kanji_from_api.dart';
 import 'package:kanji_for_n5_level_app/providers/status_stored_provider.dart';
-import 'package:kanji_for_n5_level_app/screens/navigation_bar_screens/sections_screen/cache_knaji_list_provider.dart';
+import 'package:kanji_for_n5_level_app/screens/navigation_bar_screens/sections_screen/cache_kanji_list_provider.dart';
 
 class KanjiListProvider extends Notifier<KanjiListData> {
   @override
