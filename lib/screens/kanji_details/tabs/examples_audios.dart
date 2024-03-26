@@ -47,12 +47,12 @@ class ExampleAudios extends ConsumerWidget {
                     data: data,
                   ),
                   trailing: ExampleAudio(
-                    example: examples[index],
-                    track: data.track,
-                    index: index,
-                    isPlaying: data.isPlaying,
-                    statusStorage: statusStorage,
-                  ),
+                      example: examples[index],
+                      track: data.track,
+                      index: index,
+                      isPlaying: data.isPlaying,
+                      statusStorage: statusStorage,
+                      onPrimaryColor: Theme.of(context).colorScheme.onPrimary),
                 )
             ],
           ),

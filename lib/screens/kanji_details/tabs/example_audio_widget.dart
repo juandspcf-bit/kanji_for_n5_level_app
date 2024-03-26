@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:assets_audio_player/assets_audio_player.dart';
 import 'package:flutter/material.dart';
 import 'package:kanji_for_n5_level_app/main.dart';
@@ -12,6 +14,7 @@ class ExampleAudio extends StatefulWidget {
     required this.index,
     required this.isPlaying,
     required this.statusStorage,
+    required this.onPrimaryColor,
   });
 
   final Example example;
@@ -19,6 +22,7 @@ class ExampleAudio extends StatefulWidget {
   final int index;
   final bool isPlaying;
   final StatusStorage statusStorage;
+  final Color onPrimaryColor;
 
   @override
   State<ExampleAudio> createState() => _ExampleAudioState();
@@ -26,8 +30,30 @@ class ExampleAudio extends StatefulWidget {
 
 class _ExampleAudioState extends State<ExampleAudio> {
   final AssetsAudioPlayer player = AssetsAudioPlayer.newPlayer();
-  bool isTaped = false;
   bool isPlaying = false;
+  late Widget iconStatus;
+  @override
+  void initState() {
+    super.initState();
+
+    iconStatus = Icon(
+      Icons.play_arrow,
+      size: 30,
+      color: widget.onPrimaryColor,
+    );
+
+    player.isPlaying.asBroadcastStream().listen((event) {
+      if (isPlaying && !event) {
+        setState(() {
+          iconStatus = Icon(
+            Icons.play_arrow,
+            size: 30,
+            color: widget.onPrimaryColor,
+          );
+        });
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -46,66 +72,51 @@ class _ExampleAudioState extends State<ExampleAudio> {
                   player.stop();
                   player
                       .open(
-                    widget.statusStorage == StatusStorage.onlyOnline
-                        ? Audio.network(widget.example.audio.mp3)
-                        : Audio.file(widget.example.audio.mp3),
-                  )
+                        widget.statusStorage == StatusStorage.onlyOnline
+                            ? Audio.network(widget.example.audio.mp3)
+                            : Audio.file(widget.example.audio.mp3),
+                      )
                       .whenComplete(() {
-                    logger.d('is playing ${player.isPlaying.value}');
-                    isPlaying = true;
-                    isTaped = false;
-                  });
+                        logger.d('is playing ${player.isPlaying.value}');
+                        if (player.isPlaying.value) {
+                          isPlaying = true;
+                          setState(() {
+                            iconStatus = Icon(
+                              Icons.music_note,
+                              size: 30,
+                              color: widget.onPrimaryColor,
+                            );
+                          });
+                        }
+                      })
+                      .timeout(const Duration(seconds: 10))
+                      .onError((error, stackTrace) {
+                        logger.e(error);
+                        setState(() {
+                          isPlaying = false;
+                          player.stop();
+                          iconStatus = Icon(
+                            Icons.play_arrow,
+                            size: 30,
+                            color: widget.onPrimaryColor,
+                          );
+                        });
+                      });
                   setState(() {
-                    isTaped = true;
+                    iconStatus = Padding(
+                      padding: const EdgeInsets.all(13.0),
+                      child: CircularProgressIndicator(
+                          color: widget.onPrimaryColor),
+                    );
                   });
                 },
                 child: widget.track == widget.index && widget.isPlaying
                     ? Icon(
                         Icons.music_note,
                         size: 30,
-                        color: Theme.of(context).colorScheme.onPrimary,
+                        color: widget.onPrimaryColor,
                       )
-                    : StreamBuilder(
-                        stream: player.isPlaying.asBroadcastStream(),
-                        builder: (context, asyncSnapshot) {
-                          if (asyncSnapshot.hasError) {
-                            logger.e('error stream');
-                            return Icon(
-                              Icons.play_arrow_rounded,
-                              size: 30,
-                              color: Theme.of(context).colorScheme.onPrimary,
-                            );
-                          }
-
-                          logger.d(
-                              'what is the value ${asyncSnapshot.data ?? -1}');
-
-                          if (asyncSnapshot.data == null) {
-                            return Icon(
-                              Icons.play_arrow_rounded,
-                              size: 30,
-                              color: Theme.of(context).colorScheme.onPrimary,
-                            );
-                          }
-                          final bool isPlaying = asyncSnapshot.data!;
-
-                          if (isTaped && !isPlaying) {
-                            return Padding(
-                              padding: const EdgeInsets.all(13.0),
-                              child: CircularProgressIndicator(
-                                  color:
-                                      Theme.of(context).colorScheme.onPrimary),
-                            );
-                          }
-
-                          return Icon(
-                            isPlaying
-                                ? Icons.music_note
-                                : Icons.play_arrow_rounded,
-                            size: 30,
-                            color: Theme.of(context).colorScheme.onPrimary,
-                          );
-                        }),
+                    : iconStatus,
               ),
             ),
           ),
