@@ -5,6 +5,7 @@ import 'package:kanji_for_n5_level_app/main.dart';
 import 'package:kanji_for_n5_level_app/screens/body_list/queue_download_delete_provider.dart';
 import 'package:kanji_for_n5_level_app/models/kanji_from_api.dart';
 import 'package:kanji_for_n5_level_app/providers/status_stored_provider.dart';
+import 'package:kanji_for_n5_level_app/screens/navigation_bar_screens/sections_screen/cache_knaji_list_provider.dart';
 
 class KanjiListProvider extends Notifier<KanjiListData> {
   @override
@@ -102,11 +103,20 @@ class KanjiListProvider extends Notifier<KanjiListData> {
     }
   }
 
-  Future<void> fetchKanjis(
-      {required List<String> kanjisCharacters,
-      required int sectionNumber}) async {
+  Future<void> fetchKanjis({
+    required List<String> kanjisCharacters,
+    required int sectionNumber,
+  }) async {
     try {
       clearKanjiList(sectionNumber);
+
+      if (ref.read(cacheKanjiListProvider.notifier).isInCache(sectionNumber)) {
+        final kanjiList = ref
+            .read(cacheKanjiListProvider.notifier)
+            .getFromCache(sectionNumber);
+        onSuccesRequest(kanjiList);
+        return;
+      }
 
       List<KanjiFromApi> kanjiList = await ref
           .read(kanjiListProvider.notifier)
@@ -127,6 +137,8 @@ class KanjiListProvider extends Notifier<KanjiListData> {
           return kanji;
         },
       ).toList();
+
+      ref.read(cacheKanjiListProvider.notifier).addToCache(kanjiList);
 
       onSuccesRequest(kanjiList);
     } catch (e) {
