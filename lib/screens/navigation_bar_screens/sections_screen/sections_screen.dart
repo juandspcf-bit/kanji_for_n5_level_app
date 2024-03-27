@@ -89,9 +89,26 @@ class Section extends ConsumerWidget {
                 .setSection(sectionData.sectionNumber);
 
             Navigator.of(context).push(
-              MaterialPageRoute(
-                builder: (ctx) {
-                  return const KanjiForSectionScreen();
+              PageRouteBuilder(
+                transitionDuration: const Duration(seconds: 1),
+                reverseTransitionDuration: const Duration(seconds: 1),
+                pageBuilder: (context, animation, secondaryAnimation) =>
+                    const KanjiForSectionScreen(),
+                transitionsBuilder:
+                    (context, animation, secondaryAnimation, child) {
+                  return SlideTransition(
+                    position: Tween<Offset>(
+                      begin: const Offset(-1, 0),
+                      end: Offset.zero,
+                    ).animate(
+                      animation.drive(
+                        CurveTween(
+                          curve: Curves.easeInOutBack,
+                        ),
+                      ),
+                    ),
+                    child: child,
+                  );
                 },
               ),
             );
