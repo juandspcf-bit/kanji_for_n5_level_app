@@ -150,7 +150,7 @@ class BodyKanjisList extends ConsumerWidget {
 
                 final kanjiListData = ref.read(kanjiListProvider);
                 final sectionModel = listSections[kanjiListData.section - 1];
-                ref.read(kanjiListProvider.notifier).fetchKanjis(
+                ref.read(kanjiListProvider.notifier).fetchKanjisOnRefresh(
                       kanjisCharacters: sectionModel.kanjisCharacters,
                       sectionNumber: kanjiListData.section,
                     );

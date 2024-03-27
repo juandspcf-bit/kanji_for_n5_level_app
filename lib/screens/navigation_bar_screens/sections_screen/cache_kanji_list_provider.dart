@@ -34,6 +34,18 @@ class CacheKanjiList extends Notifier<Map<int, List<KanjiFromApi>>> {
     state[list.first.key] = list.first.value;
   }
 
+  void updateListOnCache(
+    List<KanjiFromApi> kanjiFromApiList,
+  ) {
+    var list = state.entries
+        .where((element) =>
+            element.value.first.section == kanjiFromApiList.first.section)
+        .toList();
+    if (list.isEmpty) return;
+
+    state[list.first.key] = kanjiFromApiList;
+  }
+
   List<KanjiFromApi> getFromCache(int section) {
     return state.entries
         .where((element) => element.value.first.section == section)

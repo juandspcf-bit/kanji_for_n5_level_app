@@ -147,6 +147,48 @@ class KanjiListProvider extends Notifier<KanjiListData> {
     }
   }
 
+  Future<void> fetchKanjisOnRefresh({
+    required List<String> kanjisCharacters,
+    required int sectionNumber,
+  }) async {
+    try {
+      clearKanjiList(sectionNumber);
+
+      List<KanjiFromApi> kanjiList = await ref
+          .read(kanjiListProvider.notifier)
+          .getKanjiListFromRepositories(
+            kanjisCharacters,
+            sectionNumber,
+          );
+
+      kanjiList = kanjiList.map(
+        (kanji) {
+          if (ref
+              .read(queueDownloadDeleteProvider.notifier)
+              .isInTheDownloadQueue(kanji.kanjiCharacter)) {
+            logger.d('isn in the download queue ${kanji.kanjiCharacter}');
+            return updateStatusKanji(
+                StatusStorage.proccessingStoring, false, kanji);
+          }
+          return kanji;
+        },
+      ).toList();
+
+      final isInCache =
+          ref.read(cacheKanjiListProvider.notifier).isInCache(sectionNumber);
+      if (isInCache) {
+        ref.read(cacheKanjiListProvider.notifier).updateListOnCache(kanjiList);
+      } else {
+        ref.read(cacheKanjiListProvider.notifier).addToCache(kanjiList);
+      }
+
+      onSuccesRequest(kanjiList);
+    } catch (e) {
+      logger.e(e);
+      onErrorRequest();
+    }
+  }
+
   Future<List<KanjiFromApi>> getKanjiListFromRepositories(
     List<String> kanjisCharacteres,
     int section,
