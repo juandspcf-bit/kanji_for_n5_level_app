@@ -158,7 +158,7 @@ class BodyKanjisList extends ConsumerWidget {
               child: _getListWidgets(orientation, widhtScreen, ref));
     } else if (statusResponse == 2) {
       return ErrorFetchingKanjisScreen(mainScreenData: mainScreenData);
-    } else /* if (statusResponse == 1 && kanjisFromApi.isEmpty) */ {
+    } else {
       return const NoDataToShownScreen();
     }
   }

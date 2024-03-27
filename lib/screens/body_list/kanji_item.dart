@@ -58,12 +58,29 @@ class _KanjiItemState extends ConsumerState<KanjiItem> {
         .setInitList(kanjiFromApi);
 
     Navigator.of(context).push(
-      MaterialPageRoute(builder: (ctx) {
-        return KanjiDetails(
+      PageRouteBuilder(
+        transitionDuration: const Duration(seconds: 1),
+        reverseTransitionDuration: const Duration(seconds: 1),
+        pageBuilder: (context, animation, secondaryAnimation) => KanjiDetails(
           kanjiFromApi: kanjiFromApi,
           statusStorage: kanjiFromApi.statusStorage,
-        );
-      }),
+        ),
+        transitionsBuilder: (context, animation, secondaryAnimation, child) {
+          return SlideTransition(
+            position: Tween<Offset>(
+              begin: const Offset(0, -1),
+              end: Offset.zero,
+            ).animate(
+              animation.drive(
+                CurveTween(
+                  curve: Curves.easeInOutBack,
+                ),
+              ),
+            ),
+            child: child,
+          );
+        },
+      ),
     );
   }
 
