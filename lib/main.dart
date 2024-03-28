@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_logs/flutter_logs.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -43,6 +44,24 @@ final darkTheme = ThemeData.dark();
 
 void main() async {
   WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
+
+  //Initialize Logging
+  await FlutterLogs.initLogs(
+      logLevelsEnabled: [
+        LogLevel.INFO,
+        LogLevel.WARNING,
+        LogLevel.ERROR,
+        LogLevel.SEVERE
+      ],
+      timeStampFormat: TimeStampFormat.TIME_FORMAT_READABLE,
+      directoryStructure: DirectoryStructure.FOR_DATE,
+      logTypesEnabled: ["device", "network", "errors"],
+      logFileExtension: LogFileExtension.LOG,
+      logsWriteDirectoryName: "MyLogs",
+      logsExportDirectoryName: "MyLogs/Exported",
+      debugFileOperations: true,
+      isDebuggable: true);
+
   FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,

@@ -1,7 +1,9 @@
 import 'dart:async';
 
 import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:flutter_logs/flutter_logs.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:kanji_for_n5_level_app/main.dart';
 
 class StatusConnectionProvider extends Notifier<ConnectivityResult> {
   StreamSubscription? subscription;
@@ -12,6 +14,13 @@ class StatusConnectionProvider extends Notifier<ConnectivityResult> {
     connectionState.checkConnectivity().then((value) {
       subscription = connectionState.onConnectivityChanged
           .listen((ConnectivityResult result) {
+        logger.d('Connections $result');
+        FlutterLogs.logThis(
+            tag: 'MyApp',
+            subTag: 'logData',
+            logMessage:
+                'This is a log message: Connections $result ${DateTime.now().millisecondsSinceEpoch}',
+            level: LogLevel.INFO);
         state = result;
       });
       state = value;
