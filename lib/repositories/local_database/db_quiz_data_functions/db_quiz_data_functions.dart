@@ -186,7 +186,7 @@ Future<SingleQuizAudioExampleData> getSingleQuizSectionAudioExamplerData(
 
   if (listQuery.isEmpty) {
     return SingleQuizAudioExampleData(
-      kanjiCharacter: '',
+      kanjiCharacter: kanjiCharacter,
       section: -1,
       uuid: '',
       allCorrectAnswers: false,
@@ -301,7 +301,7 @@ Future<SingleQuizFlashCardData> getSingleFlashCardData(
 
   if (listQuery.isEmpty) {
     return SingleQuizFlashCardData(
-      kanjiCharacter: '',
+      kanjiCharacter: kanjiCharacter,
       section: -1,
       uuid: '',
       allRevisedFlashCards: false,
@@ -409,29 +409,41 @@ Future<void> cacheFlashCardsScore(List<String> sections,
 
       FutureGroup<int> futureFlashCardsCachedGroup = FutureGroup<int>();
 
-      /// update cache
-      for (var i = 0; i < sectionsKanjis['section$section']!.length; i++) {
-        int kanjiNumber = i + 1;
-        if (listFlashCardsData['kanji_$kanjiNumber'] != null) {
-          final quizData =
-              listFlashCardsData['kanji_$kanjiNumber'] as Map<String, Object>;
-          if (quizDetailsDataList[i].section == -1) {
-            futureFlashCardsCachedGroup.add(insertSingleFlashCardData(
-              quizData['kanjiCharacter'] as String,
-              int.parse(section),
-              uuid,
-              quizData['allRevisedFlashCards'] as bool,
-            ));
-          } else {
-            futureFlashCardsCachedGroup.add(updateSingleFlashCardData(
-              quizData['kanjiCharacter'] as String,
-              int.parse(section),
-              uuid,
-              quizData['allRevisedFlashCards'] as bool,
-            ));
+      try {
+        for (var i = 0; i < sectionsKanjis['section$section']!.length; i++) {
+          int kanjiNumber = i + 1;
+          if (listFlashCardsData['kanji_$kanjiNumber'] != null) {
+            final quizData =
+                listFlashCardsData['kanji_$kanjiNumber'] as Map<String, Object>;
+            final kanjiCharacter = quizData['kanjiCharacter'] as String;
+            int index = quizDetailsDataList.indexWhere(
+                (element) => element.kanjiCharacter == kanjiCharacter);
+            if (index == -1) return;
+            if (quizDetailsDataList[index].section == -1) {
+              futureFlashCardsCachedGroup.add(insertSingleFlashCardData(
+                quizData['kanjiCharacter'] as String,
+                int.parse(section),
+                uuid,
+                quizData['allRevisedFlashCards'] as bool,
+              ));
+            } else {
+              futureFlashCardsCachedGroup.add(
+                updateSingleFlashCardData(
+                  quizData['kanjiCharacter'] as String,
+                  int.parse(section),
+                  uuid,
+                  quizData['allRevisedFlashCards'] as bool,
+                ),
+              );
+            }
           }
         }
+      } catch (e) {
+        logger.d(section);
+        logger.e(e);
       }
+
+      /// update cache
 
       futureFlashCardsCachedGroup.close();
       await futureFlashCardsCachedGroup.future;
@@ -474,7 +486,11 @@ Future<void> cacheQuizDetails(List<String> sections,
         if (lisQuizData['kanji_$kanjiNumber'] != null) {
           final quizData =
               lisQuizData['kanji_$kanjiNumber'] as Map<String, Object>;
-          if (quizDetailsDataList[i].section == -1) {
+          final kanjiCharacter = quizData['kanjiCharacter'] as String;
+          int index = quizDetailsDataList.indexWhere(
+              (element) => element.kanjiCharacter == kanjiCharacter);
+          if (index == -1) return;
+          if (quizDetailsDataList[index].section == -1) {
             futureQuizDetailsCachedGroup
                 .add(insertSingleAudioExampleQuizSectionDataDB(
               int.parse(section),
@@ -522,27 +538,25 @@ Future<void> cacheQuizKanji(List<String> sections, String uuid,
 
   futureQuizScoreGroup.close();
 
-  final dataQuizList = await futureQuizScoreGroup.future;
+  final quizDetailsDataList = await futureQuizScoreGroup.future;
 
   FutureGroup<void> futureQuizScoreCacheGroup = FutureGroup<void>();
 
-  for (int i = 0; i < dataQuizList.length; i++) {
+  for (int i = 0; i < quizDetailsDataList.length; i++) {
     int sectionNumber = i + 1;
     if (quizScoreData['quizScore_$sectionNumber'] != null) {
-      final quizScore =
+      final quizData =
           quizScoreData['quizScore_$sectionNumber'] as Map<String, Object>;
-      //logger.d('data quiz data ${dataQuizList[i].section}');
-
-      if (dataQuizList[i].section == -1) {
+      if (quizDetailsDataList[i].section == -1) {
         futureQuizScoreCacheGroup.add(
           insertSingleQuizSectionDataDB(
             sectionNumber,
             uuid,
-            quizScore['allCorrectAnswersQuizKanji'] as bool,
-            quizScore['isFinishedKanjiQuiz'] as bool,
-            quizScore['countCorrects'] as int,
-            quizScore['countIncorrects'] as int,
-            quizScore['countOmited'] as int,
+            quizData['allCorrectAnswersQuizKanji'] as bool,
+            quizData['isFinishedKanjiQuiz'] as bool,
+            quizData['countCorrects'] as int,
+            quizData['countIncorrects'] as int,
+            quizData['countOmited'] as int,
           ),
         );
       } else {
@@ -550,11 +564,11 @@ Future<void> cacheQuizKanji(List<String> sections, String uuid,
           updateSingleQuizSectionData(
             sectionNumber,
             uuid,
-            quizScore['allCorrectAnswersQuizKanji'] as bool,
-            quizScore['isFinishedKanjiQuiz'] as bool,
-            quizScore['countCorrects'] as int,
-            quizScore['countIncorrects'] as int,
-            quizScore['countOmited'] as int,
+            quizData['allCorrectAnswersQuizKanji'] as bool,
+            quizData['isFinishedKanjiQuiz'] as bool,
+            quizData['countCorrects'] as int,
+            quizData['countIncorrects'] as int,
+            quizData['countOmited'] as int,
           ),
         );
       }
