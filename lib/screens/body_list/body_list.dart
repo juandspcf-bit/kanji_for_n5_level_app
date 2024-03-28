@@ -66,19 +66,12 @@ class BodyKanjisList extends ConsumerWidget {
   Widget _getListWidgets(
       Orientation orientation, ScreenSizeWidth widhtScreen, WidgetRef ref) {
     if (Orientation.portrait == orientation) {
-      return SliverList(
-        delegate: SliverChildBuilderDelegate(
-          childCount: kanjisFromApi.length,
-          (context, index) {
-            return getKanjiItem(index, ref);
-          },
-        ),
-      ); /* ListView.builder(
+      return ListView.builder(
         itemCount: kanjisFromApi.length,
         itemBuilder: (ctx, index) {
           return getKanjiItem(index, ref);
         },
-      ); */
+      );
     } else if (Orientation.landscape == orientation &&
         (ScreenSizeWidth.large == widhtScreen ||
             ScreenSizeWidth.extraLarge == widhtScreen)) {
@@ -120,21 +113,12 @@ class BodyKanjisList extends ConsumerWidget {
         ),
       );
     } else {
-      return SliverList(
-        delegate: SliverChildBuilderDelegate(
-          childCount: kanjisFromApi.length,
-          (context, index) {
-            return getKanjiItem(index, ref);
-          },
-        ),
-      );
-
-      /* ListView.builder(
+      return ListView.builder(
         itemCount: kanjisFromApi.length,
         itemBuilder: (ctx, index) {
           return getKanjiItem(index, ref);
         },
-      ); */
+      );
     }
   }
 
@@ -145,13 +129,11 @@ class BodyKanjisList extends ConsumerWidget {
     final isAny = isAnyProcessingData();
 
     if (statusResponse == 0) {
-      return Container();
-      /* SafeArea(
+      return SafeArea(
         child: ShimmerList(
           selection: mainScreenData.selection,
         ),
-      ) */
-      ;
+      );
     } else if (statusResponse == 1 && kanjisFromApi.isNotEmpty) {
       return (connectivityData == ConnectivityResult.none)
           ? _getListWidgets(orientation, widhtScreen, ref)
