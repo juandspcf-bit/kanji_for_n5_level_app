@@ -353,8 +353,6 @@ Future<int> updateSingleFlashCardData(
   bool allRevisedFlashCards,
 ) async {
   final db = await kanjiFromApiDatabase;
-  //logger.d('uuid: $uuid, allCorrectAnwers: $allCorrectAnswers,'
-  //    ' isFinishedQuiz: $isFinishedQuiz, corrects: $countCorrects');
   return await db.rawUpdate(
       'UPDATE'
       ' kanji_flashcard_quiz '

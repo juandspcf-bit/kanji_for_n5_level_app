@@ -129,9 +129,10 @@ class FavoritesListProvider extends Notifier<FavoritesKanjisData> {
   }
 
   void setInitialFavoritesWithNoInternetConnection(
-      List<KanjiFromApi> storedKanjis,
-      List<Favorite> myFavoritesCached,
-      int section) {
+    List<KanjiFromApi> storedKanjis,
+    List<Favorite> myFavoritesCached,
+    int section,
+  ) {
     if (myFavoritesCached.isEmpty) {
       state = const FavoritesKanjisData(
         favoritesKanjisFromApi: [],
