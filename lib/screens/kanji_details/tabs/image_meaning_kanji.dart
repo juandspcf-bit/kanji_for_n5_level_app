@@ -3,21 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kanji_for_n5_level_app/providers/image_meaning_kanji_provider.dart';
 
-class ImageMeaningKanji extends ConsumerStatefulWidget {
+class ImageMeaningKanji extends ConsumerWidget {
   const ImageMeaningKanji({super.key});
 
   @override
-  ConsumerState<ImageMeaningKanji> createState() => _ImageMeaningKanjiState();
-}
-
-class _ImageMeaningKanjiState extends ConsumerState<ImageMeaningKanji> {
-  @override
-  void initState() {
-    super.initState();
-  }
-
-  @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final imageUrl = ref.watch(imageMeaningKanjiProvider).link;
     if (imageUrl == '') {
       return LayoutBuilder(

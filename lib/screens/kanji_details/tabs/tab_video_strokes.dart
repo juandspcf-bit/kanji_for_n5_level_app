@@ -11,18 +11,11 @@ import 'package:kanji_for_n5_level_app/screens/kanji_details/tabs/image_meaning_
 import 'package:kanji_for_n5_level_app/screens/kanji_details/tabs/meaning_definition.dart';
 import 'package:video_player/video_player.dart';
 
-class TabVideoStrokes extends ConsumerStatefulWidget {
-  const TabVideoStrokes({
-    super.key,
-  });
+class TabVideoStrokes extends ConsumerWidget {
+  const TabVideoStrokes({super.key});
 
   @override
-  ConsumerState<TabVideoStrokes> createState() => _TabVideoStrokes();
-}
-
-class _TabVideoStrokes extends ConsumerState<TabVideoStrokes> {
-  @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final connectivityData = ref.watch(statusConnectionProvider);
     final kanjiFromApi = ref.watch(kanjiDetailsProvider)!.kanjiFromApi;
 
