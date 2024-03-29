@@ -122,7 +122,9 @@ class KanjiDetails extends ConsumerWidget {
                         ),
                         IconButton(
                             onPressed: statusConnectionData ==
-                                    ConnectivityResult.none
+                                        ConnectivityResult.none &&
+                                    kanjiFromApi.statusStorage ==
+                                        StatusStorage.onlyOnline
                                 ? null
                                 : () {
                                     ref
