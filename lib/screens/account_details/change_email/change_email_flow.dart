@@ -1,8 +1,11 @@
 import 'package:email_validator/email_validator.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kanji_for_n5_level_app/screens/account_details/change_email/change_email_flow_provider.dart';
 import 'package:kanji_for_n5_level_app/screens/common_widgets/my_dialogs.dart';
+import 'package:kanji_for_n5_level_app/screens/main_screens/login_screen/login_provider.dart';
+import 'package:kanji_for_n5_level_app/screens/main_screens/main_content_provider.dart';
 
 class EmailChangeFlow extends ConsumerWidget with MyDialogs {
   const EmailChangeFlow({super.key});
@@ -105,26 +108,30 @@ class EmailChangeFlow extends ConsumerWidget with MyDialogs {
         }, 'emails not match');
       }
 
-      /* 
-      
-
-      if (current.statusProcessing ==
-          StatusProcessingPasswordChangeFlow.error) {
+      if (current.statusProcessing == StatusProcessingEmailChangeFlow.error) {
         errorDialog(context, () {
           ref
-              .read(passwordChangeFlowProvider.notifier)
-              .setStatusProcessing(StatusProcessingPasswordChangeFlow.form);
-        }, 'an error happend during updating process');
+              .read(emailChangeProvider.notifier)
+              .setStatusProcessing(StatusProcessingEmailChangeFlow.form);
+        }, 'An error happend during changing your email');
       }
-
       if (current.statusProcessing ==
-          StatusProcessingPasswordChangeFlow.succsess) {
-        successDialog(context, () {
+          StatusProcessingEmailChangeFlow.succsess) {
+        successDialog(context, () async {
           ref
-              .read(passwordChangeFlowProvider.notifier)
-              .setStatusProcessing(StatusProcessingPasswordChangeFlow.form);
-        }, 'succeful updating process');
-      } */
+              .read(emailChangeProvider.notifier)
+              .setStatusProcessing(StatusProcessingEmailChangeFlow.form);
+          await FirebaseAuth.instance.signOut();
+          ref.read(mainScreenProvider.notifier).resetMainScreenState();
+          ref.read(loginProvider.notifier).resetData();
+          ref
+              .read(loginProvider.notifier)
+              .setStatusLoggingFlow(StatusProcessingLoggingFlow.form);
+          if (context.mounted) {
+            Navigator.pop(context);
+          }
+        }, 'succeful sent link to change your email');
+      }
     });
 
     return Scaffold(

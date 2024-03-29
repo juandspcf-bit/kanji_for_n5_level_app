@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:kanji_for_n5_level_app/main.dart';
 
 class EmailChange extends Notifier<EmailChangeFlowData> {
   @override
@@ -59,7 +60,12 @@ class EmailChange extends Notifier<EmailChangeFlowData> {
     );
     await user.reauthenticateWithCredential(authCredential);
 
-    user.verifyBeforeUpdateEmail(state.email);
+    user
+        .verifyBeforeUpdateEmail(state.email)
+        .then((value) =>
+            setStatusProcessing(StatusProcessingEmailChangeFlow.succsess))
+        .onError((error, stackTrace) =>
+            setStatusProcessing(StatusProcessingEmailChangeFlow.error));
   }
 }
 
