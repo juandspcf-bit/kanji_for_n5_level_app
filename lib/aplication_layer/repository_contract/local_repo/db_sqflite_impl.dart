@@ -11,8 +11,8 @@ import 'package:kanji_for_n5_level_app/repositories/local_database/db_deleting_d
 import 'package:kanji_for_n5_level_app/repositories/local_database/db_favorites.dart';
 import 'package:kanji_for_n5_level_app/repositories/local_database/db_firts_time_logged_functions.dart';
 import 'package:kanji_for_n5_level_app/repositories/local_database/db_inserting_data.dart';
+import 'package:kanji_for_n5_level_app/repositories/local_database/db_loading_data.dart';
 import 'package:kanji_for_n5_level_app/repositories/local_database/db_quiz_data_functions/db_quiz_data_functions.dart';
-import 'package:kanji_for_n5_level_app/repositories/local_database/download_data_utils.dart';
 
 class SqliteDBService implements LocalDBService {
   @override
@@ -21,17 +21,6 @@ class SqliteDBService implements LocalDBService {
     String uuid,
   ) async {
     return await storeKanjiToSqlDB(kanjiFromApi, uuid);
-  }
-
-  @override
-  Future<KanjiFromApi?> storeKanjiToLocalDatabasev2(
-    KanjiFromApi kanjiFromApi,
-    String uuid,
-  ) async {
-    return await storeKanjiToSqlDBv2(
-      kanjiFromApi,
-      uuid,
-    );
   }
 
   @override
@@ -236,5 +225,10 @@ class SqliteDBService implements LocalDBService {
   Future<void> updateQuizScoreFromCloud(
       Map<String, Object> quizScoreData, String uuid) {
     return updateQuizScore(quizScoreData, uuid);
+  }
+
+  @override
+  Future<List<KanjiFromApi>> loadStoredKanjis() async {
+    return loadStoredKanjisFromSqliteDB();
   }
 }

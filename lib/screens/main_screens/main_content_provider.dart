@@ -7,7 +7,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kanji_for_n5_level_app/aplication_layer/auth_firebase_impl/auth_service_firebase.dart';
 import 'package:kanji_for_n5_level_app/models/favorite.dart';
-import 'package:kanji_for_n5_level_app/repositories/local_database/db_loading_data.dart';
 import 'package:kanji_for_n5_level_app/main.dart';
 import 'package:kanji_for_n5_level_app/providers/score_kanji_list_provider.dart';
 import 'package:kanji_for_n5_level_app/models/kanji_from_api.dart';
@@ -128,7 +127,7 @@ class MainScreenProvider extends Notifier<MainScreenData> {
   }
 
   Future<List<KanjiFromApi>> loadStoredKanjis() async {
-    var listOfStoredKanjis = await loadStoredKanjisFromDB();
+    var listOfStoredKanjis = await localDBService.loadStoredKanjis();
     final validAndInvalidKanjis = await runCompute(listOfStoredKanjis);
     final listOfValidStoredKanjis =
         validAndInvalidKanjis.$1.map((e) => e.$1).toList();

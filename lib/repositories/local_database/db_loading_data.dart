@@ -6,7 +6,7 @@ import 'package:uuid/uuid.dart';
 
 const uuid = Uuid();
 
-Future<List<KanjiFromApi>> loadStoredKanjisFromDB() async {
+Future<List<KanjiFromApi>> loadStoredKanjisFromSqliteDB() async {
   final user = FirebaseAuth.instance.currentUser;
 
   if (user == null) {
