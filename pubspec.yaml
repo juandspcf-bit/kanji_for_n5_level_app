@@ -35,13 +35,13 @@ dependencies:
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.6
   google_fonts: ^6.1.0
-  firebase_core: ^2.25.4
+  firebase_core: ^2.27.2
   cached_network_image: ^3.3.1
-  http: ^1.1.2
+  http: ^1.2.1
   flutter_svg: ^2.0.10+1
-  video_player: ^2.8.2
+  video_player: ^2.8.3
   assets_audio_player: ^3.1.1
-  flutter_riverpod: ^2.4.10
+  flutter_riverpod: ^2.5.1
   cloud_firestore: ^4.15.5
   async: ^2.11.0
   fl_chart: ^0.66.2
@@ -60,7 +60,7 @@ dependencies:
   email_validator: ^2.1.17
   image_picker: ^1.0.4
   firebase_storage: ^11.5.1
-  intl: ^0.18.1
+  intl: ^0.19.0
   smooth_page_indicator: ^1.1.0
   shimmer: ^3.0.0
   freezed: ^2.4.6

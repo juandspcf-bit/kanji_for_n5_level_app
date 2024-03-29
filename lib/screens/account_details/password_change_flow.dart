@@ -1,7 +1,7 @@
 // ignore: implementation_imports
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:kanji_for_n5_level_app/providers/password_change_flow_provider.dart';
+import 'package:kanji_for_n5_level_app/screens/account_details/password_change_flow_provider.dart';
 import 'package:kanji_for_n5_level_app/screens/account_details/password_change.dart';
 import 'package:kanji_for_n5_level_app/screens/common_screens.dart/loading_screen.dart';
 import 'package:kanji_for_n5_level_app/screens/common_widgets/my_dialogs.dart';

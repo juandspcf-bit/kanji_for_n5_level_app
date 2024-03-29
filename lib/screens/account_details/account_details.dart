@@ -6,7 +6,7 @@ import 'package:kanji_for_n5_level_app/screens/account_details/close_account/clo
 import 'package:kanji_for_n5_level_app/screens/account_details/personal_info/personal_info_provider.dart';
 import 'package:kanji_for_n5_level_app/screens/main_screens/login_screen/login_provider.dart';
 import 'package:kanji_for_n5_level_app/screens/main_screens/main_content_provider.dart';
-import 'package:kanji_for_n5_level_app/providers/password_change_flow_provider.dart';
+import 'package:kanji_for_n5_level_app/screens/account_details/password_change_flow_provider.dart';
 import 'package:kanji_for_n5_level_app/screens/account_details/password_change_flow.dart';
 import 'package:kanji_for_n5_level_app/screens/account_details/personal_info/personal_info.dart';
 
@@ -62,6 +62,28 @@ class AccountDetails extends ConsumerWidget {
                   ),
                   ListTile(
                     onTap: () {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(builder: (ctx) {
+                          return const PersonalInfo();
+                        }),
+                      );
+                    },
+                    contentPadding:
+                        const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                    shape: OutlineInputBorder(
+                      borderSide:
+                          const BorderSide().copyWith(color: Colors.white30),
+                      borderRadius:
+                          const BorderRadius.all(Radius.circular(12.0)),
+                    ),
+                    title: const Text('Change Email'),
+                    trailing: const Icon(Icons.arrow_forward_ios),
+                  ),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  ListTile(
+                    onTap: () {
                       ref
                           .read(passwordChangeFlowProvider.notifier)
                           .resetState();
@@ -78,7 +100,7 @@ class AccountDetails extends ConsumerWidget {
                       borderRadius:
                           const BorderRadius.all(Radius.circular(12.0)),
                     ),
-                    title: const Text('Password'),
+                    title: const Text('Change password'),
                     trailing: const Icon(Icons.arrow_forward_ios),
                   ),
                   const SizedBox(
