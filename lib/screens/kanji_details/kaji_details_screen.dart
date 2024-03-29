@@ -121,51 +121,61 @@ class KanjiDetails extends ConsumerWidget {
                               : const Icon(Icons.cloud_done_rounded),
                         ),
                         IconButton(
-                            onPressed: () {
-                              ref
-                                  .read(quizDetailsProvider.notifier)
-                                  .setDataQuiz(kanjiFromApi);
-                              ref
-                                  .read(quizDetailsProvider.notifier)
-                                  .setQuizState(0);
-                              ref
-                                  .read(selectQuizDetailsProvider.notifier)
-                                  .setScreen(ScreensQuizDetail.welcome);
-                              ref
-                                  .read(selectQuizDetailsProvider.notifier)
-                                  .setOption(2);
-                              ref
-                                  .read(flashCardProvider.notifier)
-                                  .initTheQuiz(kanjiFromApi);
-                              ref
-                                  .read(lastScoreDetailsProvider.notifier)
-                                  .getSingleAudioExampleQuizDataDB(
-                                    kanjiFromApi.kanjiCharacter,
-                                    ref.read(sectionProvider),
-                                    authService.user ?? '',
-                                  );
-                              ref
-                                  .read(lastScoreFlashCardProvider.notifier)
-                                  .getSingleFlashCardDataDB(
-                                    kanjiFromApi.kanjiCharacter,
-                                    ref.read(sectionProvider),
-                                    authService.user ?? '',
-                                  );
+                            onPressed: statusConnectionData ==
+                                    ConnectivityResult.none
+                                ? null
+                                : () {
+                                    ref
+                                        .read(quizDetailsProvider.notifier)
+                                        .setDataQuiz(kanjiFromApi);
+                                    ref
+                                        .read(quizDetailsProvider.notifier)
+                                        .setQuizState(0);
+                                    ref
+                                        .read(
+                                            selectQuizDetailsProvider.notifier)
+                                        .setScreen(ScreensQuizDetail.welcome);
+                                    ref
+                                        .read(
+                                            selectQuizDetailsProvider.notifier)
+                                        .setOption(2);
+                                    ref
+                                        .read(flashCardProvider.notifier)
+                                        .initTheQuiz(kanjiFromApi);
+                                    ref
+                                        .read(lastScoreDetailsProvider.notifier)
+                                        .getSingleAudioExampleQuizDataDB(
+                                          kanjiFromApi.kanjiCharacter,
+                                          ref.read(sectionProvider),
+                                          authService.user ?? '',
+                                        );
+                                    ref
+                                        .read(
+                                            lastScoreFlashCardProvider.notifier)
+                                        .getSingleFlashCardDataDB(
+                                          kanjiFromApi.kanjiCharacter,
+                                          ref.read(sectionProvider),
+                                          authService.user ?? '',
+                                        );
 
-                              Navigator.of(context).push(MaterialPageRoute(
-                                builder: (context) {
-                                  return DetailsQuizScreen(
-                                      kanjiFromApi: kanjiFromApi);
-                                },
-                              ));
-                            },
+                                    Navigator.of(context)
+                                        .push(MaterialPageRoute(
+                                      builder: (context) {
+                                        return DetailsQuizScreen(
+                                            kanjiFromApi: kanjiFromApi);
+                                      },
+                                    ));
+                                  },
                             icon: const Icon(Icons.quiz)),
                         IconButton(
-                          onPressed: () {
-                            ref
-                                .read(kanjiDetailsProvider.notifier)
-                                .storeToFavorites(kanjiFromApi);
-                          },
+                          onPressed:
+                              statusConnectionData == ConnectivityResult.none
+                                  ? null
+                                  : () {
+                                      ref
+                                          .read(kanjiDetailsProvider.notifier)
+                                          .storeToFavorites(kanjiFromApi);
+                                    },
                           icon: const IconFavorites(),
                         )
                       ],
