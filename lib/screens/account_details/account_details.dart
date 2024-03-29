@@ -23,121 +23,118 @@ class AccountDetails extends ConsumerWidget {
         ),
         centerTitle: true,
       ),
-      body: Center(
-        child: SingleChildScrollView(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              const SizedBox(
-                height: 10,
+      body: SingleChildScrollView(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            const SizedBox(
+              height: 30,
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+              child: Column(
+                children: [
+                  ListTile(
+                    onTap: () {
+                      ref.read(personalInfoProvider.notifier).resetData();
+                      ref
+                          .read(personalInfoProvider.notifier)
+                          .getInitialPersonalInfoData();
+                      Navigator.of(context).push(
+                        MaterialPageRoute(builder: (ctx) {
+                          return const PersonalInfo();
+                        }),
+                      );
+                    },
+                    contentPadding:
+                        const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                    shape: OutlineInputBorder(
+                      borderSide:
+                          const BorderSide().copyWith(color: Colors.white30),
+                      borderRadius:
+                          const BorderRadius.all(Radius.circular(12.0)),
+                    ),
+                    title: const Text('Name, email,'),
+                    trailing: const Icon(Icons.arrow_forward_ios),
+                  ),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  ListTile(
+                    onTap: () {
+                      ref
+                          .read(passwordChangeFlowProvider.notifier)
+                          .resetState();
+                      Navigator.of(context)
+                          .push(MaterialPageRoute(builder: (ctx) {
+                        return const PasswordChangeFlow();
+                      }));
+                    },
+                    contentPadding:
+                        const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                    shape: OutlineInputBorder(
+                      borderSide:
+                          const BorderSide().copyWith(color: Colors.white30),
+                      borderRadius:
+                          const BorderRadius.all(Radius.circular(12.0)),
+                    ),
+                    title: const Text('Password'),
+                    trailing: const Icon(Icons.arrow_forward_ios),
+                  ),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  ListTile(
+                    onTap: () async {
+                      await FirebaseAuth.instance.signOut();
+                      ref
+                          .read(mainScreenProvider.notifier)
+                          .resetMainScreenState();
+                      ref.read(loginProvider.notifier).resetData();
+                      ref.read(loginProvider.notifier).setStatusLoggingFlow(
+                          StatusProcessingLoggingFlow.form);
+                      if (context.mounted) {
+                        Navigator.pop(context);
+                      }
+                    },
+                    contentPadding:
+                        const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                    shape: OutlineInputBorder(
+                      borderSide:
+                          const BorderSide().copyWith(color: Colors.white30),
+                      borderRadius:
+                          const BorderRadius.all(Radius.circular(12.0)),
+                    ),
+                    title: const Text('Logout'),
+                    trailing: const Icon(Icons.arrow_forward_ios),
+                  ),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  ListTile(
+                    onTap: () async {
+                      ref.read(closeAccountProvider.notifier).resetStatus();
+                      Navigator.of(context).push(
+                        MaterialPageRoute(builder: (ctx) {
+                          return const CloseAccountScreen();
+                        }),
+                      );
+                    },
+                    contentPadding:
+                        const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                    shape: OutlineInputBorder(
+                      borderSide:
+                          const BorderSide().copyWith(color: Colors.white30),
+                      borderRadius:
+                          const BorderRadius.all(Radius.circular(12.0)),
+                    ),
+                    title: const Text('Close Account'),
+                    trailing: const Icon(Icons.arrow_forward_ios),
+                  ),
+                ],
               ),
-              Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-                child: Column(
-                  children: [
-                    ListTile(
-                      onTap: () {
-                        ref.read(personalInfoProvider.notifier).resetData();
-                        ref
-                            .read(personalInfoProvider.notifier)
-                            .getInitialPersonalInfoData();
-                        Navigator.of(context).push(
-                          MaterialPageRoute(builder: (ctx) {
-                            return const PersonalInfo();
-                          }),
-                        );
-                      },
-                      contentPadding: const EdgeInsets.symmetric(
-                          horizontal: 10, vertical: 5),
-                      shape: OutlineInputBorder(
-                        borderSide:
-                            const BorderSide().copyWith(color: Colors.white30),
-                        borderRadius:
-                            const BorderRadius.all(Radius.circular(12.0)),
-                      ),
-                      title: const Text('Name, email,'),
-                      trailing: const Icon(Icons.arrow_forward_ios),
-                    ),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    ListTile(
-                      onTap: () {
-                        ref
-                            .read(passwordChangeFlowProvider.notifier)
-                            .resetState();
-                        Navigator.of(context)
-                            .push(MaterialPageRoute(builder: (ctx) {
-                          return const PasswordChangeFlow();
-                        }));
-                      },
-                      contentPadding: const EdgeInsets.symmetric(
-                          horizontal: 10, vertical: 5),
-                      shape: OutlineInputBorder(
-                        borderSide:
-                            const BorderSide().copyWith(color: Colors.white30),
-                        borderRadius:
-                            const BorderRadius.all(Radius.circular(12.0)),
-                      ),
-                      title: const Text('Password'),
-                      trailing: const Icon(Icons.arrow_forward_ios),
-                    ),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    ListTile(
-                      onTap: () async {
-                        await FirebaseAuth.instance.signOut();
-                        ref
-                            .read(mainScreenProvider.notifier)
-                            .resetMainScreenState();
-                        ref.read(loginProvider.notifier).resetData();
-                        ref.read(loginProvider.notifier).setStatusLoggingFlow(
-                            StatusProcessingLoggingFlow.form);
-                        if (context.mounted) {
-                          Navigator.pop(context);
-                        }
-                      },
-                      contentPadding: const EdgeInsets.symmetric(
-                          horizontal: 10, vertical: 5),
-                      shape: OutlineInputBorder(
-                        borderSide:
-                            const BorderSide().copyWith(color: Colors.white30),
-                        borderRadius:
-                            const BorderRadius.all(Radius.circular(12.0)),
-                      ),
-                      title: const Text('Logout'),
-                      trailing: const Icon(Icons.arrow_forward_ios),
-                    ),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    ListTile(
-                      onTap: () async {
-                        ref.read(closeAccountProvider.notifier).resetStatus();
-                        Navigator.of(context).push(
-                          MaterialPageRoute(builder: (ctx) {
-                            return const CloseAccountScreen();
-                          }),
-                        );
-                      },
-                      contentPadding: const EdgeInsets.symmetric(
-                          horizontal: 10, vertical: 5),
-                      shape: OutlineInputBorder(
-                        borderSide:
-                            const BorderSide().copyWith(color: Colors.white30),
-                        borderRadius:
-                            const BorderRadius.all(Radius.circular(12.0)),
-                      ),
-                      title: const Text('Close Account'),
-                      trailing: const Icon(Icons.arrow_forward_ios),
-                    ),
-                  ],
-                ),
-              )
-            ],
-          ),
+            )
+          ],
         ),
       ),
     );
