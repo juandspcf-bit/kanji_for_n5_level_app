@@ -156,7 +156,7 @@ class PersonalInfo extends ConsumerWidget with MyDialogs {
             PersonalInfoUpdatingStatus.updating) {
           return const ProcessProgress(message: 'Updating data');
         } else {
-          return UserData(accountDetailsData: personalInfoData);
+          return UserForm(accountDetailsData: personalInfoData);
         }
       }),
     );

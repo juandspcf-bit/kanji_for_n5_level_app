@@ -1,4 +1,5 @@
 import 'package:kanji_for_n5_level_app/models/favorite.dart';
+import 'package:kanji_for_n5_level_app/models/user.dart';
 
 abstract class CloudDBService {
   Future<List<Favorite>> loadFavoritesCloudDB(
@@ -22,6 +23,8 @@ abstract class CloudDBService {
     String email,
     String uuid,
   );
+
+  Future<UserData> readUserData(String uuid);
 
   Future<void> createQuizScoreMap(String uuid);
 

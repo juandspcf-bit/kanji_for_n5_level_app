@@ -1,15 +1,13 @@
 import 'package:connectivity_plus/connectivity_plus.dart';
-import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kanji_for_n5_level_app/config_files/assets_paths.dart';
-import 'package:kanji_for_n5_level_app/main.dart';
 import 'package:kanji_for_n5_level_app/screens/account_details/personal_info/personal_info_provider.dart';
 import 'package:kanji_for_n5_level_app/providers/status_connection_provider.dart';
 import 'package:kanji_for_n5_level_app/screens/main_screens/sign_up_screen/profile_picture_widget.dart';
 
-class UserData extends ConsumerWidget {
-  UserData({
+class UserForm extends ConsumerWidget {
+  UserForm({
     super.key,
     required this.accountDetailsData,
   });
@@ -90,7 +88,6 @@ class UserData extends ConsumerWidget {
 
   Widget getImageProfileWidget(
       PersonalInfoData accountDetailsData, WidgetRef ref) {
-    logger.d(accountDetailsData.pathProfileTemporal);
     if (accountDetailsData.pathProfileTemporal.isNotEmpty) {
       return ProfilePictureWidget(
         avatarWidget: CircleAvatarImage(

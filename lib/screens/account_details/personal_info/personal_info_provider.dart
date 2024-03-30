@@ -31,21 +31,21 @@ class PersonalInfoProvider extends Notifier<PersonalInfoData> {
   }
 
   Future<void> getInitialPersonalInfoData() async {
-    logger.d('uuid ${authService.userUuid}');
-    final uuid = FirebaseAuth.instance.currentUser!.uid;
-    final fullName = FirebaseAuth.instance.currentUser!.displayName;
-
+    final uuid = authService.userUuid;
+    String? fullName;
     try {
       setFetchingStatus(PersonalInfoFetchinStatus.processing);
-
+      final user = await cloudDBService.readUserData(uuid ?? '');
       final userPhoto = storageRef.child("userImages/$uuid.jpg");
+
+      fullName = '${user.firstName} ${user.lastName}';
 
       final photoLink =
           await userPhoto.getDownloadURL().timeout(const Duration(seconds: 10));
       state = PersonalInfoData(
           pathProfileUser: photoLink,
           pathProfileTemporal: '',
-          name: fullName ?? '',
+          name: fullName,
           updatingStatus: state.updatingStatus,
           fetchingStatus: PersonalInfoFetchinStatus.success,
           showPasswordRequest: state.showPasswordRequest);

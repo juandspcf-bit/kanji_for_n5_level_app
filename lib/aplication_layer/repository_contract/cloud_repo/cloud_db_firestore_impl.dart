@@ -1,5 +1,6 @@
 import 'package:kanji_for_n5_level_app/aplication_layer/repository_contract/cloud_repo/cloud_db_contract.dart';
 import 'package:kanji_for_n5_level_app/models/favorite.dart';
+import 'package:kanji_for_n5_level_app/models/user.dart';
 import 'package:kanji_for_n5_level_app/repositories/cloud_database/db_firestore_functions/db_favorites_firestore.dart';
 import 'package:kanji_for_n5_level_app/repositories/cloud_database/db_firestore_functions/db_quiz_score_firestore.dart';
 import 'package:kanji_for_n5_level_app/repositories/cloud_database/db_firestore_functions/db_user_data_firestore.dart';
@@ -38,10 +39,15 @@ class FireStoreDBService extends CloudDBService {
 
   @override
   Future<void> addUserData(String email, String uuid) {
-    return insertUserData(
+    return insertUserDataFirebase(
       email,
       uuid,
     );
+  }
+
+  @override
+  Future<UserData> readUserData(String uuid) async {
+    return await readUserDataFirebase(uuid);
   }
 
   @override
