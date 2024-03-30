@@ -35,9 +35,9 @@ class UserForm extends ConsumerWidget {
               child: Column(
                 children: [
                   TextFormField(
-                    initialValue: accountDetailsData.name,
+                    initialValue: accountDetailsData.firstName,
                     decoration: const InputDecoration(
-                      label: Text('Full name'),
+                      label: Text('Firts name'),
                       suffixIcon: Icon(Icons.person),
                       border: OutlineInputBorder(),
                     ),
@@ -55,6 +55,40 @@ class UserForm extends ConsumerWidget {
                   ),
                   const SizedBox(
                     height: 20,
+                  ),
+                  TextFormField(
+                    initialValue: accountDetailsData.firstName,
+                    decoration: const InputDecoration(
+                      label: Text('Last name'),
+                      suffixIcon: Icon(Icons.person),
+                      border: OutlineInputBorder(),
+                    ),
+                    validator: (text) {
+                      if (text != null && text.isNotEmpty && text.length > 2) {
+                        return null;
+                      } else {
+                        return 'Please provide a not to short name';
+                      }
+                    },
+                    onSaved: (text) {
+                      if (text == null) return;
+                      ref.read(personalInfoProvider.notifier).setName(text);
+                    },
+                  ),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  Row(
+                    children: [
+                      IconButton(
+                        onPressed: () {},
+                        icon: const Icon(Icons.calendar_month_outlined),
+                      ),
+                      const SizedBox(
+                        width: 10,
+                      ),
+                      const Text('Your Birthday:'),
+                    ],
                   ),
                   const SizedBox(
                     height: 20,

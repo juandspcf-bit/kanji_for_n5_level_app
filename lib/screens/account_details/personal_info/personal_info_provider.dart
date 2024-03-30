@@ -14,7 +14,7 @@ class PersonalInfoProvider extends Notifier<PersonalInfoData> {
     return PersonalInfoData(
         pathProfileUser: '',
         pathProfileTemporal: '',
-        name: '',
+        firstName: '',
         updatingStatus: PersonalInfoUpdatingStatus.noStarted,
         fetchingStatus: PersonalInfoFetchinStatus.noStarted,
         showPasswordRequest: false);
@@ -24,7 +24,7 @@ class PersonalInfoProvider extends Notifier<PersonalInfoData> {
     state = PersonalInfoData(
         pathProfileUser: '',
         pathProfileTemporal: '',
-        name: '',
+        firstName: '',
         updatingStatus: PersonalInfoUpdatingStatus.noStarted,
         fetchingStatus: PersonalInfoFetchinStatus.noStarted,
         showPasswordRequest: state.showPasswordRequest);
@@ -45,7 +45,7 @@ class PersonalInfoProvider extends Notifier<PersonalInfoData> {
       state = PersonalInfoData(
           pathProfileUser: photoLink,
           pathProfileTemporal: '',
-          name: fullName,
+          firstName: fullName,
           updatingStatus: state.updatingStatus,
           fetchingStatus: PersonalInfoFetchinStatus.success,
           showPasswordRequest: state.showPasswordRequest);
@@ -53,7 +53,7 @@ class PersonalInfoProvider extends Notifier<PersonalInfoData> {
       state = PersonalInfoData(
           pathProfileUser: '',
           pathProfileTemporal: '',
-          name: fullName ?? 'no name',
+          firstName: fullName ?? 'no name',
           updatingStatus: state.updatingStatus,
           fetchingStatus: PersonalInfoFetchinStatus.error,
           showPasswordRequest: state.showPasswordRequest);
@@ -62,7 +62,7 @@ class PersonalInfoProvider extends Notifier<PersonalInfoData> {
       state = PersonalInfoData(
           pathProfileUser: '',
           pathProfileTemporal: '',
-          name: fullName ?? '',
+          firstName: fullName ?? '',
           updatingStatus: state.updatingStatus,
           fetchingStatus: PersonalInfoFetchinStatus.error,
           showPasswordRequest: state.showPasswordRequest);
@@ -73,7 +73,7 @@ class PersonalInfoProvider extends Notifier<PersonalInfoData> {
     state = PersonalInfoData(
         pathProfileUser: '',
         pathProfileTemporal: path,
-        name: state.name,
+        firstName: state.firstName,
         updatingStatus: state.updatingStatus,
         fetchingStatus: state.fetchingStatus,
         showPasswordRequest: state.showPasswordRequest);
@@ -83,7 +83,7 @@ class PersonalInfoProvider extends Notifier<PersonalInfoData> {
     state = PersonalInfoData(
         pathProfileUser: path,
         pathProfileTemporal: state.pathProfileTemporal,
-        name: state.name,
+        firstName: state.firstName,
         updatingStatus: state.updatingStatus,
         fetchingStatus: state.fetchingStatus,
         showPasswordRequest: state.showPasswordRequest);
@@ -93,7 +93,7 @@ class PersonalInfoProvider extends Notifier<PersonalInfoData> {
     state = PersonalInfoData(
         pathProfileUser: state.pathProfileUser,
         pathProfileTemporal: state.pathProfileTemporal,
-        name: name,
+        firstName: name,
         updatingStatus: state.updatingStatus,
         fetchingStatus: state.fetchingStatus,
         showPasswordRequest: state.showPasswordRequest);
@@ -103,7 +103,7 @@ class PersonalInfoProvider extends Notifier<PersonalInfoData> {
     state = PersonalInfoData(
         pathProfileUser: state.pathProfileUser,
         pathProfileTemporal: state.pathProfileTemporal,
-        name: state.name,
+        firstName: state.firstName,
         updatingStatus: state.updatingStatus,
         fetchingStatus: state.fetchingStatus,
         showPasswordRequest: state.showPasswordRequest);
@@ -113,7 +113,7 @@ class PersonalInfoProvider extends Notifier<PersonalInfoData> {
     state = PersonalInfoData(
         pathProfileUser: state.pathProfileUser,
         pathProfileTemporal: state.pathProfileTemporal,
-        name: state.name,
+        firstName: state.firstName,
         updatingStatus: updatingStatus,
         fetchingStatus: state.fetchingStatus,
         showPasswordRequest: state.showPasswordRequest);
@@ -123,7 +123,7 @@ class PersonalInfoProvider extends Notifier<PersonalInfoData> {
     state = PersonalInfoData(
         pathProfileUser: state.pathProfileUser,
         pathProfileTemporal: state.pathProfileTemporal,
-        name: state.name,
+        firstName: state.firstName,
         updatingStatus: state.updatingStatus,
         fetchingStatus: fetchingStatus,
         showPasswordRequest: state.showPasswordRequest);
@@ -133,7 +133,7 @@ class PersonalInfoProvider extends Notifier<PersonalInfoData> {
     state = PersonalInfoData(
         pathProfileUser: state.pathProfileUser,
         pathProfileTemporal: state.pathProfileTemporal,
-        name: state.name,
+        firstName: state.firstName,
         updatingStatus: state.updatingStatus,
         fetchingStatus: state.fetchingStatus,
         showPasswordRequest: status);
@@ -157,7 +157,7 @@ class PersonalInfoProvider extends Notifier<PersonalInfoData> {
     final personalInfoData = state;
     final name = user.displayName;
     if (name != null &&
-        name.trim() == personalInfoData.name.trim() &&
+        name.trim() == personalInfoData.firstName.trim() &&
         personalInfoData.pathProfileTemporal.isEmpty) {
       setUpdatingStatus(PersonalInfoUpdatingStatus.noUpdate);
       return;
@@ -165,8 +165,8 @@ class PersonalInfoProvider extends Notifier<PersonalInfoData> {
     setUpdatingStatus(PersonalInfoUpdatingStatus.updating);
 
     try {
-      if (name != null && name != personalInfoData.name.trim()) {
-        await user.updateDisplayName(personalInfoData.name);
+      if (name != null && name != personalInfoData.firstName.trim()) {
+        await user.updateDisplayName(personalInfoData.firstName);
       }
     } on FirebaseAuthException catch (e) {
       logger.e('error changing email with ${e.code} and message $e');
@@ -226,7 +226,7 @@ enum PersonalInfoUpdatingStatus {
 class PersonalInfoData {
   final String pathProfileUser;
   final String pathProfileTemporal;
-  final String name;
+  final String firstName;
   final PersonalInfoUpdatingStatus updatingStatus;
   final PersonalInfoFetchinStatus fetchingStatus;
   final bool showPasswordRequest;
@@ -234,7 +234,7 @@ class PersonalInfoData {
   PersonalInfoData(
       {required this.pathProfileUser,
       required this.pathProfileTemporal,
-      required this.name,
+      required this.firstName,
       required this.updatingStatus,
       required this.fetchingStatus,
       required this.showPasswordRequest});
