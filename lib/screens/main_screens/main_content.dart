@@ -20,7 +20,7 @@ class MainContent extends ConsumerWidget with StatusDBStoringDialogs {
   const MainContent({super.key});
 
   Widget selectScreen(ScreenSelection selectedPageIndex) {
-    getAllQuizSectionData(authService.user ?? '');
+    getAllQuizSectionData(authService.userUuid ?? '');
 
     switch (selectedPageIndex) {
       case ScreenSelection.kanjiSections:

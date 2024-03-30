@@ -65,7 +65,7 @@ class MainScreenProvider extends Notifier<MainScreenData> {
     } else {
       ref
           .read(progressTimelineProvider.notifier)
-          .getAllQuizSectionData(authService.user ?? '');
+          .getAllQuizSectionData(authService.userUuid ?? '');
       ref
           .read(mainScreenProvider.notifier)
           .setScreen(ScreenSelection.progressTimeLine);
@@ -93,9 +93,9 @@ class MainScreenProvider extends Notifier<MainScreenData> {
 
     try {
       final quizScoreData =
-          await cloudDBService.loadQuizScoreData(authService.user ?? '');
+          await cloudDBService.loadQuizScoreData(authService.userUuid ?? '');
       localDBService.updateQuizScoreFromCloud(
-          quizScoreData, authService.user ?? '');
+          quizScoreData, authService.userUuid ?? '');
     } catch (e) {
       logger.e('error loading quiz score $e');
     }
@@ -103,7 +103,7 @@ class MainScreenProvider extends Notifier<MainScreenData> {
     List<Favorite> favoritesKanjis;
     try {
       favoritesKanjis =
-          await cloudDBService.loadFavoritesCloudDB(authService.user ?? '');
+          await cloudDBService.loadFavoritesCloudDB(authService.userUuid ?? '');
       await localDBService.storeAllFavoritesFromCloud(favoritesKanjis);
     } catch (e) {
       favoritesKanjis = [];
@@ -119,7 +119,7 @@ class MainScreenProvider extends Notifier<MainScreenData> {
   Future<void> getOfflineData() async {
     List<KanjiFromApi> listOfValidStoredKanjis = await loadStoredKanjis();
     final favoritesKanjis =
-        await localDBService.loadFavoritesDatabase(authService.user ?? '');
+        await localDBService.loadFavoritesDatabase(authService.userUuid ?? '');
     ref
         .read(favoriteskanjisProvider.notifier)
         .setInitialFavoritesWithNoInternetConnection(

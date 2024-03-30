@@ -58,7 +58,7 @@ class KanjiQuizScreen extends ConsumerWidget {
 
       ref.read(lastScoreKanjiQuizProvider.notifier).setFinishedQuiz(
             section: ref.read(sectionProvider),
-            uuid: authService.user ?? '',
+            uuid: authService.userUuid ?? '',
             countCorrects: countCorrects,
             countIncorrects: countIncorrects,
             countOmited: countOmited,

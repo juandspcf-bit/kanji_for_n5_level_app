@@ -226,7 +226,7 @@ class DownloadKanji {
   Future<KanjiFromApi?> storeKanjiToLocalDatabase() async {
     final kanjiFromApiStored = await localDBService.storeKanjiToLocalDatabase(
       kanjiFromApi,
-      authService.user ?? '',
+      authService.userUuid ?? '',
     );
 
     if (kanjiFromApiStored == null) return null;
@@ -247,7 +247,7 @@ class DeleteKanji {
   Future<void> deleteKanjiFromLocalDatabase() async {
     await localDBService.deleteKanjiFromLocalDatabase(
       kanjiFromApi,
-      authService.user ?? '',
+      authService.userUuid ?? '',
     );
   }
 }

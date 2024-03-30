@@ -106,7 +106,7 @@ class QuestionScreenPortrait extends ConsumerWidget {
 
                     ref.read(lastScoreDetailsProvider.notifier).setFinishedQuiz(
                           section: ref.read(sectionProvider),
-                          uuid: authService.user ?? '',
+                          uuid: authService.userUuid ?? '',
                           kanjiCharacter: kanjiFromApi.kanjiCharacter,
                           countCorrects: scores.correctAnswers.length,
                           countIncorrects: scores.incorrectAnwers.length,

@@ -11,11 +11,11 @@ final streamAuth = FirebaseAuth.instance.userChanges();
 
 class FirebaseSignInUser implements AuthService {
   @override
-  String? user = '';
+  String? userUuid = '';
 
   @override
   void setLoggedUser() {
-    user = FirebaseAuth.instance.currentUser?.uid;
+    userUuid = FirebaseAuth.instance.currentUser?.uid;
   }
 
   @override

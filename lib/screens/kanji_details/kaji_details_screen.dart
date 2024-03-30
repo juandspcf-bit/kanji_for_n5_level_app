@@ -149,7 +149,7 @@ class KanjiDetails extends ConsumerWidget {
                                         .getSingleAudioExampleQuizDataDB(
                                           kanjiFromApi.kanjiCharacter,
                                           ref.read(sectionProvider),
-                                          authService.user ?? '',
+                                          authService.userUuid ?? '',
                                         );
                                     ref
                                         .read(
@@ -157,7 +157,7 @@ class KanjiDetails extends ConsumerWidget {
                                         .getSingleFlashCardDataDB(
                                           kanjiFromApi.kanjiCharacter,
                                           ref.read(sectionProvider),
-                                          authService.user ?? '',
+                                          authService.userUuid ?? '',
                                         );
 
                                     Navigator.of(context)

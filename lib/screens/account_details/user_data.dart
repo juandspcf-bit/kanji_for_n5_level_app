@@ -58,25 +58,6 @@ class UserData extends ConsumerWidget {
                   const SizedBox(
                     height: 20,
                   ),
-                  TextFormField(
-                    initialValue: accountDetailsData.email,
-                    decoration: const InputDecoration(
-                      label: Text('Your email'),
-                      suffixIcon: Icon(Icons.email),
-                      border: OutlineInputBorder(),
-                    ),
-                    validator: (text) {
-                      if (text != null && EmailValidator.validate(text)) {
-                        return null;
-                      } else {
-                        return 'Not a valid email';
-                      }
-                    },
-                    onSaved: (text) {
-                      if (text == null) return;
-                      ref.read(personalInfoProvider.notifier).setEmail(text);
-                    },
-                  ),
                   const SizedBox(
                     height: 20,
                   ),

@@ -35,7 +35,7 @@ class _FlassCardScreenState extends ConsumerState<FlashCardScreenLandscape> {
         ref.read(lastScoreFlashCardProvider.notifier).setFinishedFlashCard(
               kanjiCharacter: widget.kanjiFromApi.kanjiCharacter,
               section: widget.kanjiFromApi.section,
-              uuid: authService.user ?? '',
+              uuid: authService.userUuid ?? '',
               countUnWatched: ref
                   .read(flashCardProvider.notifier)
                   .answers

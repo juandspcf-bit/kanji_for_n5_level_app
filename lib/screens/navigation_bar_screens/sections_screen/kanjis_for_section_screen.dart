@@ -113,7 +113,7 @@ class KanjiForSectionScreen extends ConsumerWidget
                           .read(lastScoreKanjiQuizProvider.notifier)
                           .getKanjiQuizLastScore(
                             ref.read(sectionProvider),
-                            authService.user ?? '',
+                            authService.userUuid ?? '',
                           );
                       Navigator.of(context).push(
                         MaterialPageRoute(

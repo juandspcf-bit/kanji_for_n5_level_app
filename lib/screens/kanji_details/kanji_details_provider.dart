@@ -54,7 +54,7 @@ class KanjiDetailsProvider extends Notifier<KanjiDetailsData?> {
         await cloudDBService.insertFavoriteCloudDB(
           kanjiFromApi.kanjiCharacter,
           timeStamp,
-          authService.user ?? '',
+          authService.userUuid ?? '',
         );
         await insertFavorite(kanjiFromApi.kanjiCharacter, timeStamp);
         final storedItems =
@@ -85,7 +85,7 @@ class KanjiDetailsProvider extends Notifier<KanjiDetailsData?> {
       try {
         await cloudDBService.deleteFavoriteCloudDB(
           kanjiFromApi.kanjiCharacter,
-          authService.user ?? '',
+          authService.userUuid ?? '',
         );
         await deleteFavorite(kanjiFromApi.kanjiCharacter);
         ref.read(favoriteskanjisProvider.notifier).removeItem(kanjiFromApi);

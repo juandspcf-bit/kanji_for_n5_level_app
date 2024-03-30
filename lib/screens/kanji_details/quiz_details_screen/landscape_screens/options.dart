@@ -37,14 +37,14 @@ class OptionsDetails extends ConsumerWidget {
                 .getSingleAudioExampleQuizDataDB(
                   kanjiFromApi.kanjiCharacter,
                   ref.read(sectionProvider),
-                  authService.user ?? '',
+                  authService.userUuid ?? '',
                 );
             ref
                 .read(lastScoreFlashCardProvider.notifier)
                 .getSingleFlashCardDataDB(
                   kanjiFromApi.kanjiCharacter,
                   ref.read(sectionProvider),
-                  authService.user ?? '',
+                  authService.userUuid ?? '',
                 );
 
             Navigator.of(context).push(MaterialPageRoute(

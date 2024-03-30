@@ -15,7 +15,6 @@ class PersonalInfoProvider extends Notifier<PersonalInfoData> {
         pathProfileUser: '',
         pathProfileTemporal: '',
         name: '',
-        email: '',
         updatingStatus: PersonalInfoUpdatingStatus.noStarted,
         fetchingStatus: PersonalInfoFetchinStatus.noStarted,
         showPasswordRequest: false);
@@ -26,23 +25,20 @@ class PersonalInfoProvider extends Notifier<PersonalInfoData> {
         pathProfileUser: '',
         pathProfileTemporal: '',
         name: '',
-        email: '',
         updatingStatus: PersonalInfoUpdatingStatus.noStarted,
         fetchingStatus: PersonalInfoFetchinStatus.noStarted,
         showPasswordRequest: state.showPasswordRequest);
   }
 
   Future<void> getInitialPersonalInfoData() async {
+    logger.d('uuid ${authService.userUuid}');
     final uuid = FirebaseAuth.instance.currentUser!.uid;
     final fullName = FirebaseAuth.instance.currentUser!.displayName;
-    final email = FirebaseAuth.instance.currentUser!.email;
 
     try {
       setFetchingStatus(PersonalInfoFetchinStatus.processing);
 
       final userPhoto = storageRef.child("userImages/$uuid.jpg");
-
-      logger.e('reading profile photo');
 
       final photoLink =
           await userPhoto.getDownloadURL().timeout(const Duration(seconds: 10));
@@ -50,19 +46,14 @@ class PersonalInfoProvider extends Notifier<PersonalInfoData> {
           pathProfileUser: photoLink,
           pathProfileTemporal: '',
           name: fullName ?? '',
-          email: email ?? '',
           updatingStatus: state.updatingStatus,
           fetchingStatus: PersonalInfoFetchinStatus.success,
           showPasswordRequest: state.showPasswordRequest);
     } on TimeoutException {
-      logger.e('time out exception');
-      logger.d(fullName);
-      logger.d(email);
       state = PersonalInfoData(
           pathProfileUser: '',
           pathProfileTemporal: '',
           name: fullName ?? 'no name',
-          email: email ?? 'no data',
           updatingStatus: state.updatingStatus,
           fetchingStatus: PersonalInfoFetchinStatus.error,
           showPasswordRequest: state.showPasswordRequest);
@@ -72,7 +63,6 @@ class PersonalInfoProvider extends Notifier<PersonalInfoData> {
           pathProfileUser: '',
           pathProfileTemporal: '',
           name: fullName ?? '',
-          email: email ?? '',
           updatingStatus: state.updatingStatus,
           fetchingStatus: PersonalInfoFetchinStatus.error,
           showPasswordRequest: state.showPasswordRequest);
@@ -84,7 +74,6 @@ class PersonalInfoProvider extends Notifier<PersonalInfoData> {
         pathProfileUser: '',
         pathProfileTemporal: path,
         name: state.name,
-        email: state.email,
         updatingStatus: state.updatingStatus,
         fetchingStatus: state.fetchingStatus,
         showPasswordRequest: state.showPasswordRequest);
@@ -95,7 +84,6 @@ class PersonalInfoProvider extends Notifier<PersonalInfoData> {
         pathProfileUser: path,
         pathProfileTemporal: state.pathProfileTemporal,
         name: state.name,
-        email: state.email,
         updatingStatus: state.updatingStatus,
         fetchingStatus: state.fetchingStatus,
         showPasswordRequest: state.showPasswordRequest);
@@ -106,7 +94,6 @@ class PersonalInfoProvider extends Notifier<PersonalInfoData> {
         pathProfileUser: state.pathProfileUser,
         pathProfileTemporal: state.pathProfileTemporal,
         name: name,
-        email: state.email,
         updatingStatus: state.updatingStatus,
         fetchingStatus: state.fetchingStatus,
         showPasswordRequest: state.showPasswordRequest);
@@ -117,7 +104,6 @@ class PersonalInfoProvider extends Notifier<PersonalInfoData> {
         pathProfileUser: state.pathProfileUser,
         pathProfileTemporal: state.pathProfileTemporal,
         name: state.name,
-        email: email,
         updatingStatus: state.updatingStatus,
         fetchingStatus: state.fetchingStatus,
         showPasswordRequest: state.showPasswordRequest);
@@ -128,7 +114,6 @@ class PersonalInfoProvider extends Notifier<PersonalInfoData> {
         pathProfileUser: state.pathProfileUser,
         pathProfileTemporal: state.pathProfileTemporal,
         name: state.name,
-        email: state.email,
         updatingStatus: updatingStatus,
         fetchingStatus: state.fetchingStatus,
         showPasswordRequest: state.showPasswordRequest);
@@ -139,7 +124,6 @@ class PersonalInfoProvider extends Notifier<PersonalInfoData> {
         pathProfileUser: state.pathProfileUser,
         pathProfileTemporal: state.pathProfileTemporal,
         name: state.name,
-        email: state.email,
         updatingStatus: state.updatingStatus,
         fetchingStatus: fetchingStatus,
         showPasswordRequest: state.showPasswordRequest);
@@ -150,7 +134,6 @@ class PersonalInfoProvider extends Notifier<PersonalInfoData> {
         pathProfileUser: state.pathProfileUser,
         pathProfileTemporal: state.pathProfileTemporal,
         name: state.name,
-        email: state.email,
         updatingStatus: state.updatingStatus,
         fetchingStatus: state.fetchingStatus,
         showPasswordRequest: status);
@@ -173,11 +156,8 @@ class PersonalInfoProvider extends Notifier<PersonalInfoData> {
     }
     final personalInfoData = state;
     final name = user.displayName;
-    final email = user.email;
     if (name != null &&
         name.trim() == personalInfoData.name.trim() &&
-        email != null &&
-        email.trim() == personalInfoData.email.trim() &&
         personalInfoData.pathProfileTemporal.isEmpty) {
       setUpdatingStatus(PersonalInfoUpdatingStatus.noUpdate);
       return;
@@ -187,15 +167,6 @@ class PersonalInfoProvider extends Notifier<PersonalInfoData> {
     try {
       if (name != null && name != personalInfoData.name.trim()) {
         await user.updateDisplayName(personalInfoData.name);
-      }
-
-      if (email != null && email != personalInfoData.email.trim()) {
-        final authCredential = EmailAuthProvider.credential(
-          email: user.email!,
-          password: password,
-        );
-        await user.reauthenticateWithCredential(authCredential);
-        await user.updateEmail(personalInfoData.email);
       }
     } on FirebaseAuthException catch (e) {
       logger.e('error changing email with ${e.code} and message $e');
@@ -256,7 +227,6 @@ class PersonalInfoData {
   final String pathProfileUser;
   final String pathProfileTemporal;
   final String name;
-  final String email;
   final PersonalInfoUpdatingStatus updatingStatus;
   final PersonalInfoFetchinStatus fetchingStatus;
   final bool showPasswordRequest;
@@ -265,7 +235,6 @@ class PersonalInfoData {
       {required this.pathProfileUser,
       required this.pathProfileTemporal,
       required this.name,
-      required this.email,
       required this.updatingStatus,
       required this.fetchingStatus,
       required this.showPasswordRequest});
