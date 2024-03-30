@@ -10,6 +10,8 @@ abstract class AuthService {
       {required String email});
 
   Future<(DeleteUserStatus, String)> deleteUser({required String password});
+
+  Future<void> singOut();
 }
 
 enum StatusLogingRequest {

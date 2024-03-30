@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:kanji_for_n5_level_app/main.dart';
 import 'package:kanji_for_n5_level_app/screens/account_details/change_email/change_email_flow.dart';
 import 'package:kanji_for_n5_level_app/screens/account_details/close_account/close_account.dart';
 import 'package:kanji_for_n5_level_app/screens/account_details/close_account/close_account_provider.dart';
@@ -109,7 +110,7 @@ class AccountDetails extends ConsumerWidget {
                   ),
                   ListTile(
                     onTap: () async {
-                      await FirebaseAuth.instance.signOut();
+                      await authService.singOut();
                       ref
                           .read(mainScreenProvider.notifier)
                           .resetMainScreenState();

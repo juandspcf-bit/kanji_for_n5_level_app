@@ -71,8 +71,9 @@ class FirebaseSignInUser implements AuthService {
   }
 
   @override
-  Future<(DeleteUserStatus, String)> deleteUser(
-      {required String password}) async {
+  Future<(DeleteUserStatus, String)> deleteUser({
+    required String password,
+  }) async {
     final user = FirebaseAuth.instance.currentUser;
     if (user == null) {
       return (DeleteUserStatus.error, '');
@@ -101,5 +102,10 @@ class FirebaseSignInUser implements AuthService {
       logger.e(e);
       return (DeleteUserStatus.error, uuid);
     }
+  }
+
+  @override
+  Future<void> singOut() async {
+    return await FirebaseAuth.instance.signOut();
   }
 }
