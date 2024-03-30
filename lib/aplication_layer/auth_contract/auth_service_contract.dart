@@ -1,5 +1,5 @@
 abstract class AuthService {
-  String? user;
+  String? userUuid;
 
   void setLoggedUser();
 
