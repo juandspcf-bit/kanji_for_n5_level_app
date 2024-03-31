@@ -57,7 +57,7 @@ Future<void> updateUserDataFirebase(
 ) async {
   try {
     final docRef = dbFirebase.collection("user_data").doc(uuid);
-    docRef.set(newData);
+    docRef.update(newData);
   } on FirebaseException {
     rethrow;
   } catch (e) {

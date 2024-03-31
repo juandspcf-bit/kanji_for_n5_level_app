@@ -2,7 +2,6 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kanji_for_n5_level_app/aplication_layer/auth_firebase_impl/auth_service_firebase.dart';
 import 'package:kanji_for_n5_level_app/main.dart';
@@ -173,16 +172,7 @@ class PersonalInfoProvider extends Notifier<PersonalInfoData> {
         showPasswordRequest: status);
   }
 
-  void onValidate(GlobalKey<FormState> formKey) async {
-    final currentFormState = formKey.currentState;
-    if (currentFormState == null) return;
-    if (!currentFormState.validate()) return;
-    currentFormState.save();
-
-    setShowPasswordRequest(true);
-  }
-
-  void updateUserData(String password) async {
+  void updateUserData() async {
     final userUuid = authService.userUuid;
     if (userUuid == null) {
       setUpdatingStatus(PersonalInfoUpdatingStatus.error);
@@ -193,7 +183,11 @@ class PersonalInfoProvider extends Notifier<PersonalInfoData> {
     setUpdatingStatus(PersonalInfoUpdatingStatus.updating);
 
     try {
-      updateUserDataFirebase(userUuid, {});
+      updateUserDataFirebase(userUuid, {
+        'birthday': state.birthdate,
+        'firstName': state.firstName,
+        'lastName': state.lastName,
+      });
     } on FirebaseException catch (e) {
       logger.e('error changing email with ${e.code} and message $e');
       setUpdatingStatus(PersonalInfoUpdatingStatus.error);

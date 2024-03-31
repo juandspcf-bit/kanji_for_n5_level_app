@@ -2,7 +2,6 @@ import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kanji_for_n5_level_app/config_files/assets_paths.dart';
-import 'package:kanji_for_n5_level_app/main.dart';
 import 'package:kanji_for_n5_level_app/screens/account_details/personal_info/personal_info_provider.dart';
 import 'package:kanji_for_n5_level_app/providers/status_connection_provider.dart';
 import 'package:kanji_for_n5_level_app/screens/main_screens/sign_up_screen/profile_picture_widget.dart';
@@ -29,6 +28,15 @@ class UserForm extends ConsumerWidget {
   }
 
   final PersonalInfoData accountDetailsData;
+
+  void onValidate(WidgetRef ref) async {
+    final currentFormState = _formKey.currentState;
+    if (currentFormState == null) return;
+    if (!currentFormState.validate()) return;
+    currentFormState.save();
+
+    ref.read(personalInfoProvider.notifier).updateUserData();
+  }
 
   final _formKey = GlobalKey<FormState>();
 
@@ -88,7 +96,7 @@ class UserForm extends ConsumerWidget {
                     },
                     onSaved: (text) {
                       if (text == null) return;
-                      ref.read(personalInfoProvider.notifier).setName(text);
+                      ref.read(personalInfoProvider.notifier).setLastName(text);
                     },
                   ),
                   const SizedBox(
@@ -115,9 +123,7 @@ class UserForm extends ConsumerWidget {
                     onPressed: statusConnectionData == ConnectivityResult.none
                         ? null
                         : () {
-                            ref
-                                .read(personalInfoProvider.notifier)
-                                .onValidate(_formKey);
+                            onValidate(ref);
                           },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Theme.of(context).colorScheme.primary,
