@@ -124,7 +124,7 @@ class LoginForm extends ConsumerWidget {
               ref.read(singUpProvider.notifier).resetStatus();
 
               Navigator.of(context).push(MaterialPageRoute(builder: (ctx) {
-                return const SignUpForm();
+                return const SignUpScreen();
               }));
             },
             style: ElevatedButton.styleFrom().copyWith(
