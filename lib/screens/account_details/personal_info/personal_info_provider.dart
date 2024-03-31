@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kanji_for_n5_level_app/aplication_layer/auth_firebase_impl/auth_service_firebase.dart';
 import 'package:kanji_for_n5_level_app/main.dart';
+import 'package:kanji_for_n5_level_app/repositories/cloud_database/db_firestore_functions/db_user_data_firestore.dart';
 import 'package:kanji_for_n5_level_app/screens/main_screens/main_content_provider.dart';
 
 class PersonalInfoProvider extends Notifier<PersonalInfoData> {
@@ -182,30 +183,23 @@ class PersonalInfoProvider extends Notifier<PersonalInfoData> {
   }
 
   void updateUserData(String password) async {
-    final user = FirebaseAuth.instance.currentUser;
-    if (user == null) {
+    final userUuid = authService.userUuid;
+    if (userUuid == null) {
       setUpdatingStatus(PersonalInfoUpdatingStatus.error);
       return;
     }
     final personalInfoData = state;
-    final name = user.displayName;
-    if (name != null &&
-        name.trim() == personalInfoData.firstName.trim() &&
-        personalInfoData.pathProfileTemporal.isEmpty) {
-      setUpdatingStatus(PersonalInfoUpdatingStatus.noUpdate);
-      return;
-    }
+
     setUpdatingStatus(PersonalInfoUpdatingStatus.updating);
 
     try {
-      if (name != null && name != personalInfoData.firstName.trim()) {
-        await user.updateDisplayName(personalInfoData.firstName);
-      }
-    } on FirebaseAuthException catch (e) {
+      updateUserDataFirebase(userUuid, {});
+    } on FirebaseException catch (e) {
       logger.e('error changing email with ${e.code} and message $e');
       setUpdatingStatus(PersonalInfoUpdatingStatus.error);
-
       return;
+    } catch (e) {
+      setUpdatingStatus(PersonalInfoUpdatingStatus.error);
     }
 
     if (personalInfoData.pathProfileTemporal.isNotEmpty) {

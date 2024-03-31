@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:kanji_for_n5_level_app/main.dart';
 import 'package:kanji_for_n5_level_app/models/user.dart';
 
@@ -47,5 +48,19 @@ Future<UserData> readUserDataFirebase(String uuid) async {
           email: '',
           birthday: '',
         ));
+  }
+}
+
+Future<void> updateUserDataFirebase(
+  String uuid,
+  Map<String, String> newData,
+) async {
+  try {
+    final docRef = dbFirebase.collection("user_data").doc(uuid);
+    docRef.set(newData);
+  } on FirebaseException {
+    rethrow;
+  } catch (e) {
+    rethrow;
   }
 }
