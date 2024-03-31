@@ -4,10 +4,10 @@ import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kanji_for_n5_level_app/aplication_layer/auth_contract/auth_service_contract.dart';
 import 'package:kanji_for_n5_level_app/screens/common_screens.dart/loading_screen.dart';
-import 'package:kanji_for_n5_level_app/screens/main_screens/login_screen/login_provider.dart';
+import 'package:kanji_for_n5_level_app/screens/login_screen/login_provider.dart';
 import 'package:kanji_for_n5_level_app/providers/status_connection_provider.dart';
 import 'package:kanji_for_n5_level_app/screens/common_screens.dart/error_connection_screen.dart';
-import 'package:kanji_for_n5_level_app/screens/main_screens/login_screen/login_form.dart';
+import 'package:kanji_for_n5_level_app/screens/login_screen/login_form.dart';
 import 'package:kanji_for_n5_level_app/screens/common_widgets/my_dialogs.dart';
 
 class ToLoginFormScreen extends ConsumerWidget with MyDialogs {

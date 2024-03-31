@@ -4,7 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kanji_for_n5_level_app/main.dart';
 import 'package:kanji_for_n5_level_app/screens/account_details/change_email/change_email_flow_provider.dart';
 import 'package:kanji_for_n5_level_app/screens/common_widgets/my_dialogs.dart';
-import 'package:kanji_for_n5_level_app/screens/main_screens/login_screen/login_provider.dart';
+import 'package:kanji_for_n5_level_app/screens/login_screen/login_provider.dart';
 import 'package:kanji_for_n5_level_app/screens/main_screens/main_content_provider.dart';
 
 class EmailChangeFlow extends ConsumerWidget with MyDialogs {
