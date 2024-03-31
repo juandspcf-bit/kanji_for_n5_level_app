@@ -87,10 +87,30 @@ class MainContent extends ConsumerWidget with StatusDBStoringDialogs {
                 ),
                 GestureDetector(
                   onTap: () {
-                    Navigator.of(context)
-                        .push(MaterialPageRoute(builder: (ctx) {
-                      return const AccountDetails();
-                    }));
+                    Navigator.of(context).push(
+                      PageRouteBuilder(
+                        transitionDuration: const Duration(seconds: 1),
+                        reverseTransitionDuration: const Duration(seconds: 1),
+                        pageBuilder: (context, animation, secondaryAnimation) =>
+                            const AccountDetails(),
+                        transitionsBuilder:
+                            (context, animation, secondaryAnimation, child) {
+                          return SlideTransition(
+                            position: Tween<Offset>(
+                              begin: const Offset(0, 1),
+                              end: Offset.zero,
+                            ).animate(
+                              animation.drive(
+                                CurveTween(
+                                  curve: Curves.easeInOutBack,
+                                ),
+                              ),
+                            ),
+                            child: child,
+                          );
+                        },
+                      ),
+                    );
                   },
                   child: LayoutBuilder(
                     builder: (ctx, constrains) {
