@@ -26,6 +26,11 @@ abstract class CloudDBService {
 
   Future<UserData> readUserData(String uuid);
 
+  Future<void> updateUserData(
+    String uuid,
+    Map<String, String> newData,
+  );
+
   Future<void> createQuizScoreMap(String uuid);
 
   Future<void> updateQuizSectionScore(

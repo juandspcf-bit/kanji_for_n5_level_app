@@ -5,7 +5,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kanji_for_n5_level_app/aplication_layer/auth_firebase_impl/auth_service_firebase.dart';
 import 'package:kanji_for_n5_level_app/main.dart';
-import 'package:kanji_for_n5_level_app/repositories/cloud_database/db_firestore_functions/db_user_data_firestore.dart';
 import 'package:kanji_for_n5_level_app/screens/main_screens/main_content_provider.dart';
 
 class PersonalInfoProvider extends Notifier<PersonalInfoData> {
@@ -183,7 +182,7 @@ class PersonalInfoProvider extends Notifier<PersonalInfoData> {
     setUpdatingStatus(PersonalInfoUpdatingStatus.updating);
 
     try {
-      updateUserDataFirebase(userUuid, {
+      await cloudDBService.updateUserData(userUuid, {
         'birthday': state.birthdate,
         'firstName': state.firstName,
         'lastName': state.lastName,

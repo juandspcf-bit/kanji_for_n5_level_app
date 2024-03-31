@@ -51,6 +51,14 @@ class FireStoreDBService extends CloudDBService {
   }
 
   @override
+  Future<void> updateUserData(
+    String uuid,
+    Map<String, String> newData,
+  ) async {
+    return updateUserDataFirebase(uuid, newData);
+  }
+
+  @override
   Future<void> updateQuizSectionScore(
     bool allCorrectAnswersQuizKanji,
     bool isFinishedKanjiQuiz,
