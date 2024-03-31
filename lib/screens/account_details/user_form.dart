@@ -2,6 +2,7 @@ import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kanji_for_n5_level_app/config_files/assets_paths.dart';
+import 'package:kanji_for_n5_level_app/main.dart';
 import 'package:kanji_for_n5_level_app/screens/account_details/personal_info/personal_info_provider.dart';
 import 'package:kanji_for_n5_level_app/providers/status_connection_provider.dart';
 import 'package:kanji_for_n5_level_app/screens/main_screens/sign_up_screen/profile_picture_widget.dart';
@@ -11,6 +12,21 @@ class UserForm extends ConsumerWidget {
     super.key,
     required this.accountDetailsData,
   });
+
+  void _setDatePicker(BuildContext context, WidgetRef ref) async {
+    final now = DateTime.now();
+    final firstDate = DateTime(now.year - 100, 1, 1);
+    final pickedDate = await showDatePicker(
+      context: context,
+      initialDate: now,
+      firstDate: firstDate,
+      lastDate: now,
+    );
+
+    if (pickedDate == null) return;
+    ref.read(personalInfoProvider.notifier).setBirthdate(
+        '${pickedDate.year}/${pickedDate.month}/${pickedDate.day}');
+  }
 
   final PersonalInfoData accountDetailsData;
 
@@ -57,7 +73,7 @@ class UserForm extends ConsumerWidget {
                     height: 20,
                   ),
                   TextFormField(
-                    initialValue: accountDetailsData.firstName,
+                    initialValue: accountDetailsData.lastName,
                     decoration: const InputDecoration(
                       label: Text('Last name'),
                       suffixIcon: Icon(Icons.person),
@@ -81,13 +97,15 @@ class UserForm extends ConsumerWidget {
                   Row(
                     children: [
                       IconButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          _setDatePicker(context, ref);
+                        },
                         icon: const Icon(Icons.calendar_month_outlined),
                       ),
                       const SizedBox(
                         width: 10,
                       ),
-                      const Text('Your Birthday:'),
+                      Text('Your Birthday: ${accountDetailsData.birthdate}'),
                     ],
                   ),
                   const SizedBox(
