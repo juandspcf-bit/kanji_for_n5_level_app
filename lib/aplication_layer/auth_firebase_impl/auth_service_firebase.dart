@@ -73,34 +73,36 @@ class FirebaseSignInUser implements AuthService {
   @override
   Future<(DeleteUserStatus, String)> deleteUser({
     required String password,
+    required String uuid,
   }) async {
-    final user = FirebaseAuth.instance.currentUser;
-    if (user == null) {
+    if (uuid == '') {
       return (DeleteUserStatus.error, '');
     }
-    final uuid = user.uid;
+    final user = FirebaseAuth.instance.currentUser;
+
+    final querySnapshot =
+        await dbFirebase.collection("user_data").doc(uuid).get();
+
+    final queryData = querySnapshot.data();
     try {
-      final email = user.email;
-      if (email != null) {
+      if (querySnapshot.exists && queryData != null && user != null) {
+        final email = queryData['email'] as String;
         final authCredential = EmailAuthProvider.credential(
-          email: user.email!,
+          email: email,
           password: password,
         );
         await user.reauthenticateWithCredential(authCredential);
-        await user.updateEmail(email);
-      }
-      await user.delete();
-      return (DeleteUserStatus.success, uuid);
-    } on FirebaseAuthException catch (e) {
-      if (e.code == 'wrong-password') {
-        return (DeleteUserStatus.wrongPassword, uuid);
+        await user.delete();
+        return (DeleteUserStatus.success, uuid);
       } else {
-        logger.e(e);
         return (DeleteUserStatus.error, uuid);
       }
+    } on FirebaseAuthException {
+      rethrow;
+    } on FirebaseException {
+      rethrow;
     } catch (e) {
-      logger.e(e);
-      return (DeleteUserStatus.error, uuid);
+      rethrow;
     }
   }
 

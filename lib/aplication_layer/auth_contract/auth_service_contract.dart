@@ -9,7 +9,8 @@ abstract class AuthService {
   Future<StatusResetPasswordRequest> sendPasswordResetEmail(
       {required String email});
 
-  Future<(DeleteUserStatus, String)> deleteUser({required String password});
+  Future<(DeleteUserStatus, String)> deleteUser(
+      {required String password, required String uuid});
 
   Future<void> singOut();
 }

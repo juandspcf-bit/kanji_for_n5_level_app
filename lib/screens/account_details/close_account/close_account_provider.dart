@@ -44,23 +44,37 @@ class CloseAccountProvider extends Notifier<CloseAccountData> {
 
   void deleteUser({required String password}) async {
     setDeleteRequestStatus(DeleteRequestStatus.process);
-    //TODO execute the deletion succefuly even if the connection is lost
-    final (deleteUserStatus, uuid) =
-        await authService.deleteUser(password: password);
-    await localDBService.deleteUserData(uuid);
 
-    await cloudDBService.deleteQuizScoreData(uuid);
-    await cloudDBService.deleteAllFavoritesCloudDB(uuid);
+    try {
+      final (deleteUserStatus, uuid) = await authService.deleteUser(
+        password: password,
+        uuid: authService.userUuid ?? '',
+      );
 
-    final userPhoto = storageRef.child("userImages/$uuid.jpg");
-    await userPhoto.delete().onError(
-        (error, stackTrace) => logger.e('error deleting user photo $error'));
+      if (deleteUserStatus == DeleteUserStatus.error) {
+        setDeleteRequestStatus(DeleteRequestStatus.noStarted);
+        setDeleteUserStatus(DeleteUserStatus.error);
+        return;
+      }
 
-    await Future.delayed(
-      const Duration(seconds: 2),
-    );
-    setDeleteRequestStatus(DeleteRequestStatus.noStarted);
-    setDeleteUserStatus(deleteUserStatus);
+      await localDBService.deleteUserData(uuid);
+
+      await cloudDBService.deleteQuizScoreData(uuid);
+      await cloudDBService.deleteAllFavoritesCloudDB(uuid);
+
+      final userPhoto = storageRef.child("userImages/$uuid.jpg");
+      await userPhoto.delete().onError(
+          (error, stackTrace) => logger.e('error deleting user photo $error'));
+
+      await Future.delayed(
+        const Duration(seconds: 2),
+      );
+      setDeleteRequestStatus(DeleteRequestStatus.noStarted);
+      setDeleteUserStatus(DeleteUserStatus.success);
+    } catch (e) {
+      setDeleteRequestStatus(DeleteRequestStatus.noStarted);
+      setDeleteUserStatus(DeleteUserStatus.error);
+    }
   }
 }
 
