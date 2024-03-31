@@ -55,7 +55,7 @@ class AccountDetails extends ConsumerWidget {
                       borderRadius:
                           const BorderRadius.all(Radius.circular(12.0)),
                     ),
-                    title: const Text('Name, email,'),
+                    title: const Text('Your data'),
                     trailing: const Icon(Icons.arrow_forward_ios),
                   ),
                   const SizedBox(
