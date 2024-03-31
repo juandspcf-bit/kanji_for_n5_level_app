@@ -16,13 +16,10 @@ Future<void> insertUserDataFirebase(
 
 Future<UserData> readUserDataFirebase(String uuid) async {
   try {
-    final querySnapshot = await dbFirebase
-        .collection("user_data")
-        .where("uuid", isEqualTo: uuid)
-        .limit(1)
-        .get();
-    if (querySnapshot.size != 0) {
-      final queyData = querySnapshot.docs.first.data();
+    final querySnapshot =
+        await dbFirebase.collection("user_data").doc(uuid).get();
+    final queyData = querySnapshot.data();
+    if (querySnapshot.exists && queyData != null) {
       final user = UserData(
         uuid: queyData['uuid'],
         birthday: queyData['birthday'],
