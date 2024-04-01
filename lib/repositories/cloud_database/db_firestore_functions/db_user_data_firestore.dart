@@ -2,16 +2,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:kanji_for_n5_level_app/main.dart';
 import 'package:kanji_for_n5_level_app/models/user.dart';
 
-Future<void> insertUserDataFirebase(
-  String email,
-  String uuid,
-) {
-  final data = <String, Object>{
-    'email': email,
-    'uuid': uuid,
-  };
-
-  return dbFirebase.collection("user_data").doc(uuid).set(data);
+Future<void> insertUserDataFirebase(Map<String, String> userData) {
+  return dbFirebase.collection("user_data").doc(userData['uuid']).set(userData);
 }
 
 Future<UserData> readUserDataFirebase(String uuid) async {

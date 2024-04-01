@@ -38,11 +38,8 @@ class FireStoreDBService extends CloudDBService {
   }
 
   @override
-  Future<void> addUserData(String email, String uuid) {
-    return insertUserDataFirebase(
-      email,
-      uuid,
-    );
+  Future<void> addUserData(Map<String, String> userData) {
+    return insertUserDataFirebase(userData);
   }
 
   @override

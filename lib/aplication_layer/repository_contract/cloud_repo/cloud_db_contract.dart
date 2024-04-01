@@ -20,8 +20,7 @@ abstract class CloudDBService {
   Future<void> deleteAllFavoritesCloudDB(String uuid);
 
   Future<void> addUserData(
-    String email,
-    String uuid,
+    Map<String, String> userData,
   );
 
   Future<UserData> readUserData(String uuid);

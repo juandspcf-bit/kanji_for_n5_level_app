@@ -35,13 +35,23 @@ class PersonalInfoProvider extends Notifier<PersonalInfoData> {
 
   Future<void> getInitialPersonalInfoData() async {
     final uuid = authService.userUuid;
+
+    setFetchingStatus(PersonalInfoFetchinStatus.processing);
+
+    String photoLink = '';
     try {
-      setFetchingStatus(PersonalInfoFetchinStatus.processing);
-      final user = await cloudDBService.readUserData(uuid ?? '');
       final userPhoto = storageRef.child("userImages/$uuid.jpg");
 
-      final photoLink =
+      photoLink =
           await userPhoto.getDownloadURL().timeout(const Duration(seconds: 10));
+    } catch (e) {
+      logger.e(e);
+    }
+
+    try {
+      final user = await cloudDBService.readUserData(uuid ?? '');
+      logger.d(user);
+
       state = PersonalInfoData(
           pathProfileUser: photoLink,
           pathProfileTemporal: '',

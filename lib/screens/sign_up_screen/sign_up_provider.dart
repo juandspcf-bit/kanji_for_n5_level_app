@@ -164,9 +164,14 @@ class SingUpProvider extends Notifier<SingUpData> {
 
       if (user == null) return;
 
-      await user.updateDisplayName(state.firtsName);
-      await user.updateEmail(state.emailAddress);
-      await cloudDBService.addUserData(state.emailAddress, user.uid);
+      final userData = {
+        'birthday': '',
+        'email': state.emailAddress,
+        'firstName': state.firtsName,
+        'lastName': state.lastName,
+        'uuid': user.uid,
+      };
+      await cloudDBService.addUserData(userData);
       await cloudDBService.createQuizScoreMap(user.uid);
 
       if (state.pathProfileUser.isNotEmpty) {
