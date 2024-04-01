@@ -14,7 +14,7 @@ import 'package:kanji_for_n5_level_app/aplication_layer/repository_contract/loca
 import 'package:kanji_for_n5_level_app/aplication_layer/repository_contract/local_repo/db_sqflite_impl.dart';
 import 'package:kanji_for_n5_level_app/aplication_layer/repository_contract/api_repo/kanji_api_contract.dart';
 import 'package:kanji_for_n5_level_app/aplication_layer/repository_contract/api_repo/kanji_kanji_alive_api_impl.dart';
-import 'package:kanji_for_n5_level_app/auth_flow.dart';
+import 'package:kanji_for_n5_level_app/screens/auth_flow/auth_flow.dart';
 import 'package:kanji_for_n5_level_app/providers/on_boarding_provider.dart';
 import 'package:kanji_for_n5_level_app/screens/onBoarding_screen/my_page_viewer.dart';
 import 'package:logger/logger.dart';
