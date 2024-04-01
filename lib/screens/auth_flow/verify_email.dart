@@ -27,7 +27,6 @@ class _VerifyEmailEstate extends ConsumerState<VerifyEmail> {
   void initState() {
     super.initState();
     isEmailVerified = FirebaseAuth.instance.currentUser!.emailVerified;
-    logger.d('is verified $isEmailVerified');
     if (!isEmailVerified) {
       sendEmailVerification();
       timer = Timer.periodic(const Duration(seconds: 3), (timer) {
@@ -117,26 +116,37 @@ class _VerifyEmailEstate extends ConsumerState<VerifyEmail> {
             appBar: AppBar(
               title: const Text('Verify email'),
             ),
-            body: Padding(
-              padding: const EdgeInsets.all(15),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const Text(
-                    'A notification email has been sent',
-                    style: TextStyle(fontSize: 20),
-                  ),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  ElevatedButton.icon(
-                    onPressed: canResendEmail ? sendEmailVerification : null,
-                    icon: const Icon(Icons.email),
-                    label: const Text('resent email'),
-                  ),
-                  ElevatedButton(
+            body: Center(
+              child: Padding(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 20, vertical: 30),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Text(
+                      'A notification email has been sent',
+                      style: Theme.of(context).textTheme.titleLarge,
+                    ),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    ElevatedButton.icon(
+                      onPressed: canResendEmail ? sendEmailVerification : null,
+                      icon: const Icon(Icons.email),
+                      label: const Text('resent email'),
+                      style: ElevatedButton.styleFrom().copyWith(
+                        minimumSize: const MaterialStatePropertyAll(
+                          Size.fromHeight(40),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    ElevatedButton(
                       onPressed: () {
                         try {
+                          timer?.cancel();
                           authService.singOut();
                           ref
                               .read(mainScreenProvider.notifier)
@@ -150,8 +160,15 @@ class _VerifyEmailEstate extends ConsumerState<VerifyEmail> {
                           logger.e(e);
                         }
                       },
-                      child: const Text('Cancel')),
-                ],
+                      style: ElevatedButton.styleFrom().copyWith(
+                        minimumSize: const MaterialStatePropertyAll(
+                          Size.fromHeight(40),
+                        ),
+                      ),
+                      child: const Text('Cancel'),
+                    ),
+                  ],
+                ),
               ),
             ),
           );

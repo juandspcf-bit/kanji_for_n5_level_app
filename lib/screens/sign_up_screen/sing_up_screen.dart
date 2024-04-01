@@ -7,6 +7,18 @@ import 'package:kanji_for_n5_level_app/screens/common_widgets/my_dialogs.dart';
 class SignUpScreen extends ConsumerWidget with MyDialogs {
   const SignUpScreen({super.key});
 
+  void showMessageError(
+    BuildContext context,
+    WidgetRef ref,
+    String message,
+  ) {
+    errorDialog(context, () {
+      ref
+          .read(singUpProvider.notifier)
+          .setStatusCreatingUser(StatusCreatingUser.notStarted);
+    }, message);
+  }
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     ref.listen<SingUpData>(singUpProvider, (prev, current) {
@@ -26,17 +38,5 @@ class SignUpScreen extends ConsumerWidget with MyDialogs {
     });
 
     return SingUpForm();
-  }
-
-  void showMessageError(
-    BuildContext context,
-    WidgetRef ref,
-    String message,
-  ) {
-    errorDialog(context, () {
-      ref
-          .read(singUpProvider.notifier)
-          .setStatusCreatingUser(StatusCreatingUser.notStarted);
-    }, message);
   }
 }

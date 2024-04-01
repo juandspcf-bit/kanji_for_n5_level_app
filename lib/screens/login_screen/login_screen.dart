@@ -10,8 +10,8 @@ import 'package:kanji_for_n5_level_app/screens/common_screens.dart/error_connect
 import 'package:kanji_for_n5_level_app/screens/login_screen/login_form.dart';
 import 'package:kanji_for_n5_level_app/screens/common_widgets/my_dialogs.dart';
 
-class ToLoginFormScreen extends ConsumerWidget with MyDialogs {
-  ToLoginFormScreen({super.key});
+class LoginFormScreen extends ConsumerWidget with MyDialogs {
+  LoginFormScreen({super.key});
 
   void toLoging(BuildContext context, WidgetRef ref) async {
     await ref.read(loginProvider.notifier).toLoging();
