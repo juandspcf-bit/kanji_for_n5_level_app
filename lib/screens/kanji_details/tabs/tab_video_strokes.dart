@@ -6,7 +6,7 @@ import 'package:kanji_for_n5_level_app/screens/kanji_details/kanji_details_provi
 import 'package:kanji_for_n5_level_app/providers/status_connection_provider.dart';
 import 'package:kanji_for_n5_level_app/providers/status_stored_provider.dart';
 import 'package:kanji_for_n5_level_app/providers/video_status_playing.dart';
-import 'package:kanji_for_n5_level_app/screens/common_screens.dart/error_connection_screen.dart';
+import 'package:kanji_for_n5_level_app/screens/common_screens/error_connection_screen.dart';
 import 'package:kanji_for_n5_level_app/screens/kanji_details/tabs/image_meaning_kanji.dart';
 import 'package:kanji_for_n5_level_app/screens/kanji_details/tabs/meaning_definition.dart';
 import 'package:video_player/video_player.dart';

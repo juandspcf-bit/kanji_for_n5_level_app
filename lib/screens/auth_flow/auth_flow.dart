@@ -14,7 +14,6 @@ class AuthFlow extends ConsumerWidget {
         stream: streamAuth,
         builder: (ctx, snapShot) {
           final user = snapShot.data;
-          logger.d('the user is ${snapShot.data}');
           if (user != null) {
             authService.setLoggedUser();
             return const VerifyEmail();

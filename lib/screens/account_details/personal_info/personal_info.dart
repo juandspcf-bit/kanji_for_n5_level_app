@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kanji_for_n5_level_app/screens/account_details/personal_info/personal_info_provider.dart';
 import 'package:kanji_for_n5_level_app/screens/account_details/user_form.dart';
-import 'package:kanji_for_n5_level_app/screens/common_screens.dart/loading_screen.dart';
+import 'package:kanji_for_n5_level_app/screens/common_screens/loading_screen.dart';
 import 'package:kanji_for_n5_level_app/screens/common_widgets/my_dialogs.dart';
 
 class PersonalInfo extends ConsumerWidget with MyDialogs {

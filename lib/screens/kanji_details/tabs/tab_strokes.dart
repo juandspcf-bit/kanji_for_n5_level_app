@@ -4,7 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kanji_for_n5_level_app/screens/kanji_details/kanji_details_provider.dart';
 import 'package:kanji_for_n5_level_app/providers/status_connection_provider.dart';
 import 'package:kanji_for_n5_level_app/providers/status_stored_provider.dart';
-import 'package:kanji_for_n5_level_app/screens/common_screens.dart/error_connection_screen.dart';
+import 'package:kanji_for_n5_level_app/screens/common_screens/error_connection_screen.dart';
 import 'package:kanji_for_n5_level_app/screens/kanji_details/tabs/strokes_images.dart';
 
 class TabStrokes extends ConsumerWidget {
