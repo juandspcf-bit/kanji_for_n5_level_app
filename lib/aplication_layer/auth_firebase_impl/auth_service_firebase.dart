@@ -110,4 +110,27 @@ class FirebaseSignInUser implements AuthService {
   Future<void> singOut() async {
     return await FirebaseAuth.instance.signOut();
   }
+
+  @override
+  Future<String> singUpWithEmailAndPassword({
+    required String email,
+    required String password,
+  }) async {
+    try {
+      final credential = await FirebaseAuth.instance
+          .createUserWithEmailAndPassword(
+            email: email,
+            password: password,
+          )
+          .timeout(const Duration(seconds: 40));
+
+      final user = credential.user;
+
+      if (user == null) return '';
+
+      return user.uid;
+    } catch (e) {
+      rethrow;
+    }
+  }
 }

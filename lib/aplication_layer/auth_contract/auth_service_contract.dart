@@ -6,6 +6,9 @@ abstract class AuthService {
   Future<StatusLogingRequest> singInWithEmailAndPassword(
       {required String email, required String password});
 
+  Future<String> singUpWithEmailAndPassword(
+      {required String email, required String password});
+
   Future<StatusResetPasswordRequest> sendPasswordResetEmail(
       {required String email});
 
@@ -61,4 +64,25 @@ enum DeleteUserStatus {
 
   const DeleteUserStatus(this.message);
   final String message;
+}
+
+enum StatusCreatingUser {
+  notStarted('Not started'),
+  success('Success'),
+  passworfMisMatch('the passwords are not the same'),
+  invalidEmail('Your email address is not valid'),
+  emailAlreadyInUse(
+      'there already exists an account with the given email address'),
+  operationNotAllowed('An unexpected error has happened'),
+  weakPassword('Your password is weak'),
+  error('An unexpected error has happened');
+
+  const StatusCreatingUser(
+    this.message,
+  );
+
+  final String message;
+
+  @override
+  String toString() => message;
 }

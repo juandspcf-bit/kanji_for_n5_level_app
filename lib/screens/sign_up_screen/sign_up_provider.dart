@@ -1,8 +1,10 @@
+import 'dart:async';
 import 'dart:io';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:kanji_for_n5_level_app/aplication_layer/auth_contract/auth_service_contract.dart';
 import 'package:kanji_for_n5_level_app/aplication_layer/auth_firebase_impl/auth_service_firebase.dart';
 import 'package:kanji_for_n5_level_app/main.dart';
 import 'package:kanji_for_n5_level_app/screens/main_screens/main_content_provider.dart';
@@ -154,29 +156,26 @@ class SingUpProvider extends Notifier<SingUpData> {
     setStatusFlow(StatusProcessingSignUpFlow.signUpProccessing);
 
     try {
-      final credential =
-          await FirebaseAuth.instance.createUserWithEmailAndPassword(
+      final userUuid = await authService.singUpWithEmailAndPassword(
         email: state.emailAddress,
         password: state.password,
       );
 
-      final user = credential.user;
-
-      if (user == null) return;
+      if (userUuid == '') return;
 
       final userData = {
         'birthday': '',
         'email': state.emailAddress,
         'firstName': state.firtsName,
         'lastName': state.lastName,
-        'uuid': user.uid,
+        'uuid': userUuid,
       };
       await cloudDBService.addUserData(userData);
-      await cloudDBService.createQuizScoreMap(user.uid);
+      await cloudDBService.createQuizScoreMap(userUuid);
 
       if (state.pathProfileUser.isNotEmpty) {
         try {
-          final userPhoto = storageRef.child("userImages/${user.uid}.jpg");
+          final userPhoto = storageRef.child("userImages/$userUuid.jpg");
 
           await userPhoto.putFile(File(state.pathProfileUser));
 
@@ -198,9 +197,12 @@ class SingUpProvider extends Notifier<SingUpData> {
         setStatusCreatingUser(StatusCreatingUser.weakPassword);
       } else if (e.code == 'email-already-in-use') {
         setStatusCreatingUser(StatusCreatingUser.emailAlreadyInUse);
-      } else {
-        setStatusCreatingUser(StatusCreatingUser.error);
-      }
+      } else {}
+    } on TimeoutException {
+      setStatusCreatingUser(
+          StatusCreatingUser.error); // Prints "throws" after 2 seconds.
+    } catch (e) {
+      setStatusCreatingUser(StatusCreatingUser.error);
     }
   }
 }
@@ -241,25 +243,4 @@ enum StatusProcessingSignUpFlow {
   error,
   succsess,
   form,
-}
-
-enum StatusCreatingUser {
-  notStarted('Not started'),
-  success('Success'),
-  passworfMisMatch('the passwords are not the same'),
-  invalidEmail('Your email address is not valid'),
-  emailAlreadyInUse(
-      'there already exists an account with the given email address'),
-  operationNotAllowed('An unexpected error has happened'),
-  weakPassword('Your password is weak'),
-  error('An unexpected error has happened');
-
-  const StatusCreatingUser(
-    this.message,
-  );
-
-  final String message;
-
-  @override
-  String toString() => message;
 }
