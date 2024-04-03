@@ -1,6 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kanji_for_n5_level_app/aplication_layer/auth_contract/auth_service_contract.dart';
-import 'package:kanji_for_n5_level_app/aplication_layer/auth_firebase_impl/auth_service_firebase.dart';
 import 'package:kanji_for_n5_level_app/main.dart';
 
 class CloseAccountProvider extends Notifier<CloseAccountData> {
@@ -62,9 +61,11 @@ class CloseAccountProvider extends Notifier<CloseAccountData> {
       await cloudDBService.deleteQuizScoreData(uuid);
       await cloudDBService.deleteAllFavoritesCloudDB(uuid);
 
-      final userPhoto = storageRef.child("userImages/$uuid.jpg");
-      await userPhoto.delete().onError(
-          (error, stackTrace) => logger.e('error deleting user photo $error'));
+      try {
+        storageService.deleteFile(uuid);
+      } catch (e) {
+        logger.e('error deleting user photo $e');
+      }
 
       await Future.delayed(
         const Duration(seconds: 2),

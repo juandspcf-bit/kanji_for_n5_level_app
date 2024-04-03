@@ -1,9 +1,7 @@
 import 'dart:async';
-import 'dart:io';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:kanji_for_n5_level_app/aplication_layer/auth_firebase_impl/auth_service_firebase.dart';
 import 'package:kanji_for_n5_level_app/main.dart';
 import 'package:kanji_for_n5_level_app/screens/main_screens/main_content_provider.dart';
 
@@ -40,10 +38,7 @@ class PersonalInfoProvider extends Notifier<PersonalInfoData> {
 
     String photoLink = '';
     try {
-      final userPhoto = storageRef.child("userImages/$uuid.jpg");
-
-      photoLink =
-          await userPhoto.getDownloadURL().timeout(const Duration(seconds: 10));
+      photoLink = await storageService.getDownloadLink(uuid ?? '');
     } catch (e) {
       logger.e(e);
     }
@@ -207,11 +202,8 @@ class PersonalInfoProvider extends Notifier<PersonalInfoData> {
 
     if (personalInfoData.pathProfileTemporal.isNotEmpty) {
       try {
-        final userPhoto = storageRef
-            .child("userImages/${FirebaseAuth.instance.currentUser!.uid}.jpg");
-
-        await userPhoto.putFile(File(personalInfoData.pathProfileTemporal));
-        final url = await userPhoto.getDownloadURL();
+        final url = await storageService.updateFile(
+            personalInfoData.pathProfileTemporal, authService.userUuid ?? '');
         setProfilePath(url);
         ref.read(mainScreenProvider.notifier).setAvatarLink(url);
         setUpdatingStatus(PersonalInfoUpdatingStatus.succes);

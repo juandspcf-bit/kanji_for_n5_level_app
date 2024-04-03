@@ -1,15 +1,13 @@
 import 'dart:async';
 
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:kanji_for_n5_level_app/aplication_layer/auth_contract/auth_service_contract.dart';
 import 'package:kanji_for_n5_level_app/config_files/network_config.dart';
 import 'package:kanji_for_n5_level_app/main.dart';
 
-final storageRef = FirebaseStorage.instance.ref();
 final streamAuth = FirebaseAuth.instance.userChanges();
 
-class FirebaseSignInUser implements AuthService {
+class FirebaseAuthService implements AuthService {
   @override
   String? userUuid = '';
 

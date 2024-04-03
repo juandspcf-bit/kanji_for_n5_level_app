@@ -1,0 +1,37 @@
+import 'dart:io';
+
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:kanji_for_n5_level_app/aplication_layer/repository_contract/storage_repo/storage_contract.dart';
+
+final storageRef = FirebaseStorage.instance.ref();
+
+class FirebaseStorageService extends StorageService {
+  @override
+  Future<String> storeFile(String path, String uuid) async {
+    final userPhoto = storageRef.child("userImages/$uuid.jpg");
+    await userPhoto.putFile(File(path));
+    return await userPhoto.getDownloadURL();
+  }
+
+  @override
+  Future<String> getDownloadLink(String uuid) async {
+    final userPhoto = storageRef.child("userImages/$uuid.jpg");
+
+    return await userPhoto
+        .getDownloadURL()
+        .timeout(const Duration(seconds: 10));
+  }
+
+  @override
+  Future<String> updateFile(String path, String uuid) async {
+    final userPhoto = storageRef.child("userImages/$uuid.jpg");
+    await userPhoto.putFile(File(path));
+    return await userPhoto.getDownloadURL();
+  }
+
+  @override
+  Future<void> deleteFile(String uuid) async {
+    final userPhoto = storageRef.child("userImages/$uuid.jpg");
+    return await userPhoto.delete();
+  }
+}

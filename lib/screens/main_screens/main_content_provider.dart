@@ -5,7 +5,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:kanji_for_n5_level_app/aplication_layer/auth_firebase_impl/auth_service_firebase.dart';
 import 'package:kanji_for_n5_level_app/models/favorite.dart';
 import 'package:kanji_for_n5_level_app/main.dart';
 import 'package:kanji_for_n5_level_app/providers/score_kanji_list_provider.dart';
@@ -147,9 +146,7 @@ class MainScreenProvider extends Notifier<MainScreenData> {
     final fullName = FirebaseAuth.instance.currentUser!.displayName;
 
     try {
-      final userPhoto = storageRef.child("userImages/$uuid.jpg");
-
-      final link = await userPhoto.getDownloadURL();
+      final link = await storageService.getDownloadLink(uuid);
       state = MainScreenData(
           selection: ScreenSelection.kanjiSections,
           avatarLink: link,

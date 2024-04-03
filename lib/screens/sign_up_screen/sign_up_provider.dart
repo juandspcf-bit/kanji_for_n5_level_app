@@ -1,11 +1,9 @@
 import 'dart:async';
-import 'dart:io';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kanji_for_n5_level_app/aplication_layer/auth_contract/auth_service_contract.dart';
-import 'package:kanji_for_n5_level_app/aplication_layer/auth_firebase_impl/auth_service_firebase.dart';
 import 'package:kanji_for_n5_level_app/main.dart';
 import 'package:kanji_for_n5_level_app/screens/main_screens/main_content_provider.dart';
 
@@ -175,11 +173,14 @@ class SingUpProvider extends Notifier<SingUpData> {
 
       if (state.pathProfileUser.isNotEmpty) {
         try {
-          final userPhoto = storageRef.child("userImages/$userUuid.jpg");
+          /* final userPhoto = storageRef.child("userImages/$userUuid.jpg");
 
           await userPhoto.putFile(File(state.pathProfileUser));
 
-          final link = await userPhoto.getDownloadURL();
+          final link = await userPhoto.getDownloadURL(); */
+
+          final link =
+              await storageService.storeFile(state.pathProfileUser, userUuid);
 
           ref.read(mainScreenProvider.notifier).setAvatarLink(link);
 
