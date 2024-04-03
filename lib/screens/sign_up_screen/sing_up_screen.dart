@@ -19,7 +19,7 @@ class SignUpScreen extends ConsumerWidget with MyDialogs {
     errorDialog(context, () {
       ref
           .read(singUpProvider.notifier)
-          .setStatusCreatingUser(StatusCreatingUser.notStarted);
+          .setStatusCreatingUser(StatusCreatingUser.form);
     }, message);
   }
 
@@ -28,7 +28,7 @@ class SignUpScreen extends ConsumerWidget with MyDialogs {
     final connectionWifiState = ref.watch(statusConnectionProvider);
 
     ref.listen<SingUpData>(singUpProvider, (prev, current) {
-      if (current.statusCreatingUser != StatusCreatingUser.notStarted &&
+      if (current.statusCreatingUser != StatusCreatingUser.form &&
           current.statusCreatingUser != StatusCreatingUser.success) {
         showMessageError(
           context,

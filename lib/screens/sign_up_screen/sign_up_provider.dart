@@ -12,7 +12,7 @@ class SingUpProvider extends Notifier<SingUpData> {
   SingUpData build() {
     return SingUpData(
       statusFlow: StatusProcessingSignUpFlow.form,
-      statusCreatingUser: StatusCreatingUser.notStarted,
+      statusCreatingUser: StatusCreatingUser.form,
       pathProfileUser: '',
       firtsName: '',
       lastName: '',
@@ -51,7 +51,7 @@ class SingUpProvider extends Notifier<SingUpData> {
   void resetStatus() {
     state = SingUpData(
       statusFlow: StatusProcessingSignUpFlow.form,
-      statusCreatingUser: StatusCreatingUser.notStarted,
+      statusCreatingUser: StatusCreatingUser.form,
       pathProfileUser: '',
       firtsName: '',
       lastName: '',
@@ -173,12 +173,6 @@ class SingUpProvider extends Notifier<SingUpData> {
 
       if (state.pathProfileUser.isNotEmpty) {
         try {
-          /* final userPhoto = storageRef.child("userImages/$userUuid.jpg");
-
-          await userPhoto.putFile(File(state.pathProfileUser));
-
-          final link = await userPhoto.getDownloadURL(); */
-
           final link =
               await storageService.storeFile(state.pathProfileUser, userUuid);
 
