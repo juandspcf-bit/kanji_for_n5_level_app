@@ -86,3 +86,14 @@ enum StatusCreatingUser {
   @override
   String toString() => message;
 }
+
+class DeleteUserException implements Exception {
+  final String message;
+
+  DeleteUserException({required this.message});
+
+  @override
+  String toString() {
+    return 'Exception: $message';
+  }
+}

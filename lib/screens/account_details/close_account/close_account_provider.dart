@@ -42,6 +42,12 @@ class CloseAccountProvider extends Notifier<CloseAccountData> {
   }
 
   void deleteUser({required String password}) async {
+    if (authService.userUuid == null || authService.userUuid == '') {
+      setDeleteRequestStatus(DeleteRequestStatus.noStarted);
+      setDeleteUserStatus(DeleteUserStatus.error);
+      return;
+    }
+
     setDeleteRequestStatus(DeleteRequestStatus.process);
 
     try {
@@ -72,7 +78,8 @@ class CloseAccountProvider extends Notifier<CloseAccountData> {
       );
       setDeleteRequestStatus(DeleteRequestStatus.noStarted);
       setDeleteUserStatus(DeleteUserStatus.success);
-    } catch (e) {
+    } on DeleteUserException catch (e) {
+      logger.e(e);
       setDeleteRequestStatus(DeleteRequestStatus.noStarted);
       setDeleteUserStatus(DeleteUserStatus.error);
     }

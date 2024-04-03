@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:kanji_for_n5_level_app/aplication_layer/auth_contract/auth_service_contract.dart';
 import 'package:kanji_for_n5_level_app/main.dart';
 import 'package:kanji_for_n5_level_app/models/secction_model.dart';
 
@@ -163,12 +165,14 @@ Future<void> deleteQuizScoreDataFire(
         .where("uuid", isEqualTo: uuid)
         .get();
 
-    //logger.d("Successfully completed");
     for (var docSnapshot in docRefFavorites.docs) {
       await docSnapshot.reference.delete();
     }
+  } on FirebaseException catch (e) {
+    throw DeleteUserException(message: e.code);
   } catch (e) {
-    logger.e('erro deleting in cloud $e');
+    throw DeleteUserException(
+        message: 'error deleting quiz user data in cloud db');
   }
 }
 

@@ -95,12 +95,12 @@ class FirebaseAuthService implements AuthService {
       } else {
         return (DeleteUserStatus.error, uuid);
       }
-    } on FirebaseAuthException {
-      rethrow;
-    } on FirebaseException {
-      rethrow;
+    } on FirebaseAuthException catch (e) {
+      throw DeleteUserException(message: e.code);
+    } on FirebaseException catch (e) {
+      throw DeleteUserException(message: e.code);
     } catch (e) {
-      rethrow;
+      throw DeleteUserException(message: 'Error from the server: $e');
     }
   }
 

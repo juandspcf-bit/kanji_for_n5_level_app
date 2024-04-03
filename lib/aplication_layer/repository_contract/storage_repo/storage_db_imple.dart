@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:kanji_for_n5_level_app/aplication_layer/auth_contract/auth_service_contract.dart';
 import 'package:kanji_for_n5_level_app/aplication_layer/repository_contract/storage_repo/storage_contract.dart';
 
 final storageRef = FirebaseStorage.instance.ref();
@@ -31,7 +32,14 @@ class FirebaseStorageService extends StorageService {
 
   @override
   Future<void> deleteFile(String uuid) async {
-    final userPhoto = storageRef.child("userImages/$uuid.jpg");
-    return await userPhoto.delete();
+    try {
+      final userPhoto = storageRef.child("userImages/$uuid.jpg");
+      return await userPhoto.delete();
+    } on FirebaseException catch (e) {
+      throw DeleteUserException(message: e.code);
+    } catch (e) {
+      throw DeleteUserException(
+          message: 'error deleting user favorites from cloud db');
+    }
   }
 }
