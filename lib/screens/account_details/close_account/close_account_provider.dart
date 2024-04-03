@@ -79,7 +79,7 @@ class CloseAccountProvider extends Notifier<CloseAccountData> {
       setDeleteRequestStatus(DeleteRequestStatus.noStarted);
       setDeleteUserStatus(DeleteUserStatus.success);
     } on DeleteUserException catch (e) {
-      logger.e(e);
+      logger.e(e.deleteErrorUserCode);
       setDeleteRequestStatus(DeleteRequestStatus.noStarted);
       setDeleteUserStatus(DeleteUserStatus.error);
     }

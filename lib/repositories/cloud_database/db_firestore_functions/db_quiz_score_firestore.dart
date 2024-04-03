@@ -169,10 +169,15 @@ Future<void> deleteQuizScoreDataFire(
       await docSnapshot.reference.delete();
     }
   } on FirebaseException catch (e) {
-    throw DeleteUserException(message: e.code);
+    throw DeleteUserException(
+      message: e.code,
+      deleteErrorUserCode: DeleteErrorUserCode.deleteErrorQuizData,
+    );
   } catch (e) {
     throw DeleteUserException(
-        message: 'error deleting quiz user data in cloud db');
+      message: 'error deleting quiz user data in cloud db',
+      deleteErrorUserCode: DeleteErrorUserCode.deleteErrorQuizData,
+    );
   }
 }
 

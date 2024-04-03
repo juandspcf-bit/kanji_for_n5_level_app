@@ -73,9 +73,14 @@ Future<void> deleteAllFavorites(
       await docSnapshot.reference.delete();
     }
   } on FirebaseException catch (e) {
-    throw DeleteUserException(message: e.code);
+    throw DeleteUserException(
+      message: e.code,
+      deleteErrorUserCode: DeleteErrorUserCode.deleteErrorFavorites,
+    );
   } catch (e) {
     throw DeleteUserException(
-        message: 'error deleting user favorites from cloud db');
+      message: 'error deleting user favorites from cloud db',
+      deleteErrorUserCode: DeleteErrorUserCode.deleteErrorFavorites,
+    );
   }
 }
