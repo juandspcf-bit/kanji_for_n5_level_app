@@ -156,18 +156,7 @@ Future<void> deleteQuizScoreDataFire(
 ) async {
   try {
     final docRef = dbFirebase.collection("quiz_score").doc(uuid);
-    final docRefUserData = dbFirebase.collection("user_data").doc(uuid);
     await docRef.delete();
-    await docRefUserData.delete();
-
-    final docRefFavorites = await dbFirebase
-        .collection("favorites")
-        .where("uuid", isEqualTo: uuid)
-        .get();
-
-    for (var docSnapshot in docRefFavorites.docs) {
-      await docSnapshot.reference.delete();
-    }
   } on FirebaseException catch (e) {
     throw DeleteUserException(
       message: e.code,

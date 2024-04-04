@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kanji_for_n5_level_app/main.dart';
 import 'package:kanji_for_n5_level_app/screens/account_details/change_email/change_email_flow.dart';
-import 'package:kanji_for_n5_level_app/screens/account_details/close_account/close_account.dart';
+import 'package:kanji_for_n5_level_app/screens/account_details/close_account/close_account_screen.dart';
 import 'package:kanji_for_n5_level_app/screens/account_details/close_account/close_account_provider.dart';
 import 'package:kanji_for_n5_level_app/screens/account_details/personal_info/personal_info_provider.dart';
 import 'package:kanji_for_n5_level_app/screens/login_screen/login_provider.dart';

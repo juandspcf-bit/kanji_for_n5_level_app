@@ -30,6 +30,10 @@ abstract class CloudDBService {
     Map<String, String> newData,
   );
 
+  Future<void> deleteUserData(
+    String uuid,
+  );
+
   Future<void> createQuizScoreMap(String uuid);
 
   Future<void> updateQuizSectionScore(

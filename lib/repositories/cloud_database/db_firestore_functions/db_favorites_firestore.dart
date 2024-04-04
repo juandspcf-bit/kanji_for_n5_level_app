@@ -53,7 +53,6 @@ Future<void> deleteFavorite(
       .where("kanjiCharacter", isEqualTo: kanjiCharacter)
       .get();
 
-  //logger.d("Successfully completed");
   for (var docSnapshot in querySnapshot.docs) {
     await docSnapshot.reference.delete();
   }

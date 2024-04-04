@@ -64,6 +64,8 @@ class CloseAccountProvider extends Notifier<CloseAccountData> {
 
       await localDBService.deleteUserData(uuid);
 
+      await cloudDBService.deleteUserData(uuid);
+
       await cloudDBService.deleteQuizScoreData(uuid);
       await cloudDBService.deleteAllFavoritesCloudDB(uuid);
 
@@ -79,6 +81,10 @@ class CloseAccountProvider extends Notifier<CloseAccountData> {
       setDeleteRequestStatus(DeleteRequestStatus.noStarted);
       setDeleteUserStatus(DeleteUserStatus.success);
     } on DeleteUserException catch (e) {
+      if (e.deleteErrorUserCode != DeleteErrorUserCode.deleteErrorAuth) {
+        setDeleteRequestStatus(DeleteRequestStatus.noStarted);
+        setDeleteUserStatus(DeleteUserStatus.success);
+      }
       logger.e(e.deleteErrorUserCode);
       setDeleteRequestStatus(DeleteRequestStatus.noStarted);
       setDeleteUserStatus(DeleteUserStatus.error);

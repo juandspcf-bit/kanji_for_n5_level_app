@@ -109,5 +109,6 @@ enum DeleteErrorUserCode {
   deleteErrorData,
   deleteErrorCached,
   deleteErrorAuth,
+  deleteErrorUserData,
   deleteError
 }

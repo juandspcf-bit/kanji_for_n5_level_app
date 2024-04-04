@@ -56,6 +56,12 @@ class FireStoreDBService extends CloudDBService {
   }
 
   @override
+  Future<void> deleteUserData(String uuid) {
+    // TODO: implement deleteUserData
+    throw UnimplementedError();
+  }
+
+  @override
   Future<void> updateQuizSectionScore(
     bool allCorrectAnswersQuizKanji,
     bool isFinishedKanjiQuiz,
