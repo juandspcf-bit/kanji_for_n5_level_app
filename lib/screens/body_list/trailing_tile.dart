@@ -18,13 +18,13 @@ class TrailingTile extends ConsumerWidget {
   Widget selectWidgetStatus(KanjiFromApi kanjiFromApi, BuildContext context) {
     if (kanjiFromApi.statusStorage == StatusStorage.onlyOnline) {
       return Icon(
-        Icons.download_for_offline,
+        Icons.download_outlined,
         color: Theme.of(context).colorScheme.onSecondaryContainer,
         size: 50,
       );
     } else if (kanjiFromApi.statusStorage == StatusStorage.stored) {
       return Icon(
-        Icons.storage,
+        Icons.storage_outlined,
         color: Theme.of(context).colorScheme.onSecondaryContainer,
         size: 50,
       );
@@ -33,7 +33,7 @@ class TrailingTile extends ConsumerWidget {
       return const CircularProgressIndicator();
     } else {
       return Icon(
-        Icons.question_mark_rounded,
+        Icons.question_mark_outlined,
         color: Theme.of(context).colorScheme.onSecondaryContainer,
         size: 50,
       );
