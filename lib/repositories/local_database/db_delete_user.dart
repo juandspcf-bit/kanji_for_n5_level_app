@@ -22,8 +22,8 @@ Future<void> deleteUserDataFromSqlDB(String uuid) async {
     await compute(deleteKanjiFromApiComputeVersion, parametersDelete);
 
     await db.rawDelete('DELETE FROM kanji_FromApi WHERE uuid = ?', [uuid]);
-    await db.rawDelete('DELETE FROM examples WHERE uuid = ?', [uuid]);
-    await db.rawDelete('DELETE FROM strokes WHERE uuid = ?', [uuid]);
+    //await db.rawDelete('DELETE FROM examples WHERE uuid = ?', [uuid]);
+    //await db.rawDelete('DELETE FROM strokes WHERE uuid = ?', [uuid]);
     await db.rawDelete('DELETE FROM user_favorites WHERE uuid = ?', [uuid]);
     await db.rawDelete('DELETE FROM kanji_quiz WHERE uuid = ?', [uuid]);
     await db.rawDelete(

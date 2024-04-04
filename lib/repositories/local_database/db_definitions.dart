@@ -66,42 +66,48 @@ Future<Database> get kanjiFromApiDatabase async {
         ')',
       );
 
-      await db.execute('CREATE TABLE strokes('
-          ' id INTEGER PRIMARY KEY AUTOINCREMENT,'
-          ' strokeImageLink TEXT,'
-          ' kanjiCharacter TEXT,'
-          ' uuid TEXT,'
-          ' kanji_id INTEGER,'
-          ' FOREIGN KEY (kanji_id) REFERENCES kanji_FromApi(id)'
-          '   ON DELETE CASCADE'
-          ')');
+      await db.execute(
+        'CREATE TABLE strokes('
+        ' id INTEGER PRIMARY KEY AUTOINCREMENT,'
+        ' strokeImageLink TEXT,'
+        ' kanjiCharacter TEXT,'
+        ' uuid TEXT,'
+        ' kanji_id INTEGER,'
+        ' FOREIGN KEY (kanji_id) REFERENCES kanji_FromApi(id)'
+        '   ON DELETE CASCADE'
+        ')',
+      );
 
-      await db.execute('CREATE TABLE examples('
-          ' id INTEGER PRIMARY KEY AUTOINCREMENT,'
-          ' japanese TEXT,'
-          ' meaning TEXT,'
-          ' opus TEXT,'
-          ' aac TEXT,'
-          ' ogg TEXT,'
-          ' mp3 TEXT,'
-          ' kanjiCharacter TEXT,'
-          ' uuid TEXT,'
-          ' kanji_id INTEGER,'
-          ' FOREIGN KEY (kanji_id) REFERENCES kanji_FromApi(id)'
-          '   ON DELETE CASCADE'
-          ')');
+      await db.execute(
+        'CREATE TABLE examples('
+        ' id INTEGER PRIMARY KEY AUTOINCREMENT,'
+        ' japanese TEXT,'
+        ' meaning TEXT,'
+        ' opus TEXT,'
+        ' aac TEXT,'
+        ' ogg TEXT,'
+        ' mp3 TEXT,'
+        ' kanjiCharacter TEXT,'
+        ' uuid TEXT,'
+        ' kanji_id INTEGER,'
+        ' FOREIGN KEY (kanji_id) REFERENCES kanji_FromApi(id)'
+        '   ON DELETE CASCADE'
+        ')',
+      );
 
-      return db.execute('CREATE TABLE kanji_FromApi('
-          ' id INTEGER PRIMARY KEY AUTOINCREMENT,'
-          ' kanjiCharacter TEXT,'
-          ' englishMeaning TEXT,'
-          ' kanjiImageLink TEXT,'
-          ' katakanaMeaning TEXT,'
-          ' hiraganaMeaning TEXT,'
-          ' videoLink TEXT,'
-          ' section INTEGER,'
-          ' uuid TEXT'
-          ')');
+      return db.execute(
+        'CREATE TABLE kanji_FromApi('
+        ' id INTEGER PRIMARY KEY AUTOINCREMENT,'
+        ' kanjiCharacter TEXT,'
+        ' englishMeaning TEXT,'
+        ' kanjiImageLink TEXT,'
+        ' katakanaMeaning TEXT,'
+        ' hiraganaMeaning TEXT,'
+        ' videoLink TEXT,'
+        ' section INTEGER,'
+        ' uuid TEXT'
+        ')',
+      );
     },
     version: 1,
   );
