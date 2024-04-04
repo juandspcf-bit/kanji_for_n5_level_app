@@ -69,11 +69,7 @@ class CloseAccountProvider extends Notifier<CloseAccountData> {
       await cloudDBService.deleteQuizScoreData(uuid);
       await cloudDBService.deleteAllFavoritesCloudDB(uuid);
 
-      try {
-        storageService.deleteFile(uuid);
-      } catch (e) {
-        logger.e('error deleting user photo $e');
-      }
+      storageService.deleteFile(uuid);
 
       await Future.delayed(
         const Duration(seconds: 2),
