@@ -19,9 +19,9 @@ abstract class LocalDBService {
     String uuid,
   );
 
-  Future<void> deleteUserData(
-    String uuid,
-  );
+  Future<void> deleteUserData(String uuid);
+
+  Future<void> deleteUserQueue();
 
   Future<List<Favorite>> loadFavoritesDatabase(String uid);
 

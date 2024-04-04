@@ -64,10 +64,29 @@ class CloseAccountProvider extends Notifier<CloseAccountData> {
 
       await localDBService.deleteUserData(uuid);
 
-      await cloudDBService.deleteUserData(uuid);
+      try {
+        await cloudDBService.deleteUserData(uuid);
+      } on DeleteUserException catch (e) {
+        logger.e(e);
+      }
 
-      await cloudDBService.deleteQuizScoreData(uuid);
-      await cloudDBService.deleteAllFavoritesCloudDB(uuid);
+      try {
+        await cloudDBService.deleteQuizScoreData(uuid);
+      } on DeleteUserException catch (e) {
+        logger.e(e);
+      }
+
+      try {
+        await cloudDBService.deleteAllFavoritesCloudDB(uuid);
+      } on DeleteUserException catch (e) {
+        logger.e(e);
+      }
+
+      try {
+        storageService.deleteFile(uuid);
+      } on DeleteUserException catch (e) {
+        logger.e(e);
+      }
 
       storageService.deleteFile(uuid);
 
