@@ -18,7 +18,7 @@ class TrailingTile extends ConsumerWidget {
   Widget selectWidgetStatus(KanjiFromApi kanjiFromApi, BuildContext context) {
     if (kanjiFromApi.statusStorage == StatusStorage.onlyOnline) {
       return Icon(
-        Icons.download_outlined,
+        Icons.file_download_outlined,
         color: Theme.of(context).colorScheme.onSecondaryContainer,
         size: 50,
       );
