@@ -31,6 +31,19 @@ class MainScreenProvider extends Notifier<MainScreenData> {
 
   List<KanjiFromApi> listOfValidStoredKanjis = [];
 
+  ScreenSelection getScreenSelection() {
+    return state.selection;
+  }
+
+  void setFullName(String fullName) {
+    state = MainScreenData(
+      selection: state.selection,
+      avatarLink: state.avatarLink,
+      fullName: fullName,
+      pathAvatar: state.pathAvatar,
+    );
+  }
+
   void setScreen(ScreenSelection screen) {
     state = MainScreenData(
       selection: screen,
@@ -41,19 +54,6 @@ class MainScreenProvider extends Notifier<MainScreenData> {
   }
 
   void setAvatarLink(String link) {
-    state = MainScreenData(
-      selection: state.selection,
-      avatarLink: link,
-      fullName: state.fullName,
-      pathAvatar: state.pathAvatar,
-    );
-  }
-
-  ScreenSelection getScreenSelection() {
-    return state.selection;
-  }
-
-  void setLinkAvatar(String link) {
     state = MainScreenData(
       selection: state.selection,
       avatarLink: link,
@@ -120,8 +120,6 @@ class MainScreenProvider extends Notifier<MainScreenData> {
 
     listOfValidStoredKanjis =
         listStoresKanjis.isEmpty ? await loadStoredKanjis() : listStoresKanjis;
-
-    //listOfValidStoredKanjis = await loadStoredKanjis();
 
     try {
       final quizScoreData =

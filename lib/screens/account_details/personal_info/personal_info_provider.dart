@@ -1,9 +1,11 @@
 import 'dart:async';
 
+import 'package:dio/dio.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kanji_for_n5_level_app/main.dart';
 import 'package:kanji_for_n5_level_app/screens/main_screens/main_content_provider.dart';
+import 'package:path_provider/path_provider.dart';
 
 class PersonalInfoProvider extends Notifier<PersonalInfoData> {
   @override
@@ -192,6 +194,9 @@ class PersonalInfoProvider extends Notifier<PersonalInfoData> {
         'firstName': state.firstName,
         'lastName': state.lastName,
       });
+
+      final fullName = '${state.firstName} ${state.lastName}';
+      ref.read(mainScreenProvider.notifier).setFullName(fullName);
     } on FirebaseException catch (e) {
       logger.e('error changing email with ${e.code} and message $e');
       setUpdatingStatus(PersonalInfoUpdatingStatus.error);
@@ -202,10 +207,22 @@ class PersonalInfoProvider extends Notifier<PersonalInfoData> {
 
     if (personalInfoData.pathProfileTemporal.isNotEmpty) {
       try {
-        final url = await storageService.updateFile(
+        final avatarLink = await storageService.updateFile(
             personalInfoData.pathProfileTemporal, authService.userUuid ?? '');
-        setProfilePath(url);
-        ref.read(mainScreenProvider.notifier).setAvatarLink(url);
+        setProfilePath(avatarLink);
+        ref.read(mainScreenProvider.notifier).setAvatarLink(avatarLink);
+
+        final dio = Dio();
+        final pathBase = (await getApplicationDocumentsDirectory()).path;
+        final pathAvatar = '$pathBase/$userUuid.jpg';
+
+        await dio.download(
+          avatarLink,
+          pathAvatar,
+        );
+
+        ref.read(mainScreenProvider.notifier).setPathAvatar(pathAvatar);
+
         setUpdatingStatus(PersonalInfoUpdatingStatus.succes);
       } catch (e) {
         setUpdatingStatus(PersonalInfoUpdatingStatus.error);
