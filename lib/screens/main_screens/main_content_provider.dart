@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:dio/dio.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -13,6 +14,7 @@ import 'package:kanji_for_n5_level_app/screens/navigation_bar_screens/favorite_s
 import 'package:kanji_for_n5_level_app/providers/status_connection_provider.dart';
 import 'package:kanji_for_n5_level_app/providers/status_stored_provider.dart';
 import 'package:kanji_for_n5_level_app/screens/navigation_bar_screens/pogress_screen/progress_screen_provider.dart';
+import 'package:path_provider/path_provider.dart';
 
 class MainScreenProvider extends Notifier<MainScreenData> {
   @override
@@ -20,21 +22,31 @@ class MainScreenProvider extends Notifier<MainScreenData> {
     Connectivity().checkConnectivity().then((result) =>
         ref.read(statusConnectionProvider.notifier).setInitialStatus(result));
     return MainScreenData(
-        selection: ScreenSelection.kanjiSections, avatarLink: '', fullName: '');
+      selection: ScreenSelection.kanjiSections,
+      avatarLink: '',
+      fullName: '',
+      pathAvatar: '',
+    );
   }
 
   List<KanjiFromApi> listOfValidStoredKanjis = [];
 
   void setScreen(ScreenSelection screen) {
     state = MainScreenData(
-        selection: screen,
-        avatarLink: state.avatarLink,
-        fullName: state.fullName);
+      selection: screen,
+      avatarLink: state.avatarLink,
+      fullName: state.fullName,
+      pathAvatar: state.pathAvatar,
+    );
   }
 
   void setAvatarLink(String link) {
     state = MainScreenData(
-        selection: state.selection, avatarLink: link, fullName: state.fullName);
+      selection: state.selection,
+      avatarLink: link,
+      fullName: state.fullName,
+      pathAvatar: state.pathAvatar,
+    );
   }
 
   ScreenSelection getScreenSelection() {
@@ -43,7 +55,20 @@ class MainScreenProvider extends Notifier<MainScreenData> {
 
   void setLinkAvatar(String link) {
     state = MainScreenData(
-        selection: state.selection, avatarLink: link, fullName: state.fullName);
+      selection: state.selection,
+      avatarLink: link,
+      fullName: state.fullName,
+      pathAvatar: state.pathAvatar,
+    );
+  }
+
+  void setPathAvatar(String pathAvatar) {
+    state = MainScreenData(
+      selection: state.selection,
+      avatarLink: state.avatarLink,
+      fullName: state.fullName,
+      pathAvatar: pathAvatar,
+    );
   }
 
   void selectPage(
@@ -150,21 +175,36 @@ class MainScreenProvider extends Notifier<MainScreenData> {
   }
 
   Future<void> getAppBarData() async {
-    final uuid = FirebaseAuth.instance.currentUser!.uid;
+    final uuid = authService.userUuid;
     final fullName = FirebaseAuth.instance.currentUser!.displayName;
 
     try {
-      final link = await storageService.getDownloadLink(uuid);
+      if (state.avatarLink != '' && state.pathAvatar != '') return;
+
+      final avatarLink = await storageService.getDownloadLink(uuid ?? '');
+
+      final dio = Dio();
+      final pathBase = (await getApplicationDocumentsDirectory()).path;
+      final pathAvatar = '$pathBase/$uuid.jpg';
+
+      await dio.download(
+        avatarLink,
+        pathAvatar,
+      );
+
       state = MainScreenData(
           selection: ScreenSelection.kanjiSections,
-          avatarLink: link,
-          fullName: fullName ?? '');
+          avatarLink: avatarLink,
+          fullName: fullName ?? '',
+          pathAvatar: pathAvatar);
     } catch (e) {
       logger.e('error reading profile photo');
       state = MainScreenData(
-          selection: ScreenSelection.kanjiSections,
-          avatarLink: '',
-          fullName: fullName ?? '');
+        selection: ScreenSelection.kanjiSections,
+        avatarLink: '',
+        fullName: fullName ?? '',
+        pathAvatar: '',
+      );
     }
   }
 
@@ -174,14 +214,20 @@ class MainScreenProvider extends Notifier<MainScreenData> {
     logger.d('The full name is 1 $fullName');
 
     state = MainScreenData(
-        selection: ScreenSelection.kanjiSections,
-        avatarLink: '',
-        fullName: fullName ?? '');
+      selection: ScreenSelection.kanjiSections,
+      avatarLink: '',
+      fullName: fullName ?? '',
+      pathAvatar: state.pathAvatar,
+    );
   }
 
   void resetMainScreenState() {
     state = MainScreenData(
-        selection: ScreenSelection.kanjiSections, avatarLink: '', fullName: '');
+      selection: ScreenSelection.kanjiSections,
+      avatarLink: '',
+      fullName: '',
+      pathAvatar: state.pathAvatar,
+    );
   }
 }
 
@@ -191,12 +237,15 @@ final mainScreenProvider = NotifierProvider<MainScreenProvider, MainScreenData>(
 class MainScreenData {
   final ScreenSelection selection;
   final String avatarLink;
+  final String pathAvatar;
   final String fullName;
 
-  MainScreenData(
-      {required this.selection,
-      required this.avatarLink,
-      required this.fullName});
+  MainScreenData({
+    required this.selection,
+    required this.avatarLink,
+    required this.pathAvatar,
+    required this.fullName,
+  });
 }
 
 enum ScreenSelection {
@@ -276,7 +325,7 @@ Future<(List<(KanjiFromApi, bool)>, List<(KanjiFromApi, bool)>)>
   );
 }
 
-Future<bool> checkFileIfExists(String audioPath) async {
-  final audioFile = File(audioPath);
-  return await audioFile.exists();
+Future<bool> checkFileIfExists(String path) async {
+  final file = File(path);
+  return await file.exists();
 }

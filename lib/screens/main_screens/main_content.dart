@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
@@ -115,21 +117,32 @@ class MainContent extends ConsumerWidget with StatusDBStoringDialogs {
                   child: LayoutBuilder(
                     builder: (ctx, constrains) {
                       final height = constrains.maxHeight;
-                      return CachedNetworkImage(
-                        width: height - 3,
-                        height: height - 3,
-                        fit: BoxFit.cover,
-                        imageBuilder: (context, imageProvider) {
-                          return CircleAvatar(
-                            backgroundImage: imageProvider,
-                          );
-                        },
-                        imageUrl: mainScreenData.avatarLink,
-                        placeholder: (context, url) =>
-                            const CircularProgressIndicator(),
-                        errorWidget: (context, url, error) =>
-                            Image.asset('assets/images/user.png'),
-                      );
+                      return (mainScreenData.avatarLink != '' &&
+                              mainScreenData.pathAvatar != '')
+                          ? Container(
+                              color: Colors.transparent,
+                              width: height - 3,
+                              height: height - 3,
+                              child: CircleAvatar(
+                                backgroundImage:
+                                    FileImage(File(mainScreenData.pathAvatar)),
+                              ),
+                            )
+                          : CachedNetworkImage(
+                              width: height - 3,
+                              height: height - 3,
+                              fit: BoxFit.cover,
+                              imageBuilder: (context, imageProvider) {
+                                return CircleAvatar(
+                                  backgroundImage: imageProvider,
+                                );
+                              },
+                              imageUrl: mainScreenData.avatarLink,
+                              placeholder: (context, url) =>
+                                  const CircularProgressIndicator(),
+                              errorWidget: (context, url, error) =>
+                                  Image.asset('assets/images/user.png'),
+                            );
                     },
                   ),
                 ),

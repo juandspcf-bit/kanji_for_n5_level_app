@@ -50,6 +50,7 @@ class _VerifyEmailEstate extends ConsumerState<VerifyEmail> {
         canResendEmail = true;
       });
     } catch (e) {
+      timer?.cancel();
       logger.e(e);
     }
   }
