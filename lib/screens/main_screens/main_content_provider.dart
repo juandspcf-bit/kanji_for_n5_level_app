@@ -176,7 +176,9 @@ class MainScreenProvider extends Notifier<MainScreenData> {
 
   Future<void> getAppBarData() async {
     final uuid = authService.userUuid;
-    final fullName = FirebaseAuth.instance.currentUser!.displayName;
+
+    final userData = await cloudDBService.readUserData(uuid ?? '');
+    final fullName = '${userData.firstName} ${userData.lastName}';
 
     try {
       if (state.avatarLink != '' && state.pathAvatar != '') return;
@@ -195,14 +197,14 @@ class MainScreenProvider extends Notifier<MainScreenData> {
       state = MainScreenData(
           selection: ScreenSelection.kanjiSections,
           avatarLink: avatarLink,
-          fullName: fullName ?? '',
+          fullName: fullName,
           pathAvatar: pathAvatar);
     } catch (e) {
       logger.e('error reading profile photo');
       state = MainScreenData(
         selection: ScreenSelection.kanjiSections,
         avatarLink: '',
-        fullName: fullName ?? '',
+        fullName: fullName,
         pathAvatar: '',
       );
     }
