@@ -23,6 +23,8 @@ class MainScreenProvider extends Notifier<MainScreenData> {
         selection: ScreenSelection.kanjiSections, avatarLink: '', fullName: '');
   }
 
+  List<KanjiFromApi> listOfValidStoredKanjis = [];
+
   void setScreen(ScreenSelection screen) {
     state = MainScreenData(
         selection: screen,
@@ -88,7 +90,13 @@ class MainScreenProvider extends Notifier<MainScreenData> {
   }
 
   Future<void> getOnlineData() async {
-    List<KanjiFromApi> listOfValidStoredKanjis = await loadStoredKanjis();
+    final listStoresKanjis =
+        ref.read(storedKanjisProvider.notifier).listStoresKanjis;
+
+    listOfValidStoredKanjis =
+        listStoresKanjis.isEmpty ? await loadStoredKanjis() : listStoresKanjis;
+
+    //listOfValidStoredKanjis = await loadStoredKanjis();
 
     try {
       final quizScoreData =

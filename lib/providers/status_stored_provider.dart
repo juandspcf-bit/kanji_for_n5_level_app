@@ -99,6 +99,12 @@ class StoredkanjisProvider extends Notifier<Map<int, List<KanjiFromApi>>> {
 
     return orderedKanjisSections;
   }
+
+  List<KanjiFromApi> get listStoresKanjis =>
+      state.values.fold([], (previousValue, element) {
+        previousValue.addAll(element);
+        return previousValue;
+      });
 }
 
 final storedKanjisProvider =
