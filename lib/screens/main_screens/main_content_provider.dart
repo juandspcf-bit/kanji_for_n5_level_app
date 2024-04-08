@@ -111,7 +111,7 @@ class MainScreenProvider extends Notifier<MainScreenData> {
 
   Future<void> initAppOffline() async {
     await getOfflineData();
-    await getAppBarDataOffline();
+    //await getAppBarDataOffline();
   }
 
   Future<void> getOnlineData() async {
@@ -147,7 +147,12 @@ class MainScreenProvider extends Notifier<MainScreenData> {
   }
 
   Future<void> getOfflineData() async {
-    List<KanjiFromApi> listOfValidStoredKanjis = await loadStoredKanjis();
+    final listStoresKanjis =
+        ref.read(storedKanjisProvider.notifier).listStoresKanjis;
+
+    listOfValidStoredKanjis =
+        listStoresKanjis.isEmpty ? await loadStoredKanjis() : listStoresKanjis;
+
     final favoritesKanjis =
         await localDBService.loadFavoritesDatabase(authService.userUuid ?? '');
     ref
@@ -209,9 +214,8 @@ class MainScreenProvider extends Notifier<MainScreenData> {
   }
 
   Future<void> getAppBarDataOffline() async {
+    if (state.avatarLink != '' && state.pathAvatar != '') return;
     final fullName = FirebaseAuth.instance.currentUser!.displayName;
-
-    logger.d('The full name is 1 $fullName');
 
     state = MainScreenData(
       selection: ScreenSelection.kanjiSections,
