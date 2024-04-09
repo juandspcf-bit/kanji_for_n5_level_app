@@ -16,11 +16,21 @@ import 'package:kanji_for_n5_level_app/repositories/local_database/db_quiz_data_
 
 class SqliteDBService implements LocalDBService {
   @override
+  Future<void> insertUserData(Map<String, Object> data) async {
+    await insertUserDataToSqlite(data);
+  }
+
+  @override
+  Future<List<Map<String, Object?>>> readUserData(String uuid) async {
+    return readUserDataFromSqlite(uuid);
+  }
+
+  @override
   Future<KanjiFromApi?> storeKanjiToLocalDatabase(
     KanjiFromApi kanjiFromApi,
     String uuid,
   ) async {
-    return await storeKanjiToSqlDB(kanjiFromApi, uuid);
+    return await storeKanjiToSqlite(kanjiFromApi, uuid);
   }
 
   @override

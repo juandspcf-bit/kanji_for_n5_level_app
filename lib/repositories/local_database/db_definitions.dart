@@ -29,6 +29,16 @@ Future<Database> get kanjiFromApiDatabase async {
       );
 
       await db.execute(
+        'CREATE TABLE user_data('
+        ' id INTEGER PRIMARY KEY AUTOINCREMENT,'
+        ' uuid TEXT,'
+        ' fullName TEXT,'
+        ' linkAvatar TEXT,'
+        ' pathAvatar TEXT'
+        ')',
+      );
+
+      await db.execute(
         'CREATE TABLE kanji_quiz('
         ' id INTEGER PRIMARY KEY AUTOINCREMENT,'
         ' allCorrectAnswersQuizKanji INTEGER,'

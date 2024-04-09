@@ -7,6 +7,10 @@ import 'package:kanji_for_n5_level_app/models/single_quiz_flash_card_data.dart';
 import 'package:kanji_for_n5_level_app/models/single_quiz_section_data.dart';
 
 abstract class LocalDBService {
+  Future<void> insertUserData(Map<String, Object> data);
+
+  Future<List<Map<String, Object?>>> readUserData(String uuid);
+
   Future<List<KanjiFromApi>> loadStoredKanjis();
 
   Future<KanjiFromApi?> storeKanjiToLocalDatabase(

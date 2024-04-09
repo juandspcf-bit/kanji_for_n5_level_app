@@ -12,6 +12,55 @@ import 'package:path_provider/path_provider.dart';
 
 const durationTimeOutMili = 1000 * 60 * 5;
 
+Future<void> insertUserDataToSqlite(Map<String, Object> data) async {
+  final db = await kanjiFromApiDatabase;
+
+  final listUserData = await readUserDataFromSqlite(data['uuid'] as String);
+
+  if (listUserData.isEmpty) {
+    await db.rawInsert(
+      'INSERT INTO user_data('
+      ' uuid,'
+      ' fullName,'
+      ' linkAvatar,'
+      ' pathAvatar'
+      ') '
+      'VALUES(?,?,?,?)',
+      [
+        data['uuid'],
+        data['fullName'],
+        data['linkAvatar'],
+        data['pathAvatar'],
+      ],
+    );
+  } else {
+    await db.rawUpdate(
+        'UPDATE kanji_quiz '
+        'SET'
+        ' uuid = ?,'
+        ' fullName = ?,'
+        ' linkAvatar = ?,'
+        ' pathAvatar = ?'
+        ' WHERE section = ? AND uuid = ?',
+        [
+          data['uuid'],
+          data['fullName'],
+          data['linkAvatar'],
+          data['pathAvatar'],
+        ]);
+  }
+}
+
+Future<List<Map<String, Object?>>> readUserDataFromSqlite(String uuid) async {
+  final db = await kanjiFromApiDatabase;
+  return await db.rawQuery(
+    'SELECT * FROM user_data '
+    'WHERE'
+    ' uuid = ?',
+    [uuid],
+  );
+}
+
 class ParametersCompute {
   final Directory path;
   final KanjiFromApi kanjiFromApi;
@@ -24,7 +73,7 @@ class ParametersCompute {
   });
 }
 
-Future<KanjiFromApi?> storeKanjiToSqlDB(
+Future<KanjiFromApi?> storeKanjiToSqlite(
   KanjiFromApi kanjiFromApi,
   String uuid,
 ) async {
