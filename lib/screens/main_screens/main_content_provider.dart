@@ -195,7 +195,7 @@ class MainScreenProvider extends Notifier<MainScreenData> {
           fullName: fullName,
           pathAvatar: pathAvatar);
 
-      localDBService.insertUserData({
+      await localDBService.insertUserData({
         'uuid': uuid ?? '',
         'fullName': fullName,
         'linkAvatar': avatarLink,

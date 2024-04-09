@@ -4,7 +4,9 @@ import 'package:dio/dio.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kanji_for_n5_level_app/main.dart';
+import 'package:kanji_for_n5_level_app/repositories/local_database/db_loading_data.dart';
 import 'package:kanji_for_n5_level_app/screens/main_screens/main_content_provider.dart';
+import 'package:kanji_for_n5_level_app/utils/networking/networking.dart';
 import 'package:path_provider/path_provider.dart';
 
 class PersonalInfoProvider extends Notifier<PersonalInfoData> {
@@ -188,6 +190,10 @@ class PersonalInfoProvider extends Notifier<PersonalInfoData> {
 
     setUpdatingStatus(PersonalInfoUpdatingStatus.updating);
 
+    String fullName = '';
+    String avatarLink = '';
+    String pathAvatar = '';
+
     try {
       await cloudDBService.updateUserData(userUuid, {
         'birthday': state.birthdate,
@@ -195,31 +201,26 @@ class PersonalInfoProvider extends Notifier<PersonalInfoData> {
         'lastName': state.lastName,
       });
 
-      final fullName = '${state.firstName} ${state.lastName}';
+      fullName = '${state.firstName} ${state.lastName}';
+      logger.d(fullName);
       ref.read(mainScreenProvider.notifier).setFullName(fullName);
     } on FirebaseException catch (e) {
-      logger.e('error changing email with ${e.code} and message $e');
+      logger.e(e);
       setUpdatingStatus(PersonalInfoUpdatingStatus.error);
       return;
     } catch (e) {
+      logger.e(e);
       setUpdatingStatus(PersonalInfoUpdatingStatus.error);
     }
 
     if (personalInfoData.pathProfileTemporal.isNotEmpty) {
       try {
-        final avatarLink = await storageService.updateFile(
+        avatarLink = await storageService.updateFile(
             personalInfoData.pathProfileTemporal, authService.userUuid ?? '');
         setProfilePath(avatarLink);
         ref.read(mainScreenProvider.notifier).setAvatarLink(avatarLink);
 
-        final dio = Dio();
-        final pathBase = (await getApplicationDocumentsDirectory()).path;
-        final pathAvatar = '$pathBase/$userUuid.jpg';
-
-        await dio.download(
-          avatarLink,
-          pathAvatar,
-        );
+        (_, pathAvatar) = await downloadAndCacheAvatar(userUuid);
 
         ref.read(mainScreenProvider.notifier).setPathAvatar(pathAvatar);
 
@@ -233,6 +234,15 @@ class PersonalInfoProvider extends Notifier<PersonalInfoData> {
     } else {
       setUpdatingStatus(PersonalInfoUpdatingStatus.succes);
     }
+
+    if (personalInfoData.pathProfileTemporal.isNotEmpty) {
+      await localDBService.insertUserData({
+        'uuid': userUuid,
+        'fullName': fullName,
+        'linkAvatar': avatarLink,
+        'pathAvatar': pathAvatar,
+      });
+    } else {}
   }
 }
 

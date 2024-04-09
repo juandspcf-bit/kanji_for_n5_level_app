@@ -34,20 +34,22 @@ Future<void> insertUserDataToSqlite(Map<String, Object> data) async {
       ],
     );
   } else {
-    await db.rawUpdate(
+    logger.d(data);
+    logger.d(listUserData);
+    int value = await db.rawUpdate(
         'UPDATE user_data '
         'SET'
-        ' uuid = ?,'
         ' fullName = ?,'
         ' linkAvatar = ?,'
         ' pathAvatar = ?'
         ' WHERE uuid = ?',
         [
-          data['uuid'],
           data['fullName'],
           data['linkAvatar'],
           data['pathAvatar'],
+          data['uuid']
         ]);
+    logger.d(value);
   }
 }
 
