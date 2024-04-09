@@ -35,13 +35,13 @@ Future<void> insertUserDataToSqlite(Map<String, Object> data) async {
     );
   } else {
     await db.rawUpdate(
-        'UPDATE kanji_quiz '
+        'UPDATE user_data '
         'SET'
         ' uuid = ?,'
         ' fullName = ?,'
         ' linkAvatar = ?,'
         ' pathAvatar = ?'
-        ' WHERE section = ? AND uuid = ?',
+        ' WHERE uuid = ?',
         [
           data['uuid'],
           data['fullName'],

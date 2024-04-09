@@ -14,6 +14,7 @@ import 'package:kanji_for_n5_level_app/screens/navigation_bar_screens/favorite_s
 import 'package:kanji_for_n5_level_app/providers/status_connection_provider.dart';
 import 'package:kanji_for_n5_level_app/providers/status_stored_provider.dart';
 import 'package:kanji_for_n5_level_app/screens/navigation_bar_screens/pogress_screen/progress_screen_provider.dart';
+import 'package:kanji_for_n5_level_app/utils/networking/networking.dart';
 import 'package:path_provider/path_provider.dart';
 
 class MainScreenProvider extends Notifier<MainScreenData> {
@@ -111,7 +112,7 @@ class MainScreenProvider extends Notifier<MainScreenData> {
 
   Future<void> initAppOffline() async {
     await getOfflineData();
-    //await getAppBarDataOffline();
+    await getAppBarDataOffline();
   }
 
   Future<void> getOnlineData() async {
@@ -186,22 +187,20 @@ class MainScreenProvider extends Notifier<MainScreenData> {
     try {
       if (state.avatarLink != '' && state.pathAvatar != '') return;
 
-      final avatarLink = await storageService.getDownloadLink(uuid ?? '');
-
-      final dio = Dio();
-      final pathBase = (await getApplicationDocumentsDirectory()).path;
-      final pathAvatar = '$pathBase/$uuid.jpg';
-
-      await dio.download(
-        avatarLink,
-        pathAvatar,
-      );
+      final (avatarLink, pathAvatar) = await downloadAndCacheAvatar(uuid ?? '');
 
       state = MainScreenData(
           selection: ScreenSelection.kanjiSections,
           avatarLink: avatarLink,
           fullName: fullName,
           pathAvatar: pathAvatar);
+
+      localDBService.insertUserData({
+        'uuid': uuid ?? '',
+        'fullName': fullName,
+        'linkAvatar': avatarLink,
+        'pathAvatar': pathAvatar,
+      });
     } catch (e) {
       logger.e('error reading profile photo');
       state = MainScreenData(
@@ -214,13 +213,27 @@ class MainScreenProvider extends Notifier<MainScreenData> {
   }
 
   Future<void> getAppBarDataOffline() async {
-    if (state.avatarLink != '' && state.pathAvatar != '') return;
-    final fullName = FirebaseAuth.instance.currentUser!.displayName;
+    logger.d(state.fullName);
+    if (state.avatarLink == '' &&
+        state.pathAvatar == '' &&
+        state.fullName == '') {
+      final listUser =
+          await localDBService.readUserData(authService.userUuid ?? '');
+      if (listUser.isNotEmpty) {
+        final user = listUser.first;
+        state = MainScreenData(
+          selection: ScreenSelection.kanjiSections,
+          avatarLink: user['linkAvatar'] as String,
+          fullName: user['fullName'] as String,
+          pathAvatar: user['pathAvatar'] as String,
+        );
+      }
+    }
 
     state = MainScreenData(
       selection: ScreenSelection.kanjiSections,
-      avatarLink: '',
-      fullName: fullName ?? '',
+      avatarLink: state.avatarLink,
+      fullName: state.fullName,
       pathAvatar: state.pathAvatar,
     );
   }
