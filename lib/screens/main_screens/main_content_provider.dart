@@ -1,8 +1,6 @@
 import 'dart:io';
 
 import 'package:connectivity_plus/connectivity_plus.dart';
-import 'package:dio/dio.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -15,7 +13,6 @@ import 'package:kanji_for_n5_level_app/providers/status_connection_provider.dart
 import 'package:kanji_for_n5_level_app/providers/status_stored_provider.dart';
 import 'package:kanji_for_n5_level_app/screens/navigation_bar_screens/pogress_screen/progress_screen_provider.dart';
 import 'package:kanji_for_n5_level_app/utils/networking/networking.dart';
-import 'package:path_provider/path_provider.dart';
 
 class MainScreenProvider extends Notifier<MainScreenData> {
   @override

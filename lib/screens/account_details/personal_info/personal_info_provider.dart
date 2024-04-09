@@ -1,13 +1,10 @@
 import 'dart:async';
 
-import 'package:dio/dio.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kanji_for_n5_level_app/main.dart';
-import 'package:kanji_for_n5_level_app/repositories/local_database/db_loading_data.dart';
 import 'package:kanji_for_n5_level_app/screens/main_screens/main_content_provider.dart';
 import 'package:kanji_for_n5_level_app/utils/networking/networking.dart';
-import 'package:path_provider/path_provider.dart';
 
 class PersonalInfoProvider extends Notifier<PersonalInfoData> {
   @override
@@ -190,9 +187,18 @@ class PersonalInfoProvider extends Notifier<PersonalInfoData> {
 
     setUpdatingStatus(PersonalInfoUpdatingStatus.updating);
 
+    final cachedUserDataList = await localDBService.readUserData(userUuid);
+
     String fullName = '';
     String avatarLink = '';
     String pathAvatar = '';
+
+    if (cachedUserDataList.isNotEmpty) {
+      final cachedUserData = cachedUserDataList.first;
+      fullName = cachedUserData['fullName'] as String;
+      avatarLink = cachedUserData['linkAvatar'] as String;
+      pathAvatar = cachedUserData['pathAvatar'] as String;
+    }
 
     try {
       await cloudDBService.updateUserData(userUuid, {
