@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kanji_for_n5_level_app/aplication_layer/auth_contract/auth_service_contract.dart';
 import 'package:kanji_for_n5_level_app/main.dart';
@@ -145,7 +144,7 @@ class SingUpProvider extends Notifier<SingUpData> {
     );
   }
 
-  Future<void> toCreateUser(BuildContext context) async {
+  Future<void> toCreateUser() async {
     if (state.password != state.confirmPassword) {
       setStatusCreatingUser(StatusCreatingUser.passworfMisMatch);
       return;

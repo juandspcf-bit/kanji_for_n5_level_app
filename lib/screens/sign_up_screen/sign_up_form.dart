@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:kanji_for_n5_level_app/main.dart';
 import 'package:kanji_for_n5_level_app/screens/common_widgets/password_widget.dart';
 import 'package:kanji_for_n5_level_app/screens/login_screen/email_widget.dart';
 import 'package:kanji_for_n5_level_app/screens/sign_up_screen/profile_picture_widget.dart';
@@ -20,12 +19,7 @@ class SingUpForm extends ConsumerWidget {
     if (currentState == null || !currentState.validate()) return;
     currentState.save();
 
-    try {
-      await ref.read(singUpProvider.notifier).toCreateUser(context);
-    } catch (e) {
-      logger.e(e.toString());
-      if (context.mounted) {}
-    }
+    await ref.read(singUpProvider.notifier).toCreateUser();
   }
 
   @override
