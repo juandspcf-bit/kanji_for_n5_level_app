@@ -95,15 +95,6 @@ class LoginFormScreen extends ConsumerWidget with MyDialogs {
                   )
                 : SafeArea(
                     child: LoginForm(
-                      loginFormData: loginFormData,
-                      setEmail: (value) {
-                        if (value == null) return;
-                        ref.read(loginProvider.notifier).setEmail(value);
-                      },
-                      setPassword: (value) {
-                        if (value == null) return;
-                        ref.read(loginProvider.notifier).setPassword(value);
-                      },
                       onSuccefulValidation: () {
                         toLoging(context, ref);
                       },

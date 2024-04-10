@@ -13,19 +13,15 @@ import 'package:kanji_for_n5_level_app/screens/common_widgets/my_dialogs.dart';
 class LoginForm extends ConsumerWidget {
   LoginForm({
     super.key,
-    required this.loginFormData,
-    required this.setEmail,
-    required this.setPassword,
     required this.onSuccefulValidation,
   });
   final _formKey = GlobalKey<FormState>();
-  final LogingData loginFormData;
-  final void Function(String? value) setEmail;
-  final void Function(String? value) setPassword;
+
   final void Function() onSuccefulValidation;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final loginFormData = ref.watch(loginProvider);
     return SingleChildScrollView(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -43,8 +39,9 @@ class LoginForm extends ConsumerWidget {
               children: [
                 EmailTextField(
                   initialValue: loginFormData.email,
-                  setEmail: (text) {
-                    setEmail(text);
+                  setEmail: (value) {
+                    if (value == null) return;
+                    ref.read(loginProvider.notifier).setEmail(value);
                   },
                 ),
                 const SizedBox(
@@ -53,7 +50,10 @@ class LoginForm extends ConsumerWidget {
                 PasswordTextField(
                   initialValue: loginFormData.password,
                   formKey: _formKey,
-                  onSave: setPassword,
+                  onSave: (value) {
+                    if (value == null) return;
+                    ref.read(loginProvider.notifier).setPassword(value);
+                  },
                   labelText: 'password',
                 ),
                 const SizedBox(
