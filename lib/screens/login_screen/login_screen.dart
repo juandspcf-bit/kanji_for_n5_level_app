@@ -13,10 +13,6 @@ import 'package:kanji_for_n5_level_app/screens/common_widgets/my_dialogs.dart';
 class LoginFormScreen extends ConsumerWidget with MyDialogs {
   LoginFormScreen({super.key});
 
-  void toLoging(BuildContext context, WidgetRef ref) async {
-    await ref.read(loginProvider.notifier).toLoging();
-  }
-
   void showLoginResultMessageDialog(
       BuildContext context, StatusLogingRequest result, WidgetRef ref) {
     if (result != StatusLogingRequest.success &&
@@ -94,11 +90,7 @@ class LoginFormScreen extends ConsumerWidget with MyDialogs {
                     message: 'Login to your account',
                   )
                 : SafeArea(
-                    child: LoginForm(
-                      onSuccefulValidation: () {
-                        toLoging(context, ref);
-                      },
-                    ),
+                    child: LoginForm(),
                   );
           },
         ),

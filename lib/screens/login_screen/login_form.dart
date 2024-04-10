@@ -13,11 +13,15 @@ import 'package:kanji_for_n5_level_app/screens/common_widgets/my_dialogs.dart';
 class LoginForm extends ConsumerWidget {
   LoginForm({
     super.key,
-    required this.onSuccefulValidation,
   });
   final _formKey = GlobalKey<FormState>();
 
-  final void Function() onSuccefulValidation;
+  void onValidation(BuildContext context, WidgetRef ref) async {
+    final currentState = _formKey.currentState;
+    if (currentState == null || !currentState.validate()) return;
+    currentState.save();
+    await ref.read(loginProvider.notifier).toLoging();
+  }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -96,12 +100,7 @@ class LoginForm extends ConsumerWidget {
                 currentFocus.unfocus();
               }
 
-              final currenState = _formKey.currentState;
-              if (currenState == null) return;
-              if (currenState.validate()) {
-                currenState.save();
-                onSuccefulValidation();
-              }
+              onValidation(context, ref);
             },
             style: ElevatedButton.styleFrom().copyWith(
               minimumSize: const MaterialStatePropertyAll(
