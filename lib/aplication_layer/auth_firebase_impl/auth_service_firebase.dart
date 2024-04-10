@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:kanji_for_n5_level_app/aplication_layer/auth_contract/auth_service_contract.dart';
+import 'package:kanji_for_n5_level_app/aplication_layer/auth_contract/delete_user_exception.dart';
 import 'package:kanji_for_n5_level_app/config_files/network_config.dart';
 import 'package:kanji_for_n5_level_app/main.dart';
 
