@@ -210,10 +210,6 @@ class PersonalInfoProvider extends Notifier<PersonalInfoData> {
       fullName = '${state.firstName} ${state.lastName}';
       logger.d(fullName);
       ref.read(mainScreenProvider.notifier).setFullName(fullName);
-    } on FirebaseException catch (e) {
-      logger.e(e);
-      setUpdatingStatus(PersonalInfoUpdatingStatus.error);
-      return;
     } catch (e) {
       logger.e(e);
       setUpdatingStatus(PersonalInfoUpdatingStatus.error);
