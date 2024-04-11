@@ -1,7 +1,7 @@
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:kanji_for_n5_level_app/aplication_layer/auth_contract/auth_service_contract.dart';
+import 'package:kanji_for_n5_level_app/aplication_layer/auth_service/auth_service_contract.dart';
 import 'package:kanji_for_n5_level_app/providers/status_connection_provider.dart';
 import 'package:kanji_for_n5_level_app/screens/common_screens/error_connection_screen.dart';
 import 'package:kanji_for_n5_level_app/screens/sign_up_screen/sign_up_form.dart';

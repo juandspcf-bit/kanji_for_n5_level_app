@@ -1,4 +1,4 @@
-import 'package:kanji_for_n5_level_app/aplication_layer/repository_contract/local_repo/db_contract.dart';
+import 'package:kanji_for_n5_level_app/aplication_layer/repository_service/local_repo/db_contract.dart';
 import 'package:kanji_for_n5_level_app/models/favorite.dart';
 import 'package:kanji_for_n5_level_app/models/first_time_logged.dart';
 import 'package:kanji_for_n5_level_app/models/kanji_from_api.dart';
