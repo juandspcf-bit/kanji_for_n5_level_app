@@ -1,3 +1,4 @@
+import 'package:kanji_for_n5_level_app/aplication_layer/auth_service/delete_user_exception.dart';
 import 'package:kanji_for_n5_level_app/aplication_layer/repository_service/local_repo/db_contract.dart';
 import 'package:kanji_for_n5_level_app/models/favorite.dart';
 import 'package:kanji_for_n5_level_app/models/first_time_logged.dart';
@@ -23,6 +24,14 @@ class SqliteDBService implements LocalDBService {
   @override
   Future<List<Map<String, Object?>>> readUserData(String uuid) async {
     return readUserDataFromSqlite(uuid);
+  }
+
+  @override
+  Future<void> insertToTheDeleteErrorQueue(
+    String uuid,
+    DeleteErrorUserCode deleteErrorUserCode,
+  ) async {
+    await insertToTheDeleteErrorQueueSqlite(uuid, deleteErrorUserCode);
   }
 
   @override

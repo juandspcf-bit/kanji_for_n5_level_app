@@ -39,6 +39,27 @@ Future<void> deleteUserDataSqlite(String uuid) async {
   }
 }
 
+Future<void> insertToTheDeleteErrorQueueSqlite(
+  String uuid,
+  DeleteErrorUserCode deleteErrorUserCode,
+) async {
+  if (uuid == '') return;
+
+  final db = await kanjiFromApiDatabase;
+
+  await db.rawInsert(
+    'INSERT INTO delete_user_queue('
+    ' uuid,'
+    ' errorMessage'
+    ') '
+    'VALUES(?,?,?,?)',
+    [
+      uuid,
+      deleteErrorUserCode,
+    ],
+  );
+}
+
 Future<void> deleteUserQueueSqlite() async {
   final db = await kanjiFromApiDatabase;
   final queue = await db.rawQuery('SELECT * FROM delete_user_queue');
@@ -49,21 +70,21 @@ Future<void> deleteUserQueueSqlite() async {
     final uuid = operation['uuid'] as String;
     final errorMessage = operation['errorMessage'] as String;
 
-    if (errorMessage == DeleteErrorUserCode.deleteErrorUserData.name) {
+    if (errorMessage == DeleteErrorUserCode.deleteErrorUserData.toString()) {
       await cloudDBService.deleteUserData(uuid);
       await db.rawDelete(
           'DELETE FROM delete_user_queue WHERE uuid = ? AND errorMessage = ?',
           [uuid, errorMessage]);
     }
 
-    if (errorMessage == DeleteErrorUserCode.deleteErrorQuizData.name) {
+    if (errorMessage == DeleteErrorUserCode.deleteErrorQuizData.toString()) {
       await cloudDBService.deleteQuizScoreData(uuid);
       await db.rawDelete(
           'DELETE FROM delete_user_queue WHERE uuid = ? AND errorMessage = ?',
           [uuid, errorMessage]);
     }
 
-    if (errorMessage == DeleteErrorUserCode.deleteErrorFavorites.name) {
+    if (errorMessage == DeleteErrorUserCode.deleteErrorFavorites.toString()) {
       await cloudDBService.deleteAllFavoritesCloudDB(uuid);
       await db.rawDelete(
           'DELETE FROM delete_user_queue WHERE uuid = ? AND errorMessage = ?',

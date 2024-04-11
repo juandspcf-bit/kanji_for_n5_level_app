@@ -1,3 +1,4 @@
+import 'package:kanji_for_n5_level_app/aplication_layer/auth_service/delete_user_exception.dart';
 import 'package:kanji_for_n5_level_app/models/favorite.dart';
 import 'package:kanji_for_n5_level_app/models/first_time_logged.dart';
 import 'package:kanji_for_n5_level_app/models/kanji_from_api.dart';
@@ -10,6 +11,11 @@ abstract class LocalDBService {
   Future<void> insertUserData(Map<String, Object> data);
 
   Future<List<Map<String, Object?>>> readUserData(String uuid);
+
+  Future<void> insertToTheDeleteErrorQueue(
+    String uuid,
+    DeleteErrorUserCode deleteErrorUserCode,
+  );
 
   Future<List<KanjiFromApi>> loadStoredKanjis();
 
