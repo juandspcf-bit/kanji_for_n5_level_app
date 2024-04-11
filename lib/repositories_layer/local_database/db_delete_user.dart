@@ -52,7 +52,7 @@ Future<void> insertToTheDeleteErrorQueueSqlite(
     ' uuid,'
     ' errorMessage'
     ') '
-    'VALUES(?,?,?,?)',
+    'VALUES(?,?)',
     [
       uuid,
       deleteErrorUserCode,
