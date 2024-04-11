@@ -16,9 +16,9 @@ import 'package:kanji_for_n5_level_app/aplication_layer/repository_service/api_r
 import 'package:kanji_for_n5_level_app/aplication_layer/repository_service/api_repo/kanji_kanji_alive_api_impl.dart';
 import 'package:kanji_for_n5_level_app/aplication_layer/repository_service/storage_repo/storage_contract.dart';
 import 'package:kanji_for_n5_level_app/aplication_layer/repository_service/storage_repo/storage_db_imple.dart';
-import 'package:kanji_for_n5_level_app/screens/auth_flow/auth_flow.dart';
+import 'package:kanji_for_n5_level_app/presentation_layer/screens/auth_flow/auth_flow.dart';
 import 'package:kanji_for_n5_level_app/providers/on_boarding_provider.dart';
-import 'package:kanji_for_n5_level_app/screens/onBoarding_screen/my_page_viewer.dart';
+import 'package:kanji_for_n5_level_app/presentation_layer/screens/onBoarding_screen/my_page_viewer.dart';
 import 'package:logger/logger.dart';
 import 'firebase_options.dart';
 
