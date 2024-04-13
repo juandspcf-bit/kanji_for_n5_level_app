@@ -60,7 +60,7 @@ class SqliteDBService implements LocalDBService {
 
   @override
   Future<void> deleteUserQueue() async {
-    await deleteUserQueueSqlite();
+    return await deleteUserQueueSqlite();
   }
 
   @override

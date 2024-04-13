@@ -12,6 +12,7 @@ class AuthFlow extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     ref.read(lottieFilesProvider.notifier).initLottieFile();
+    localDBService.deleteUserQueue();
     return StreamBuilder(
         stream: streamAuth,
         builder: (ctx, snapShot) {
