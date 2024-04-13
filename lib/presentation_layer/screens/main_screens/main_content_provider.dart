@@ -167,7 +167,6 @@ class MainScreenProvider extends Notifier<MainScreenData> {
     final listOfInvalidStoredKanjis =
         validAndInvalidKanjis.$2.map((e) => e.$1).toList();
     localDBService.cleanInvalidDBRecords(listOfInvalidStoredKanjis);
-    ref.read(lottieFilesProvider.notifier).initLottieFile();
 
     ref
         .read(storedKanjisProvider.notifier)
