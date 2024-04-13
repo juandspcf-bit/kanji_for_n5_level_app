@@ -269,7 +269,9 @@ enum ScreenSelection {
 }
 
 Future<(List<(KanjiFromApi, bool)>, List<(KanjiFromApi, bool)>)>
-    cleanInvalidStoredFiles(List<KanjiFromApi> listOfStoredKanjis) async {
+    cleanInvalidStoredFiles(
+  List<KanjiFromApi> listOfStoredKanjis,
+) async {
   final List<(KanjiFromApi, bool)> listKanjisRecords =
       listOfStoredKanjis.map((e) => (e, true)).toList();
   for (int i = 0; i < listKanjisRecords.length; i++) {

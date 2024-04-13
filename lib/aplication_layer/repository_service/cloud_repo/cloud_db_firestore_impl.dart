@@ -56,9 +56,8 @@ class FireStoreDBService extends CloudDBService {
   }
 
   @override
-  Future<void> deleteUserData(String uuid) {
-    // TODO: implement deleteUserData
-    throw UnimplementedError();
+  Future<void> deleteUserData(String uuid) async {
+    return await deleteUserDataFirebase(uuid);
   }
 
   @override
