@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kanji_for_n5_level_app/main.dart';
+import 'package:kanji_for_n5_level_app/presentation_layer/screens/common_screens/loading_screen.dart';
 import 'package:kanji_for_n5_level_app/providers/status_connection_provider.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/login_screen/login_provider.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/main_screens/main_content.dart';
@@ -83,25 +84,9 @@ class _VerifyEmailEstate extends ConsumerState<VerifyEmail> {
             builder: (BuildContext context, AsyncSnapshot<void> snapShot) {
               final connectionStatus = snapShot.connectionState;
               if (connectionStatus == ConnectionState.waiting) {
-                return Scaffold(
-                  body: Center(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          'Loading',
-                          style: Theme.of(context).textTheme.titleLarge,
-                        ),
-                        const SizedBox(
-                          height: 25,
-                        ),
-                        const SizedBox(
-                          height: 100,
-                          width: 100,
-                          child: CircularProgressIndicator(),
-                        ),
-                      ],
-                    ),
+                return const Scaffold(
+                  body: ProcessProgress(
+                    message: 'Loading',
                   ),
                 );
               } else if (connectionStatus == ConnectionState.done ||
