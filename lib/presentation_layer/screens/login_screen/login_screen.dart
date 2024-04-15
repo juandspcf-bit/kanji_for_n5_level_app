@@ -74,11 +74,12 @@ class LoginFormScreen extends ConsumerWidget with MyDialogs {
         padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 15),
         child: Builder(
           builder: (ctx) {
-            if (statusConnectionData == ConnectivityResult.other) {
+            /* if (statusConnectionData == ConnectivityResult.other) {
               return const ProcessProgress(
                 message: 'Welcome!!',
               );
-            } else if (statusConnectionData == ConnectivityResult.none) {
+            } else  */
+            if (statusConnectionData == ConnectivityResult.none) {
               return const ErrorConnectionScreen(
                 message: 'No internet connection, try again to login later',
               );
