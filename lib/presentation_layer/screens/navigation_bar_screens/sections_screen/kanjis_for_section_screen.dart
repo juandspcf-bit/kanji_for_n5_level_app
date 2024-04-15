@@ -1,19 +1,15 @@
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:kanji_for_n5_level_app/main.dart';
 import 'package:kanji_for_n5_level_app/models/secction_model.dart';
+import 'package:kanji_for_n5_level_app/presentation_layer/screens/navigation_bar_screens/sections_screen/kanji_sections_quiz_animation.dart';
 import 'package:kanji_for_n5_level_app/providers/error_storing_database_status.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/body_list/kanjis_list_provider.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/main_screens/main_content_provider.dart';
-import 'package:kanji_for_n5_level_app/presentation_layer/screens/quiz_kanji_list_screen/quiz_screen/quiz_kanji_list_provider.dart';
 import 'package:kanji_for_n5_level_app/providers/status_connection_provider.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/body_list/body_list.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/common_widgets/my_dialogs.dart';
-import 'package:kanji_for_n5_level_app/presentation_layer/screens/navigation_bar_screens/sections_screen/section_screen_provider.dart';
 
-import 'package:kanji_for_n5_level_app/presentation_layer/screens/quiz_kanji_list_screen/kanji_quiz_screen.dart';
-import 'package:kanji_for_n5_level_app/presentation_layer/screens/quiz_kanji_list_screen/welcome_screen/last_score_provider.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/body_list/status_operations_dialogs.dart';
 
 class KanjiForSectionScreen extends ConsumerWidget
@@ -46,12 +42,6 @@ class KanjiForSectionScreen extends ConsumerWidget
           .read(kanjiListProvider.notifier)
           .getOfflineKanjiList(kanjiListData);
     }
-
-    final isAnyProcessingDataFunc =
-        ref.read(kanjiListProvider.notifier).isAnyProcessingData;
-
-    final accesToQuiz = !isAnyProcessingDataFunc() &&
-        !(connectivityData == ConnectivityResult.none);
 
     ref.listen<KanjiListData>(kanjiListProvider, (previuos, current) {
       if (current.errorDownload.status) {
@@ -101,31 +91,40 @@ class KanjiForSectionScreen extends ConsumerWidget
                 ? const Icon(Icons.cloud_off)
                 : const Icon(Icons.cloud_done_rounded),
           ),
-          IconButton(
-              onPressed: kanjiListData.status == 1 && accesToQuiz
-                  ? () {
-                      ref
-                          .read(quizDataValuesProvider.notifier)
-                          .initTheStateBeforeAccessingQuizScreen(
-                              kanjiListData.kanjiList.length,
-                              kanjiListData.kanjiList);
-                      ref
-                          .read(lastScoreKanjiQuizProvider.notifier)
-                          .getKanjiQuizLastScore(
-                            ref.read(sectionProvider),
-                            authService.userUuid ?? '',
-                          );
-                      Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (ctx) {
-                            return KanjiQuizScreen(
-                                kanjisFromApi: kanjiListData.kanjiList);
-                          },
-                        ),
-                      );
-                    }
-                  : null,
-              icon: const Icon(Icons.quiz))
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 10.0),
+            child: KanjiSectionsQuizAnimated(
+              kanjiListData: kanjiListData,
+              closedChild: const Icon(Icons.quiz),
+            ),
+          ),
+
+          /* IconButton(
+            onPressed: kanjiListData.status == 1 && accesToQuiz
+                ? () {
+                    ref
+                        .read(quizDataValuesProvider.notifier)
+                        .initTheStateBeforeAccessingQuizScreen(
+                            kanjiListData.kanjiList.length,
+                            kanjiListData.kanjiList);
+                    ref
+                        .read(lastScoreKanjiQuizProvider.notifier)
+                        .getKanjiQuizLastScore(
+                          ref.read(sectionProvider),
+                          authService.userUuid ?? '',
+                        );
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (ctx) {
+                          return KanjiQuizScreen(
+                              kanjisFromApi: kanjiListData.kanjiList);
+                        },
+                      ),
+                    ); 
+                  }
+                : null,
+            icon: const Icon(Icons.quiz),
+          ) */
         ],
       ),
       body: BodyKanjisList(
