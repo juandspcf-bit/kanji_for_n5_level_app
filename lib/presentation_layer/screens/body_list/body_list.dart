@@ -39,17 +39,21 @@ class BodyKanjisList extends ConsumerWidget {
         ),
       );
     } else {
-      return Dismissible(
-        key: Key(kanjisFromApi[index].kanjiCharacter),
-        child: KanjiItem(
-          key: ValueKey(kanjisFromApi[index].kanjiCharacter),
-          kanjiFromApi: kanjisFromApi[index],
+      return KanjiItemAnimated(
+        statusStorage: kanjisFromApi[index].statusStorage,
+        kanjiFromApi: kanjisFromApi[index],
+        closedChild: Dismissible(
+          key: Key(kanjisFromApi[index].kanjiCharacter),
+          child: KanjiItem(
+            key: ValueKey(kanjisFromApi[index].kanjiCharacter),
+            kanjiFromApi: kanjisFromApi[index],
+          ),
+          onDismissed: (direction) async {
+            await ref
+                .read(favoriteskanjisProvider.notifier)
+                .dismissisFavorite(kanjisFromApi[index]);
+          },
         ),
-        onDismissed: (direction) async {
-          await ref
-              .read(favoriteskanjisProvider.notifier)
-              .dismissisFavorite(kanjisFromApi[index]);
-        },
       );
     }
   }

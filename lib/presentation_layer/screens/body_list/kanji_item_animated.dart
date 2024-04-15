@@ -26,22 +26,27 @@ class KanjiItemAnimated extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final theme = Theme.of(context);
     return OpenContainer(
-      transitionDuration: const Duration(milliseconds: 800),
+      transitionDuration: const Duration(milliseconds: 900),
       openBuilder: (context, closedContainer) {
         return KanjiDetails(
             statusStorage: statusStorage, kanjiFromApi: kanjiFromApi);
       },
-      openColor: theme.cardColor,
+      openColor: Theme.of(context).colorScheme.surface,
       closedShape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.all(Radius.circular(0)),
       ),
       closedElevation: 0,
-      closedColor: theme.cardColor,
+      closedColor: Theme.of(context).colorScheme.surface,
       closedBuilder: (context, openContainer) {
         return GestureDetector(
           onTap: () {
+            final isProcessingData = kanjiFromApi.statusStorage ==
+                    StatusStorage.proccessingStoring ||
+                kanjiFromApi.statusStorage == StatusStorage.proccessingDeleting;
+
+            if (isProcessingData) return;
+
             ref
                 .read(customNavigationRailsDetailsProvider.notifier)
                 .setSelection(0);
