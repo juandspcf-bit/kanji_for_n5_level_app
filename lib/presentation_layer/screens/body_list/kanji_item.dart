@@ -86,73 +86,57 @@ class _KanjiItemState extends ConsumerState<KanjiItem> {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: widget.kanjiFromApi.accessToKanjiItemsButtons
-          ? () {
-              logger.d('clicked');
-              navigateToKanjiDetails(context, widget.kanjiFromApi);
-            }
-          : null,
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
-        child: Container(
-          decoration: BoxDecoration(
-              color: accessToKanjiItemsButtons
-                  ? Theme.of(context).colorScheme.surface
-                  : Theme.of(context).colorScheme.surface.withOpacity(0.5),
-              borderRadius: BorderRadius.circular(30)),
-          child: Padding(
-            padding: const EdgeInsets.all(10.0),
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                LeadingTile(
-                  kanjiFromApi: widget.kanjiFromApi,
-                ),
-                const SizedBox(
-                  width: 10,
-                ),
-                Expanded(
-                  child: Padding(
-                    padding: const EdgeInsets.all(10.0),
-                    child: GestureDetector(
-                      onTap: widget.kanjiFromApi.accessToKanjiItemsButtons
-                          ? () {
-                              navigateToKanjiDetails(
-                                  context, widget.kanjiFromApi);
-                            }
-                          : null,
-                      child: Container(
-                        color: Colors.transparent,
-                        width: double.infinity,
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            TitleTile(
-                              kanjiFromApi: widget.kanjiFromApi,
-                            ),
-                            const SizedBox(
-                              height: 5,
-                            ),
-                            SubTitleTile(
-                              kanjiFromApi: widget.kanjiFromApi,
-                            ),
-                          ],
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+      child: Container(
+        decoration: BoxDecoration(
+            color: accessToKanjiItemsButtons
+                ? Theme.of(context).colorScheme.surface
+                : Theme.of(context).colorScheme.surface.withOpacity(0.5),
+            borderRadius: BorderRadius.circular(30)),
+        child: Padding(
+          padding: const EdgeInsets.all(10.0),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              LeadingTile(
+                kanjiFromApi: widget.kanjiFromApi,
+              ),
+              const SizedBox(
+                width: 10,
+              ),
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.all(10.0),
+                  child: Container(
+                    color: Colors.transparent,
+                    width: double.infinity,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        TitleTile(
+                          kanjiFromApi: widget.kanjiFromApi,
                         ),
-                      ),
+                        const SizedBox(
+                          height: 5,
+                        ),
+                        SubTitleTile(
+                          kanjiFromApi: widget.kanjiFromApi,
+                        ),
+                      ],
                     ),
                   ),
                 ),
-                Padding(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 5, vertical: 15),
-                  child: TrailingTile(
-                    kanjiFromApi: widget.kanjiFromApi,
-                  ),
-                )
-              ],
-            ),
+              ),
+              Padding(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 5, vertical: 15),
+                child: TrailingTile(
+                  kanjiFromApi: widget.kanjiFromApi,
+                ),
+              )
+            ],
           ),
         ),
       ),

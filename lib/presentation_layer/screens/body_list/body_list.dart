@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kanji_for_n5_level_app/config_files/screen_config.dart';
 import 'package:kanji_for_n5_level_app/models/kanji_from_api.dart';
 import 'package:kanji_for_n5_level_app/models/secction_model.dart';
+import 'package:kanji_for_n5_level_app/presentation_layer/screens/body_list/kanji_item_animated.dart';
 import 'package:kanji_for_n5_level_app/providers/status_stored_provider.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/body_list/error_fetching_kanjis.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/body_list/kanjis_list_provider.dart';
@@ -29,9 +30,13 @@ class BodyKanjisList extends ConsumerWidget {
 
   Widget getKanjiItem(int index, WidgetRef ref) {
     if (mainScreenData.selection == ScreenSelection.kanjiSections) {
-      return KanjiItem(
-        key: ValueKey(kanjisFromApi[index].kanjiCharacter),
+      return KanjiItemAnimated(
+        statusStorage: kanjisFromApi[index].statusStorage,
         kanjiFromApi: kanjisFromApi[index],
+        closedChild: KanjiItem(
+          key: ValueKey(kanjisFromApi[index].kanjiCharacter),
+          kanjiFromApi: kanjisFromApi[index],
+        ),
       );
     } else {
       return Dismissible(
