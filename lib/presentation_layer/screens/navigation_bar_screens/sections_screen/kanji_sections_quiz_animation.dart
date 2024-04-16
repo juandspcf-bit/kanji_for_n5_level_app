@@ -27,12 +27,12 @@ class KanjiSectionsQuizAnimated extends ConsumerWidget {
       openBuilder: (context, closedContainer) {
         return KanjiQuizScreen(kanjisFromApi: kanjiListData.kanjiList);
       },
-      openColor: Theme.of(context).colorScheme.surface,
+      openColor: Colors.transparent,
       closedShape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.all(Radius.circular(0)),
       ),
       closedElevation: 0,
-      closedColor: Theme.of(context).colorScheme.surface,
+      closedColor: Colors.transparent,
       closedBuilder: (context, openContainer) {
         final connectivityData = ref.watch(statusConnectionProvider);
         final isAnyProcessingDataFunc =
