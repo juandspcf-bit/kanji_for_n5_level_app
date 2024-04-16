@@ -126,53 +126,7 @@ class KanjiDetails extends ConsumerWidget {
                           child: KanjiDetailsQuizAnimated(
                               kanjiFromApi: kanjiFromApi,
                               closedChild: const Icon(Icons.quiz)),
-                        ) /* IconButton(
-                          onPressed: statusConnectionData ==
-                                      ConnectivityResult.none &&
-                                  kanjiFromApi.statusStorage ==
-                                      StatusStorage.onlyOnline
-                              ? null
-                              : () {
-                                  ref
-                                      .read(quizDetailsProvider.notifier)
-                                      .setDataQuiz(kanjiFromApi);
-                                  ref
-                                      .read(quizDetailsProvider.notifier)
-                                      .setQuizState(0);
-                                  ref
-                                      .read(selectQuizDetailsProvider.notifier)
-                                      .setScreen(ScreensQuizDetail.welcome);
-                                  ref
-                                      .read(selectQuizDetailsProvider.notifier)
-                                      .setOption(2);
-                                  ref
-                                      .read(flashCardProvider.notifier)
-                                      .initTheQuiz(kanjiFromApi);
-                                  ref
-                                      .read(lastScoreDetailsProvider.notifier)
-                                      .getSingleAudioExampleQuizDataDB(
-                                        kanjiFromApi.kanjiCharacter,
-                                        ref.read(sectionProvider),
-                                        authService.userUuid ?? '',
-                                      );
-                                  ref
-                                      .read(lastScoreFlashCardProvider.notifier)
-                                      .getSingleFlashCardDataDB(
-                                        kanjiFromApi.kanjiCharacter,
-                                        ref.read(sectionProvider),
-                                        authService.userUuid ?? '',
-                                      );
-
-                                  Navigator.of(context).push(MaterialPageRoute(
-                                    builder: (context) {
-                                      return DetailsQuizScreen(
-                                          kanjiFromApi: kanjiFromApi);
-                                    },
-                                  ));
-                                },
-                          icon: const Icon(Icons.quiz),
-                        ) */
-                        ,
+                        ),
                         IconButton(
                           onPressed:
                               statusConnectionData == ConnectivityResult.none
