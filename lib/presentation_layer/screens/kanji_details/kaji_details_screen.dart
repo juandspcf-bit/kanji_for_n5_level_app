@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kanji_for_n5_level_app/config_files/screen_config.dart';
 import 'package:kanji_for_n5_level_app/main.dart';
 import 'package:kanji_for_n5_level_app/models/kanji_from_api.dart';
+import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_details/kanji_details_quiz_animated.dart';
 import 'package:kanji_for_n5_level_app/providers/examples_audios_track_list_provider.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_details/custom_navigation_rails_details/custom_navigation_rails_details.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_details/quiz_details_screen/flash_card/flash_card_quiz_provider.dart';
@@ -120,55 +121,58 @@ class KanjiDetails extends ConsumerWidget {
                               ? const Icon(Icons.cloud_off)
                               : const Icon(Icons.cloud_done_rounded),
                         ),
-                        IconButton(
-                            onPressed: statusConnectionData ==
-                                        ConnectivityResult.none &&
-                                    kanjiFromApi.statusStorage ==
-                                        StatusStorage.onlyOnline
-                                ? null
-                                : () {
-                                    ref
-                                        .read(quizDetailsProvider.notifier)
-                                        .setDataQuiz(kanjiFromApi);
-                                    ref
-                                        .read(quizDetailsProvider.notifier)
-                                        .setQuizState(0);
-                                    ref
-                                        .read(
-                                            selectQuizDetailsProvider.notifier)
-                                        .setScreen(ScreensQuizDetail.welcome);
-                                    ref
-                                        .read(
-                                            selectQuizDetailsProvider.notifier)
-                                        .setOption(2);
-                                    ref
-                                        .read(flashCardProvider.notifier)
-                                        .initTheQuiz(kanjiFromApi);
-                                    ref
-                                        .read(lastScoreDetailsProvider.notifier)
-                                        .getSingleAudioExampleQuizDataDB(
-                                          kanjiFromApi.kanjiCharacter,
-                                          ref.read(sectionProvider),
-                                          authService.userUuid ?? '',
-                                        );
-                                    ref
-                                        .read(
-                                            lastScoreFlashCardProvider.notifier)
-                                        .getSingleFlashCardDataDB(
-                                          kanjiFromApi.kanjiCharacter,
-                                          ref.read(sectionProvider),
-                                          authService.userUuid ?? '',
-                                        );
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 5),
+                          child: KanjiDetailsQuizAnimated(
+                              kanjiFromApi: kanjiFromApi,
+                              closedChild: const Icon(Icons.quiz)),
+                        ) /* IconButton(
+                          onPressed: statusConnectionData ==
+                                      ConnectivityResult.none &&
+                                  kanjiFromApi.statusStorage ==
+                                      StatusStorage.onlyOnline
+                              ? null
+                              : () {
+                                  ref
+                                      .read(quizDetailsProvider.notifier)
+                                      .setDataQuiz(kanjiFromApi);
+                                  ref
+                                      .read(quizDetailsProvider.notifier)
+                                      .setQuizState(0);
+                                  ref
+                                      .read(selectQuizDetailsProvider.notifier)
+                                      .setScreen(ScreensQuizDetail.welcome);
+                                  ref
+                                      .read(selectQuizDetailsProvider.notifier)
+                                      .setOption(2);
+                                  ref
+                                      .read(flashCardProvider.notifier)
+                                      .initTheQuiz(kanjiFromApi);
+                                  ref
+                                      .read(lastScoreDetailsProvider.notifier)
+                                      .getSingleAudioExampleQuizDataDB(
+                                        kanjiFromApi.kanjiCharacter,
+                                        ref.read(sectionProvider),
+                                        authService.userUuid ?? '',
+                                      );
+                                  ref
+                                      .read(lastScoreFlashCardProvider.notifier)
+                                      .getSingleFlashCardDataDB(
+                                        kanjiFromApi.kanjiCharacter,
+                                        ref.read(sectionProvider),
+                                        authService.userUuid ?? '',
+                                      );
 
-                                    Navigator.of(context)
-                                        .push(MaterialPageRoute(
-                                      builder: (context) {
-                                        return DetailsQuizScreen(
-                                            kanjiFromApi: kanjiFromApi);
-                                      },
-                                    ));
-                                  },
-                            icon: const Icon(Icons.quiz)),
+                                  Navigator.of(context).push(MaterialPageRoute(
+                                    builder: (context) {
+                                      return DetailsQuizScreen(
+                                          kanjiFromApi: kanjiFromApi);
+                                    },
+                                  ));
+                                },
+                          icon: const Icon(Icons.quiz),
+                        ) */
+                        ,
                         IconButton(
                           onPressed:
                               statusConnectionData == ConnectivityResult.none
