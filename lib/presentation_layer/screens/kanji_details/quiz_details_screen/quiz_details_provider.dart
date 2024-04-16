@@ -131,6 +131,7 @@ class QuizDetailsProvider extends Notifier<
   }
 
   void setDataQuiz(KanjiFromApi kanjiFromApi) {
+    logger.d("the data quiz example is ${kanjiFromApi.example}");
     final dataInit = kanjiFromApi.example
         .map((e) => (
               audioQuestion: e.audio.mp3,
@@ -141,6 +142,7 @@ class QuizDetailsProvider extends Notifier<
     dataInit.shuffle();
     _dataQuiz = dataInit;
     _answers = List.filled(_dataQuiz.length, StateAnswersQuizDetails.ommitted);
+    logger.d("the data quiz init is $_dataQuiz");
     //logger.d(_dataQuiz);
     //mp3Audios = mp3AudiosInit;
   }

@@ -46,8 +46,9 @@ class KanjiDetailsQuizAnimated extends ConsumerWidget {
             kanjiFromApi.statusStorage == StatusStorage.onlyOnline;
 
         return GestureDetector(
-          onTap: accesToQuiz
+          onTap: !accesToQuiz
               ? () {
+                  logger.e('called set data quiz');
                   ref
                       .read(quizDetailsProvider.notifier)
                       .setDataQuiz(kanjiFromApi);

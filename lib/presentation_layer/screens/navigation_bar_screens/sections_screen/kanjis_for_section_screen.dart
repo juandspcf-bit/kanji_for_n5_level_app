@@ -98,33 +98,6 @@ class KanjiForSectionScreen extends ConsumerWidget
               closedChild: const Icon(Icons.quiz),
             ),
           ),
-
-          /* IconButton(
-            onPressed: kanjiListData.status == 1 && accesToQuiz
-                ? () {
-                    ref
-                        .read(quizDataValuesProvider.notifier)
-                        .initTheStateBeforeAccessingQuizScreen(
-                            kanjiListData.kanjiList.length,
-                            kanjiListData.kanjiList);
-                    ref
-                        .read(lastScoreKanjiQuizProvider.notifier)
-                        .getKanjiQuizLastScore(
-                          ref.read(sectionProvider),
-                          authService.userUuid ?? '',
-                        );
-                    Navigator.of(context).push(
-                      MaterialPageRoute(
-                        builder: (ctx) {
-                          return KanjiQuizScreen(
-                              kanjisFromApi: kanjiListData.kanjiList);
-                        },
-                      ),
-                    ); 
-                  }
-                : null,
-            icon: const Icon(Icons.quiz),
-          ) */
         ],
       ),
       body: BodyKanjisList(

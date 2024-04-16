@@ -55,7 +55,7 @@ class KanjiSectionsQuizAnimated extends ConsumerWidget {
                         ref.read(sectionProvider),
                         authService.userUuid ?? '',
                       );
-
+                  logger.d('kanji quiz animation tapped');
                   openContainer();
                 }
               : null,
