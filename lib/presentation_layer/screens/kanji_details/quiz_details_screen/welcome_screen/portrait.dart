@@ -2,9 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kanji_for_n5_level_app/models/kanji_from_api.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_details/quiz_details_screen/quiz_details_provider.dart';
-import 'package:kanji_for_n5_level_app/providers/select_quiz_details_screen.dart';
-import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_details/quiz_details_screen/flash_card/flash_card_screen.dart';
-import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_details/quiz_details_screen/quiz_details_question.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_details/quiz_details_screen/welcome_screen/welcome_kanji_details_quiz_screen.dart';
 
 class WelcomeKanjiDetailsQuizScreenPortrait extends ConsumerWidget {
@@ -81,17 +78,10 @@ class WelcomeKanjiDetailsQuizScreenPortrait extends ConsumerWidget {
           ),
           ElevatedButton(
             onPressed: () {
-              //ref.read(selectQuizDetailsProvider.notifier).selectScreen();
               if (screenNumber.selectedOption == 0) {
-                Navigator.of(context).push(
-                  MaterialPageRoute(builder: (ctx) {
-                    return QuizDetailsScreen(kanjiFromApi: kanjiFromApi);
-                  }),
-                );
+                ref.read(quizDetailsProvider.notifier).setScreen(Screen.quiz);
               } else if (screenNumber.selectedOption == 1) {
-                Navigator.of(context).push(MaterialPageRoute(builder: (cxt) {
-                  return FlashCardsScreen(kanjiFromApi: kanjiFromApi);
-                }));
+                ref.read(quizDetailsProvider.notifier).setScreen(Screen.quiz);
               }
               ref.read(quizDetailsProvider.notifier).setOption(2);
             },

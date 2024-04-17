@@ -9,7 +9,6 @@ import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_details/
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_details/quiz_details_screen/last_score_details_provider.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_details/quiz_details_screen/last_score_flash_card_provider.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_details/quiz_details_screen/quiz_details_provider.dart';
-import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_details/quiz_details_screen_v2/quiz_details_main_screen.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/navigation_bar_screens/sections_screen/section_screen_provider.dart';
 import 'package:kanji_for_n5_level_app/providers/select_quiz_details_screen.dart';
 import 'package:kanji_for_n5_level_app/providers/status_connection_provider.dart';
@@ -75,6 +74,11 @@ class KanjiDetailsQuizAnimated extends ConsumerWidget {
                         ref.read(sectionProvider),
                         authService.userUuid ?? '',
                       );
+
+                  ref
+                      .read(quizDetailsProvider.notifier)
+                      .setScreen(Screen.welcome);
+                  ref.read(quizDetailsProvider.notifier).resetValues();
 
                   openContainer();
                 }
