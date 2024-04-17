@@ -16,7 +16,20 @@ class DetailsQuizScreen extends ConsumerWidget {
 
   final KanjiFromApi kanjiFromApi;
 
-  Widget _getScreen(QuizDetailsData quizDetailsData, WidgetRef ref) {
+  String _getTitle(Screen screen) {
+    switch (screen) {
+      case Screen.flashCards:
+        return 'Review what you have learn';
+      case Screen.quiz:
+        return 'Guess the righ meaning';
+      case Screen.score:
+        return 'Your score';
+      default:
+        return 'Test your knowledge';
+    }
+  }
+
+  Widget _getScreen(QuizDetailsData quizDetailsData) {
     if (quizDetailsData.currentScreenType == Screen.quiz) {
       return QuizDetailsScreen(kanjiFromApi: kanjiFromApi);
     } else if (quizDetailsData.currentScreenType == Screen.flashCards) {
@@ -53,11 +66,11 @@ class DetailsQuizScreen extends ConsumerWidget {
       },
       child: Scaffold(
         appBar: AppBar(
-          title: const Text(
-            'Test your knowledge',
+          title: Text(
+            _getTitle(quizDetailsData.currentScreenType),
           ),
         ),
-        body: _getScreen(quizDetailsData, ref),
+        body: _getScreen(quizDetailsData),
       ),
     );
   }
