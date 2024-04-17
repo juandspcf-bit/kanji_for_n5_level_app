@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:kanji_for_n5_level_app/presentation_layer/screens/quiz_kanji_list_screen/quiz_screen/quiz_kanji_list_provider.dart';
+import 'package:kanji_for_n5_level_app/presentation_layer/screens/quiz_kanji_list_screen/quiz_kanji_list_provider.dart';
 
 class ResetQuestionButton extends ConsumerWidget {
   const ResetQuestionButton({super.key});

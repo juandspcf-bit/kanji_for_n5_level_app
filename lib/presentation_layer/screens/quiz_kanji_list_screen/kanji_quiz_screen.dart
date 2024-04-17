@@ -7,7 +7,7 @@ import 'package:kanji_for_n5_level_app/main.dart';
 import 'package:kanji_for_n5_level_app/models/kanji_from_api.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/navigation_bar_screens/sections_screen/section_screen_provider.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/quiz_kanji_list_screen/animated_quiz_question_screen.dart';
-import 'package:kanji_for_n5_level_app/presentation_layer/screens/quiz_kanji_list_screen/quiz_screen/quiz_kanji_list_provider.dart';
+import 'package:kanji_for_n5_level_app/presentation_layer/screens/quiz_kanji_list_screen/quiz_kanji_list_provider.dart';
 import 'package:kanji_for_n5_level_app/providers/status_connection_provider.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/common_screens/error_connection_screen.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/quiz_kanji_list_screen/score_screen/score_body.dart';

@@ -28,14 +28,15 @@ class _AnimatesQuizQuestionScreenState
 
   @override
   Widget build(BuildContext context) {
-    Timer(const Duration(milliseconds: 200), () {
+    Timer(const Duration(milliseconds: 100), () {
       setState(() {
         offset = 0;
       });
     });
     return AnimatedContainer(
-      duration: const Duration(milliseconds: 300),
+      duration: const Duration(milliseconds: 1000),
       transform: Matrix4.translationValues(offset, 0, 0),
+      curve: Curves.easeInOutBack,
       child: const QuizQuestionScreen(),
     );
   }
