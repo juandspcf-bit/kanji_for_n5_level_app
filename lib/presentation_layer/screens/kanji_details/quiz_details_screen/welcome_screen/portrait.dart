@@ -1,15 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:kanji_for_n5_level_app/models/kanji_from_api.dart';
-import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_details/quiz_details_screen/flash_card/flash_card_quiz_provider.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_details/quiz_details_screen/quiz_details_provider.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_details/quiz_details_screen/welcome_screen/welcome_kanji_details_quiz_screen.dart';
 
 class WelcomeKanjiDetailsQuizScreenPortrait extends ConsumerWidget {
-  const WelcomeKanjiDetailsQuizScreenPortrait(
-      {super.key, required this.kanjiFromApi});
-
-  final KanjiFromApi kanjiFromApi;
+  const WelcomeKanjiDetailsQuizScreenPortrait({super.key});
 
   final welcomeMessage = 'Select the quiz type '
       'you would like to try.';
@@ -82,7 +77,6 @@ class WelcomeKanjiDetailsQuizScreenPortrait extends ConsumerWidget {
               if (quizDetailsData.selectedOption == 0) {
                 ref.read(quizDetailsProvider.notifier).setScreen(Screen.quiz);
               } else if (quizDetailsData.selectedOption == 1) {
-                ref.read(flashCardProvider.notifier).initTheQuiz(kanjiFromApi);
                 ref
                     .read(quizDetailsProvider.notifier)
                     .setScreen(Screen.flashCards);

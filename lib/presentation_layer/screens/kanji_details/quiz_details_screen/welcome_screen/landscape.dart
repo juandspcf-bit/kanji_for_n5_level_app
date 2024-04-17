@@ -2,16 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kanji_for_n5_level_app/config_files/screen_config.dart';
 import 'package:kanji_for_n5_level_app/main.dart';
-import 'package:kanji_for_n5_level_app/models/kanji_from_api.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_details/quiz_details_screen/quiz_details_provider.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_details/quiz_details_screen/last_score_details_provider.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_details/quiz_details_screen/last_score_flash_card_provider.dart';
 
 class WelcomeKanjiDetailsQuizScreenLandScape extends ConsumerWidget {
-  const WelcomeKanjiDetailsQuizScreenLandScape(
-      {super.key, required this.kanjiFromApi});
-
-  final KanjiFromApi kanjiFromApi;
+  const WelcomeKanjiDetailsQuizScreenLandScape({
+    super.key,
+  });
 
   final welcomeMessage = 'Select the quiz type '
       'you would like to try.';

@@ -37,9 +37,7 @@ class DetailsQuizScreen extends ConsumerWidget {
     } else if (quizDetailsData.currentScreenType == Screen.score) {
       return const QuizScoreDetails();
     } else {
-      return WelcomeScreen(
-        kanjiFromApi: kanjiFromApi,
-      );
+      return const WelcomeScreen();
     }
   }
 

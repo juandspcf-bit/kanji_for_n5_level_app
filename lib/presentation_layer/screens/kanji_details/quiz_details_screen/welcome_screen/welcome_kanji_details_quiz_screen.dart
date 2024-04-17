@@ -1,23 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kanji_for_n5_level_app/main.dart';
-import 'package:kanji_for_n5_level_app/models/kanji_from_api.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_details/quiz_details_screen/last_score_details_provider.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_details/quiz_details_screen/last_score_flash_card_provider.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_details/quiz_details_screen/welcome_screen/landscape.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_details/quiz_details_screen/welcome_screen/portrait.dart';
 
 class WelcomeScreen extends ConsumerWidget {
-  const WelcomeScreen({super.key, required this.kanjiFromApi});
-
-  final KanjiFromApi kanjiFromApi;
+  const WelcomeScreen({
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final orientation = MediaQuery.orientationOf(context);
     return Orientation.portrait == orientation
-        ? WelcomeKanjiDetailsQuizScreenPortrait(kanjiFromApi: kanjiFromApi)
-        : WelcomeKanjiDetailsQuizScreenLandScape(kanjiFromApi: kanjiFromApi);
+        ? const WelcomeKanjiDetailsQuizScreenPortrait()
+        : const WelcomeKanjiDetailsQuizScreenLandScape();
   }
 }
 
