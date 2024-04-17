@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kanji_for_n5_level_app/models/kanji_from_api.dart';
+import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_details/quiz_details_screen/quiz_details_provider.dart';
 import 'package:kanji_for_n5_level_app/providers/select_quiz_details_screen.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_details/quiz_details_screen/flash_card/flash_card_screen.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_details/quiz_details_screen/quiz_details_question.dart';
@@ -17,7 +18,7 @@ class WelcomeKanjiDetailsQuizScreenPortrait extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final screenNumber = ref.watch(selectQuizDetailsProvider);
+    final screenNumber = ref.watch(quizDetailsProvider);
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 0),
       child: Column(
@@ -58,7 +59,7 @@ class WelcomeKanjiDetailsQuizScreenPortrait extends ConsumerWidget {
             ),
             groupValue: screenNumber.selectedOption,
             onChanged: ((value) {
-              ref.read(selectQuizDetailsProvider.notifier).setOption(value);
+              ref.read(quizDetailsProvider.notifier).setOption(value);
             }),
           ),
           const LastScoreAudioExampleScreen(),
@@ -71,7 +72,7 @@ class WelcomeKanjiDetailsQuizScreenPortrait extends ConsumerWidget {
                 style: Theme.of(context).textTheme.bodyLarge),
             groupValue: screenNumber.selectedOption,
             onChanged: ((value) {
-              ref.read(selectQuizDetailsProvider.notifier).setOption(value);
+              ref.read(quizDetailsProvider.notifier).setOption(value);
             }),
           ),
           const LastFlashCardScore(),
@@ -81,19 +82,18 @@ class WelcomeKanjiDetailsQuizScreenPortrait extends ConsumerWidget {
           ElevatedButton(
             onPressed: () {
               //ref.read(selectQuizDetailsProvider.notifier).selectScreen();
-              if (ref.read(selectQuizDetailsProvider).selectedOption == 0) {
+              if (screenNumber.selectedOption == 0) {
                 Navigator.of(context).push(
                   MaterialPageRoute(builder: (ctx) {
                     return QuizDetailsScreen(kanjiFromApi: kanjiFromApi);
                   }),
                 );
-              } else if (ref.read(selectQuizDetailsProvider).selectedOption ==
-                  1) {
+              } else if (screenNumber.selectedOption == 1) {
                 Navigator.of(context).push(MaterialPageRoute(builder: (cxt) {
                   return FlashCardsScreen(kanjiFromApi: kanjiFromApi);
                 }));
               }
-              ref.read(selectQuizDetailsProvider.notifier).setOption(2);
+              ref.read(quizDetailsProvider.notifier).setOption(2);
             },
             style: ElevatedButton.styleFrom().copyWith(
               minimumSize: const MaterialStatePropertyAll(
