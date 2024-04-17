@@ -3,36 +3,19 @@ import 'package:kanji_for_n5_level_app/main.dart';
 import 'package:kanji_for_n5_level_app/models/kanji_from_api.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_details/quiz_details_screen/score_quiz_details/quiz_details_score_screen.dart';
 
-class QuizDetailsProvider extends Notifier<
-    ({
-      int indexQuestion,
-      String audioQuestion,
-      int selectedAnswer,
-      ({String hiraganaMeaning, String englishMeaning}) answer1,
-      ({String hiraganaMeaning, String englishMeaning}) answer2,
-      ({String hiraganaMeaning, String englishMeaning}) answer3,
-    })> {
+class QuizDetailsProvider extends Notifier<QuizDetailsData> {
   @override
-  ({
-    ({String hiraganaMeaning, String englishMeaning}) answer1,
-    ({String hiraganaMeaning, String englishMeaning}) answer2,
-    ({String hiraganaMeaning, String englishMeaning}) answer3,
-    int selectedAnswer,
-    String audioQuestion,
-    int indexQuestion
-  }) build() {
-    return (
-      indexQuestion: 0,
-      audioQuestion: "",
-      selectedAnswer: 4,
-      answer1: (hiraganaMeaning: '', englishMeaning: ''),
-      answer2: (hiraganaMeaning: '', englishMeaning: ''),
-      answer3: (hiraganaMeaning: '', englishMeaning: ''),
-    );
+  QuizDetailsData build() {
+    return QuizDetailsData(
+        indexQuestion: 0,
+        audioQuestion: "",
+        selectedAnswer: 4,
+        answer1: AnswerData(hiraganaMeaning: "", englishMeaning: ""),
+        answer2: AnswerData(hiraganaMeaning: "", englishMeaning: ""),
+        answer3: AnswerData(hiraganaMeaning: "", englishMeaning: ""));
   }
 
-  List<({String audioQuestion, String englishMeaning, String hiraganaMeaning})>
-      _dataQuiz = [];
+  List<Answer> _dataQuiz = [];
   List<StateAnswersQuizDetails> _answers = [];
 
   void resetValues() {
@@ -75,23 +58,18 @@ class QuizDetailsProvider extends Notifier<
         element.hiraganaMeaning == _dataQuiz[index].hiraganaMeaning);
     dataQuizCopy.removeAt(indexToRemove);
     dataQuizCopy.shuffle();
-    final List<
-        ({
-          String audioQuestion,
-          String hiraganaMeaning,
-          String englishMeaning
-        })> posibleAnswers = [
-      (
+    final posibleAnswers = [
+      Answer(
         audioQuestion: _dataQuiz[index].audioQuestion,
         hiraganaMeaning: _dataQuiz[index].hiraganaMeaning,
         englishMeaning: _dataQuiz[index].englishMeaning,
       ),
-      (
+      Answer(
         audioQuestion: '',
         hiraganaMeaning: dataQuizCopy[0].hiraganaMeaning,
         englishMeaning: dataQuizCopy[0].englishMeaning,
       ),
-      (
+      Answer(
         audioQuestion: '',
         hiraganaMeaning: dataQuizCopy[1].hiraganaMeaning,
         englishMeaning: dataQuizCopy[1].englishMeaning,
@@ -102,26 +80,19 @@ class QuizDetailsProvider extends Notifier<
 
     //logger.d('the possible answers are $posibleAnswers');
 
-    ({
-      int indexQuestion,
-      String audioQuestion,
-      int selectedAnswer,
-      ({String hiraganaMeaning, String englishMeaning}) answer1,
-      ({String hiraganaMeaning, String englishMeaning}) answer2,
-      ({String hiraganaMeaning, String englishMeaning}) answer3,
-    }) value = (
+    final value = QuizDetailsData(
       indexQuestion: index,
       audioQuestion: _dataQuiz[index].audioQuestion,
       selectedAnswer: 4,
-      answer1: (
+      answer1: AnswerData(
         hiraganaMeaning: posibleAnswers[0].hiraganaMeaning,
         englishMeaning: posibleAnswers[0].englishMeaning,
       ),
-      answer2: (
+      answer2: AnswerData(
         hiraganaMeaning: posibleAnswers[1].hiraganaMeaning,
         englishMeaning: posibleAnswers[1].englishMeaning,
       ),
-      answer3: (
+      answer3: AnswerData(
         hiraganaMeaning: posibleAnswers[2].hiraganaMeaning,
         englishMeaning: posibleAnswers[2].englishMeaning,
       ),
@@ -133,7 +104,7 @@ class QuizDetailsProvider extends Notifier<
   void setDataQuiz(KanjiFromApi kanjiFromApi) {
     logger.d("the data quiz example is ${kanjiFromApi.example}");
     final dataInit = kanjiFromApi.example
-        .map((e) => (
+        .map((e) => Answer(
               audioQuestion: e.audio.mp3,
               hiraganaMeaning: e.japanese,
               englishMeaning: e.meaning.english,
@@ -148,26 +119,19 @@ class QuizDetailsProvider extends Notifier<
   }
 
   void setAnswer(int selectedAnswer) {
-    ({
-      int indexQuestion,
-      String audioQuestion,
-      int selectedAnswer,
-      ({String hiraganaMeaning, String englishMeaning}) answer1,
-      ({String hiraganaMeaning, String englishMeaning}) answer2,
-      ({String hiraganaMeaning, String englishMeaning}) answer3,
-    }) stateCopy = (
+    final stateCopy = QuizDetailsData(
       indexQuestion: state.indexQuestion,
       audioQuestion: state.audioQuestion,
       selectedAnswer: selectedAnswer,
-      answer1: (
+      answer1: AnswerData(
         hiraganaMeaning: state.answer1.hiraganaMeaning,
         englishMeaning: state.answer1.englishMeaning,
       ),
-      answer2: (
+      answer2: AnswerData(
         hiraganaMeaning: state.answer2.hiraganaMeaning,
         englishMeaning: state.answer2.englishMeaning,
       ),
-      answer3: (
+      answer3: AnswerData(
         hiraganaMeaning: state.answer3.hiraganaMeaning,
         englishMeaning: state.answer3.englishMeaning,
       ),
@@ -178,24 +142,24 @@ class QuizDetailsProvider extends Notifier<
     final correct = _dataQuiz.firstWhere(
         (element) => element.audioQuestion == stateCopy.audioQuestion);
 
-    ({String hiraganaMeaning, String englishMeaning}) answerRadioTiles;
+    AnswerData answerRadioTiles;
     if (selectedAnswer == 0) {
-      answerRadioTiles = (
+      answerRadioTiles = AnswerData(
         hiraganaMeaning: stateCopy.answer1.hiraganaMeaning,
-        englishMeaning: stateCopy.answer1.englishMeaning
+        englishMeaning: stateCopy.answer1.englishMeaning,
       );
     } else if (selectedAnswer == 1) {
-      answerRadioTiles = (
+      answerRadioTiles = AnswerData(
         hiraganaMeaning: stateCopy.answer2.hiraganaMeaning,
-        englishMeaning: stateCopy.answer2.englishMeaning
+        englishMeaning: stateCopy.answer2.englishMeaning,
       );
     } else if (selectedAnswer == 2) {
-      answerRadioTiles = (
+      answerRadioTiles = AnswerData(
         hiraganaMeaning: stateCopy.answer3.hiraganaMeaning,
-        englishMeaning: stateCopy.answer3.englishMeaning
+        englishMeaning: stateCopy.answer3.englishMeaning,
       );
     } else {
-      answerRadioTiles = (hiraganaMeaning: '', englishMeaning: '');
+      answerRadioTiles = AnswerData(hiraganaMeaning: '', englishMeaning: '');
     }
 
     if (answerRadioTiles.hiraganaMeaning == '') {
@@ -214,16 +178,49 @@ class QuizDetailsProvider extends Notifier<
   }
 }
 
-final quizDetailsProvider = NotifierProvider<
-    QuizDetailsProvider,
-    ({
-      int indexQuestion,
-      String audioQuestion,
-      int selectedAnswer,
-      ({String hiraganaMeaning, String englishMeaning}) answer1,
-      ({String hiraganaMeaning, String englishMeaning}) answer2,
-      ({String hiraganaMeaning, String englishMeaning}) answer3,
-    })>(QuizDetailsProvider.new);
+class QuizDetailsData {
+  final int indexQuestion;
+  final String audioQuestion;
+  final int selectedAnswer;
+  final AnswerData answer1;
+  final AnswerData answer2;
+  final AnswerData answer3;
+
+  QuizDetailsData({
+    required this.indexQuestion,
+    required this.audioQuestion,
+    required this.selectedAnswer,
+    required this.answer1,
+    required this.answer2,
+    required this.answer3,
+  });
+}
+
+class AnswerData {
+  final String hiraganaMeaning;
+  final String englishMeaning;
+
+  AnswerData({
+    required this.hiraganaMeaning,
+    required this.englishMeaning,
+  });
+}
+
+class Answer {
+  final String audioQuestion;
+  final String hiraganaMeaning;
+  final String englishMeaning;
+
+  Answer({
+    required this.audioQuestion,
+    required this.hiraganaMeaning,
+    required this.englishMeaning,
+  });
+}
+
+final quizDetailsProvider =
+    NotifierProvider<QuizDetailsProvider, QuizDetailsData>(
+        QuizDetailsProvider.new);
 
 enum StateAnswersQuizDetails { correct, incorrect, ommitted }
 
