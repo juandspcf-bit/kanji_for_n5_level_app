@@ -4,10 +4,11 @@ import 'package:kanji_for_n5_level_app/main.dart';
 import 'package:kanji_for_n5_level_app/models/kanji_from_api.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_details/quiz_details_screen/flash_card/flash_card_quiz_provider.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_details/quiz_details_screen/flash_card/flash_card_screen.dart';
-import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_details/quiz_details_screen/flash_card/flash_card_widget.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_details/quiz_details_screen/last_score_flash_card_provider.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_details/quiz_details_screen/quiz_details_provider.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_details/quiz_details_screen/quiz_details_question.dart';
+import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_details/quiz_details_screen/score_quiz_details/quiz_score_details.dart';
+import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_details/quiz_details_screen/score_quiz_details/visible_lottie_file/visible_lottie_file_provider.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_details/quiz_details_screen/welcome_screen/welcome_kanji_details_quiz_screen.dart';
 
 class DetailsQuizScreen extends ConsumerWidget {
@@ -20,6 +21,8 @@ class DetailsQuizScreen extends ConsumerWidget {
       return QuizDetailsScreen(kanjiFromApi: kanjiFromApi);
     } else if (quizDetailsData.currentScreenType == Screen.flashCards) {
       return FlashCardsScreen(kanjiFromApi: kanjiFromApi);
+    } else if (quizDetailsData.currentScreenType == Screen.score) {
+      return const QuizScoreDetails();
     } else {
       return WelcomeScreen(
         kanjiFromApi: kanjiFromApi,
@@ -43,6 +46,9 @@ class DetailsQuizScreen extends ConsumerWidget {
                     .where((element) => !element)
                     .length,
               );
+        } else if (quizDetailsData.currentScreenType == Screen.score) {
+          ref.read(quizDetailsProvider.notifier).resetValues();
+          ref.read(visibleLottieFileProvider.notifier).reset();
         }
       },
       child: Scaffold(
