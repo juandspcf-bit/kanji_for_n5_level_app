@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kanji_for_n5_level_app/models/kanji_from_api.dart';
+import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_details/quiz_details_screen/flash_card/flash_card_quiz_provider.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_details/quiz_details_screen/quiz_details_provider.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_details/quiz_details_screen/welcome_screen/welcome_kanji_details_quiz_screen.dart';
 
@@ -15,7 +16,7 @@ class WelcomeKanjiDetailsQuizScreenPortrait extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final screenNumber = ref.watch(quizDetailsProvider);
+    final quizDetailsData = ref.watch(quizDetailsProvider);
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 0),
       child: Column(
@@ -54,7 +55,7 @@ class WelcomeKanjiDetailsQuizScreenPortrait extends ConsumerWidget {
               'Multi optional answers',
               style: Theme.of(context).textTheme.bodyLarge,
             ),
-            groupValue: screenNumber.selectedOption,
+            groupValue: quizDetailsData.selectedOption,
             onChanged: ((value) {
               ref.read(quizDetailsProvider.notifier).setOption(value);
             }),
@@ -67,7 +68,7 @@ class WelcomeKanjiDetailsQuizScreenPortrait extends ConsumerWidget {
             value: 1,
             title: Text('Flash cards',
                 style: Theme.of(context).textTheme.bodyLarge),
-            groupValue: screenNumber.selectedOption,
+            groupValue: quizDetailsData.selectedOption,
             onChanged: ((value) {
               ref.read(quizDetailsProvider.notifier).setOption(value);
             }),
@@ -78,10 +79,13 @@ class WelcomeKanjiDetailsQuizScreenPortrait extends ConsumerWidget {
           ),
           ElevatedButton(
             onPressed: () {
-              if (screenNumber.selectedOption == 0) {
+              if (quizDetailsData.selectedOption == 0) {
                 ref.read(quizDetailsProvider.notifier).setScreen(Screen.quiz);
-              } else if (screenNumber.selectedOption == 1) {
-                ref.read(quizDetailsProvider.notifier).setScreen(Screen.quiz);
+              } else if (quizDetailsData.selectedOption == 1) {
+                ref.read(flashCardProvider.notifier).initTheQuiz(kanjiFromApi);
+                ref
+                    .read(quizDetailsProvider.notifier)
+                    .setScreen(Screen.flashCards);
               }
               ref.read(quizDetailsProvider.notifier).setOption(2);
             },

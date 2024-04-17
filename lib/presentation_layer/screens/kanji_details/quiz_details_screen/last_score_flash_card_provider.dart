@@ -41,6 +41,7 @@ class LastScoreFlashCardProvider
     required String uuid,
     required int countUnWatched,
   }) async {
+    logger.d('storing flash car data');
     cloudDBService.updateQuizFlashCardScore(
       kanjiCharacter,
       countUnWatched == 0,
@@ -49,46 +50,21 @@ class LastScoreFlashCardProvider
     );
 
     if (state.value?.section == -1) {
-      final numberOfRows = await localDBService.insertSingleFlashCardDataDB(
+      await localDBService.insertSingleFlashCardDataDB(
         kanjiCharacter,
         section,
         uuid,
         countUnWatched,
       );
-      if (numberOfRows != 0) {
-        state = await AsyncValue.guard(
-          () {
-            return Future(() => SingleQuizFlashCardData(
-                  kanjiCharacter: kanjiCharacter,
-                  section: section,
-                  uuid: uuid,
-                  allRevisedFlashCards: countUnWatched == 0,
-                ));
-          },
-        );
-      }
       return;
     }
 
-    final numberOfRows = await localDBService.setSingleFlashCardDataDB(
+    await localDBService.setSingleFlashCardDataDB(
       kanjiCharacter,
       section,
       uuid,
       countUnWatched,
     );
-
-    if (numberOfRows != 0) {
-      state = await AsyncValue.guard(
-        () {
-          return Future(() => SingleQuizFlashCardData(
-                kanjiCharacter: kanjiCharacter,
-                section: section,
-                uuid: uuid,
-                allRevisedFlashCards: countUnWatched == 0,
-              ));
-        },
-      );
-    }
   }
 }
 

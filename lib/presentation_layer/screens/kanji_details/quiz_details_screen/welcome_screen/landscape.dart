@@ -3,11 +3,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kanji_for_n5_level_app/config_files/screen_config.dart';
 import 'package:kanji_for_n5_level_app/main.dart';
 import 'package:kanji_for_n5_level_app/models/kanji_from_api.dart';
-import 'package:kanji_for_n5_level_app/providers/select_quiz_details_screen.dart';
-import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_details/quiz_details_screen/flash_card/flash_card_screen.dart';
+import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_details/quiz_details_screen/quiz_details_provider.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_details/quiz_details_screen/last_score_details_provider.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_details/quiz_details_screen/last_score_flash_card_provider.dart';
-import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_details/quiz_details_screen/quiz_details_question.dart';
 
 class WelcomeKanjiDetailsQuizScreenLandScape extends ConsumerWidget {
   const WelcomeKanjiDetailsQuizScreenLandScape(
@@ -33,7 +31,7 @@ class WelcomeKanjiDetailsQuizScreenLandScape extends ConsumerWidget {
         imageSize = 170;
     }
 
-    final screenNumber = ref.watch(selectQuizDetailsProvider);
+    final quizDetailsData = ref.watch(quizDetailsProvider);
     return Row(
       crossAxisAlignment: CrossAxisAlignment.center,
       mainAxisAlignment: MainAxisAlignment.center,
@@ -72,9 +70,9 @@ class WelcomeKanjiDetailsQuizScreenLandScape extends ConsumerWidget {
                   'Multi optional answers',
                   style: Theme.of(context).textTheme.bodyLarge,
                 ),
-                groupValue: screenNumber.selectedOption,
+                groupValue: quizDetailsData.selectedOption,
                 onChanged: ((value) {
-                  ref.read(selectQuizDetailsProvider.notifier).setOption(value);
+                  ref.read(quizDetailsProvider.notifier).setOption(value);
                 }),
               ),
               const LastScoreAudioExampleScreen(),
@@ -85,9 +83,9 @@ class WelcomeKanjiDetailsQuizScreenLandScape extends ConsumerWidget {
                 value: 1,
                 title: Text('Flash cards',
                     style: Theme.of(context).textTheme.bodyLarge),
-                groupValue: screenNumber.selectedOption,
+                groupValue: quizDetailsData.selectedOption,
                 onChanged: ((value) {
-                  ref.read(selectQuizDetailsProvider.notifier).setOption(value);
+                  ref.read(quizDetailsProvider.notifier).setOption(value);
                 }),
               ),
               const LastFlashCardScore(),
@@ -98,24 +96,16 @@ class WelcomeKanjiDetailsQuizScreenLandScape extends ConsumerWidget {
                 padding: const EdgeInsets.symmetric(horizontal: 8),
                 child: ElevatedButton(
                   onPressed: () {
-                    //ref.read(selectQuizDetailsProvider.notifier).selectScreen();
-                    if (ref.read(selectQuizDetailsProvider).selectedOption ==
-                        0) {
-                      Navigator.of(context).push(
-                        MaterialPageRoute(builder: (ctx) {
-                          return QuizDetailsScreen(kanjiFromApi: kanjiFromApi);
-                        }),
-                      );
-                    } else if (ref
-                            .read(selectQuizDetailsProvider)
-                            .selectedOption ==
-                        1) {
-                      Navigator.of(context)
-                          .push(MaterialPageRoute(builder: (cxt) {
-                        return FlashCardsScreen(kanjiFromApi: kanjiFromApi);
-                      }));
+                    if (quizDetailsData.selectedOption == 0) {
+                      ref
+                          .read(quizDetailsProvider.notifier)
+                          .setScreen(Screen.quiz);
+                    } else if (quizDetailsData.selectedOption == 1) {
+                      ref
+                          .read(quizDetailsProvider.notifier)
+                          .setScreen(Screen.flashCards);
                     }
-                    ref.read(selectQuizDetailsProvider.notifier).setOption(2);
+                    ref.read(quizDetailsProvider.notifier).setOption(2);
                   },
                   style: ElevatedButton.styleFrom().copyWith(
                     minimumSize: const MaterialStatePropertyAll(
