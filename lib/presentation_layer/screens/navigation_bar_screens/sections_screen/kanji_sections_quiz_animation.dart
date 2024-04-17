@@ -25,7 +25,9 @@ class KanjiSectionsQuizAnimated extends ConsumerWidget {
     return OpenContainer(
       transitionDuration: const Duration(milliseconds: 900),
       openBuilder: (context, closedContainer) {
-        return KanjiQuizScreen(kanjisFromApi: kanjiListData.kanjiList);
+        return KanjiQuizScreen(
+          kanjisFromApi: kanjiListData.kanjiList,
+        );
       },
       openColor: Colors.transparent,
       closedShape: const RoundedRectangleBorder(

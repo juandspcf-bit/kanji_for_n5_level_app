@@ -1,13 +1,15 @@
+import 'dart:async';
+
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kanji_for_n5_level_app/main.dart';
 import 'package:kanji_for_n5_level_app/models/kanji_from_api.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/navigation_bar_screens/sections_screen/section_screen_provider.dart';
+import 'package:kanji_for_n5_level_app/presentation_layer/screens/quiz_kanji_list_screen/animated_quiz_question_screen.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/quiz_kanji_list_screen/quiz_screen/quiz_kanji_list_provider.dart';
 import 'package:kanji_for_n5_level_app/providers/status_connection_provider.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/common_screens/error_connection_screen.dart';
-import 'package:kanji_for_n5_level_app/presentation_layer/screens/quiz_kanji_list_screen/quiz_screen/quiz_question_screen.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/quiz_kanji_list_screen/score_screen/score_body.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/quiz_kanji_list_screen/score_screen/base_widgets/visible_lottie_file_kanji_list_provider.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/quiz_kanji_list_screen/welcome_screen/last_score_provider.dart';
@@ -44,8 +46,12 @@ class KanjiQuizScreen extends ConsumerWidget {
     return (countCorrects, countIncorrects, countOmited);
   }
 
-  Widget getScreen(ConnectivityResult resultStatus, QuizDataValues quizState,
-      WidgetRef ref) {
+  Widget getScreen(
+    BuildContext context,
+    ConnectivityResult resultStatus,
+    QuizDataValues quizState,
+    WidgetRef ref,
+  ) {
     if (resultStatus == ConnectivityResult.none) {
       return const ErrorConnectionScreen(
         message: 'The internet connection has gone, restart the quiz later',
@@ -68,7 +74,9 @@ class KanjiQuizScreen extends ConsumerWidget {
         child: ScoreBodyQuizKanjiList(),
       );
     } else if (quizState.currentScreenType == Screens.quiz) {
-      return const QuizQuestionScreen();
+      return AnimatesQuizQuestionScreen(
+        windowWidth: MediaQuery.sizeOf(context).width,
+      );
     } else if (quizState.currentScreenType == Screens.welcome) {
       return const Center(child: WelcomeKanjiListQuizScreen());
     } else {
@@ -94,7 +102,12 @@ class KanjiQuizScreen extends ConsumerWidget {
           padding: const EdgeInsets.symmetric(
             horizontal: 20,
           ),
-          child: getScreen(resultStatus, quizState, ref),
+          child: getScreen(
+            context,
+            resultStatus,
+            quizState,
+            ref,
+          ),
         ),
       ),
     );
