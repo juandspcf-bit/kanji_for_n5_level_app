@@ -5,17 +5,20 @@ class SelectQuizDetailsProvider extends Notifier<SelectQuizDetailsData> {
   @override
   SelectQuizDetailsData build() {
     return SelectQuizDetailsData(
-        selectedOption: 2, screensQuizDetail: ScreensQuizDetail.welcome);
+      selectedOption: 2,
+    );
   }
 
   void setScreen(ScreensQuizDetail screenNumber) {
     state = SelectQuizDetailsData(
-        selectedOption: state.selectedOption, screensQuizDetail: screenNumber);
+      selectedOption: state.selectedOption,
+    );
   }
 
   void setOption(int? value) {
     state = SelectQuizDetailsData(
-        selectedOption: value ?? 2, screensQuizDetail: state.screensQuizDetail);
+      selectedOption: value ?? 2,
+    );
   }
 
   void selectScreen() {
@@ -33,11 +36,11 @@ final selectQuizDetailsProvider =
         SelectQuizDetailsProvider.new);
 
 class SelectQuizDetailsData {
-  final ScreensQuizDetail screensQuizDetail;
   final int selectedOption;
 
-  SelectQuizDetailsData(
-      {required this.screensQuizDetail, required this.selectedOption});
+  SelectQuizDetailsData({
+    required this.selectedOption,
+  });
 }
 
 enum ScreensQuizDetail {
