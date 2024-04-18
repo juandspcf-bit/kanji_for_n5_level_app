@@ -7,6 +7,7 @@ class QuizDetailsProvider extends Notifier<QuizDetailsData> {
   @override
   QuizDetailsData build() {
     return QuizDetailsData(
+      kanjiFromApi: null,
       indexQuestion: 0,
       audioQuestion: "",
       selectedAnswer: 4,
@@ -56,6 +57,7 @@ class QuizDetailsProvider extends Notifier<QuizDetailsData> {
 
   void setScreen(Screen screen) {
     state = QuizDetailsData(
+      kanjiFromApi: state.kanjiFromApi,
       indexQuestion: state.indexQuestion,
       audioQuestion: state.audioQuestion,
       selectedAnswer: state.selectedAnswer,
@@ -69,6 +71,7 @@ class QuizDetailsProvider extends Notifier<QuizDetailsData> {
 
   void setOption(int? value) {
     state = QuizDetailsData(
+      kanjiFromApi: state.kanjiFromApi,
       indexQuestion: state.indexQuestion,
       audioQuestion: state.audioQuestion,
       selectedAnswer: state.selectedAnswer,
@@ -110,6 +113,7 @@ class QuizDetailsProvider extends Notifier<QuizDetailsData> {
     //logger.d('the possible answers are $posibleAnswers');
 
     final value = QuizDetailsData(
+      kanjiFromApi: state.kanjiFromApi,
       indexQuestion: index,
       audioQuestion: _dataQuiz[index].audioQuestion,
       selectedAnswer: 4,
@@ -133,7 +137,6 @@ class QuizDetailsProvider extends Notifier<QuizDetailsData> {
   }
 
   void setDataQuiz(KanjiFromApi kanjiFromApi) {
-    logger.d("the data quiz example is ${kanjiFromApi.example}");
     final dataInit = kanjiFromApi.example
         .map((e) => Answer(
               audioQuestion: e.audio.mp3,
@@ -144,13 +147,23 @@ class QuizDetailsProvider extends Notifier<QuizDetailsData> {
     dataInit.shuffle();
     _dataQuiz = dataInit;
     _answers = List.filled(_dataQuiz.length, StateAnswersQuizDetails.ommitted);
-    logger.d("the data quiz init is $_dataQuiz");
-    //logger.d(_dataQuiz);
-    //mp3Audios = mp3AudiosInit;
+
+    state = QuizDetailsData(
+      kanjiFromApi: kanjiFromApi,
+      indexQuestion: state.indexQuestion,
+      audioQuestion: state.audioQuestion,
+      selectedAnswer: state.selectedAnswer,
+      answer1: state.answer1,
+      answer2: state.answer2,
+      answer3: state.answer3,
+      currentScreenType: state.currentScreenType,
+      selectedOption: state.selectedOption,
+    );
   }
 
   void setAnswer(int selectedAnswer) {
     final stateCopy = QuizDetailsData(
+      kanjiFromApi: state.kanjiFromApi,
       indexQuestion: state.indexQuestion,
       audioQuestion: state.audioQuestion,
       selectedAnswer: selectedAnswer,
@@ -212,6 +225,7 @@ class QuizDetailsProvider extends Notifier<QuizDetailsData> {
 }
 
 class QuizDetailsData {
+  final KanjiFromApi? kanjiFromApi;
   final int indexQuestion;
   final String audioQuestion;
   final int selectedAnswer;
@@ -222,6 +236,7 @@ class QuizDetailsData {
   final int selectedOption;
 
   QuizDetailsData({
+    required this.kanjiFromApi,
     required this.indexQuestion,
     required this.audioQuestion,
     required this.selectedAnswer,

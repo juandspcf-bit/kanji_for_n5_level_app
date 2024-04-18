@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kanji_for_n5_level_app/main.dart';
-import 'package:kanji_for_n5_level_app/models/kanji_from_api.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_details/quiz_details_screen/score_quiz_details/quiz_details_score_screen.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_details/quiz_details_screen/last_score_details_provider.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_details/quiz_details_screen/quiz_details_provider.dart';
@@ -10,15 +9,15 @@ import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_details/
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/navigation_bar_screens/sections_screen/section_screen_provider.dart';
 
 class QuestionScreenPortrait extends ConsumerWidget {
-  final KanjiFromApi kanjiFromApi;
-
   String formatText(String japanese) {
     final firtsIndex = japanese.indexOf('（');
     logger.d('the firtsIndex is $firtsIndex of $japanese');
     return japanese.substring(0, firtsIndex).trim();
   }
 
-  const QuestionScreenPortrait({super.key, required this.kanjiFromApi});
+  const QuestionScreenPortrait({
+    super.key,
+  });
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final quizDetailData = ref.watch(quizDetailsProvider);
@@ -39,7 +38,7 @@ class QuestionScreenPortrait extends ConsumerWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    'Question ${quizDetailData.indexQuestion + 1} of ${kanjiFromApi.example.length}',
+                    'Question ${quizDetailData.indexQuestion + 1} of ${quizDetailData.kanjiFromApi!.example.length}',
                     style: Theme.of(context).textTheme.titleLarge,
                   ),
                 ],
@@ -53,7 +52,7 @@ class QuestionScreenPortrait extends ConsumerWidget {
               child: BigPlayButton(
                 sizeOval: 90,
                 sizeIcon: 60,
-                statusStorage: kanjiFromApi.statusStorage,
+                statusStorage: quizDetailData.kanjiFromApi!.statusStorage,
                 audioQuestion: quizDetailData.audioQuestion,
               ),
             ),
@@ -91,7 +90,8 @@ class QuestionScreenPortrait extends ConsumerWidget {
                   ref.read(lastScoreDetailsProvider.notifier).setFinishedQuiz(
                         section: ref.read(sectionProvider),
                         uuid: authService.userUuid ?? '',
-                        kanjiCharacter: kanjiFromApi.kanjiCharacter,
+                        kanjiCharacter:
+                            quizDetailData.kanjiFromApi!.kanjiCharacter,
                         countCorrects: scores.correctAnswers.length,
                         countIncorrects: scores.incorrectAnwers.length,
                         countOmited: scores.omitted.length,

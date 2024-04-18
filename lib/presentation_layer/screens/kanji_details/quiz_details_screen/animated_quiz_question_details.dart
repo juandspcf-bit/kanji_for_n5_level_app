@@ -37,7 +37,7 @@ class _AnimatesQuizQuestionScreenState
       duration: const Duration(milliseconds: 1000),
       transform: Matrix4.translationValues(offset, 0, 0),
       curve: Curves.easeInOutBack,
-      child: const Placeholder(),
+      child: const QuizQuestionDetails(),
     );
   }
 }
