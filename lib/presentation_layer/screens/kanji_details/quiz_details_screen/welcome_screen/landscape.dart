@@ -97,7 +97,7 @@ class WelcomeKanjiDetailsQuizScreenLandScape extends ConsumerWidget {
                     if (quizDetailsData.selectedOption == 0) {
                       ref
                           .read(quizDetailsProvider.notifier)
-                          .setScreen(Screen.quiz);
+                          .setScreen(Screen.question);
                     } else if (quizDetailsData.selectedOption == 1) {
                       ref
                           .read(quizDetailsProvider.notifier)

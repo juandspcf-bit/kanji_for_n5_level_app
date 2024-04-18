@@ -21,7 +21,7 @@ class ButtomsResetQuiz extends ConsumerWidget {
             onPressed: () {
               ref.read(visibleLottieFileProvider.notifier).reset();
               ref.read(quizDetailsProvider.notifier).resetValues();
-              ref.read(quizDetailsProvider.notifier).setScreen(Screen.quiz);
+              ref.read(quizDetailsProvider.notifier).setScreen(Screen.question);
             },
             style: ElevatedButton.styleFrom(
               minimumSize: const Size.fromHeight(40),

@@ -261,4 +261,4 @@ final quizDetailsProvider =
 
 enum StateAnswersQuizDetails { correct, incorrect, ommitted }
 
-enum Screen { quiz, score, welcome, flashCards }
+enum Screen { question, score, welcome, flashCards }

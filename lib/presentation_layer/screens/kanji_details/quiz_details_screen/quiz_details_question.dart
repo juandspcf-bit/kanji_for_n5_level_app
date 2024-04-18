@@ -4,8 +4,8 @@ import 'package:kanji_for_n5_level_app/models/kanji_from_api.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_details/quiz_details_screen/landscape_screens/quiz_details_question_landscape.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_details/quiz_details_screen/quiz_details_question_portrait.dart';
 
-class QuizDetailsScreen extends ConsumerWidget {
-  const QuizDetailsScreen({super.key, required this.kanjiFromApi});
+class QuizQuestionDetails extends ConsumerWidget {
+  const QuizQuestionDetails({super.key, required this.kanjiFromApi});
 
   final KanjiFromApi kanjiFromApi;
 

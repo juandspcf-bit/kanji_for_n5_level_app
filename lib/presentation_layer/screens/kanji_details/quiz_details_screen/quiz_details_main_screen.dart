@@ -20,7 +20,7 @@ class DetailsQuizScreen extends ConsumerWidget {
     switch (screen) {
       case Screen.flashCards:
         return 'Review what you have learn';
-      case Screen.quiz:
+      case Screen.question:
         return 'Guess the righ meaning';
       case Screen.score:
         return 'Your score';
@@ -30,14 +30,14 @@ class DetailsQuizScreen extends ConsumerWidget {
   }
 
   Widget _getScreen(QuizDetailsData quizDetailsData) {
-    if (quizDetailsData.currentScreenType == Screen.quiz) {
-      return QuizDetailsScreen(kanjiFromApi: kanjiFromApi);
+    if (quizDetailsData.currentScreenType == Screen.question) {
+      return QuizQuestionDetails(kanjiFromApi: kanjiFromApi);
     } else if (quizDetailsData.currentScreenType == Screen.flashCards) {
-      return FlashCardsScreen(kanjiFromApi: kanjiFromApi);
+      return FlashCardsDetails(kanjiFromApi: kanjiFromApi);
     } else if (quizDetailsData.currentScreenType == Screen.score) {
       return const QuizScoreDetails();
     } else {
-      return const WelcomeScreen();
+      return const QuizWelcomeDetails();
     }
   }
 

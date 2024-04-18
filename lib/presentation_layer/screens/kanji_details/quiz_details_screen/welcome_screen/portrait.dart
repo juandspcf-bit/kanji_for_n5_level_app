@@ -75,7 +75,9 @@ class WelcomeKanjiDetailsQuizScreenPortrait extends ConsumerWidget {
           ElevatedButton(
             onPressed: () {
               if (quizDetailsData.selectedOption == 0) {
-                ref.read(quizDetailsProvider.notifier).setScreen(Screen.quiz);
+                ref
+                    .read(quizDetailsProvider.notifier)
+                    .setScreen(Screen.question);
               } else if (quizDetailsData.selectedOption == 1) {
                 ref
                     .read(quizDetailsProvider.notifier)

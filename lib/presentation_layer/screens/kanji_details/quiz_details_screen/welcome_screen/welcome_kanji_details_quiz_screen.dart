@@ -6,8 +6,8 @@ import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_details/
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_details/quiz_details_screen/welcome_screen/landscape.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_details/quiz_details_screen/welcome_screen/portrait.dart';
 
-class WelcomeScreen extends ConsumerWidget {
-  const WelcomeScreen({
+class QuizWelcomeDetails extends ConsumerWidget {
+  const QuizWelcomeDetails({
     super.key,
   });
 
