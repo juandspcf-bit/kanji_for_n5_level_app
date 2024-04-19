@@ -127,13 +127,14 @@ class MainScreenProvider extends Notifier<MainScreenData> {
       logger.e('error loading quiz score $e');
     }
 
-    List<Favorite> favoritesKanjis;
+    List<Favorite> favoritesKanjis = [];
     try {
       favoritesKanjis =
           await cloudDBService.loadFavoritesCloudDB(authService.userUuid ?? '');
       await localDBService.storeAllFavoritesFromCloud(favoritesKanjis);
     } catch (e) {
-      favoritesKanjis = [];
+      favoritesKanjis = await localDBService
+          .loadFavoritesDatabase(authService.userUuid ?? '');
       logger.e('error loading favorites $e');
     }
 
@@ -155,7 +156,10 @@ class MainScreenProvider extends Notifier<MainScreenData> {
     ref
         .read(favoriteskanjisProvider.notifier)
         .setInitialFavoritesWithNoInternetConnection(
-            listOfValidStoredKanjis, favoritesKanjis, 10);
+          listOfValidStoredKanjis,
+          favoritesKanjis,
+          10,
+        );
   }
 
   Future<List<KanjiFromApi>> loadStoredKanjis() async {
