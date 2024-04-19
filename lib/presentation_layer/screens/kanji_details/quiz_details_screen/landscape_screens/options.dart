@@ -26,7 +26,33 @@ class OptionsDetails extends ConsumerWidget {
       children: [
         DetailsQuizScreenAnimated(
           kanjiFromApi: kanjiFromApi,
-          closedChild: const Icon(Icons.quiz),
+          closedChild: Container(
+            width: 300,
+            height: 40,
+            decoration: BoxDecoration(
+                color: Theme.of(context).colorScheme.primary,
+                borderRadius: BorderRadius.circular(30)),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(
+                  Icons.quiz,
+                  color: Theme.of(context).colorScheme.onPrimary,
+                ),
+                const SizedBox(
+                  width: 10,
+                ),
+                Text(
+                  "quizzes!",
+                  style: TextStyle(
+                    fontSize: Theme.of(context).textTheme.titleMedium!.fontSize,
+                    color: Theme.of(context).colorScheme.onPrimary,
+                  ),
+                )
+              ],
+            ),
+          ),
         ),
         const SizedBox(
           height: 10,
