@@ -30,22 +30,31 @@ class ButtomsResetQuiz extends ConsumerWidget {
             label: const Text('Restart quiz'),
           ),
         ),
-        Padding(
-          padding: const EdgeInsets.only(top: 5, bottom: 5),
-          child: ElevatedButton.icon(
-            onPressed: () {
-              ref.read(quizDetailsProvider.notifier).resetValues();
-              ref.read(visibleLottieFileProvider.notifier).reset();
-              ref.read(quizDetailsProvider.notifier).setScreen(Screen.welcome);
-            },
-            style: ElevatedButton.styleFrom(
-              minimumSize: const Size.fromHeight(40),
-            ),
-            icon: const Icon(Icons.arrow_circle_right),
-            label: const Text('To quiz type selector'),
-          ),
+        const Padding(
+          padding: EdgeInsets.only(top: 5, bottom: 5),
+          child: ToQuizSelectorButton(),
         ),
       ],
+    );
+  }
+}
+
+class ToQuizSelectorButton extends ConsumerWidget {
+  const ToQuizSelectorButton({super.key});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return ElevatedButton.icon(
+      onPressed: () {
+        ref.read(quizDetailsProvider.notifier).resetValues();
+        ref.read(visibleLottieFileProvider.notifier).reset();
+        ref.read(quizDetailsProvider.notifier).setScreen(Screen.welcome);
+      },
+      style: ElevatedButton.styleFrom(
+        minimumSize: const Size.fromHeight(40),
+      ),
+      icon: const Icon(Icons.arrow_circle_right),
+      label: const Text('To quiz type selector'),
     );
   }
 }

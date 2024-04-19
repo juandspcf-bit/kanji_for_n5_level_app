@@ -13,8 +13,8 @@ import 'package:kanji_for_n5_level_app/presentation_layer/screens/navigation_bar
 import 'package:kanji_for_n5_level_app/providers/status_connection_provider.dart';
 import 'package:kanji_for_n5_level_app/providers/status_stored_provider.dart';
 
-class KanjiDetailsQuizAnimated extends ConsumerWidget {
-  const KanjiDetailsQuizAnimated({
+class DetailsQuizScreenAnimated extends ConsumerWidget {
+  const DetailsQuizScreenAnimated({
     super.key,
     required this.kanjiFromApi,
     required this.closedChild,

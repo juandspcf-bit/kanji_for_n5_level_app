@@ -116,7 +116,7 @@ class KanjiDetails extends ConsumerWidget {
                         ),
                         Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 5),
-                          child: KanjiDetailsQuizAnimated(
+                          child: DetailsQuizScreenAnimated(
                               kanjiFromApi: kanjiFromApi,
                               closedChild: const Icon(Icons.quiz)),
                         ),

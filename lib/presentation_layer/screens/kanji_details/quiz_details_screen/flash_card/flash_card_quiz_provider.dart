@@ -5,6 +5,7 @@ class FlashCardProvider extends Notifier<FlashCardData> {
   @override
   FlashCardData build() {
     return FlashCardData(
+        kanjiFromApi: null,
         indexQuestion: 0,
         dataInit: [],
         audioQuestion: [],
@@ -26,6 +27,7 @@ class FlashCardProvider extends Notifier<FlashCardData> {
     answers =
         List<bool>.filled(kanjiFromApi.example.length, false, growable: true);
     state = FlashCardData(
+        kanjiFromApi: kanjiFromApi,
         indexQuestion: 0,
         dataInit: dataInit,
         audioQuestion: dataInit.map((e) => e.audioQuestion).toList(),
@@ -39,6 +41,7 @@ class FlashCardProvider extends Notifier<FlashCardData> {
       final dataInit = state.dataInit;
       dataInit.shuffle();
       state = FlashCardData(
+          kanjiFromApi: state.kanjiFromApi,
           indexQuestion: 0,
           dataInit: dataInit,
           audioQuestion: dataInit.map((e) => e.audioQuestion).toList(),
@@ -47,6 +50,7 @@ class FlashCardProvider extends Notifier<FlashCardData> {
     } else {
       var index = state.indexQuestion;
       state = FlashCardData(
+          kanjiFromApi: state.kanjiFromApi,
           indexQuestion: ++index,
           dataInit: state.dataInit,
           audioQuestion: state.audioQuestion,
@@ -62,6 +66,7 @@ class FlashCardProvider extends Notifier<FlashCardData> {
 
   void setIndex(int index) {
     state = FlashCardData(
+        kanjiFromApi: state.kanjiFromApi,
         indexQuestion: index,
         dataInit: state.dataInit,
         audioQuestion: state.audioQuestion,
@@ -74,6 +79,7 @@ final flashCardProvider =
     NotifierProvider<FlashCardProvider, FlashCardData>(FlashCardProvider.new);
 
 class FlashCardData {
+  final KanjiFromApi? kanjiFromApi;
   final int indexQuestion;
   final List<String> audioQuestion;
   final List<String> japanese;
@@ -82,7 +88,8 @@ class FlashCardData {
       dataInit;
 
   FlashCardData(
-      {required this.indexQuestion,
+      {required this.kanjiFromApi,
+      required this.indexQuestion,
       required this.dataInit,
       required this.audioQuestion,
       required this.japanese,
