@@ -16,7 +16,7 @@ Future<List<Favorite>> loadFavoriteKanjis(
       for (var docSnapshot in querySnapshot.docs) {
         final favoriteMap = docSnapshot.data();
         listFavorites.add(Favorite(
-          kanjis: favoriteMap['kanjiCharacter'],
+          kanji: favoriteMap['kanjiCharacter'],
           uuid: favoriteMap['uuid'],
           timeStamp: favoriteMap['timeStamp'],
         ));

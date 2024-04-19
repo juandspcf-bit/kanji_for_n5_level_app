@@ -32,7 +32,7 @@ class FavoritesListProvider extends Notifier<FavoritesKanjisData> {
     try {
       var kanjiList = await applicationApiService.requestKanjiListToApi(
         storedKanjis,
-        myFavorites.map((e) => e.kanjis).toList(),
+        myFavorites.map((e) => e.kanji).toList(),
         section,
       );
 
@@ -105,7 +105,7 @@ class FavoritesListProvider extends Notifier<FavoritesKanjisData> {
     try {
       var kanjiListFromAPI = await applicationApiService.requestKanjiListToApi(
         storedKanjis,
-        favoritesKanjisFromDB.map((e) => e.kanjis).toList(),
+        favoritesKanjisFromDB.map((e) => e.kanji).toList(),
         10,
       );
 
@@ -146,7 +146,7 @@ class FavoritesListProvider extends Notifier<FavoritesKanjisData> {
     for (var favorite in myFavoritesCached) {
       try {
         final favoriteStored =
-            storedKanjis.firstWhere((e) => e.kanjiCharacter == favorite.kanjis);
+            storedKanjis.firstWhere((e) => e.kanjiCharacter == favorite.kanji);
         favoriteKanjisStored.add(favoriteStored);
       } catch (e) {
         continue;

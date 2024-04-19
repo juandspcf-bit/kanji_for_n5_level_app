@@ -10,7 +10,7 @@ Future<List<Favorite>> loadFavorites(String uid) async {
         await db.query('user_favorites', where: 'uuid = ?', whereArgs: [uid]);
     return data.map((e) {
       return Favorite(
-        kanjis: e['kanjiCharacter'] as String,
+        kanji: e['kanjiCharacter'] as String,
         uuid: e['uuid'] as String,
         timeStamp: e['timeStamp'] as int,
       );
@@ -29,14 +29,14 @@ Future<Favorite> loadSingleFavorite(String kanjiCharacter, String uid) async {
         whereArgs: [uid, kanjiCharacter]);
     final dataQuery = data.map((e) {
       return Favorite(
-        kanjis: e['kanjiCharacter'] as String,
+        kanji: e['kanjiCharacter'] as String,
         uuid: e['uuid'] as String,
         timeStamp: e['timeStamp'] as int,
       );
     }).toList();
     if (data.isEmpty) {
       return Favorite(
-        kanjis: '',
+        kanji: '',
         uuid: '',
         timeStamp: -1,
       );
@@ -45,7 +45,7 @@ Future<Favorite> loadSingleFavorite(String kanjiCharacter, String uid) async {
   } catch (e) {
     logger.e(e);
     return Favorite(
-      kanjis: '',
+      kanji: '',
       uuid: '',
       timeStamp: -1,
     );
@@ -82,11 +82,11 @@ Future<void> storeAllFavorites(List<Favorite> favorites) async {
     final db = await kanjiFromApiDatabase;
     for (var favorite in favorites) {
       final favoriteDB =
-          await loadSingleFavorite(favorite.kanjis, favorite.uuid);
+          await loadSingleFavorite(favorite.kanji, favorite.uuid);
 
-      if (favoriteDB.kanjis == '') {
+      if (favoriteDB.kanji == '') {
         db.insert("user_favorites", {
-          'kanjiCharacter': favorite.kanjis,
+          'kanjiCharacter': favorite.kanji,
           'uuid': favorite.uuid,
           'timeStamp': favorite.timeStamp,
         });

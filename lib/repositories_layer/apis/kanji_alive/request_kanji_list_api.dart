@@ -44,7 +44,7 @@ class KanjiAliveApi {
     if (kanjisCharacteres.length == lists.$3.length) {
       List<Response> kanjiInformationList =
           await group.future.timeout(const Duration(
-        seconds: 15,
+        seconds: 25,
       ));
       for (final kanjiInformation in kanjiInformationList) {
         bodies.add(json.decode(kanjiInformation.body));
@@ -57,7 +57,7 @@ class KanjiAliveApi {
     }
 
     List<Response> kanjiInformationList = await group.future.timeout(
-      const Duration(seconds: 15),
+      const Duration(seconds: 25),
     );
     for (final kanjiInformation in kanjiInformationList) {
       bodies.add(json.decode(kanjiInformation.body));
