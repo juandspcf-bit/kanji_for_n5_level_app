@@ -115,7 +115,7 @@ class QuestionScreenPortrait extends ConsumerWidget {
               icon: const Icon(Icons.arrow_circle_right),
               label: const Text('Next'),
             ),
-            const ButtomsResetQuiz(),
+            const ToQuizSelectorButton(),
           ],
         ),
       ),
