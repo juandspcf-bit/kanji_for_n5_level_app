@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kanji_for_n5_level_app/main.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_details/quiz_details_screen/flash_card/flash_card_quiz_provider.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_details/quiz_details_screen/flash_card/flash_card_widget.dart';
+import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_details/quiz_details_screen/score_quiz_details/visible_lottie_file/buttoms_reset_quiz.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 class FlashCardScreenLandscape extends ConsumerStatefulWidget {
@@ -59,6 +60,13 @@ class _FlassCardScreenState extends ConsumerState<FlashCardScreenLandscape> {
                   logger.d('$index');
                   controller.jumpToPage(index);
                 },
+              ),
+              const SizedBox(
+                height: 50,
+              ),
+              const Padding(
+                padding: EdgeInsets.symmetric(horizontal: 20),
+                child: ToQuizSelectorButton(),
               ),
             ],
           ),

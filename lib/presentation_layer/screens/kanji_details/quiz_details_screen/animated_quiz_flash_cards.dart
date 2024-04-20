@@ -29,6 +29,7 @@ class _AnimatesQuizQuestionScreenState
 
   @override
   Widget build(BuildContext context) {
+    final orientation = MediaQuery.orientationOf(context);
     Timer(const Duration(milliseconds: 100), () {
       setState(() {
         offset = 0;
@@ -38,9 +39,14 @@ class _AnimatesQuizQuestionScreenState
       alignment: Alignment.center,
       children: [
         Column(
+          mainAxisAlignment: Orientation.portrait == orientation
+              ? MainAxisAlignment.start
+              : MainAxisAlignment.center,
           children: [
             SizedBox(
-              height: MediaQuery.sizeOf(context).width * 0.3,
+              height: Orientation.portrait == orientation
+                  ? MediaQuery.sizeOf(context).width * 0.3
+                  : 0,
             ),
             SvgPicture.asset(
               'assets/images/cards-fill-svgrepo-com.svg',
