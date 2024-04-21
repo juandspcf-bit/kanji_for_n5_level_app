@@ -35,7 +35,7 @@ class _AnimatesQuizQuestionScreenState
       });
     });
     return Stack(
-      alignment: Alignment.center,
+      alignment: Alignment.topCenter,
       children: [
         Column(
           mainAxisAlignment: Orientation.portrait == orientation
