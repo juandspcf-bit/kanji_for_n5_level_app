@@ -4,13 +4,13 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kanji_for_n5_level_app/models/secction_model.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/navigation_bar_screens/sections_screen/kanji_sections_quiz_animation.dart';
 import 'package:kanji_for_n5_level_app/providers/error_storing_database_status.dart';
-import 'package:kanji_for_n5_level_app/presentation_layer/screens/body_list/kanjis_list_provider.dart';
+import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_list/body_list/kanjis_list_provider.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/main_screens/main_content_provider.dart';
 import 'package:kanji_for_n5_level_app/providers/status_connection_provider.dart';
-import 'package:kanji_for_n5_level_app/presentation_layer/screens/body_list/body_list.dart';
+import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_list/body_list/body_list.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/common_widgets/my_dialogs.dart';
 
-import 'package:kanji_for_n5_level_app/presentation_layer/screens/body_list/status_operations_dialogs.dart';
+import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_list/body_list/status_operations_dialogs.dart';
 
 class KanjiForSectionScreen extends ConsumerWidget
     with MyDialogs, StatusDBStoringDialogs {
