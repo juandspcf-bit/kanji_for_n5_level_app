@@ -86,19 +86,6 @@ class QuestionScreenPortrait extends ConsumerWidget {
                 bool isReachedEnd =
                     ref.read(quizDetailsProvider.notifier).onNext();
                 if (isReachedEnd) {
-                  final scores = ref.read(quizDetailsScoreProvider);
-
-                  ref.read(lastScoreDetailsProvider.notifier).setFinishedQuiz(
-                        section: ref.read(sectionProvider),
-                        uuid: authService.userUuid ?? '',
-                        kanjiCharacter:
-                            quizDetailData.kanjiFromApi!.kanjiCharacter,
-                        countCorrects: scores.correctAnswers.length,
-                        countIncorrects: scores.incorrectAnwers.length,
-                        countOmited: scores.omitted.length,
-                      );
-
-                  ref.read(quizDetailsProvider.notifier).resetValues();
                   ref
                       .read(visibleLottieFileProvider.notifier)
                       .setInitialDelay();

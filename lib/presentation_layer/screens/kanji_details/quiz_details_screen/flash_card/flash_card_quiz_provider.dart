@@ -59,11 +59,6 @@ class FlashCardProvider extends Notifier<FlashCardData> {
     }
   }
 
-  bool isTheLastQuestion() {
-    final length = state.japanese.length;
-    return (length - 1) == state.indexQuestion;
-  }
-
   void setIndex(int index) {
     state = FlashCardData(
         kanjiFromApi: state.kanjiFromApi,

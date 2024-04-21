@@ -35,14 +35,14 @@ class LastScoreFlashCardProvider
     );
   }
 
-  void setFinishedFlashCard({
+  Future<void> setFinishedFlashCard({
     required String kanjiCharacter,
     required int section,
     required String uuid,
     required int countUnWatched,
   }) async {
-    logger.d('storing flash car data');
-    cloudDBService.updateQuizFlashCardScore(
+    state = const AsyncLoading();
+    await cloudDBService.updateQuizFlashCardScore(
       kanjiCharacter,
       countUnWatched == 0,
       section,
@@ -65,6 +65,18 @@ class LastScoreFlashCardProvider
       uuid,
       countUnWatched,
     );
+
+    state = await AsyncValue.guard(
+      () {
+        return localDBService.getSingleFlashCardDataDB(
+          kanjiCharacter,
+          section,
+          uuid,
+        );
+      },
+    );
+
+    logger.d('set flash card score');
   }
 }
 

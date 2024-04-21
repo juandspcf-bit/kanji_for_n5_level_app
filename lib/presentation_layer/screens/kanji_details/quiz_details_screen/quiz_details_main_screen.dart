@@ -5,11 +5,14 @@ import 'package:kanji_for_n5_level_app/models/kanji_from_api.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_details/quiz_details_screen/animated_quiz_flash_cards.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_details/quiz_details_screen/animated_quiz_question_details.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_details/quiz_details_screen/flash_card/flash_card_quiz_provider.dart';
+import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_details/quiz_details_screen/last_score_details_provider.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_details/quiz_details_screen/last_score_flash_card_provider.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_details/quiz_details_screen/quiz_details_provider.dart';
+import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_details/quiz_details_screen/score_quiz_details/quiz_details_score_provider.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_details/quiz_details_screen/score_quiz_details/quiz_score_details.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_details/quiz_details_screen/score_quiz_details/visible_lottie_file/visible_lottie_file_provider.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_details/quiz_details_screen/welcome_screen/welcome_kanji_details_quiz_screen.dart';
+import 'package:kanji_for_n5_level_app/presentation_layer/screens/navigation_bar_screens/sections_screen/section_screen_provider.dart';
 
 class DetailsQuizScreen extends ConsumerWidget {
   const DetailsQuizScreen({super.key, required this.kanjiFromApi});
@@ -46,6 +49,16 @@ class DetailsQuizScreen extends ConsumerWidget {
                     .length,
               );
         } else if (quizDetailsData.currentScreenType == Screen.score) {
+          final scores = ref.read(quizDetailsScoreProvider);
+
+          ref.read(lastScoreDetailsProvider.notifier).setFinishedQuiz(
+                section: ref.read(sectionProvider),
+                uuid: authService.userUuid ?? '',
+                kanjiCharacter: quizDetailsData.kanjiFromApi!.kanjiCharacter,
+                countCorrects: scores.correctAnswers.length,
+                countIncorrects: scores.incorrectAnwers.length,
+                countOmited: scores.omitted.length,
+              );
           ref.read(quizDetailsProvider.notifier).resetValues();
           ref.read(visibleLottieFileProvider.notifier).reset();
         }

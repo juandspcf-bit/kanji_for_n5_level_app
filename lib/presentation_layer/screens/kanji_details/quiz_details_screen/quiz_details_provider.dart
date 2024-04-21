@@ -29,6 +29,10 @@ class QuizDetailsProvider extends Notifier<QuizDetailsData> {
     setQuizState(0);
   }
 
+  KanjiFromApi? geKanjiFromApi() {
+    return state.kanjiFromApi;
+  }
+
   int getQuizStateCurrentIndex() {
     return state.indexQuestion;
   }

@@ -25,15 +25,16 @@ class LastScoreDetailsProvider
     int section,
     String uuid,
   ) async {
-    logger.d('$kanjiCharacter, $section, $uuid');
     state = const AsyncLoading();
-    state = await AsyncValue.guard((() {
-      return localDBService.getSingleAudioExampleQuizDataDB(
-        kanjiCharacter,
-        section,
-        uuid,
-      );
-    }));
+    state = await AsyncValue.guard(
+      (() {
+        return localDBService.getSingleAudioExampleQuizDataDB(
+          kanjiCharacter,
+          section,
+          uuid,
+        );
+      }),
+    );
   }
 
   void setFinishedQuiz({
@@ -44,8 +45,9 @@ class LastScoreDetailsProvider
     int countIncorrects = 0,
     int countOmited = 0,
   }) async {
+    state = const AsyncLoading();
     try {
-      cloudDBService.updateQuizDetailScore(
+      await cloudDBService.updateQuizDetailScore(
           kanjiCharacter,
           countCorrects == 0 && countOmited == 0,
           true,
