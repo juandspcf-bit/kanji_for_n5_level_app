@@ -30,7 +30,7 @@ class _AnimatesQuizQuestionScreenState
   @override
   Widget build(BuildContext context) {
     final orientation = MediaQuery.orientationOf(context);
-    Timer(const Duration(milliseconds: 100), () {
+    Timer(const Duration(milliseconds: 200), () {
       setState(() {
         offset = 0;
       });
@@ -48,13 +48,10 @@ class _AnimatesQuizQuestionScreenState
                   ? MediaQuery.sizeOf(context).width * 0.3
                   : 0,
             ),
-            SvgPicture.asset(
-              'assets/images/cards-fill-svgrepo-com.svg',
+            Image.asset(
+              'assets/images/kanji-study-svgrepo-com.png',
               height: 250,
               width: 250,
-              colorFilter:
-                  const ColorFilter.mode(Colors.white, BlendMode.srcIn),
-              semanticsLabel: '',
             ),
           ],
         ),

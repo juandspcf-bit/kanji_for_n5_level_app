@@ -28,16 +28,40 @@ class _AnimatesQuizQuestionScreenState
 
   @override
   Widget build(BuildContext context) {
-    Timer(const Duration(milliseconds: 100), () {
+    final orientation = MediaQuery.orientationOf(context);
+    Timer(const Duration(milliseconds: 200), () {
       setState(() {
         offset = 0;
       });
     });
-    return AnimatedContainer(
-      duration: const Duration(milliseconds: 1000),
-      transform: Matrix4.translationValues(offset, 0, 0),
-      curve: Curves.easeInOutBack,
-      child: const QuizQuestionScreen(),
+    return Stack(
+      alignment: Alignment.center,
+      children: [
+        Column(
+          mainAxisAlignment: Orientation.portrait == orientation
+              ? MainAxisAlignment.start
+              : MainAxisAlignment.center,
+          children: [
+            SizedBox(
+              height: Orientation.portrait == orientation
+                  ? MediaQuery.sizeOf(context).width * 0.3
+                  : 0,
+            ),
+            Image.asset(
+              'assets/images/kanji-study-svgrepo-com.png',
+              height: 250,
+              width: 250,
+            ),
+          ],
+        ),
+        AnimatedContainer(
+          color: Theme.of(context).colorScheme.surface,
+          duration: const Duration(milliseconds: 1000),
+          transform: Matrix4.translationValues(offset, 0, 0),
+          curve: Curves.easeInOutBack,
+          child: const QuizQuestionScreen(),
+        ),
+      ],
     );
   }
 }

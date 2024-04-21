@@ -1,9 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_details/quiz_details_screen/quiz_details_question.dart';
 
 class AnimatedQuizQuestionDetails extends ConsumerStatefulWidget {
@@ -31,7 +29,7 @@ class _AnimatesQuizQuestionScreenState
   @override
   Widget build(BuildContext context) {
     final orientation = MediaQuery.orientationOf(context);
-    Timer(const Duration(milliseconds: 100), () {
+    Timer(const Duration(milliseconds: 200), () {
       setState(() {
         offset = 0;
       });
@@ -49,13 +47,10 @@ class _AnimatesQuizQuestionScreenState
                   ? MediaQuery.sizeOf(context).width * 0.3
                   : 0,
             ),
-            SvgPicture.asset(
-              'assets/images/quiz-on-computer-with-question-signs-around-svgrepo-com.svg',
+            Image.asset(
+              'assets/images/kanji-study-svgrepo-com.png',
               height: 250,
               width: 250,
-              colorFilter:
-                  const ColorFilter.mode(Colors.white, BlendMode.srcIn),
-              semanticsLabel: '',
             ),
           ],
         ),
