@@ -70,14 +70,14 @@ class SqliteDBService implements LocalDBService {
   }
 
   @override
-  void setKanjiQuizLastScore({
+  Future<void> setKanjiQuizLastScore({
     int section = -1,
     String uuid = '',
     int countCorrects = 0,
     int countIncorrects = 0,
     int countOmited = 0,
-  }) {
-    updateSingleQuizSectionData(
+  }) async {
+    await updateSingleQuizSectionData(
       section,
       uuid,
       countIncorrects == 0 && countOmited == 0,
@@ -89,14 +89,14 @@ class SqliteDBService implements LocalDBService {
   }
 
   @override
-  void insertSingleQuizSectionData(
+  Future<void> insertSingleQuizSectionData(
     int section,
     String uuid,
     int countCorrects,
     int countIncorrects,
     int countOmited,
-  ) {
-    insertSingleQuizSectionDataDB(
+  ) async {
+    await insertSingleQuizSectionDataDB(
       section,
       uuid,
       countIncorrects == 0 && countOmited == 0,

@@ -21,29 +21,6 @@ class KanjiQuizScreen extends ConsumerWidget {
 
   final List<KanjiFromApi> kanjisFromApi;
 
-  (int, int, int) getCounts(
-    List<bool> isCorrectAnswer,
-    List<bool> isOmittedAnswer,
-  ) {
-    int countCorrects = isCorrectAnswer.map((e) {
-      if (e == true) {
-        return 1;
-      }
-      return 0;
-    }).reduce((value, element) => value + element);
-
-    int countOmited = isOmittedAnswer.map((e) {
-      if (e == true) {
-        return 1;
-      }
-      return 0;
-    }).reduce((value, element) => value + element);
-
-    int countIncorrects = isCorrectAnswer.length - countCorrects - countOmited;
-
-    return (countCorrects, countIncorrects, countOmited);
-  }
-
   Widget getScreen(
     BuildContext context,
     ConnectivityResult resultStatus,
@@ -55,19 +32,6 @@ class KanjiQuizScreen extends ConsumerWidget {
         message: 'The internet connection has gone, restart the quiz later',
       );
     } else if (quizState.currentScreenType == Screens.score) {
-      final (countCorrects, countIncorrects, countOmited) = getCounts(
-        quizState.isCorrectAnswer,
-        quizState.isOmittedAnswer,
-      );
-
-      ref.read(lastScoreKanjiQuizProvider.notifier).setFinishedQuiz(
-            section: ref.read(sectionProvider),
-            uuid: authService.userUuid ?? '',
-            countCorrects: countCorrects,
-            countIncorrects: countIncorrects,
-            countOmited: countOmited,
-          );
-
       return const Center(
         child: ScoreBodyQuizKanjiList(),
       );
@@ -91,8 +55,18 @@ class KanjiQuizScreen extends ConsumerWidget {
 
     return PopScope(
       onPopInvoked: (didPop) {
-        ref.read(quizDataValuesProvider.notifier).resetTheQuiz();
-        ref.read(visibleLottieFileKanjiListProvider.notifier).reset();
+        if (quizState.currentScreenType == Screens.score) {
+          final (countCorrects, countIncorrects, countOmited) =
+              ref.read(quizDataValuesProvider.notifier).getCounts();
+
+          ref.read(lastScoreKanjiQuizProvider.notifier).setFinishedQuiz(
+                section: ref.read(sectionProvider),
+                uuid: authService.userUuid ?? '',
+                countCorrects: countCorrects,
+                countIncorrects: countIncorrects,
+                countOmited: countOmited,
+              );
+        }
       },
       child: Scaffold(
         appBar: AppBar(title: const Text("Test your knowledge")),

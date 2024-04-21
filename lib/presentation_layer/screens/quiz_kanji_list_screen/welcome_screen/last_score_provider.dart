@@ -19,9 +19,11 @@ class LastScoreKanjiQuizProvider extends AsyncNotifier<SingleQuizSectionData> {
 
   void getKanjiQuizLastScore(int section, String uuid) async {
     state = const AsyncLoading();
-    state = await AsyncValue.guard((() {
-      return localDBService.getKanjiQuizLastScore(section, uuid);
-    }));
+    state = await AsyncValue.guard(
+      (() {
+        return localDBService.getKanjiQuizLastScore(section, uuid);
+      }),
+    );
   }
 
   void setFinishedQuiz({
@@ -30,9 +32,10 @@ class LastScoreKanjiQuizProvider extends AsyncNotifier<SingleQuizSectionData> {
     int countCorrects = 0,
     int countIncorrects = 0,
     int countOmited = 0,
-  }) {
+  }) async {
+    state = const AsyncLoading();
     try {
-      cloudDBService.updateQuizSectionScore(
+      await cloudDBService.updateQuizSectionScore(
         countIncorrects == 0 && countOmited == 0,
         true,
         countCorrects,
@@ -41,23 +44,29 @@ class LastScoreKanjiQuizProvider extends AsyncNotifier<SingleQuizSectionData> {
         section,
         uuid,
       );
+      if (state.value?.section == -1) {
+        await localDBService.insertSingleQuizSectionData(
+            section, uuid, countCorrects, countIncorrects, countOmited);
+        return;
+      }
+
+      await localDBService.setKanjiQuizLastScore(
+        section: section,
+        uuid: uuid,
+        countCorrects: countCorrects,
+        countIncorrects: countIncorrects,
+        countOmited: countOmited,
+      );
+
+      state = await AsyncValue.guard(
+        (() {
+          return localDBService.getKanjiQuizLastScore(section, uuid);
+        }),
+      );
     } catch (e) {
+      state = AsyncValue.error('error retriving data', StackTrace.current);
       logger.e(e);
     }
-
-    if (state.value?.section == -1) {
-      localDBService.insertSingleQuizSectionData(
-          section, uuid, countCorrects, countIncorrects, countOmited);
-      return;
-    }
-
-    localDBService.setKanjiQuizLastScore(
-      section: section,
-      uuid: uuid,
-      countCorrects: countCorrects,
-      countIncorrects: countIncorrects,
-      countOmited: countOmited,
-    );
   }
 }
 

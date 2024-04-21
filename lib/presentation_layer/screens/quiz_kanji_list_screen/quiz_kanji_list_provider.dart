@@ -217,6 +217,27 @@ class QuizDataValuesProvider extends Notifier<QuizDataValues> {
     copy2.shuffle();
     return copy2;
   }
+
+  (int, int, int) getCounts() {
+    int countCorrects = state.isCorrectAnswer.map((e) {
+      if (e == true) {
+        return 1;
+      }
+      return 0;
+    }).reduce((value, element) => value + element);
+
+    int countOmited = state.isOmittedAnswer.map((e) {
+      if (e == true) {
+        return 1;
+      }
+      return 0;
+    }).reduce((value, element) => value + element);
+
+    int countIncorrects =
+        state.isCorrectAnswer.length - countCorrects - countOmited;
+
+    return (countCorrects, countIncorrects, countOmited);
+  }
 }
 
 final quizDataValuesProvider =

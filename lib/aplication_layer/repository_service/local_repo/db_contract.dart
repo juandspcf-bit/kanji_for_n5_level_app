@@ -40,7 +40,7 @@ abstract class LocalDBService {
     String uuid,
   );
 
-  void setKanjiQuizLastScore({
+  Future<void> setKanjiQuizLastScore({
     int section = -1,
     String uuid = '',
     int countCorrects = 0,
@@ -48,7 +48,7 @@ abstract class LocalDBService {
     int countOmited = 0,
   });
 
-  void insertSingleQuizSectionData(
+  Future<void> insertSingleQuizSectionData(
     int section,
     String uuid,
     int countCorrects,
