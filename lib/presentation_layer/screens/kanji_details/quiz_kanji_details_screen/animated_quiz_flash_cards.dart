@@ -31,9 +31,13 @@ class _AnimatesQuizQuestionScreenState
   Widget build(BuildContext context) {
     final orientation = MediaQuery.orientationOf(context);
     Timer(const Duration(milliseconds: 200), () {
-      setState(() {
-        offset = 0;
-      });
+      if (context.mounted) {
+        setState(
+          () {
+            offset = 0;
+          },
+        );
+      }
     });
     return Stack(
       alignment: Alignment.topCenter,
