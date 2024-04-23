@@ -35,7 +35,7 @@ class KanjiForSectionScreen extends ConsumerWidget
       );
     }
 
-    final connectivityData = ref.watch(statusConnectionProvider);
+    ref.watch(statusConnectionProvider);
     final mainScreenData = ref.watch(mainScreenProvider);
     final kanjiListData = ref.watch(kanjiListProvider);
 
@@ -88,7 +88,6 @@ class KanjiForSectionScreen extends ConsumerWidget
       body: BodyKanjisList(
         kanjisFromApi: kanjiListData.kanjiList,
         statusResponse: kanjiListData.status,
-        connectivityData: connectivityData,
         mainScreenData: mainScreenData,
       ),
     );

@@ -99,7 +99,6 @@ class KanjisForFavoritesScreen extends ConsumerWidget with MyDialogs {
       kanjisFromApi: kanjiFavoritesList.favoritesKanjisFromApi
           .map((e) => e.kanjiFromApi)
           .toList(),
-      connectivityData: connectivityData,
       mainScreenData: mainScreenData,
     );
   }

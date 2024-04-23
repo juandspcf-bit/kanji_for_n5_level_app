@@ -17,10 +17,11 @@ class QuizIconKanjiList extends ConsumerWidget {
     final isAnyProcessingDataFunc =
         ref.read(kanjiListProvider.notifier).isAnyProcessingData;
 
-    final accesToQuiz = !isAnyProcessingDataFunc() &&
-        !(connectivityData == ConnectivityResult.none);
+    final accesToQuiz = isAnyProcessingDataFunc() ||
+        connectivityData == ConnectivityResult.none ||
+        kanjiListData.kanjiList.isEmpty;
 
-    return (kanjiListData.status == 1 && accesToQuiz)
+    return (kanjiListData.status == 1 && !accesToQuiz)
         ? const AnimatedOpacityIcon(
             child: Padding(
               padding: EdgeInsets.symmetric(horizontal: 10.0),

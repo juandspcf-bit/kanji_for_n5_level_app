@@ -14,14 +14,14 @@ class StatusConnectionProvider extends Notifier<ConnectivityResult> {
     connectionState.checkConnectivity().then((value) {
       subscription = connectionState.onConnectivityChanged
           .listen((ConnectivityResult result) {
-        logger.d('Connections $result');
-        FlutterLogs.logThis(
+        state = result;
+        logger.d('Connections $state');
+/*         FlutterLogs.logThis(
             tag: 'MyApp',
             subTag: 'logData',
             logMessage:
                 'This is a log message: Connections $result ${DateTime.now().millisecondsSinceEpoch}',
-            level: LogLevel.INFO);
-        state = result;
+            level: LogLevel.INFO); */
       });
       state = value;
     });
