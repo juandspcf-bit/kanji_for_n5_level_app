@@ -1,12 +1,10 @@
 import 'dart:async';
 
-import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:kanji_for_n5_level_app/main.dart';
 import 'package:kanji_for_n5_level_app/models/secction_model.dart';
-import 'package:kanji_for_n5_level_app/presentation_layer/screens/navigation_bar_screens/sections_screen/cache_kanji_list_provider.dart';
-import 'package:kanji_for_n5_level_app/presentation_layer/screens/navigation_bar_screens/sections_screen/kanji_sections_quiz_animation.dart';
+import 'package:kanji_for_n5_level_app/presentation_layer/screens/navigation_bar_screens/sections_screen/kanjis_for_section_screen/connection_status_icon.dart';
+import 'package:kanji_for_n5_level_app/presentation_layer/screens/navigation_bar_screens/sections_screen/kanjis_for_section_screen/quiz_icon_kanji_list.dart';
 import 'package:kanji_for_n5_level_app/providers/error_storing_database_status.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_list/body_list/kanjis_list_provider.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/main_screens/main_content_provider.dart';
@@ -39,16 +37,7 @@ class KanjiForSectionScreen extends ConsumerWidget
 
     final connectivityData = ref.watch(statusConnectionProvider);
     final mainScreenData = ref.watch(mainScreenProvider);
-    var kanjiListData = ref.watch(kanjiListProvider);
-
-/*     if (connectivityData == ConnectivityResult.none &&
-        !ref
-            .read(cacheKanjiListProvider.notifier)
-            .isInCache(kanjiListData.section)) {
-      kanjiListData = ref
-          .read(kanjiListProvider.notifier)
-          .getOfflineKanjiList(kanjiListData);
-    } */
+    final kanjiListData = ref.watch(kanjiListProvider);
 
     ref.listen<KanjiListData>(kanjiListProvider, (previuos, current) {
       if (current.errorDownload.status) {
@@ -88,31 +77,12 @@ class KanjiForSectionScreen extends ConsumerWidget
       }
     });
 
-    final isAnyProcessingDataFunc =
-        ref.read(kanjiListProvider.notifier).isAnyProcessingData;
-
-    final accesToQuiz = !isAnyProcessingDataFunc() &&
-        !(connectivityData == ConnectivityResult.none);
-
     return Scaffold(
       appBar: AppBar(
         title: Text(listSections[kanjiListData.section - 1].title),
-        actions: [
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 10),
-            child: connectivityData == ConnectivityResult.none
-                ? const Icon(Icons.cloud_off)
-                : const Icon(Icons.cloud_done_rounded),
-          ),
-          if (kanjiListData.status == 1 && accesToQuiz)
-            const AnimatedOpacityIcon(
-              child: Padding(
-                padding: EdgeInsets.symmetric(horizontal: 10.0),
-                child: KanjiSectionsQuizAnimated(
-                  closedChild: Icon(Icons.quiz),
-                ),
-              ),
-            ),
+        actions: const [
+          ConnectionStatusIcon(),
+          QuizIconKanjiList(),
         ],
       ),
       body: BodyKanjisList(

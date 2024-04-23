@@ -5,6 +5,7 @@ import 'package:kanji_for_n5_level_app/config_files/screen_config.dart';
 import 'package:kanji_for_n5_level_app/models/kanji_from_api.dart';
 import 'package:kanji_for_n5_level_app/models/secction_model.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_list/body_list/kanji_item_animated.dart';
+import 'package:kanji_for_n5_level_app/providers/status_connection_provider.dart';
 import 'package:kanji_for_n5_level_app/providers/status_stored_provider.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_list/body_list/error_fetching_kanjis.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_list/body_list/kanjis_list_provider.dart';
@@ -147,7 +148,11 @@ class BodyKanjisList extends ConsumerWidget {
       return (connectivityData == ConnectivityResult.none)
           ? _getListWidgets(orientation, widhtScreen, ref)
           : RefreshIndicator(
-              notificationPredicate: isAny ? (_) => false : (_) => true,
+              notificationPredicate: isAny ||
+                      ref.read(statusConnectionProvider) ==
+                          ConnectivityResult.none
+                  ? (_) => false
+                  : (_) => true,
               onRefresh: () async {
                 if (mainScreenData.selection ==
                     ScreenSelection.favoritesKanjis) {
