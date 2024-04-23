@@ -1,7 +1,11 @@
+import 'dart:async';
+
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:kanji_for_n5_level_app/main.dart';
 import 'package:kanji_for_n5_level_app/models/secction_model.dart';
+import 'package:kanji_for_n5_level_app/presentation_layer/screens/navigation_bar_screens/sections_screen/cache_kanji_list_provider.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/navigation_bar_screens/sections_screen/kanji_sections_quiz_animation.dart';
 import 'package:kanji_for_n5_level_app/providers/error_storing_database_status.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_list/body_list/kanjis_list_provider.dart';
@@ -37,11 +41,14 @@ class KanjiForSectionScreen extends ConsumerWidget
     final mainScreenData = ref.watch(mainScreenProvider);
     var kanjiListData = ref.watch(kanjiListProvider);
 
-    if (connectivityData == ConnectivityResult.none) {
+/*     if (connectivityData == ConnectivityResult.none &&
+        !ref
+            .read(cacheKanjiListProvider.notifier)
+            .isInCache(kanjiListData.section)) {
       kanjiListData = ref
           .read(kanjiListProvider.notifier)
           .getOfflineKanjiList(kanjiListData);
-    }
+    } */
 
     ref.listen<KanjiListData>(kanjiListProvider, (previuos, current) {
       if (current.errorDownload.status) {
@@ -81,6 +88,12 @@ class KanjiForSectionScreen extends ConsumerWidget
       }
     });
 
+    final isAnyProcessingDataFunc =
+        ref.read(kanjiListProvider.notifier).isAnyProcessingData;
+
+    final accesToQuiz = !isAnyProcessingDataFunc() &&
+        !(connectivityData == ConnectivityResult.none);
+
     return Scaffold(
       appBar: AppBar(
         title: Text(listSections[kanjiListData.section - 1].title),
@@ -91,13 +104,15 @@ class KanjiForSectionScreen extends ConsumerWidget
                 ? const Icon(Icons.cloud_off)
                 : const Icon(Icons.cloud_done_rounded),
           ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 10.0),
-            child: KanjiSectionsQuizAnimated(
-              kanjiListData: kanjiListData,
-              closedChild: const Icon(Icons.quiz),
+          if (kanjiListData.status == 1 && accesToQuiz)
+            const AnimatedOpacityIcon(
+              child: Padding(
+                padding: EdgeInsets.symmetric(horizontal: 10.0),
+                child: KanjiSectionsQuizAnimated(
+                  closedChild: Icon(Icons.quiz),
+                ),
+              ),
             ),
-          ),
         ],
       ),
       body: BodyKanjisList(
@@ -106,6 +121,41 @@ class KanjiForSectionScreen extends ConsumerWidget
         connectivityData: connectivityData,
         mainScreenData: mainScreenData,
       ),
+    );
+  }
+}
+
+class AnimatedOpacityIcon extends ConsumerStatefulWidget {
+  const AnimatedOpacityIcon({super.key, required this.child});
+
+  final Widget child;
+
+  @override
+  ConsumerState<AnimatedOpacityIcon> createState() => _AnimationFadeState();
+}
+
+class _AnimationFadeState extends ConsumerState<AnimatedOpacityIcon> {
+  double opacityLevel = 0.0;
+
+  @override
+  void initState() {
+    Timer(const Duration(milliseconds: 100), () {
+      if (context.mounted) {
+        setState(() {
+          opacityLevel = 1.0;
+        });
+      }
+    });
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedOpacity(
+      curve: accelerateEasing,
+      opacity: opacityLevel,
+      duration: const Duration(milliseconds: 600),
+      child: widget.child,
     );
   }
 }

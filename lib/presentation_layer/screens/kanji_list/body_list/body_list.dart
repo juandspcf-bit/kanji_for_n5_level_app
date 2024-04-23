@@ -34,7 +34,7 @@ class BodyKanjisList extends ConsumerWidget {
         statusStorage: kanjisFromApi[index].statusStorage,
         kanjiFromApi: kanjisFromApi[index],
         closedChild: KanjiItem(
-          key: ValueKey(kanjisFromApi[index].kanjiCharacter),
+          key: Key(kanjisFromApi[index].kanjiCharacter),
           kanjiFromApi: kanjisFromApi[index],
         ),
       );
@@ -45,7 +45,7 @@ class BodyKanjisList extends ConsumerWidget {
         closedChild: Dismissible(
           key: Key(kanjisFromApi[index].kanjiCharacter),
           child: KanjiItem(
-            key: ValueKey(kanjisFromApi[index].kanjiCharacter),
+            key: Key(kanjisFromApi[index].kanjiCharacter),
             kanjiFromApi: kanjisFromApi[index],
           ),
           onDismissed: (direction) async {
@@ -164,7 +164,8 @@ class BodyKanjisList extends ConsumerWidget {
                       sectionNumber: kanjiListData.section,
                     );
               },
-              child: _getListWidgets(orientation, widhtScreen, ref));
+              child: _getListWidgets(orientation, widhtScreen, ref),
+            );
     } else if (statusResponse == 2) {
       return ErrorFetchingKanjisScreen(mainScreenData: mainScreenData);
     } else {

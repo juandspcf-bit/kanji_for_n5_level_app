@@ -13,11 +13,9 @@ import 'package:kanji_for_n5_level_app/providers/status_connection_provider.dart
 class KanjiSectionsQuizAnimated extends ConsumerWidget {
   const KanjiSectionsQuizAnimated({
     super.key,
-    required this.kanjiListData,
     required this.closedChild,
   });
 
-  final KanjiListData kanjiListData;
   final Widget closedChild;
 
   @override
@@ -25,6 +23,7 @@ class KanjiSectionsQuizAnimated extends ConsumerWidget {
     return OpenContainer(
       transitionDuration: const Duration(milliseconds: 900),
       openBuilder: (context, closedContainer) {
+        var kanjiListData = ref.read(kanjiListProvider);
         return KanjiQuizScreen(
           kanjisFromApi: kanjiListData.kanjiList,
         );
@@ -36,31 +35,19 @@ class KanjiSectionsQuizAnimated extends ConsumerWidget {
       closedElevation: 0,
       closedColor: Colors.transparent,
       closedBuilder: (context, openContainer) {
-        final connectivityData = ref.watch(statusConnectionProvider);
-        final isAnyProcessingDataFunc =
-            ref.read(kanjiListProvider.notifier).isAnyProcessingData;
-
-        final accesToQuiz = !isAnyProcessingDataFunc() &&
-            !(connectivityData == ConnectivityResult.none);
-
         return GestureDetector(
-          onTap: kanjiListData.status == 1 && accesToQuiz
-              ? () {
-                  ref
-                      .read(quizDataValuesProvider.notifier)
-                      .initTheStateBeforeAccessingQuizScreen(
-                          kanjiListData.kanjiList.length,
-                          kanjiListData.kanjiList);
-                  ref
-                      .read(lastScoreKanjiQuizProvider.notifier)
-                      .getKanjiQuizLastScore(
-                        ref.read(sectionProvider),
-                        authService.userUuid ?? '',
-                      );
-                  logger.d('kanji quiz animation tapped');
-                  openContainer();
-                }
-              : null,
+          onTap: () {
+            var kanjiListData = ref.watch(kanjiListProvider);
+            ref
+                .read(quizDataValuesProvider.notifier)
+                .initTheStateBeforeAccessingQuizScreen(
+                    kanjiListData.kanjiList.length, kanjiListData.kanjiList);
+            ref.read(lastScoreKanjiQuizProvider.notifier).getKanjiQuizLastScore(
+                  ref.read(sectionProvider),
+                  authService.userUuid ?? '',
+                );
+            openContainer();
+          },
           child: closedChild,
         );
       },

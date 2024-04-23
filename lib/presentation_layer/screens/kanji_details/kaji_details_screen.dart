@@ -5,6 +5,7 @@ import 'package:kanji_for_n5_level_app/config_files/screen_config.dart';
 import 'package:kanji_for_n5_level_app/main.dart';
 import 'package:kanji_for_n5_level_app/models/kanji_from_api.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_details/kanji_details_quiz_animated.dart';
+import 'package:kanji_for_n5_level_app/presentation_layer/screens/navigation_bar_screens/sections_screen/kanjis_for_section_screen.dart';
 import 'package:kanji_for_n5_level_app/providers/examples_audios_track_list_provider.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_details/custom_navigation_rails_details/custom_navigation_rails_details.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_details/kanji_details_provider.dart';
@@ -114,23 +115,28 @@ class KanjiDetails extends ConsumerWidget {
                               ? const Icon(Icons.cloud_off)
                               : const Icon(Icons.cloud_done_rounded),
                         ),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 5),
-                          child: DetailsQuizScreenAnimated(
-                              kanjiFromApi: kanjiFromApi,
-                              closedChild: const Icon(Icons.quiz)),
-                        ),
-                        IconButton(
-                          onPressed:
-                              statusConnectionData == ConnectivityResult.none
-                                  ? null
-                                  : () {
-                                      ref
-                                          .read(kanjiDetailsProvider.notifier)
-                                          .storeToFavorites(kanjiFromApi);
-                                    },
-                          icon: const IconFavorites(),
-                        )
+                        if (statusConnectionData != ConnectivityResult.none ||
+                            kanjiFromApi.statusStorage == StatusStorage.stored)
+                          AnimatedOpacityIcon(
+                            child: Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 5),
+                              child: DetailsQuizScreenAnimated(
+                                  kanjiFromApi: kanjiFromApi,
+                                  closedChild: const Icon(Icons.quiz)),
+                            ),
+                          ),
+                        if (statusConnectionData != ConnectivityResult.none)
+                          AnimatedOpacityIcon(
+                            child: IconButton(
+                              onPressed: () {
+                                ref
+                                    .read(kanjiDetailsProvider.notifier)
+                                    .storeToFavorites(kanjiFromApi);
+                              },
+                              icon: const IconFavorites(),
+                            ),
+                          )
                       ],
                       bottom: const TabBar(
                         tabs: <Widget>[

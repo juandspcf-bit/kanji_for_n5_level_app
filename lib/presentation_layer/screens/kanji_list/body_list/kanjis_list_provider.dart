@@ -1,9 +1,11 @@
 import 'dart:async';
 
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kanji_for_n5_level_app/main.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_list/body_list/queue_download_delete_provider.dart';
 import 'package:kanji_for_n5_level_app/models/kanji_from_api.dart';
+import 'package:kanji_for_n5_level_app/providers/status_connection_provider.dart';
 import 'package:kanji_for_n5_level_app/providers/status_stored_provider.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/navigation_bar_screens/sections_screen/cache_kanji_list_provider.dart';
 
@@ -115,6 +117,25 @@ class KanjiListProvider extends Notifier<KanjiListData> {
             .read(cacheKanjiListProvider.notifier)
             .getFromCache(sectionNumber);
         onSuccesRequest(kanjiList);
+        return;
+      }
+
+      final connectivityData = ref.read(statusConnectionProvider);
+      if (connectivityData == ConnectivityResult.none) {
+        final storedKanjisFromProvider = ref.read(storedKanjisProvider);
+
+        if (storedKanjisFromProvider[state.section] != null &&
+            storedKanjisFromProvider[state.section]!.isNotEmpty) {
+          onSuccesRequest(storedKanjisFromProvider[state.section]!);
+          return;
+        }
+        state = KanjiListData(
+          kanjiList: <KanjiFromApi>[],
+          status: 1,
+          section: sectionNumber,
+          errorDownload: state.errorDownload,
+          errorDeleting: state.errorDeleting,
+        );
         return;
       }
 
