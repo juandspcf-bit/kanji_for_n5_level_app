@@ -151,6 +151,11 @@ class MainScreenProvider extends Notifier<MainScreenData> {
     listOfValidStoredKanjis =
         listStoresKanjis.isEmpty ? await loadStoredKanjis() : listStoresKanjis;
 
+    var kanjiFavoritesList =
+        ref.read(favoriteskanjisProvider.notifier).getFavorites();
+
+    if (kanjiFavoritesList.isNotEmpty) return;
+
     final favoritesKanjis =
         await localDBService.loadFavoritesDatabase(authService.userUuid ?? '');
     ref

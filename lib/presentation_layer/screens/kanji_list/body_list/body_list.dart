@@ -22,10 +22,9 @@ class BodyKanjisList extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final kanjiListData = ref.watch(kanjiListProvider);
-    if (kanjiListData.status == 2) {
+    if (statusResponse == 2) {
       return ErrorFetchingKanjisScreen(mainScreenData: mainScreenData);
-    } else if (kanjiListData.status == 0) {
+    } else if (statusResponse == 0) {
       return SafeArea(
         child: ShimmerList(
           selection: mainScreenData.selection,
@@ -34,7 +33,7 @@ class BodyKanjisList extends ConsumerWidget {
     } else {
       return RefreshBodyList(
         statusResponse: statusResponse,
-        kanjisFromApi: kanjiListData.kanjiList,
+        kanjisFromApi: kanjisFromApi,
         mainScreenData: mainScreenData,
       );
     }

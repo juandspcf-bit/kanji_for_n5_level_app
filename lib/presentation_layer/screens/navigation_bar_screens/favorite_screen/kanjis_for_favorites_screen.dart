@@ -1,12 +1,9 @@
-import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kanji_for_n5_level_app/main.dart';
 import 'package:kanji_for_n5_level_app/providers/error_storing_database_status.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/navigation_bar_screens/favorite_screen/favorites_kanjis_provider.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/main_screens/main_content_provider.dart';
-import 'package:kanji_for_n5_level_app/providers/status_connection_provider.dart';
-import 'package:kanji_for_n5_level_app/providers/status_stored_provider.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_list/body_list/body_list.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/common_widgets/my_dialogs.dart';
 
@@ -31,25 +28,6 @@ class KanjisForFavoritesScreen extends ConsumerWidget with MyDialogs {
       );
     }
     var kanjiFavoritesList = ref.watch(favoriteskanjisProvider);
-    final connectivityData = ref.watch(statusConnectionProvider);
-
-    if (connectivityData == ConnectivityResult.none) {
-      final favoritesKanjisStored = kanjiFavoritesList.favoritesKanjisFromApi
-          .where((element) =>
-              element.kanjiFromApi.statusStorage == StatusStorage.stored)
-          .toList();
-      if (favoritesKanjisStored.isNotEmpty) {
-        kanjiFavoritesList = FavoritesKanjisData(
-          favoritesKanjisFromApi: favoritesKanjisStored,
-          favoritesFetchingStatus: FavoritesFetchingStatus.succefulFecth,
-        );
-      } else {
-        kanjiFavoritesList = const FavoritesKanjisData(
-          favoritesKanjisFromApi: [],
-          favoritesFetchingStatus: FavoritesFetchingStatus.succefulFecth,
-        );
-      }
-    }
 
     ref.listen<FavoritesKanjisData>(favoriteskanjisProvider, (prev, current) {
       logger.d(current.onDismissibleActionStatus.message);

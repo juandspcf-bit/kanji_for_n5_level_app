@@ -75,12 +75,12 @@ class _VerifyEmailEstate extends ConsumerState<VerifyEmail> {
 
   @override
   Widget build(BuildContext context) {
-    final connectionWifiState = ref.watch(statusConnectionProvider);
     return isEmailVerified
         ? FutureBuilder(
-            future: connectionWifiState == ConnectivityResult.none
-                ? ref.read(mainScreenProvider.notifier).initAppOffline()
-                : ref.read(mainScreenProvider.notifier).initAppOnline(),
+            future:
+                ref.read(statusConnectionProvider) == ConnectivityResult.none
+                    ? ref.read(mainScreenProvider.notifier).initAppOffline()
+                    : ref.read(mainScreenProvider.notifier).initAppOnline(),
             builder: (BuildContext context, AsyncSnapshot<void> snapShot) {
               final connectionStatus = snapShot.connectionState;
               if (connectionStatus == ConnectionState.waiting) {
@@ -92,7 +92,7 @@ class _VerifyEmailEstate extends ConsumerState<VerifyEmail> {
               } else if (connectionStatus == ConnectionState.done ||
                   connectionStatus == ConnectionState.active) {
                 FlutterNativeSplash.remove();
-                return const MainContent(); //const MainContent();
+                return const MainContent();
               } else {
                 return const Center(child: Text('error'));
               }
