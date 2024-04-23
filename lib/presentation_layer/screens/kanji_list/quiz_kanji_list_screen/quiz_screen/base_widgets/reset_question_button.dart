@@ -16,7 +16,7 @@ class ResetQuestionButton extends ConsumerWidget {
         style: ElevatedButton.styleFrom(
           minimumSize: const Size.fromHeight(60),
         ),
-        icon: const Icon(Icons.arrow_circle_right),
+        icon: const Icon(Icons.restore_page_rounded),
         label: const Text(
           "Reset question",
           textAlign: TextAlign.center,
