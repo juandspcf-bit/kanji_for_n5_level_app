@@ -4,10 +4,10 @@ import 'package:kanji_for_n5_level_app/main.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_details/quiz_kanji_details_screen/score_quiz_details/quiz_details_score_provider.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_details/quiz_kanji_details_screen/last_score_details_provider.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_details/quiz_kanji_details_screen/quiz_details_provider.dart';
-import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_details/quiz_kanji_details_screen/big_play_button.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_details/quiz_kanji_details_screen/score_quiz_details/quiz_score_details.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_details/quiz_kanji_details_screen/score_quiz_details/visible_lottie_file/buttoms_reset_quiz.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_details/quiz_kanji_details_screen/score_quiz_details/visible_lottie_file/visible_lottie_file_provider.dart';
+import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_details/tabs/example_audio_widget.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/navigation_bar_screens/sections_screen/section_screen_provider.dart';
 
 class QuestionScreenLandscape extends ConsumerWidget {
@@ -57,11 +57,15 @@ class QuestionScreenLandscape extends ConsumerWidget {
                   decoration: BoxDecoration(
                       color: Theme.of(context).colorScheme.primary,
                       borderRadius: BorderRadius.circular(100)),
-                  child: BigPlayButton(
+                  child: ExampleAudio(
+                    audioQuestion: quizDetailData.audioQuestion,
                     sizeOval: 90,
                     sizeIcon: 60,
+                    trackPlaylist: -1,
+                    indexPlaylist: -1,
+                    isInPlaylistPlaying: false,
                     statusStorage: quizDetailData.kanjiFromApi!.statusStorage,
-                    audioQuestion: quizDetailData.audioQuestion,
+                    onPrimaryColor: Theme.of(context).colorScheme.onPrimary,
                   ),
                 ),
               ],

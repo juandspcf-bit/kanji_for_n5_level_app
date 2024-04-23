@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kanji_for_n5_level_app/main.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_details/quiz_kanji_details_screen/quiz_details_provider.dart';
-import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_details/quiz_kanji_details_screen/big_play_button.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_details/quiz_kanji_details_screen/score_quiz_details/visible_lottie_file/buttoms_reset_quiz.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_details/quiz_kanji_details_screen/score_quiz_details/visible_lottie_file/visible_lottie_file_provider.dart';
+import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_details/tabs/example_audio_widget.dart';
 
 class QuestionScreenPortrait extends ConsumerWidget {
   String formatText(String japanese) {
@@ -47,11 +47,15 @@ class QuestionScreenPortrait extends ConsumerWidget {
               decoration: BoxDecoration(
                   color: Theme.of(context).colorScheme.primary,
                   borderRadius: BorderRadius.circular(100)),
-              child: BigPlayButton(
+              child: ExampleAudio(
+                audioQuestion: quizDetailData.audioQuestion,
                 sizeOval: 90,
                 sizeIcon: 60,
+                trackPlaylist: -1,
+                indexPlaylist: -1,
+                isInPlaylistPlaying: false,
                 statusStorage: quizDetailData.kanjiFromApi!.statusStorage,
-                audioQuestion: quizDetailData.audioQuestion,
+                onPrimaryColor: Theme.of(context).colorScheme.onPrimary,
               ),
             ),
             RadioListTile(

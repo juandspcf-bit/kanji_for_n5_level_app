@@ -8,19 +8,24 @@ import 'package:kanji_for_n5_level_app/providers/status_stored_provider.dart';
 class ExampleAudio extends StatefulWidget {
   const ExampleAudio({
     super.key,
-    required this.audioQuestion,
-    required this.track,
-    required this.index,
-    required this.isPlaying,
+    required this.sizeOval,
+    required this.sizeIcon,
     required this.statusStorage,
+    required this.audioQuestion,
+    required this.trackPlaylist,
+    required this.indexPlaylist,
+    required this.isInPlaylistPlaying,
     required this.onPrimaryColor,
   });
 
-  final String audioQuestion;
-  final int track;
-  final int index;
-  final bool isPlaying;
+  final double sizeOval;
+  final double sizeIcon;
   final StatusStorage statusStorage;
+  final String audioQuestion;
+  final int trackPlaylist;
+  final int indexPlaylist;
+  final bool isInPlaylistPlaying;
+
   final Color onPrimaryColor;
 
   @override
@@ -37,7 +42,7 @@ class _ExampleAudioState extends State<ExampleAudio> {
 
     iconStatus = Icon(
       Icons.play_arrow,
-      size: 30,
+      size: widget.sizeIcon,
       color: widget.onPrimaryColor,
     );
 
@@ -46,7 +51,7 @@ class _ExampleAudioState extends State<ExampleAudio> {
         setState(() {
           iconStatus = Icon(
             Icons.play_arrow,
-            size: 30,
+            size: widget.sizeIcon,
             color: widget.onPrimaryColor,
           );
         });
@@ -60,8 +65,8 @@ class _ExampleAudioState extends State<ExampleAudio> {
       builder: (context) {
         return ClipOval(
           child: SizedBox(
-            width: 50,
-            height: 50,
+            width: widget.sizeOval,
+            height: widget.sizeOval,
             child: Material(
               color: Theme.of(context).colorScheme.primary,
               child: InkWell(
@@ -82,7 +87,7 @@ class _ExampleAudioState extends State<ExampleAudio> {
                           setState(() {
                             iconStatus = Icon(
                               Icons.music_note,
-                              size: 30,
+                              size: widget.sizeIcon,
                               color: widget.onPrimaryColor,
                             );
                           });
@@ -96,7 +101,7 @@ class _ExampleAudioState extends State<ExampleAudio> {
                           player.stop();
                           iconStatus = Icon(
                             Icons.play_arrow,
-                            size: 30,
+                            size: widget.sizeIcon,
                             color: widget.onPrimaryColor,
                           );
                         });
@@ -109,10 +114,11 @@ class _ExampleAudioState extends State<ExampleAudio> {
                     );
                   });
                 },
-                child: widget.track == widget.index && widget.isPlaying
+                child: widget.trackPlaylist == widget.indexPlaylist &&
+                        widget.isInPlaylistPlaying
                     ? Icon(
                         Icons.music_note,
-                        size: 30,
+                        size: widget.sizeIcon,
                         color: widget.onPrimaryColor,
                       )
                     : iconStatus,
