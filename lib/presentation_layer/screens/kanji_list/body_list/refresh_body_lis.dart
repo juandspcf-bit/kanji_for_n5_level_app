@@ -1,10 +1,7 @@
 import 'package:connectivity_plus/connectivity_plus.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kanji_for_n5_level_app/config_files/screen_config.dart';
-import 'package:kanji_for_n5_level_app/main.dart';
 import 'package:kanji_for_n5_level_app/models/kanji_from_api.dart';
 import 'package:kanji_for_n5_level_app/models/secction_model.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_list/body_list/kanji_item.dart';
@@ -20,9 +17,13 @@ class RefreshBodyList extends ConsumerWidget {
   const RefreshBodyList({
     super.key,
     required this.statusResponse,
+    required this.kanjisFromApi,
+    required this.mainScreenData,
   });
 
   final int statusResponse;
+  final List<KanjiFromApi> kanjisFromApi;
+  final MainScreenData mainScreenData;
 
   bool isAnyProcessingData(List<KanjiFromApi> kanjisFromApi) {
     try {
@@ -171,15 +172,10 @@ class RefreshBodyList extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final orientation = MediaQuery.orientationOf(context);
     final widhtScreen = getScreenSizeWidth(context);
-
-    final mainScreenData = ref.watch(mainScreenProvider);
     final connectivityData = ref.watch(statusConnectionProvider);
-    final kanjiListData = ref.watch(kanjiListProvider);
-    logger.d('changed connection');
-    logger.d(
-        '$connectivityData  enable  ${isAnyProcessingData(kanjiListData.kanjiList) || connectivityData == ConnectivityResult.none}');
+
     return RefreshIndicator(
-      notificationPredicate: isAnyProcessingData(kanjiListData.kanjiList) ||
+      notificationPredicate: isAnyProcessingData(kanjisFromApi) ||
               connectivityData == ConnectivityResult.none
           ? (_) => false
           : (_) => true,
@@ -200,7 +196,7 @@ class RefreshBodyList extends ConsumerWidget {
       },
       child: _getListWidgets(
         context,
-        kanjiListData.kanjiList,
+        kanjisFromApi,
         mainScreenData,
         orientation,
         widhtScreen,

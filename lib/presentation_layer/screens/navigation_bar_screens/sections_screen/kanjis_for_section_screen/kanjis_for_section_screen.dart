@@ -8,7 +8,6 @@ import 'package:kanji_for_n5_level_app/presentation_layer/screens/navigation_bar
 import 'package:kanji_for_n5_level_app/providers/error_storing_database_status.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_list/body_list/kanjis_list_provider.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/main_screens/main_content_provider.dart';
-import 'package:kanji_for_n5_level_app/providers/status_connection_provider.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_list/body_list/body_list.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/common_widgets/my_dialogs.dart';
 
@@ -22,6 +21,9 @@ class KanjiForSectionScreen extends ConsumerWidget
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final mainScreenData = ref.watch(mainScreenProvider);
+    final kanjiListData = ref.watch(kanjiListProvider);
+
     if (ref.watch(errorDatabaseStatusProvider)) {
       errorDialog(
         context,
@@ -34,10 +36,6 @@ class KanjiForSectionScreen extends ConsumerWidget
         ' list and access the content again to see the updated content.',
       );
     }
-
-    ref.watch(statusConnectionProvider);
-    final mainScreenData = ref.watch(mainScreenProvider);
-    final kanjiListData = ref.watch(kanjiListProvider);
 
     ref.listen<KanjiListData>(kanjiListProvider, (previuos, current) {
       if (current.errorDownload.status) {
