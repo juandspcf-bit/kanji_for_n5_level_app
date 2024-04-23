@@ -47,7 +47,7 @@ class ExampleAudios extends ConsumerWidget {
                     data: data,
                   ),
                   trailing: ExampleAudio(
-                      example: examples[index],
+                      audioQuestion: examples[index].audio.mp3,
                       track: data.track,
                       index: index,
                       isPlaying: data.isPlaying,

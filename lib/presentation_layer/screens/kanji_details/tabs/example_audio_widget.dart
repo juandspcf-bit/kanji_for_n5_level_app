@@ -3,13 +3,12 @@ import 'dart:async';
 import 'package:assets_audio_player/assets_audio_player.dart';
 import 'package:flutter/material.dart';
 import 'package:kanji_for_n5_level_app/main.dart';
-import 'package:kanji_for_n5_level_app/models/kanji_from_api.dart';
 import 'package:kanji_for_n5_level_app/providers/status_stored_provider.dart';
 
 class ExampleAudio extends StatefulWidget {
   const ExampleAudio({
     super.key,
-    required this.example,
+    required this.audioQuestion,
     required this.track,
     required this.index,
     required this.isPlaying,
@@ -17,7 +16,7 @@ class ExampleAudio extends StatefulWidget {
     required this.onPrimaryColor,
   });
 
-  final Example example;
+  final String audioQuestion;
   final int track;
   final int index;
   final bool isPlaying;
@@ -73,8 +72,8 @@ class _ExampleAudioState extends State<ExampleAudio> {
                   player
                       .open(
                         widget.statusStorage == StatusStorage.onlyOnline
-                            ? Audio.network(widget.example.audio.mp3)
-                            : Audio.file(widget.example.audio.mp3),
+                            ? Audio.network(widget.audioQuestion)
+                            : Audio.file(widget.audioQuestion),
                       )
                       .whenComplete(() {
                         logger.d('is playing ${player.isPlaying.value}');
