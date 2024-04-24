@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kanji_for_n5_level_app/aplication_layer/auth_service/auth_service_contract.dart';
+import 'package:kanji_for_n5_level_app/aplication_layer/auth_service/auth_service_firebase.dart';
 import 'package:kanji_for_n5_level_app/main.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/main_screens/main_content_provider.dart';
 
@@ -153,10 +154,11 @@ class SingUpProvider extends Notifier<SingUpData> {
     setStatusFlow(StatusProcessingSignUpFlow.signUpProccessing);
 
     try {
-      final userUuid = await authService.singUpWithEmailAndPassword(
-        email: state.emailAddress,
-        password: state.password,
-      );
+      final userUuid =
+          await ref.read(authServiceProvider).singUpWithEmailAndPassword(
+                email: state.emailAddress,
+                password: state.password,
+              );
 
       if (userUuid == '') return;
 

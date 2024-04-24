@@ -7,6 +7,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:kanji_for_n5_level_app/aplication_layer/auth_service/auth_service_firebase.dart';
 import 'package:kanji_for_n5_level_app/main.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/common_screens/loading_screen.dart';
 import 'package:kanji_for_n5_level_app/providers/status_connection_provider.dart';
@@ -180,7 +181,7 @@ class _VerifyEmailEstate extends ConsumerState<VerifyEmail> {
                       onPressed: () {
                         try {
                           timer?.cancel();
-                          authService.singOut();
+                          ref.read(authServiceProvider).singOut();
                           ref
                               .read(mainScreenProvider.notifier)
                               .resetMainScreenState();

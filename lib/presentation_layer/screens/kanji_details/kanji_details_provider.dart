@@ -1,4 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:kanji_for_n5_level_app/aplication_layer/auth_service/auth_service_firebase.dart';
 import 'package:kanji_for_n5_level_app/main.dart';
 import 'package:kanji_for_n5_level_app/repositories_layer/local_database/db_favorites.dart';
 import 'package:kanji_for_n5_level_app/models/kanji_from_api.dart';
@@ -54,7 +55,7 @@ class KanjiDetailsProvider extends Notifier<KanjiDetailsData?> {
         await cloudDBService.insertFavoriteCloudDB(
           kanjiFromApi.kanjiCharacter,
           timeStamp,
-          authService.userUuid ?? '',
+          ref.read(authServiceProvider).userUuid ?? '',
         );
         await insertFavorite(kanjiFromApi.kanjiCharacter, timeStamp);
         final storedItems =
@@ -85,7 +86,7 @@ class KanjiDetailsProvider extends Notifier<KanjiDetailsData?> {
       try {
         await cloudDBService.deleteFavoriteCloudDB(
           kanjiFromApi.kanjiCharacter,
-          authService.userUuid ?? '',
+          ref.read(authServiceProvider).userUuid ?? '',
         );
         await deleteFavorite(kanjiFromApi.kanjiCharacter);
         ref.read(favoriteskanjisProvider.notifier).removeItem(kanjiFromApi);

@@ -1,5 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kanji_for_n5_level_app/aplication_layer/auth_service/auth_service_contract.dart';
+import 'package:kanji_for_n5_level_app/aplication_layer/auth_service/auth_service_firebase.dart';
 import 'package:kanji_for_n5_level_app/aplication_layer/auth_service/delete_user_exception.dart';
 import 'package:kanji_for_n5_level_app/main.dart';
 
@@ -43,7 +44,8 @@ class CloseAccountProvider extends Notifier<CloseAccountData> {
   }
 
   void deleteUser({required String password}) async {
-    if (authService.userUuid == null || authService.userUuid == '') {
+    if (ref.read(authServiceProvider).userUuid == null ||
+        ref.read(authServiceProvider).userUuid == '') {
       setDeleteRequestStatus(DeleteRequestStatus.noStarted);
       setDeleteUserStatus(DeleteUserStatus.error);
       return;
@@ -52,10 +54,11 @@ class CloseAccountProvider extends Notifier<CloseAccountData> {
     setDeleteRequestStatus(DeleteRequestStatus.process);
 
     try {
-      final (deleteUserStatus, uuid) = await authService.deleteUser(
-        password: password,
-        uuid: authService.userUuid ?? '',
-      );
+      final (deleteUserStatus, uuid) =
+          await ref.read(authServiceProvider).deleteUser(
+                password: password,
+                uuid: ref.read(authServiceProvider).userUuid ?? '',
+              );
 
       if (deleteUserStatus == DeleteUserStatus.error) {
         setDeleteRequestStatus(DeleteRequestStatus.noStarted);
@@ -69,7 +72,7 @@ class CloseAccountProvider extends Notifier<CloseAccountData> {
         await cloudDBService.deleteUserData(uuid);
       } on DeleteUserException catch (e) {
         localDBService.insertToTheDeleteErrorQueue(
-          authService.userUuid ?? '',
+          ref.read(authServiceProvider).userUuid ?? '',
           e.deleteErrorUserCode,
         );
         logger.e(e);
@@ -79,7 +82,7 @@ class CloseAccountProvider extends Notifier<CloseAccountData> {
         await cloudDBService.deleteQuizScoreData(uuid);
       } on DeleteUserException catch (e) {
         localDBService.insertToTheDeleteErrorQueue(
-          authService.userUuid ?? '',
+          ref.read(authServiceProvider).userUuid ?? '',
           e.deleteErrorUserCode,
         );
         logger.e(e);
@@ -89,7 +92,7 @@ class CloseAccountProvider extends Notifier<CloseAccountData> {
         await cloudDBService.deleteAllFavoritesCloudDB(uuid);
       } on DeleteUserException catch (e) {
         localDBService.insertToTheDeleteErrorQueue(
-          authService.userUuid ?? '',
+          ref.read(authServiceProvider).userUuid ?? '',
           e.deleteErrorUserCode,
         );
         logger.e(e);

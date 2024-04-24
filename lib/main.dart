@@ -6,8 +6,6 @@ import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:kanji_for_n5_level_app/aplication_layer/auth_service/auth_service_contract.dart';
-import 'package:kanji_for_n5_level_app/aplication_layer/auth_service/auth_service_firebase.dart';
 import 'package:kanji_for_n5_level_app/aplication_layer/repository_service/cloud_repo/cloud_db_contract.dart';
 import 'package:kanji_for_n5_level_app/aplication_layer/repository_service/cloud_repo/cloud_db_firestore_impl.dart';
 import 'package:kanji_for_n5_level_app/aplication_layer/repository_service/local_repo/db_contract.dart';
@@ -31,8 +29,6 @@ final LocalDBService localDBService = SqliteDBService();
 
 final dio = Dio();
 final logger = Logger();
-
-final AuthService authService = FirebaseAuthService();
 
 var kColorScheme = ColorScheme.fromSeed(
   seedColor: const Color.fromARGB(255, 96, 59, 181),

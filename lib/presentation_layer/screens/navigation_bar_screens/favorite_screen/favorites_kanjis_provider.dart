@@ -1,4 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:kanji_for_n5_level_app/aplication_layer/auth_service/auth_service_firebase.dart';
 import 'package:kanji_for_n5_level_app/main.dart';
 import 'package:kanji_for_n5_level_app/models/favorite.dart';
 import 'package:kanji_for_n5_level_app/models/secction_model.dart';
@@ -92,8 +93,8 @@ class FavoritesListProvider extends Notifier<FavoritesKanjisData> {
     );
     List<KanjiFromApi> storedKanjis =
         await ref.read(mainScreenProvider.notifier).loadStoredKanjis();
-    final favoritesKanjisFromDB =
-        await localDBService.loadFavoritesDatabase(authService.userUuid ?? '');
+    final favoritesKanjisFromDB = await localDBService
+        .loadFavoritesDatabase(ref.read(authServiceProvider).userUuid ?? '');
     if (favoritesKanjisFromDB.isEmpty) {
       state = const FavoritesKanjisData(
         favoritesKanjisFromApi: [],

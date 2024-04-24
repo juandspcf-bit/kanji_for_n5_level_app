@@ -1,6 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kanji_for_n5_level_app/aplication_layer/auth_service/auth_service_contract.dart';
-import 'package:kanji_for_n5_level_app/main.dart';
+import 'package:kanji_for_n5_level_app/aplication_layer/auth_service/auth_service_firebase.dart';
 
 class ModalEmailResetProvider extends Notifier<ModalEmailResetData> {
   @override
@@ -11,7 +11,9 @@ class ModalEmailResetProvider extends Notifier<ModalEmailResetData> {
 
   Future<StatusResetPasswordRequest> sendPasswordResetEmail() async {
     setRequestStatus(StatusSendingRequest.sending);
-    final result = await authService.sendPasswordResetEmail(email: state.email);
+    final result = await ref
+        .read(authServiceProvider)
+        .sendPasswordResetEmail(email: state.email);
     setRequestStatus(StatusSendingRequest.finished);
     return result;
   }

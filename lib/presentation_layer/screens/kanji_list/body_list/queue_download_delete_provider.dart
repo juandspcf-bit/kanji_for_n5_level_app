@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:kanji_for_n5_level_app/aplication_layer/auth_service/auth_service_firebase.dart';
 import 'package:kanji_for_n5_level_app/main.dart';
 import 'package:kanji_for_n5_level_app/models/kanji_from_api.dart';
 import 'package:kanji_for_n5_level_app/providers/status_stored_provider.dart';
@@ -85,8 +86,8 @@ class QueueDownloadDeleteProvider extends Notifier<QueueData> {
         ),
       );
 
-      final kanjiFromApiStored =
-          await downloadKanji.storeKanjiToLocalDatabase();
+      final kanjiFromApiStored = await downloadKanji.storeKanjiToLocalDatabase(
+          ref.read(authServiceProvider).userUuid ?? '');
 
       if (kanjiFromApiStored == null) {
         updateKanjisOnVisibleList(kanjiFromApiOnline);
@@ -136,7 +137,8 @@ class QueueDownloadDeleteProvider extends Notifier<QueueData> {
 
       kanjiFromApiOnline = await updateKanjiWithOnliVersion(kanjiFromApiStored);
 
-      await deleteKanji.deleteKanjiFromLocalDatabase();
+      await deleteKanji.deleteKanjiFromLocalDatabase(
+          ref.read(authServiceProvider).userUuid ?? '');
 
       logger.d('success storing to db');
       ref.read(storedKanjisProvider.notifier).deleteItem(kanjiFromApiStored);
@@ -223,10 +225,10 @@ class DownloadKanji {
     required this.kanjiFromApi,
   });
 
-  Future<KanjiFromApi?> storeKanjiToLocalDatabase() async {
+  Future<KanjiFromApi?> storeKanjiToLocalDatabase(uuid) async {
     final kanjiFromApiStored = await localDBService.storeKanjiToLocalDatabase(
       kanjiFromApi,
-      authService.userUuid ?? '',
+      uuid,
     );
 
     if (kanjiFromApiStored == null) return null;
@@ -244,10 +246,10 @@ class DeleteKanji {
     required this.kanjiFromApi,
   });
 
-  Future<void> deleteKanjiFromLocalDatabase() async {
+  Future<void> deleteKanjiFromLocalDatabase(uuid) async {
     await localDBService.deleteKanjiFromLocalDatabase(
       kanjiFromApi,
-      authService.userUuid ?? '',
+      uuid,
     );
   }
 }

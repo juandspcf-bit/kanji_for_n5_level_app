@@ -4,8 +4,8 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:kanji_for_n5_level_app/aplication_layer/auth_service/auth_service_firebase.dart';
 import 'package:kanji_for_n5_level_app/config_files/screen_config.dart';
-import 'package:kanji_for_n5_level_app/main.dart';
 import 'package:kanji_for_n5_level_app/providers/status_connection_provider.dart';
 import 'package:kanji_for_n5_level_app/repositories_layer/local_database/db_quiz_data_functions/db_quiz_data_functions.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/account_details/account_details.dart';
@@ -21,8 +21,8 @@ import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_list/bod
 class MainContent extends ConsumerWidget with StatusDBStoringDialogs {
   const MainContent({super.key});
 
-  Widget selectScreen(ScreenSelection selectedPageIndex) {
-    getAllQuizSectionData(authService.userUuid ?? '');
+  Widget selectScreen(ScreenSelection selectedPageIndex, WidgetRef ref) {
+    getAllQuizSectionData(ref.read(authServiceProvider).userUuid ?? '');
 
     switch (selectedPageIndex) {
       case ScreenSelection.kanjiSections:
@@ -150,12 +150,12 @@ class MainContent extends ConsumerWidget with StatusDBStoringDialogs {
             )
           : null,
       body: bottomNavigationBar
-          ? selectScreen(mainScreenData.selection)
+          ? selectScreen(mainScreenData.selection, ref)
           : Row(
               children: [
                 const CustomNavigationRail(),
                 Expanded(
-                  child: selectScreen(mainScreenData.selection),
+                  child: selectScreen(mainScreenData.selection, ref),
                 )
               ],
             ),

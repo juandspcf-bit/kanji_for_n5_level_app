@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kanji_for_n5_level_app/aplication_layer/auth_service/auth_service_contract.dart';
-import 'package:kanji_for_n5_level_app/main.dart';
+import 'package:kanji_for_n5_level_app/aplication_layer/auth_service/auth_service_firebase.dart';
 
 class LoginProvider extends Notifier<LogingData> {
   @override
@@ -97,8 +97,10 @@ class LoginProvider extends Notifier<LogingData> {
   Future<StatusLogingRequest> toLoging() async {
     setStatusLoggingFlow(StatusProcessingLoggingFlow.logging);
 
-    final result = await authService.singInWithEmailAndPassword(
-        email: state.email, password: state.password);
+    final result = await ref
+        .read(authServiceProvider)
+        .singInWithEmailAndPassword(
+            email: state.email, password: state.password);
     if (result == StatusLogingRequest.success) {
     } else {
       setStatusLoggingFlow(StatusProcessingLoggingFlow.form);

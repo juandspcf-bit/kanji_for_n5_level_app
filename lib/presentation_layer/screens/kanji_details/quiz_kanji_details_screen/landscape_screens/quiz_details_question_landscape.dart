@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:kanji_for_n5_level_app/aplication_layer/auth_service/auth_service_firebase.dart';
 import 'package:kanji_for_n5_level_app/main.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_details/quiz_kanji_details_screen/score_quiz_details/quiz_details_score_provider.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_details/quiz_kanji_details_screen/last_score_details_provider.dart';
@@ -132,7 +133,7 @@ class QuestionScreenLandscape extends ConsumerWidget {
                           .read(lastScoreDetailsProvider.notifier)
                           .setFinishedQuiz(
                             section: ref.read(sectionProvider),
-                            uuid: authService.userUuid ?? '',
+                            uuid: ref.read(authServiceProvider).userUuid ?? '',
                             kanjiCharacter:
                                 quizDetailData.kanjiFromApi!.kanjiCharacter,
                             countCorrects: scores.correctAnswers.length,

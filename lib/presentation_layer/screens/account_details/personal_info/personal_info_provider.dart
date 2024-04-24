@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:kanji_for_n5_level_app/aplication_layer/auth_service/auth_service_firebase.dart';
 import 'package:kanji_for_n5_level_app/main.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/main_screens/main_content_provider.dart';
 import 'package:kanji_for_n5_level_app/utils/networking/networking.dart';
@@ -32,7 +33,7 @@ class PersonalInfoProvider extends Notifier<PersonalInfoData> {
   }
 
   Future<void> getInitialPersonalInfoData() async {
-    final uuid = authService.userUuid;
+    final uuid = ref.read(authServiceProvider).userUuid;
 
     setFetchingStatus(PersonalInfoFetchinStatus.processing);
 
@@ -177,7 +178,7 @@ class PersonalInfoProvider extends Notifier<PersonalInfoData> {
   }
 
   void updateUserData() async {
-    final userUuid = authService.userUuid;
+    final userUuid = ref.read(authServiceProvider).userUuid;
     if (userUuid == null) {
       setUpdatingStatus(PersonalInfoUpdatingStatus.error);
       return;
@@ -217,7 +218,8 @@ class PersonalInfoProvider extends Notifier<PersonalInfoData> {
     if (personalInfoData.pathProfileTemporal.isNotEmpty) {
       try {
         avatarLink = await storageService.updateFile(
-            personalInfoData.pathProfileTemporal, authService.userUuid ?? '');
+            personalInfoData.pathProfileTemporal,
+            ref.read(authServiceProvider).userUuid ?? '');
         setProfilePath(avatarLink);
         ref.read(mainScreenProvider.notifier).setAvatarLink(avatarLink);
 

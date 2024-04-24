@@ -1,7 +1,7 @@
 import 'package:animations/animations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:kanji_for_n5_level_app/main.dart';
+import 'package:kanji_for_n5_level_app/aplication_layer/auth_service/auth_service_firebase.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_list/body_list/kanjis_list_provider.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/navigation_bar_screens/sections_screen/section_screen_provider.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_list/quiz_kanji_list_screen/kanji_quiz_screen.dart';
@@ -42,7 +42,7 @@ class KanjiSectionsQuizAnimated extends ConsumerWidget {
                     kanjiListData.kanjiList.length, kanjiListData.kanjiList);
             ref.read(lastScoreKanjiQuizProvider.notifier).getKanjiQuizLastScore(
                   ref.read(sectionProvider),
-                  authService.userUuid ?? '',
+                  ref.read(authServiceProvider).userUuid ?? '',
                 );
             openContainer();
           },

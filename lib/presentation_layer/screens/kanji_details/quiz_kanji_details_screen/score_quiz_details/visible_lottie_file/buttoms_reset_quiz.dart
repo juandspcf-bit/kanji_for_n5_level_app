@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:kanji_for_n5_level_app/main.dart';
+import 'package:kanji_for_n5_level_app/aplication_layer/auth_service/auth_service_firebase.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_details/quiz_kanji_details_screen/flash_card/flash_card_quiz_provider.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_details/quiz_kanji_details_screen/last_score_details_provider.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_details/quiz_kanji_details_screen/last_score_flash_card_provider.dart';
@@ -62,7 +62,7 @@ class ToQuizSelectorButton extends ConsumerWidget {
           ref.read(lastScoreFlashCardProvider.notifier).setFinishedFlashCard(
                 kanjiCharacter: kanjiFromApi.kanjiCharacter,
                 section: kanjiFromApi.section,
-                uuid: authService.userUuid ?? '',
+                uuid: ref.read(authServiceProvider).userUuid ?? '',
                 countUnWatched: ref
                     .read(flashCardProvider.notifier)
                     .answers
@@ -74,7 +74,7 @@ class ToQuizSelectorButton extends ConsumerWidget {
 
           ref.read(lastScoreDetailsProvider.notifier).setFinishedQuiz(
                 section: ref.read(sectionProvider),
-                uuid: authService.userUuid ?? '',
+                uuid: ref.read(authServiceProvider).userUuid ?? '',
                 kanjiCharacter: quizDetailsData.kanjiFromApi!.kanjiCharacter,
                 countCorrects: scores.correctAnswers.length,
                 countIncorrects: scores.incorrectAnwers.length,

@@ -18,7 +18,7 @@ class AuthFlow extends ConsumerWidget {
         builder: (ctx, snapShot) {
           final user = snapShot.data;
           if (user != null) {
-            authService.setLoggedUser();
+            ref.read(authServiceProvider).setLoggedUser();
             return const VerifyEmail();
           } else {
             return LoginFormScreen();

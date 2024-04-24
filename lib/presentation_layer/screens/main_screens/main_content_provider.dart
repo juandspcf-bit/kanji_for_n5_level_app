@@ -4,6 +4,7 @@ import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:kanji_for_n5_level_app/aplication_layer/auth_service/auth_service_firebase.dart';
 import 'package:kanji_for_n5_level_app/models/favorite.dart';
 import 'package:kanji_for_n5_level_app/main.dart';
 import 'package:kanji_for_n5_level_app/models/kanji_from_api.dart';
@@ -88,7 +89,7 @@ class MainScreenProvider extends Notifier<MainScreenData> {
     } else {
       ref
           .read(progressTimelineProvider.notifier)
-          .getAllQuizSectionData(authService.userUuid ?? '');
+          .getAllQuizSectionData(ref.read(authServiceProvider).userUuid ?? '');
       ref
           .read(mainScreenProvider.notifier)
           .setScreen(ScreenSelection.progressTimeLine);
@@ -119,22 +120,22 @@ class MainScreenProvider extends Notifier<MainScreenData> {
         listStoresKanjis.isEmpty ? await loadStoredKanjis() : listStoresKanjis;
 
     try {
-      final quizScoreData =
-          await cloudDBService.loadQuizScoreData(authService.userUuid ?? '');
+      final quizScoreData = await cloudDBService
+          .loadQuizScoreData(ref.read(authServiceProvider).userUuid ?? '');
       localDBService.updateQuizScoreFromCloud(
-          quizScoreData, authService.userUuid ?? '');
+          quizScoreData, ref.read(authServiceProvider).userUuid ?? '');
     } catch (e) {
       logger.e('error loading quiz score $e');
     }
 
     List<Favorite> favoritesKanjis = [];
     try {
-      favoritesKanjis =
-          await cloudDBService.loadFavoritesCloudDB(authService.userUuid ?? '');
+      favoritesKanjis = await cloudDBService
+          .loadFavoritesCloudDB(ref.read(authServiceProvider).userUuid ?? '');
       await localDBService.storeAllFavoritesFromCloud(favoritesKanjis);
     } catch (e) {
       favoritesKanjis = await localDBService
-          .loadFavoritesDatabase(authService.userUuid ?? '');
+          .loadFavoritesDatabase(ref.read(authServiceProvider).userUuid ?? '');
       logger.e('error loading favorites $e');
     }
 
@@ -156,8 +157,8 @@ class MainScreenProvider extends Notifier<MainScreenData> {
 
     if (kanjiFavoritesList.isNotEmpty) return;
 
-    final favoritesKanjis =
-        await localDBService.loadFavoritesDatabase(authService.userUuid ?? '');
+    final favoritesKanjis = await localDBService
+        .loadFavoritesDatabase(ref.read(authServiceProvider).userUuid ?? '');
     ref
         .read(favoriteskanjisProvider.notifier)
         .setInitialFavoritesWithNoInternetConnection(
@@ -183,7 +184,7 @@ class MainScreenProvider extends Notifier<MainScreenData> {
   }
 
   Future<void> getAppBarData() async {
-    final uuid = authService.userUuid;
+    final uuid = ref.read(authServiceProvider).userUuid;
 
     final userData = await cloudDBService.readUserData(uuid ?? '');
     final fullName = '${userData.firstName} ${userData.lastName}';
@@ -221,8 +222,8 @@ class MainScreenProvider extends Notifier<MainScreenData> {
     if (state.avatarLink == '' &&
         state.pathAvatar == '' &&
         state.fullName == '') {
-      final listUser =
-          await localDBService.readUserData(authService.userUuid ?? '');
+      final listUser = await localDBService
+          .readUserData(ref.read(authServiceProvider).userUuid ?? '');
       if (listUser.isNotEmpty) {
         final user = listUser.first;
         state = MainScreenData(
