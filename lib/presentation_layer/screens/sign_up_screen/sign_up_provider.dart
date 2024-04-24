@@ -169,8 +169,8 @@ class SingUpProvider extends Notifier<SingUpData> {
         'lastName': state.lastName,
         'uuid': userUuid,
       };
-      await cloudDBService.addUserData(userData);
-      await cloudDBService.createQuizScoreMap(userUuid);
+      await ref.read(cloudDBServiceProvider).addUserData(userData);
+      await ref.read(cloudDBServiceProvider).createQuizScoreMap(userUuid);
 
       if (state.pathProfileUser.isNotEmpty) {
         try {

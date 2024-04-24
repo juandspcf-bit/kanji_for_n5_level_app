@@ -120,7 +120,8 @@ class MainScreenProvider extends Notifier<MainScreenData> {
         listStoresKanjis.isEmpty ? await loadStoredKanjis() : listStoresKanjis;
 
     try {
-      final quizScoreData = await cloudDBService
+      final quizScoreData = await ref
+          .read(cloudDBServiceProvider)
           .loadQuizScoreData(ref.read(authServiceProvider).userUuid ?? '');
       localDBService.updateQuizScoreFromCloud(
           quizScoreData, ref.read(authServiceProvider).userUuid ?? '');
@@ -130,7 +131,8 @@ class MainScreenProvider extends Notifier<MainScreenData> {
 
     List<Favorite> favoritesKanjis = [];
     try {
-      favoritesKanjis = await cloudDBService
+      favoritesKanjis = await ref
+          .read(cloudDBServiceProvider)
           .loadFavoritesCloudDB(ref.read(authServiceProvider).userUuid ?? '');
       await localDBService.storeAllFavoritesFromCloud(favoritesKanjis);
     } catch (e) {
@@ -186,7 +188,8 @@ class MainScreenProvider extends Notifier<MainScreenData> {
   Future<void> getAppBarData() async {
     final uuid = ref.read(authServiceProvider).userUuid;
 
-    final userData = await cloudDBService.readUserData(uuid ?? '');
+    final userData =
+        await ref.read(cloudDBServiceProvider).readUserData(uuid ?? '');
     final fullName = '${userData.firstName} ${userData.lastName}';
 
     try {

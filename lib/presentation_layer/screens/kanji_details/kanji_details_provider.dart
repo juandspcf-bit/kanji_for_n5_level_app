@@ -52,11 +52,11 @@ class KanjiDetailsProvider extends Notifier<KanjiDetailsData?> {
     if (!queryKanji) {
       try {
         final timeStamp = DateTime.now().millisecondsSinceEpoch;
-        await cloudDBService.insertFavoriteCloudDB(
-          kanjiFromApi.kanjiCharacter,
-          timeStamp,
-          ref.read(authServiceProvider).userUuid ?? '',
-        );
+        await ref.read(cloudDBServiceProvider).insertFavoriteCloudDB(
+              kanjiFromApi.kanjiCharacter,
+              timeStamp,
+              ref.read(authServiceProvider).userUuid ?? '',
+            );
         await insertFavorite(kanjiFromApi.kanjiCharacter, timeStamp);
         final storedItems =
             ref.read(storedKanjisProvider.notifier).getStoresItems();
@@ -84,10 +84,10 @@ class KanjiDetailsProvider extends Notifier<KanjiDetailsData?> {
       }
     } else {
       try {
-        await cloudDBService.deleteFavoriteCloudDB(
-          kanjiFromApi.kanjiCharacter,
-          ref.read(authServiceProvider).userUuid ?? '',
-        );
+        await ref.read(cloudDBServiceProvider).deleteFavoriteCloudDB(
+              kanjiFromApi.kanjiCharacter,
+              ref.read(authServiceProvider).userUuid ?? '',
+            );
         await deleteFavorite(kanjiFromApi.kanjiCharacter);
         ref.read(favoriteskanjisProvider.notifier).removeItem(kanjiFromApi);
         Future.delayed(

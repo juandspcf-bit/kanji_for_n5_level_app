@@ -6,8 +6,6 @@ import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:kanji_for_n5_level_app/aplication_layer/repository_service/cloud_repo/cloud_db_contract.dart';
-import 'package:kanji_for_n5_level_app/aplication_layer/repository_service/cloud_repo/cloud_db_firestore_impl.dart';
 import 'package:kanji_for_n5_level_app/aplication_layer/repository_service/local_repo/db_contract.dart';
 import 'package:kanji_for_n5_level_app/aplication_layer/repository_service/local_repo/db_sqflite_impl.dart';
 import 'package:kanji_for_n5_level_app/aplication_layer/repository_service/storage_repo/storage_contract.dart';
@@ -20,7 +18,6 @@ import 'firebase_options.dart';
 
 final dbFirebase = FirebaseFirestore.instance;
 
-final CloudDBService cloudDBService = FireStoreDBService();
 final StorageService storageService = FirebaseStorageService();
 final LocalDBService localDBService = SqliteDBService();
 

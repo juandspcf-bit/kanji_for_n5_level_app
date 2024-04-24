@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:kanji_for_n5_level_app/aplication_layer/services.dart';
 import 'package:kanji_for_n5_level_app/main.dart';
 import 'package:kanji_for_n5_level_app/models/single_quiz_audio_example_data.dart';
 
@@ -47,7 +48,7 @@ class LastScoreDetailsProvider
   }) async {
     state = const AsyncLoading();
     try {
-      await cloudDBService.updateQuizDetailScore(
+      await ref.read(cloudDBServiceProvider).updateQuizDetailScore(
           kanjiCharacter,
           countCorrects == 0 && countOmited == 0,
           true,

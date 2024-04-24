@@ -45,7 +45,8 @@ class PersonalInfoProvider extends Notifier<PersonalInfoData> {
     }
 
     try {
-      final user = await cloudDBService.readUserData(uuid ?? '');
+      final user =
+          await ref.read(cloudDBServiceProvider).readUserData(uuid ?? '');
       logger.d(user);
 
       state = PersonalInfoData(
@@ -201,7 +202,7 @@ class PersonalInfoProvider extends Notifier<PersonalInfoData> {
     }
 
     try {
-      await cloudDBService.updateUserData(userUuid, {
+      await ref.read(cloudDBServiceProvider).updateUserData(userUuid, {
         'birthday': state.birthdate,
         'firstName': state.firstName,
         'lastName': state.lastName,

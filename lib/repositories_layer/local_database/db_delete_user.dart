@@ -1,6 +1,5 @@
 import 'package:flutter/foundation.dart';
 import 'package:kanji_for_n5_level_app/aplication_layer/auth_service/delete_user_exception.dart';
-import 'package:kanji_for_n5_level_app/main.dart';
 import 'package:kanji_for_n5_level_app/repositories_layer/local_database/db_definitions.dart';
 import 'package:kanji_for_n5_level_app/repositories_layer/local_database/db_deleting_data.dart';
 
@@ -71,21 +70,21 @@ Future<void> deleteUserQueueSqlite() async {
     final errorMessage = operation['errorMessage'] as String;
 
     if (errorMessage == DeleteErrorUserCode.deleteErrorUserData.toString()) {
-      await cloudDBService.deleteUserData(uuid);
+      //await ref.read(cloudDBServiceProvider).deleteUserData(uuid);
       await db.rawDelete(
           'DELETE FROM delete_user_queue WHERE uuid = ? AND errorMessage = ?',
           [uuid, errorMessage]);
     }
 
     if (errorMessage == DeleteErrorUserCode.deleteErrorQuizData.toString()) {
-      await cloudDBService.deleteQuizScoreData(uuid);
+      //await cloudDBService.deleteQuizScoreData(uuid);
       await db.rawDelete(
           'DELETE FROM delete_user_queue WHERE uuid = ? AND errorMessage = ?',
           [uuid, errorMessage]);
     }
 
     if (errorMessage == DeleteErrorUserCode.deleteErrorFavorites.toString()) {
-      await cloudDBService.deleteAllFavoritesCloudDB(uuid);
+      //await cloudDBService.deleteAllFavoritesCloudDB(uuid);
       await db.rawDelete(
           'DELETE FROM delete_user_queue WHERE uuid = ? AND errorMessage = ?',
           [uuid, errorMessage]);

@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:kanji_for_n5_level_app/aplication_layer/services.dart';
 import 'package:kanji_for_n5_level_app/main.dart';
 import 'package:kanji_for_n5_level_app/models/single_quiz_flash_card_data.dart';
 
@@ -42,12 +43,12 @@ class LastScoreFlashCardProvider
     required int countUnWatched,
   }) async {
     state = const AsyncLoading();
-    await cloudDBService.updateQuizFlashCardScore(
-      kanjiCharacter,
-      countUnWatched == 0,
-      section,
-      uuid,
-    );
+    await ref.read(cloudDBServiceProvider).updateQuizFlashCardScore(
+          kanjiCharacter,
+          countUnWatched == 0,
+          section,
+          uuid,
+        );
 
     if (state.value?.section == -1) {
       await localDBService.insertSingleFlashCardDataDB(

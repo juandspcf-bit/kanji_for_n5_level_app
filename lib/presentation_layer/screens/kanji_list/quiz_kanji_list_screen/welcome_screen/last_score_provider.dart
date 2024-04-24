@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:kanji_for_n5_level_app/aplication_layer/services.dart';
 import 'package:kanji_for_n5_level_app/main.dart';
 import 'package:kanji_for_n5_level_app/models/single_quiz_section_data.dart';
 
@@ -35,15 +36,15 @@ class LastScoreKanjiQuizProvider extends AsyncNotifier<SingleQuizSectionData> {
   }) async {
     state = const AsyncLoading();
     try {
-      await cloudDBService.updateQuizSectionScore(
-        countIncorrects == 0 && countOmited == 0,
-        true,
-        countCorrects,
-        countIncorrects,
-        countOmited,
-        section,
-        uuid,
-      );
+      await ref.read(cloudDBServiceProvider).updateQuizSectionScore(
+            countIncorrects == 0 && countOmited == 0,
+            true,
+            countCorrects,
+            countIncorrects,
+            countOmited,
+            section,
+            uuid,
+          );
       if (state.value?.section == -1) {
         await localDBService.insertSingleQuizSectionData(
             section, uuid, countCorrects, countIncorrects, countOmited);

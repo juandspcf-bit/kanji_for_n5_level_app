@@ -69,7 +69,7 @@ class CloseAccountProvider extends Notifier<CloseAccountData> {
       await localDBService.deleteUserData(uuid);
 
       try {
-        await cloudDBService.deleteUserData(uuid);
+        await ref.read(cloudDBServiceProvider).deleteUserData(uuid);
       } on DeleteUserException catch (e) {
         localDBService.insertToTheDeleteErrorQueue(
           ref.read(authServiceProvider).userUuid ?? '',
@@ -79,7 +79,7 @@ class CloseAccountProvider extends Notifier<CloseAccountData> {
       }
 
       try {
-        await cloudDBService.deleteQuizScoreData(uuid);
+        await ref.read(cloudDBServiceProvider).deleteQuizScoreData(uuid);
       } on DeleteUserException catch (e) {
         localDBService.insertToTheDeleteErrorQueue(
           ref.read(authServiceProvider).userUuid ?? '',
@@ -89,7 +89,7 @@ class CloseAccountProvider extends Notifier<CloseAccountData> {
       }
 
       try {
-        await cloudDBService.deleteAllFavoritesCloudDB(uuid);
+        await ref.read(cloudDBServiceProvider).deleteAllFavoritesCloudDB(uuid);
       } on DeleteUserException catch (e) {
         localDBService.insertToTheDeleteErrorQueue(
           ref.read(authServiceProvider).userUuid ?? '',
