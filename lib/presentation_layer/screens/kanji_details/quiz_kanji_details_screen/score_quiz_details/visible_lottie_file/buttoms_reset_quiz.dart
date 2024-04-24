@@ -89,7 +89,7 @@ class ToQuizSelectorButton extends ConsumerWidget {
       style: ElevatedButton.styleFrom(
         minimumSize: const Size.fromHeight(40),
       ),
-      icon: const Icon(Icons.arrow_circle_right),
+      icon: const Icon(Icons.home),
       label: const Text('To quiz type selector'),
     );
   }
