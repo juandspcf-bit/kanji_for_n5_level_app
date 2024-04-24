@@ -1,4 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:kanji_for_n5_level_app/aplication_layer/services.dart';
 import 'package:kanji_for_n5_level_app/main.dart';
 
 class ProgressTimelineProvider extends Notifier<ProgressTimeLineData> {
@@ -16,7 +17,8 @@ class ProgressTimelineProvider extends Notifier<ProgressTimeLineData> {
   void getAllQuizSectionData(
     String uuid,
   ) async {
-    final data = await localDBService.getAllQuizSectionDBData(uuid);
+    final data =
+        await ref.read(localDBServiceProvider).getAllQuizSectionDBData(uuid);
     logger.d(data.allAudioQuizCorrectStatusList);
     logger.d(data.allAudioQuizFinishedStatusList);
     state = ProgressTimeLineData(

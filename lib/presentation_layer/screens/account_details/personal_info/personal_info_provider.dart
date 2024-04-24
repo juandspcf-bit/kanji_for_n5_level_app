@@ -189,7 +189,8 @@ class PersonalInfoProvider extends Notifier<PersonalInfoData> {
 
     setUpdatingStatus(PersonalInfoUpdatingStatus.updating);
 
-    final cachedUserDataList = await localDBService.readUserData(userUuid);
+    final cachedUserDataList =
+        await ref.read(localDBServiceProvider).readUserData(userUuid);
 
     String fullName = '';
     String avatarLink = '';
@@ -241,7 +242,7 @@ class PersonalInfoProvider extends Notifier<PersonalInfoData> {
     }
 
     if (personalInfoData.pathProfileTemporal.isNotEmpty) {
-      await localDBService.insertUserData({
+      await ref.read(localDBServiceProvider).insertUserData({
         'uuid': userUuid,
         'fullName': fullName,
         'linkAvatar': avatarLink,

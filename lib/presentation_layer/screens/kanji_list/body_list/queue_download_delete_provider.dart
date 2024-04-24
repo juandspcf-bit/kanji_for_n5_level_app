@@ -85,8 +85,14 @@ class QueueDownloadDeleteProvider extends Notifier<QueueData> {
         ),
       );
 
-      final kanjiFromApiStored = await downloadKanji.storeKanjiToLocalDatabase(
-          ref.read(authServiceProvider).userUuid ?? '');
+/*       final kanjiFromApiStored = await downloadKanji.storeKanjiToLocalDatabase(
+          ref.read(authServiceProvider).userUuid ?? '', ref); */
+
+      final kanjiFromApiStored =
+          await ref.read(localDBServiceProvider).storeKanjiToLocalDatabase(
+                kanjiFromApiOnline,
+                ref.read(authServiceProvider).userUuid ?? '',
+              );
 
       if (kanjiFromApiStored == null) {
         updateKanjisOnVisibleList(kanjiFromApiOnline);
@@ -139,8 +145,13 @@ class QueueDownloadDeleteProvider extends Notifier<QueueData> {
           .requestSingleKanjiToApi(
               kanjiFromApiStored.kanjiCharacter, kanjiFromApiStored.section);
 
-      await deleteKanji.deleteKanjiFromLocalDatabase(
-          ref.read(authServiceProvider).userUuid ?? '');
+/*       await deleteKanji.deleteKanjiFromLocalDatabase(
+          ref.read(authServiceProvider).userUuid ?? '', ref); */
+
+      await ref.read(localDBServiceProvider).deleteKanjiFromLocalDatabase(
+            kanjiFromApiStored,
+            ref.read(authServiceProvider).userUuid ?? '',
+          );
 
       logger.d('success storing to db');
       ref.read(storedKanjisProvider.notifier).deleteItem(kanjiFromApiStored);
@@ -226,17 +237,6 @@ class DownloadKanji {
     required this.kanjiCharacter,
     required this.kanjiFromApi,
   });
-
-  Future<KanjiFromApi?> storeKanjiToLocalDatabase(uuid) async {
-    final kanjiFromApiStored = await localDBService.storeKanjiToLocalDatabase(
-      kanjiFromApi,
-      uuid,
-    );
-
-    if (kanjiFromApiStored == null) return null;
-
-    return kanjiFromApiStored;
-  }
 }
 
 class DeleteKanji {
@@ -247,11 +247,4 @@ class DeleteKanji {
     required this.kanjiCharacter,
     required this.kanjiFromApi,
   });
-
-  Future<void> deleteKanjiFromLocalDatabase(uuid) async {
-    await localDBService.deleteKanjiFromLocalDatabase(
-      kanjiFromApi,
-      uuid,
-    );
-  }
 }

@@ -22,7 +22,9 @@ class LastScoreKanjiQuizProvider extends AsyncNotifier<SingleQuizSectionData> {
     state = const AsyncLoading();
     state = await AsyncValue.guard(
       (() {
-        return localDBService.getKanjiQuizLastScore(section, uuid);
+        return ref
+            .read(localDBServiceProvider)
+            .getKanjiQuizLastScore(section, uuid);
       }),
     );
   }
@@ -46,22 +48,24 @@ class LastScoreKanjiQuizProvider extends AsyncNotifier<SingleQuizSectionData> {
             uuid,
           );
       if (state.value?.section == -1) {
-        await localDBService.insertSingleQuizSectionData(
+        await ref.read(localDBServiceProvider).insertSingleQuizSectionData(
             section, uuid, countCorrects, countIncorrects, countOmited);
         return;
       }
 
-      await localDBService.setKanjiQuizLastScore(
-        section: section,
-        uuid: uuid,
-        countCorrects: countCorrects,
-        countIncorrects: countIncorrects,
-        countOmited: countOmited,
-      );
+      await ref.read(localDBServiceProvider).setKanjiQuizLastScore(
+            section: section,
+            uuid: uuid,
+            countCorrects: countCorrects,
+            countIncorrects: countIncorrects,
+            countOmited: countOmited,
+          );
 
       state = await AsyncValue.guard(
         (() {
-          return localDBService.getKanjiQuizLastScore(section, uuid);
+          return ref
+              .read(localDBServiceProvider)
+              .getKanjiQuizLastScore(section, uuid);
         }),
       );
     } catch (e) {

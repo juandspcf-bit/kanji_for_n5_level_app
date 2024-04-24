@@ -66,35 +66,35 @@ class CloseAccountProvider extends Notifier<CloseAccountData> {
         return;
       }
 
-      await localDBService.deleteUserData(uuid);
+      await ref.read(localDBServiceProvider).deleteUserData(uuid);
 
       try {
         await ref.read(cloudDBServiceProvider).deleteUserData(uuid);
       } on DeleteUserException catch (e) {
-        localDBService.insertToTheDeleteErrorQueue(
-          ref.read(authServiceProvider).userUuid ?? '',
-          e.deleteErrorUserCode,
-        );
+        ref.read(localDBServiceProvider).insertToTheDeleteErrorQueue(
+              ref.read(authServiceProvider).userUuid ?? '',
+              e.deleteErrorUserCode,
+            );
         logger.e(e);
       }
 
       try {
         await ref.read(cloudDBServiceProvider).deleteQuizScoreData(uuid);
       } on DeleteUserException catch (e) {
-        localDBService.insertToTheDeleteErrorQueue(
-          ref.read(authServiceProvider).userUuid ?? '',
-          e.deleteErrorUserCode,
-        );
+        ref.read(localDBServiceProvider).insertToTheDeleteErrorQueue(
+              ref.read(authServiceProvider).userUuid ?? '',
+              e.deleteErrorUserCode,
+            );
         logger.e(e);
       }
 
       try {
         await ref.read(cloudDBServiceProvider).deleteAllFavoritesCloudDB(uuid);
       } on DeleteUserException catch (e) {
-        localDBService.insertToTheDeleteErrorQueue(
-          ref.read(authServiceProvider).userUuid ?? '',
-          e.deleteErrorUserCode,
-        );
+        ref.read(localDBServiceProvider).insertToTheDeleteErrorQueue(
+              ref.read(authServiceProvider).userUuid ?? '',
+              e.deleteErrorUserCode,
+            );
         logger.e(e);
       }
 

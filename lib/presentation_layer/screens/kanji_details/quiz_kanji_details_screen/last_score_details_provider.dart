@@ -29,11 +29,11 @@ class LastScoreDetailsProvider
     state = const AsyncLoading();
     state = await AsyncValue.guard(
       (() {
-        return localDBService.getSingleAudioExampleQuizDataDB(
-          kanjiCharacter,
-          section,
-          uuid,
-        );
+        return ref.read(localDBServiceProvider).getSingleAudioExampleQuizDataDB(
+              kanjiCharacter,
+              section,
+              uuid,
+            );
       }),
     );
   }
@@ -62,14 +62,15 @@ class LastScoreDetailsProvider
     }
 
     if (state.value?.section == -1) {
-      final numberOfRows = await localDBService.insertAudioExampleScore(
-        section,
-        uuid,
-        kanjiCharacter,
-        countCorrects,
-        countIncorrects,
-        countOmited,
-      );
+      final numberOfRows =
+          await ref.read(localDBServiceProvider).insertAudioExampleScore(
+                section,
+                uuid,
+                kanjiCharacter,
+                countCorrects,
+                countIncorrects,
+                countOmited,
+              );
       if (numberOfRows != 0) {
         state = await AsyncValue.guard(
           () {
@@ -91,14 +92,15 @@ class LastScoreDetailsProvider
       return;
     }
 
-    final numberOfRows = await localDBService.setAudioExampleLastScore(
-      kanjiCharacter: kanjiCharacter,
-      section: section,
-      uuid: uuid,
-      countCorrects: countCorrects,
-      countIncorrects: countIncorrects,
-      countOmited: countOmited,
-    );
+    final numberOfRows =
+        await ref.read(localDBServiceProvider).setAudioExampleLastScore(
+              kanjiCharacter: kanjiCharacter,
+              section: section,
+              uuid: uuid,
+              countCorrects: countCorrects,
+              countIncorrects: countIncorrects,
+              countOmited: countOmited,
+            );
 
     if (numberOfRows != 0) {
       state = await AsyncValue.guard(

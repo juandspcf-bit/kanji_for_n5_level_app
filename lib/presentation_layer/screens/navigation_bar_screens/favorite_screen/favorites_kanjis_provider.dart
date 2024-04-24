@@ -94,7 +94,8 @@ class FavoritesListProvider extends Notifier<FavoritesKanjisData> {
     );
     List<KanjiFromApi> storedKanjis =
         await ref.read(mainScreenProvider.notifier).loadStoredKanjis();
-    final favoritesKanjisFromDB = await localDBService
+    final favoritesKanjisFromDB = await ref
+        .read(localDBServiceProvider)
         .loadFavoritesDatabase(ref.read(authServiceProvider).userUuid ?? '');
     if (favoritesKanjisFromDB.isEmpty) {
       state = const FavoritesKanjisData(

@@ -27,11 +27,11 @@ class LastScoreFlashCardProvider
     state = const AsyncLoading();
     state = await AsyncValue.guard(
       () {
-        return localDBService.getSingleFlashCardDataDB(
-          kanjiCharacter,
-          section,
-          uuid,
-        );
+        return ref.read(localDBServiceProvider).getSingleFlashCardDataDB(
+              kanjiCharacter,
+              section,
+              uuid,
+            );
       },
     );
   }
@@ -51,29 +51,29 @@ class LastScoreFlashCardProvider
         );
 
     if (state.value?.section == -1) {
-      await localDBService.insertSingleFlashCardDataDB(
-        kanjiCharacter,
-        section,
-        uuid,
-        countUnWatched,
-      );
+      await ref.read(localDBServiceProvider).insertSingleFlashCardDataDB(
+            kanjiCharacter,
+            section,
+            uuid,
+            countUnWatched,
+          );
       return;
     }
 
-    await localDBService.setSingleFlashCardDataDB(
-      kanjiCharacter,
-      section,
-      uuid,
-      countUnWatched,
-    );
-
-    state = await AsyncValue.guard(
-      () {
-        return localDBService.getSingleFlashCardDataDB(
+    await ref.read(localDBServiceProvider).setSingleFlashCardDataDB(
           kanjiCharacter,
           section,
           uuid,
+          countUnWatched,
         );
+
+    state = await AsyncValue.guard(
+      () {
+        return ref.read(localDBServiceProvider).getSingleFlashCardDataDB(
+              kanjiCharacter,
+              section,
+              uuid,
+            );
       },
     );
 

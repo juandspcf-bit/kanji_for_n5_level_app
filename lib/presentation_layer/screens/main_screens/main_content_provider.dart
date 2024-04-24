@@ -123,7 +123,7 @@ class MainScreenProvider extends Notifier<MainScreenData> {
       final quizScoreData = await ref
           .read(cloudDBServiceProvider)
           .loadQuizScoreData(ref.read(authServiceProvider).userUuid ?? '');
-      localDBService.updateQuizScoreFromCloud(
+      ref.read(localDBServiceProvider).updateQuizScoreFromCloud(
           quizScoreData, ref.read(authServiceProvider).userUuid ?? '');
     } catch (e) {
       logger.e('error loading quiz score $e');
@@ -134,9 +134,12 @@ class MainScreenProvider extends Notifier<MainScreenData> {
       favoritesKanjis = await ref
           .read(cloudDBServiceProvider)
           .loadFavoritesCloudDB(ref.read(authServiceProvider).userUuid ?? '');
-      await localDBService.storeAllFavoritesFromCloud(favoritesKanjis);
+      await ref
+          .read(localDBServiceProvider)
+          .storeAllFavoritesFromCloud(favoritesKanjis);
     } catch (e) {
-      favoritesKanjis = await localDBService
+      favoritesKanjis = await ref
+          .read(localDBServiceProvider)
           .loadFavoritesDatabase(ref.read(authServiceProvider).userUuid ?? '');
       logger.e('error loading favorites $e');
     }
@@ -159,7 +162,8 @@ class MainScreenProvider extends Notifier<MainScreenData> {
 
     if (kanjiFavoritesList.isNotEmpty) return;
 
-    final favoritesKanjis = await localDBService
+    final favoritesKanjis = await ref
+        .read(localDBServiceProvider)
         .loadFavoritesDatabase(ref.read(authServiceProvider).userUuid ?? '');
     ref
         .read(favoriteskanjisProvider.notifier)
@@ -171,13 +175,16 @@ class MainScreenProvider extends Notifier<MainScreenData> {
   }
 
   Future<List<KanjiFromApi>> loadStoredKanjis() async {
-    var listOfStoredKanjis = await localDBService.loadStoredKanjis();
+    var listOfStoredKanjis =
+        await ref.read(localDBServiceProvider).loadStoredKanjis();
     final validAndInvalidKanjis = await runCompute(listOfStoredKanjis);
     final listOfValidStoredKanjis =
         validAndInvalidKanjis.$1.map((e) => e.$1).toList();
     final listOfInvalidStoredKanjis =
         validAndInvalidKanjis.$2.map((e) => e.$1).toList();
-    localDBService.cleanInvalidDBRecords(listOfInvalidStoredKanjis);
+    ref
+        .read(localDBServiceProvider)
+        .cleanInvalidDBRecords(listOfInvalidStoredKanjis);
 
     ref
         .read(storedKanjisProvider.notifier)
@@ -207,7 +214,7 @@ class MainScreenProvider extends Notifier<MainScreenData> {
           fullName: fullName,
           pathAvatar: pathAvatar);
 
-      await localDBService.insertUserData({
+      await ref.read(localDBServiceProvider).insertUserData({
         'uuid': uuid ?? '',
         'fullName': fullName,
         'linkAvatar': avatarLink,
@@ -229,7 +236,8 @@ class MainScreenProvider extends Notifier<MainScreenData> {
     if (state.avatarLink == '' &&
         state.pathAvatar == '' &&
         state.fullName == '') {
-      final listUser = await localDBService
+      final listUser = await ref
+          .read(localDBServiceProvider)
           .readUserData(ref.read(authServiceProvider).userUuid ?? '');
       if (listUser.isNotEmpty) {
         final user = listUser.first;
