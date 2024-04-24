@@ -39,7 +39,8 @@ class PersonalInfoProvider extends Notifier<PersonalInfoData> {
 
     String photoLink = '';
     try {
-      photoLink = await storageService.getDownloadLink(uuid ?? '');
+      photoLink =
+          await ref.read(storageServiceProvider).getDownloadLink(uuid ?? '');
     } catch (e) {
       logger.e(e);
     }
@@ -218,13 +219,13 @@ class PersonalInfoProvider extends Notifier<PersonalInfoData> {
 
     if (personalInfoData.pathProfileTemporal.isNotEmpty) {
       try {
-        avatarLink = await storageService.updateFile(
+        avatarLink = await ref.read(storageServiceProvider).updateFile(
             personalInfoData.pathProfileTemporal,
             ref.read(authServiceProvider).userUuid ?? '');
         setProfilePath(avatarLink);
         ref.read(mainScreenProvider.notifier).setAvatarLink(avatarLink);
 
-        (_, pathAvatar) = await downloadAndCacheAvatar(userUuid);
+        (_, pathAvatar) = await downloadAndCacheAvatar(userUuid, avatarLink);
 
         ref.read(mainScreenProvider.notifier).setPathAvatar(pathAvatar);
 

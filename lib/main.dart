@@ -8,8 +8,6 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:kanji_for_n5_level_app/aplication_layer/repository_service/local_repo/db_contract.dart';
 import 'package:kanji_for_n5_level_app/aplication_layer/repository_service/local_repo/db_sqflite_impl.dart';
-import 'package:kanji_for_n5_level_app/aplication_layer/repository_service/storage_repo/storage_contract.dart';
-import 'package:kanji_for_n5_level_app/aplication_layer/repository_service/storage_repo/storage_db_imple.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/auth_flow/auth_flow.dart';
 import 'package:kanji_for_n5_level_app/providers/on_boarding_provider.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/onBoarding_screen/my_page_viewer.dart';
@@ -18,7 +16,6 @@ import 'firebase_options.dart';
 
 final dbFirebase = FirebaseFirestore.instance;
 
-final StorageService storageService = FirebaseStorageService();
 final LocalDBService localDBService = SqliteDBService();
 
 final dio = Dio();

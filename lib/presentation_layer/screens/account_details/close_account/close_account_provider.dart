@@ -99,12 +99,12 @@ class CloseAccountProvider extends Notifier<CloseAccountData> {
       }
 
       try {
-        storageService.deleteFile(uuid);
+        ref.read(storageServiceProvider).deleteFile(uuid);
       } on DeleteUserException catch (e) {
         logger.e(e);
       }
 
-      storageService.deleteFile(uuid);
+      ref.read(storageServiceProvider).deleteFile(uuid);
 
       await Future.delayed(
         const Duration(seconds: 2),

@@ -174,8 +174,9 @@ class SingUpProvider extends Notifier<SingUpData> {
 
       if (state.pathProfileUser.isNotEmpty) {
         try {
-          final link =
-              await storageService.storeFile(state.pathProfileUser, userUuid);
+          final link = await ref
+              .read(storageServiceProvider)
+              .storeFile(state.pathProfileUser, userUuid);
 
           ref.read(mainScreenProvider.notifier).setAvatarLink(link);
 

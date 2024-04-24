@@ -195,7 +195,11 @@ class MainScreenProvider extends Notifier<MainScreenData> {
     try {
       if (state.avatarLink != '' && state.pathAvatar != '') return;
 
-      final (avatarLink, pathAvatar) = await downloadAndCacheAvatar(uuid ?? '');
+      final avatarLink =
+          await ref.read(storageServiceProvider).getDownloadLink(uuid ?? '');
+
+      final (_, pathAvatar) =
+          await downloadAndCacheAvatar(uuid ?? '', avatarLink);
 
       state = MainScreenData(
           selection: ScreenSelection.kanjiSections,

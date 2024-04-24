@@ -3,7 +3,6 @@ import 'package:kanji_for_n5_level_app/API_Files/key_file_api.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
-import 'package:kanji_for_n5_level_app/main.dart';
 import 'package:path_provider/path_provider.dart';
 
 Future<Map<String, dynamic>> getKanjiData(String kanji) async {
@@ -23,8 +22,9 @@ Future<Map<String, dynamic>> getKanjiData(String kanji) async {
   return json.decode(kanjiInformation.body);
 }
 
-Future<(String, String)> downloadAndCacheAvatar(String uuid) async {
-  final avatarLink = await storageService.getDownloadLink(uuid);
+Future<(String, String)> downloadAndCacheAvatar(
+    String uuid, String avatarLink) async {
+  //final avatarLink = await storageService.getDownloadLink(uuid);
 
   final dio = Dio();
   final pathBase = (await getApplicationDocumentsDirectory()).path;
