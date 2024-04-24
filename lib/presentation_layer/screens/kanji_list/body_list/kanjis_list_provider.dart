@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:kanji_for_n5_level_app/aplication_layer/services.dart';
 import 'package:kanji_for_n5_level_app/main.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_list/body_list/queue_download_delete_provider.dart';
 import 'package:kanji_for_n5_level_app/models/kanji_from_api.dart';
@@ -217,11 +218,11 @@ class KanjiListProvider extends Notifier<KanjiListData> {
     final storedKanjis =
         ref.read(storedKanjisProvider.notifier).getStoresItems();
 
-    return applicationApiService.requestKanjiListToApi(
-      storedKanjis[section] ?? [],
-      kanjisCharacteres,
-      section,
-    );
+    return ref.read(applicationApiServiceProvider).requestKanjiListToApi(
+          storedKanjis[section] ?? [],
+          kanjisCharacteres,
+          section,
+        );
   }
 
   void clearKanjiList(int section) {

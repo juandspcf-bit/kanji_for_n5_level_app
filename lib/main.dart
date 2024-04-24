@@ -10,8 +10,6 @@ import 'package:kanji_for_n5_level_app/aplication_layer/repository_service/cloud
 import 'package:kanji_for_n5_level_app/aplication_layer/repository_service/cloud_repo/cloud_db_firestore_impl.dart';
 import 'package:kanji_for_n5_level_app/aplication_layer/repository_service/local_repo/db_contract.dart';
 import 'package:kanji_for_n5_level_app/aplication_layer/repository_service/local_repo/db_sqflite_impl.dart';
-import 'package:kanji_for_n5_level_app/aplication_layer/repository_service/api_repo/kanji_api_contract.dart';
-import 'package:kanji_for_n5_level_app/aplication_layer/repository_service/api_repo/kanji_kanji_alive_api_impl.dart';
 import 'package:kanji_for_n5_level_app/aplication_layer/repository_service/storage_repo/storage_contract.dart';
 import 'package:kanji_for_n5_level_app/aplication_layer/repository_service/storage_repo/storage_db_imple.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/auth_flow/auth_flow.dart';
@@ -22,7 +20,6 @@ import 'firebase_options.dart';
 
 final dbFirebase = FirebaseFirestore.instance;
 
-final KanjiApiService applicationApiService = AppAplicationApiService();
 final CloudDBService cloudDBService = FireStoreDBService();
 final StorageService storageService = FirebaseStorageService();
 final LocalDBService localDBService = SqliteDBService();

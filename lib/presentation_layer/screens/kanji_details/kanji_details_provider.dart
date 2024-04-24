@@ -1,5 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:kanji_for_n5_level_app/aplication_layer/auth_service/auth_service_firebase.dart';
+import 'package:kanji_for_n5_level_app/aplication_layer/services.dart';
 import 'package:kanji_for_n5_level_app/main.dart';
 import 'package:kanji_for_n5_level_app/repositories_layer/local_database/db_favorites.dart';
 import 'package:kanji_for_n5_level_app/models/kanji_from_api.dart';

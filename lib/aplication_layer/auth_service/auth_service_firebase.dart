@@ -1,17 +1,12 @@
 import 'dart:async';
 
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kanji_for_n5_level_app/aplication_layer/auth_service/auth_service_contract.dart';
 import 'package:kanji_for_n5_level_app/aplication_layer/auth_service/delete_user_exception.dart';
 import 'package:kanji_for_n5_level_app/config_files/network_config.dart';
 import 'package:kanji_for_n5_level_app/main.dart';
 
 final streamAuth = FirebaseAuth.instance.userChanges();
-
-final authServiceProvider = Provider<AuthService>((ref) {
-  return FirebaseAuthService();
-});
 
 class FirebaseAuthService implements AuthService {
   @override

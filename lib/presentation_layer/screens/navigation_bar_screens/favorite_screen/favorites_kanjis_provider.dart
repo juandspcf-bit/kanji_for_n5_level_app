@@ -1,5 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:kanji_for_n5_level_app/aplication_layer/auth_service/auth_service_firebase.dart';
+import 'package:kanji_for_n5_level_app/aplication_layer/services.dart';
 import 'package:kanji_for_n5_level_app/main.dart';
 import 'package:kanji_for_n5_level_app/models/favorite.dart';
 import 'package:kanji_for_n5_level_app/models/secction_model.dart';
@@ -31,11 +31,12 @@ class FavoritesListProvider extends Notifier<FavoritesKanjisData> {
     }
 
     try {
-      var kanjiList = await applicationApiService.requestKanjiListToApi(
-        storedKanjis,
-        myFavorites.map((e) => e.kanji).toList(),
-        section,
-      );
+      var kanjiList =
+          await ref.read(applicationApiServiceProvider).requestKanjiListToApi(
+                storedKanjis,
+                myFavorites.map((e) => e.kanji).toList(),
+                section,
+              );
 
       kanjiList = updateSectionInKanjiList(kanjiList);
 
@@ -104,11 +105,12 @@ class FavoritesListProvider extends Notifier<FavoritesKanjisData> {
     }
 
     try {
-      var kanjiListFromAPI = await applicationApiService.requestKanjiListToApi(
-        storedKanjis,
-        favoritesKanjisFromDB.map((e) => e.kanji).toList(),
-        10,
-      );
+      var kanjiListFromAPI =
+          await ref.read(applicationApiServiceProvider).requestKanjiListToApi(
+                storedKanjis,
+                favoritesKanjisFromDB.map((e) => e.kanji).toList(),
+                10,
+              );
 
       kanjiListFromAPI = updateSectionInKanjiList(kanjiListFromAPI);
 

@@ -2,7 +2,6 @@ import 'dart:io';
 
 import 'package:async/async.dart';
 import 'package:flutter/foundation.dart';
-import 'package:kanji_for_n5_level_app/main.dart';
 import 'package:kanji_for_n5_level_app/repositories_layer/local_database/db_definitions.dart';
 import 'package:kanji_for_n5_level_app/models/kanji_from_api.dart';
 import 'package:kanji_for_n5_level_app/providers/status_stored_provider.dart';
@@ -128,12 +127,6 @@ Future<void> deleteKanjiFromApiComputeVersion(
       e.toString();
     }
   }
-}
-
-Future<KanjiFromApi> updateKanjiWithOnliVersion(
-    KanjiFromApi kanjiFromApi) async {
-  return await applicationApiService.requestSingleKanjiToApi(
-      kanjiFromApi.kanjiCharacter, kanjiFromApi.section);
 }
 
 KanjiFromApi updateStatusKanjiComputeVersion(
