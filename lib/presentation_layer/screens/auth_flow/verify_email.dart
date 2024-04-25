@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:delightful_toast/delight_toast.dart';
 import 'package:delightful_toast/toast/components/toast_card.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -78,9 +77,8 @@ class _VerifyEmailEstate extends ConsumerState<VerifyEmail> {
 
   @override
   Widget build(BuildContext context) {
-    ref.listen<ConnectivityResult>(statusConnectionProvider,
-        (previuos, current) {
-      if (current == ConnectivityResult.none) {
+    ref.listen<ConnectionStatus>(statusConnectionProvider, (previuos, current) {
+      if (current == ConnectionStatus.noConnected) {
         DelightToastBar(
           builder: (context) => ToastCard(
             color: Theme.of(context).colorScheme.secondaryContainer,
@@ -101,8 +99,7 @@ class _VerifyEmailEstate extends ConsumerState<VerifyEmail> {
         ).show(context);
         return;
       }
-      if (current == ConnectivityResult.wifi ||
-          current == ConnectivityResult.mobile) {
+      if (current == ConnectionStatus.connected) {
         DelightToastBar(
           builder: (context) => ToastCard(
             color: Theme.of(context).colorScheme.secondaryContainer,
@@ -146,10 +143,10 @@ class _VerifyEmailEstate extends ConsumerState<VerifyEmail> {
 
     return isEmailVerified
         ? FutureBuilder(
-            future:
-                ref.read(statusConnectionProvider) == ConnectivityResult.none
-                    ? ref.read(mainScreenProvider.notifier).initAppOffline()
-                    : ref.read(mainScreenProvider.notifier).initAppOnline(),
+            future: ref.read(statusConnectionProvider) ==
+                    ConnectionStatus.noConnected
+                ? ref.read(mainScreenProvider.notifier).initAppOffline()
+                : ref.read(mainScreenProvider.notifier).initAppOnline(),
             builder: (BuildContext context, AsyncSnapshot<void> snapShot) {
               final connectionStatus = snapShot.connectionState;
               if (connectionStatus == ConnectionState.waiting) {

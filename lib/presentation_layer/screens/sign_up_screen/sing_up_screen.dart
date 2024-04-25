@@ -1,4 +1,3 @@
-import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kanji_for_n5_level_app/aplication_layer/auth_service/auth_service_contract.dart';
@@ -43,7 +42,7 @@ class SignUpScreen extends ConsumerWidget with MyDialogs {
       }
     });
 
-    return connectionWifiState == ConnectivityResult.none
+    return connectionWifiState == ConnectionStatus.noConnected
         ? Scaffold(
             appBar: AppBar(),
             body: const ErrorConnectionScreen(

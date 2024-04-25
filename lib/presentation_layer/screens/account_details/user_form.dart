@@ -1,4 +1,3 @@
-import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kanji_for_n5_level_app/config_files/assets_paths.dart';
@@ -120,11 +119,12 @@ class UserForm extends ConsumerWidget {
                     height: 20,
                   ),
                   ElevatedButton(
-                    onPressed: statusConnectionData == ConnectivityResult.none
-                        ? null
-                        : () {
-                            onValidate(ref);
-                          },
+                    onPressed:
+                        statusConnectionData == ConnectionStatus.noConnected
+                            ? null
+                            : () {
+                                onValidate(ref);
+                              },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Theme.of(context).colorScheme.primary,
                       foregroundColor: Theme.of(context).colorScheme.onPrimary,

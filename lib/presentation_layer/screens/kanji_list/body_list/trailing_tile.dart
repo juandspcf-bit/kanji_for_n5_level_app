@@ -1,4 +1,3 @@
-import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kanji_for_n5_level_app/models/kanji_from_api.dart';
@@ -73,7 +72,7 @@ class TrailingTile extends ConsumerWidget {
         if (!kanjiFromApi.accessToKanjiItemsButtons) return;
 
         final resultStatus = ref.read(statusConnectionProvider);
-        if (ConnectivityResult.none == resultStatus) {
+        if (ConnectionStatus.noConnected == resultStatus) {
           showSnackBarQuizz(
               context, 'you shoul be connected to perform this acction', 3);
           return;

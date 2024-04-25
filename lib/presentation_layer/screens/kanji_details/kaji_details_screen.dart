@@ -1,4 +1,3 @@
-import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kanji_for_n5_level_app/config_files/screen_config.dart';
@@ -111,11 +110,13 @@ class KanjiDetails extends ConsumerWidget {
                       actions: [
                         Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 10),
-                          child: statusConnectionData == ConnectivityResult.none
+                          child: statusConnectionData ==
+                                  ConnectionStatus.noConnected
                               ? const Icon(Icons.cloud_off)
                               : const Icon(Icons.cloud_done_rounded),
                         ),
-                        if (statusConnectionData != ConnectivityResult.none ||
+                        if (statusConnectionData !=
+                                ConnectionStatus.noConnected ||
                             kanjiFromApi.statusStorage == StatusStorage.stored)
                           AnimatedOpacityIcon(
                             child: Padding(
@@ -126,7 +127,8 @@ class KanjiDetails extends ConsumerWidget {
                                   closedChild: const Icon(Icons.quiz)),
                             ),
                           ),
-                        if (statusConnectionData != ConnectivityResult.none)
+                        if (statusConnectionData !=
+                            ConnectionStatus.noConnected)
                           AnimatedOpacityIcon(
                             child: IconButton(
                               onPressed: () {

@@ -1,4 +1,3 @@
-import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -19,7 +18,7 @@ class TabVideoStrokes extends ConsumerWidget {
     final connectivityData = ref.watch(statusConnectionProvider);
     final kanjiFromApi = ref.watch(kanjiDetailsProvider)!.kanjiFromApi;
 
-    return connectivityData == ConnectivityResult.none &&
+    return connectivityData == ConnectionStatus.noConnected &&
             kanjiFromApi.statusStorage == StatusStorage.onlyOnline
         ? const ErrorConnectionScreen(
             message:

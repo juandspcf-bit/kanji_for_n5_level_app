@@ -1,4 +1,3 @@
-import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kanji_for_n5_level_app/aplication_layer/services.dart';
@@ -22,11 +21,11 @@ class KanjiQuizScreen extends ConsumerWidget {
 
   Widget getScreen(
     BuildContext context,
-    ConnectivityResult resultStatus,
+    ConnectionStatus resultStatus,
     QuizDataValues quizState,
     WidgetRef ref,
   ) {
-    if (resultStatus == ConnectivityResult.none) {
+    if (resultStatus == ConnectionStatus.noConnected) {
       return const ErrorConnectionScreen(
         message: 'The internet connection has gone, restart the quiz later',
       );

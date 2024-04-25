@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kanji_for_n5_level_app/aplication_layer/services.dart';
 import 'package:kanji_for_n5_level_app/main.dart';
@@ -122,7 +121,7 @@ class KanjiListProvider extends Notifier<KanjiListData> {
       }
 
       final connectivityData = ref.read(statusConnectionProvider);
-      if (connectivityData == ConnectivityResult.none) {
+      if (connectivityData == ConnectionStatus.noConnected) {
         final storedKanjisFromProvider = ref.read(storedKanjisProvider);
 
         if (storedKanjisFromProvider[state.section] != null &&

@@ -1,4 +1,3 @@
-import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
@@ -53,7 +52,7 @@ class SearchScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final searchScreenState = ref.watch(searchScreenProvider);
     final statusConnectionState = ref.watch(statusConnectionProvider);
-    return statusConnectionState == ConnectivityResult.none
+    return statusConnectionState == ConnectionStatus.noConnected
         ? const ErrorConnectionScreen(
             message:
                 'No internet connection, you will be able to search when the connection is restored',

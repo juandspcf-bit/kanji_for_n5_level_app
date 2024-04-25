@@ -1,6 +1,5 @@
 import 'dart:io';
 
-import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -13,12 +12,23 @@ import 'package:kanji_for_n5_level_app/providers/status_connection_provider.dart
 import 'package:kanji_for_n5_level_app/providers/status_stored_provider.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/navigation_bar_screens/pogress_screen/progress_screen_provider.dart';
 import 'package:kanji_for_n5_level_app/utils/networking/networking.dart';
+import 'package:observe_internet_connectivity/observe_internet_connectivity.dart';
 
 class MainScreenProvider extends Notifier<MainScreenData> {
   @override
   MainScreenData build() {
-    Connectivity().checkConnectivity().then((result) =>
-        ref.read(statusConnectionProvider.notifier).setInitialStatus(result));
+    InternetConnectivity().hasInternetConnection.then((hasInternet) {
+      if (hasInternet) {
+        ref
+            .read(statusConnectionProvider.notifier)
+            .setInitialStatus(ConnectionStatus.connected);
+      } else {
+        ref
+            .read(statusConnectionProvider.notifier)
+            .setInitialStatus(ConnectionStatus.noConnected);
+      }
+    });
+
     return MainScreenData(
       selection: ScreenSelection.kanjiSections,
       avatarLink: '',

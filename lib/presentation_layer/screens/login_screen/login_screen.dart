@@ -1,4 +1,3 @@
-import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -79,7 +78,7 @@ class LoginFormScreen extends ConsumerWidget with MyDialogs {
                 message: 'Welcome!!',
               );
             } else  */
-            if (statusConnectionData == ConnectivityResult.none) {
+            if (statusConnectionData == ConnectionStatus.noConnected) {
               return const ErrorConnectionScreen(
                 message: 'No internet connection, try again to login later',
               );

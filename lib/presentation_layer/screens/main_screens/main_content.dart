@@ -1,7 +1,6 @@
 import 'dart:io';
 
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kanji_for_n5_level_app/aplication_layer/services.dart';
@@ -83,7 +82,7 @@ class MainContent extends ConsumerWidget with StatusDBStoringDialogs {
               actions: [
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 10),
-                  child: statusConnectionData == ConnectivityResult.none
+                  child: statusConnectionData == ConnectionStatus.noConnected
                       ? const Icon(Icons.cloud_off)
                       : const Icon(Icons.cloud_done_rounded),
                 ),

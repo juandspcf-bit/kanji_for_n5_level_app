@@ -1,4 +1,3 @@
-import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kanji_for_n5_level_app/config_files/screen_config.dart';
@@ -176,7 +175,7 @@ class RefreshBodyList extends ConsumerWidget {
 
     return RefreshIndicator(
       notificationPredicate: isAnyProcessingData(kanjisFromApi) ||
-              connectivityData == ConnectivityResult.none
+              connectivityData == ConnectionStatus.noConnected
           ? (_) => false
           : (_) => true,
       onRefresh: () async {

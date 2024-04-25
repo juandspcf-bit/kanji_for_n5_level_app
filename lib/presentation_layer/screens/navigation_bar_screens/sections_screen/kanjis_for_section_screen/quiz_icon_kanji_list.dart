@@ -1,4 +1,3 @@
-import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_list/body_list/kanjis_list_provider.dart';
@@ -18,7 +17,7 @@ class QuizIconKanjiList extends ConsumerWidget {
         ref.read(kanjiListProvider.notifier).isAnyProcessingData;
 
     final accesToQuiz = isAnyProcessingDataFunc() ||
-        connectivityData == ConnectivityResult.none ||
+        connectivityData == ConnectionStatus.noConnected ||
         kanjiListData.kanjiList.isEmpty;
 
     return (kanjiListData.status == 1 && !accesToQuiz)

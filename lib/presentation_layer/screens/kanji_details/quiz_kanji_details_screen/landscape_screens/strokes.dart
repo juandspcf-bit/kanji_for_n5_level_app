@@ -1,4 +1,3 @@
-import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kanji_for_n5_level_app/providers/status_connection_provider.dart';
@@ -18,7 +17,7 @@ class StrokesLandScape extends ConsumerWidget {
     final kanjiDetailsData = ref.watch(kanjiDetailsProvider);
     final kanjiFromApi = kanjiDetailsData!.kanjiFromApi;
     final statusStorage = kanjiDetailsData.statusStorage;
-    return connectivityData == ConnectivityResult.none &&
+    return connectivityData == ConnectionStatus.noConnected &&
             kanjiFromApi.statusStorage == StatusStorage.onlyOnline
         ? const ErrorConnectionScreen(
             message:

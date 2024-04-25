@@ -1,5 +1,4 @@
 import 'package:animations/animations.dart';
-import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kanji_for_n5_level_app/aplication_layer/services.dart';
@@ -42,8 +41,9 @@ class DetailsQuizScreenAnimated extends ConsumerWidget {
       closedBuilder: (context, openContainer) {
         final statusConnectionData = ref.watch(statusConnectionProvider);
 
-        final accesToQuiz = statusConnectionData == ConnectivityResult.none &&
-            kanjiFromApi.statusStorage == StatusStorage.onlyOnline;
+        final accesToQuiz =
+            statusConnectionData == ConnectionStatus.noConnected &&
+                kanjiFromApi.statusStorage == StatusStorage.onlyOnline;
 
         return GestureDetector(
           onTap: !accesToQuiz
