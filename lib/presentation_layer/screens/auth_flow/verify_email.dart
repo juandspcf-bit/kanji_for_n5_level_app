@@ -99,6 +99,7 @@ class _VerifyEmailEstate extends ConsumerState<VerifyEmail> {
             ),
           ),
         ).show(context);
+        return;
       }
       if (current == ConnectivityResult.wifi ||
           current == ConnectivityResult.mobile) {
@@ -120,7 +121,27 @@ class _VerifyEmailEstate extends ConsumerState<VerifyEmail> {
             ),
           ),
         ).show(context);
+        return;
       }
+
+      DelightToastBar(
+        builder: (context) => ToastCard(
+          color: Theme.of(context).colorScheme.secondaryContainer,
+          leading: Icon(
+            Icons.question_mark,
+            size: 28,
+            color: Colors.red.shade400,
+          ),
+          title: Text(
+            current.name,
+            style: TextStyle(
+              color: Theme.of(context).colorScheme.onSecondaryContainer,
+              fontWeight: FontWeight.w700,
+              fontSize: 14,
+            ),
+          ),
+        ),
+      ).show(context);
     });
 
     return isEmailVerified
