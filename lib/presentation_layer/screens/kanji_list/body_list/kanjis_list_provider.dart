@@ -152,7 +152,6 @@ class KanjiListProvider extends Notifier<KanjiListData> {
           if (ref
               .read(queueDownloadDeleteProvider.notifier)
               .isInTheDownloadQueue(kanji.kanjiCharacter)) {
-            logger.d('isn in the download queue ${kanji.kanjiCharacter}');
             return updateStatusKanji(
                 StatusStorage.proccessingStoring, false, kanji);
           }
