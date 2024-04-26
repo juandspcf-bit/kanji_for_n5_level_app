@@ -3,8 +3,8 @@ import 'package:kanji_for_n5_level_app/aplication_layer/auth_service/auth_servic
 import 'package:kanji_for_n5_level_app/aplication_layer/auth_service/auth_service_firebase.dart';
 import 'package:kanji_for_n5_level_app/aplication_layer/repository_service/api_repo/kanji_api_service_contract.dart';
 import 'package:kanji_for_n5_level_app/aplication_layer/repository_service/api_repo/kanji_kanji_alive_api_impl.dart';
-import 'package:kanji_for_n5_level_app/aplication_layer/repository_service/cloud_repo/cloud_db_contract.dart';
-import 'package:kanji_for_n5_level_app/aplication_layer/repository_service/cloud_repo/cloud_db_firestore_impl.dart';
+import 'package:kanji_for_n5_level_app/aplication_layer/repository_service/cloud_repo/cloud_db_service_contract.dart';
+import 'package:kanji_for_n5_level_app/aplication_layer/repository_service/cloud_repo/cloud_db_service_firestore.dart';
 import 'package:kanji_for_n5_level_app/aplication_layer/repository_service/local_repo/db_contract.dart';
 import 'package:kanji_for_n5_level_app/aplication_layer/repository_service/local_repo/db_sqflite_impl.dart';
 import 'package:kanji_for_n5_level_app/aplication_layer/repository_service/storage_repo/storage_contract.dart';

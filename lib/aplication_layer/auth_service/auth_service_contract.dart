@@ -1,3 +1,5 @@
+import 'package:kanji_for_n5_level_app/models/user.dart';
+
 abstract class AuthService {
   String? userUuid;
 
@@ -13,7 +15,9 @@ abstract class AuthService {
       {required String email});
 
   Future<(DeleteUserStatus, String)> deleteUser(
-      {required String password, required String uuid});
+      {required String password,
+      required String uuid,
+      required UserData userData});
 
   Future<void> singOut();
 }

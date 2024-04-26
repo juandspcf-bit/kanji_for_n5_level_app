@@ -12,8 +12,6 @@ import 'package:kanji_for_n5_level_app/providers/status_connection_provider.dart
 import 'package:logger/logger.dart';
 import 'firebase_options.dart';
 
-final dbFirebase = FirebaseFirestore.instance;
-
 final dio = Dio();
 final logger = Logger();
 

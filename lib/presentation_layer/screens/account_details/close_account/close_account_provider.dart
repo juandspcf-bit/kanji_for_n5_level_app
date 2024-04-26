@@ -53,11 +53,16 @@ class CloseAccountProvider extends Notifier<CloseAccountData> {
 
     setDeleteRequestStatus(DeleteRequestStatus.process);
 
+    final userData = await ref
+        .read(cloudDBServiceProvider)
+        .readUserData(ref.read(authServiceProvider).userUuid ?? '');
+
     try {
       final (deleteUserStatus, uuid) =
           await ref.read(authServiceProvider).deleteUser(
                 password: password,
                 uuid: ref.read(authServiceProvider).userUuid ?? '',
+                userData: userData,
               );
 
       if (deleteUserStatus == DeleteUserStatus.error) {

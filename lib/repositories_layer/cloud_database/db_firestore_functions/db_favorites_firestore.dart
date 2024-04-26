@@ -5,6 +5,7 @@ import 'package:kanji_for_n5_level_app/models/favorite.dart';
 
 Future<List<Favorite>> loadFavoriteKanjis(
   String uuid,
+  FirebaseFirestore dbFirebase,
 ) async {
   List<Favorite> listFavorites = [];
   try {
@@ -33,6 +34,7 @@ Future<void> insertFavorite(
   String kanjiCharacter,
   int timeStamp,
   String uuid,
+  FirebaseFirestore dbFirebase,
 ) {
   final data = <String, Object>{
     'kanjiCharacter': kanjiCharacter,
@@ -46,6 +48,7 @@ Future<void> insertFavorite(
 Future<void> deleteFavorite(
   String kanjiCharacter,
   String uuid,
+  FirebaseFirestore dbFirebase,
 ) async {
   final querySnapshot = await dbFirebase
       .collection("favorites")
@@ -60,6 +63,7 @@ Future<void> deleteFavorite(
 
 Future<void> deleteAllFavorites(
   String uuid,
+  FirebaseFirestore dbFirebase,
 ) async {
   try {
     final querySnapshot = await dbFirebase

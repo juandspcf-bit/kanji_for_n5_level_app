@@ -5,6 +5,7 @@ import 'package:kanji_for_n5_level_app/aplication_layer/auth_service/auth_servic
 import 'package:kanji_for_n5_level_app/aplication_layer/auth_service/delete_user_exception.dart';
 import 'package:kanji_for_n5_level_app/config_files/network_config.dart';
 import 'package:kanji_for_n5_level_app/main.dart';
+import 'package:kanji_for_n5_level_app/models/user.dart';
 
 final streamAuth = FirebaseAuth.instance.userChanges();
 
@@ -73,19 +74,16 @@ class FirebaseAuthService implements AuthService {
   Future<(DeleteUserStatus, String)> deleteUser({
     required String password,
     required String uuid,
+    required UserData userData,
   }) async {
     if (uuid == '') {
       return (DeleteUserStatus.error, '');
     }
     final user = FirebaseAuth.instance.currentUser;
 
-    final querySnapshot =
-        await dbFirebase.collection("user_data").doc(uuid).get();
-
-    final queryData = querySnapshot.data();
     try {
-      if (querySnapshot.exists && queryData != null && user != null) {
-        final email = queryData['email'] as String;
+      if (userData.uuid != "" && user != null) {
+        final email = userData.email;
         final authCredential = EmailAuthProvider.credential(
           email: email,
           password: password,

@@ -69,4 +69,8 @@ abstract class CloudDBService {
   );
 
   Future<Map<String, Object>> loadQuizScoreData(String uuid);
+
+  Future<Map<String, dynamic>> fetchKanjiData(
+    String kanjiCharacter,
+  );
 }

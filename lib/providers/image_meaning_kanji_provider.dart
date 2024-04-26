@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:kanji_for_n5_level_app/aplication_layer/services.dart';
 import 'package:kanji_for_n5_level_app/main.dart';
 
 class ImageMeaningKanjiProvider extends Notifier<ImageMeaningKanjiData> {
@@ -8,17 +9,17 @@ class ImageMeaningKanjiProvider extends Notifier<ImageMeaningKanjiData> {
     return ImageMeaningKanjiData(kanji: '', link: '');
   }
 
-  void fetchData(String kanjiCharacter) {
-    final imagesLinks = dbFirebase.collection("kanjis");
-    imagesLinks.doc(kanjiCharacter).get().then(
-      (DocumentSnapshot doc) {
-        final kanjiData = doc.data() as Map<String, dynamic>;
-        state = ImageMeaningKanjiData(
-            kanji: kanjiData['kanji'] as String,
-            link: kanjiData['link'] as String);
-      },
-      onError: (e) => state = ImageMeaningKanjiData(kanji: '', link: ''),
-    );
+  void fetchData(String kanjiCharacter) async {
+    try {
+      final kanjiData =
+          await ref.read(cloudDBServiceProvider).fetchKanjiData(kanjiCharacter);
+
+      state = ImageMeaningKanjiData(
+          kanji: kanjiData['kanji'] as String,
+          link: kanjiData['link'] as String);
+    } catch (e) {
+      state = ImageMeaningKanjiData(kanji: '', link: '');
+    }
   }
 
   void clearState() {

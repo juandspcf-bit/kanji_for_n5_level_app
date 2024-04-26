@@ -3,11 +3,15 @@ import 'package:kanji_for_n5_level_app/aplication_layer/auth_service/delete_user
 import 'package:kanji_for_n5_level_app/main.dart';
 import 'package:kanji_for_n5_level_app/models/user.dart';
 
-Future<void> insertUserDataFirebase(Map<String, String> userData) {
+Future<void> insertUserDataFirebase(
+  Map<String, String> userData,
+  FirebaseFirestore dbFirebase,
+) {
   return dbFirebase.collection("user_data").doc(userData['uuid']).set(userData);
 }
 
-Future<UserData> readUserDataFirebase(String uuid) async {
+Future<UserData> readUserDataFirebase(
+    String uuid, FirebaseFirestore dbFirebase) async {
   try {
     final querySnapshot =
         await dbFirebase.collection("user_data").doc(uuid).get();
@@ -44,6 +48,7 @@ Future<UserData> readUserDataFirebase(String uuid) async {
 Future<void> updateUserDataFirebase(
   String uuid,
   Map<String, String> newData,
+  FirebaseFirestore dbFirebase,
 ) async {
   try {
     final docRef = dbFirebase.collection("user_data").doc(uuid);
@@ -55,7 +60,10 @@ Future<void> updateUserDataFirebase(
   }
 }
 
-Future<void> deleteUserDataFirebase(String uuid) async {
+Future<void> deleteUserDataFirebase(
+  String uuid,
+  FirebaseFirestore dbFirebase,
+) async {
   try {
     final docRefUserData = dbFirebase.collection("user_data").doc(uuid);
     await docRefUserData.delete();

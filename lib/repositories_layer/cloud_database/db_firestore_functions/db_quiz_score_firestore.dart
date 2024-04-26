@@ -3,7 +3,10 @@ import 'package:kanji_for_n5_level_app/aplication_layer/auth_service/delete_user
 import 'package:kanji_for_n5_level_app/main.dart';
 import 'package:kanji_for_n5_level_app/models/secction_model.dart';
 
-Future<Map<String, Object>> loadQuizScoreDataFire(String uuid) async {
+Future<Map<String, Object>> loadQuizScoreDataFire(
+  String uuid,
+  FirebaseFirestore dbFirebase,
+) async {
   final docRef = dbFirebase.collection("quiz_score").doc(uuid);
   final documentSnapshot = await docRef.get();
   final data = documentSnapshot.data();
@@ -92,6 +95,7 @@ Future<void> setQuizSectionScore(
   int countOmited,
   int section,
   String uuid,
+  FirebaseFirestore dbFirebase,
 ) async {
   final docRef = dbFirebase.collection("quiz_score").doc(uuid);
   logger.d('reference quizScore_$section');
@@ -116,6 +120,7 @@ Future<void> updateQuizDetailScoreFire(
   int countOmited,
   int section,
   String uuid,
+  FirebaseFirestore dbFirebase,
 ) async {
   final docRef = dbFirebase.collection("quiz_score").doc(uuid);
   final kanjiList = sectionsKanjis['section$section'];
@@ -138,6 +143,7 @@ Future<void> updateQuizFlashCardFire(
   bool allRevisedFlashCards,
   int section,
   String uuid,
+  FirebaseFirestore dbFirebase,
 ) async {
   final docRef = dbFirebase.collection("quiz_score").doc(uuid);
   final kanjiList = sectionsKanjis['section$section'];
@@ -153,6 +159,7 @@ Future<void> updateQuizFlashCardFire(
 
 Future<void> deleteQuizScoreDataFire(
   String uuid,
+  FirebaseFirestore dbFirebase,
 ) async {
   try {
     final docRef = dbFirebase.collection("quiz_score").doc(uuid);
@@ -170,7 +177,10 @@ Future<void> deleteQuizScoreDataFire(
   }
 }
 
-Future<void> createQuizScoreMapCloud(String uuid) async {
+Future<void> createQuizScoreMapCloud(
+  String uuid,
+  FirebaseFirestore dbFirebase,
+) async {
   final docRef = dbFirebase.collection("quiz_score").doc(uuid);
   docRef.set(
     {
