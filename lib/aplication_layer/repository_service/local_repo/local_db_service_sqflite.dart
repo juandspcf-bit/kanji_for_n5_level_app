@@ -1,5 +1,5 @@
 import 'package:kanji_for_n5_level_app/aplication_layer/auth_service/delete_user_exception.dart';
-import 'package:kanji_for_n5_level_app/aplication_layer/repository_service/local_repo/db_contract.dart';
+import 'package:kanji_for_n5_level_app/aplication_layer/repository_service/local_repo/local_db_service_contract.dart';
 import 'package:kanji_for_n5_level_app/models/favorite.dart';
 import 'package:kanji_for_n5_level_app/models/first_time_logged.dart';
 import 'package:kanji_for_n5_level_app/models/kanji_from_api.dart';
