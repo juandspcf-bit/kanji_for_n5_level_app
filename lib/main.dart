@@ -1,7 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_logs/flutter_logs.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -9,7 +8,9 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/auth_flow/auth_flow.dart';
 import 'package:kanji_for_n5_level_app/providers/on_boarding_provider.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/onBoarding_screen/my_page_viewer.dart';
+import 'package:kanji_for_n5_level_app/providers/status_connection_provider.dart';
 import 'package:logger/logger.dart';
+import 'package:observe_internet_connectivity/observe_internet_connectivity.dart';
 import 'firebase_options.dart';
 
 final dbFirebase = FirebaseFirestore.instance;
@@ -31,23 +32,6 @@ final darkTheme = ThemeData.dark();
 void main() async {
   WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
 
-  //Initialize Logging
-  await FlutterLogs.initLogs(
-      logLevelsEnabled: [
-        LogLevel.INFO,
-        LogLevel.WARNING,
-        LogLevel.ERROR,
-        LogLevel.SEVERE
-      ],
-      timeStampFormat: TimeStampFormat.TIME_FORMAT_READABLE,
-      directoryStructure: DirectoryStructure.FOR_DATE,
-      logTypesEnabled: ["device", "network", "errors"],
-      logFileExtension: LogFileExtension.LOG,
-      logsWriteDirectoryName: "MyLogs",
-      logsExportDirectoryName: "MyLogs/Exported",
-      debugFileOperations: true,
-      isDebuggable: true);
-
   FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
@@ -67,6 +51,7 @@ class MyApp extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final onBoardingData = ref.watch(onBoardingProvider);
+    ref.read(statusConnectionProvider);
     return MaterialApp(
       title: 'Flutter Demo',
       debugShowCheckedModeBanner: false,

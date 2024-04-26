@@ -1,7 +1,5 @@
 import 'dart:async';
 
-import 'package:delightful_toast/delight_toast.dart';
-import 'package:delightful_toast/toast/components/toast_card.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
@@ -29,6 +27,7 @@ class _VerifyEmailEstate extends ConsumerState<VerifyEmail> {
   @override
   void initState() {
     super.initState();
+
     isEmailVerified = FirebaseAuth.instance.currentUser!.emailVerified;
     if (!isEmailVerified) {
       sendEmailVerification();
@@ -77,70 +76,6 @@ class _VerifyEmailEstate extends ConsumerState<VerifyEmail> {
 
   @override
   Widget build(BuildContext context) {
-    ref.listen<ConnectionStatus>(statusConnectionProvider, (previuos, current) {
-      if (current == ConnectionStatus.noConnected) {
-        DelightToastBar(
-          builder: (context) => ToastCard(
-            color: Theme.of(context).colorScheme.secondaryContainer,
-            leading: Icon(
-              Icons.wifi_off,
-              size: 28,
-              color: Colors.red.shade400,
-            ),
-            title: Text(
-              "No internet connection",
-              style: TextStyle(
-                color: Theme.of(context).colorScheme.onSecondaryContainer,
-                fontWeight: FontWeight.w700,
-                fontSize: 14,
-              ),
-            ),
-          ),
-        ).show(context);
-        return;
-      }
-      if (current == ConnectionStatus.connected) {
-        DelightToastBar(
-          builder: (context) => ToastCard(
-            color: Theme.of(context).colorScheme.secondaryContainer,
-            leading: Icon(
-              Icons.wifi,
-              size: 28,
-              color: Colors.red.shade400,
-            ),
-            title: Text(
-              "Internet connection",
-              style: TextStyle(
-                color: Theme.of(context).colorScheme.onSecondaryContainer,
-                fontWeight: FontWeight.w700,
-                fontSize: 14,
-              ),
-            ),
-          ),
-        ).show(context);
-        return;
-      }
-
-      DelightToastBar(
-        builder: (context) => ToastCard(
-          color: Theme.of(context).colorScheme.secondaryContainer,
-          leading: Icon(
-            Icons.question_mark,
-            size: 28,
-            color: Colors.red.shade400,
-          ),
-          title: Text(
-            current.name,
-            style: TextStyle(
-              color: Theme.of(context).colorScheme.onSecondaryContainer,
-              fontWeight: FontWeight.w700,
-              fontSize: 14,
-            ),
-          ),
-        ),
-      ).show(context);
-    });
-
     return isEmailVerified
         ? FutureBuilder(
             future: ref.read(statusConnectionProvider) ==

@@ -5,14 +5,37 @@ import 'package:kanji_for_n5_level_app/aplication_layer/services.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/auth_flow/verify_email.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/login_screen/login_screen.dart';
 import 'package:kanji_for_n5_level_app/providers/score_kanji_list_provider.dart';
+import 'package:kanji_for_n5_level_app/providers/status_connection_provider.dart';
+import 'package:toastification/toastification.dart';
 
-class AuthFlow extends ConsumerWidget {
+class AuthFlow extends ConsumerStatefulWidget {
   const AuthFlow({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<AuthFlow> createState() => _AutFlowState();
+}
+
+class _AutFlowState extends ConsumerState<AuthFlow> {
+  ToastificationItem? notification;
+
+  @override
+  Widget build(BuildContext context) {
     ref.read(lottieFilesProvider.notifier).initLottieFile();
     //localDBService.deleteUserQueue();
+
+    ref.listen<ConnectionStatus>(statusConnectionProvider, (previuos, current) {
+      ref.read(toastServiceProvider).dismiss();
+
+      if (current == ConnectionStatus.noConnected) {
+        ref.read(toastServiceProvider).showNoWifiConnection(context);
+        return;
+      }
+      if (current == ConnectionStatus.connected) {
+        ref.read(toastServiceProvider).showWifiConnection(context);
+        return;
+      }
+    });
+
     return StreamBuilder(
         stream: streamAuth,
         builder: (ctx, snapShot) {
