@@ -26,13 +26,25 @@ class _AutFlowState extends ConsumerState<AuthFlow> {
       ref.read(toastServiceProvider).dismiss(context);
 
       if (current == ConnectionStatus.noConnected) {
-        ref.read(toastServiceProvider).showMessage(context,
-            'No connected to internet', const Icon(Icons.wifi_off), null);
+        ref.read(toastServiceProvider).showMessage(
+              context,
+              'No connected to internet',
+              Icons.wifi_off,
+              const Duration(days: 1),
+              '',
+              null,
+            );
         return;
       }
       if (current == ConnectionStatus.connected) {
-        ref.read(toastServiceProvider).showMessage(context,
-            'Internet connection restored', const Icon(Icons.wifi_off), null);
+        ref.read(toastServiceProvider).showMessage(
+              context,
+              'Internet connection restored',
+              Icons.wifi,
+              const Duration(seconds: 5),
+              '',
+              null,
+            );
         return;
       }
     });

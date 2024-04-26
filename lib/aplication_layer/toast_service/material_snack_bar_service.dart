@@ -8,22 +8,45 @@ class MaterialSnackBarService extends ToastServiceContract {
   }
 
   @override
-  void showMessage(BuildContext context, String message, Icon icon,
-      void Function()? action) {
+  void showMessage(
+    BuildContext context,
+    String message,
+    IconData? iconData,
+    Duration duration,
+    String labelAction,
+    void Function()? actionCallback,
+  ) {
     var snackBar = SnackBar(
+      backgroundColor: Theme.of(context).colorScheme.secondaryContainer,
+      dismissDirection: DismissDirection.endToStart,
+      behavior: SnackBarBehavior.floating,
+      margin: const EdgeInsets.symmetric(vertical: 20, horizontal: 30),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
       content: Row(
         children: [
-          icon,
+          if (iconData != null)
+            Icon(
+              iconData,
+              color: Colors.amber,
+            ),
           const SizedBox(
             width: 10,
           ),
-          Text(message),
+          Text(
+            message,
+            style: const TextStyle(color: Colors.white),
+          ),
         ],
       ),
-      duration: const Duration(days: 1),
-      action: action == null
+      duration: duration,
+      action: actionCallback == null
           ? null
-          : SnackBarAction(label: 'Undo', onPressed: () async {}),
+          : SnackBarAction(
+              label: labelAction,
+              textColor: Colors.white,
+              onPressed: () async {
+                actionCallback();
+              }),
     );
 
     ScaffoldMessenger.of(context).showSnackBar(snackBar);
@@ -32,8 +55,16 @@ class MaterialSnackBarService extends ToastServiceContract {
   @override
   void showShortMessage(BuildContext context, String message) {
     var snackBar = SnackBar(
-      content: Text(message),
-      duration: const Duration(seconds: 3),
+      backgroundColor: Theme.of(context).colorScheme.secondaryContainer,
+      dismissDirection: DismissDirection.endToStart,
+      behavior: SnackBarBehavior.floating,
+      margin: const EdgeInsets.symmetric(vertical: 20, horizontal: 30),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
+      content: Text(
+        message,
+        style: const TextStyle(color: Colors.white),
+      ),
+      duration: const Duration(seconds: 4),
     );
 
     ScaffoldMessenger.of(context).showSnackBar(snackBar);

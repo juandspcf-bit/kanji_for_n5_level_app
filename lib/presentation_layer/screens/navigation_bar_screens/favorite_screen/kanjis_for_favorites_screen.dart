@@ -43,7 +43,9 @@ class KanjisForFavoritesScreen extends ConsumerWidget with MyDialogs {
         ref.read(toastServiceProvider).showMessage(
             context,
             current.onDismissibleActionStatus.message,
-            const Icon(Icons.favorite),
+            null,
+            const Duration(seconds: 7),
+            'Undo',
             current.onDismissibleActionStatus ==
                     OnDismissibleActionStatus.successAdded
                 ? null
