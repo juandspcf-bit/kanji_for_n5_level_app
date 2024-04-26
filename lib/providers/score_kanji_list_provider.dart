@@ -1,5 +1,4 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:kanji_for_n5_level_app/main.dart';
 import 'package:lottie/lottie.dart';
 
 class LottieFilesProvider extends Notifier<ScoreKnajiListData> {
@@ -9,15 +8,11 @@ class LottieFilesProvider extends Notifier<ScoreKnajiListData> {
   }
 
   void initLottieFile() async {
+    if (state.lottieComposition != null) return;
     final lottieComposition =
         await AssetLottie('assets/lottie_files/congrats.json').load();
     state = ScoreKnajiListData(lottieComposition: lottieComposition);
   }
-}
-
-Future<LottieComposition> loadLottieFileComputeVersion(String path) async {
-  logger.d('inside isolate');
-  return await AssetLottie(path).load();
 }
 
 final lottieFilesProvider =

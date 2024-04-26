@@ -276,6 +276,11 @@ class FavoritesListProvider extends Notifier<FavoritesKanjisData> {
       setDismissedKanji(state.favoritesKanjisFromApi[index], index);
       removeItem(kanjiFromApi);
 
+      await ref.read(cloudDBServiceProvider).deleteFavoriteCloudDB(
+            kanjiFromApi.kanjiCharacter,
+            ref.read(authServiceProvider).userUuid ?? '',
+          );
+
       await deleteFavorite(kanjiFromApi.kanjiCharacter);
       setOnDismissibleActionStatus(OnDismissibleActionStatus.successRemoved);
     } catch (e) {
@@ -295,6 +300,12 @@ class FavoritesListProvider extends Notifier<FavoritesKanjisData> {
 
   Future<void> restoreFavorite(FavoriteKanji favoriteKanji, int index) async {
     try {
+      await ref.read(cloudDBServiceProvider).insertFavoriteCloudDB(
+            favoriteKanji.kanjiFromApi.kanjiCharacter,
+            favoriteKanji.timeStamp,
+            ref.read(authServiceProvider).userUuid ?? '',
+          );
+
       await insertFavorite(
         favoriteKanji.kanjiFromApi.kanjiCharacter,
         favoriteKanji.timeStamp,
