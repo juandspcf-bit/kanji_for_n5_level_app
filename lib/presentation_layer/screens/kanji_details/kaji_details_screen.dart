@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:kanji_for_n5_level_app/aplication_layer/services.dart';
 import 'package:kanji_for_n5_level_app/config_files/screen_config.dart';
 import 'package:kanji_for_n5_level_app/main.dart';
 import 'package:kanji_for_n5_level_app/models/kanji_from_api.dart';
@@ -53,12 +54,10 @@ class KanjiDetails extends ConsumerWidget {
           current.storingToFavoritesStatus ==
               StoringToFavoritesStatus.successRemoved ||
           current.storingToFavoritesStatus == StoringToFavoritesStatus.error) {
-        ScaffoldMessenger.of(context).clearSnackBars();
-        var snackBar = SnackBar(
-          content: Text(current.storingToFavoritesStatus.message),
-          duration: const Duration(seconds: 3),
-        );
-        ScaffoldMessenger.of(context).showSnackBar(snackBar);
+        ref.read(toastServiceProvider).dismiss(context);
+        ref.read(toastServiceProvider).showShortMessage(
+            context, current.storingToFavoritesStatus.message);
+
         ref
             .read(kanjiDetailsProvider.notifier)
             .setStoringToFavoritesStatus(StoringToFavoritesStatus.noStarted);
@@ -99,7 +98,7 @@ class KanjiDetails extends ConsumerWidget {
                     ref
                         .read(examplesAudiosTrackListProvider.notifier)
                         .setIsPlaying(false);
-                    ScaffoldMessenger.of(context).clearSnackBars();
+                    ref.read(toastServiceProvider).dismiss(context);
                   },
                   child: Scaffold(
                     appBar: AppBar(

@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:kanji_for_n5_level_app/aplication_layer/services.dart';
 import 'package:kanji_for_n5_level_app/models/secction_model.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/navigation_bar_screens/sections_screen/kanjis_for_section_screen/connection_status_icon.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/navigation_bar_screens/sections_screen/kanjis_for_section_screen/quiz_icon_kanji_list.dart';
@@ -39,15 +40,9 @@ class KanjiForSectionScreen extends ConsumerWidget
 
     ref.listen<KanjiListData>(kanjiListProvider, (previuos, current) {
       if (current.errorDownload.status) {
-        ScaffoldMessenger.of(context).clearSnackBars();
-        var snackBar = SnackBar(
-          content: Text(
-              'error downloading kanji ${current.errorDownload.kanjiCharacter}'),
-          duration: const Duration(seconds: 3),
-        );
-
-        ScaffoldMessenger.of(context).showSnackBar(snackBar);
-
+        ref.read(toastServiceProvider).dismiss(context);
+        ref.read(toastServiceProvider).showShortMessage(context,
+            'error downloading kanji ${current.errorDownload.kanjiCharacter}');
         ref.read(kanjiListProvider.notifier).setErrorDownload(
               ErrorDownload(
                 kanjiCharacter: '',
@@ -57,14 +52,9 @@ class KanjiForSectionScreen extends ConsumerWidget
       }
 
       if (current.errorDeleting.status) {
-        ScaffoldMessenger.of(context).clearSnackBars();
-        var snackBar = SnackBar(
-          content: Text(
-              'error removing stored kanji ${current.errorDeleting.kanjiCharacter}'),
-          duration: const Duration(seconds: 3),
-        );
-
-        ScaffoldMessenger.of(context).showSnackBar(snackBar);
+        ref.read(toastServiceProvider).dismiss(context);
+        ref.read(toastServiceProvider).showShortMessage(context,
+            'error removing stored kanji ${current.errorDeleting.kanjiCharacter}');
 
         ref.read(kanjiListProvider.notifier).setErrorDelete(
               ErrorDeleting(

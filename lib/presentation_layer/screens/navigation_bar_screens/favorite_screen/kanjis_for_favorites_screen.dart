@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:kanji_for_n5_level_app/aplication_layer/services.dart';
 import 'package:kanji_for_n5_level_app/main.dart';
 import 'package:kanji_for_n5_level_app/providers/error_storing_database_status.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/navigation_bar_screens/favorite_screen/favorites_kanjis_provider.dart';
@@ -37,17 +38,16 @@ class KanjisForFavoritesScreen extends ConsumerWidget with MyDialogs {
               OnDismissibleActionStatus.successRemoved ||
           current.onDismissibleActionStatus ==
               OnDismissibleActionStatus.error) {
-        ScaffoldMessenger.of(context).clearSnackBars();
+        ref.read(toastServiceProvider).dismiss(context);
 
-        var snackBar = SnackBar(
-          content: Text(current.onDismissibleActionStatus.message),
-          duration: const Duration(seconds: 3),
-          action: current.onDismissibleActionStatus ==
-                  OnDismissibleActionStatus.successAdded
-              ? null
-              : SnackBarAction(
-                  label: 'Undo',
-                  onPressed: () async {
+        ref.read(toastServiceProvider).showMessage(
+            context,
+            current.onDismissibleActionStatus.message,
+            const Icon(Icons.favorite),
+            current.onDismissibleActionStatus ==
+                    OnDismissibleActionStatus.successAdded
+                ? null
+                : () async {
                     logger.d('restoring kanji');
                     final dissmisedKanji =
                         ref.read(favoriteskanjisProvider).dissmisedKanji;
@@ -62,10 +62,8 @@ class KanjisForFavoritesScreen extends ConsumerWidget with MyDialogs {
                           dissmisedKanji.kanjiFromApiFromDismisibleAction,
                           dissmisedKanji.index,
                         );
-                  }),
-        );
+                  });
 
-        ScaffoldMessenger.of(context).showSnackBar(snackBar);
         ref
             .read(favoriteskanjisProvider.notifier)
             .setOnDismissibleActionStatus(OnDismissibleActionStatus.noStarted);

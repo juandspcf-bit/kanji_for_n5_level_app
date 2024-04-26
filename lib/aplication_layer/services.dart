@@ -9,8 +9,7 @@ import 'package:kanji_for_n5_level_app/aplication_layer/repository_service/local
 import 'package:kanji_for_n5_level_app/aplication_layer/repository_service/local_repo/db_sqflite_impl.dart';
 import 'package:kanji_for_n5_level_app/aplication_layer/repository_service/storage_repo/storage_contract.dart';
 import 'package:kanji_for_n5_level_app/aplication_layer/repository_service/storage_repo/storage_db_imple.dart';
-import 'package:kanji_for_n5_level_app/aplication_layer/toast_service/delightful_toast_service.dart';
-import 'package:kanji_for_n5_level_app/aplication_layer/toast_service/toastification_service.dart';
+import 'package:kanji_for_n5_level_app/aplication_layer/toast_service/material_snack_bar_service.dart';
 import 'package:kanji_for_n5_level_app/aplication_layer/toast_service/toats_service_contract.dart';
 
 final authServiceProvider = Provider<AuthService>((ref) {
@@ -34,5 +33,5 @@ final localDBServiceProvider = Provider<LocalDBService>((ref) {
 });
 
 final toastServiceProvider = Provider<ToastServiceContract>((ref) {
-  return DelightfulToastService(); //ToastificationService();
+  return MaterialSnackBarService(); //ToastificationService();
 });

@@ -52,7 +52,7 @@ dependencies:
   path_provider: ^2.1.1
   shared_preferences: ^2.2.2
   permission_handler: ^11.0.1
-  connectivity_plus: ^5.0.1
+
   logger: ^2.0.2+1
   flutter_native_splash: ^2.3.5
   lottie: ^2.7.0
@@ -68,9 +68,9 @@ dependencies:
   timeline_tile: ^2.0.0
   flutter_logs: ^2.1.11
   animations: ^2.0.11
-  delightful_toast: ^1.1.0
+
   observe_internet_connectivity: ^1.0.2
-  toastification: ^1.0.0
+
 
 dev_dependencies:
   flutter_test:

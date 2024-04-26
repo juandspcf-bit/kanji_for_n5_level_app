@@ -8,7 +8,6 @@ import 'package:kanji_for_n5_level_app/presentation_layer/screens/common_screens
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/login_screen/login_screen.dart';
 import 'package:kanji_for_n5_level_app/providers/score_kanji_list_provider.dart';
 import 'package:kanji_for_n5_level_app/providers/status_connection_provider.dart';
-import 'package:toastification/toastification.dart';
 
 class AuthFlow extends ConsumerStatefulWidget {
   const AuthFlow({super.key});
@@ -18,22 +17,22 @@ class AuthFlow extends ConsumerStatefulWidget {
 }
 
 class _AutFlowState extends ConsumerState<AuthFlow> {
-  ToastificationItem? notification;
-
   @override
   Widget build(BuildContext context) {
     ref.read(lottieFilesProvider.notifier).initLottieFile();
     //localDBService.deleteUserQueue();
 
     ref.listen<ConnectionStatus>(statusConnectionProvider, (previuos, current) {
-      ref.read(toastServiceProvider).dismiss();
+      ref.read(toastServiceProvider).dismiss(context);
 
       if (current == ConnectionStatus.noConnected) {
-        ref.read(toastServiceProvider).showNoWifiConnection(context);
+        ref.read(toastServiceProvider).showMessage(context,
+            'No connected to internet', const Icon(Icons.wifi_off), null);
         return;
       }
       if (current == ConnectionStatus.connected) {
-        ref.read(toastServiceProvider).showWifiConnection(context);
+        ref.read(toastServiceProvider).showMessage(context,
+            'Internet connection restored', const Icon(Icons.wifi_off), null);
         return;
       }
     });

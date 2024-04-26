@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:kanji_for_n5_level_app/aplication_layer/services.dart';
 import 'package:kanji_for_n5_level_app/models/kanji_from_api.dart';
 import 'package:kanji_for_n5_level_app/models/secction_model.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_list/body_list/queue_download_delete_provider.dart';
@@ -39,15 +40,14 @@ class TrailingTile extends ConsumerWidget {
     }
   }
 
-  void showSnackBarQuizz(BuildContext context, String message, int duration) {
+  void showSnackBarQuizz(
+    BuildContext context,
+    String message,
+    WidgetRef ref,
+  ) {
     if (context.mounted) {
-      ScaffoldMessenger.of(context).clearSnackBars();
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          duration: Duration(seconds: duration),
-          content: Text(message),
-        ),
-      );
+      ref.read(toastServiceProvider).dismiss(context);
+      ref.read(toastServiceProvider).showShortMessage(context, message);
     }
   }
 
@@ -74,7 +74,10 @@ class TrailingTile extends ConsumerWidget {
         final resultStatus = ref.read(statusConnectionProvider);
         if (ConnectionStatus.noConnected == resultStatus) {
           showSnackBarQuizz(
-              context, 'you shoul be connected to perform this acction', 3);
+            context,
+            'you shoul be connected to perform this acction',
+            ref,
+          );
           return;
         }
 

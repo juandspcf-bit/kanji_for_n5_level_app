@@ -10,7 +10,6 @@ import 'package:kanji_for_n5_level_app/providers/on_boarding_provider.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/onBoarding_screen/my_page_viewer.dart';
 import 'package:kanji_for_n5_level_app/providers/status_connection_provider.dart';
 import 'package:logger/logger.dart';
-import 'package:observe_internet_connectivity/observe_internet_connectivity.dart';
 import 'firebase_options.dart';
 
 final dbFirebase = FirebaseFirestore.instance;
