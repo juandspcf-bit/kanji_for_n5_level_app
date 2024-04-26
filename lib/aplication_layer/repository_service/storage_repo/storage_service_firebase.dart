@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:kanji_for_n5_level_app/aplication_layer/auth_service/delete_user_exception.dart';
-import 'package:kanji_for_n5_level_app/aplication_layer/repository_service/storage_repo/storage_contract.dart';
+import 'package:kanji_for_n5_level_app/aplication_layer/repository_service/storage_repo/storage_service_contract.dart';
 
 final storageRef = FirebaseStorage.instance.ref();
 

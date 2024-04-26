@@ -1,7 +1,5 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kanji_for_n5_level_app/aplication_layer/services.dart';
-import 'package:kanji_for_n5_level_app/main.dart';
 
 class ImageMeaningKanjiProvider extends Notifier<ImageMeaningKanjiData> {
   @override
