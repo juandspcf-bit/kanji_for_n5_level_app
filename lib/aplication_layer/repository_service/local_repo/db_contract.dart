@@ -117,5 +117,17 @@ abstract class LocalDBService {
   Future<void> storeAllFavoritesFromCloud(List<Favorite> favorites);
 
   Future<void> updateQuizScoreFromCloud(
-      Map<String, Object> quizScoreData, String uuid);
+    Map<String, Object> quizScoreData,
+    String uuid,
+  );
+
+  Future<List<Favorite>> loadFavorites(String uid);
+
+  Future<Favorite> loadSingleFavorite(String kanjiCharacter, String uid);
+
+  Future<int> insertFavorite(String kanji, int timeStamp);
+
+  Future<int> deleteFavorite(String kanji);
+
+  Future<void> storeAllFavorites(List<Favorite> favorites);
 }

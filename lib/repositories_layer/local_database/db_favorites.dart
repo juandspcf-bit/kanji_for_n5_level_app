@@ -3,7 +3,7 @@ import 'package:kanji_for_n5_level_app/main.dart';
 import 'package:kanji_for_n5_level_app/models/favorite.dart';
 import 'package:kanji_for_n5_level_app/repositories_layer/local_database/db_definitions.dart';
 
-Future<List<Favorite>> loadFavorites(String uid) async {
+Future<List<Favorite>> loadFavoritesFirebase(String uid) async {
   try {
     final db = await kanjiFromApiDatabase;
     final data =
@@ -21,7 +21,8 @@ Future<List<Favorite>> loadFavorites(String uid) async {
   }
 }
 
-Future<Favorite> loadSingleFavorite(String kanjiCharacter, String uid) async {
+Future<Favorite> loadSingleFavoriteFirebase(
+    String kanjiCharacter, String uid) async {
   try {
     final db = await kanjiFromApiDatabase;
     final data = await db.query('user_favorites',
@@ -52,7 +53,7 @@ Future<Favorite> loadSingleFavorite(String kanjiCharacter, String uid) async {
   }
 }
 
-Future<int> insertFavorite(String kanji, int timeStamp) async {
+Future<int> insertFavoriteFirebase(String kanji, int timeStamp) async {
   final user = FirebaseAuth.instance.currentUser;
 
   if (user == null) {
@@ -66,7 +67,7 @@ Future<int> insertFavorite(String kanji, int timeStamp) async {
   });
 }
 
-Future<int> deleteFavorite(String kanji) async {
+Future<int> deleteFavoriteFirebase(String kanji) async {
   final user = FirebaseAuth.instance.currentUser;
 
   if (user == null) {
@@ -77,12 +78,12 @@ Future<int> deleteFavorite(String kanji) async {
       where: 'kanjiCharacter= ? AND uuid= ?', whereArgs: [kanji, user.uid]);
 }
 
-Future<void> storeAllFavorites(List<Favorite> favorites) async {
+Future<void> storeAllFavoritesFirebase(List<Favorite> favorites) async {
   try {
     final db = await kanjiFromApiDatabase;
     for (var favorite in favorites) {
       final favoriteDB =
-          await loadSingleFavorite(favorite.kanji, favorite.uuid);
+          await loadSingleFavoriteFirebase(favorite.kanji, favorite.uuid);
 
       if (favoriteDB.kanji == '') {
         db.insert("user_favorites", {

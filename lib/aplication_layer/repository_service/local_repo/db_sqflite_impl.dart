@@ -255,4 +255,29 @@ class SqliteDBService implements LocalDBService {
   Future<List<KanjiFromApi>> loadStoredKanjis() async {
     return loadStoredKanjisFromSqliteDB();
   }
+
+  @override
+  Future<int> deleteFavorite(String kanji) {
+    return deleteFavoriteFirebase(kanji);
+  }
+
+  @override
+  Future<int> insertFavorite(String kanji, int timeStamp) {
+    return insertFavoriteFirebase(kanji, timeStamp);
+  }
+
+  @override
+  Future<List<Favorite>> loadFavorites(String uid) {
+    return loadFavoritesFirebase(uid);
+  }
+
+  @override
+  Future<Favorite> loadSingleFavorite(String kanjiCharacter, String uid) {
+    return loadSingleFavoriteFirebase(kanjiCharacter, uid);
+  }
+
+  @override
+  Future<void> storeAllFavorites(List<Favorite> favorites) {
+    return storeAllFavoritesFirebase(favorites);
+  }
 }

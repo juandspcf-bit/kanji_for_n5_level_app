@@ -4,7 +4,6 @@ import 'package:kanji_for_n5_level_app/main.dart';
 import 'package:kanji_for_n5_level_app/models/favorite.dart';
 import 'package:kanji_for_n5_level_app/models/secction_model.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/main_screens/main_content_provider.dart';
-import 'package:kanji_for_n5_level_app/repositories_layer/local_database/db_favorites.dart';
 import 'package:kanji_for_n5_level_app/models/kanji_from_api.dart';
 import 'package:kanji_for_n5_level_app/providers/status_stored_provider.dart';
 
@@ -281,7 +280,9 @@ class FavoritesListProvider extends Notifier<FavoritesKanjisData> {
             ref.read(authServiceProvider).userUuid ?? '',
           );
 
-      await deleteFavorite(kanjiFromApi.kanjiCharacter);
+      await ref
+          .read(localDBServiceProvider)
+          .deleteFavorite(kanjiFromApi.kanjiCharacter);
       setOnDismissibleActionStatus(OnDismissibleActionStatus.successRemoved);
     } catch (e) {
       logger.e(e);
@@ -306,10 +307,10 @@ class FavoritesListProvider extends Notifier<FavoritesKanjisData> {
             ref.read(authServiceProvider).userUuid ?? '',
           );
 
-      await insertFavorite(
-        favoriteKanji.kanjiFromApi.kanjiCharacter,
-        favoriteKanji.timeStamp,
-      );
+      await ref.read(localDBServiceProvider).insertFavorite(
+            favoriteKanji.kanjiFromApi.kanjiCharacter,
+            favoriteKanji.timeStamp,
+          );
       final kanjiList = state.favoritesKanjisFromApi;
       logger.d('kanjiList: $kanjiList , $index');
 

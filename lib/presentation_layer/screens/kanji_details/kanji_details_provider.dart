@@ -1,7 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kanji_for_n5_level_app/aplication_layer/services.dart';
 import 'package:kanji_for_n5_level_app/main.dart';
-import 'package:kanji_for_n5_level_app/repositories_layer/local_database/db_favorites.dart';
 import 'package:kanji_for_n5_level_app/models/kanji_from_api.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/navigation_bar_screens/favorite_screen/favorites_kanjis_provider.dart';
 import 'package:kanji_for_n5_level_app/providers/status_stored_provider.dart';
@@ -57,7 +56,9 @@ class KanjiDetailsProvider extends Notifier<KanjiDetailsData?> {
               timeStamp,
               ref.read(authServiceProvider).userUuid ?? '',
             );
-        await insertFavorite(kanjiFromApi.kanjiCharacter, timeStamp);
+        await ref
+            .read(localDBServiceProvider)
+            .insertFavorite(kanjiFromApi.kanjiCharacter, timeStamp);
         final storedItems =
             ref.read(storedKanjisProvider.notifier).getStoresItems();
         ref.read(favoriteskanjisProvider.notifier).addItem(
@@ -88,7 +89,9 @@ class KanjiDetailsProvider extends Notifier<KanjiDetailsData?> {
               kanjiFromApi.kanjiCharacter,
               ref.read(authServiceProvider).userUuid ?? '',
             );
-        await deleteFavorite(kanjiFromApi.kanjiCharacter);
+        await ref
+            .read(localDBServiceProvider)
+            .deleteFavorite(kanjiFromApi.kanjiCharacter);
         ref.read(favoriteskanjisProvider.notifier).removeItem(kanjiFromApi);
         Future.delayed(
           const Duration(
