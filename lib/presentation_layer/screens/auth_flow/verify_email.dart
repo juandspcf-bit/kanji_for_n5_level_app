@@ -76,6 +76,7 @@ class _VerifyEmailEstate extends ConsumerState<VerifyEmail> {
 
   @override
   Widget build(BuildContext context) {
+    FlutterNativeSplash.remove();
     return isEmailVerified
         ? FutureBuilder(
             future: ref.read(statusConnectionProvider) ==
@@ -92,7 +93,6 @@ class _VerifyEmailEstate extends ConsumerState<VerifyEmail> {
                 );
               } else if (connectionStatus == ConnectionState.done ||
                   connectionStatus == ConnectionState.active) {
-                FlutterNativeSplash.remove();
                 return const MainContent();
               } else {
                 return const Center(child: Text('error'));

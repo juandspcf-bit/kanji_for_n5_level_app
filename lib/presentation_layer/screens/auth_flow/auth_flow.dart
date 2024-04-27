@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kanji_for_n5_level_app/aplication_layer/auth_service/auth_service_firebase.dart';
 import 'package:kanji_for_n5_level_app/aplication_layer/services.dart';
+import 'package:kanji_for_n5_level_app/main.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/auth_flow/verify_email.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/common_screens/error_connection_screen.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/common_screens/loading_screen.dart';
@@ -52,12 +53,14 @@ class _AutFlowState extends ConsumerState<AuthFlow> {
     return StreamBuilder(
         stream: streamAuth,
         builder: (ctx, snapShot) {
+          logger.d(snapShot.connectionState);
           if (snapShot.connectionState == ConnectionState.waiting) {
             return const ProcessProgress(
               message: 'Login to your account',
             );
           }
-          if (snapShot.hasData) {
+          if (snapShot.connectionState == ConnectionState.active &&
+              snapShot.hasData) {
             final user = snapShot.data;
             if (user != null) {
               ref.read(authServiceProvider).setLoggedUser();
@@ -65,6 +68,11 @@ class _AutFlowState extends ConsumerState<AuthFlow> {
             } else {
               return LoginFormScreen();
             }
+          }
+
+          if (snapShot.connectionState == ConnectionState.active &&
+              !snapShot.hasData) {
+            return LoginFormScreen();
           }
 
           return const ErrorConnectionScreen(message: 'Error while login');

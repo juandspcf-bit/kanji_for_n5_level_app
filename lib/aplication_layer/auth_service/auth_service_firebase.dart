@@ -7,11 +7,12 @@ import 'package:kanji_for_n5_level_app/config_files/network_config.dart';
 import 'package:kanji_for_n5_level_app/main.dart';
 import 'package:kanji_for_n5_level_app/models/user.dart';
 
-final streamAuth = FirebaseAuth.instance.userChanges();
+Stream<User?> streamAuth = FirebaseAuth.instance.userChanges();
 
 class FirebaseAuthService implements AuthService {
   @override
   String? userUuid = '';
+  FirebaseAuth autServiceInstance = FirebaseAuth.instance;
 
   @override
   void setLoggedUser() {
@@ -23,7 +24,7 @@ class FirebaseAuthService implements AuthService {
       {required String email, required String password}) async {
     try {
       logger.d(password);
-      await FirebaseAuth.instance
+      await autServiceInstance
           .signInWithEmailAndPassword(email: email, password: password)
           .timeout(
             const Duration(seconds: timeOutValue),
@@ -53,7 +54,7 @@ class FirebaseAuthService implements AuthService {
   Future<StatusResetPasswordRequest> sendPasswordResetEmail(
       {required email}) async {
     try {
-      await FirebaseAuth.instance
+      await autServiceInstance
           .sendPasswordResetEmail(email: email)
           .timeout(const Duration(seconds: timeOutValue));
 
@@ -79,7 +80,7 @@ class FirebaseAuthService implements AuthService {
     if (uuid == '') {
       return (DeleteUserStatus.error, '');
     }
-    final user = FirebaseAuth.instance.currentUser;
+    final user = autServiceInstance.currentUser;
 
     try {
       if (userData.uuid != "" && user != null) {
@@ -111,7 +112,7 @@ class FirebaseAuthService implements AuthService {
 
   @override
   Future<void> singOut() async {
-    return await FirebaseAuth.instance.signOut();
+    return await autServiceInstance.signOut();
   }
 
   @override
@@ -120,7 +121,7 @@ class FirebaseAuthService implements AuthService {
     required String password,
   }) async {
     try {
-      final credential = await FirebaseAuth.instance
+      final credential = await autServiceInstance
           .createUserWithEmailAndPassword(
             email: email,
             password: password,
