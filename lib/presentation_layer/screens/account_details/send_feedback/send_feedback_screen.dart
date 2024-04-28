@@ -53,12 +53,10 @@ class SendFeedBackForm extends ConsumerWidget {
                           labelText: 'message',
                           floatingLabelBehavior: FloatingLabelBehavior.always),
                       validator: (text) {
-                        if (text != null &&
-                            text.length >= 4 &&
-                            text.length <= 20) {
+                        if (text != null && text.length >= 4) {
                           return null;
                         } else {
-                          return 'Password should be between 20 and 4 characters';
+                          return 'Text should not be to short';
                         }
                       },
                       onSaved: (value) {},
