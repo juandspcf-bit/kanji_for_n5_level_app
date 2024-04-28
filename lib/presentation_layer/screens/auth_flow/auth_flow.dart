@@ -60,8 +60,10 @@ class _AutFlowState extends ConsumerState<AuthFlow> {
               message: 'Login to your account',
             );
           }
-          if (snapShot.connectionState == ConnectionState.active &&
-              snapShot.hasData) {
+          if ((snapShot.connectionState == ConnectionState.active &&
+                  snapShot.hasData) ||
+              (snapShot.connectionState == ConnectionState.done &&
+                  snapShot.hasData)) {
             final user = snapShot.data;
             if (user != null) {
               ref.read(authServiceProvider).setLoggedUser();
@@ -76,14 +78,14 @@ class _AutFlowState extends ConsumerState<AuthFlow> {
             return LoginFormScreen();
           }
 
-          ref.read(toastServiceProvider).showMessage(
+/*           ref.read(toastServiceProvider).showMessage(
                 context,
-                'error connecting internet',
+                'Error login in',
                 Icons.error,
                 const Duration(seconds: 5),
                 '',
                 null,
-              );
+              ); */
 
           return LoginFormScreen();
         });

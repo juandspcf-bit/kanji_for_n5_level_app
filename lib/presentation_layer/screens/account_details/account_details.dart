@@ -5,6 +5,7 @@ import 'package:kanji_for_n5_level_app/presentation_layer/screens/account_detail
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/account_details/close_account/close_account_screen.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/account_details/close_account/close_account_provider.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/account_details/personal_info/personal_info_provider.dart';
+import 'package:kanji_for_n5_level_app/presentation_layer/screens/account_details/send_feedback/send_feedback_screen.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/login_screen/login_provider.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/main_screens/main_content_provider.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/account_details/password_change_flow_provider.dart';
@@ -102,6 +103,27 @@ class AccountDetails extends ConsumerWidget {
                           const BorderRadius.all(Radius.circular(12.0)),
                     ),
                     title: const Text('Change password'),
+                    trailing: const Icon(Icons.arrow_forward_ios),
+                  ),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  ListTile(
+                    onTap: () {
+                      Navigator.of(context)
+                          .push(MaterialPageRoute(builder: (ctx) {
+                        return const SendFeedBack();
+                      }));
+                    },
+                    contentPadding:
+                        const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                    shape: OutlineInputBorder(
+                      borderSide:
+                          const BorderSide().copyWith(color: Colors.white30),
+                      borderRadius:
+                          const BorderRadius.all(Radius.circular(12.0)),
+                    ),
+                    title: const Text('Send Feedback'),
                     trailing: const Icon(Icons.arrow_forward_ios),
                   ),
                   const SizedBox(
