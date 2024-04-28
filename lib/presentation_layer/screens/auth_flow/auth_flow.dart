@@ -51,9 +51,10 @@ class _AutFlowState extends ConsumerState<AuthFlow> {
     });
 
     return StreamBuilder(
-        stream: streamAuth,
+        stream: ref.read(authServiceProvider).authStream(),
         builder: (ctx, snapShot) {
           logger.d(snapShot.connectionState);
+          logger.d(snapShot.hasData);
           if (snapShot.connectionState == ConnectionState.waiting) {
             return const ProcessProgress(
               message: 'Login to your account',
@@ -75,7 +76,16 @@ class _AutFlowState extends ConsumerState<AuthFlow> {
             return LoginFormScreen();
           }
 
-          return const ErrorConnectionScreen(message: 'Error while login');
+          ref.read(toastServiceProvider).showMessage(
+                context,
+                'error connecting internet',
+                Icons.error,
+                const Duration(seconds: 5),
+                '',
+                null,
+              );
+
+          return LoginFormScreen();
         });
   }
 }

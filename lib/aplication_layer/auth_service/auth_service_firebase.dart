@@ -7,9 +7,23 @@ import 'package:kanji_for_n5_level_app/config_files/network_config.dart';
 import 'package:kanji_for_n5_level_app/main.dart';
 import 'package:kanji_for_n5_level_app/models/user.dart';
 
-Stream<User?> streamAuth = FirebaseAuth.instance.userChanges();
-
 class FirebaseAuthService implements AuthService {
+  Stream<User?> streamAuth = FirebaseAuth.instance.userChanges();
+
+  final transformer = StreamTransformer<User?, String?>.fromHandlers(
+      handleData: (value, sink) {
+        if (value == null) sink.add(null);
+        sink.add(
+          value!.uid,
+        );
+      },
+      handleDone: (sink) => sink.close());
+
+  @override
+  Stream<String?> authStream() {
+    return streamAuth.transform(transformer);
+  }
+
   @override
   String? userUuid = '';
   FirebaseAuth autServiceInstance = FirebaseAuth.instance;
