@@ -2,6 +2,13 @@
 
 <uses-permission android:name="android.permission.INTERNET"/>
 
+<queries>
+    <intent>
+      <action android:name="android.intent.action.SENDTO" />
+      <data android:scheme="mailto" />
+    </intent>
+  </queries>
+
     <application
         android:label="kanji_for_n5_level_app"
         android:name="${applicationName}"
