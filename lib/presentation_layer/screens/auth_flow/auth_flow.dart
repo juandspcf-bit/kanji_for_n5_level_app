@@ -58,10 +58,9 @@ class _AutFlowState extends ConsumerState<AuthFlow> {
               message: 'Login to your account',
             );
           }
-          if ((snapShot.connectionState == ConnectionState.active &&
-                  snapShot.hasData) ||
-              (snapShot.connectionState == ConnectionState.done &&
-                  snapShot.hasData)) {
+          if ((snapShot.connectionState == ConnectionState.active ||
+                  snapShot.connectionState == ConnectionState.done) &&
+              snapShot.hasData) {
             final user = snapShot.data;
             if (user != null) {
               ref.read(authServiceProvider).setLoggedUser();
