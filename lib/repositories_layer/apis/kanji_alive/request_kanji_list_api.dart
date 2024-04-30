@@ -14,17 +14,22 @@ class KanjiAliveApi {
   ) async {
     return await Isolate.run<List<KanjiFromApi>>(() async {
       FutureGroup<Response> group = FutureGroup<Response>();
-      final lists = getGroupedKanjisAccordingToItsStorageStatus(
+      final (
+        indexesFromKanjisToRequestToApi,
+        indexesFromStoredKanjis,
+        listOfKanjisToRequestToApi,
+        listOfStoredKanjis,
+      ) = getGroupedKanjisAccordingToItsStorageStatus(
         storedKanjis,
         kanjisCharacteres,
       );
 
       //when all the kanjis are stored
-      if (kanjisCharacteres.length == lists.$4.length) {
+      if (kanjisCharacteres.length == listOfStoredKanjis.length) {
         final List<KanjiFromApi> fixedLengthList = [];
-        for (int i = 0; i < lists.$4.length; i++) {
+        for (int i = 0; i < listOfStoredKanjis.length; i++) {
           for (int j = 0; j < storedKanjis.length; j++) {
-            if (lists.$4[i] == storedKanjis[j].kanjiCharacter) {
+            if (listOfStoredKanjis[i] == storedKanjis[j].kanjiCharacter) {
               fixedLengthList.add(storedKanjis[j]);
               break;
             }
@@ -33,7 +38,7 @@ class KanjiAliveApi {
         return fixedLengthList;
       }
 
-      for (final kanji in lists.$3) {
+      for (final kanji in listOfKanjisToRequestToApi) {
         group.add(RequestsApi.getKanjiData(kanji));
       }
 
@@ -43,7 +48,7 @@ class KanjiAliveApi {
       List<KanjiFromApi> kanjisFromApi = [];
 
       //when all the kanjis are online
-      if (kanjisCharacteres.length == lists.$3.length) {
+      if (kanjisCharacteres.length == listOfKanjisToRequestToApi.length) {
         //fecth all the kanjis with a http request
         List<Response> kanjiInformationList = await group.future.timeout(
           const Duration(
@@ -74,13 +79,13 @@ class KanjiAliveApi {
       }
       final fixedLengthList = List<KanjiFromApi>.filled(
           kanjisCharacteres.length, kanjisFromApi.first);
-      for (int i = 0; i < lists.$1.length; i++) {
-        fixedLengthList[lists.$1[i]] = kanjisFromApi[i];
+      for (int i = 0; i < indexesFromKanjisToRequestToApi.length; i++) {
+        fixedLengthList[indexesFromKanjisToRequestToApi[i]] = kanjisFromApi[i];
       }
-      for (int i = 0; i < lists.$4.length; i++) {
+      for (int i = 0; i < listOfStoredKanjis.length; i++) {
         for (int j = 0; j < storedKanjis.length; j++) {
-          if (lists.$4[i] == storedKanjis[j].kanjiCharacter) {
-            fixedLengthList[lists.$2[i]] = storedKanjis[j];
+          if (listOfStoredKanjis[i] == storedKanjis[j].kanjiCharacter) {
+            fixedLengthList[indexesFromStoredKanjis[i]] = storedKanjis[j];
             break;
           }
         }

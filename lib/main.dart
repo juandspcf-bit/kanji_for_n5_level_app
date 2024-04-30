@@ -7,6 +7,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/auth_flow/auth_flow.dart';
 import 'package:kanji_for_n5_level_app/providers/on_boarding_provider.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/onBoarding_screen/my_page_viewer.dart';
+import 'package:kanji_for_n5_level_app/providers/score_kanji_list_provider.dart';
 import 'package:kanji_for_n5_level_app/providers/status_connection_provider.dart';
 import 'package:logger/logger.dart';
 import 'firebase_options.dart';
@@ -46,6 +47,7 @@ class MyApp extends ConsumerWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    ref.read(lottieFilesProvider.notifier).initLottieFile();
     final onBoardingData = ref.watch(onBoardingProvider);
     ref.read(statusConnectionProvider);
     return MaterialApp(

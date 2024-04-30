@@ -18,7 +18,6 @@ class AuthFlow extends ConsumerStatefulWidget {
 class _AutFlowState extends ConsumerState<AuthFlow> {
   @override
   Widget build(BuildContext context) {
-    ref.read(lottieFilesProvider.notifier).initLottieFile();
     //localDBService.deleteUserQueue();
 
     ref.listen<ConnectionStatus>(statusConnectionProvider, (previuos, current) {
