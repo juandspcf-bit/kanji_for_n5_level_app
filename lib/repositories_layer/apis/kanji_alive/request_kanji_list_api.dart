@@ -15,11 +15,11 @@ class KanjiAliveApi {
     String uuid,
   ) async {
     return await Isolate.run<List<KanjiFromApi>>(() async {
-      final localHostResult = await RequestsApi.getKanjiDataLocalHost(
+/*       final localHostResult = await RequestsApi.getKanjiDataLocalHost(
         '大',
         uuid,
       );
-      logger.d(localHostResult.body);
+      logger.d(localHostResult.body); */
 
       FutureGroup<Response> group = FutureGroup<Response>();
       final (
