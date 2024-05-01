@@ -140,10 +140,12 @@ class QueueDownloadDeleteProvider extends Notifier<QueueData> {
         ),
       );
 
-      kanjiFromApiOnline = await ref
-          .read(applicationApiServiceProvider)
-          .requestSingleKanjiToApi(
-              kanjiFromApiStored.kanjiCharacter, kanjiFromApiStored.section);
+      kanjiFromApiOnline =
+          await ref.read(applicationApiServiceProvider).requestSingleKanjiToApi(
+                kanjiFromApiStored.kanjiCharacter,
+                kanjiFromApiStored.section,
+                ref.read(authServiceProvider).userUuid ?? '',
+              );
 
 /*       await deleteKanji.deleteKanjiFromLocalDatabase(
           ref.read(authServiceProvider).userUuid ?? '', ref); */

@@ -9,7 +9,8 @@ class RequestEnglishWordToKanji {
   static void getKanjiFromEnglishWord(
       String word,
       void Function(List<KanjiFromApi>) onSuccess,
-      void Function() onError) async {
+      void Function() onError,
+      String uuid) async {
     try {
       Response value = await RequestsApi.getKanjiFromEnglishWord(word);
 
@@ -21,8 +22,8 @@ class RequestEnglishWordToKanji {
       Map<String, dynamic> kanjiMap = map['kanji'];
 
       logger.d(kanjiMap['character']);
-      final kanjiList =
-          await KanjiAliveApi.getKanjiList([], [kanjiMap['character']], 0);
+      final kanjiList = await KanjiAliveApi.getKanjiList(
+          [], [kanjiMap['character']], 0, uuid);
 
       onSuccess(kanjiList);
     } catch (e) {

@@ -35,6 +35,7 @@ class FavoritesListProvider extends Notifier<FavoritesKanjisData> {
                 storedKanjis,
                 myFavorites.map((e) => e.kanji).toList(),
                 section,
+                ref.read(authServiceProvider).userUuid ?? '',
               );
 
       kanjiList = updateSectionInKanjiList(kanjiList);
@@ -110,6 +111,7 @@ class FavoritesListProvider extends Notifier<FavoritesKanjisData> {
                 storedKanjis,
                 favoritesKanjisFromDB.map((e) => e.kanji).toList(),
                 10,
+                ref.read(authServiceProvider).userUuid ?? '',
               );
 
       kanjiListFromAPI = updateSectionInKanjiList(kanjiListFromAPI);

@@ -3,6 +3,7 @@ import 'dart:isolate';
 
 import 'package:async/async.dart';
 import 'package:http/http.dart';
+import 'package:kanji_for_n5_level_app/main.dart';
 import 'package:kanji_for_n5_level_app/models/kanji_from_api.dart';
 import 'package:kanji_for_n5_level_app/repositories_layer/apis/kanji_alive/request_api.dart';
 
@@ -11,8 +12,15 @@ class KanjiAliveApi {
     List<KanjiFromApi> storedKanjis,
     List<String> kanjisCharacteres,
     int section,
+    String uuid,
   ) async {
     return await Isolate.run<List<KanjiFromApi>>(() async {
+      final localHostResult = await RequestsApi.getKanjiDataLocalHost(
+        '大',
+        uuid,
+      );
+      logger.d(localHostResult.body);
+
       FutureGroup<Response> group = FutureGroup<Response>();
       final (
         indexesFromKanjisToRequestToApi,

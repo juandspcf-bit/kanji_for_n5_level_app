@@ -3,7 +3,9 @@ import 'package:http/http.dart';
 import 'package:kanji_for_n5_level_app/API_Files/key_file_api.dart';
 
 class RequestsApi {
-  static Future<Response> getKanjiData(String kanji) async {
+  static Future<Response> getKanjiData(
+    String kanji,
+  ) async {
     final url = Uri.https(
       "kanjialive-api.p.rapidapi.com",
       "api/public/kanji/$kanji",
@@ -13,7 +15,7 @@ class RequestsApi {
       url,
       headers: {
         'X-RapidAPI-Key': xRapidAPIKey,
-        'X-RapidAPI-Host': 'kanjialive-api.p.rapidapi.com'
+        'X-RapidAPI-Host': 'kanjialive-api.p.rapidapi.com',
       },
     );
   }
@@ -27,6 +29,25 @@ class RequestsApi {
       headers: {
         'X-RapidAPI-Key': xRapidAPIKey,
         'X-RapidAPI-Host': 'kanjialive-api.p.rapidapi.com'
+      },
+    );
+  }
+
+  static Future<Response> getKanjiDataLocalHost(
+    String kanji,
+    String uuid,
+  ) async {
+    final url = Uri.http(
+      "172.20.10.2:90",
+      "api/v1/kanjis/$kanji",
+    );
+
+    return http.get(
+      url,
+      headers: {
+        'X-RapidAPI-Key': xRapidAPIKey,
+        'X-RapidAPI-Host': 'kanjialive-api.p.rapidapi.com',
+        'uuid': uuid,
       },
     );
   }

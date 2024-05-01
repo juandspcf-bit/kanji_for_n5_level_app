@@ -5,14 +5,15 @@ import 'package:kanji_for_n5_level_app/repositories_layer/apis/kanji_alive/reque
 class AppAplicationApiService implements KanjiApiService {
   @override
   Future<List<KanjiFromApi>> requestKanjiListToApi(
-    List<KanjiFromApi> storedKanjis,
-    List<String> kanjisCharacteres,
-    int section,
-  ) async {
+      List<KanjiFromApi> storedKanjis,
+      List<String> kanjisCharacteres,
+      int section,
+      String uuid) async {
     return KanjiAliveApi.getKanjiList(
       storedKanjis,
       kanjisCharacteres,
       section,
+      uuid,
     );
   }
 
@@ -20,9 +21,14 @@ class AppAplicationApiService implements KanjiApiService {
   Future<KanjiFromApi> requestSingleKanjiToApi(
     String kanjiCharacter,
     int section,
+    String uuid,
   ) async {
-    final kanjiList =
-        await KanjiAliveApi.getKanjiList([], [kanjiCharacter], section);
+    final kanjiList = await KanjiAliveApi.getKanjiList(
+      [],
+      [kanjiCharacter],
+      section,
+      uuid,
+    );
     return kanjiList[0];
   }
 }

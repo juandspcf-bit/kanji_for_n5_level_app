@@ -220,6 +220,7 @@ class KanjiListProvider extends Notifier<KanjiListData> {
           storedKanjis[section] ?? [],
           kanjisCharacteres,
           section,
+          ref.read(authServiceProvider).userUuid ?? '',
         );
   }
 

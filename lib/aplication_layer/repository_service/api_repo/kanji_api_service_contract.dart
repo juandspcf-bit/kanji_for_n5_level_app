@@ -5,10 +5,12 @@ abstract class KanjiApiService {
     List<KanjiFromApi> storedKanjis,
     List<String> kanjisCharacteres,
     int section,
+    String uuid,
   );
 
   Future<KanjiFromApi> requestSingleKanjiToApi(
     String kanjisCharacteres,
     int section,
+    String uuid,
   );
 }
