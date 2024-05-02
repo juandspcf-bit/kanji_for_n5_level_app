@@ -4,7 +4,6 @@ import 'package:async/async.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:kanji_for_n5_level_app/main.dart';
-import 'package:kanji_for_n5_level_app/providers/image_meaning_kanji_provider.dart';
 import 'package:kanji_for_n5_level_app/repositories_layer/local_database/db_definitions.dart';
 import 'package:kanji_for_n5_level_app/repositories_layer/local_database/db_utils.dart';
 import 'package:kanji_for_n5_level_app/models/kanji_from_api.dart';
@@ -67,7 +66,7 @@ Future<List<Map<String, Object?>>> readUserDataFromSqlite(String uuid) async {
 class ParametersCompute {
   final Directory path;
   final KanjiFromApi kanjiFromApi;
-  final ImageMeaningKanjiData imageMeaningData;
+  final ImageDetailsLink imageMeaningData;
   final String uuid;
 
   ParametersCompute({
@@ -80,7 +79,7 @@ class ParametersCompute {
 
 Future<KanjiFromApi?> storeKanjiToSqlite(
   KanjiFromApi kanjiFromApi,
-  ImageMeaningKanjiData imageMeaningData,
+  ImageDetailsLink imageMeaningData,
   String uuid,
 ) async {
   final dirDocumentPath = await getApplicationDocumentsDirectory();
@@ -93,12 +92,12 @@ Future<KanjiFromApi?> storeKanjiToSqlite(
         uuid: uuid,
       ));
 
-  final imageMeaningDownloaded = ImageMeaningKanjiData(
-      kanji: imageMeaningData.kanji,
-      link: imageMeaningPath,
-      linkHeight: imageMeaningData.linkHeight,
-      linkWidth: imageMeaningData.linkHeight,
-      statusImageMeaningStorage: StatusImageMeaningStorage.stored);
+  final imageMeaningDownloaded = ImageDetailsLink(
+    kanji: imageMeaningData.kanji,
+    link: imageMeaningPath,
+    linkHeight: imageMeaningData.linkHeight,
+    linkWidth: imageMeaningData.linkWidth,
+  );
 
   await insertPathsInDB(
     kanjiFromApiDownloaded,
@@ -113,7 +112,7 @@ Future<(KanjiFromApi, String)> downloadKanjiDataFromApiComputeVersion(
 ) async {
   final examplesMap = await downloadExamples(parametersCompute);
   final strokesPaths = await downloadStrokesData(parametersCompute);
-  final imageMeaning = await downloadImageMeaning(parametersCompute);
+  final imageMeaning = await downloadImageDetails(parametersCompute);
 
   final kanjiMap = await downloadKanjidata(parametersCompute);
 
@@ -161,7 +160,7 @@ Future<List<Map<String, String>>> downloadExamples(
   return exampleMaps;
 }
 
-Future<String> downloadImageMeaning(
+Future<String> downloadImageDetails(
   ParametersCompute parametersCompute,
 ) async {
   final path = getPathToDocuments(
@@ -295,7 +294,7 @@ Future<Map<String, String>> downloadKanjidata(
 
 Future<int> insertPathsInDB(
   KanjiFromApi kanjifromApi,
-  ImageMeaningKanjiData imageMeaningDownloaded,
+  ImageDetailsLink imageMeaningDownloaded,
   String uuid,
 ) async {
   final kanjiMap = {

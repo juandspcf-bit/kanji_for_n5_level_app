@@ -70,3 +70,30 @@ Future<List<KanjiFromApi>> loadStoredKanjisFromSqliteDB() async {
 
   return kanjisFromApi;
 }
+
+Future<ImageDetailsLink> loadImageDetailsFromSqliteDB(
+  String kanjiCharacter,
+  String uuid,
+) async {
+  final db = await kanjiFromApiDatabase;
+  final imageDetailsDataList = await db.query('image_meaning',
+      where: 'uuid = ? AND kanjiCharacter= ?',
+      whereArgs: [uuid, kanjiCharacter],
+      limit: 1);
+
+  if (imageDetailsDataList.isEmpty) {
+    return ImageDetailsLink(
+      kanji: '',
+      link: '',
+      linkHeight: 0,
+      linkWidth: 0,
+    );
+  }
+  final imageDetailsData = imageDetailsDataList.first;
+  return ImageDetailsLink(
+    kanji: imageDetailsData['kanjiCharacter'] as String,
+    link: imageDetailsData['link'] as String,
+    linkHeight: imageDetailsData['linkHeight'] as int,
+    linkWidth: imageDetailsData['linkWidth'] as int,
+  );
+}

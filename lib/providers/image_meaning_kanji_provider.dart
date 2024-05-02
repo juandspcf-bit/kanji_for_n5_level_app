@@ -1,72 +1,91 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kanji_for_n5_level_app/aplication_layer/services.dart';
+import 'package:kanji_for_n5_level_app/main.dart';
 
-class ImageMeaningKanjiProvider extends Notifier<ImageMeaningKanjiData> {
+class ImageMeaningKanjiProvider extends Notifier<ImageDetailsLinkData> {
   @override
-  ImageMeaningKanjiData build() {
-    return ImageMeaningKanjiData(
+  ImageDetailsLinkData build() {
+    return ImageDetailsLinkData(
       kanji: '',
       link: '',
       linkHeight: 0,
       linkWidth: 0,
-      statusImageMeaningStorage: StatusImageMeaningStorage.online,
+      storageImageDetailsStatus: StorageImageDetailsStatus.online,
     );
   }
 
   void fetchData(String kanjiCharacter) async {
     try {
-      final kanjiData =
-          await ref.read(cloudDBServiceProvider).fetchKanjiData(kanjiCharacter);
+      final imageDetailsStored =
+          await ref.read(localDBServiceProvider).loadImageDetails(
+                kanjiCharacter,
+                ref.read(authServiceProvider).userUuid ?? '',
+              );
 
-      state = ImageMeaningKanjiData(
-        kanji: kanjiData['kanji'] as String,
-        link: kanjiData['link'] as String,
-        linkHeight: kanjiData['linkHeight'],
-        linkWidth: kanjiData['linkWidth'],
-        statusImageMeaningStorage: StatusImageMeaningStorage.online,
-      );
+      if (imageDetailsStored.kanji != '') {
+        state = ImageDetailsLinkData(
+          kanji: imageDetailsStored.kanji,
+          link: imageDetailsStored.link,
+          linkHeight: imageDetailsStored.linkHeight,
+          linkWidth: imageDetailsStored.linkWidth,
+          storageImageDetailsStatus: StorageImageDetailsStatus.stored,
+        );
+        logger.d(
+            'In database link ${imageDetailsStored.linkHeight} ${imageDetailsStored.linkWidth}');
+      } else {
+        final kanjiData = await ref
+            .read(cloudDBServiceProvider)
+            .fetchKanjiData(kanjiCharacter);
+
+        state = ImageDetailsLinkData(
+          kanji: kanjiData['kanji'] as String,
+          link: kanjiData['link'] as String,
+          linkHeight: kanjiData['linkHeight'],
+          linkWidth: kanjiData['linkWidth'],
+          storageImageDetailsStatus: StorageImageDetailsStatus.online,
+        );
+        logger.d('In cloud');
+      }
     } catch (e) {
-      state = ImageMeaningKanjiData(
-          kanji: '',
-          link: '',
-          linkHeight: 0,
-          linkWidth: 0,
-          statusImageMeaningStorage: StatusImageMeaningStorage.online);
+      state = ImageDetailsLinkData(
+        kanji: '',
+        link: '',
+        linkHeight: 0,
+        linkWidth: 0,
+        storageImageDetailsStatus: StorageImageDetailsStatus.online,
+      );
     }
   }
 
   void clearState() {
-    state = ImageMeaningKanjiData(
+    state = ImageDetailsLinkData(
       kanji: '',
       link: '',
       linkHeight: 0,
       linkWidth: 0,
-      statusImageMeaningStorage: StatusImageMeaningStorage.online,
+      storageImageDetailsStatus: StorageImageDetailsStatus.online,
     );
   }
 }
 
 final imageMeaningKanjiProvider =
-    NotifierProvider<ImageMeaningKanjiProvider, ImageMeaningKanjiData>(
+    NotifierProvider<ImageMeaningKanjiProvider, ImageDetailsLinkData>(
         ImageMeaningKanjiProvider.new);
 
-class ImageMeaningKanjiData {
+class ImageDetailsLinkData {
   final String kanji;
   final String link;
   final int linkHeight;
   final int linkWidth;
-  final StatusImageMeaningStorage statusImageMeaningStorage;
+  final StorageImageDetailsStatus storageImageDetailsStatus;
 
-  ImageMeaningKanjiData({
+  ImageDetailsLinkData({
     required this.kanji,
     required this.link,
     required this.linkHeight,
     required this.linkWidth,
-    required this.statusImageMeaningStorage,
+    required this.storageImageDetailsStatus,
   });
 }
 
-enum StatusImageMeaningStorage {
-  online,
-  stored,
-}
+enum StorageImageDetailsStatus { online, stored }

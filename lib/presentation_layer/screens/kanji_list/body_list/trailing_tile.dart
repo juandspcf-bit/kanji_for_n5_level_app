@@ -86,7 +86,12 @@ class TrailingTile extends ConsumerWidget {
           final imageMeaningData = ref.read(imageMeaningKanjiProvider);
           ref.read(queueDownloadDeleteProvider.notifier).insertKanjiToStorage(
                 kanjiFromApi,
-                imageMeaningData,
+                ImageDetailsLink(
+                  kanji: imageMeaningData.kanji,
+                  link: imageMeaningData.link,
+                  linkHeight: imageMeaningData.linkHeight,
+                  linkWidth: imageMeaningData.linkWidth,
+                ),
               );
         } else if (kanjiFromApi.statusStorage == StatusStorage.stored) {
           ref
