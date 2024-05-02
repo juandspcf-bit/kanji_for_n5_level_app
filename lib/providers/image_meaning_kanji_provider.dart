@@ -9,6 +9,7 @@ class ImageMeaningKanjiProvider extends Notifier<ImageMeaningKanjiData> {
       link: '',
       linkHeight: 0,
       linkWidth: 0,
+      statusImageMeaningStorage: StatusImageMeaningStorage.online,
     );
   }
 
@@ -22,14 +23,15 @@ class ImageMeaningKanjiProvider extends Notifier<ImageMeaningKanjiData> {
         link: kanjiData['link'] as String,
         linkHeight: kanjiData['linkHeight'],
         linkWidth: kanjiData['linkWidth'],
+        statusImageMeaningStorage: StatusImageMeaningStorage.online,
       );
     } catch (e) {
       state = ImageMeaningKanjiData(
-        kanji: '',
-        link: '',
-        linkHeight: 0,
-        linkWidth: 0,
-      );
+          kanji: '',
+          link: '',
+          linkHeight: 0,
+          linkWidth: 0,
+          statusImageMeaningStorage: StatusImageMeaningStorage.online);
     }
   }
 
@@ -39,6 +41,7 @@ class ImageMeaningKanjiProvider extends Notifier<ImageMeaningKanjiData> {
       link: '',
       linkHeight: 0,
       linkWidth: 0,
+      statusImageMeaningStorage: StatusImageMeaningStorage.online,
     );
   }
 }
@@ -52,11 +55,18 @@ class ImageMeaningKanjiData {
   final String link;
   final int linkHeight;
   final int linkWidth;
+  final StatusImageMeaningStorage statusImageMeaningStorage;
 
   ImageMeaningKanjiData({
     required this.kanji,
     required this.link,
     required this.linkHeight,
     required this.linkWidth,
+    required this.statusImageMeaningStorage,
   });
+}
+
+enum StatusImageMeaningStorage {
+  online,
+  stored,
 }
