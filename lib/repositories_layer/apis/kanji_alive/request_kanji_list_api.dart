@@ -3,7 +3,6 @@ import 'dart:isolate';
 
 import 'package:async/async.dart';
 import 'package:http/http.dart';
-import 'package:kanji_for_n5_level_app/main.dart';
 import 'package:kanji_for_n5_level_app/models/kanji_from_api.dart';
 import 'package:kanji_for_n5_level_app/repositories_layer/apis/kanji_alive/request_api.dart';
 

@@ -8,8 +8,8 @@ class ImageMeaningKanji extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final imageUrl = ref.watch(imageMeaningKanjiProvider).link;
-    if (imageUrl == '') {
+    final imageData = ref.watch(imageMeaningKanjiProvider);
+    if (imageData.link == '') {
       return LayoutBuilder(
         builder: (context, constraints) {
           final height = constraints.maxWidth * 427 / 640;
@@ -24,8 +24,13 @@ class ImageMeaningKanji extends ConsumerWidget {
         },
       );
     }
+
+    final height = 800 * imageData.linkHeight / imageData.linkWidth;
+
     return CachedNetworkImage(
-      imageUrl: imageUrl,
+      memCacheWidth: 800,
+      memCacheHeight: height.ceil(),
+      imageUrl: imageData.link,
       progressIndicatorBuilder: (ctx, text, porgress) {
         return LayoutBuilder(
           builder: (context, constraints) {
