@@ -28,7 +28,8 @@ class KanjiFromApi {
 
   @override
   String toString() {
-    return 'kanji character $kanjiCharacter, : meaning: $englishMeaning, image link: $kanjiImageLink, statusStorage:$statusStorage ';
+    return 'kanji character $kanjiCharacter, : meaning: $englishMeaning,'
+        ' image link: $kanjiImageLink, statusStorage:$statusStorage ';
   }
 }
 
@@ -60,6 +61,20 @@ class AudioExamples {
       required this.aac,
       required this.ogg,
       required this.mp3});
+}
+
+class ImageDetailsLink {
+  final String kanji;
+  final String link;
+  final int linkHeight;
+  final int linkWidth;
+
+  ImageDetailsLink({
+    required this.kanji,
+    required this.link,
+    required this.linkHeight,
+    required this.linkWidth,
+  });
 }
 
 class Strokes {
