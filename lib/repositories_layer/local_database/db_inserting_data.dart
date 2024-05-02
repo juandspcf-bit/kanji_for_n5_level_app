@@ -67,11 +67,13 @@ Future<List<Map<String, Object?>>> readUserDataFromSqlite(String uuid) async {
 class ParametersCompute {
   final Directory path;
   final KanjiFromApi kanjiFromApi;
+  final ImageMeaningKanjiData imageMeaningData;
   final String uuid;
 
   ParametersCompute({
     required this.path,
     required this.kanjiFromApi,
+    required this.imageMeaningData,
     required this.uuid,
   });
 }
@@ -87,6 +89,7 @@ Future<KanjiFromApi?> storeKanjiToSqlite(
       ParametersCompute(
         kanjiFromApi: kanjiFromApi,
         path: dirDocumentPath,
+        imageMeaningData: imageMeaningData,
         uuid: uuid,
       ));
 
@@ -97,7 +100,7 @@ Future<KanjiFromApi?> storeKanjiToSqlite(
 Future<KanjiFromApi> downloadKanjiDataFromApiComputeVersion(
   ParametersCompute parametersCompute,
 ) async {
-  final examplesMap = await downloadExampleData(parametersCompute);
+  final examplesMap = await downloadExamples(parametersCompute);
   final strokesPaths = await downloadStrokesData(parametersCompute);
 
   final kanjiMap = await downloadKanjidata(parametersCompute);
@@ -133,19 +136,33 @@ Future<KanjiFromApi> downloadKanjiDataFromApiComputeVersion(
       strokes: strokes);
 }
 
-Future<List<Map<String, String>>> downloadExampleData(
+Future<List<Map<String, String>>> downloadExamples(
     ParametersCompute parametersCompute) async {
   List<Map<String, String>> exampleMaps = [];
   for (var example in parametersCompute.kanjiFromApi.example) {
-    final exampleMap =
-        await downloadExampleComputeVersion(example, parametersCompute);
+    final exampleMap = await downloadExample(example, parametersCompute);
     exampleMaps.add(exampleMap);
   }
 
   return exampleMaps;
 }
 
-Future<Map<String, String>> downloadExampleComputeVersion(
+void downloadImageMeaning(
+  ParametersCompute parametersCompute,
+) {
+  final path = getPathToDocuments(
+      dirDocumentPath: parametersCompute.path,
+      link: parametersCompute.imageMeaningData.link,
+      uuid: parametersCompute.uuid);
+  Dio dio = Dio();
+  dio.download(
+    parametersCompute.imageMeaningData.link,
+    path,
+    onReceiveProgress: (received, total) {},
+  );
+}
+
+Future<Map<String, String>> downloadExample(
   Example example,
   ParametersCompute parametersCompute,
 ) async {
