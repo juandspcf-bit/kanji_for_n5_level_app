@@ -84,7 +84,7 @@ Future<KanjiFromApi?> storeKanjiToSqlite(
   String uuid,
 ) async {
   final dirDocumentPath = await getApplicationDocumentsDirectory();
-  final kanjiFromApiDownloaded = await compute(
+  final (kanjiFromApiDownloaded, imageMeaningPath) = await compute(
       downloadKanjiDataFromApiComputeVersion,
       ParametersCompute(
         kanjiFromApi: kanjiFromApi,
@@ -93,15 +93,27 @@ Future<KanjiFromApi?> storeKanjiToSqlite(
         uuid: uuid,
       ));
 
-  await insertPathsInDB(kanjiFromApiDownloaded, uuid);
+  final imageMeaningDownloaded = ImageMeaningKanjiData(
+      kanji: imageMeaningData.kanji,
+      link: imageMeaningPath,
+      linkHeight: imageMeaningData.linkHeight,
+      linkWidth: imageMeaningData.linkHeight,
+      statusImageMeaningStorage: StatusImageMeaningStorage.stored);
+
+  await insertPathsInDB(
+    kanjiFromApiDownloaded,
+    imageMeaningDownloaded,
+    uuid,
+  );
   return Future(() => kanjiFromApiDownloaded);
 }
 
-Future<KanjiFromApi> downloadKanjiDataFromApiComputeVersion(
+Future<(KanjiFromApi, String)> downloadKanjiDataFromApiComputeVersion(
   ParametersCompute parametersCompute,
 ) async {
   final examplesMap = await downloadExamples(parametersCompute);
   final strokesPaths = await downloadStrokesData(parametersCompute);
+  final imageMeaning = await downloadImageMeaning(parametersCompute);
 
   final kanjiMap = await downloadKanjidata(parametersCompute);
 
@@ -122,7 +134,7 @@ Future<KanjiFromApi> downloadKanjiDataFromApiComputeVersion(
 
   final strokes = Strokes(count: strokesPaths.length, images: strokesPaths);
 
-  return KanjiFromApi(
+  final storedKanjiFromApi = KanjiFromApi(
       kanjiCharacter: kanjiMap['kanjiCharacter'] ?? '',
       englishMeaning: kanjiMap['englishMeaning'] ?? '',
       kanjiImageLink: kanjiMap['kanjiImageLink'] ?? '',
@@ -134,6 +146,8 @@ Future<KanjiFromApi> downloadKanjiDataFromApiComputeVersion(
       accessToKanjiItemsButtons: true,
       example: examples,
       strokes: strokes);
+
+  return (storedKanjiFromApi, imageMeaning);
 }
 
 Future<List<Map<String, String>>> downloadExamples(
@@ -147,19 +161,20 @@ Future<List<Map<String, String>>> downloadExamples(
   return exampleMaps;
 }
 
-void downloadImageMeaning(
+Future<String> downloadImageMeaning(
   ParametersCompute parametersCompute,
-) {
+) async {
   final path = getPathToDocuments(
       dirDocumentPath: parametersCompute.path,
       link: parametersCompute.imageMeaningData.link,
       uuid: parametersCompute.uuid);
   Dio dio = Dio();
-  dio.download(
+  await dio.download(
     parametersCompute.imageMeaningData.link,
     path,
     onReceiveProgress: (received, total) {},
   );
+  return path;
 }
 
 Future<Map<String, String>> downloadExample(
@@ -278,7 +293,11 @@ Future<Map<String, String>> downloadKanjidata(
   };
 }
 
-Future<int> insertPathsInDB(KanjiFromApi kanjifromApi, String uuid) async {
+Future<int> insertPathsInDB(
+  KanjiFromApi kanjifromApi,
+  ImageMeaningKanjiData imageMeaningDownloaded,
+  String uuid,
+) async {
   final kanjiMap = {
     'kanjiCharacter': kanjifromApi.kanjiCharacter,
     'englishMeaning': kanjifromApi.englishMeaning,
@@ -291,6 +310,15 @@ Future<int> insertPathsInDB(KanjiFromApi kanjifromApi, String uuid) async {
   };
   final dbKanjiFromApi = await kanjiFromApiDatabase;
   int id = await dbKanjiFromApi.insert("kanji_FromApi", kanjiMap);
+
+  await dbKanjiFromApi.insert("image_meaning", {
+    'kanjiCharacter': kanjifromApi.kanjiCharacter,
+    'link': imageMeaningDownloaded.link,
+    'linkHeight': imageMeaningDownloaded.linkHeight,
+    'linkWidth': imageMeaningDownloaded.linkWidth,
+    'uuid': uuid,
+    'kanji_id': id,
+  });
 
   FutureGroup<int> groupStrokesDb = FutureGroup<int>();
   final strokes = kanjifromApi.strokes.images.map((e) {
