@@ -97,6 +97,20 @@ Future<Database> get kanjiFromApiDatabase async {
       );
 
       await db.execute(
+        'CREATE TABLE image_meaning('
+        ' id INTEGER PRIMARY KEY AUTOINCREMENT,'
+        ' kanjiCharacter TEXT,'
+        ' link TEXT,'
+        ' linkHeight INTEGER,'
+        ' linkWidth INTEGER,'
+        ' uuid TEXT,'
+        ' kanji_id INTEGER,'
+        ' FOREIGN KEY (kanji_id) REFERENCES kanji_FromApi(id)'
+        '   ON DELETE CASCADE'
+        ')',
+      );
+
+      await db.execute(
         'CREATE TABLE examples('
         ' id INTEGER PRIMARY KEY AUTOINCREMENT,'
         ' japanese TEXT,'

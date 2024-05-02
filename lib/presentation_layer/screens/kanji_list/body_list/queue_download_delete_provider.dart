@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kanji_for_n5_level_app/aplication_layer/services.dart';
 import 'package:kanji_for_n5_level_app/main.dart';
 import 'package:kanji_for_n5_level_app/models/kanji_from_api.dart';
+import 'package:kanji_for_n5_level_app/providers/image_meaning_kanji_provider.dart';
 import 'package:kanji_for_n5_level_app/providers/status_stored_provider.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_list/body_list/kanjis_list_provider.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/navigation_bar_screens/favorite_screen/favorites_kanjis_provider.dart';
@@ -66,6 +67,7 @@ class QueueDownloadDeleteProvider extends Notifier<QueueData> {
 
   void insertKanjiToStorage(
     KanjiFromApi kanjiFromApiOnline,
+    ImageMeaningKanjiData imageMeaningData,
   ) async {
     try {
       final downloadKanji = DownloadKanji(
@@ -84,9 +86,6 @@ class QueueDownloadDeleteProvider extends Notifier<QueueData> {
           kanjiFromApiOnline,
         ),
       );
-
-/*       final kanjiFromApiStored = await downloadKanji.storeKanjiToLocalDatabase(
-          ref.read(authServiceProvider).userUuid ?? '', ref); */
 
       final kanjiFromApiStored =
           await ref.read(localDBServiceProvider).storeKanjiToLocalDatabase(
@@ -146,9 +145,6 @@ class QueueDownloadDeleteProvider extends Notifier<QueueData> {
                 kanjiFromApiStored.section,
                 ref.read(authServiceProvider).userUuid ?? '',
               );
-
-/*       await deleteKanji.deleteKanjiFromLocalDatabase(
-          ref.read(authServiceProvider).userUuid ?? '', ref); */
 
       await ref.read(localDBServiceProvider).deleteKanjiFromLocalDatabase(
             kanjiFromApiStored,

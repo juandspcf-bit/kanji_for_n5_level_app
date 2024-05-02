@@ -4,6 +4,7 @@ import 'package:kanji_for_n5_level_app/aplication_layer/services.dart';
 import 'package:kanji_for_n5_level_app/models/kanji_from_api.dart';
 import 'package:kanji_for_n5_level_app/models/secction_model.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_list/body_list/queue_download_delete_provider.dart';
+import 'package:kanji_for_n5_level_app/providers/image_meaning_kanji_provider.dart';
 import 'package:kanji_for_n5_level_app/providers/status_connection_provider.dart';
 import 'package:kanji_for_n5_level_app/providers/status_stored_provider.dart';
 
@@ -82,9 +83,11 @@ class TrailingTile extends ConsumerWidget {
         }
 
         if (kanjiFromApi.statusStorage == StatusStorage.onlyOnline) {
-          ref
-              .read(queueDownloadDeleteProvider.notifier)
-              .insertKanjiToStorage(kanjiFromApi);
+          final imageMeaningData = ref.read(imageMeaningKanjiProvider);
+          ref.read(queueDownloadDeleteProvider.notifier).insertKanjiToStorage(
+                kanjiFromApi,
+                imageMeaningData,
+              );
         } else if (kanjiFromApi.statusStorage == StatusStorage.stored) {
           ref
               .read(queueDownloadDeleteProvider.notifier)
