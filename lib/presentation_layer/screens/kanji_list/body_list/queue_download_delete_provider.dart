@@ -90,6 +90,7 @@ class QueueDownloadDeleteProvider extends Notifier<QueueData> {
       final kanjiFromApiStored =
           await ref.read(localDBServiceProvider).storeKanjiToLocalDatabase(
                 kanjiFromApiOnline,
+                imageMeaningData,
                 ref.read(authServiceProvider).userUuid ?? '',
               );
 

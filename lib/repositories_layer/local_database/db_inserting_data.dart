@@ -4,6 +4,7 @@ import 'package:async/async.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:kanji_for_n5_level_app/main.dart';
+import 'package:kanji_for_n5_level_app/providers/image_meaning_kanji_provider.dart';
 import 'package:kanji_for_n5_level_app/repositories_layer/local_database/db_definitions.dart';
 import 'package:kanji_for_n5_level_app/repositories_layer/local_database/db_utils.dart';
 import 'package:kanji_for_n5_level_app/models/kanji_from_api.dart';
@@ -77,6 +78,7 @@ class ParametersCompute {
 
 Future<KanjiFromApi?> storeKanjiToSqlite(
   KanjiFromApi kanjiFromApi,
+  ImageMeaningKanjiData imageMeaningData,
   String uuid,
 ) async {
   final dirDocumentPath = await getApplicationDocumentsDirectory();
