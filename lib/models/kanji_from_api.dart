@@ -88,11 +88,14 @@ class Strokes {
 }
 
 KanjiFromApi builKanjiInfoFromApi(Map<String, dynamic> body, int section) {
-  final Map<String, dynamic> kanjiInfo = body['kanji'];
+  final Map<String, dynamic> kanji = body['kanji'];
 
-  final String kanjiCharacterFromAPI = kanjiInfo['character'];
+  final String kanjiCharacterFromAPI = kanji['character'];
 
-  final Map<String, dynamic> kanjiStrokes = kanjiInfo["strokes"];
+  final Map<String, dynamic> kanjiMeaning = kanji["meaning"];
+  final String englishMeaningFromAPI = kanjiMeaning['english'];
+
+  final Map<String, dynamic> kanjiStrokes = kanji["strokes"];
 
   final List<dynamic> kanjiImagesFromApis = kanjiStrokes["images"];
   final kanjiImages = kanjiImagesFromApis.map((e) => e as String).toList();
@@ -103,16 +106,13 @@ KanjiFromApi builKanjiInfoFromApi(Map<String, dynamic> body, int section) {
     images: kanjiImages,
   );
 
-  final Map<String, dynamic> kanjiMeaning = kanjiInfo["meaning"];
-  final String englishMeaningFromAPI = kanjiMeaning['english'];
-
-  final Map<String, dynamic> kanjiOnyomi = kanjiInfo["onyomi"];
+  final Map<String, dynamic> kanjiOnyomi = kanji["onyomi"];
   final String katakanaMeaningFromAPI = kanjiOnyomi['katakana'];
 
-  final Map<String, dynamic> kanjiKunyomi = kanjiInfo['kunyomi'];
+  final Map<String, dynamic> kanjiKunyomi = kanji['kunyomi'];
   final String hiraganaMeaningFromAPI = kanjiKunyomi['hiragana'];
 
-  final Map<String, dynamic> kanjiVideo = kanjiInfo['video'];
+  final Map<String, dynamic> kanjiVideo = kanji['video'];
   final String videoLinkFromAPI = kanjiVideo['mp4'];
 
   final List<dynamic> examplesFromAPI = body['examples'];
