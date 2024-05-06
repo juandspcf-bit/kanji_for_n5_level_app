@@ -51,16 +51,9 @@ class Meaning {
 }
 
 class AudioExamples {
-  final String opus;
-  final String aac;
-  final String ogg;
   final String mp3;
 
-  AudioExamples(
-      {required this.opus,
-      required this.aac,
-      required this.ogg,
-      required this.mp3});
+  AudioExamples({required this.mp3});
 }
 
 class ImageDetailsLink {
@@ -123,11 +116,7 @@ KanjiFromApi builKanjiInfoFromApi(Map<String, dynamic> body, int section) {
     final Map<String, dynamic> meaningMap = e['meaning'];
     final meaning = Meaning(english: meaningMap['english'] as String);
     final Map<String, dynamic> audioMap = e['audio'];
-    final audio = AudioExamples(
-        opus: audioMap['opus'],
-        aac: audioMap['aac'],
-        ogg: audioMap['ogg'],
-        mp3: audioMap['mp3']);
+    final audio = AudioExamples(mp3: audioMap['mp3']);
 
     return Example(
       japanese: japanese,

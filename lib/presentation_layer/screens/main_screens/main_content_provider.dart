@@ -298,25 +298,7 @@ Future<(List<(KanjiFromApi, bool)>, List<(KanjiFromApi, bool)>)>
     var storedKanjiRecord = listKanjisRecords[i];
     final listExamples = storedKanjiRecord.$1.example;
     for (var example in listExamples) {
-      var existAudioFile = await checkFileIfExists(example.audio.opus);
-      if (!existAudioFile) {
-        storedKanjiRecord = (storedKanjiRecord.$1, false);
-        break;
-      }
-
-      existAudioFile = await checkFileIfExists(example.audio.aac);
-      if (!existAudioFile) {
-        storedKanjiRecord = (storedKanjiRecord.$1, false);
-        break;
-      }
-
-      existAudioFile = await checkFileIfExists(example.audio.ogg);
-      if (!existAudioFile) {
-        storedKanjiRecord = (storedKanjiRecord.$1, false);
-        break;
-      }
-
-      existAudioFile = await checkFileIfExists(example.audio.mp3);
+      var existAudioFile = await checkFileIfExists(example.audio.mp3);
       if (!existAudioFile) {
         storedKanjiRecord = (storedKanjiRecord.$1, false);
         break;

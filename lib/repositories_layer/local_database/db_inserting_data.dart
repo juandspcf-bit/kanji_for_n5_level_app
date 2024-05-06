@@ -111,20 +111,16 @@ Future<(KanjiFromApi, String)> downloadKanjiDataFromApiComputeVersion(
   ParametersCompute parametersCompute,
 ) async {
   final examplesMap = await downloadExamples(parametersCompute);
-  logger.d('downloading examples');
+
   final strokesPaths = await downloadStrokesData(parametersCompute);
-  logger.d('downloading stroke data');
+
   final imageMeaning = await downloadImageDetails(parametersCompute);
-  logger.d('downloading image details');
 
   final kanjiMap = await downloadKanjidata(parametersCompute);
 
   final List<Example> examples = [];
   for (var exampleMap in examplesMap) {
     final audioExample = AudioExamples(
-      opus: exampleMap['opus'] ?? '',
-      aac: exampleMap['aac'] ?? '',
-      ogg: exampleMap['ogg'] ?? '',
       mp3: exampleMap['mp3'] ?? '',
     );
     final example = Example(
@@ -186,15 +182,6 @@ Future<Map<String, String>> downloadExample(
   Example example,
   ParametersCompute parametersCompute,
 ) async {
-  FutureGroup<Response<dynamic>> group = FutureGroup<Response<dynamic>>();
-  final List<String> pathsToDocuments = [];
-  final audioLinks = [
-    example.audio.mp3,
-    example.audio.opus,
-    example.audio.aac,
-    example.audio.ogg,
-  ];
-
   String path = '';
 
   try {
@@ -232,39 +219,6 @@ Future<Map<String, String>> downloadExample(
     'mp3': path,
     'kanjiCharacter': parametersCompute.kanjiFromApi.kanjiCharacter,
   };
-
-  /* for (var audioLink in audioLinks) {
-    final path = getPathToDocuments(
-        dirDocumentPath: parametersCompute.path,
-        link: audioLink,
-        uuid: parametersCompute.uuid);
-    pathsToDocuments.add(path);
-    Dio dio = Dio();
-    logger.d(audioLink);
-
-    addToFutureGroup(path: path, link: audioLink, group: group, dio: dio);
-  }
-
-  group.close();
-
-  try {
-    await group.future
-        .timeout(const Duration(milliseconds: durationTimeOutMili));
-  } catch (e) {
-    logger.e('error in examples download');
-    logger.e(e);
-    rethrow;
-  }
-
-  return {
-    'japanese': example.japanese,
-    'meaning': example.meaning.english,
-    'opus': pathsToDocuments[0],
-    'aac': pathsToDocuments[1],
-    'ogg': pathsToDocuments[2],
-    'mp3': pathsToDocuments[3],
-    'kanjiCharacter': parametersCompute.kanjiFromApi.kanjiCharacter,
-  }; */
 }
 
 Future<List<String>> downloadStrokesData(
@@ -385,9 +339,6 @@ Future<int> insertPathsInDB(
 
   final exampleMaps = kanjifromApi.example.map((e) {
     Map<String, Object> mapAudios = {};
-    mapAudios['opus'] = e.audio.opus;
-    mapAudios['aac'] = e.audio.aac;
-    mapAudios['ogg'] = e.audio.ogg;
     mapAudios['mp3'] = e.audio.mp3;
     mapAudios['japanese'] = e.japanese;
     mapAudios['meaning'] = e.meaning.english;

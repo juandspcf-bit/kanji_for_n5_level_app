@@ -66,7 +66,6 @@ class QueueDownloadDeleteProvider extends Notifier<QueueData> {
 
   void insertKanjiToStorage(
     KanjiFromApi kanjiFromApiOnline,
-    ImageDetailsLink imageMeaningData,
   ) async {
     try {
       final downloadKanji = DownloadKanji(
@@ -84,6 +83,17 @@ class QueueDownloadDeleteProvider extends Notifier<QueueData> {
           false,
           kanjiFromApiOnline,
         ),
+      );
+
+      final kanjiData = await ref
+          .read(cloudDBServiceProvider)
+          .fetchKanjiData(kanjiFromApiOnline.kanjiCharacter);
+
+      final imageMeaningData = ImageDetailsLink(
+        kanji: kanjiData['kanji'] as String,
+        link: kanjiData['link'] as String,
+        linkHeight: kanjiData['linkHeight'],
+        linkWidth: kanjiData['linkWidth'],
       );
 
       final kanjiFromApiStored =
@@ -106,7 +116,7 @@ class QueueDownloadDeleteProvider extends Notifier<QueueData> {
     } on TimeoutException {
       updateKanjisOnVisibleList(kanjiFromApiOnline);
 
-      logger.e('Error storing time out'); // Prints "throws" after 2 seconds.
+      logger.e('Error storing time out');
     } catch (e) {
       updateKanjisOnVisibleList(kanjiFromApiOnline);
 

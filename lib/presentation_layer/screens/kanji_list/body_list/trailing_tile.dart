@@ -4,7 +4,6 @@ import 'package:kanji_for_n5_level_app/aplication_layer/services.dart';
 import 'package:kanji_for_n5_level_app/models/kanji_from_api.dart';
 import 'package:kanji_for_n5_level_app/models/secction_model.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_list/body_list/queue_download_delete_provider.dart';
-import 'package:kanji_for_n5_level_app/providers/image_meaning_kanji_provider.dart';
 import 'package:kanji_for_n5_level_app/providers/status_connection_provider.dart';
 import 'package:kanji_for_n5_level_app/providers/status_stored_provider.dart';
 
@@ -69,7 +68,7 @@ class TrailingTile extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return GestureDetector(
-      onTap: () {
+      onTap: () async {
         if (!kanjiFromApi.accessToKanjiItemsButtons) return;
 
         final resultStatus = ref.read(statusConnectionProvider);
@@ -83,16 +82,9 @@ class TrailingTile extends ConsumerWidget {
         }
 
         if (kanjiFromApi.statusStorage == StatusStorage.onlyOnline) {
-          final imageMeaningData = ref.read(imageMeaningKanjiProvider);
-          ref.read(queueDownloadDeleteProvider.notifier).insertKanjiToStorage(
-                kanjiFromApi,
-                ImageDetailsLink(
-                  kanji: imageMeaningData.kanji,
-                  link: imageMeaningData.link,
-                  linkHeight: imageMeaningData.linkHeight,
-                  linkWidth: imageMeaningData.linkWidth,
-                ),
-              );
+          ref
+              .read(queueDownloadDeleteProvider.notifier)
+              .insertKanjiToStorage(kanjiFromApi);
         } else if (kanjiFromApi.statusStorage == StatusStorage.stored) {
           ref
               .read(queueDownloadDeleteProvider.notifier)

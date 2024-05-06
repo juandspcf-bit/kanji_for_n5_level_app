@@ -28,11 +28,7 @@ Future<List<KanjiFromApi>> loadStoredKanjisFromSqliteDB() async {
         [kanjiCharacter, user.uid]);
 
     final examples = listMapExamplesFromDb.map((exampleFromDb) {
-      final audio = AudioExamples(
-          opus: exampleFromDb['opus'] as String,
-          aac: exampleFromDb['aac'] as String,
-          ogg: exampleFromDb['ogg'] as String,
-          mp3: exampleFromDb['mp3'] as String);
+      final audio = AudioExamples(mp3: exampleFromDb['mp3'] as String);
       final meaning = Meaning(english: exampleFromDb['meaning'] as String);
       return Example(
           japanese: exampleFromDb['japanese'] as String,

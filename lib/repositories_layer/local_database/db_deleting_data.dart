@@ -83,19 +83,9 @@ Future<void> deleteKanjiFromApiComputeVersion(
       FutureGroup<int> groupKanjiExampleAudioLinksFile = FutureGroup<int>();
 
       parametersDelete.listMapExamplesFromDb.map((exampleFromDb) {
-        return AudioExamples(
-            opus: exampleFromDb['opus'] as String,
-            aac: exampleFromDb['aac'] as String,
-            ogg: exampleFromDb['ogg'] as String,
-            mp3: exampleFromDb['mp3'] as String);
+        return AudioExamples(mp3: exampleFromDb['mp3'] as String);
       }).map((e) async {
         groupKanjiExampleAudioLinksFile.add(Future(() async {
-          final opusFile = File(e.opus);
-          await opusFile.delete();
-          final aacFile = File(e.aac);
-          await aacFile.delete();
-          final oggFile = File(e.ogg);
-          await oggFile.delete();
           final mp3File = File(e.mp3);
           await mp3File.delete();
           return 1;
