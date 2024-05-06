@@ -9,7 +9,7 @@ import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_list/bod
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/navigation_bar_screens/favorite_screen/favorites_kanjis_provider.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/navigation_bar_screens/sections_screen/cache_kanji_list_provider.dart';
 
-class QueueDownloadDeleteProvider extends Notifier<QueueData> {
+class QueueDownloadDelete extends Notifier<QueueData> {
   void removeDownload(String kanjiCharacter) {
     final downloadKankiQueue = [...state.downloadKankiQueue];
     downloadKankiQueue
@@ -224,8 +224,7 @@ class QueueDownloadDeleteProvider extends Notifier<QueueData> {
 }
 
 final queueDownloadDeleteProvider =
-    NotifierProvider<QueueDownloadDeleteProvider, QueueData>(
-        QueueDownloadDeleteProvider.new);
+    NotifierProvider<QueueDownloadDelete, QueueData>(QueueDownloadDelete.new);
 
 class QueueData {
   final List<DownloadKanji> downloadKankiQueue;

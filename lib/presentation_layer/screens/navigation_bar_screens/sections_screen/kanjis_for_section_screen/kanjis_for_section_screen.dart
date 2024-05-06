@@ -25,7 +25,7 @@ class KanjiForSectionScreen extends ConsumerWidget
     final mainScreenData = ref.watch(mainScreenProvider);
     final kanjiListData = ref.watch(kanjiListProvider);
 
-    if (ref.watch(errorDatabaseStatusProvider)) {
+/*     if (ref.watch(errorDatabaseStatusProvider)) {
       errorDialog(
         context,
         () {
@@ -63,7 +63,7 @@ class KanjiForSectionScreen extends ConsumerWidget
               ),
             );
       }
-    });
+    }); */
 
     return Scaffold(
       appBar: AppBar(
