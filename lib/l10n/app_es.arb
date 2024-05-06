@@ -1,6 +1,23 @@
 {
-    "@@locale": "es",
-    "welcome":"Bien venido",
-    "sections":"{section, select, section_1{Dentro de imagenes} section_2{Numeros} section_3{Numeros y direcciones} section_4{Cuerpo humano y gente} section_5{Dias y kanjis para la escuela} section_6{Tiempo} section_7{Adjetivos} section_8{Verbos} section_9{Sujetos} other{otros}}",
-    "section":"seccion"
+  "@@locale": "es",
+  "welcome": "Bien venido",
+  "@welcome": {},
+  "sections": "{section, select, section_1{Dentro de imagenes} section_2{Numeros} section_3{Numeros y direcciones} section_4{Cuerpo humano y gente} section_5{Dias y kanjis para la escuela} section_6{Tiempo} section_7{Adjetivos} section_8{Verbos} section_9{Sujetos} other{otros}}",
+  "@sections": {
+    "placeholders": {
+      "section": {
+        "type": "String"
+      }
+    }
+  },
+  "section": "seccion",
+  "@section": {},
+  "sectiosNavBar": "secciones",
+  "@sectiosNavBar": {},
+  "favoritesNavBar": "favoritos",
+  "@favoritesNavBar": {},
+  "basicSearchNavBar": "busqueda basica",
+  "@basicSearchNavBar": {},
+  "progressNavBar": "mi progreso",
+  "@progressNavBar": {}
 }

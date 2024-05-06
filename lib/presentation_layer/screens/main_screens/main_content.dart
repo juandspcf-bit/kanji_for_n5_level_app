@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kanji_for_n5_level_app/aplication_layer/services.dart';
 import 'package:kanji_for_n5_level_app/config_files/screen_config.dart';
+import 'package:kanji_for_n5_level_app/l10n/locazition.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_list/body_list/providers/error_delete_providers.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_list/body_list/providers/error_download_provider.dart';
 import 'package:kanji_for_n5_level_app/providers/status_connection_provider.dart';
@@ -18,7 +19,6 @@ import 'package:kanji_for_n5_level_app/presentation_layer/screens/navigation_bar
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/navigation_bar_screens/search_screen.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/navigation_bar_screens/sections_screen/sections_screen.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_list/body_list/status_operations_dialogs.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class MainContent extends ConsumerWidget with StatusDBStoringDialogs {
   const MainContent({super.key});
@@ -71,7 +71,7 @@ class MainContent extends ConsumerWidget with StatusDBStoringDialogs {
     final statusConnectionData = ref.watch(statusConnectionProvider);
 
     String scaffoldTitle =
-        '${AppLocalizations.of(context)!.welcome} \n ${mainScreenData.fullName}';
+        '${context.l10n.welcome} \n ${mainScreenData.fullName}';
 
     if (mainScreenData.selection == ScreenSelection.favoritesKanjis) {
       scaffoldTitle = "Favorites";

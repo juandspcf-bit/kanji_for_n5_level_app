@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kanji_for_n5_level_app/aplication_layer/services.dart';
+import 'package:kanji_for_n5_level_app/l10n/locazition.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/main_screens/main_content_provider.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_list/body_list/status_operations_dialogs.dart';
 
@@ -23,30 +24,30 @@ class CustomBottomNavigationBar extends ConsumerWidget
             .selectPage(index, context, statusDBStoringDialog);
       },
       selectedIndex: mainScreenData.selection.index,
-      destinations: const [
+      destinations: [
         NavigationDestination(
-          icon: Icon(
+          icon: const Icon(
             Icons.book,
           ),
-          label: "Sections",
+          label: context.l10n.sectiosNavBar,
         ),
         NavigationDestination(
-          icon: Icon(
+          icon: const Icon(
             Icons.star,
           ),
-          label: "Favorites",
+          label: context.l10n.favoritesNavBar,
         ),
         NavigationDestination(
-          icon: Icon(
+          icon: const Icon(
             Icons.search,
           ),
-          label: "Basic search",
+          label: context.l10n.basicSearchNavBar,
         ),
         NavigationDestination(
-          icon: Icon(
+          icon: const Icon(
             Icons.timeline,
           ),
-          label: "Progress",
+          label: context.l10n.progressNavBar,
         ),
       ],
     );
