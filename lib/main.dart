@@ -11,6 +11,7 @@ import 'package:kanji_for_n5_level_app/providers/score_kanji_list_provider.dart'
 import 'package:kanji_for_n5_level_app/providers/status_connection_provider.dart';
 import 'package:logger/logger.dart';
 import 'firebase_options.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 final dio = Dio();
 final logger = Logger();
@@ -52,6 +53,8 @@ class MyApp extends ConsumerWidget {
     ref.read(statusConnectionProvider);
     return MaterialApp(
       title: 'Flutter Demo',
+      localizationsDelegates: AppLocalizations.localizationsDelegates,
+      supportedLocales: AppLocalizations.supportedLocales,
       debugShowCheckedModeBanner: false,
       darkTheme: darkTheme.copyWith(
         colorScheme: kDarkColorScheme,
