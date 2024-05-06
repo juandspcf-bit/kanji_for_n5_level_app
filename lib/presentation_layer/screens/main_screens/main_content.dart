@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kanji_for_n5_level_app/aplication_layer/services.dart';
 import 'package:kanji_for_n5_level_app/config_files/screen_config.dart';
+import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_list/body_list/queue_download_delete_provider.dart';
 import 'package:kanji_for_n5_level_app/providers/status_connection_provider.dart';
 import 'package:kanji_for_n5_level_app/repositories_layer/local_database/db_quiz_data_functions/db_quiz_data_functions.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/account_details/account_details.dart';
@@ -75,7 +76,11 @@ class MainContent extends ConsumerWidget with StatusDBStoringDialogs {
       scaffoldTitle = "Favorites";
     }
 
-    //final sizeScreen = getScreenSizeWidth(context);
+    ref.listen<QueueData>(queueDownloadDeleteProvider, (previuos, current) {
+      ref.read(toastServiceProvider).dismiss(context);
+      ref.read(toastServiceProvider).showShortMessage(context,
+          "There was an errror downloading ${current.errorDownloadKanji.kanjiCharacter}");
+    });
 
     return Scaffold(
       appBar: bottomNavigationBar

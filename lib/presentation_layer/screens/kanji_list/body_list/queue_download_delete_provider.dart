@@ -17,6 +17,7 @@ class QueueDownloadDelete extends Notifier<QueueData> {
     state = QueueData(
       downloadKankiQueue: downloadKankiQueue,
       deleteKanjiQueue: state.deleteKanjiQueue,
+      errorDownloadKanji: state.errorDownloadKanji,
     );
   }
 
@@ -27,6 +28,7 @@ class QueueDownloadDelete extends Notifier<QueueData> {
     state = QueueData(
       downloadKankiQueue: state.downloadKankiQueue,
       deleteKanjiQueue: deleteKanjiQueue,
+      errorDownloadKanji: state.errorDownloadKanji,
     );
   }
 
@@ -40,6 +42,7 @@ class QueueDownloadDelete extends Notifier<QueueData> {
     state = QueueData(
       downloadKankiQueue: downloadKankiQueue,
       deleteKanjiQueue: state.deleteKanjiQueue,
+      errorDownloadKanji: state.errorDownloadKanji,
     );
     return true;
   }
@@ -54,6 +57,7 @@ class QueueDownloadDelete extends Notifier<QueueData> {
     state = QueueData(
       downloadKankiQueue: state.downloadKankiQueue,
       deleteKanjiQueue: deleteKanjiQueue,
+      errorDownloadKanji: state.errorDownloadKanji,
     );
     return true;
   }
@@ -115,10 +119,22 @@ class QueueDownloadDelete extends Notifier<QueueData> {
       updateKanjisOnVisibleList(kanjiFromApiStored);
     } on TimeoutException {
       updateKanjisOnVisibleList(kanjiFromApiOnline);
+      state = QueueData(
+        downloadKankiQueue: state.downloadKankiQueue,
+        deleteKanjiQueue: state.deleteKanjiQueue,
+        errorDownloadKanji: ErrorDownloadKanji(
+            kanjiCharacter: kanjiFromApiOnline.kanjiCharacter),
+      );
 
       logger.e('Error storing time out');
     } catch (e) {
       updateKanjisOnVisibleList(kanjiFromApiOnline);
+      state = QueueData(
+        downloadKankiQueue: state.downloadKankiQueue,
+        deleteKanjiQueue: state.deleteKanjiQueue,
+        errorDownloadKanji: ErrorDownloadKanji(
+            kanjiCharacter: kanjiFromApiOnline.kanjiCharacter),
+      );
 
       logger.e('Error storing');
       logger.e(e.toString());
@@ -217,9 +233,9 @@ class QueueDownloadDelete extends Notifier<QueueData> {
   @override
   QueueData build() {
     return QueueData(
-      downloadKankiQueue: [],
-      deleteKanjiQueue: [],
-    );
+        downloadKankiQueue: [],
+        deleteKanjiQueue: [],
+        errorDownloadKanji: ErrorDownloadKanji(kanjiCharacter: ''));
   }
 }
 
@@ -229,10 +245,12 @@ final queueDownloadDeleteProvider =
 class QueueData {
   final List<DownloadKanji> downloadKankiQueue;
   final List<DeleteKanji> deleteKanjiQueue;
+  final ErrorDownloadKanji errorDownloadKanji;
 
   QueueData({
     required this.downloadKankiQueue,
     required this.deleteKanjiQueue,
+    required this.errorDownloadKanji,
   });
 }
 
@@ -253,5 +271,13 @@ class DeleteKanji {
   DeleteKanji({
     required this.kanjiCharacter,
     required this.kanjiFromApi,
+  });
+}
+
+class ErrorDownloadKanji {
+  final String kanjiCharacter;
+
+  ErrorDownloadKanji({
+    required this.kanjiCharacter,
   });
 }
