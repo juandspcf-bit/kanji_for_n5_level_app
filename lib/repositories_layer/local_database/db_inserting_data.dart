@@ -111,6 +111,7 @@ Future<(KanjiFromApi, String)> downloadKanjiDataFromApiComputeVersion(
   ParametersCompute parametersCompute,
 ) async {
   final examplesMap = await downloadExamples(parametersCompute);
+  logger.d('downloading examples');
   final strokesPaths = await downloadStrokesData(parametersCompute);
   final imageMeaning = await downloadImageDetails(parametersCompute);
 
@@ -168,6 +169,7 @@ Future<String> downloadImageDetails(
       link: parametersCompute.imageMeaningData.link,
       uuid: parametersCompute.uuid);
   Dio dio = Dio();
+  logger.d('download examples ready');
   await dio.download(
     parametersCompute.imageMeaningData.link,
     path,
@@ -196,6 +198,8 @@ Future<Map<String, String>> downloadExample(
         uuid: parametersCompute.uuid);
     pathsToDocuments.add(path);
     Dio dio = Dio();
+    logger.d(audioLink);
+
     addToFutureGroup(path: path, link: audioLink, group: group, dio: dio);
   }
 

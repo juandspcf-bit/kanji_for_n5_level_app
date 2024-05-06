@@ -13,10 +13,10 @@ void addToFutureGroup({
     link,
     path,
     onReceiveProgress: (received, total) {
-/*         if (total != -1) {
-          print((received / total * 100).toStringAsFixed(0) + "%");
-          //you can build progressbar feature too
-        } */
+/*       if (total != -1) {
+        print((received / total * 100).toStringAsFixed(0) + "%");
+        //you can build progressbar feature too
+      } */
     },
   ));
 }

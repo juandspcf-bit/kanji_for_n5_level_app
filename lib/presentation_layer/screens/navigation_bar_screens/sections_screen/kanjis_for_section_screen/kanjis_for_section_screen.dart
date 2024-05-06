@@ -13,6 +13,7 @@ import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_list/bod
 import 'package:kanji_for_n5_level_app/presentation_layer/common_widgets/my_dialogs.dart';
 
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_list/body_list/status_operations_dialogs.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class KanjiForSectionScreen extends ConsumerWidget
     with MyDialogs, StatusDBStoringDialogs {
@@ -67,7 +68,8 @@ class KanjiForSectionScreen extends ConsumerWidget
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(listSections[kanjiListData.section - 1].title),
+        title: Text(AppLocalizations.of(context)!
+            .sections("section_${kanjiListData.section}")),
         actions: const [
           ConnectionStatusIcon(),
           QuizIconKanjiList(),

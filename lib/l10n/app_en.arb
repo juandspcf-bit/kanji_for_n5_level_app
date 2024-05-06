@@ -1,3 +1,6 @@
 {
-    "welcome":"welcome"
+    "@@locale": "en",
+    "welcome":"welcome",
+    "sections":"{section, select, section_1{From pictures} section_2{Numbers} section_3{Numbers and directions} section_4{Human body and people} section_5{Days and kanjis for the school} section_6{Time} section_7{Adjectives} section_8{Verbs} section_9{Nouns} other{other}}",
+    "section":"section"
 }
