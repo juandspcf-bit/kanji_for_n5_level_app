@@ -113,7 +113,9 @@ Future<(KanjiFromApi, String)> downloadKanjiDataFromApiComputeVersion(
   final examplesMap = await downloadExamples(parametersCompute);
   logger.d('downloading examples');
   final strokesPaths = await downloadStrokesData(parametersCompute);
+  logger.d('downloading stroke data');
   final imageMeaning = await downloadImageDetails(parametersCompute);
+  logger.d('downloading image details');
 
   final kanjiMap = await downloadKanjidata(parametersCompute);
 
@@ -169,12 +171,14 @@ Future<String> downloadImageDetails(
       link: parametersCompute.imageMeaningData.link,
       uuid: parametersCompute.uuid);
   Dio dio = Dio();
-  logger.d('download examples ready');
+  logger.d('download images ready');
+  logger.d(parametersCompute.imageMeaningData.link);
   await dio.download(
     parametersCompute.imageMeaningData.link,
     path,
     onReceiveProgress: (received, total) {},
   );
+  logger.d('download images succefull');
   return path;
 }
 
@@ -185,13 +189,51 @@ Future<Map<String, String>> downloadExample(
   FutureGroup<Response<dynamic>> group = FutureGroup<Response<dynamic>>();
   final List<String> pathsToDocuments = [];
   final audioLinks = [
+    example.audio.mp3,
     example.audio.opus,
     example.audio.aac,
     example.audio.ogg,
-    example.audio.mp3
   ];
 
-  for (var audioLink in audioLinks) {
+  String path = '';
+
+  try {
+    path = getPathToDocuments(
+      dirDocumentPath: parametersCompute.path,
+      link: example.audio.mp3,
+      uuid: parametersCompute.uuid,
+    );
+    Dio dio = Dio();
+    await dio.download(
+      example.audio.mp3,
+      path,
+      onReceiveProgress: (received, total) {
+/*       if (total != -1) {
+        print((received / total * 100).toStringAsFixed(0) + "%");
+        //you can build progressbar feature too
+      } */
+      },
+    ).timeout(
+      const Duration(milliseconds: durationTimeOutMili),
+    );
+    logger.d("download example succefull");
+  } catch (e) {
+    logger.e('error in examples download');
+    logger.e(e);
+    rethrow;
+  }
+
+  return {
+    'japanese': example.japanese,
+    'meaning': example.meaning.english,
+    'opus': '',
+    'aac': '',
+    'ogg': '',
+    'mp3': path,
+    'kanjiCharacter': parametersCompute.kanjiFromApi.kanjiCharacter,
+  };
+
+  /* for (var audioLink in audioLinks) {
     final path = getPathToDocuments(
         dirDocumentPath: parametersCompute.path,
         link: audioLink,
@@ -222,7 +264,7 @@ Future<Map<String, String>> downloadExample(
     'ogg': pathsToDocuments[2],
     'mp3': pathsToDocuments[3],
     'kanjiCharacter': parametersCompute.kanjiFromApi.kanjiCharacter,
-  };
+  }; */
 }
 
 Future<List<String>> downloadStrokesData(
