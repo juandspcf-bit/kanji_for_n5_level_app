@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kanji_for_n5_level_app/aplication_layer/services.dart';
 import 'package:kanji_for_n5_level_app/main.dart';
 import 'package:kanji_for_n5_level_app/models/kanji_from_api.dart';
+import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_list/body_list/providers/error_delete_providers.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_list/body_list/providers/error_download_provider.dart';
 import 'package:kanji_for_n5_level_app/providers/status_stored_provider.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_list/body_list/kanjis_list_provider.dart';
@@ -177,11 +178,19 @@ class QueueDownloadDelete extends Notifier<QueueData> {
     } on TimeoutException {
       updateKanjisOnVisibleList(kanjiFromApiStored);
 
+      ref
+          .read(errorDeleteProvider.notifier)
+          .setKanjiError(kanjiFromApiStored.kanjiCharacter);
+
       logger.e('Error storing time out'); // Prints "throws" after 2 seconds.
     } catch (e) {
       ref.read(storedKanjisProvider.notifier).deleteItem(kanjiFromApiStored);
       if (kanjiFromApiOnline == null) return;
       updateKanjisOnVisibleList(kanjiFromApiOnline);
+
+      ref
+          .read(errorDeleteProvider.notifier)
+          .setKanjiError(kanjiFromApiStored.kanjiCharacter);
 
       logger.e('Error storing');
       logger.e(e.toString());

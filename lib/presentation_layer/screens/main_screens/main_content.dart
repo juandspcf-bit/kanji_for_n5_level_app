@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kanji_for_n5_level_app/aplication_layer/services.dart';
 import 'package:kanji_for_n5_level_app/config_files/screen_config.dart';
+import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_list/body_list/providers/error_delete_providers.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_list/body_list/providers/error_download_provider.dart';
 import 'package:kanji_for_n5_level_app/providers/status_connection_provider.dart';
 import 'package:kanji_for_n5_level_app/repositories_layer/local_database/db_quiz_data_functions/db_quiz_data_functions.dart';
@@ -80,6 +81,12 @@ class MainContent extends ConsumerWidget with StatusDBStoringDialogs {
       ref.read(toastServiceProvider).dismiss(context);
       ref.read(toastServiceProvider).showShortMessage(
           context, "There was an errror downloading ${current.kanjiCharacter}");
+    });
+
+    ref.listen<ErrorDeleteKanji>(errorDeleteProvider, (previuos, current) {
+      ref.read(toastServiceProvider).dismiss(context);
+      ref.read(toastServiceProvider).showShortMessage(
+          context, "There was an errror deleting ${current.kanjiCharacter}");
     });
 
     return Scaffold(
