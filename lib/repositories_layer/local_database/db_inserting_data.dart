@@ -99,7 +99,7 @@ Future<KanjiFromApi?> storeKanjiToSqlite(
     linkWidth: imageMeaningData.linkWidth,
   );
 
-  await insertPathsInDB(
+  await insertDataInDB(
     kanjiFromApiDownloaded,
     imageMeaningDownloaded,
     uuid,
@@ -297,7 +297,7 @@ Future<Map<String, String>> downloadKanjidata(
   };
 }
 
-Future<int> insertPathsInDB(
+Future<int> insertDataInDB(
   KanjiFromApi kanjifromApi,
   ImageDetailsLink imageMeaningDownloaded,
   String uuid,
