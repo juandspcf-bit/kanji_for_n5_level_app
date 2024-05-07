@@ -19,5 +19,11 @@
   "basicSearchNavBar": "Basic Search",
   "@basicSearchNavBar": {},
   "progressNavBar": "progress",
-  "@progressNavBar": {}
+  "@progressNavBar": {},
+  "meaningAndDefinition": "Meaning and definition",
+  "@meaningAndDefinition": {},
+  "meaning": "Meaning",
+  "@meaning": {},
+  "erroConnectionDetailsMessage":"No internet connection, you will be able to acces the info when the connection is restored",
+  "@erroConnectionDetailsMessage":{}
 }

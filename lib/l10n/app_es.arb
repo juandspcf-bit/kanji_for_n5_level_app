@@ -19,5 +19,11 @@
   "basicSearchNavBar": "busqueda basica",
   "@basicSearchNavBar": {},
   "progressNavBar": "mi progreso",
-  "@progressNavBar": {}
+  "@progressNavBar": {},
+  "meaningAndDefinition": "Significado y definicion",
+  "@meaningAndDefinition": {},
+  "meaning": "Significado",
+  "@meaning": {},
+  "erroConnectionDetailsMessage":"No tienes coneccion a internet, podras acceder los datos cuando se restablesca",
+  "@erroConnectionDetailsMessage":{}
 }

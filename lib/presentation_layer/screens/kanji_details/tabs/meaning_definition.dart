@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:kanji_for_n5_level_app/l10n/locazition.dart';
 
 class MeaningAndDefinition extends ConsumerWidget {
   const MeaningAndDefinition({
@@ -27,7 +28,7 @@ class MeaningAndDefinition extends ConsumerWidget {
           height: 10,
         ),
         Text(
-          "Meaning and definition",
+          context.l10n.meaningAndDefinition,
           style: Theme.of(context)
               .textTheme
               .titleLarge!
@@ -43,7 +44,7 @@ class MeaningAndDefinition extends ConsumerWidget {
               width: 20,
             ),
             SelectableText(
-              capitalizeString('Meaning: $englishMeaning'),
+              capitalizeString('${context.l10n.meaning}: $englishMeaning'),
             ),
           ],
         ),
