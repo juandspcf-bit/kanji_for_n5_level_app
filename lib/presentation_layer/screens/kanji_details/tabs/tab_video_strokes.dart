@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:kanji_for_n5_level_app/l10n/locazition.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_details/kanji_details_provider.dart';
 import 'package:kanji_for_n5_level_app/providers/status_connection_provider.dart';
 import 'package:kanji_for_n5_level_app/providers/status_stored_provider.dart';
@@ -10,7 +8,6 @@ import 'package:kanji_for_n5_level_app/providers/video_status_playing.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/common_screens/error_connection_screen.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_details/tabs/image_meaning_kanji.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_details/tabs/meaning_definition.dart';
-import 'package:path/path.dart';
 import 'package:video_player/video_player.dart';
 
 class TabVideoStrokes extends ConsumerWidget {
