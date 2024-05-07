@@ -136,7 +136,9 @@ Future<(KanjiFromApi, String)> downloadKanjiDataFromApiComputeVersion(
       kanjiCharacter: kanjiMap['kanjiCharacter'] ?? '',
       englishMeaning: kanjiMap['englishMeaning'] ?? '',
       kanjiImageLink: kanjiMap['kanjiImageLink'] ?? '',
+      katakanaRomaji: kanjiMap['katakanaRomaji'] ?? '',
       katakanaMeaning: kanjiMap['katakanaMeaning'] ?? '',
+      hiraganaRomaji: kanjiMap['hiraganaRomaji'] ?? '',
       hiraganaMeaning: kanjiMap['hiraganaMeaning'] ?? '',
       videoLink: kanjiMap['videoLink'] ?? '',
       section: int.parse(kanjiMap['section'] ?? '0'),
@@ -251,7 +253,8 @@ Future<List<String>> downloadStrokesData(
 }
 
 Future<Map<String, String>> downloadKanjidata(
-    ParametersCompute parametersCompute) async {
+  ParametersCompute parametersCompute,
+) async {
   FutureGroup<Response<dynamic>> group = FutureGroup<Response<dynamic>>();
   final List<String> pathsToDocuments = [];
 
@@ -276,7 +279,7 @@ Future<Map<String, String>> downloadKanjidata(
     await group.future
         .timeout(const Duration(milliseconds: durationTimeOutMili));
   } catch (e) {
-    logger.e('error in examples download');
+    logger.e('error in kanji images links download');
     logger.e(e);
     rethrow;
   }
@@ -285,7 +288,9 @@ Future<Map<String, String>> downloadKanjidata(
     'kanjiCharacter': parametersCompute.kanjiFromApi.kanjiCharacter,
     'englishMeaning': parametersCompute.kanjiFromApi.englishMeaning,
     'kanjiImageLink': pathsToDocuments[0],
+    'katakanaRomaji': parametersCompute.kanjiFromApi.katakanaRomaji,
     'katakanaMeaning': parametersCompute.kanjiFromApi.katakanaMeaning,
+    'hiraganaRomaji': parametersCompute.kanjiFromApi.hiraganaRomaji,
     'hiraganaMeaning': parametersCompute.kanjiFromApi.hiraganaMeaning,
     'videoLink': pathsToDocuments[1],
     'section': parametersCompute.kanjiFromApi.section.toString()
@@ -301,7 +306,9 @@ Future<int> insertPathsInDB(
     'kanjiCharacter': kanjifromApi.kanjiCharacter,
     'englishMeaning': kanjifromApi.englishMeaning,
     'kanjiImageLink': kanjifromApi.kanjiImageLink,
+    'katakanaRomaji': kanjifromApi.katakanaRomaji,
     'katakanaMeaning': kanjifromApi.katakanaMeaning,
+    'hiraganaRomaji': kanjifromApi.hiraganaRomaji,
     'hiraganaMeaning': kanjifromApi.hiraganaMeaning,
     'videoLink': kanjifromApi.videoLink,
     'section': kanjifromApi.section,

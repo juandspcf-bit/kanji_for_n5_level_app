@@ -4,7 +4,9 @@ class KanjiFromApi {
   final String kanjiCharacter;
   final String englishMeaning;
   final String kanjiImageLink;
+  final String katakanaRomaji;
   final String katakanaMeaning;
+  final String hiraganaRomaji;
   final String hiraganaMeaning;
   final String videoLink;
   final int section;
@@ -17,7 +19,9 @@ class KanjiFromApi {
       {required this.kanjiCharacter,
       required this.englishMeaning,
       required this.kanjiImageLink,
+      required this.katakanaRomaji,
       required this.katakanaMeaning,
+      required this.hiraganaRomaji,
       required this.hiraganaMeaning,
       required this.videoLink,
       required this.section,
@@ -100,9 +104,11 @@ KanjiFromApi builKanjiInfoFromApi(Map<String, dynamic> body, int section) {
   );
 
   final Map<String, dynamic> kanjiOnyomi = kanji["onyomi"];
+  final String katakanaRomajiMeaningFromAPI = kanjiOnyomi['romaji'];
   final String katakanaMeaningFromAPI = kanjiOnyomi['katakana'];
 
   final Map<String, dynamic> kanjiKunyomi = kanji['kunyomi'];
+  final String hiraganaRomajiMeaningFromAPI = kanjiKunyomi['romaji'];
   final String hiraganaMeaningFromAPI = kanjiKunyomi['hiragana'];
 
   final Map<String, dynamic> kanjiVideo = kanji['video'];
@@ -129,7 +135,9 @@ KanjiFromApi builKanjiInfoFromApi(Map<String, dynamic> body, int section) {
       kanjiCharacter: kanjiCharacterFromAPI,
       englishMeaning: englishMeaningFromAPI,
       kanjiImageLink: kanjiImageFromAPI,
+      katakanaRomaji: katakanaRomajiMeaningFromAPI,
       katakanaMeaning: katakanaMeaningFromAPI,
+      hiraganaRomaji: hiraganaRomajiMeaningFromAPI,
       hiraganaMeaning: hiraganaMeaningFromAPI,
       section: section,
       videoLink: videoLinkFromAPI,
