@@ -28,7 +28,9 @@ class VideoStrolesLandScape extends ConsumerWidget {
                     children: [
                       MeaningAndDefinition(
                         englishMeaning: kanjiFromApi.englishMeaning,
+                        hiraganaRomaji: kanjiFromApi.hiraganaRomaji,
                         hiraganaMeaning: kanjiFromApi.hiraganaMeaning,
+                        katakanaRomaji: kanjiFromApi.katakanaRomaji,
                         katakanaMeaning: kanjiFromApi.katakanaMeaning,
                       ),
                       const ImageMeaningKanji(),

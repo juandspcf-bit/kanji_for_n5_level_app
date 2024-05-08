@@ -6,12 +6,16 @@ class MeaningAndDefinition extends ConsumerWidget {
   const MeaningAndDefinition({
     super.key,
     required this.englishMeaning,
+    required this.hiraganaRomaji,
     required this.hiraganaMeaning,
+    required this.katakanaRomaji,
     required this.katakanaMeaning,
   });
 
   final String englishMeaning;
+  final String hiraganaRomaji;
   final String hiraganaMeaning;
+  final String katakanaRomaji;
   final String katakanaMeaning;
 
   String capitalizeString(String text) {
@@ -49,7 +53,19 @@ class MeaningAndDefinition extends ConsumerWidget {
           ],
         ),
         const SizedBox(
-          height: 10,
+          height: 20,
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            const SizedBox(
+              width: 20,
+            ),
+            SelectableText("Kunyomi(romaji): $hiraganaRomaji"),
+          ],
+        ),
+        const SizedBox(
+          height: 5,
         ),
         Row(
           mainAxisAlignment: MainAxisAlignment.start,
@@ -61,7 +77,19 @@ class MeaningAndDefinition extends ConsumerWidget {
           ],
         ),
         const SizedBox(
-          height: 10,
+          height: 20,
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            const SizedBox(
+              width: 20,
+            ),
+            SelectableText("Onyomi(romaji): $katakanaRomaji"),
+          ],
+        ),
+        const SizedBox(
+          height: 5,
         ),
         Row(
           mainAxisAlignment: MainAxisAlignment.start,
