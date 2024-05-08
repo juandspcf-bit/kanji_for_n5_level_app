@@ -34,35 +34,6 @@ class MeaningAndDefinition extends ConsumerWidget {
           const SizedBox(
             height: 10,
           ),
-          Center(
-            child: Text(
-              context.l10n.meaningAndDefinition,
-              style: Theme.of(context)
-                  .textTheme
-                  .titleLarge!
-                  .copyWith(fontWeight: FontWeight.bold),
-            ),
-          ),
-          const SizedBox(
-            height: 10,
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20),
-            child: Container(
-              width: double.infinity,
-              padding: const EdgeInsets.all(10),
-              decoration: BoxDecoration(
-                color: const Color.fromARGB(221, 62, 61, 64),
-                borderRadius: BorderRadius.circular(20),
-              ),
-              child: SelectableText(
-                capitalizeString('${context.l10n.meaning}: $englishMeaning'),
-              ),
-            ),
-          ),
-          const SizedBox(
-            height: 20,
-          ),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20),
             child: Container(
@@ -75,33 +46,33 @@ class MeaningAndDefinition extends ConsumerWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  Center(
+                    child: Text(
+                      context.l10n.meaningAndDefinition,
+                      style: Theme.of(context)
+                          .textTheme
+                          .titleLarge!
+                          .copyWith(fontWeight: FontWeight.bold),
+                    ),
+                  ),
                   const SizedBox(
-                    height: 5,
+                    height: 20,
+                  ),
+                  SelectableText(
+                    capitalizeString(
+                        '${context.l10n.meaning}: $englishMeaning'),
+                  ),
+                  const SizedBox(
+                    height: 20,
                   ),
                   SelectableText("Kunyomi(romaji): $hiraganaRomaji"),
                   const SizedBox(
                     height: 5,
                   ),
                   SelectableText("Kunyomi: $hiraganaMeaning"),
-                ],
-              ),
-            ),
-          ),
-          const SizedBox(
-            height: 20,
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20),
-            child: Container(
-              width: double.infinity,
-              padding: const EdgeInsets.all(10),
-              decoration: BoxDecoration(
-                color: const Color.fromARGB(221, 62, 61, 64),
-                borderRadius: BorderRadius.circular(20),
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
+                  const SizedBox(
+                    height: 20,
+                  ),
                   SelectableText("Onyomi(romaji): $katakanaRomaji"),
                   const SizedBox(
                     height: 5,
