@@ -26,84 +26,99 @@ class MeaningAndDefinition extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return Column(
-      children: [
-        const SizedBox(
-          height: 10,
-        ),
-        Text(
-          context.l10n.meaningAndDefinition,
-          style: Theme.of(context)
-              .textTheme
-              .titleLarge!
-              .copyWith(fontWeight: FontWeight.bold),
-        ),
-        const SizedBox(
-          height: 10,
-        ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            const SizedBox(
-              width: 20,
+    return SizedBox(
+      width: double.infinity,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const SizedBox(
+            height: 10,
+          ),
+          Center(
+            child: Text(
+              context.l10n.meaningAndDefinition,
+              style: Theme.of(context)
+                  .textTheme
+                  .titleLarge!
+                  .copyWith(fontWeight: FontWeight.bold),
             ),
-            SelectableText(
-              capitalizeString('${context.l10n.meaning}: $englishMeaning'),
+          ),
+          const SizedBox(
+            height: 10,
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20),
+            child: Container(
+              width: double.infinity,
+              padding: const EdgeInsets.all(10),
+              decoration: BoxDecoration(
+                color: const Color.fromARGB(221, 62, 61, 64),
+                borderRadius: BorderRadius.circular(20),
+              ),
+              child: SelectableText(
+                capitalizeString('${context.l10n.meaning}: $englishMeaning'),
+              ),
             ),
-          ],
-        ),
-        const SizedBox(
-          height: 20,
-        ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            const SizedBox(
-              width: 20,
+          ),
+          const SizedBox(
+            height: 20,
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20),
+            child: Container(
+              width: double.infinity,
+              padding: const EdgeInsets.all(10),
+              decoration: BoxDecoration(
+                color: const Color.fromARGB(221, 62, 61, 64),
+                borderRadius: BorderRadius.circular(20),
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const SizedBox(
+                    height: 5,
+                  ),
+                  SelectableText("Kunyomi(romaji): $hiraganaRomaji"),
+                  const SizedBox(
+                    height: 5,
+                  ),
+                  SelectableText("Kunyomi: $hiraganaMeaning"),
+                ],
+              ),
             ),
-            SelectableText("Kunyomi(romaji): $hiraganaRomaji"),
-          ],
-        ),
-        const SizedBox(
-          height: 5,
-        ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            const SizedBox(
-              width: 20,
+          ),
+          const SizedBox(
+            height: 20,
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20),
+            child: Container(
+              width: double.infinity,
+              padding: const EdgeInsets.all(10),
+              decoration: BoxDecoration(
+                color: const Color.fromARGB(221, 62, 61, 64),
+                borderRadius: BorderRadius.circular(20),
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  SelectableText("Onyomi(romaji): $katakanaRomaji"),
+                  const SizedBox(
+                    height: 5,
+                  ),
+                  SelectableText("Onyomi: $katakanaMeaning"),
+                  const SizedBox(
+                    height: 5,
+                  ),
+                ],
+              ),
             ),
-            SelectableText("Kunyomi: $hiraganaMeaning"),
-          ],
-        ),
-        const SizedBox(
-          height: 20,
-        ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            const SizedBox(
-              width: 20,
-            ),
-            SelectableText("Onyomi(romaji): $katakanaRomaji"),
-          ],
-        ),
-        const SizedBox(
-          height: 5,
-        ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            const SizedBox(
-              width: 20,
-            ),
-            SelectableText("Onyomi: $katakanaMeaning"),
-          ],
-        ),
-        const SizedBox(
-          height: 10,
-        ),
-      ],
+          ),
+          const SizedBox(
+            height: 20,
+          )
+        ],
+      ),
     );
   }
 }
