@@ -171,8 +171,9 @@ class MainScreenProvider extends Notifier<MainScreenData> {
   }
 
   Future<List<KanjiFromApi>> loadStoredKanjis() async {
-    var listOfStoredKanjis =
-        await ref.read(localDBServiceProvider).loadStoredKanjis();
+    var listOfStoredKanjis = await ref
+        .read(localDBServiceProvider)
+        .loadStoredKanjis(ref.read(authServiceProvider).userUuid ?? '');
     final validAndInvalidKanjis = await runCompute(listOfStoredKanjis);
     final listOfValidStoredKanjis =
         validAndInvalidKanjis.$1.map((e) => e.$1).toList();

@@ -257,8 +257,8 @@ class SqliteDBService implements LocalDBService {
   }
 
   @override
-  Future<List<KanjiFromApi>> loadStoredKanjis() async {
-    return loadStoredKanjisFromSqliteDB();
+  Future<List<KanjiFromApi>> loadStoredKanjis(String uuid) async {
+    return loadStoredKanjisFromSqliteDB(uuid);
   }
 
   @override

@@ -17,7 +17,7 @@ abstract class LocalDBService {
     DeleteErrorUserCode deleteErrorUserCode,
   );
 
-  Future<List<KanjiFromApi>> loadStoredKanjis();
+  Future<List<KanjiFromApi>> loadStoredKanjis(String uuid);
 
   Future<ImageDetailsLink> loadImageDetails(String kanjiCharacter, String uuid);
 
