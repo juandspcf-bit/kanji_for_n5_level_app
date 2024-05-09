@@ -25,11 +25,11 @@ class TabVideoStrokes extends ConsumerWidget {
             child: Column(
               children: [
                 const SizedBox(
-                  height: 10,
+                  height: 20,
                 ),
                 const VideoWrapper(),
                 const SizedBox(
-                  height: 10,
+                  height: 20,
                 ),
                 MeaningAndDefinition(
                   englishMeaning: kanjiFromApi.englishMeaning,
@@ -37,6 +37,9 @@ class TabVideoStrokes extends ConsumerWidget {
                   hiraganaMeaning: kanjiFromApi.hiraganaMeaning,
                   katakanaRomaji: kanjiFromApi.katakanaRomaji,
                   katakanaMeaning: kanjiFromApi.katakanaMeaning,
+                ),
+                const SizedBox(
+                  height: 20,
                 ),
                 const ImageMeaningKanji(),
               ],
@@ -269,9 +272,6 @@ class VideoSection extends ConsumerWidget {
                 ),
               ],
             ),
-          ),
-          const SizedBox(
-            height: 10,
           ),
         ],
       ),

@@ -31,9 +31,6 @@ class MeaningAndDefinition extends ConsumerWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const SizedBox(
-            height: 10,
-          ),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20),
             child: Container(
@@ -85,9 +82,6 @@ class MeaningAndDefinition extends ConsumerWidget {
               ),
             ),
           ),
-          const SizedBox(
-            height: 20,
-          )
         ],
       ),
     );
