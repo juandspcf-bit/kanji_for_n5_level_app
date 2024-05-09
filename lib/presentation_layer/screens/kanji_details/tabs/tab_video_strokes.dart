@@ -28,8 +28,8 @@ class TabVideoStrokes extends ConsumerWidget {
                   height: 10,
                 ),
                 const VideoWrapper(),
-                const Divider(
-                  height: 4,
+                const SizedBox(
+                  height: 10,
                 ),
                 MeaningAndDefinition(
                   englishMeaning: kanjiFromApi.englishMeaning,
@@ -111,161 +111,170 @@ class VideoSection extends ConsumerWidget {
     var opacity = 1.0;
     if (connectionState == ConnectionState.waiting) opacity = 0.0;
 
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        LayoutBuilder(
-          builder: (ctx, constrains) {
-            final widthCard = (constrains.maxWidth * 0.5);
-            final widthVideo = widthCard - 30;
-            return Stack(
-              alignment: Alignment.center,
-              children: connectionState == ConnectionState.done && !hasError
-                  ? [
-                      Align(
-                        alignment: Alignment.center,
-                        child: Card(
-                          surfaceTintColor: Colors.transparent,
-                          color: Colors.white,
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(10),
+      margin: const EdgeInsets.symmetric(horizontal: 20),
+      decoration: BoxDecoration(
+        color: const Color.fromARGB(221, 62, 61, 64),
+        borderRadius: BorderRadius.circular(20),
+      ),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          LayoutBuilder(
+            builder: (ctx, constrains) {
+              final widthCard = (constrains.maxWidth * 0.5);
+              final widthVideo = widthCard - 30;
+              return Stack(
+                alignment: Alignment.center,
+                children: connectionState == ConnectionState.done && !hasError
+                    ? [
+                        Align(
+                          alignment: Alignment.center,
+                          child: Card(
+                            surfaceTintColor: Colors.transparent,
+                            color: Colors.white,
+                            child: SizedBox(
+                              height:
+                                  widthCard * videoController.value.aspectRatio,
+                              width: widthCard,
+                            ),
+                          ),
+                        ),
+                        Align(
+                          alignment: Alignment.center,
                           child: SizedBox(
                             height:
-                                widthCard * videoController.value.aspectRatio,
-                            width: widthCard,
-                          ),
-                        ),
-                      ),
-                      Align(
-                        alignment: Alignment.center,
-                        child: SizedBox(
-                          height:
-                              widthVideo * videoController.value.aspectRatio,
-                          width: widthVideo,
-                          child: AspectRatio(
-                            aspectRatio: videoController.value.aspectRatio,
-                            child: VideoPlayer(videoController),
-                          ),
-                        ),
-                      ),
-                    ]
-                  : [
-                      if (connectionState == ConnectionState.waiting)
-                        Align(
-                          alignment: Alignment.center,
-                          child: Card(
-                            shadowColor: Colors.transparent,
-                            surfaceTintColor: Colors.transparent,
-                            color: Colors.transparent,
-                            child: SizedBox(
-                              height:
-                                  widthCard * videoController.value.aspectRatio,
-                              width: widthCard,
-                              child: const CircularProgressIndicator(
-                                strokeWidth: 8,
-                              ),
+                                widthVideo * videoController.value.aspectRatio,
+                            width: widthVideo,
+                            child: AspectRatio(
+                              aspectRatio: videoController.value.aspectRatio,
+                              child: VideoPlayer(videoController),
                             ),
                           ),
-                        )
-                      else
-                        Align(
-                          alignment: Alignment.center,
-                          child: Card(
-                            shadowColor: Colors.transparent,
-                            surfaceTintColor: Colors.transparent,
-                            color: Colors.transparent,
-                            child: SizedBox(
-                              height:
-                                  widthCard * videoController.value.aspectRatio,
-                              width: widthCard,
-                              child: const Icon(
-                                Icons.error,
-                                color: Colors.amberAccent,
+                        ),
+                      ]
+                    : [
+                        if (connectionState == ConnectionState.waiting)
+                          Align(
+                            alignment: Alignment.center,
+                            child: Card(
+                              shadowColor: Colors.transparent,
+                              surfaceTintColor: Colors.transparent,
+                              color: Colors.transparent,
+                              child: SizedBox(
+                                height: widthCard *
+                                    videoController.value.aspectRatio,
+                                width: widthCard,
+                                child: const CircularProgressIndicator(
+                                  strokeWidth: 8,
+                                ),
                               ),
                             ),
-                          ),
-                        )
-                    ],
-            );
-          },
-        ),
-        Opacity(
-          opacity: opacity,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Container(
-                decoration: BoxDecoration(
-                  color: Theme.of(context).colorScheme.primary,
-                  shape: BoxShape.circle,
-                ),
-                child: IconButton(
-                  style: ButtonStyle(
-                    overlayColor: MaterialStateProperty.all(Colors.black26),
-                    backgroundColor: MaterialStateProperty.all(
-                        Theme.of(context).colorScheme.primary),
+                          )
+                        else
+                          Align(
+                            alignment: Alignment.center,
+                            child: Card(
+                              shadowColor: Colors.transparent,
+                              surfaceTintColor: Colors.transparent,
+                              color: Colors.transparent,
+                              child: SizedBox(
+                                height: widthCard *
+                                    videoController.value.aspectRatio,
+                                width: widthCard,
+                                child: const Icon(
+                                  Icons.error,
+                                  color: Colors.amberAccent,
+                                ),
+                              ),
+                            ),
+                          )
+                      ],
+              );
+            },
+          ),
+          Opacity(
+            opacity: opacity,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Container(
+                  decoration: BoxDecoration(
+                    color: Theme.of(context).colorScheme.primary,
+                    shape: BoxShape.circle,
                   ),
-                  onPressed: () async {
-                    /*  */
-                    videoController.value.isPlaying
-                        ? videoController.pause().then((value) => ref
-                            .read(videoStatusPlaying.notifier)
-                            .setIsPlaying(false))
-                        : videoController.play().then((value) => ref
-                            .read(videoStatusPlaying.notifier)
-                            .setIsPlaying(true));
-                  },
-                  icon: Padding(
-                    padding: const EdgeInsets.all(4.0),
-                    child: Icon(
-                      videoStatus.isPlaying ? Icons.pause : Icons.play_arrow,
-                      size: 30,
-                      color: Theme.of(context).colorScheme.onPrimary,
+                  child: IconButton(
+                    style: ButtonStyle(
+                      overlayColor: MaterialStateProperty.all(Colors.black26),
+                      backgroundColor: MaterialStateProperty.all(
+                          Theme.of(context).colorScheme.primary),
+                    ),
+                    onPressed: () async {
+                      /*  */
+                      videoController.value.isPlaying
+                          ? videoController.pause().then((value) => ref
+                              .read(videoStatusPlaying.notifier)
+                              .setIsPlaying(false))
+                          : videoController.play().then((value) => ref
+                              .read(videoStatusPlaying.notifier)
+                              .setIsPlaying(true));
+                    },
+                    icon: Padding(
+                      padding: const EdgeInsets.all(4.0),
+                      child: Icon(
+                        videoStatus.isPlaying ? Icons.pause : Icons.play_arrow,
+                        size: 30,
+                        color: Theme.of(context).colorScheme.onPrimary,
+                      ),
                     ),
                   ),
                 ),
-              ),
-              TextButton(
-                onPressed: () {
-                  ref.read(videoStatusPlaying.notifier).setSpeed(1.0);
-                },
-                child: Text(
-                  '1.0X',
-                  style: GoogleFonts.chakraPetch(
-                      color: videoStatus.speed == 1.0
-                          ? Colors.amber
-                          : Theme.of(context).colorScheme.onPrimaryContainer),
+                TextButton(
+                  onPressed: () {
+                    ref.read(videoStatusPlaying.notifier).setSpeed(1.0);
+                  },
+                  child: Text(
+                    '1.0X',
+                    style: GoogleFonts.chakraPetch(
+                        color: videoStatus.speed == 1.0
+                            ? Colors.amber
+                            : Theme.of(context).colorScheme.onPrimaryContainer),
+                  ),
                 ),
-              ),
-              TextButton(
-                onPressed: () {
-                  ref.read(videoStatusPlaying.notifier).setSpeed(0.5);
-                },
-                child: Text(
-                  '0.5X',
-                  style: GoogleFonts.chakraPetch(
-                      color: videoStatus.speed == 0.5
-                          ? Colors.amber
-                          : Theme.of(context).colorScheme.onPrimaryContainer),
+                TextButton(
+                  onPressed: () {
+                    ref.read(videoStatusPlaying.notifier).setSpeed(0.5);
+                  },
+                  child: Text(
+                    '0.5X',
+                    style: GoogleFonts.chakraPetch(
+                        color: videoStatus.speed == 0.5
+                            ? Colors.amber
+                            : Theme.of(context).colorScheme.onPrimaryContainer),
+                  ),
                 ),
-              ),
-              TextButton(
-                onPressed: () {
-                  ref.read(videoStatusPlaying.notifier).setSpeed(0.25);
-                },
-                child: Text(
-                  '0.25X',
-                  style: GoogleFonts.chakraPetch(
-                      color: videoStatus.speed == 0.25
-                          ? Colors.amber
-                          : Theme.of(context).colorScheme.onPrimaryContainer),
+                TextButton(
+                  onPressed: () {
+                    ref.read(videoStatusPlaying.notifier).setSpeed(0.25);
+                  },
+                  child: Text(
+                    '0.25X',
+                    style: GoogleFonts.chakraPetch(
+                        color: videoStatus.speed == 0.25
+                            ? Colors.amber
+                            : Theme.of(context).colorScheme.onPrimaryContainer),
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
-        ),
-        const SizedBox(
-          height: 10,
-        ),
-      ],
+          const SizedBox(
+            height: 10,
+          ),
+        ],
+      ),
     );
   }
 }
