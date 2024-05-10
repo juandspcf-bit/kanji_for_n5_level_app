@@ -124,56 +124,52 @@ class AvatarMainScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final avatarLink = ref.watch(avatarMainScreenProvider);
 
-    return avatarLink.when(
-      data: (data) {
-        final (connection, url) = data;
-        return GestureDetector(
-          onTap: () {
-            Navigator.of(context).push(
-              PageRouteBuilder(
-                transitionDuration: const Duration(seconds: 1),
-                reverseTransitionDuration: const Duration(seconds: 1),
-                pageBuilder: (context, animation, secondaryAnimation) =>
-                    const AccountDetails(),
-                transitionsBuilder:
-                    (context, animation, secondaryAnimation, child) {
-                  return SlideTransition(
-                    position: Tween<Offset>(
-                      begin: const Offset(0, 1),
-                      end: Offset.zero,
-                    ).animate(
-                      animation.drive(
-                        CurveTween(
-                          curve: Curves.easeInOutBack,
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        return avatarLink.when(
+          data: (data) {
+            final (connection, url) = data;
+            return GestureDetector(
+              onTap: () {
+                Navigator.of(context).push(
+                  PageRouteBuilder(
+                    transitionDuration: const Duration(seconds: 1),
+                    reverseTransitionDuration: const Duration(seconds: 1),
+                    pageBuilder: (context, animation, secondaryAnimation) =>
+                        const AccountDetails(),
+                    transitionsBuilder:
+                        (context, animation, secondaryAnimation, child) {
+                      return SlideTransition(
+                        position: Tween<Offset>(
+                          begin: const Offset(0, 1),
+                          end: Offset.zero,
+                        ).animate(
+                          animation.drive(
+                            CurveTween(
+                              curve: Curves.easeInOutBack,
+                            ),
+                          ),
                         ),
-                      ),
-                    ),
-                    child: child,
-                  );
-                },
-              ),
-            );
-          },
-          child: (connection == ConnectionStatus.noConnected)
-              ? Container(
-                  color: Colors.transparent,
-                  child: LayoutBuilder(
-                    builder: (context, constraints) {
-                      return SizedBox(
+                        child: child,
+                      );
+                    },
+                  ),
+                );
+              },
+              child: (connection == ConnectionStatus.noConnected)
+                  ? Container(
+                      color: Colors.transparent,
+                      child: SizedBox(
                         width: constraints.maxHeight,
                         height: constraints.maxHeight,
                         child: CircleAvatar(
                           backgroundImage: FileImage(File(url)),
                         ),
-                      );
-                    },
-                  ),
-                )
-              : CachedNetworkImage(
-                  fit: BoxFit.contain,
-                  imageBuilder: (context, imageProvider) {
-                    return LayoutBuilder(
-                      builder: (context, constraints) {
+                      ),
+                    )
+                  : CachedNetworkImage(
+                      fit: BoxFit.contain,
+                      imageBuilder: (context, imageProvider) {
                         return SizedBox(
                           width: constraints.maxHeight,
                           height: constraints.maxHeight,
@@ -182,45 +178,33 @@ class AvatarMainScreen extends ConsumerWidget {
                           ),
                         );
                       },
-                    );
-                  },
-                  imageUrl: url,
-                  placeholder: (context, url) => LayoutBuilder(
-                        builder: (context, constraints) {
-                          return SizedBox(
+                      imageUrl: url,
+                      placeholder: (context, url) => SizedBox(
                             width: constraints.maxHeight,
                             height: constraints.maxHeight,
                             child: const Padding(
-                              padding: EdgeInsets.all(8.0),
+                              padding: EdgeInsets.all(8),
                               child: CircularProgressIndicator(),
                             ),
-                          );
-                        },
-                      ),
-                  errorWidget: (context, url, error) => LayoutBuilder(
-                        builder: (context, constraints) {
-                          return SizedBox(
+                          ),
+                      errorWidget: (context, url, error) => SizedBox(
                             width: constraints.maxHeight,
                             height: constraints.maxHeight,
                             child: Image.asset('assets/images/user.png'),
-                          );
-                        },
-                      )),
-        );
-      },
-      error: (error, stack) => Container(),
-      loading: () => LayoutBuilder(
-        builder: (context, constraints) {
-          return SizedBox(
+                          )),
+            );
+          },
+          error: (error, stack) => Container(),
+          loading: () => SizedBox(
             width: constraints.maxHeight,
             height: constraints.maxHeight,
             child: const Padding(
               padding: EdgeInsets.all(8.0),
               child: CircularProgressIndicator(),
             ),
-          );
-        },
-      ),
+          ),
+        );
+      },
     );
   }
 }
