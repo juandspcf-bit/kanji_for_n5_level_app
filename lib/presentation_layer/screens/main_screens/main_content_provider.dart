@@ -7,6 +7,8 @@ import 'package:kanji_for_n5_level_app/aplication_layer/services.dart';
 import 'package:kanji_for_n5_level_app/models/favorite.dart';
 import 'package:kanji_for_n5_level_app/main.dart';
 import 'package:kanji_for_n5_level_app/models/kanji_from_api.dart';
+import 'package:kanji_for_n5_level_app/presentation_layer/screens/main_screens/avatar_main_screen_provider.dart';
+import 'package:kanji_for_n5_level_app/presentation_layer/screens/main_screens/title_main_screen_provider.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/navigation_bar_screens/favorite_screen/favorites_kanjis_provider.dart';
 import 'package:kanji_for_n5_level_app/providers/status_stored_provider.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/navigation_bar_screens/pogress_screen/progress_screen_provider.dart';
@@ -100,7 +102,9 @@ class MainScreenProvider extends Notifier<MainScreenData> {
   ///edpoint where the app is initilizated with online connection
   Future<void> initAppOnline() async {
     await getOnlineData();
-    await getAppBarData();
+    ref.read(avatarMainScreenProvider.notifier).getLink();
+    ref.read(titleMainScreenProvider.notifier).getTitle();
+    getAppBarData();
   }
 
   Future<void> initAppOffline() async {
@@ -205,12 +209,6 @@ class MainScreenProvider extends Notifier<MainScreenData> {
       final (_, pathAvatar) =
           await downloadAndCacheAvatar(uuid ?? '', avatarLink);
 
-      state = MainScreenData(
-          selection: ScreenSelection.kanjiSections,
-          avatarLink: avatarLink,
-          fullName: fullName,
-          pathAvatar: pathAvatar);
-
       await ref.read(localDBServiceProvider).insertUserData({
         'uuid': uuid ?? '',
         'fullName': fullName,
@@ -219,12 +217,6 @@ class MainScreenProvider extends Notifier<MainScreenData> {
       });
     } catch (e) {
       logger.e('error reading profile photo');
-      state = MainScreenData(
-        selection: ScreenSelection.kanjiSections,
-        avatarLink: '',
-        fullName: fullName,
-        pathAvatar: '',
-      );
     }
   }
 

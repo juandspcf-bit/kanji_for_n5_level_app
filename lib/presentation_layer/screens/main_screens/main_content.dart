@@ -8,6 +8,8 @@ import 'package:kanji_for_n5_level_app/config_files/screen_config.dart';
 import 'package:kanji_for_n5_level_app/l10n/locazition.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_list/body_list/providers/error_delete_providers.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_list/body_list/providers/error_download_provider.dart';
+import 'package:kanji_for_n5_level_app/presentation_layer/screens/main_screens/avatar_main_screen_provider.dart';
+import 'package:kanji_for_n5_level_app/presentation_layer/screens/main_screens/title_main_screen_provider.dart';
 import 'package:kanji_for_n5_level_app/providers/status_connection_provider.dart';
 import 'package:kanji_for_n5_level_app/repositories_layer/local_database/db_quiz_data_functions/db_quiz_data_functions.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/account_details/account_details.dart';
@@ -92,7 +94,7 @@ class MainContent extends ConsumerWidget with StatusDBStoringDialogs {
     return Scaffold(
       appBar: bottomNavigationBar
           ? AppBar(
-              title: Text(scaffoldTitle),
+              title: const TitleMainScreen(),
               actions: [
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 10),
@@ -100,7 +102,8 @@ class MainContent extends ConsumerWidget with StatusDBStoringDialogs {
                       ? const Icon(Icons.cloud_off)
                       : const Icon(Icons.cloud_done_rounded),
                 ),
-                GestureDetector(
+                const AvatarMainScreen(),
+/*                 GestureDetector(
                   onTap: () {
                     Navigator.of(context).push(
                       PageRouteBuilder(
@@ -158,7 +161,10 @@ class MainContent extends ConsumerWidget with StatusDBStoringDialogs {
                             );
                     },
                   ),
-                ),
+                ), */
+                const SizedBox(
+                  width: 10,
+                )
               ],
             )
           : null,
@@ -174,6 +180,77 @@ class MainContent extends ConsumerWidget with StatusDBStoringDialogs {
             ),
       bottomNavigationBar:
           bottomNavigationBar ? const CustomBottomNavigationBar() : null,
+    );
+  }
+}
+
+class AvatarMainScreen extends ConsumerWidget {
+  const AvatarMainScreen({super.key});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final avatarLink = ref.watch(avatarMainScreenProvider);
+
+    return avatarLink.when(
+      data: (data) {
+        return GestureDetector(
+          onTap: () {
+            Navigator.of(context).push(
+              PageRouteBuilder(
+                transitionDuration: const Duration(seconds: 1),
+                reverseTransitionDuration: const Duration(seconds: 1),
+                pageBuilder: (context, animation, secondaryAnimation) =>
+                    const AccountDetails(),
+                transitionsBuilder:
+                    (context, animation, secondaryAnimation, child) {
+                  return SlideTransition(
+                    position: Tween<Offset>(
+                      begin: const Offset(0, 1),
+                      end: Offset.zero,
+                    ).animate(
+                      animation.drive(
+                        CurveTween(
+                          curve: Curves.easeInOutBack,
+                        ),
+                      ),
+                    ),
+                    child: child,
+                  );
+                },
+              ),
+            );
+          },
+          child: CachedNetworkImage(
+            fit: BoxFit.cover,
+            imageBuilder: (context, imageProvider) {
+              return CircleAvatar(
+                backgroundImage: imageProvider,
+              );
+            },
+            imageUrl: data,
+            placeholder: (context, url) => const CircularProgressIndicator(),
+            errorWidget: (context, url, error) =>
+                Image.asset('assets/images/user.png'),
+          ),
+        );
+      },
+      error: (error, stack) => Container(),
+      loading: () => const CircularProgressIndicator(),
+    );
+  }
+}
+
+class TitleMainScreen extends ConsumerWidget {
+  const TitleMainScreen({super.key});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final titleMainScreenData = ref.watch(titleMainScreenProvider);
+
+    return titleMainScreenData.when(
+      data: (data) => Text(data),
+      error: (error, stack) => Container(),
+      loading: () => const CircularProgressIndicator(),
     );
   }
 }
