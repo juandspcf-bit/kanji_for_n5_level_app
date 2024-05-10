@@ -72,13 +72,6 @@ class MainContent extends ConsumerWidget with StatusDBStoringDialogs {
     final mainScreenData = ref.watch(mainScreenProvider);
     final statusConnectionData = ref.watch(statusConnectionProvider);
 
-    String scaffoldTitle =
-        '${context.l10n.welcome} \n ${mainScreenData.fullName}';
-
-    if (mainScreenData.selection == ScreenSelection.favoritesKanjis) {
-      scaffoldTitle = "Favorites";
-    }
-
     ref.listen<ErrorDownloadKanji>(errorDownloadProvider, (previuos, current) {
       ref.read(toastServiceProvider).dismiss(context);
       ref.read(toastServiceProvider).showShortMessage(
@@ -94,7 +87,9 @@ class MainContent extends ConsumerWidget with StatusDBStoringDialogs {
     return Scaffold(
       appBar: bottomNavigationBar
           ? AppBar(
-              title: const TitleMainScreen(),
+              title: mainScreenData.selection == ScreenSelection.favoritesKanjis
+                  ? const Text("Favorites")
+                  : const TitleMainScreen(),
               actions: [
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 10),
@@ -103,68 +98,6 @@ class MainContent extends ConsumerWidget with StatusDBStoringDialogs {
                       : const Icon(Icons.cloud_done_rounded),
                 ),
                 const AvatarMainScreen(),
-/*                 GestureDetector(
-                  onTap: () {
-                    Navigator.of(context).push(
-                      PageRouteBuilder(
-                        transitionDuration: const Duration(seconds: 1),
-                        reverseTransitionDuration: const Duration(seconds: 1),
-                        pageBuilder: (context, animation, secondaryAnimation) =>
-                            const AccountDetails(),
-                        transitionsBuilder:
-                            (context, animation, secondaryAnimation, child) {
-                          return SlideTransition(
-                            position: Tween<Offset>(
-                              begin: const Offset(0, 1),
-                              end: Offset.zero,
-                            ).animate(
-                              animation.drive(
-                                CurveTween(
-                                  curve: Curves.easeInOutBack,
-                                ),
-                              ),
-                            ),
-                            child: child,
-                          );
-                        },
-                      ),
-                    );
-                  },
-                  child: LayoutBuilder(
-                    builder: (ctx, constrains) {
-                      final height = constrains.maxHeight;
-                      return (mainScreenData.avatarLink != '' &&
-                              mainScreenData.pathAvatar != '')
-                          ? Container(
-                              color: Colors.transparent,
-                              width: height - 3,
-                              height: height - 3,
-                              child: CircleAvatar(
-                                backgroundImage:
-                                    FileImage(File(mainScreenData.pathAvatar)),
-                              ),
-                            )
-                          : CachedNetworkImage(
-                              width: height - 3,
-                              height: height - 3,
-                              fit: BoxFit.cover,
-                              imageBuilder: (context, imageProvider) {
-                                return CircleAvatar(
-                                  backgroundImage: imageProvider,
-                                );
-                              },
-                              imageUrl: mainScreenData.avatarLink,
-                              placeholder: (context, url) =>
-                                  const CircularProgressIndicator(),
-                              errorWidget: (context, url, error) =>
-                                  Image.asset('assets/images/user.png'),
-                            );
-                    },
-                  ),
-                ), */
-                const SizedBox(
-                  width: 10,
-                )
               ],
             )
           : null,
@@ -193,6 +126,7 @@ class AvatarMainScreen extends ConsumerWidget {
 
     return avatarLink.when(
       data: (data) {
+        final (connection, url) = data;
         return GestureDetector(
           onTap: () {
             Navigator.of(context).push(
@@ -220,22 +154,73 @@ class AvatarMainScreen extends ConsumerWidget {
               ),
             );
           },
-          child: CachedNetworkImage(
-            fit: BoxFit.cover,
-            imageBuilder: (context, imageProvider) {
-              return CircleAvatar(
-                backgroundImage: imageProvider,
-              );
-            },
-            imageUrl: data,
-            placeholder: (context, url) => const CircularProgressIndicator(),
-            errorWidget: (context, url, error) =>
-                Image.asset('assets/images/user.png'),
-          ),
+          child: (connection == ConnectionStatus.noConnected)
+              ? Container(
+                  color: Colors.transparent,
+                  child: LayoutBuilder(
+                    builder: (context, constraints) {
+                      return SizedBox(
+                        width: constraints.maxHeight,
+                        height: constraints.maxHeight,
+                        child: CircleAvatar(
+                          backgroundImage: FileImage(File(url)),
+                        ),
+                      );
+                    },
+                  ),
+                )
+              : CachedNetworkImage(
+                  fit: BoxFit.contain,
+                  imageBuilder: (context, imageProvider) {
+                    return LayoutBuilder(
+                      builder: (context, constraints) {
+                        return SizedBox(
+                          width: constraints.maxHeight,
+                          height: constraints.maxHeight,
+                          child: CircleAvatar(
+                            backgroundImage: imageProvider,
+                          ),
+                        );
+                      },
+                    );
+                  },
+                  imageUrl: url,
+                  placeholder: (context, url) => LayoutBuilder(
+                        builder: (context, constraints) {
+                          return SizedBox(
+                            width: constraints.maxHeight,
+                            height: constraints.maxHeight,
+                            child: const Padding(
+                              padding: EdgeInsets.all(8.0),
+                              child: CircularProgressIndicator(),
+                            ),
+                          );
+                        },
+                      ),
+                  errorWidget: (context, url, error) => LayoutBuilder(
+                        builder: (context, constraints) {
+                          return SizedBox(
+                            width: constraints.maxHeight,
+                            height: constraints.maxHeight,
+                            child: Image.asset('assets/images/user.png'),
+                          );
+                        },
+                      )),
         );
       },
       error: (error, stack) => Container(),
-      loading: () => const CircularProgressIndicator(),
+      loading: () => LayoutBuilder(
+        builder: (context, constraints) {
+          return SizedBox(
+            width: constraints.maxHeight,
+            height: constraints.maxHeight,
+            child: const Padding(
+              padding: EdgeInsets.all(8.0),
+              child: CircularProgressIndicator(),
+            ),
+          );
+        },
+      ),
     );
   }
 }
@@ -246,9 +231,8 @@ class TitleMainScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final titleMainScreenData = ref.watch(titleMainScreenProvider);
-
     return titleMainScreenData.when(
-      data: (data) => Text(data),
+      data: (data) => Text('${context.l10n.welcome} \n $data'),
       error: (error, stack) => Container(),
       loading: () => const CircularProgressIndicator(),
     );

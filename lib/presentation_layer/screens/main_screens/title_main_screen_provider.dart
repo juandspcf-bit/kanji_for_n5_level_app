@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kanji_for_n5_level_app/aplication_layer/services.dart';
+import 'package:kanji_for_n5_level_app/providers/status_connection_provider.dart';
 
 class TitleMainScreenNotifier extends AsyncNotifier<String> {
   @override
@@ -15,11 +16,24 @@ class TitleMainScreenNotifier extends AsyncNotifier<String> {
       (() async {
         final uuid = ref.read(authServiceProvider).userUuid;
 
-        final userData =
-            await ref.read(cloudDBServiceProvider).readUserData(uuid ?? '');
-        final fullName = 'Welcome\n ${userData.firstName} ${userData.lastName}';
+        final connection = ref.read(statusConnectionProvider);
 
-        return Future(() => fullName);
+        if (connection == ConnectionStatus.noConnected) {
+          final listUser = await ref
+              .read(localDBServiceProvider)
+              .readUserData(ref.read(authServiceProvider).userUuid ?? '');
+          if (listUser.isNotEmpty) {
+            final user = listUser.first;
+            return user['fullName'] as String;
+          }
+          return "";
+        } else {
+          final userData =
+              await ref.read(cloudDBServiceProvider).readUserData(uuid ?? '');
+          final fullName = '${userData.firstName} ${userData.lastName}';
+
+          return fullName;
+        }
       }),
     );
   }

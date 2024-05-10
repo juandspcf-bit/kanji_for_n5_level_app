@@ -3,7 +3,10 @@ import 'dart:async';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kanji_for_n5_level_app/aplication_layer/services.dart';
 import 'package:kanji_for_n5_level_app/main.dart';
+import 'package:kanji_for_n5_level_app/presentation_layer/screens/main_screens/avatar_main_screen_provider.dart';
+import 'package:kanji_for_n5_level_app/presentation_layer/screens/main_screens/main_content.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/main_screens/main_content_provider.dart';
+import 'package:kanji_for_n5_level_app/presentation_layer/screens/main_screens/title_main_screen_provider.dart';
 import 'package:kanji_for_n5_level_app/utils/networking/networking.dart';
 
 class PersonalInfoProvider extends Notifier<PersonalInfoData> {
@@ -212,7 +215,8 @@ class PersonalInfoProvider extends Notifier<PersonalInfoData> {
 
       fullName = '${state.firstName} ${state.lastName}';
       logger.d(fullName);
-      ref.read(mainScreenProvider.notifier).setFullName(fullName);
+      //ref.read(mainScreenProvider.notifier).setFullName(fullName);
+      ref.read(titleMainScreenProvider.notifier).getTitle();
     } catch (e) {
       logger.e(e);
       setUpdatingStatus(PersonalInfoUpdatingStatus.error);
@@ -224,12 +228,7 @@ class PersonalInfoProvider extends Notifier<PersonalInfoData> {
             personalInfoData.pathProfileTemporal,
             ref.read(authServiceProvider).userUuid ?? '');
         setProfilePath(avatarLink);
-        ref.read(mainScreenProvider.notifier).setAvatarLink(avatarLink);
-
-        (_, pathAvatar) = await downloadAndCacheAvatar(userUuid, avatarLink);
-
-        ref.read(mainScreenProvider.notifier).setPathAvatar(pathAvatar);
-
+        ref.read(avatarMainScreenProvider.notifier).getLink();
         setUpdatingStatus(PersonalInfoUpdatingStatus.succes);
       } catch (e) {
         setUpdatingStatus(PersonalInfoUpdatingStatus.error);

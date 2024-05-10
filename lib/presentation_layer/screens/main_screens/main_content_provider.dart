@@ -109,7 +109,8 @@ class MainScreenProvider extends Notifier<MainScreenData> {
 
   Future<void> initAppOffline() async {
     await getOfflineData();
-    await getAppBarDataOffline();
+    ref.read(avatarMainScreenProvider.notifier).getLink();
+    ref.read(titleMainScreenProvider.notifier).getTitle();
   }
 
   Future<void> getOnlineData() async {
@@ -221,7 +222,6 @@ class MainScreenProvider extends Notifier<MainScreenData> {
   }
 
   Future<void> getAppBarDataOffline() async {
-    logger.d(state.fullName);
     if (state.avatarLink == '' &&
         state.pathAvatar == '' &&
         state.fullName == '') {
