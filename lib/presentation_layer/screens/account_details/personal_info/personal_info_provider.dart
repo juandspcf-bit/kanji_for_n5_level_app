@@ -4,10 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kanji_for_n5_level_app/aplication_layer/services.dart';
 import 'package:kanji_for_n5_level_app/main.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/main_screens/avatar_main_screen_provider.dart';
-import 'package:kanji_for_n5_level_app/presentation_layer/screens/main_screens/main_content.dart';
-import 'package:kanji_for_n5_level_app/presentation_layer/screens/main_screens/main_content_provider.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/main_screens/title_main_screen_provider.dart';
-import 'package:kanji_for_n5_level_app/utils/networking/networking.dart';
 
 class PersonalInfoProvider extends Notifier<PersonalInfoData> {
   @override
