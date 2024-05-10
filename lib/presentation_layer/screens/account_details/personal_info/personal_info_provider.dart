@@ -211,8 +211,6 @@ class PersonalInfoProvider extends Notifier<PersonalInfoData> {
       });
 
       fullName = '${state.firstName} ${state.lastName}';
-      logger.d(fullName);
-      //ref.read(mainScreenProvider.notifier).setFullName(fullName);
       ref.read(titleMainScreenProvider.notifier).getTitle();
     } catch (e) {
       logger.e(e);
