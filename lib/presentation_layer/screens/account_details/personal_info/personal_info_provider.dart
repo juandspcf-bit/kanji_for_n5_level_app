@@ -32,57 +32,6 @@ class PersonalInfoProvider extends Notifier<PersonalInfoData> {
         showPasswordRequest: state.showPasswordRequest);
   }
 
-  Future<void> getInitialPersonalInfoData() async {
-    final uuid = ref.read(authServiceProvider).userUuid;
-
-    setFetchingStatus(PersonalInfoFetchinStatus.processing);
-
-    String photoLink = '';
-    try {
-      photoLink =
-          await ref.read(storageServiceProvider).getDownloadLink(uuid ?? '');
-    } catch (e) {
-      logger.e(e);
-    }
-
-    try {
-      final user =
-          await ref.read(cloudDBServiceProvider).readUserData(uuid ?? '');
-      logger.d(user);
-
-      state = PersonalInfoData(
-          pathProfileUser: photoLink,
-          pathProfileTemporal: '',
-          firstName: user.firstName,
-          lastName: user.lastName,
-          birthdate: user.birthday,
-          updatingStatus: state.updatingStatus,
-          fetchingStatus: PersonalInfoFetchinStatus.success,
-          showPasswordRequest: state.showPasswordRequest);
-    } on TimeoutException {
-      state = PersonalInfoData(
-          pathProfileUser: '',
-          pathProfileTemporal: '',
-          firstName: '',
-          lastName: '',
-          birthdate: '',
-          updatingStatus: state.updatingStatus,
-          fetchingStatus: PersonalInfoFetchinStatus.error,
-          showPasswordRequest: state.showPasswordRequest);
-    } catch (e) {
-      logger.e('error reading profile photo');
-      state = PersonalInfoData(
-          pathProfileUser: '',
-          pathProfileTemporal: '',
-          firstName: '',
-          lastName: '',
-          birthdate: '',
-          updatingStatus: state.updatingStatus,
-          fetchingStatus: PersonalInfoFetchinStatus.error,
-          showPasswordRequest: state.showPasswordRequest);
-    }
-  }
-
   void setProfileTemporalPath(String path) async {
     state = PersonalInfoData(
         pathProfileUser: '',
@@ -177,6 +126,57 @@ class PersonalInfoProvider extends Notifier<PersonalInfoData> {
         updatingStatus: state.updatingStatus,
         fetchingStatus: state.fetchingStatus,
         showPasswordRequest: status);
+  }
+
+  Future<void> fetchUserData() async {
+    final uuid = ref.read(authServiceProvider).userUuid;
+
+    setFetchingStatus(PersonalInfoFetchinStatus.processing);
+
+    String photoLink = '';
+    try {
+      photoLink =
+          await ref.read(storageServiceProvider).getDownloadLink(uuid ?? '');
+    } catch (e) {
+      logger.e(e);
+    }
+
+    try {
+      final user =
+          await ref.read(cloudDBServiceProvider).readUserData(uuid ?? '');
+      logger.d(user);
+
+      state = PersonalInfoData(
+          pathProfileUser: photoLink,
+          pathProfileTemporal: '',
+          firstName: user.firstName,
+          lastName: user.lastName,
+          birthdate: user.birthday,
+          updatingStatus: state.updatingStatus,
+          fetchingStatus: PersonalInfoFetchinStatus.success,
+          showPasswordRequest: state.showPasswordRequest);
+    } on TimeoutException {
+      state = PersonalInfoData(
+          pathProfileUser: '',
+          pathProfileTemporal: '',
+          firstName: '',
+          lastName: '',
+          birthdate: '',
+          updatingStatus: state.updatingStatus,
+          fetchingStatus: PersonalInfoFetchinStatus.error,
+          showPasswordRequest: state.showPasswordRequest);
+    } catch (e) {
+      logger.e('error reading profile photo');
+      state = PersonalInfoData(
+          pathProfileUser: '',
+          pathProfileTemporal: '',
+          firstName: '',
+          lastName: '',
+          birthdate: '',
+          updatingStatus: state.updatingStatus,
+          fetchingStatus: PersonalInfoFetchinStatus.error,
+          showPasswordRequest: state.showPasswordRequest);
+    }
   }
 
   void updateUserData() async {

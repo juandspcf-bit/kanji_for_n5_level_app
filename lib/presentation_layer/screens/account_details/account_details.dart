@@ -39,9 +39,7 @@ class AccountDetails extends ConsumerWidget {
                   ListTile(
                     onTap: () {
                       ref.read(personalInfoProvider.notifier).resetData();
-                      ref
-                          .read(personalInfoProvider.notifier)
-                          .getInitialPersonalInfoData();
+                      ref.read(personalInfoProvider.notifier).fetchUserData();
                       Navigator.of(context).push(
                         MaterialPageRoute(builder: (ctx) {
                           return const PersonalInfo();
