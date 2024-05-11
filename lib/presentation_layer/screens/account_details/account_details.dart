@@ -4,13 +4,13 @@ import 'package:kanji_for_n5_level_app/aplication_layer/services.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/account_details/change_email/change_email_flow.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/account_details/close_account/close_account_screen.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/account_details/close_account/close_account_provider.dart';
-import 'package:kanji_for_n5_level_app/presentation_layer/screens/account_details/personal_info/personal_info_provider.dart';
+import 'package:kanji_for_n5_level_app/presentation_layer/screens/account_details/personal_info_update/personal_info_provider.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/account_details/send_feedback/send_feedback_screen.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/login_screen/login_provider.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/main_screens/main_content_provider.dart';
-import 'package:kanji_for_n5_level_app/presentation_layer/screens/account_details/password_change_flow_provider.dart';
-import 'package:kanji_for_n5_level_app/presentation_layer/screens/account_details/password_change_flow.dart';
-import 'package:kanji_for_n5_level_app/presentation_layer/screens/account_details/personal_info/personal_info.dart';
+import 'package:kanji_for_n5_level_app/presentation_layer/screens/account_details/password_change/password_change_flow_provider.dart';
+import 'package:kanji_for_n5_level_app/presentation_layer/screens/account_details/password_change/password_change_flow.dart';
+import 'package:kanji_for_n5_level_app/presentation_layer/screens/account_details/personal_info_update/personal_info.dart';
 
 class AccountDetails extends ConsumerWidget {
   const AccountDetails({super.key});

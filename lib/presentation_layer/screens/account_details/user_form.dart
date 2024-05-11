@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kanji_for_n5_level_app/config_files/assets_paths.dart';
 import 'package:kanji_for_n5_level_app/main.dart';
-import 'package:kanji_for_n5_level_app/presentation_layer/screens/account_details/personal_info/personal_info_provider.dart';
+import 'package:kanji_for_n5_level_app/presentation_layer/screens/account_details/personal_info_update/personal_info_provider.dart';
 import 'package:kanji_for_n5_level_app/providers/status_connection_provider.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/sign_up_screen/profile_picture_widget.dart';
 

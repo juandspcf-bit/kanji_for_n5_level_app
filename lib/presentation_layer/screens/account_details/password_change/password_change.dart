@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:kanji_for_n5_level_app/presentation_layer/screens/account_details/password_change_flow_provider.dart';
+import 'package:kanji_for_n5_level_app/presentation_layer/screens/account_details/password_change/password_change_flow_provider.dart';
 
 class PassworChange extends ConsumerWidget {
   PassworChange({

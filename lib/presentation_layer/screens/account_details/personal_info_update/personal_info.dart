@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:kanji_for_n5_level_app/presentation_layer/screens/account_details/personal_info/personal_info_provider.dart';
+import 'package:kanji_for_n5_level_app/presentation_layer/screens/account_details/personal_info_update/personal_info_provider.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/account_details/user_form.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/common_screens/loading_screen.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/common_widgets/my_dialogs.dart';
