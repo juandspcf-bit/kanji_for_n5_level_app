@@ -126,11 +126,6 @@ class UserForm extends ConsumerWidget {
                                 onValidate(ref);
                               },
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: Theme.of(context).colorScheme.primary,
-                      foregroundColor: Theme.of(context).colorScheme.onPrimary,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10),
-                      ),
                       minimumSize: const Size.fromHeight(50),
                     ),
                     child: accountDetailsData.updatingStatus ==

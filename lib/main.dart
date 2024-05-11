@@ -64,6 +64,9 @@ class MyApp extends ConsumerWidget {
             backgroundColor: kDarkColorScheme.primary,
             foregroundColor: kDarkColorScheme.onPrimary,
             textStyle: Theme.of(context).textTheme.bodyLarge,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10),
+            ),
           ),
         ),
         /*       cardTheme: const CardTheme().copyWith(
