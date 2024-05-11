@@ -123,7 +123,9 @@ class PersonalInfoProvider extends Notifier<PersonalInfoData> {
         firstName: '',
         lastName: '',
         birthdate: '',
-        updatingStatus: PersonalInfoUpdatingStatus.noStarted,
+        updatingStatus: _isUpdating
+            ? PersonalInfoUpdatingStatus.updating
+            : PersonalInfoUpdatingStatus.noStarted,
         fetchingStatus: PersonalInfoFetchinStatus.noStarted,
         showPasswordRequest: state.showPasswordRequest);
   }
@@ -179,6 +181,8 @@ class PersonalInfoProvider extends Notifier<PersonalInfoData> {
     }
   }
 
+  var _isUpdating = false;
+
   void updateUserData() async {
     final userUuid = ref.read(authServiceProvider).userUuid;
     if (userUuid == null) {
@@ -188,6 +192,7 @@ class PersonalInfoProvider extends Notifier<PersonalInfoData> {
     final personalInfoData = state;
 
     setUpdatingStatus(PersonalInfoUpdatingStatus.updating);
+    _isUpdating = true;
 
     final cachedUserDataList =
         await ref.read(localDBServiceProvider).readUserData(userUuid);
@@ -215,6 +220,7 @@ class PersonalInfoProvider extends Notifier<PersonalInfoData> {
     } catch (e) {
       logger.e(e);
       setUpdatingStatus(PersonalInfoUpdatingStatus.error);
+      _isUpdating = false;
     }
 
     if (personalInfoData.pathProfileTemporal.isNotEmpty) {
@@ -225,14 +231,16 @@ class PersonalInfoProvider extends Notifier<PersonalInfoData> {
         setProfilePath(avatarLink);
         ref.read(avatarMainScreenProvider.notifier).getLink();
         setUpdatingStatus(PersonalInfoUpdatingStatus.succes);
+        _isUpdating = false;
       } catch (e) {
         setUpdatingStatus(PersonalInfoUpdatingStatus.error);
-
+        _isUpdating = false;
         logger.e('error');
         logger.e(e);
       }
     } else {
       setUpdatingStatus(PersonalInfoUpdatingStatus.succes);
+      _isUpdating = false;
     }
 
     if (personalInfoData.pathProfileTemporal.isNotEmpty) {

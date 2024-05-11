@@ -7,6 +7,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:kanji_for_n5_level_app/config_files/screen_config.dart';
 import 'package:kanji_for_n5_level_app/main.dart';
+import 'package:kanji_for_n5_level_app/presentation_layer/screens/account_details/personal_info_update/personal_info_provider.dart';
 
 class ProfilePictureWidget extends ConsumerWidget {
   const ProfilePictureWidget({
@@ -54,7 +55,11 @@ class ProfilePictureWidget extends ConsumerWidget {
           right: 0,
           child: IconButton(
             onPressed: () {
-              modalSelectionSourcePictureWidget(context, setPathProfileUser);
+              final updatingStatus =
+                  ref.read(personalInfoProvider).updatingStatus;
+              if (updatingStatus != PersonalInfoUpdatingStatus.updating) {
+                modalSelectionSourcePictureWidget(context, setPathProfileUser);
+              }
             },
             icon: Icon(
               Icons.image_search,
