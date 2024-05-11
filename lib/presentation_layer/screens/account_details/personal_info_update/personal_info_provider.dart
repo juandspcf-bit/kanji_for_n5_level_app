@@ -20,18 +20,6 @@ class PersonalInfoProvider extends Notifier<PersonalInfoData> {
         showPasswordRequest: false);
   }
 
-  void resetData() {
-    state = PersonalInfoData(
-        pathProfileUser: '',
-        pathProfileTemporal: '',
-        firstName: '',
-        lastName: '',
-        birthdate: '',
-        updatingStatus: PersonalInfoUpdatingStatus.noStarted,
-        fetchingStatus: PersonalInfoFetchinStatus.noStarted,
-        showPasswordRequest: state.showPasswordRequest);
-  }
-
   void setProfileTemporalPath(String path) async {
     state = PersonalInfoData(
         pathProfileUser: '',
@@ -126,6 +114,18 @@ class PersonalInfoProvider extends Notifier<PersonalInfoData> {
         updatingStatus: state.updatingStatus,
         fetchingStatus: state.fetchingStatus,
         showPasswordRequest: status);
+  }
+
+  void resetData() {
+    state = PersonalInfoData(
+        pathProfileUser: '',
+        pathProfileTemporal: '',
+        firstName: '',
+        lastName: '',
+        birthdate: '',
+        updatingStatus: PersonalInfoUpdatingStatus.noStarted,
+        fetchingStatus: PersonalInfoFetchinStatus.noStarted,
+        showPasswordRequest: state.showPasswordRequest);
   }
 
   Future<void> fetchUserData() async {
