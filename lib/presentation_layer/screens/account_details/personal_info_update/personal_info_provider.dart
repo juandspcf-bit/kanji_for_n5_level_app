@@ -130,6 +130,10 @@ class PersonalInfoProvider extends Notifier<PersonalInfoData> {
         showPasswordRequest: state.showPasswordRequest);
   }
 
+  String _firtsName = "";
+  String _lastName = "";
+  String _birthdate = "";
+
   Future<void> fetchUserData() async {
     final uuid = ref.read(authServiceProvider).userUuid;
 
@@ -146,7 +150,9 @@ class PersonalInfoProvider extends Notifier<PersonalInfoData> {
     try {
       final user =
           await ref.read(cloudDBServiceProvider).readUserData(uuid ?? '');
-      logger.d(user);
+      _firtsName = user.firstName;
+      _lastName = user.lastName;
+      _birthdate = user.birthday;
 
       state = PersonalInfoData(
           pathProfileUser: photoLink,
@@ -184,9 +190,19 @@ class PersonalInfoProvider extends Notifier<PersonalInfoData> {
   var _isUpdating = false;
 
   void updateUserData() async {
+    if (state.pathProfileTemporal == "" &&
+        _birthdate == state.birthdate &&
+        _firtsName == state.firstName &&
+        _lastName == state.lastName) {
+      setUpdatingStatus(PersonalInfoUpdatingStatus.noUpdate);
+      _isUpdating = false;
+      return;
+    }
+
     final userUuid = ref.read(authServiceProvider).userUuid;
     if (userUuid == null) {
       setUpdatingStatus(PersonalInfoUpdatingStatus.error);
+      _isUpdating = false;
       return;
     }
     final personalInfoData = state;
@@ -249,6 +265,7 @@ class PersonalInfoProvider extends Notifier<PersonalInfoData> {
         'fullName': fullName,
         'linkAvatar': avatarLink,
         'pathAvatar': pathAvatar,
+        'birthday': state.birthdate
       });
     } else {}
   }

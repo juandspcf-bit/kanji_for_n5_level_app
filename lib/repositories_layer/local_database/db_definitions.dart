@@ -33,6 +33,7 @@ Future<Database> get kanjiFromApiDatabase async {
         ' id INTEGER PRIMARY KEY AUTOINCREMENT,'
         ' uuid TEXT,'
         ' fullName TEXT,'
+        ' birthday TEXT,'
         ' linkAvatar TEXT,'
         ' pathAvatar TEXT'
         ')',

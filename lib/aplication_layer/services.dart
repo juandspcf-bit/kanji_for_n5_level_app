@@ -33,5 +33,5 @@ final localDBServiceProvider = Provider<LocalDBService>((ref) {
 });
 
 final toastServiceProvider = Provider<ToastServiceContract>((ref) {
-  return MaterialSnackBarService(); //ToastificationService();
+  return MaterialSnackBarService();
 });
