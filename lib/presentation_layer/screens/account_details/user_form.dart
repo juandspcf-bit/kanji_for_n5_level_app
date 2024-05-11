@@ -52,7 +52,7 @@ class UserForm extends ConsumerWidget {
             height: 20,
           ),
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
             child: Form(
               key: _formKey,
               child: Column(
@@ -128,12 +128,19 @@ class UserForm extends ConsumerWidget {
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Theme.of(context).colorScheme.primary,
                       foregroundColor: Theme.of(context).colorScheme.onPrimary,
-                      minimumSize: const Size.fromHeight(40), // NEW
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      minimumSize: const Size.fromHeight(50),
                     ),
                     child: accountDetailsData.updatingStatus ==
                             PersonalInfoUpdatingStatus.updating
-                        ? CircularProgressIndicator(
-                            color: Theme.of(context).colorScheme.onPrimary,
+                        ? SizedBox(
+                            width: 30,
+                            height: 30,
+                            child: CircularProgressIndicator(
+                              color: Theme.of(context).colorScheme.onPrimary,
+                            ),
                           )
                         : const Text('Update your info'),
                   ),
