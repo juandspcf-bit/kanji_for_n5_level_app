@@ -11,6 +11,8 @@ class UserForm extends ConsumerWidget {
     required this.accountDetailsData,
   });
 
+  final PersonalInfoData accountDetailsData;
+
   void _setDatePicker(BuildContext context, WidgetRef ref) async {
     final now = DateTime.now();
     final firstDate = DateTime(now.year - 100, 1, 1);
@@ -25,8 +27,6 @@ class UserForm extends ConsumerWidget {
     ref.read(personalInfoProvider.notifier).setBirthdate(
         '${pickedDate.year}/${pickedDate.month}/${pickedDate.day}');
   }
-
-  final PersonalInfoData accountDetailsData;
 
   void onValidate(WidgetRef ref) async {
     final currentFormState = _formKey.currentState;
@@ -130,7 +130,12 @@ class UserForm extends ConsumerWidget {
                       foregroundColor: Theme.of(context).colorScheme.onPrimary,
                       minimumSize: const Size.fromHeight(40), // NEW
                     ),
-                    child: const Text('Update your info'),
+                    child: accountDetailsData.updatingStatus ==
+                            PersonalInfoUpdatingStatus.updating
+                        ? CircularProgressIndicator(
+                            color: Theme.of(context).colorScheme.onPrimary,
+                          )
+                        : const Text('Update your info'),
                   ),
                 ],
               ),

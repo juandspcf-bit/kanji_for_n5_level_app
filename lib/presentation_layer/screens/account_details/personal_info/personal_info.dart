@@ -70,10 +70,11 @@ class PersonalInfo extends ConsumerWidget with MyDialogs {
         if (personalInfoData.fetchingStatus ==
             PersonalInfoFetchinStatus.processing) {
           return const ProcessProgress(message: 'Fetching data');
-        } else if (personalInfoData.updatingStatus ==
+        } /* else if (personalInfoData.updatingStatus ==
             PersonalInfoUpdatingStatus.updating) {
           return const ProcessProgress(message: 'Updating data');
-        } else {
+        } */
+        else {
           return UserForm(accountDetailsData: personalInfoData);
         }
       }),
