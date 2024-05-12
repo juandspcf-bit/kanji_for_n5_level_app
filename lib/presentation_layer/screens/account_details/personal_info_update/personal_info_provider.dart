@@ -5,6 +5,7 @@ import 'package:kanji_for_n5_level_app/aplication_layer/services.dart';
 import 'package:kanji_for_n5_level_app/main.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/main_screens/avatar_main_screen_provider.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/main_screens/title_main_screen_provider.dart';
+import 'package:kanji_for_n5_level_app/providers/status_connection_provider.dart';
 
 class PersonalInfoProvider extends Notifier<PersonalInfoData> {
   @override
@@ -139,6 +140,39 @@ class PersonalInfoProvider extends Notifier<PersonalInfoData> {
 
     setFetchingStatus(PersonalInfoFetchinStatus.processing);
 
+    final statusConnection = ref.read(statusConnectionProvider);
+
+    if (statusConnection == ConnectionStatus.noConnected) {
+      final cachedUserDataList =
+          await ref.read(localDBServiceProvider).readUserData(uuid ?? '');
+
+      String firstName = '';
+      String lastName = '';
+      String avatarLink = '';
+      String pathAvatar = '';
+
+      if (cachedUserDataList.isNotEmpty) {
+        final cachedUserData = cachedUserDataList.first;
+        firstName = cachedUserData['firstName'] as String;
+        lastName = cachedUserData['lastName'] as String;
+        avatarLink = cachedUserData['linkAvatar'] as String;
+        pathAvatar = cachedUserData['pathAvatar'] as String;
+      }
+
+      state = PersonalInfoData(
+        pathProfileUser: '',
+        pathProfileTemporal: '',
+        firstName: '',
+        lastName: '',
+        birthdate: '',
+        updatingStatus: state.updatingStatus,
+        fetchingStatus: PersonalInfoFetchinStatus.success,
+        showPasswordRequest: state.showPasswordRequest,
+      );
+
+      return;
+    }
+
     String photoLink = '';
     try {
       photoLink =
@@ -165,14 +199,15 @@ class PersonalInfoProvider extends Notifier<PersonalInfoData> {
           showPasswordRequest: state.showPasswordRequest);
     } on TimeoutException {
       state = PersonalInfoData(
-          pathProfileUser: '',
-          pathProfileTemporal: '',
-          firstName: '',
-          lastName: '',
-          birthdate: '',
-          updatingStatus: state.updatingStatus,
-          fetchingStatus: PersonalInfoFetchinStatus.error,
-          showPasswordRequest: state.showPasswordRequest);
+        pathProfileUser: '',
+        pathProfileTemporal: '',
+        firstName: '',
+        lastName: '',
+        birthdate: '',
+        updatingStatus: state.updatingStatus,
+        fetchingStatus: PersonalInfoFetchinStatus.error,
+        showPasswordRequest: state.showPasswordRequest,
+      );
     } catch (e) {
       logger.e('error reading profile photo');
       state = PersonalInfoData(
@@ -213,13 +248,15 @@ class PersonalInfoProvider extends Notifier<PersonalInfoData> {
     final cachedUserDataList =
         await ref.read(localDBServiceProvider).readUserData(userUuid);
 
-    String fullName = '';
+    String firstName = '';
+    String lastName = '';
     String avatarLink = '';
     String pathAvatar = '';
 
     if (cachedUserDataList.isNotEmpty) {
       final cachedUserData = cachedUserDataList.first;
-      fullName = cachedUserData['fullName'] as String;
+      firstName = cachedUserData['firstName'] as String;
+      lastName = cachedUserData['lastName'] as String;
       avatarLink = cachedUserData['linkAvatar'] as String;
       pathAvatar = cachedUserData['pathAvatar'] as String;
     }
@@ -231,7 +268,9 @@ class PersonalInfoProvider extends Notifier<PersonalInfoData> {
         'lastName': state.lastName,
       });
 
-      fullName = '${state.firstName} ${state.lastName}';
+      firstName = state.firstName;
+      lastName = state.lastName;
+
       ref.read(titleMainScreenProvider.notifier).getTitle();
     } catch (e) {
       logger.e(e);
@@ -262,7 +301,8 @@ class PersonalInfoProvider extends Notifier<PersonalInfoData> {
     if (personalInfoData.pathProfileTemporal.isNotEmpty) {
       await ref.read(localDBServiceProvider).insertUserData({
         'uuid': userUuid,
-        'fullName': fullName,
+        'firstName': firstName,
+        'lastName': lastName,
         'linkAvatar': avatarLink,
         'pathAvatar': pathAvatar,
         'birthday': state.birthdate
