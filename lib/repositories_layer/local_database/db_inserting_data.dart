@@ -21,14 +21,18 @@ Future<void> insertUserDataToSqlite(Map<String, Object> data) async {
     await db.rawInsert(
       'INSERT INTO user_data('
       ' uuid,'
-      ' fullName,'
+      ' firstName,'
+      ' lastName,'
+      ' birthday,'
       ' linkAvatar,'
       ' pathAvatar'
       ') '
-      'VALUES(?,?,?,?)',
+      'VALUES(?,?,?,?,?,?)',
       [
         data['uuid'],
-        data['fullName'],
+        data['firstName'],
+        data['lastName'],
+        data['birthday'],
         data['linkAvatar'],
         data['pathAvatar'],
       ],
@@ -39,15 +43,18 @@ Future<void> insertUserDataToSqlite(Map<String, Object> data) async {
     int value = await db.rawUpdate(
         'UPDATE user_data '
         'SET'
-        ' fullName = ?,'
+        ' firstName = ?,'
+        ' lastName = ?,'
+        ' birthday = ?,'
         ' linkAvatar = ?,'
         ' pathAvatar = ?'
         ' WHERE uuid = ?',
         [
-          data['fullName'],
+          data['firstName'],
+          data['lastName'],
+          data['birthday'],
           data['linkAvatar'],
           data['pathAvatar'],
-          data['uuid']
         ]);
     logger.d(value);
   }

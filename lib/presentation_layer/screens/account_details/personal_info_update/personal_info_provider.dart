@@ -11,7 +11,7 @@ class PersonalInfoProvider extends Notifier<PersonalInfoData> {
   @override
   PersonalInfoData build() {
     return PersonalInfoData(
-        pathProfileUser: '',
+        link: '',
         pathProfileTemporal: '',
         firstName: '',
         lastName: '',
@@ -23,7 +23,7 @@ class PersonalInfoProvider extends Notifier<PersonalInfoData> {
 
   void setProfileTemporalPath(String path) async {
     state = PersonalInfoData(
-        pathProfileUser: '',
+        link: '',
         pathProfileTemporal: path,
         firstName: state.firstName,
         lastName: state.lastName,
@@ -35,7 +35,7 @@ class PersonalInfoProvider extends Notifier<PersonalInfoData> {
 
   void setProfilePath(String path) async {
     state = PersonalInfoData(
-        pathProfileUser: path,
+        link: path,
         pathProfileTemporal: state.pathProfileTemporal,
         firstName: state.firstName,
         lastName: state.lastName,
@@ -47,7 +47,7 @@ class PersonalInfoProvider extends Notifier<PersonalInfoData> {
 
   void setName(String name) async {
     state = PersonalInfoData(
-        pathProfileUser: state.pathProfileUser,
+        link: state.link,
         pathProfileTemporal: state.pathProfileTemporal,
         firstName: name,
         lastName: state.lastName,
@@ -59,7 +59,7 @@ class PersonalInfoProvider extends Notifier<PersonalInfoData> {
 
   void setLastName(String lastName) async {
     state = PersonalInfoData(
-        pathProfileUser: state.pathProfileUser,
+        link: state.link,
         pathProfileTemporal: state.pathProfileTemporal,
         firstName: state.firstName,
         lastName: lastName,
@@ -71,7 +71,7 @@ class PersonalInfoProvider extends Notifier<PersonalInfoData> {
 
   void setBirthdate(String birthdate) async {
     state = PersonalInfoData(
-        pathProfileUser: state.pathProfileUser,
+        link: state.link,
         pathProfileTemporal: state.pathProfileTemporal,
         firstName: state.firstName,
         lastName: state.lastName,
@@ -83,7 +83,7 @@ class PersonalInfoProvider extends Notifier<PersonalInfoData> {
 
   void setUpdatingStatus(PersonalInfoUpdatingStatus updatingStatus) async {
     state = PersonalInfoData(
-        pathProfileUser: state.pathProfileUser,
+        link: state.link,
         pathProfileTemporal: state.pathProfileTemporal,
         firstName: state.firstName,
         lastName: state.lastName,
@@ -95,7 +95,7 @@ class PersonalInfoProvider extends Notifier<PersonalInfoData> {
 
   void setFetchingStatus(PersonalInfoFetchinStatus fetchingStatus) {
     state = PersonalInfoData(
-        pathProfileUser: state.pathProfileUser,
+        link: state.link,
         pathProfileTemporal: state.pathProfileTemporal,
         firstName: state.firstName,
         lastName: state.lastName,
@@ -107,7 +107,7 @@ class PersonalInfoProvider extends Notifier<PersonalInfoData> {
 
   void setShowPasswordRequest(bool status) async {
     state = PersonalInfoData(
-        pathProfileUser: state.pathProfileUser,
+        link: state.link,
         pathProfileTemporal: state.pathProfileTemporal,
         firstName: state.firstName,
         lastName: state.lastName,
@@ -119,7 +119,7 @@ class PersonalInfoProvider extends Notifier<PersonalInfoData> {
 
   void resetData() {
     state = PersonalInfoData(
-        pathProfileUser: '',
+        link: '',
         pathProfileTemporal: '',
         firstName: '',
         lastName: '',
@@ -145,11 +145,13 @@ class PersonalInfoProvider extends Notifier<PersonalInfoData> {
     if (statusConnection == ConnectionStatus.noConnected) {
       final cachedUserDataList =
           await ref.read(localDBServiceProvider).readUserData(uuid ?? '');
+      logger.d(cachedUserDataList);
 
       String firstName = '';
       String lastName = '';
       String avatarLink = '';
       String pathAvatar = '';
+      String birthday = '';
 
       if (cachedUserDataList.isNotEmpty) {
         final cachedUserData = cachedUserDataList.first;
@@ -157,15 +159,16 @@ class PersonalInfoProvider extends Notifier<PersonalInfoData> {
         lastName = cachedUserData['lastName'] as String;
         avatarLink = cachedUserData['linkAvatar'] as String;
         pathAvatar = cachedUserData['pathAvatar'] as String;
+        birthday = cachedUserData['birthday'] as String;
       }
 
       state = PersonalInfoData(
-        pathProfileUser: '',
-        pathProfileTemporal: '',
-        firstName: '',
-        lastName: '',
-        birthdate: '',
-        updatingStatus: state.updatingStatus,
+        link: avatarLink,
+        pathProfileTemporal: pathAvatar,
+        firstName: firstName,
+        lastName: lastName,
+        birthdate: birthday,
+        updatingStatus: PersonalInfoUpdatingStatus.noStarted,
         fetchingStatus: PersonalInfoFetchinStatus.success,
         showPasswordRequest: state.showPasswordRequest,
       );
@@ -189,7 +192,7 @@ class PersonalInfoProvider extends Notifier<PersonalInfoData> {
       _birthdate = user.birthday;
 
       state = PersonalInfoData(
-          pathProfileUser: photoLink,
+          link: photoLink,
           pathProfileTemporal: '',
           firstName: user.firstName,
           lastName: user.lastName,
@@ -199,7 +202,7 @@ class PersonalInfoProvider extends Notifier<PersonalInfoData> {
           showPasswordRequest: state.showPasswordRequest);
     } on TimeoutException {
       state = PersonalInfoData(
-        pathProfileUser: '',
+        link: '',
         pathProfileTemporal: '',
         firstName: '',
         lastName: '',
@@ -211,7 +214,7 @@ class PersonalInfoProvider extends Notifier<PersonalInfoData> {
     } catch (e) {
       logger.e('error reading profile photo');
       state = PersonalInfoData(
-          pathProfileUser: '',
+          link: '',
           pathProfileTemporal: '',
           firstName: '',
           lastName: '',
@@ -338,7 +341,7 @@ enum PersonalInfoUpdatingStatus {
 }
 
 class PersonalInfoData {
-  final String pathProfileUser;
+  final String link;
   final String pathProfileTemporal;
   final String firstName;
   final String lastName;
@@ -348,7 +351,7 @@ class PersonalInfoData {
   final bool showPasswordRequest;
 
   PersonalInfoData(
-      {required this.pathProfileUser,
+      {required this.link,
       required this.pathProfileTemporal,
       required this.firstName,
       required this.lastName,

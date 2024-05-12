@@ -199,7 +199,6 @@ class MainScreenProvider extends Notifier<MainScreenData> {
 
     final userData =
         await ref.read(cloudDBServiceProvider).readUserData(uuid ?? '');
-    final fullName = '${userData.firstName} ${userData.lastName}';
 
     try {
       if (state.avatarLink != '' && state.pathAvatar != '') return;
@@ -212,12 +211,14 @@ class MainScreenProvider extends Notifier<MainScreenData> {
 
       await ref.read(localDBServiceProvider).insertUserData({
         'uuid': uuid ?? '',
-        'fullName': fullName,
+        'firstName': userData.firstName,
+        'lastName': userData.lastName,
+        'birthday': userData.birthday,
         'linkAvatar': avatarLink,
         'pathAvatar': pathAvatar,
       });
     } catch (e) {
-      logger.e('error reading profile photo');
+      logger.e(e);
     }
   }
 

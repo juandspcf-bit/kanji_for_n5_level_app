@@ -24,7 +24,10 @@ class TitleMainScreenNotifier extends AsyncNotifier<String> {
               .readUserData(ref.read(authServiceProvider).userUuid ?? '');
           if (listUser.isNotEmpty) {
             final user = listUser.first;
-            return user['fullName'] as String;
+            final firstName = user['firstName'] as String;
+            final lastName = user['lastName'] as String;
+            final fullName = "$firstName $lastName";
+            return fullName;
           }
           return "";
         } else {

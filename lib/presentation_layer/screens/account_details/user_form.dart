@@ -169,7 +169,7 @@ class UserForm extends ConsumerWidget {
     } else {
       return ProfilePictureWidget(
         avatarWidget: CircularAvatarNetworkImage(
-            pathProfileUser: accountDetailsData.pathProfileUser,
+            pathProfileUser: accountDetailsData.link,
             pathErrorImage: pathAssetUser),
         setPathProfileUser: (path) {
           ref.read(personalInfoProvider.notifier).setProfileTemporalPath(path);
