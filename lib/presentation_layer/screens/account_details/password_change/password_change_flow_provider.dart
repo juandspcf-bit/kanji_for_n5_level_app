@@ -75,7 +75,7 @@ class PasswordChangeFlowProvider extends Notifier<PasswordChangeFlowData> {
       );
       await user.reauthenticateWithCredential(authCredential);
       await user.updatePassword(state.password);
-      setStatusProcessing(StatusProcessingPasswordChangeFlow.succsess);
+      setStatusProcessing(StatusProcessingPasswordChangeFlow.success);
     } on FirebaseAuthException catch (e) {
       logger.e('error changing email with ${e.code} and message $e');
       setStatusProcessing(StatusProcessingPasswordChangeFlow.error);
@@ -129,7 +129,7 @@ enum StatusProcessingPasswordChangeFlow {
   updating,
   error,
   noMatchPasswords,
-  succsess,
+  success,
   form,
   showPasswordInput,
 }

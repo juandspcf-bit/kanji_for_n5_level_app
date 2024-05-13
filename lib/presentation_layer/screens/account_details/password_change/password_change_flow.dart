@@ -9,7 +9,7 @@ import 'package:kanji_for_n5_level_app/presentation_layer/common_widgets/my_dial
 class PasswordChangeFlow extends ConsumerWidget with MyDialogs {
   const PasswordChangeFlow({super.key});
 
-  Widget _dialogPassworRequest(BuildContext context, WidgetRef ref) {
+  Widget _dialogPasswordRequest(BuildContext context, WidgetRef ref) {
     final dialogFormKey = GlobalKey<FormState>();
     var textPassword = '';
     void onValidatePassword(BuildContext context, WidgetRef ref) {
@@ -72,11 +72,11 @@ class PasswordChangeFlow extends ConsumerWidget with MyDialogs {
     );
   }
 
-  void passworRequestDialog(BuildContext buildContext, WidgetRef ref) {
+  void passwordRequestDialog(BuildContext buildContext, WidgetRef ref) {
     showGeneralDialog(
       context: buildContext,
       pageBuilder: (ctx, a1, a2) {
-        return _dialogPassworRequest(buildContext, ref);
+        return _dialogPasswordRequest(buildContext, ref);
       },
       transitionBuilder: (ctx, a1, a2, child) {
         final transformedAnimation =
@@ -97,7 +97,7 @@ class PasswordChangeFlow extends ConsumerWidget with MyDialogs {
       return const ProcessProgress(message: 'Updating Password');
     }
 
-    return PassworChange(
+    return PasswordChange(
       initPassword: passwordChangeFlowData.password,
       initConfirmPassword: passwordChangeFlowData.confirmPassword,
       isVisibleConfirmPassword: passwordChangeFlowData.isVisibleConfirmPassword,
@@ -111,7 +111,7 @@ class PasswordChangeFlow extends ConsumerWidget with MyDialogs {
         (previous, current) {
       if (current.statusProcessing ==
           StatusProcessingPasswordChangeFlow.showPasswordInput) {
-        passworRequestDialog(context, ref);
+        passwordRequestDialog(context, ref);
       }
 
       if (current.statusProcessing ==
@@ -129,16 +129,16 @@ class PasswordChangeFlow extends ConsumerWidget with MyDialogs {
           ref
               .read(passwordChangeFlowProvider.notifier)
               .setStatusProcessing(StatusProcessingPasswordChangeFlow.form);
-        }, 'an error happend during updating process');
+        }, 'an error happened during updating process');
       }
 
       if (current.statusProcessing ==
-          StatusProcessingPasswordChangeFlow.succsess) {
+          StatusProcessingPasswordChangeFlow.success) {
         successDialog(context, () {
           ref
               .read(passwordChangeFlowProvider.notifier)
               .setStatusProcessing(StatusProcessingPasswordChangeFlow.form);
-        }, 'succeful updating process');
+        }, 'successful updating process');
       }
     });
 
