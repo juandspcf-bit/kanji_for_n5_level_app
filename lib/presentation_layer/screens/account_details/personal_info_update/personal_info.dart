@@ -13,56 +13,6 @@ class PersonalInfo extends ConsumerWidget with MyDialogs {
   Widget build(BuildContext context, WidgetRef ref) {
     final personalInfoData = ref.watch(personalInfoProvider);
 
-    ref.listen<PersonalInfoData>(personalInfoProvider, (previous, current) {
-      if (current.updatingStatus == PersonalInfoUpdatingStatus.error) {
-        ref.read(toastServiceProvider).dismiss(context);
-        ref
-            .read(personalInfoProvider.notifier)
-            .setUpdatingStatus(PersonalInfoUpdatingStatus.noStarted);
-        ref.read(personalInfoProvider.notifier).setShowPasswordRequest(false);
-        ref.read(toastServiceProvider).showMessage(
-              context,
-              'an error happend during updating process',
-              Icons.error,
-              const Duration(seconds: 3),
-              "",
-              null,
-            );
-      }
-
-      if (current.updatingStatus == PersonalInfoUpdatingStatus.success) {
-        ref.read(toastServiceProvider).dismiss(context);
-        ref
-            .read(personalInfoProvider.notifier)
-            .setUpdatingStatus(PersonalInfoUpdatingStatus.noStarted);
-        ref.read(personalInfoProvider.notifier).setShowPasswordRequest(false);
-        ref.read(toastServiceProvider).showMessage(
-              context,
-              'succeful updating process',
-              Icons.done,
-              const Duration(seconds: 3),
-              "",
-              null,
-            );
-      }
-
-      if (current.updatingStatus == PersonalInfoUpdatingStatus.noUpdate) {
-        ref.read(toastServiceProvider).dismiss(context);
-        ref
-            .read(personalInfoProvider.notifier)
-            .setUpdatingStatus(PersonalInfoUpdatingStatus.noStarted);
-        ref.read(personalInfoProvider.notifier).setShowPasswordRequest(false);
-        ref.read(toastServiceProvider).showMessage(
-              context,
-              'nothing to update',
-              Icons.question_mark,
-              const Duration(seconds: 3),
-              "",
-              null,
-            );
-      }
-    });
-
     return Scaffold(
       appBar: AppBar(),
       body: Builder(builder: (ctx) {
