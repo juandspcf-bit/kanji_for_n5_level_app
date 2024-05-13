@@ -62,7 +62,7 @@ class EmailChange extends Notifier<EmailChangeFlowData> {
     user
         .verifyBeforeUpdateEmail(state.email)
         .then((value) =>
-            setStatusProcessing(StatusProcessingEmailChangeFlow.succsess))
+            setStatusProcessing(StatusProcessingEmailChangeFlow.success))
         .onError((error, stackTrace) =>
             setStatusProcessing(StatusProcessingEmailChangeFlow.error));
   }
@@ -87,7 +87,7 @@ enum StatusProcessingEmailChangeFlow {
   updating,
   error,
   noMatchEmails,
-  succsess,
+  success,
   form,
   showEmailInput,
 }

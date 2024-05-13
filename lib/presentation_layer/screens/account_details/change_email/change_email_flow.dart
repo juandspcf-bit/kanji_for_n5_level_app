@@ -6,11 +6,12 @@ import 'package:kanji_for_n5_level_app/presentation_layer/screens/account_detail
 import 'package:kanji_for_n5_level_app/presentation_layer/common_widgets/my_dialogs.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/login_screen/login_provider.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/main_screens/main_content_provider.dart';
+import 'package:kanji_for_n5_level_app/providers/status_connection_provider.dart';
 
 class EmailChangeFlow extends ConsumerWidget with MyDialogs {
   const EmailChangeFlow({super.key});
 
-  Widget _dialogPassworRequest(BuildContext context, WidgetRef ref) {
+  Widget _dialogPasswordRequest(BuildContext context, WidgetRef ref) {
     final dialogFormKey = GlobalKey<FormState>();
     var textPassword = '';
     void onValidatePassword(BuildContext context, WidgetRef ref) {
@@ -73,11 +74,11 @@ class EmailChangeFlow extends ConsumerWidget with MyDialogs {
     );
   }
 
-  void _passworRequestDialog(BuildContext buildContext, WidgetRef ref) {
+  void _passwordRequestDialog(BuildContext buildContext, WidgetRef ref) {
     showGeneralDialog(
       context: buildContext,
       pageBuilder: (ctx, a1, a2) {
-        return _dialogPassworRequest(buildContext, ref);
+        return _dialogPasswordRequest(buildContext, ref);
       },
       transitionBuilder: (ctx, a1, a2, child) {
         final transformedAnimation =
@@ -97,7 +98,7 @@ class EmailChangeFlow extends ConsumerWidget with MyDialogs {
     ref.listen<EmailChangeFlowData>(emailChangeProvider, (previous, current) {
       if (current.statusProcessing ==
           StatusProcessingEmailChangeFlow.showEmailInput) {
-        _passworRequestDialog(context, ref);
+        _passwordRequestDialog(context, ref);
       }
       if (current.statusProcessing ==
           StatusProcessingEmailChangeFlow.noMatchEmails) {
@@ -113,10 +114,9 @@ class EmailChangeFlow extends ConsumerWidget with MyDialogs {
           ref
               .read(emailChangeProvider.notifier)
               .setStatusProcessing(StatusProcessingEmailChangeFlow.form);
-        }, 'An error happend during changing your email');
+        }, 'An error happened during changing your email');
       }
-      if (current.statusProcessing ==
-          StatusProcessingEmailChangeFlow.succsess) {
+      if (current.statusProcessing == StatusProcessingEmailChangeFlow.success) {
         successDialog(context, () async {
           ref
               .read(emailChangeProvider.notifier)
@@ -130,7 +130,7 @@ class EmailChangeFlow extends ConsumerWidget with MyDialogs {
           if (context.mounted) {
             Navigator.pop(context);
           }
-        }, 'succeful sent link to change your email');
+        }, 'successful sent link to change your email');
       }
     });
 
@@ -169,6 +169,7 @@ class EmailChange extends ConsumerWidget {
   final _formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final statusConnectionData = ref.watch(statusConnectionProvider);
     return SingleChildScrollView(
       child: Column(
         children: [
