@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:kanji_for_n5_level_app/presentation_layer/screens/account_details/password_change/change_password_button.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/account_details/password_change/password_change_flow_provider.dart';
 
 class PasswordChange extends ConsumerWidget {
@@ -130,15 +131,9 @@ class PasswordChange extends ConsumerWidget {
                   const SizedBox(
                     height: 20,
                   ),
-                  ElevatedButton(
-                    onPressed: () {
-                      onValidation(ref);
-                    },
-                    style: ElevatedButton.styleFrom(
-                      minimumSize: const Size.fromHeight(40),
-                    ),
-                    child: const Text('change your password'),
-                  ),
+                  ChangePasswordButton(callback: () {
+                    onValidation(ref);
+                  }),
                   const SizedBox(
                     height: 20,
                   ),

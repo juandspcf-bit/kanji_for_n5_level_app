@@ -1,6 +1,7 @@
 // ignore: implementation_imports
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:kanji_for_n5_level_app/application_layer/services.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/account_details/password_change/password_change_flow_provider.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/account_details/password_change/password_change.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/common_screens/loading_screen.dart';
@@ -21,7 +22,7 @@ class PasswordChangeFlow extends ConsumerWidget with MyDialogs {
         ref
             .read(passwordChangeFlowProvider.notifier)
             .setStatusProcessing(StatusProcessingPasswordChangeFlow.form);
-        ref.read(passwordChangeFlowProvider.notifier).updateUserData(
+        ref.read(passwordChangeFlowProvider.notifier).updatePassword(
               textPassword,
             );
       }
@@ -92,11 +93,6 @@ class PasswordChangeFlow extends ConsumerWidget with MyDialogs {
   }
 
   Widget getScreen(PasswordChangeFlowData passwordChangeFlowData) {
-    if (passwordChangeFlowData.statusProcessing ==
-        StatusProcessingPasswordChangeFlow.updating) {
-      return const ProcessProgress(message: 'Updating Password');
-    }
-
     return PasswordChange(
       initPassword: passwordChangeFlowData.password,
       initConfirmPassword: passwordChangeFlowData.confirmPassword,
@@ -113,33 +109,6 @@ class PasswordChangeFlow extends ConsumerWidget with MyDialogs {
           StatusProcessingPasswordChangeFlow.showPasswordInput) {
         passwordRequestDialog(context, ref);
       }
-
-      if (current.statusProcessing ==
-          StatusProcessingPasswordChangeFlow.noMatchPasswords) {
-        errorDialog(context, () {
-          ref
-              .read(passwordChangeFlowProvider.notifier)
-              .setStatusProcessing(StatusProcessingPasswordChangeFlow.form);
-        }, 'passwords not match');
-      }
-
-      if (current.statusProcessing ==
-          StatusProcessingPasswordChangeFlow.error) {
-        errorDialog(context, () {
-          ref
-              .read(passwordChangeFlowProvider.notifier)
-              .setStatusProcessing(StatusProcessingPasswordChangeFlow.form);
-        }, 'an error happened during updating process');
-      }
-
-      if (current.statusProcessing ==
-          StatusProcessingPasswordChangeFlow.success) {
-        successDialog(context, () {
-          ref
-              .read(passwordChangeFlowProvider.notifier)
-              .setStatusProcessing(StatusProcessingPasswordChangeFlow.form);
-        }, 'successful updating process');
-      }
     });
 
     final passwordChangeFlowData = ref.watch(passwordChangeFlowProvider);
@@ -147,7 +116,13 @@ class PasswordChangeFlow extends ConsumerWidget with MyDialogs {
       appBar: AppBar(),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 20),
-        child: getScreen(passwordChangeFlowData),
+        child: PasswordChange(
+          initPassword: passwordChangeFlowData.password,
+          initConfirmPassword: passwordChangeFlowData.confirmPassword,
+          isVisibleConfirmPassword:
+              passwordChangeFlowData.isVisibleConfirmPassword,
+          isVisiblePassword: passwordChangeFlowData.isVisiblePassword,
+        ),
       ),
     );
   }

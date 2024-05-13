@@ -16,7 +16,9 @@ class PasswordChangeFlowProvider extends Notifier<PasswordChangeFlowData> {
 
   void resetState() {
     state = PasswordChangeFlowData(
-      statusProcessing: StatusProcessingPasswordChangeFlow.form,
+      statusProcessing: _isUpdating
+          ? StatusProcessingPasswordChangeFlow.updating
+          : StatusProcessingPasswordChangeFlow.form,
       password: '',
       confirmPassword: '',
       isVisiblePassword: false,
@@ -54,19 +56,24 @@ class PasswordChangeFlowProvider extends Notifier<PasswordChangeFlowData> {
     );
   }
 
-  void updateUserData(String currentPassword) async {
+  var _isUpdating = false;
+
+  void updatePassword(String currentPassword) async {
     final user = FirebaseAuth.instance.currentUser;
     if (user == null) {
       setStatusProcessing(StatusProcessingPasswordChangeFlow.error);
+      _isUpdating = false;
       return;
     }
     final email = user.email;
     if (email == null) {
       setStatusProcessing(StatusProcessingPasswordChangeFlow.error);
+      _isUpdating = false;
       return;
     }
 
     setStatusProcessing(StatusProcessingPasswordChangeFlow.updating);
+    _isUpdating = true;
 
     try {
       final authCredential = EmailAuthProvider.credential(
@@ -76,9 +83,11 @@ class PasswordChangeFlowProvider extends Notifier<PasswordChangeFlowData> {
       await user.reauthenticateWithCredential(authCredential);
       await user.updatePassword(state.password);
       setStatusProcessing(StatusProcessingPasswordChangeFlow.success);
+      _isUpdating = false;
     } on FirebaseAuthException catch (e) {
       logger.e('error changing email with ${e.code} and message $e');
       setStatusProcessing(StatusProcessingPasswordChangeFlow.error);
+      _isUpdating = false;
 
       return;
     }
