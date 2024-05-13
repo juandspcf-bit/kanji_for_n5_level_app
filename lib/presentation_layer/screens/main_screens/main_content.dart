@@ -98,6 +98,9 @@ class MainContent extends ConsumerWidget with StatusDBStoringDialogs {
                       : const Icon(Icons.cloud_done_rounded),
                 ),
                 const AvatarMainScreen(),
+                const SizedBox(
+                  width: 5,
+                ),
               ],
             )
           : null,
@@ -160,10 +163,19 @@ class AvatarMainScreen extends ConsumerWidget {
                   ? Container(
                       color: Colors.transparent,
                       child: SizedBox(
-                        width: constraints.maxHeight,
-                        height: constraints.maxHeight,
-                        child: CircleAvatar(
-                          backgroundImage: FileImage(File(url)),
+                        width: constraints.maxHeight - 5,
+                        height: constraints.maxHeight - 5,
+                        child: Container(
+                          decoration: BoxDecoration(
+                              border: Border.all(
+                                width: 0.5,
+                                color: Colors.white,
+                              ),
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(100)),
+                          child: CircleAvatar(
+                            backgroundImage: FileImage(File(url)),
+                          ),
                         ),
                       ),
                     )
@@ -171,26 +183,44 @@ class AvatarMainScreen extends ConsumerWidget {
                       fit: BoxFit.contain,
                       imageBuilder: (context, imageProvider) {
                         return SizedBox(
-                          width: constraints.maxHeight,
-                          height: constraints.maxHeight,
-                          child: CircleAvatar(
-                            backgroundImage: imageProvider,
+                          width: constraints.maxHeight - 5,
+                          height: constraints.maxHeight - 5,
+                          child: Container(
+                            decoration: BoxDecoration(
+                                border: Border.all(
+                                  width: 0.5,
+                                  color: Colors.white,
+                                ),
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(100)),
+                            child: CircleAvatar(
+                              backgroundImage: imageProvider,
+                            ),
                           ),
                         );
                       },
                       imageUrl: url,
                       placeholder: (context, url) => SizedBox(
-                            width: constraints.maxHeight,
-                            height: constraints.maxHeight,
+                            width: constraints.maxHeight - 5,
+                            height: constraints.maxHeight - 5,
                             child: const Padding(
                               padding: EdgeInsets.all(8),
                               child: CircularProgressIndicator(),
                             ),
                           ),
                       errorWidget: (context, url, error) => SizedBox(
-                            width: constraints.maxHeight,
-                            height: constraints.maxHeight,
-                            child: Image.asset('assets/images/user.png'),
+                            width: constraints.maxHeight - 5,
+                            height: constraints.maxHeight - 5,
+                            child: Container(
+                              decoration: BoxDecoration(
+                                  border: Border.all(
+                                    width: 0.5,
+                                    color: Colors.white,
+                                  ),
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.circular(100)),
+                              child: Image.asset('assets/images/user.png'),
+                            ),
                           )),
             );
           },
