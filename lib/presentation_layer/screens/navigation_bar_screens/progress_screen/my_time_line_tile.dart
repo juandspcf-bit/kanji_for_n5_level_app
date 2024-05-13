@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:kanji_for_n5_level_app/presentation_layer/screens/navigation_bar_screens/pogress_screen/my_tile.dart';
+import 'package:kanji_for_n5_level_app/presentation_layer/screens/navigation_bar_screens/progress_screen/my_tile.dart';
 import 'package:timeline_tile/timeline_tile.dart';
 
 class MyTimeLineTile extends StatelessWidget {
   const MyTimeLineTile({
     super.key,
     required this.section,
-    required this.isFirts,
+    required this.isFirst,
     required this.isLast,
     required this.isFinishedKanjiQuizSection,
     required this.isAllCorrectKanjiQuizSection,
@@ -16,7 +16,7 @@ class MyTimeLineTile extends StatelessWidget {
   });
 
   final int section;
-  final bool isFirts;
+  final bool isFirst;
   final bool isLast;
   final bool isFinishedKanjiQuizSection;
   final bool isAllCorrectKanjiQuizSection;
@@ -67,7 +67,7 @@ class MyTimeLineTile extends StatelessWidget {
       ),
       beforeLineStyle: LineStyle(color: colorContainer),
       alignment: TimelineAlign.start,
-      isFirst: isFirts,
+      isFirst: isFirst,
       isLast: isLast,
       endChild: Container(
         height: 260,

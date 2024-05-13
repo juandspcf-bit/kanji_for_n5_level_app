@@ -17,7 +17,7 @@ import 'package:kanji_for_n5_level_app/presentation_layer/screens/main_screens/n
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/navigation_bar_screens/bottom_navigation_bar.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/main_screens/main_content_provider.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/navigation_bar_screens/favorite_screen/kanjis_for_favorites_screen.dart';
-import 'package:kanji_for_n5_level_app/presentation_layer/screens/navigation_bar_screens/pogress_screen/progress_screen.dart';
+import 'package:kanji_for_n5_level_app/presentation_layer/screens/navigation_bar_screens/progress_screen/progress_screen.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/navigation_bar_screens/search_screen.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/navigation_bar_screens/sections_screen/sections_screen.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_list/body_list/status_operations_dialogs.dart';
@@ -72,16 +72,16 @@ class MainContent extends ConsumerWidget with StatusDBStoringDialogs {
     final mainScreenData = ref.watch(mainScreenProvider);
     final statusConnectionData = ref.watch(statusConnectionProvider);
 
-    ref.listen<ErrorDownloadKanji>(errorDownloadProvider, (previuos, current) {
+    ref.listen<ErrorDownloadKanji>(errorDownloadProvider, (previous, current) {
       ref.read(toastServiceProvider).dismiss(context);
       ref.read(toastServiceProvider).showShortMessage(
-          context, "There was an errror downloading ${current.kanjiCharacter}");
+          context, "There was an error downloading ${current.kanjiCharacter}");
     });
 
-    ref.listen<ErrorDeleteKanji>(errorDeleteProvider, (previuos, current) {
+    ref.listen<ErrorDeleteKanji>(errorDeleteProvider, (previous, current) {
       ref.read(toastServiceProvider).dismiss(context);
       ref.read(toastServiceProvider).showShortMessage(
-          context, "There was an errror deleting ${current.kanjiCharacter}");
+          context, "There was an error deleting ${current.kanjiCharacter}");
     });
 
     return Scaffold(

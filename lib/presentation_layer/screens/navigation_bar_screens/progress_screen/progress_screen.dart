@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:kanji_for_n5_level_app/presentation_layer/screens/navigation_bar_screens/pogress_screen/my_time_line_tile.dart';
-import 'package:kanji_for_n5_level_app/presentation_layer/screens/navigation_bar_screens/pogress_screen/progress_screen_provider.dart';
+import 'package:kanji_for_n5_level_app/presentation_layer/screens/navigation_bar_screens/progress_screen/my_time_line_tile.dart';
+import 'package:kanji_for_n5_level_app/presentation_layer/screens/navigation_bar_screens/progress_screen/progress_screen_provider.dart';
 
 class ProgressScreen extends ConsumerWidget {
   const ProgressScreen({super.key});
@@ -20,7 +20,7 @@ class ProgressScreen extends ConsumerWidget {
               i++)
             MyTimeLineTile(
               section: i + 1,
-              isFirts: i == 0,
+              isFirst: i == 0,
               isLast: i ==
                   progressTimelineData.allKanjiQuizCorrectStatusList.length - 1,
               isAllCorrectKanjiQuizSection:
@@ -34,36 +34,6 @@ class ProgressScreen extends ConsumerWidget {
               isFinishedFlashCardSection:
                   progressTimelineData.allRevisedFlashCardsStatusList[i],
             )
-/*           MyTimeLineTile(
-            section: 1,
-            isFirts: true,
-            isLast: false,
-            isAllCorrectKanjiQuizSection: true,
-            isFinishedKanjiQuizSection: true,
-            isFinishedAudioQuizSection: true,
-            isAllCorrectAudioQuizSection: true,
-            isFinishedFlashCardSection: true,
-          ),
-          MyTimeLineTile(
-            section: 2,
-            isFirts: false,
-            isLast: false,
-            isAllCorrectKanjiQuizSection: false,
-            isFinishedKanjiQuizSection: true,
-            isFinishedAudioQuizSection: true,
-            isAllCorrectAudioQuizSection: false,
-            isFinishedFlashCardSection: true,
-          ),
-          MyTimeLineTile(
-            section: 3,
-            isFirts: false,
-            isLast: true,
-            isAllCorrectKanjiQuizSection: false,
-            isFinishedKanjiQuizSection: false,
-            isFinishedAudioQuizSection: false,
-            isAllCorrectAudioQuizSection: false,
-            isFinishedFlashCardSection: false,
-          ), */
         ],
       ),
     );
