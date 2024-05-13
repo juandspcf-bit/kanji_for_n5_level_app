@@ -60,7 +60,7 @@ class UserForm extends ConsumerWidget {
                   TextFormField(
                     initialValue: accountDetailsData.firstName,
                     decoration: const InputDecoration(
-                      label: Text('Firts name'),
+                      label: Text('First name'),
                       suffixIcon: Icon(Icons.person),
                       border: OutlineInputBorder(),
                     ),

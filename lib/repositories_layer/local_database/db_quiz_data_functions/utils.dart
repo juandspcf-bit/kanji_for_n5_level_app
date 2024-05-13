@@ -18,10 +18,10 @@ List<SingleQuizSectionData> getSectionKanjiQuizList(
       return SingleQuizSectionData(
         section: mapData['section'] as int,
         allCorrectAnswers: (mapData['allCorrectAnswersQuizKanji'] as int) == 1,
-        isFinishedQuiz: (mapData['isFinishedKanjiQuizz'] as int) == 1,
+        isFinishedQuiz: (mapData['isFinishedKanjiQuiz'] as int) == 1,
         countCorrects: mapData['countCorrects'] as int,
-        countIncorrects: mapData['countIncorrects'] as int,
-        countOmited: mapData['countOmited'] as int,
+        countIncorrect: mapData['countIncorrect'] as int,
+        countOmitted: mapData['countOmitted'] as int,
       );
     } else {
       return SingleQuizSectionData(
@@ -29,8 +29,8 @@ List<SingleQuizSectionData> getSectionKanjiQuizList(
         allCorrectAnswers: false,
         isFinishedQuiz: false,
         countCorrects: 0,
-        countIncorrects: 0,
-        countOmited: 0,
+        countIncorrect: 0,
+        countOmitted: 0,
       );
     }
   }).toList();
@@ -56,8 +56,8 @@ List<List<SingleQuizAudioExampleData>> getSectionAudioQuizList(
           'allCorrectAnswers': 0,
           'isFinishedQuiz': 0,
           'countCorrects': 0,
-          'countIncorrects': 0,
-          'countOmited': 0,
+          'countIncorrect': 0,
+          'countOmitted': 0,
         };
         listMap[section.sectionNumber - 1].add(myMap);
       } else {
@@ -79,8 +79,8 @@ List<List<SingleQuizAudioExampleData>> getSectionAudioQuizList(
             allCorrectAnswers: (mapData['allCorrectAnswers'] as int) == 1,
             isFinishedQuiz: (mapData['isFinishedQuiz'] as int) == 1,
             countCorrects: mapData['countCorrects'] as int,
-            countIncorrects: mapData['countIncorrects'] as int,
-            countOmited: mapData['countOmited'] as int,
+            countIncorrect: mapData['countIncorrect'] as int,
+            countOmitted: mapData['countOmitted'] as int,
           );
         },
       ).toList();
@@ -224,6 +224,6 @@ void printAudioData(Map<String, Object?> mapData) {
   logger.d(mapData['allCorrectAnswers']);
   logger.d(mapData['isFinishedQuiz']);
   logger.d(mapData['countCorrects']);
-  logger.d(mapData['countIncorrects']);
-  logger.d(mapData['countOmited']);
+  logger.d(mapData['countIncorrect']);
+  logger.d(mapData['countOmitted']);
 }

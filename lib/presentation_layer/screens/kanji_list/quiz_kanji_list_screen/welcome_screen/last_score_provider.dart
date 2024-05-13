@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:kanji_for_n5_level_app/aplication_layer/services.dart';
+import 'package:kanji_for_n5_level_app/application_layer/services.dart';
 import 'package:kanji_for_n5_level_app/main.dart';
 import 'package:kanji_for_n5_level_app/models/single_quiz_section_data.dart';
 
@@ -13,8 +13,8 @@ class LastScoreKanjiQuizProvider extends AsyncNotifier<SingleQuizSectionData> {
       allCorrectAnswers: false,
       isFinishedQuiz: false,
       countCorrects: 0,
-      countIncorrects: 0,
-      countOmited: 0,
+      countIncorrect: 0,
+      countOmitted: 0,
     );
   }
 
@@ -33,23 +33,23 @@ class LastScoreKanjiQuizProvider extends AsyncNotifier<SingleQuizSectionData> {
     int section = -1,
     String uuid = '',
     int countCorrects = 0,
-    int countIncorrects = 0,
-    int countOmited = 0,
+    int countIncorrect = 0,
+    int countOmitted = 0,
   }) async {
     state = const AsyncLoading();
     try {
       await ref.read(cloudDBServiceProvider).updateQuizSectionScore(
-            countIncorrects == 0 && countOmited == 0,
+            countIncorrect == 0 && countOmitted == 0,
             true,
             countCorrects,
-            countIncorrects,
-            countOmited,
+            countIncorrect,
+            countOmitted,
             section,
             uuid,
           );
       if (state.value?.section == -1) {
         await ref.read(localDBServiceProvider).insertSingleQuizSectionData(
-            section, uuid, countCorrects, countIncorrects, countOmited);
+            section, uuid, countCorrects, countIncorrect, countOmitted);
         return;
       }
 
@@ -57,8 +57,8 @@ class LastScoreKanjiQuizProvider extends AsyncNotifier<SingleQuizSectionData> {
             section: section,
             uuid: uuid,
             countCorrects: countCorrects,
-            countIncorrects: countIncorrects,
-            countOmited: countOmited,
+            countIncorrect: countIncorrect,
+            countOmitted: countOmitted,
           );
 
       state = await AsyncValue.guard(
@@ -69,7 +69,7 @@ class LastScoreKanjiQuizProvider extends AsyncNotifier<SingleQuizSectionData> {
         }),
       );
     } catch (e) {
-      state = AsyncValue.error('error retriving data', StackTrace.current);
+      state = AsyncValue.error('error retrieving data', StackTrace.current);
       logger.e(e);
     }
   }

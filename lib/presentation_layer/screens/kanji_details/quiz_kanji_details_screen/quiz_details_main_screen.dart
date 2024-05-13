@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:kanji_for_n5_level_app/aplication_layer/services.dart';
+import 'package:kanji_for_n5_level_app/application_layer/services.dart';
 import 'package:kanji_for_n5_level_app/models/kanji_from_api.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_details/quiz_kanji_details_screen/animated_quiz_flash_cards.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_details/quiz_kanji_details_screen/animated_quiz_question_details.dart';
@@ -24,7 +24,7 @@ class DetailsQuizScreen extends ConsumerWidget {
       case Screen.flashCards:
         return 'Review what you have learn';
       case Screen.question:
-        return 'Guess the righ meaning';
+        return 'Guess the right meaning';
       case Screen.score:
         return 'Your score';
       default:
@@ -56,8 +56,8 @@ class DetailsQuizScreen extends ConsumerWidget {
                 uuid: ref.read(authServiceProvider).userUuid ?? '',
                 kanjiCharacter: quizDetailsData.kanjiFromApi!.kanjiCharacter,
                 countCorrects: scores.correctAnswers.length,
-                countIncorrects: scores.incorrectAnwers.length,
-                countOmited: scores.omitted.length,
+                countIncorrect: scores.incorrectAnswers.length,
+                countOmitted: scores.omitted.length,
               );
           ref.read(quizDetailsProvider.notifier).resetValues();
           ref.read(visibleLottieFileProvider.notifier).reset();

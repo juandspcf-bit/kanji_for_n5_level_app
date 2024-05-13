@@ -1,21 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:kanji_for_n5_level_app/aplication_layer/services.dart';
-import 'package:kanji_for_n5_level_app/main.dart';
+import 'package:kanji_for_n5_level_app/application_layer/services.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_details/quiz_kanji_details_screen/score_quiz_details/quiz_details_score_provider.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_details/quiz_kanji_details_screen/last_score_details_provider.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_details/quiz_kanji_details_screen/quiz_details_provider.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_details/quiz_kanji_details_screen/score_quiz_details/quiz_score_details.dart';
-import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_details/quiz_kanji_details_screen/score_quiz_details/visible_lottie_file/buttoms_reset_quiz.dart';
+import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_details/quiz_kanji_details_screen/score_quiz_details/visible_lottie_file/buttons_reset_quiz.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_details/quiz_kanji_details_screen/score_quiz_details/visible_lottie_file/visible_lottie_file_provider.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_details/tabs/example_audio_widget.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/navigation_bar_screens/sections_screen/section_screen_provider.dart';
 
 class QuestionScreenLandscape extends ConsumerWidget {
   String formatText(String japanese) {
-    final firtsIndex = japanese.indexOf('（');
-    logger.d('the firtsIndex is $firtsIndex of $japanese');
-    return japanese.substring(0, firtsIndex).trim();
+    final firstIndex = japanese.indexOf('（');
+    return japanese.substring(0, firstIndex).trim();
   }
 
   const QuestionScreenLandscape({
@@ -137,8 +135,8 @@ class QuestionScreenLandscape extends ConsumerWidget {
                             kanjiCharacter:
                                 quizDetailData.kanjiFromApi!.kanjiCharacter,
                             countCorrects: scores.correctAnswers.length,
-                            countIncorrects: scores.incorrectAnwers.length,
-                            countOmited: scores.omitted.length,
+                            countIncorrect: scores.incorrectAnswers.length,
+                            countOmitted: scores.omitted.length,
                           );
 
                       ref.read(quizDetailsProvider.notifier).resetValues();

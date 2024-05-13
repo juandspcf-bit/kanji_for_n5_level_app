@@ -20,10 +20,10 @@ class ScreenChart extends ConsumerWidget {
         text = 'Corrects';
         break;
       case 1:
-        text = 'Incorrects';
+        text = 'Incorrect';
         break;
       case 2:
-        text = 'Omited';
+        text = 'Omitted';
         break;
       default:
         text = '';
@@ -79,7 +79,7 @@ class ScreenChart extends ConsumerWidget {
         end: Alignment.topCenter,
       );
 
-  LinearGradient get _barsGradientOmited => const LinearGradient(
+  LinearGradient get _barsGradientOmitted => const LinearGradient(
         colors: [
           Color.fromARGB(255, 33, 72, 243),
           Color.fromARGB(255, 202, 208, 238),
@@ -124,7 +124,7 @@ class ScreenChart extends ConsumerWidget {
                       barRods: [
                         BarChartRodData(
                           width: 10,
-                          toY: kanjiListScoreData.incorrectAnwers.length
+                          toY: kanjiListScoreData.incorrectAnswers.length
                               .toDouble(),
                           gradient: _barsGradientIncorrect,
                         ),
@@ -136,7 +136,7 @@ class ScreenChart extends ConsumerWidget {
                         BarChartRodData(
                           width: 10,
                           toY: kanjiListScoreData.omitted.length.toDouble(),
-                          gradient: _barsGradientOmited,
+                          gradient: _barsGradientOmitted,
                         ),
                       ],
                     )

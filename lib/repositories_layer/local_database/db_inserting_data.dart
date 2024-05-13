@@ -12,10 +12,10 @@ import 'package:path_provider/path_provider.dart';
 
 const durationTimeOutMili = 1000 * 60 * 5;
 
-Future<void> insertUserDataToSqlite(Map<String, Object> data) async {
+Future<void> insertUserDataToSQLite(Map<String, Object> data) async {
   final db = await kanjiFromApiDatabase;
 
-  final listUserData = await readUserDataFromSqlite(data['uuid'] as String);
+  final listUserData = await readUserDataFromSQLite(data['uuid'] as String);
 
   if (listUserData.isEmpty) {
     await db.rawInsert(
@@ -60,7 +60,7 @@ Future<void> insertUserDataToSqlite(Map<String, Object> data) async {
   }
 }
 
-Future<List<Map<String, Object?>>> readUserDataFromSqlite(String uuid) async {
+Future<List<Map<String, Object?>>> readUserDataFromSQLite(String uuid) async {
   final db = await kanjiFromApiDatabase;
   return await db.rawQuery(
     'SELECT * FROM user_data '
@@ -84,7 +84,7 @@ class ParametersCompute {
   });
 }
 
-Future<KanjiFromApi?> storeKanjiToSqlite(
+Future<KanjiFromApi?> storeKanjiToSQLite(
   KanjiFromApi kanjiFromApi,
   ImageDetailsLink imageMeaningData,
   String uuid,

@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:kanji_for_n5_level_app/aplication_layer/services.dart';
+import 'package:kanji_for_n5_level_app/application_layer/services.dart';
 import 'package:kanji_for_n5_level_app/providers/status_connection_provider.dart';
 import 'package:kanji_for_n5_level_app/utils/networking/networking.dart';
 
@@ -31,13 +31,17 @@ class AvatarMainScreenNotifier
           }
           return (connection, "");
         } else {
-          final avatarLink = await ref
-              .read(storageServiceProvider)
-              .getDownloadLink(uuid ?? '');
+          try {
+            final avatarLink = await ref
+                .read(storageServiceProvider)
+                .getDownloadLink(uuid ?? '');
 
-          downloadAndCacheAvatar(uuid ?? '', avatarLink).then((value) => null);
-
-          return (connection, avatarLink);
+            downloadAndCacheAvatar(uuid ?? '', avatarLink)
+                .then((value) => null);
+            return (connection, avatarLink);
+          } catch (e) {
+            return (connection, "");
+          }
         }
       }),
     );

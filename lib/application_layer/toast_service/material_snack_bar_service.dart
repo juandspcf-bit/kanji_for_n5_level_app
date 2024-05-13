@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:kanji_for_n5_level_app/aplication_layer/toast_service/toats_service_contract.dart';
+import 'package:kanji_for_n5_level_app/application_layer/toast_service/toast_service_contract.dart';
 
 class MaterialSnackBarService extends ToastServiceContract {
   @override

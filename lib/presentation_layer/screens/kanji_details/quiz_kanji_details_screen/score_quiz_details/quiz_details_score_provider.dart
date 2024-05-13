@@ -4,18 +4,18 @@ import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_details/
 class QuizDetailsScoreProvider extends Notifier<
     ({
       List<StateAnswersQuizDetails> correctAnswers,
-      List<StateAnswersQuizDetails> incorrectAnwers,
+      List<StateAnswersQuizDetails> incorrectAnswers,
       List<StateAnswersQuizDetails> omitted
     })> {
   @override
   ({
     List<StateAnswersQuizDetails> correctAnswers,
-    List<StateAnswersQuizDetails> incorrectAnwers,
+    List<StateAnswersQuizDetails> incorrectAnswers,
     List<StateAnswersQuizDetails> omitted
   }) build() {
     return (
       correctAnswers: [],
-      incorrectAnwers: [],
+      incorrectAnswers: [],
       omitted: [],
     );
   }
@@ -23,7 +23,7 @@ class QuizDetailsScoreProvider extends Notifier<
   void resetStateScoreQuizDetails() {
     state = (
       correctAnswers: [],
-      incorrectAnwers: [],
+      incorrectAnswers: [],
       omitted: [],
     );
   }
@@ -34,10 +34,10 @@ class QuizDetailsScoreProvider extends Notifier<
     state = (
       correctAnswers:
           answers.where((e) => e == StateAnswersQuizDetails.correct).toList(),
-      incorrectAnwers:
+      incorrectAnswers:
           answers.where((e) => e == StateAnswersQuizDetails.incorrect).toList(),
       omitted:
-          answers.where((e) => e == StateAnswersQuizDetails.ommitted).toList(),
+          answers.where((e) => e == StateAnswersQuizDetails.omitted).toList(),
     );
   }
 }
@@ -46,6 +46,6 @@ final quizDetailsScoreProvider = NotifierProvider<
     QuizDetailsScoreProvider,
     ({
       List<StateAnswersQuizDetails> correctAnswers,
-      List<StateAnswersQuizDetails> incorrectAnwers,
+      List<StateAnswersQuizDetails> incorrectAnswers,
       List<StateAnswersQuizDetails> omitted
     })>(QuizDetailsScoreProvider.new);

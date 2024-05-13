@@ -1,5 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:kanji_for_n5_level_app/aplication_layer/auth_service/delete_user_exception.dart';
+import 'package:kanji_for_n5_level_app/application_layer/auth_service/delete_user_exception.dart';
 import 'package:kanji_for_n5_level_app/main.dart';
 import 'package:kanji_for_n5_level_app/models/favorite.dart';
 

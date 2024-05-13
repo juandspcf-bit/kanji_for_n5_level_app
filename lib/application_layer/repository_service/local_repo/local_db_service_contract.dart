@@ -1,4 +1,4 @@
-import 'package:kanji_for_n5_level_app/aplication_layer/auth_service/delete_user_exception.dart';
+import 'package:kanji_for_n5_level_app/application_layer/auth_service/delete_user_exception.dart';
 import 'package:kanji_for_n5_level_app/models/favorite.dart';
 import 'package:kanji_for_n5_level_app/models/first_time_logged.dart';
 import 'package:kanji_for_n5_level_app/models/kanji_from_api.dart';
@@ -47,16 +47,16 @@ abstract class LocalDBService {
     int section = -1,
     String uuid = '',
     int countCorrects = 0,
-    int countIncorrects = 0,
-    int countOmited = 0,
+    int countIncorrect = 0,
+    int countOmitted = 0,
   });
 
   Future<void> insertSingleQuizSectionData(
     int section,
     String uuid,
     int countCorrects,
-    int countIncorrects,
-    int countOmited,
+    int countIncorrect,
+    int countOmitted,
   );
 
   Future<SingleQuizAudioExampleData> getSingleAudioExampleQuizDataDB(
@@ -70,8 +70,8 @@ abstract class LocalDBService {
     int section = -1,
     String uuid = '',
     int countCorrects = 0,
-    int countIncorrects = 0,
-    int countOmited = 0,
+    int countIncorrect = 0,
+    int countOmitted = 0,
   });
 
   Future<int> insertAudioExampleScore(
@@ -79,8 +79,8 @@ abstract class LocalDBService {
     String uuid,
     String kanjiCharacter,
     int countCorrects,
-    int countIncorrects,
-    int countOmited,
+    int countIncorrect,
+    int countOmitted,
   );
 
   Future<SingleQuizFlashCardData> getSingleFlashCardDataDB(
@@ -109,11 +109,11 @@ abstract class LocalDBService {
 
   Future<void> cleanInvalidDBRecords(List<KanjiFromApi> listOfInvalidKanjis);
 
-  Future<FirtsTimeLogged> getAllFirtsTimeLOggedDBData(
+  Future<FirstTimeLogged> getAllFirstTimeLOggedDBData(
     String uuid,
   );
 
-  Future<int> setAllFirtsTimeLOggedDBData(
+  Future<int> setAllFirstTimeLOggedDBData(
     String uuid,
   );
 

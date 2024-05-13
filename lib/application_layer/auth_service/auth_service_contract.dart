@@ -7,7 +7,7 @@ abstract class AuthService {
 
   Stream<String?> authStream();
 
-  Future<StatusLogingRequest> singInWithEmailAndPassword(
+  Future<StatusLoginRequest> singInWithEmailAndPassword(
       {required String email, required String password});
 
   Future<String> singUpWithEmailAndPassword(
@@ -24,7 +24,7 @@ abstract class AuthService {
   Future<void> singOut();
 }
 
-enum StatusLogingRequest {
+enum StatusLoginRequest {
   notStarted('Not started'),
   success('Success'),
   invalidCredentials('Your email and password are wrong'),
@@ -35,7 +35,7 @@ enum StatusLogingRequest {
       'resetting your password or you can try again later.'),
   error('An unexpected error has happened');
 
-  const StatusLogingRequest(
+  const StatusLoginRequest(
     this.message,
   );
 

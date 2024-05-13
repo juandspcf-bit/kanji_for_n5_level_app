@@ -1,15 +1,15 @@
 import 'dart:async';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:kanji_for_n5_level_app/aplication_layer/auth_service/auth_service_contract.dart';
-import 'package:kanji_for_n5_level_app/aplication_layer/services.dart';
+import 'package:kanji_for_n5_level_app/application_layer/auth_service/auth_service_contract.dart';
+import 'package:kanji_for_n5_level_app/application_layer/services.dart';
 
 class LoginProvider extends Notifier<LogingData> {
   @override
   LogingData build() {
     return LogingData(
       statusLogingFlow: StatusProcessingLoggingFlow.form,
-      statusLogingRequest: StatusLogingRequest.notStarted,
+      statusLogingRequest: StatusLoginRequest.notStarted,
       statusResetEmail: StatusResetEmail.notStarted,
       email: '',
       password: '',
@@ -19,7 +19,7 @@ class LoginProvider extends Notifier<LogingData> {
 
   void resetData() {
     state = LogingData(
-      statusLogingRequest: StatusLogingRequest.notStarted,
+      statusLogingRequest: StatusLoginRequest.notStarted,
       statusLogingFlow: StatusProcessingLoggingFlow.form,
       statusResetEmail: StatusResetEmail.notStarted,
       email: '',
@@ -28,7 +28,7 @@ class LoginProvider extends Notifier<LogingData> {
     );
   }
 
-  void setStatusLogingRequest(StatusLogingRequest status) {
+  void setStatusLogingRequest(StatusLoginRequest status) {
     state = LogingData(
       statusLogingRequest: status,
       statusLogingFlow: state.statusLogingFlow,
@@ -94,14 +94,14 @@ class LoginProvider extends Notifier<LogingData> {
     );
   }
 
-  Future<StatusLogingRequest> toLoging() async {
+  Future<StatusLoginRequest> toLoging() async {
     setStatusLoggingFlow(StatusProcessingLoggingFlow.logging);
 
     final result = await ref
         .read(authServiceProvider)
         .singInWithEmailAndPassword(
             email: state.email, password: state.password);
-    if (result == StatusLogingRequest.success) {
+    if (result == StatusLoginRequest.success) {
     } else {
       setStatusLoggingFlow(StatusProcessingLoggingFlow.form);
     }
@@ -115,7 +115,7 @@ final loginProvider =
 
 class LogingData {
   final StatusProcessingLoggingFlow statusLogingFlow;
-  final StatusLogingRequest statusLogingRequest;
+  final StatusLoginRequest statusLogingRequest;
   final StatusResetEmail statusResetEmail;
   final String email;
   final String password;

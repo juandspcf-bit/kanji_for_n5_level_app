@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kanji_for_n5_level_app/main.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_details/quiz_kanji_details_screen/flash_card/flash_card_quiz_provider.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_details/quiz_kanji_details_screen/flash_card/flash_card_widget.dart';
-import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_details/quiz_kanji_details_screen/score_quiz_details/visible_lottie_file/buttoms_reset_quiz.dart';
+import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_details/quiz_kanji_details_screen/score_quiz_details/visible_lottie_file/buttons_reset_quiz.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 class FlashCardScreenPortrait extends ConsumerStatefulWidget {
@@ -13,10 +13,10 @@ class FlashCardScreenPortrait extends ConsumerStatefulWidget {
 
   @override
   ConsumerState<FlashCardScreenPortrait> createState() =>
-      _FlassCardScreenState();
+      _FlashCardScreenState();
 }
 
-class _FlassCardScreenState extends ConsumerState<FlashCardScreenPortrait> {
+class _FlashCardScreenState extends ConsumerState<FlashCardScreenPortrait> {
   final PageController controller = PageController();
   double index = 0;
 

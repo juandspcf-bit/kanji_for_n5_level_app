@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:kanji_for_n5_level_app/aplication_layer/services.dart';
+import 'package:kanji_for_n5_level_app/application_layer/services.dart';
 import 'package:kanji_for_n5_level_app/models/favorite.dart';
 import 'package:kanji_for_n5_level_app/main.dart';
 import 'package:kanji_for_n5_level_app/models/kanji_from_api.dart';
@@ -99,7 +99,6 @@ class MainScreenProvider extends Notifier<MainScreenData> {
     return await compute(cleanInvalidStoredFiles, listOfStoredKanjis);
   }
 
-  ///edpoint where the app is initilizated with online connection
   Future<void> initAppOnline() async {
     await getOnlineData();
     ref.read(avatarMainScreenProvider.notifier).getLink();

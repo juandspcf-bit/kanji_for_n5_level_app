@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:kanji_for_n5_level_app/aplication_layer/services.dart';
+import 'package:kanji_for_n5_level_app/application_layer/services.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/account_details/personal_info_update/personal_info_provider.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/account_details/user_form.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/common_screens/loading_screen.dart';
@@ -30,7 +30,7 @@ class PersonalInfo extends ConsumerWidget with MyDialogs {
             );
       }
 
-      if (current.updatingStatus == PersonalInfoUpdatingStatus.succes) {
+      if (current.updatingStatus == PersonalInfoUpdatingStatus.success) {
         ref.read(toastServiceProvider).dismiss(context);
         ref
             .read(personalInfoProvider.notifier)
@@ -67,7 +67,7 @@ class PersonalInfo extends ConsumerWidget with MyDialogs {
       appBar: AppBar(),
       body: Builder(builder: (ctx) {
         if (personalInfoData.fetchingStatus ==
-            PersonalInfoFetchinStatus.processing) {
+            PersonalInfoFetchingStatus.processing) {
           return const ProcessProgress(message: 'Fetching data');
         } else {
           return UserForm(accountDetailsData: personalInfoData);

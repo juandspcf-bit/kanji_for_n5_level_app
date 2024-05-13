@@ -5,7 +5,7 @@ import 'package:uuid/uuid.dart';
 
 const uuid = Uuid();
 
-Future<List<KanjiFromApi>> loadStoredKanjisFromSqliteDB(String uuid) async {
+Future<List<KanjiFromApi>> loadStoredKanjisFromSQLiteDB(String uuid) async {
   if (uuid == '') {
     return Future(() => []);
   }
@@ -66,7 +66,7 @@ Future<List<KanjiFromApi>> loadStoredKanjisFromSqliteDB(String uuid) async {
   return kanjisFromApi;
 }
 
-Future<ImageDetailsLink> loadImageDetailsFromSqliteDB(
+Future<ImageDetailsLink> loadImageDetailsFromSQLiteDB(
   String kanjiCharacter,
   String uuid,
 ) async {

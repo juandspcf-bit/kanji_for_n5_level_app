@@ -1,8 +1,8 @@
 import 'dart:async';
 
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:kanji_for_n5_level_app/aplication_layer/auth_service/auth_service_contract.dart';
-import 'package:kanji_for_n5_level_app/aplication_layer/auth_service/delete_user_exception.dart';
+import 'package:kanji_for_n5_level_app/application_layer/auth_service/auth_service_contract.dart';
+import 'package:kanji_for_n5_level_app/application_layer/auth_service/delete_user_exception.dart';
 import 'package:kanji_for_n5_level_app/config_files/network_config.dart';
 import 'package:kanji_for_n5_level_app/main.dart';
 import 'package:kanji_for_n5_level_app/models/user.dart';
@@ -34,7 +34,7 @@ class FirebaseAuthService implements AuthService {
   }
 
   @override
-  Future<StatusLogingRequest> singInWithEmailAndPassword(
+  Future<StatusLoginRequest> singInWithEmailAndPassword(
       {required String email, required String password}) async {
     try {
       logger.d(password);
@@ -44,23 +44,23 @@ class FirebaseAuthService implements AuthService {
             const Duration(seconds: timeOutValue),
           );
 
-      return StatusLogingRequest.success;
+      return StatusLoginRequest.success;
     } on FirebaseAuthException catch (e) {
       logger.e(e.code);
       if (e.code == 'INVALID_LOGIN_CREDENTIALS' ||
           e.code == 'invalid-credential') {
-        return StatusLogingRequest.invalidCredentials;
+        return StatusLoginRequest.invalidCredentials;
       } else if (e.code == 'user-not-found') {
-        return StatusLogingRequest.userNotFound;
+        return StatusLoginRequest.userNotFound;
       } else if (e.code == 'wrong-password') {
-        return StatusLogingRequest.wrongPassword;
+        return StatusLoginRequest.wrongPassword;
       } else if (e.code == 'too-many-requests') {
-        return StatusLogingRequest.tooManyRequest;
+        return StatusLoginRequest.tooManyRequest;
       }
 
-      return StatusLogingRequest.error;
+      return StatusLoginRequest.error;
     } on TimeoutException {
-      return StatusLogingRequest.error;
+      return StatusLoginRequest.error;
     }
   }
 

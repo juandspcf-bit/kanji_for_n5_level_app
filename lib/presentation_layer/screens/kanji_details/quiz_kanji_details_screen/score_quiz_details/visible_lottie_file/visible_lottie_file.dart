@@ -15,7 +15,7 @@ class VisibleLottieFile extends ConsumerWidget {
     final lottieFilesState = ref.watch(lottieFilesProvider);
     return Visibility(
       visible: (visibleLottieFileData.visibility &&
-          scores.incorrectAnwers.isEmpty &&
+          scores.incorrectAnswers.isEmpty &&
           scores.omitted.isEmpty),
       child: AnimatedOpacity(
         opacity: visibleLottieFileData.opacity,

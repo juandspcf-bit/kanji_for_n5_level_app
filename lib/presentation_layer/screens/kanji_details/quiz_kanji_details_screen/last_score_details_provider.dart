@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:kanji_for_n5_level_app/aplication_layer/services.dart';
+import 'package:kanji_for_n5_level_app/application_layer/services.dart';
 import 'package:kanji_for_n5_level_app/main.dart';
 import 'package:kanji_for_n5_level_app/models/single_quiz_audio_example_data.dart';
 
@@ -16,8 +16,8 @@ class LastScoreDetailsProvider
       allCorrectAnswers: false,
       isFinishedQuiz: false,
       countCorrects: 0,
-      countIncorrects: 0,
-      countOmited: 0,
+      countIncorrect: 0,
+      countOmitted: 0,
     );
   }
 
@@ -43,18 +43,18 @@ class LastScoreDetailsProvider
     String uuid = '',
     String kanjiCharacter = '',
     int countCorrects = 0,
-    int countIncorrects = 0,
-    int countOmited = 0,
+    int countIncorrect = 0,
+    int countOmitted = 0,
   }) async {
     state = const AsyncLoading();
     try {
       await ref.read(cloudDBServiceProvider).updateQuizDetailScore(
           kanjiCharacter,
-          countCorrects == 0 && countOmited == 0,
+          countCorrects == 0 && countOmitted == 0,
           true,
           countCorrects,
-          countIncorrects,
-          countOmited,
+          countIncorrect,
+          countOmitted,
           section,
           uuid);
     } catch (e) {
@@ -68,8 +68,8 @@ class LastScoreDetailsProvider
                 uuid,
                 kanjiCharacter,
                 countCorrects,
-                countIncorrects,
-                countOmited,
+                countIncorrect,
+                countOmitted,
               );
       if (numberOfRows != 0) {
         state = await AsyncValue.guard(
@@ -81,9 +81,9 @@ class LastScoreDetailsProvider
                 uuid: uuid,
                 isFinishedQuiz: true,
                 countCorrects: countCorrects,
-                countIncorrects: countIncorrects,
-                countOmited: countOmited,
-                allCorrectAnswers: countCorrects == 0 && countOmited == 0,
+                countIncorrect: countIncorrect,
+                countOmitted: countOmitted,
+                allCorrectAnswers: countCorrects == 0 && countOmitted == 0,
               ),
             );
           },
@@ -98,8 +98,8 @@ class LastScoreDetailsProvider
               section: section,
               uuid: uuid,
               countCorrects: countCorrects,
-              countIncorrects: countIncorrects,
-              countOmited: countOmited,
+              countIncorrect: countIncorrect,
+              countOmitted: countOmitted,
             );
 
     if (numberOfRows != 0) {
@@ -112,9 +112,9 @@ class LastScoreDetailsProvider
               uuid: uuid,
               isFinishedQuiz: true,
               countCorrects: countCorrects,
-              countIncorrects: countIncorrects,
-              countOmited: countOmited,
-              allCorrectAnswers: countCorrects == 0 && countOmited == 0,
+              countIncorrect: countIncorrect,
+              countOmitted: countOmitted,
+              allCorrectAnswers: countCorrects == 0 && countOmitted == 0,
             ),
           );
         },

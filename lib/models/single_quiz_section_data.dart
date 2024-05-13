@@ -5,16 +5,16 @@ class SingleQuizSectionData {
   final bool allCorrectAnswers;
   final bool isFinishedQuiz;
   final int countCorrects;
-  final int countIncorrects;
-  final int countOmited;
+  final int countIncorrect;
+  final int countOmitted;
 
   SingleQuizSectionData({
     required this.section,
     required this.allCorrectAnswers,
     required this.isFinishedQuiz,
     required this.countCorrects,
-    required this.countIncorrects,
-    required this.countOmited,
+    required this.countIncorrect,
+    required this.countOmitted,
   });
 
   SingleQuizSectionData copyWith({
@@ -22,16 +22,16 @@ class SingleQuizSectionData {
     bool? allCorrectAnswers,
     bool? isFinishedQuiz,
     int? countCorrects,
-    int? countIncorrects,
-    int? countOmited,
+    int? countIncorrect,
+    int? countOmitted,
   }) {
     return SingleQuizSectionData(
       section: section ?? this.section,
       allCorrectAnswers: allCorrectAnswers ?? this.allCorrectAnswers,
       isFinishedQuiz: isFinishedQuiz ?? this.isFinishedQuiz,
       countCorrects: countCorrects ?? this.countCorrects,
-      countIncorrects: countIncorrects ?? this.countIncorrects,
-      countOmited: countOmited ?? this.countOmited,
+      countIncorrect: countIncorrect ?? this.countIncorrect,
+      countOmitted: countOmitted ?? this.countOmitted,
     );
   }
 
@@ -41,8 +41,8 @@ class SingleQuizSectionData {
       'allCorrectAnswers': allCorrectAnswers,
       'isFinishedQuiz': isFinishedQuiz,
       'countCorrects': countCorrects,
-      'countIncorrects': countIncorrects,
-      'countOmited': countOmited,
+      'countIncorrect': countIncorrect,
+      'countOmitted': countOmitted,
     };
   }
 
@@ -52,8 +52,8 @@ class SingleQuizSectionData {
       allCorrectAnswers: map['allCorrectAnswers'] ?? false,
       isFinishedQuiz: map['isFinishedQuiz'] ?? false,
       countCorrects: map['countCorrects']?.toInt() ?? 0,
-      countIncorrects: map['countIncorrects']?.toInt() ?? 0,
-      countOmited: map['countOmited']?.toInt() ?? 0,
+      countIncorrect: map['countIncorrect']?.toInt() ?? 0,
+      countOmitted: map['countOmitted']?.toInt() ?? 0,
     );
   }
 
@@ -64,7 +64,7 @@ class SingleQuizSectionData {
 
   @override
   String toString() {
-    return 'SingleQuizSectionData(section: $section, allCorrectAnswers: $allCorrectAnswers, isFinishedQuiz: $isFinishedQuiz, countCorrects: $countCorrects, countIncorrects: $countIncorrects, countOmited: $countOmited)';
+    return 'SingleQuizSectionData(section: $section, allCorrectAnswers: $allCorrectAnswers, isFinishedQuiz: $isFinishedQuiz, countCorrects: $countCorrects, countIncorrect: $countIncorrect, countOmitted: $countOmitted)';
   }
 
   @override
@@ -76,8 +76,8 @@ class SingleQuizSectionData {
         other.allCorrectAnswers == allCorrectAnswers &&
         other.isFinishedQuiz == isFinishedQuiz &&
         other.countCorrects == countCorrects &&
-        other.countIncorrects == countIncorrects &&
-        other.countOmited == countOmited;
+        other.countIncorrect == countIncorrect &&
+        other.countOmitted == countOmitted;
   }
 
   @override
@@ -86,7 +86,7 @@ class SingleQuizSectionData {
         allCorrectAnswers.hashCode ^
         isFinishedQuiz.hashCode ^
         countCorrects.hashCode ^
-        countIncorrects.hashCode ^
-        countOmited.hashCode;
+        countIncorrect.hashCode ^
+        countOmitted.hashCode;
   }
 }

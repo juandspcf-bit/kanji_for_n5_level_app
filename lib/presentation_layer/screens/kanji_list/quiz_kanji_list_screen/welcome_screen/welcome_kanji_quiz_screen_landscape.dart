@@ -111,13 +111,13 @@ class LastScoreKanjiQuiz extends ConsumerWidget {
             ? Orientation.portrait == orientation
                 ? Text(
                     'You have completed this quiz with ${data.countCorrects}'
-                    ' questions correct\nout of ${data.countCorrects + data.countIncorrects + data.countOmited}',
+                    ' questions correct\nout of ${data.countCorrects + data.countIncorrect + data.countOmitted}',
                     style: textTheme,
                     textAlign: TextAlign.center,
                   )
                 : Text(
                     'You have completed this quiz with ${data.countCorrects}'
-                    ' questions correct out of ${data.countCorrects + data.countIncorrects + data.countOmited}',
+                    ' questions correct out of ${data.countCorrects + data.countIncorrect + data.countOmitted}',
                     style: textTheme,
                     textAlign: TextAlign.center,
                   )

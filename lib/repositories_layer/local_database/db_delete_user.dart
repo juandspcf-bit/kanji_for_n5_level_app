@@ -1,9 +1,9 @@
 import 'package:flutter/foundation.dart';
-import 'package:kanji_for_n5_level_app/aplication_layer/auth_service/delete_user_exception.dart';
+import 'package:kanji_for_n5_level_app/application_layer/auth_service/delete_user_exception.dart';
 import 'package:kanji_for_n5_level_app/repositories_layer/local_database/db_definitions.dart';
 import 'package:kanji_for_n5_level_app/repositories_layer/local_database/db_deleting_data.dart';
 
-Future<void> deleteUserDataSqlite(String uuid) async {
+Future<void> deleteUserDataSQLite(String uuid) async {
   try {
     final db = await kanjiFromApiDatabase;
 
@@ -38,7 +38,7 @@ Future<void> deleteUserDataSqlite(String uuid) async {
   }
 }
 
-Future<void> insertToTheDeleteErrorQueueSqlite(
+Future<void> insertToTheDeleteErrorQueueSQLite(
   String uuid,
   DeleteErrorUserCode deleteErrorUserCode,
 ) async {
@@ -59,7 +59,7 @@ Future<void> insertToTheDeleteErrorQueueSqlite(
   );
 }
 
-Future<void> deleteUserQueueSqlite() async {
+Future<void> deleteUserQueueSQLite() async {
   final db = await kanjiFromApiDatabase;
   final queue = await db.rawQuery('SELECT * FROM delete_user_queue');
 

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:kanji_for_n5_level_app/aplication_layer/services.dart';
+import 'package:kanji_for_n5_level_app/application_layer/services.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_details/quiz_kanji_details_screen/flash_card/flash_card_quiz_provider.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_details/quiz_kanji_details_screen/last_score_details_provider.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_details/quiz_kanji_details_screen/last_score_flash_card_provider.dart';
@@ -9,8 +9,8 @@ import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_details/
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_details/quiz_kanji_details_screen/score_quiz_details/visible_lottie_file/visible_lottie_file_provider.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/navigation_bar_screens/sections_screen/section_screen_provider.dart';
 
-class ButtomsResetQuiz extends ConsumerWidget {
-  const ButtomsResetQuiz({super.key});
+class ButtonsResetQuiz extends ConsumerWidget {
+  const ButtonsResetQuiz({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -77,8 +77,8 @@ class ToQuizSelectorButton extends ConsumerWidget {
                 uuid: ref.read(authServiceProvider).userUuid ?? '',
                 kanjiCharacter: quizDetailsData.kanjiFromApi!.kanjiCharacter,
                 countCorrects: scores.correctAnswers.length,
-                countIncorrects: scores.incorrectAnwers.length,
-                countOmited: scores.omitted.length,
+                countIncorrect: scores.incorrectAnswers.length,
+                countOmitted: scores.omitted.length,
               );
         }
 

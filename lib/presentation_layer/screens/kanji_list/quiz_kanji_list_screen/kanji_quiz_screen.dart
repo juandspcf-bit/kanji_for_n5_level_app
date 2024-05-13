@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:kanji_for_n5_level_app/aplication_layer/services.dart';
+import 'package:kanji_for_n5_level_app/application_layer/services.dart';
 import 'package:kanji_for_n5_level_app/models/kanji_from_api.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/navigation_bar_screens/sections_screen/section_screen_provider.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_list/quiz_kanji_list_screen/animated_quiz_question_screen.dart';
@@ -54,15 +54,15 @@ class KanjiQuizScreen extends ConsumerWidget {
     return PopScope(
       onPopInvoked: (didPop) {
         if (quizState.currentScreenType == Screens.score) {
-          final (countCorrects, countIncorrects, countOmited) =
+          final (countCorrects, countIncorrect, countOmitted) =
               ref.read(quizDataValuesProvider.notifier).getCounts();
 
           ref.read(lastScoreKanjiQuizProvider.notifier).setFinishedQuiz(
                 section: ref.read(sectionProvider),
                 uuid: ref.read(authServiceProvider).userUuid ?? '',
                 countCorrects: countCorrects,
-                countIncorrects: countIncorrects,
-                countOmited: countOmited,
+                countIncorrect: countIncorrect,
+                countOmitted: countOmitted,
               );
         }
       },

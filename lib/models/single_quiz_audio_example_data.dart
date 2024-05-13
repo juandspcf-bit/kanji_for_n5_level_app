@@ -5,8 +5,8 @@ class SingleQuizAudioExampleData {
   final bool allCorrectAnswers;
   final bool isFinishedQuiz;
   final int countCorrects;
-  final int countIncorrects;
-  final int countOmited;
+  final int countIncorrect;
+  final int countOmitted;
 
   SingleQuizAudioExampleData({
     required this.kanjiCharacter,
@@ -15,8 +15,8 @@ class SingleQuizAudioExampleData {
     required this.allCorrectAnswers,
     required this.isFinishedQuiz,
     required this.countCorrects,
-    required this.countIncorrects,
-    required this.countOmited,
+    required this.countIncorrect,
+    required this.countOmitted,
   });
 
   @override

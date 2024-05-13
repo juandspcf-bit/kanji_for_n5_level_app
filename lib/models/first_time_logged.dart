@@ -1,6 +1,6 @@
-class FirtsTimeLogged {
+class FirstTimeLogged {
   final String uuid;
   final bool? isFirstTimeLogged;
 
-  FirtsTimeLogged({required this.uuid, required this.isFirstTimeLogged});
+  FirstTimeLogged({required this.uuid, required this.isFirstTimeLogged});
 }

@@ -46,7 +46,7 @@ class InfoScore extends ConsumerWidget {
                   color: Color.fromARGB(255, 194, 88, 27),
                 ),
                 Text(
-                  'Incorrect\n answers:\n ${scores.incorrectAnwers.length}',
+                  'Incorrect\n answers:\n ${scores.incorrectAnswers.length}',
                   textAlign: TextAlign.center,
                 ),
               ],
@@ -59,7 +59,7 @@ class InfoScore extends ConsumerWidget {
                   color: Color.fromARGB(255, 33, 72, 243),
                 ),
                 Text(
-                  'Omited\n answers:\n ${scores.omitted.length}',
+                  'Omitted\n answers:\n ${scores.omitted.length}',
                   textAlign: TextAlign.center,
                 ),
               ],

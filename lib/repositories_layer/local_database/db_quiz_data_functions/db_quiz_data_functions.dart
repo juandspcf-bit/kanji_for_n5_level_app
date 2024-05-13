@@ -23,18 +23,18 @@ Future<SingleQuizSectionData> getSingleQuizSectionData(
       allCorrectAnswers: false,
       isFinishedQuiz: false,
       countCorrects: 0,
-      countIncorrects: 0,
-      countOmited: 0,
+      countIncorrect: 0,
+      countOmitted: 0,
     );
   }
 
   return SingleQuizSectionData(
     section: listQuery[0]['section'] as int,
     allCorrectAnswers: (listQuery[0]['allCorrectAnswersQuizKanji'] as int) == 1,
-    isFinishedQuiz: (listQuery[0]['isFinishedKanjiQuizz'] as int) == 1,
+    isFinishedQuiz: (listQuery[0]['isFinishedKanjiQuiz'] as int) == 1,
     countCorrects: listQuery[0]['countCorrects'] as int,
-    countIncorrects: listQuery[0]['countIncorrects'] as int,
-    countOmited: listQuery[0]['countOmited'] as int,
+    countIncorrect: listQuery[0]['countIncorrect'] as int,
+    countOmitted: listQuery[0]['countOmitted'] as int,
   );
 }
 
@@ -114,27 +114,27 @@ Future<void> updateSingleQuizSectionData(
   int section,
   String uuid,
   bool allCorrectAnswersQuizKanji,
-  bool isFinishedKanjiQuizz,
+  bool isFinishedKanjiQuiz,
   int countCorrects,
-  int countIncorrects,
-  int countOmited,
+  int countIncorrect,
+  int countOmitted,
 ) async {
   final db = await kanjiFromApiDatabase;
   await db.rawUpdate(
       'UPDATE kanji_quiz '
       'SET'
       ' allCorrectAnswersQuizKanji = ?,'
-      ' isFinishedKanjiQuizz = ?,'
+      ' isFinishedKanjiQuiz = ?,'
       ' countCorrects = ?,'
-      ' countIncorrects = ?,'
-      ' countOmited = ? '
+      ' countIncorrect = ?,'
+      ' countOmitted = ? '
       'WHERE section = ? AND uuid = ?',
       [
         allCorrectAnswersQuizKanji ? 1 : 0,
-        isFinishedKanjiQuizz ? 1 : 0,
+        isFinishedKanjiQuiz ? 1 : 0,
         countCorrects,
-        countIncorrects,
-        countOmited,
+        countIncorrect,
+        countOmitted,
         section,
         uuid,
       ]);
@@ -144,36 +144,36 @@ Future<void> insertSingleQuizSectionDataDB(
   int section,
   String uuid,
   bool allCorrectAnswersQuizKanji,
-  bool isFinishedKanjiQuizz,
+  bool isFinishedKanjiQuiz,
   int countCorrects,
-  int countIncorrects,
-  int countOmited,
+  int countIncorrect,
+  int countOmitted,
 ) async {
   final db = await kanjiFromApiDatabase;
   await db.rawInsert(
     'INSERT INTO kanji_quiz('
     ' allCorrectAnswersQuizKanji,'
-    ' isFinishedKanjiQuizz,'
+    ' isFinishedKanjiQuiz,'
     ' countCorrects,'
-    ' countIncorrects,'
-    ' countOmited,'
+    ' countIncorrect,'
+    ' countOmitted,'
     ' section,'
     ' uuid'
     ') '
     'VALUES(?,?,?,?,?,?,?)',
     [
       allCorrectAnswersQuizKanji ? 1 : 0,
-      isFinishedKanjiQuizz ? 1 : 0,
+      isFinishedKanjiQuiz ? 1 : 0,
       countCorrects,
-      countIncorrects,
-      countOmited,
+      countIncorrect,
+      countOmitted,
       section,
       uuid
     ],
   );
 }
 
-Future<SingleQuizAudioExampleData> getSingleQuizSectionAudioExamplerData(
+Future<SingleQuizAudioExampleData> getSingleQuizSectionAudioExampleData(
   String kanjiCharacter,
   int section,
   String uuid,
@@ -192,8 +192,8 @@ Future<SingleQuizAudioExampleData> getSingleQuizSectionAudioExamplerData(
       allCorrectAnswers: false,
       isFinishedQuiz: false,
       countCorrects: 0,
-      countIncorrects: 0,
-      countOmited: 0,
+      countIncorrect: 0,
+      countOmitted: 0,
     );
   }
 
@@ -204,8 +204,8 @@ Future<SingleQuizAudioExampleData> getSingleQuizSectionAudioExamplerData(
     allCorrectAnswers: (listQuery[0]['allCorrectAnswers'] as int) == 1,
     isFinishedQuiz: (listQuery[0]['isFinishedQuiz'] as int) == 1,
     countCorrects: listQuery[0]['countCorrects'] as int,
-    countIncorrects: listQuery[0]['countIncorrects'] as int,
-    countOmited: listQuery[0]['countOmited'] as int,
+    countIncorrect: listQuery[0][''] as int,
+    countOmitted: listQuery[0]['countOmitted'] as int,
   );
 }
 
@@ -216,8 +216,8 @@ Future<int> updateSingleAudioExampleQuizSectionData(
   bool allCorrectAnswers,
   bool isFinishedQuiz,
   int countCorrects,
-  int countIncorrects,
-  int countOmited,
+  int countIncorrect,
+  int countOmitted,
 ) async {
   final db = await kanjiFromApiDatabase;
   //logger.d('uuid: $uuid, allCorrectAnwers: $allCorrectAnswers,'
@@ -229,16 +229,16 @@ Future<int> updateSingleAudioExampleQuizSectionData(
       ' allCorrectAnswers = ?,'
       ' isFinishedQuiz = ?,'
       ' countCorrects = ?,'
-      ' countIncorrects = ?,'
-      ' countOmited = ? '
+      ' countIncorrect = ?,'
+      ' countOmitted = ? '
       'WHERE'
       ' kanjiCharacter = ? AND section = ? AND uuid = ?',
       [
         allCorrectAnswers ? 1 : 0,
         isFinishedQuiz ? 1 : 0,
         countCorrects,
-        countIncorrects,
-        countOmited,
+        countIncorrect,
+        countOmitted,
         kanjiCharacter,
         section,
         uuid
@@ -252,11 +252,11 @@ Future<int> insertSingleAudioExampleQuizSectionDataDB(
   bool allCorrectAnswers,
   bool isFinishedQuiz,
   int countCorrects,
-  int countIncorrects,
-  int countOmited,
+  int countIncorrect,
+  int countOmitted,
 ) async {
   logger.d('uuid: $uuid, corrects: $countCorrects,'
-      ' countIncorrects: $countIncorrects, countOmited: $countOmited');
+      ' countIncorrect: $countIncorrect, countOmitted: $countOmitted');
   final db = await kanjiFromApiDatabase;
   try {
     return await db.rawInsert(
@@ -265,8 +265,8 @@ Future<int> insertSingleAudioExampleQuizSectionDataDB(
         ' allCorrectAnswers,'
         ' isFinishedQuiz,'
         ' countCorrects,'
-        ' countIncorrects,'
-        ' countOmited,'
+        ' countIncorrect,'
+        ' countOmitted,'
         ' section,'
         ' uuid)'
         ' VALUES(?,?,?,?,?,?,?,?)',
@@ -275,8 +275,8 @@ Future<int> insertSingleAudioExampleQuizSectionDataDB(
           allCorrectAnswers ? 1 : 0,
           isFinishedQuiz ? 1 : 0,
           countCorrects,
-          countIncorrects,
-          countOmited,
+          countIncorrect,
+          countOmitted,
           section,
           uuid
         ]);
@@ -370,12 +370,15 @@ Future<int> updateSingleFlashCardData(
 
 Future<void> updateQuizScore(
     Map<String, Object> quizScoreData, String uuid) async {
-  //logger.d(quizScoreData);
   final sections = listSections.map((e) => e.sectionNumber.toString()).toList();
 
-  await cacheQuizKanji(sections, uuid, quizScoreData);
-  await cacheQuizDetails(sections, quizScoreData, uuid);
-  await cacheFlashCardsScore(sections, quizScoreData, uuid);
+  try {
+    await cacheQuizKanji(sections, uuid, quizScoreData);
+    await cacheQuizDetails(sections, quizScoreData, uuid);
+    await cacheFlashCardsScore(sections, quizScoreData, uuid);
+  } catch (e) {
+    logger.e(e);
+  }
 }
 
 Future<void> cacheFlashCardsScore(List<String> sections,
@@ -465,7 +468,7 @@ Future<void> cacheQuizDetails(List<String> sections,
         if (lisQuizData['kanji_$kanjiNumber'] != null) {
           final quizData =
               lisQuizData['kanji_$kanjiNumber'] as Map<String, Object>;
-          futureQuizDetailsGroup.add(getSingleQuizSectionAudioExamplerData(
+          futureQuizDetailsGroup.add(getSingleQuizSectionAudioExampleData(
             quizData['kanjiCharacter'] as String,
             int.parse(section),
             uuid,
@@ -497,8 +500,8 @@ Future<void> cacheQuizDetails(List<String> sections,
               quizData['allCorrectAnswers'] as bool,
               quizData['isFinishedQuiz'] as bool,
               quizData['countCorrects'] as int,
-              quizData['countIncorrects'] as int,
-              quizData['countOmited'] as int,
+              quizData['countIncorrect'] as int,
+              quizData['countOmitted'] as int,
             ));
           } else {
             futureQuizDetailsCachedGroup
@@ -509,8 +512,8 @@ Future<void> cacheQuizDetails(List<String> sections,
               quizData['allCorrectAnswers'] as bool,
               quizData['isFinishedQuiz'] as bool,
               quizData['countCorrects'] as int,
-              quizData['countIncorrects'] as int,
-              quizData['countOmited'] as int,
+              quizData['countIncorrect'] as int,
+              quizData['countOmitted'] as int,
             ));
           }
         }
@@ -553,8 +556,8 @@ Future<void> cacheQuizKanji(List<String> sections, String uuid,
             quizData['allCorrectAnswersQuizKanji'] as bool,
             quizData['isFinishedKanjiQuiz'] as bool,
             quizData['countCorrects'] as int,
-            quizData['countIncorrects'] as int,
-            quizData['countOmited'] as int,
+            quizData['countIncorrect'] as int,
+            quizData['countOmitted'] as int,
           ),
         );
       } else {
@@ -565,8 +568,8 @@ Future<void> cacheQuizKanji(List<String> sections, String uuid,
             quizData['allCorrectAnswersQuizKanji'] as bool,
             quizData['isFinishedKanjiQuiz'] as bool,
             quizData['countCorrects'] as int,
-            quizData['countIncorrects'] as int,
-            quizData['countOmited'] as int,
+            quizData['countIncorrect'] as int,
+            quizData['countOmitted'] as int,
           ),
         );
       }

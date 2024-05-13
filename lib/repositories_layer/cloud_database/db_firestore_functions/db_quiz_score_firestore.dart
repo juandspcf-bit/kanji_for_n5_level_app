@@ -1,5 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:kanji_for_n5_level_app/aplication_layer/auth_service/delete_user_exception.dart';
+import 'package:kanji_for_n5_level_app/application_layer/auth_service/delete_user_exception.dart';
 import 'package:kanji_for_n5_level_app/main.dart';
 import 'package:kanji_for_n5_level_app/models/secction_model.dart';
 
@@ -17,7 +17,6 @@ Future<Map<String, Object>> loadQuizScoreDataFire(
 
   final Map<String, Object> scoresFinal = {};
   for (var section in sections) {
-    //logger.d(data['quizScore_$section']['isFinishedkanjiQuiz']);
     if (data['quizScore_$section']['isFinishedkanjiQuiz'] != null) {
       //logger.d('pass');
       //logger.d(data['quizScore_$section']);
@@ -27,8 +26,8 @@ Future<Map<String, Object>> loadQuizScoreDataFire(
         'isFinishedKanjiQuiz':
             data['quizScore_$section']['isFinishedkanjiQuiz'] as bool,
         'countCorrects': data['quizScore_$section']['countCorrects'] as int,
-        'countIncorrects': data['quizScore_$section']['countIncorrects'] as int,
-        'countOmited': data['quizScore_$section']['countOmited'] as int,
+        'countIncorrect': data['quizScore_$section']['countIncorrect'] as int,
+        'countOmitted': data['quizScore_$section']['countOmitted'] as int,
         'section': data['quizScore_$section']['section'] as int,
       };
     }
@@ -47,8 +46,8 @@ Future<Map<String, Object>> loadQuizScoreDataFire(
           'allCorrectAnswers': dataFinalRef['allCorrectAnswers'] as bool,
           'isFinishedQuiz': dataFinalRef['isFinishedQuiz'] as bool,
           'countCorrects': dataFinalRef['countCorrects'] as int,
-          'countIncorrects': dataFinalRef['countIncorrects'] as int,
-          'countOmited': dataFinalRef['countOmited'] as int,
+          'countIncorrect': dataFinalRef['countIncorrect'] as int,
+          'countOmitted': dataFinalRef['countOmitted'] as int,
           'section': dataFinalRef['section'] as int,
         };
       }
@@ -91,8 +90,8 @@ Future<void> setQuizSectionScore(
   bool allCorrectAnswersQuizkanji,
   bool isFinishedkanjiQuiz,
   int countCorrects,
-  int countIncorrects,
-  int countOmited,
+  int countIncorrect,
+  int countOmitted,
   int section,
   String uuid,
   FirebaseFirestore dbFirebase,
@@ -104,8 +103,8 @@ Future<void> setQuizSectionScore(
       'allCorrectAnswersQuizkanji': allCorrectAnswersQuizkanji,
       'isFinishedkanjiQuiz': isFinishedkanjiQuiz,
       'countCorrects': countCorrects,
-      'countIncorrects': countIncorrects,
-      'countOmited': countOmited,
+      'countIncorrect': countIncorrect,
+      'countOmitted': countOmitted,
       'section': section,
     }
   });
@@ -116,8 +115,8 @@ Future<void> updateQuizDetailScoreFire(
   bool allCorrectAnswers,
   bool isFinishedQuiz,
   int countCorrects,
-  int countIncorrects,
-  int countOmited,
+  int countIncorrect,
+  int countOmitted,
   int section,
   String uuid,
   FirebaseFirestore dbFirebase,
@@ -131,8 +130,8 @@ Future<void> updateQuizDetailScoreFire(
       'allCorrectAnswers': allCorrectAnswers,
       'isFinishedQuiz': isFinishedQuiz,
       'countCorrects': countCorrects,
-      'countIncorrects': countIncorrects,
-      'countOmited': countOmited,
+      'countIncorrect': countIncorrect,
+      'countOmitted': countOmitted,
       'section': section,
     },
   });

@@ -60,7 +60,7 @@ class LastScoreKanjiQuiz extends ConsumerWidget {
         return data.isFinishedQuiz
             ? Text(
                 'You have completed this quiz with ${data.countCorrects}'
-                ' questions correct\nout of ${data.countCorrects + data.countIncorrects + data.countOmited}',
+                ' questions correct\nout of ${data.countCorrects + data.countIncorrect + data.countOmitted}',
                 style: Theme.of(context).textTheme.titleLarge,
                 textAlign: TextAlign.center,
               )

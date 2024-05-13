@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:kanji_for_n5_level_app/aplication_layer/auth_service/auth_service_contract.dart';
+import 'package:kanji_for_n5_level_app/application_layer/auth_service/auth_service_contract.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/common_screens/loading_screen.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/login_screen/login_provider.dart';
 import 'package:kanji_for_n5_level_app/providers/status_connection_provider.dart';
@@ -13,13 +13,13 @@ class LoginFormScreen extends ConsumerWidget with MyDialogs {
   LoginFormScreen({super.key});
 
   void showLoginResultMessageDialog(
-      BuildContext context, StatusLogingRequest result, WidgetRef ref) {
-    if (result != StatusLogingRequest.success &&
-        result != StatusLogingRequest.notStarted) {
+      BuildContext context, StatusLoginRequest result, WidgetRef ref) {
+    if (result != StatusLoginRequest.success &&
+        result != StatusLoginRequest.notStarted) {
       errorDialog(context, () {
         ref
             .read(loginProvider.notifier)
-            .setStatusLogingRequest(StatusLogingRequest.notStarted);
+            .setStatusLogingRequest(StatusLoginRequest.notStarted);
         ref
             .read(loginProvider.notifier)
             .setStatusResetEmail(StatusResetEmail.notStarted);

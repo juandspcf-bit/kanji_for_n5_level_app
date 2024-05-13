@@ -9,11 +9,11 @@ Future _onConfigure(Database db) async {
 Future<Database> get kanjiFromApiDatabase async {
   final dbPath = await sql.getDatabasesPath();
   final db = await sql.openDatabase(
-    path.join(dbPath, "downloadkanjis.db"),
+    path.join(dbPath, "download_kanjis.db"),
     onConfigure: _onConfigure,
     onCreate: (db, version) async {
       await db.execute(
-        'CREATE TABLE firts_logging_status('
+        'CREATE TABLE first_logging_status('
         ' id INTEGER PRIMARY KEY AUTOINCREMENT,'
         ' isLogged INTEGER,'
         ' uuid TEXT'
@@ -44,10 +44,10 @@ Future<Database> get kanjiFromApiDatabase async {
         'CREATE TABLE kanji_quiz('
         ' id INTEGER PRIMARY KEY AUTOINCREMENT,'
         ' allCorrectAnswersQuizKanji INTEGER,'
-        ' isFinishedKanjiQuizz INTEGER,'
+        ' isFinishedKanjiQuiz INTEGER,'
         ' countCorrects INTEGER,'
-        ' countIncorrects INTEGER,'
-        ' countOmited INTEGER,'
+        ' countIncorrect INTEGER,'
+        ' countOmitted INTEGER,'
         ' section INTEGER,'
         ' uuid TEXT'
         ')',
@@ -60,8 +60,8 @@ Future<Database> get kanjiFromApiDatabase async {
         ' allCorrectAnswers INTEGER,'
         ' isFinishedQuiz INTEGER,'
         ' countCorrects INTEGER,'
-        ' countIncorrects INTEGER,'
-        ' countOmited INTEGER,'
+        ' countIncorrect INTEGER,'
+        ' countOmitted INTEGER,'
         ' section INTEGER,'
         ' uuid TEXT'
         ')',

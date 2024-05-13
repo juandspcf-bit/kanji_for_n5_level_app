@@ -24,7 +24,7 @@ class QuizDetailsProvider extends Notifier<QuizDetailsData> {
 
   void resetValues() {
     _dataQuiz.shuffle();
-    _answers = List.filled(_dataQuiz.length, StateAnswersQuizDetails.ommitted);
+    _answers = List.filled(_dataQuiz.length, StateAnswersQuizDetails.omitted);
 
     setQuizState(0);
   }
@@ -150,7 +150,7 @@ class QuizDetailsProvider extends Notifier<QuizDetailsData> {
         .toList();
     dataInit.shuffle();
     _dataQuiz = dataInit;
-    _answers = List.filled(_dataQuiz.length, StateAnswersQuizDetails.ommitted);
+    _answers = List.filled(_dataQuiz.length, StateAnswersQuizDetails.omitted);
 
     state = QuizDetailsData(
       kanjiFromApi: kanjiFromApi,
@@ -213,7 +213,7 @@ class QuizDetailsProvider extends Notifier<QuizDetailsData> {
     }
 
     if (answerRadioTiles.hiraganaMeaning == '') {
-      _answers[stateCopy.indexQuestion] = StateAnswersQuizDetails.ommitted;
+      _answers[stateCopy.indexQuestion] = StateAnswersQuizDetails.omitted;
     } else if (answerRadioTiles.hiraganaMeaning == correct.hiraganaMeaning) {
       _answers[stateCopy.indexQuestion] = StateAnswersQuizDetails.correct;
     } else {
@@ -278,6 +278,6 @@ final quizDetailsProvider =
     NotifierProvider<QuizDetailsProvider, QuizDetailsData>(
         QuizDetailsProvider.new);
 
-enum StateAnswersQuizDetails { correct, incorrect, ommitted }
+enum StateAnswersQuizDetails { correct, incorrect, omitted }
 
 enum Screen { question, score, welcome, flashCards }

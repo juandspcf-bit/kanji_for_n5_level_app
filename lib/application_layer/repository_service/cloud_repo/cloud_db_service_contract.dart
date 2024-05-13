@@ -40,8 +40,8 @@ abstract class CloudDBService {
     bool allCorrectAnswersQuizKanji,
     bool isFinishedKanjiQuiz,
     int countCorrects,
-    int countIncorrects,
-    int countOmited,
+    int countIncorrect,
+    int countOmitted,
     int section,
     String uuid,
   );
@@ -51,8 +51,8 @@ abstract class CloudDBService {
     bool allCorrectAnswers,
     bool isFinishedQuiz,
     int countCorrects,
-    int countIncorrects,
-    int countOmited,
+    int countIncorrect,
+    int countOmitted,
     int section,
     String uuid,
   );

@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:kanji_for_n5_level_app/aplication_layer/services.dart';
+import 'package:kanji_for_n5_level_app/application_layer/services.dart';
 import 'package:kanji_for_n5_level_app/main.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/main_screens/avatar_main_screen_provider.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/main_screens/title_main_screen_provider.dart';
@@ -17,7 +17,7 @@ class PersonalInfoProvider extends Notifier<PersonalInfoData> {
         lastName: '',
         birthdate: '',
         updatingStatus: PersonalInfoUpdatingStatus.noStarted,
-        fetchingStatus: PersonalInfoFetchinStatus.noStarted,
+        fetchingStatus: PersonalInfoFetchingStatus.noStarted,
         showPasswordRequest: false);
   }
 
@@ -93,7 +93,7 @@ class PersonalInfoProvider extends Notifier<PersonalInfoData> {
         showPasswordRequest: state.showPasswordRequest);
   }
 
-  void setFetchingStatus(PersonalInfoFetchinStatus fetchingStatus) {
+  void setFetchingStatus(PersonalInfoFetchingStatus fetchingStatus) {
     state = PersonalInfoData(
         link: state.link,
         pathProfileTemporal: state.pathProfileTemporal,
@@ -127,18 +127,18 @@ class PersonalInfoProvider extends Notifier<PersonalInfoData> {
         updatingStatus: _isUpdating
             ? PersonalInfoUpdatingStatus.updating
             : PersonalInfoUpdatingStatus.noStarted,
-        fetchingStatus: PersonalInfoFetchinStatus.noStarted,
+        fetchingStatus: PersonalInfoFetchingStatus.noStarted,
         showPasswordRequest: state.showPasswordRequest);
   }
 
-  String _firtsName = "";
+  String _firstName = "";
   String _lastName = "";
   String _birthdate = "";
 
   Future<void> fetchUserData() async {
     final uuid = ref.read(authServiceProvider).userUuid;
 
-    setFetchingStatus(PersonalInfoFetchinStatus.processing);
+    setFetchingStatus(PersonalInfoFetchingStatus.processing);
 
     final statusConnection = ref.read(statusConnectionProvider);
 
@@ -169,7 +169,7 @@ class PersonalInfoProvider extends Notifier<PersonalInfoData> {
         lastName: lastName,
         birthdate: birthday,
         updatingStatus: PersonalInfoUpdatingStatus.noStarted,
-        fetchingStatus: PersonalInfoFetchinStatus.success,
+        fetchingStatus: PersonalInfoFetchingStatus.success,
         showPasswordRequest: state.showPasswordRequest,
       );
 
@@ -187,7 +187,7 @@ class PersonalInfoProvider extends Notifier<PersonalInfoData> {
     try {
       final user =
           await ref.read(cloudDBServiceProvider).readUserData(uuid ?? '');
-      _firtsName = user.firstName;
+      _firstName = user.firstName;
       _lastName = user.lastName;
       _birthdate = user.birthday;
 
@@ -198,7 +198,7 @@ class PersonalInfoProvider extends Notifier<PersonalInfoData> {
           lastName: user.lastName,
           birthdate: user.birthday,
           updatingStatus: state.updatingStatus,
-          fetchingStatus: PersonalInfoFetchinStatus.success,
+          fetchingStatus: PersonalInfoFetchingStatus.success,
           showPasswordRequest: state.showPasswordRequest);
     } on TimeoutException {
       state = PersonalInfoData(
@@ -208,7 +208,7 @@ class PersonalInfoProvider extends Notifier<PersonalInfoData> {
         lastName: '',
         birthdate: '',
         updatingStatus: state.updatingStatus,
-        fetchingStatus: PersonalInfoFetchinStatus.error,
+        fetchingStatus: PersonalInfoFetchingStatus.error,
         showPasswordRequest: state.showPasswordRequest,
       );
     } catch (e) {
@@ -220,7 +220,7 @@ class PersonalInfoProvider extends Notifier<PersonalInfoData> {
           lastName: '',
           birthdate: '',
           updatingStatus: state.updatingStatus,
-          fetchingStatus: PersonalInfoFetchinStatus.error,
+          fetchingStatus: PersonalInfoFetchingStatus.error,
           showPasswordRequest: state.showPasswordRequest);
     }
   }
@@ -230,7 +230,7 @@ class PersonalInfoProvider extends Notifier<PersonalInfoData> {
   void updateUserData() async {
     if (state.pathProfileTemporal == "" &&
         _birthdate == state.birthdate &&
-        _firtsName == state.firstName &&
+        _firstName == state.firstName &&
         _lastName == state.lastName) {
       setUpdatingStatus(PersonalInfoUpdatingStatus.noUpdate);
       _isUpdating = false;
@@ -288,7 +288,7 @@ class PersonalInfoProvider extends Notifier<PersonalInfoData> {
             ref.read(authServiceProvider).userUuid ?? '');
         setProfilePath(avatarLink);
         ref.read(avatarMainScreenProvider.notifier).getLink();
-        setUpdatingStatus(PersonalInfoUpdatingStatus.succes);
+        setUpdatingStatus(PersonalInfoUpdatingStatus.success);
         _isUpdating = false;
       } catch (e) {
         setUpdatingStatus(PersonalInfoUpdatingStatus.error);
@@ -297,7 +297,7 @@ class PersonalInfoProvider extends Notifier<PersonalInfoData> {
         logger.e(e);
       }
     } else {
-      setUpdatingStatus(PersonalInfoUpdatingStatus.succes);
+      setUpdatingStatus(PersonalInfoUpdatingStatus.success);
       _isUpdating = false;
     }
 
@@ -318,13 +318,13 @@ final personalInfoProvider =
     NotifierProvider<PersonalInfoProvider, PersonalInfoData>(
         PersonalInfoProvider.new);
 
-enum PersonalInfoFetchinStatus {
+enum PersonalInfoFetchingStatus {
   noStarted('no started'),
-  processing('proccessing'),
+  processing('processing'),
   error('error fetching data'),
-  success('succeful fetching data');
+  success('successful fetching data');
 
-  const PersonalInfoFetchinStatus(this.message);
+  const PersonalInfoFetchingStatus(this.message);
   final String message;
 }
 
@@ -332,8 +332,8 @@ enum PersonalInfoUpdatingStatus {
   noStarted('no started'),
   updating('updating'),
   noUpdate('nothing to update'),
-  succes('succeful updating process'),
-  error('an error happend during updating process');
+  success('successful updating process'),
+  error('an error happened during updating process');
 
   const PersonalInfoUpdatingStatus(this.message);
 
@@ -347,7 +347,7 @@ class PersonalInfoData {
   final String lastName;
   final String birthdate;
   final PersonalInfoUpdatingStatus updatingStatus;
-  final PersonalInfoFetchinStatus fetchingStatus;
+  final PersonalInfoFetchingStatus fetchingStatus;
   final bool showPasswordRequest;
 
   PersonalInfoData(

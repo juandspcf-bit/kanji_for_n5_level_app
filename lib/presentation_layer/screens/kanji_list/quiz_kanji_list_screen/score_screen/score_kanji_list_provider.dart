@@ -4,18 +4,18 @@ import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_details/
 class KanjiListScoreProvider extends Notifier<
     ({
       List<StateAnswersQuizDetails> correctAnswers,
-      List<StateAnswersQuizDetails> incorrectAnwers,
+      List<StateAnswersQuizDetails> incorrectAnswers,
       List<StateAnswersQuizDetails> omitted
     })> {
   @override
   ({
     List<StateAnswersQuizDetails> correctAnswers,
-    List<StateAnswersQuizDetails> incorrectAnwers,
+    List<StateAnswersQuizDetails> incorrectAnswers,
     List<StateAnswersQuizDetails> omitted,
   }) build() {
     return (
       correctAnswers: [],
-      incorrectAnwers: [],
+      incorrectAnswers: [],
       omitted: [],
     );
   }
@@ -24,10 +24,10 @@ class KanjiListScoreProvider extends Notifier<
     List<bool> isCorrectAnswer,
     List<bool> isOmittedAnswer,
   ) {
-    final List<StateAnswersQuizDetails> incorrectAnwers = [];
+    final List<StateAnswersQuizDetails> incorrectAnswers = [];
     for (var i = 0; i < isCorrectAnswer.length; i++) {
       if (!isCorrectAnswer[i] && !isOmittedAnswer[i]) {
-        incorrectAnwers.add(StateAnswersQuizDetails.incorrect);
+        incorrectAnswers.add(StateAnswersQuizDetails.incorrect);
       }
     }
 
@@ -36,10 +36,10 @@ class KanjiListScoreProvider extends Notifier<
           .where((e) => e)
           .map((e) => StateAnswersQuizDetails.correct)
           .toList(),
-      incorrectAnwers: incorrectAnwers,
+      incorrectAnswers: incorrectAnswers,
       omitted: isOmittedAnswer
           .where((e) => e)
-          .map((e) => StateAnswersQuizDetails.ommitted)
+          .map((e) => StateAnswersQuizDetails.omitted)
           .toList(),
     ); /**/
   }
@@ -49,6 +49,6 @@ final kanjiListScoreProvider = NotifierProvider<
     KanjiListScoreProvider,
     ({
       List<StateAnswersQuizDetails> correctAnswers,
-      List<StateAnswersQuizDetails> incorrectAnwers,
+      List<StateAnswersQuizDetails> incorrectAnswers,
       List<StateAnswersQuizDetails> omitted
     })>(KanjiListScoreProvider.new);

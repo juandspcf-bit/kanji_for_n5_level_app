@@ -1,5 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:kanji_for_n5_level_app/aplication_layer/repository_service/cloud_repo/cloud_db_service_contract.dart';
+import 'package:kanji_for_n5_level_app/application_layer/repository_service/cloud_repo/cloud_db_service_contract.dart';
 import 'package:kanji_for_n5_level_app/models/favorite.dart';
 import 'package:kanji_for_n5_level_app/models/user.dart';
 import 'package:kanji_for_n5_level_app/repositories_layer/cloud_database/db_firestore_functions/db_favorites_firestore.dart';
@@ -87,8 +87,8 @@ class FireStoreDBService extends CloudDBService {
     bool allCorrectAnswersQuizKanji,
     bool isFinishedKanjiQuiz,
     int countCorrects,
-    int countIncorrects,
-    int countOmited,
+    int countIncorrect,
+    int countOmitted,
     int section,
     String uuid,
   ) {
@@ -96,8 +96,8 @@ class FireStoreDBService extends CloudDBService {
       allCorrectAnswersQuizKanji,
       isFinishedKanjiQuiz,
       countCorrects,
-      countIncorrects,
-      countOmited,
+      countIncorrect,
+      countOmitted,
       section,
       uuid,
       dbFirebase,
@@ -118,8 +118,8 @@ class FireStoreDBService extends CloudDBService {
     bool allCorrectAnswers,
     bool isFinishedQuiz,
     int countCorrects,
-    int countIncorrects,
-    int countOmited,
+    int countIncorrect,
+    int countOmitted,
     int section,
     String uuid,
   ) {
@@ -128,8 +128,8 @@ class FireStoreDBService extends CloudDBService {
       allCorrectAnswers,
       isFinishedQuiz,
       countCorrects,
-      countIncorrects,
-      countOmited,
+      countIncorrect,
+      countOmitted,
       section,
       uuid,
       dbFirebase,

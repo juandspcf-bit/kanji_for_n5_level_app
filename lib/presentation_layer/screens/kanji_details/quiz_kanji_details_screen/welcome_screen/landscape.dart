@@ -134,7 +134,7 @@ class LastScoreAudioExampleScreen extends ConsumerWidget {
         return data.isFinishedQuiz
             ? Text(
                 'Last score: ${data.countCorrects} questions correct out of '
-                '${data.countCorrects + data.countIncorrects + data.countOmited}',
+                '${data.countCorrects + data.countIncorrect + data.countOmitted}',
                 style: Theme.of(context).textTheme.bodySmall,
               )
             : Text(

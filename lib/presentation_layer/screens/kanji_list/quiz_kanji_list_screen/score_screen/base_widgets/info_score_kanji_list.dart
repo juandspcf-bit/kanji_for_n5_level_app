@@ -44,7 +44,7 @@ class InfoScoreKanjiList extends ConsumerWidget {
                   color: Color.fromARGB(255, 194, 88, 27),
                 ),
                 Text(
-                  'Incorrect\n answers:\n ${kanjiListScoreData.incorrectAnwers.length}',
+                  'Incorrect\n answers:\n ${kanjiListScoreData.incorrectAnswers.length}',
                   textAlign: TextAlign.center,
                 ),
               ],
@@ -57,7 +57,7 @@ class InfoScoreKanjiList extends ConsumerWidget {
                   color: Color.fromARGB(255, 33, 72, 243),
                 ),
                 Text(
-                  'Omited\n answers:\n ${kanjiListScoreData.omitted.length}',
+                  'Omitted\n answers:\n ${kanjiListScoreData.omitted.length}',
                   textAlign: TextAlign.center,
                 ),
               ],
