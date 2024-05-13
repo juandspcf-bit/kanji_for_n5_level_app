@@ -1,6 +1,7 @@
 import 'package:assets_audio_player/assets_audio_player.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:kanji_for_n5_level_app/l10n/locazition.dart';
 import 'package:kanji_for_n5_level_app/models/kanji_from_api.dart';
 import 'package:kanji_for_n5_level_app/providers/examples_audios_track_list_provider.dart';
 import 'package:kanji_for_n5_level_app/providers/status_stored_provider.dart';
@@ -170,6 +171,6 @@ class PlayListButton extends ConsumerWidget {
           textStyle: Theme.of(context).textTheme.bodyLarge,
         ),
         icon: Icon(data.isPlaying ? Icons.stop : Icons.playlist_play),
-        label: const Text('playlist'));
+        label: Text(context.l10n.playlist));
   }
 }

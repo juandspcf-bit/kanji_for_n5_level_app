@@ -242,9 +242,12 @@ class EmailChange extends ConsumerWidget {
                     height: 20,
                   ),
                   ElevatedButton(
-                    onPressed: () {
-                      onValidation(ref);
-                    },
+                    onPressed:
+                        statusConnectionData == ConnectionStatus.noConnected
+                            ? null
+                            : () {
+                                onValidation(ref);
+                              },
                     style: ElevatedButton.styleFrom(
                       minimumSize: const Size.fromHeight(40),
                     ),

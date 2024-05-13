@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:kanji_for_n5_level_app/config_files/screen_config.dart';
+import 'package:kanji_for_n5_level_app/l10n/locazition.dart';
 import 'package:kanji_for_n5_level_app/models/kanji_from_api.dart';
 import 'package:kanji_for_n5_level_app/providers/status_stored_provider.dart';
 
@@ -17,7 +18,7 @@ class StrokesImages extends ConsumerWidget {
 
   Widget _dialog(BuildContext context, String image, int index) {
     return AlertDialog(
-      title: Text("Stroke number ${index + 1}"),
+      title: Text("${context.l10n.stroke} ${context.l10n.number} ${index + 1}"),
       content: statusStorage == StatusStorage.onlyOnline
           ? SvgPicture.network(
               image,
@@ -66,7 +67,7 @@ class StrokesImages extends ConsumerWidget {
             onPressed: () {
               Navigator.of(context).pop();
             },
-            child: const Text("Okay"))
+            child: const Text("Ok"))
       ],
     );
   }
@@ -138,7 +139,7 @@ class StrokesImages extends ConsumerWidget {
           const SizedBox(
             height: 10,
           ),
-          Text('Stroke ${index + 1}')
+          Text('${context.l10n.stroke} ${index + 1}')
         ],
       );
       strokes.add(stroke);

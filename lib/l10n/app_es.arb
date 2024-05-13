@@ -2,7 +2,7 @@
   "@@locale": "es",
   "welcome": "Bien venido",
   "@welcome": {},
-  "sections": "{section, select, section_1{Dentro de imagenes} section_2{Numeros} section_3{Numeros y direcciones} section_4{Cuerpo humano y gente} section_5{Dias y kanjis para la escuela} section_6{Tiempo} section_7{Adjetivos} section_8{Verbos} section_9{Sujetos} other{otros}}",
+  "sections": "{section, select, section_1{Dentro de imágenes} section_2{Números} section_3{Números y direcciones} section_4{Cuerpo humano y gente} section_5{Dias y kanjis para la escuela} section_6{Tiempo} section_7{Adjetivos} section_8{Verbos} section_9{Sujetos} other{otros}}",
   "@sections": {
     "placeholders": {
       "section": {
@@ -10,20 +10,28 @@
       }
     }
   },
-  "section": "seccion",
+  "section": "sección",
   "@section": {},
-  "sectiosNavBar": "secciones",
-  "@sectiosNavBar": {},
+  "sectionNavBar": "secciones",
+  "@sectionNavBar": {},
   "favoritesNavBar": "favoritos",
   "@favoritesNavBar": {},
-  "basicSearchNavBar": "busqueda basica",
+  "basicSearchNavBar": "búsqueda básica",
   "@basicSearchNavBar": {},
   "progressNavBar": "mi progreso",
   "@progressNavBar": {},
-  "meaningAndDefinition": "Significado y definicion",
+  "meaningAndDefinition": "Significado y definición",
   "@meaningAndDefinition": {},
   "meaning": "Significado",
   "@meaning": {},
-  "erroConnectionDetailsMessage":"No tienes coneccion a internet, podras acceder los datos cuando se restablesca",
+  "stroke": "trazo",
+  "@stroke": {},
+  "number": "numero",
+  "@number": {},
+  "examples": "Ejemplos",
+  "@examples": {},
+  "playlist":"Lista de reproducción",
+  "@playlist":{},
+  "erroConnectionDetailsMessage":"No tienes conexión a internet, podrás acceder los datos cuando se restablezca",
   "@erroConnectionDetailsMessage":{}
 }

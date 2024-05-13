@@ -29,7 +29,7 @@ class CustomBottomNavigationBar extends ConsumerWidget
           icon: const Icon(
             Icons.book,
           ),
-          label: context.l10n.sectiosNavBar,
+          label: context.l10n.sectionNavBar,
         ),
         NavigationDestination(
           icon: const Icon(
