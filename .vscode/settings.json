@@ -3,7 +3,10 @@
         "ARGB",
         "birthdate",
         "Birthdate",
+        "Kunyomi",
+        "Onyomi",
         "riverpod",
+        "romaji",
         "uuid"
     ]
 }
