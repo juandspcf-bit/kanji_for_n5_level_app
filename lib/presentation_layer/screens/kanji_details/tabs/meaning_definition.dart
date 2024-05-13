@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:kanji_for_n5_level_app/l10n/locazition.dart';
+import 'package:kanji_for_n5_level_app/l10n/localization.dart';
 
 class MeaningAndDefinition extends ConsumerWidget {
   const MeaningAndDefinition({
