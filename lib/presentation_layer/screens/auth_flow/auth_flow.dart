@@ -51,8 +51,8 @@ class _AutFlowState extends ConsumerState<AuthFlow> {
         builder: (ctx, snapShot) {
           logger.d("stream auth: ${snapShot.connectionState}");
           if (snapShot.connectionState == ConnectionState.waiting) {
-            return ProcessProgress(
-              message: 'Login to your account ${snapShot.connectionState}',
+            return const ProcessProgress(
+              message: 'Login to your account',
             );
           }
           if ((snapShot.connectionState == ConnectionState.active ||

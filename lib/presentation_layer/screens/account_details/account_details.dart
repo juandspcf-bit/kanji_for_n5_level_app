@@ -134,6 +134,7 @@ class AccountDetails extends ConsumerWidget {
                             StatusProcessingLoggingFlow.form,
                           );
                       await ref.read(authServiceProvider).singOut();
+                      await Future.delayed(const Duration(milliseconds: 200));
                       ref
                           .read(mainScreenProvider.notifier)
                           .resetMainScreenState();
