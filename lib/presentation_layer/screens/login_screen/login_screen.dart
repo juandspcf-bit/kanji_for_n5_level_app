@@ -4,8 +4,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kanji_for_n5_level_app/application_layer/auth_service/auth_service_contract.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/common_screens/loading_screen.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/login_screen/login_provider.dart';
-import 'package:kanji_for_n5_level_app/providers/status_connection_provider.dart';
-import 'package:kanji_for_n5_level_app/presentation_layer/screens/common_screens/error_connection_screen.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/login_screen/login_form.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/common_widgets/my_dialogs.dart';
 
@@ -19,7 +17,7 @@ class LoginFormScreen extends ConsumerWidget with MyDialogs {
       errorDialog(context, () {
         ref
             .read(loginProvider.notifier)
-            .setStatusLogingRequest(StatusLoginRequest.notStarted);
+            .setStatusLoginRequest(StatusLoginRequest.notStarted);
         ref
             .read(loginProvider.notifier)
             .setStatusResetEmail(StatusResetEmail.notStarted);
@@ -61,10 +59,9 @@ class LoginFormScreen extends ConsumerWidget with MyDialogs {
       if (context.mounted) FlutterNativeSplash.remove();
     });
     final loginFormData = ref.watch(loginProvider);
-    final statusConnectionData = ref.watch(statusConnectionProvider);
 
-    ref.listen<LogingData>(loginProvider, (previuos, current) {
-      showLoginResultMessageDialog(context, current.statusLogingRequest, ref);
+    ref.listen<LoginData>(loginProvider, (previous, current) {
+      showLoginResultMessageDialog(context, current.statusLoginRequest, ref);
       showResetEmailMessageDialog(context, current.statusResetEmail, ref);
     });
 
@@ -73,19 +70,7 @@ class LoginFormScreen extends ConsumerWidget with MyDialogs {
         padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 15),
         child: Builder(
           builder: (ctx) {
-            /* if (statusConnectionData == ConnectivityResult.other) {
-              return const ProcessProgress(
-                message: 'Welcome!!',
-              );
-            } else  */
-
-            if (statusConnectionData == ConnectionStatus.noConnected) {
-              return const ErrorConnectionScreen(
-                message: 'No internet connection, try again to login later',
-              );
-            }
-
-            return loginFormData.statusLogingFlow !=
+            return loginFormData.statusLoginFlow !=
                     StatusProcessingLoggingFlow.form
                 ? const ProcessProgress(
                     message: 'Login to your account',

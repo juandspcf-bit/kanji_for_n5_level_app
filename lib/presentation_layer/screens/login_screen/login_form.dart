@@ -9,6 +9,7 @@ import 'package:kanji_for_n5_level_app/presentation_layer/common_widgets/passwor
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/login_screen/email_widget.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/sign_up_screen/sing_up_screen.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/common_widgets/my_dialogs.dart';
+import 'package:kanji_for_n5_level_app/providers/status_connection_provider.dart';
 
 class LoginForm extends ConsumerWidget {
   LoginForm({
@@ -20,11 +21,12 @@ class LoginForm extends ConsumerWidget {
     final currentState = _formKey.currentState;
     if (currentState == null || !currentState.validate()) return;
     currentState.save();
-    await ref.read(loginProvider.notifier).toLoging();
+    await ref.read(loginProvider.notifier).toLogin();
   }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final statusConnectionData = ref.watch(statusConnectionProvider);
     final loginFormData = ref.watch(loginProvider);
     return SingleChildScrollView(
       child: Column(
@@ -93,15 +95,17 @@ class LoginForm extends ConsumerWidget {
             ),
           ),
           ElevatedButton(
-            onPressed: () {
-              FocusScopeNode currentFocus = FocusScope.of(context);
+            onPressed: statusConnectionData == ConnectionStatus.noConnected
+                ? null
+                : () {
+                    FocusScopeNode currentFocus = FocusScope.of(context);
 
-              if (!currentFocus.hasPrimaryFocus) {
-                currentFocus.unfocus();
-              }
+                    if (!currentFocus.hasPrimaryFocus) {
+                      currentFocus.unfocus();
+                    }
 
-              onValidation(context, ref);
-            },
+                    onValidation(context, ref);
+                  },
             style: ElevatedButton.styleFrom().copyWith(
               minimumSize: const MaterialStatePropertyAll(
                 Size.fromHeight(40),
@@ -113,19 +117,22 @@ class LoginForm extends ConsumerWidget {
             height: 10,
           ),
           ElevatedButton(
-            onPressed: () {
-              FocusScopeNode currentFocus = FocusScope.of(context);
+            onPressed: statusConnectionData == ConnectionStatus.noConnected
+                ? null
+                : () {
+                    FocusScopeNode currentFocus = FocusScope.of(context);
 
-              if (!currentFocus.hasPrimaryFocus) {
-                currentFocus.unfocus();
-              }
+                    if (!currentFocus.hasPrimaryFocus) {
+                      currentFocus.unfocus();
+                    }
 
-              ref.read(singUpProvider.notifier).resetStatus();
+                    ref.read(singUpProvider.notifier).resetStatus();
 
-              Navigator.of(context).push(MaterialPageRoute(builder: (ctx) {
-                return const SignUpScreen();
-              }));
-            },
+                    Navigator.of(context)
+                        .push(MaterialPageRoute(builder: (ctx) {
+                      return const SignUpScreen();
+                    }));
+                  },
             style: ElevatedButton.styleFrom().copyWith(
               minimumSize: const MaterialStatePropertyAll(
                 Size.fromHeight(40),

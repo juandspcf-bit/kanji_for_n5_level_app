@@ -19,7 +19,7 @@ class _AutFlowState extends ConsumerState<AuthFlow> {
   Widget build(BuildContext context) {
     //localDBService.deleteUserQueue();
 
-    ref.listen<ConnectionStatus>(statusConnectionProvider, (previuos, current) {
+    ref.listen<ConnectionStatus>(statusConnectionProvider, (previous, current) {
       ref.read(toastServiceProvider).dismiss(context);
 
       if (current == ConnectionStatus.noConnected) {
@@ -72,15 +72,6 @@ class _AutFlowState extends ConsumerState<AuthFlow> {
               !snapShot.hasData) {
             return LoginFormScreen();
           }
-
-/*           ref.read(toastServiceProvider).showMessage(
-                context,
-                'Error login in',
-                Icons.error,
-                const Duration(seconds: 5),
-                '',
-                null,
-              ); */
 
           return LoginFormScreen();
         });

@@ -4,9 +4,11 @@
         "birthdate",
         "Birthdate",
         "Kunyomi",
+        "lottie",
         "Onyomi",
         "riverpod",
         "romaji",
+        "unfocus",
         "uuid"
     ]
 }

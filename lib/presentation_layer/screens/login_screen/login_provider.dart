@@ -4,12 +4,12 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kanji_for_n5_level_app/application_layer/auth_service/auth_service_contract.dart';
 import 'package:kanji_for_n5_level_app/application_layer/services.dart';
 
-class LoginProvider extends Notifier<LogingData> {
+class LoginProvider extends Notifier<LoginData> {
   @override
-  LogingData build() {
-    return LogingData(
-      statusLogingFlow: StatusProcessingLoggingFlow.form,
-      statusLogingRequest: StatusLoginRequest.notStarted,
+  LoginData build() {
+    return LoginData(
+      statusLoginFlow: StatusProcessingLoggingFlow.form,
+      statusLoginRequest: StatusLoginRequest.notStarted,
       statusResetEmail: StatusResetEmail.notStarted,
       email: '',
       password: '',
@@ -18,9 +18,9 @@ class LoginProvider extends Notifier<LogingData> {
   }
 
   void resetData() {
-    state = LogingData(
-      statusLogingRequest: StatusLoginRequest.notStarted,
-      statusLogingFlow: StatusProcessingLoggingFlow.form,
+    state = LoginData(
+      statusLoginRequest: StatusLoginRequest.notStarted,
+      statusLoginFlow: StatusProcessingLoggingFlow.form,
       statusResetEmail: StatusResetEmail.notStarted,
       email: '',
       password: '',
@@ -28,10 +28,10 @@ class LoginProvider extends Notifier<LogingData> {
     );
   }
 
-  void setStatusLogingRequest(StatusLoginRequest status) {
-    state = LogingData(
-      statusLogingRequest: status,
-      statusLogingFlow: state.statusLogingFlow,
+  void setStatusLoginRequest(StatusLoginRequest status) {
+    state = LoginData(
+      statusLoginRequest: status,
+      statusLoginFlow: state.statusLoginFlow,
       statusResetEmail: state.statusResetEmail,
       email: state.email,
       password: state.password,
@@ -40,9 +40,9 @@ class LoginProvider extends Notifier<LogingData> {
   }
 
   void setStatusLoggingFlow(StatusProcessingLoggingFlow status) async {
-    state = LogingData(
-      statusLogingRequest: state.statusLogingRequest,
-      statusLogingFlow: status,
+    state = LoginData(
+      statusLoginRequest: state.statusLoginRequest,
+      statusLoginFlow: status,
       statusResetEmail: state.statusResetEmail,
       email: state.email,
       password: state.password,
@@ -51,9 +51,9 @@ class LoginProvider extends Notifier<LogingData> {
   }
 
   void setStatusResetEmail(StatusResetEmail status) async {
-    state = LogingData(
-      statusLogingRequest: state.statusLogingRequest,
-      statusLogingFlow: state.statusLogingFlow,
+    state = LoginData(
+      statusLoginRequest: state.statusLoginRequest,
+      statusLoginFlow: state.statusLoginFlow,
       statusResetEmail: status,
       email: state.email,
       password: state.password,
@@ -62,9 +62,9 @@ class LoginProvider extends Notifier<LogingData> {
   }
 
   void setEmail(String email) {
-    state = LogingData(
-      statusLogingRequest: state.statusLogingRequest,
-      statusLogingFlow: state.statusLogingFlow,
+    state = LoginData(
+      statusLoginRequest: state.statusLoginRequest,
+      statusLoginFlow: state.statusLoginFlow,
       statusResetEmail: state.statusResetEmail,
       email: email,
       password: state.password,
@@ -73,9 +73,9 @@ class LoginProvider extends Notifier<LogingData> {
   }
 
   void setPassword(String password) {
-    state = LogingData(
-      statusLogingRequest: state.statusLogingRequest,
-      statusLogingFlow: state.statusLogingFlow,
+    state = LoginData(
+      statusLoginRequest: state.statusLoginRequest,
+      statusLoginFlow: state.statusLoginFlow,
       statusResetEmail: state.statusResetEmail,
       email: state.email,
       password: password,
@@ -84,9 +84,9 @@ class LoginProvider extends Notifier<LogingData> {
   }
 
   void toggleVisibility() {
-    state = LogingData(
-      statusLogingRequest: state.statusLogingRequest,
-      statusLogingFlow: state.statusLogingFlow,
+    state = LoginData(
+      statusLoginRequest: state.statusLoginRequest,
+      statusLoginFlow: state.statusLoginFlow,
       statusResetEmail: state.statusResetEmail,
       email: state.email,
       password: state.password,
@@ -94,7 +94,7 @@ class LoginProvider extends Notifier<LogingData> {
     );
   }
 
-  Future<StatusLoginRequest> toLoging() async {
+  Future<StatusLoginRequest> toLogin() async {
     setStatusLoggingFlow(StatusProcessingLoggingFlow.logging);
 
     final result = await ref
@@ -105,25 +105,25 @@ class LoginProvider extends Notifier<LogingData> {
     } else {
       setStatusLoggingFlow(StatusProcessingLoggingFlow.form);
     }
-    setStatusLogingRequest(result);
+    setStatusLoginRequest(result);
     return result;
   }
 }
 
 final loginProvider =
-    NotifierProvider<LoginProvider, LogingData>(LoginProvider.new);
+    NotifierProvider<LoginProvider, LoginData>(LoginProvider.new);
 
-class LogingData {
-  final StatusProcessingLoggingFlow statusLogingFlow;
-  final StatusLoginRequest statusLogingRequest;
+class LoginData {
+  final StatusProcessingLoggingFlow statusLoginFlow;
+  final StatusLoginRequest statusLoginRequest;
   final StatusResetEmail statusResetEmail;
   final String email;
   final String password;
   final bool isVisiblePassword;
 
-  LogingData({
-    required this.statusLogingFlow,
-    required this.statusLogingRequest,
+  LoginData({
+    required this.statusLoginFlow,
+    required this.statusLoginRequest,
     required this.statusResetEmail,
     required this.email,
     required this.password,
