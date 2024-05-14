@@ -58,7 +58,7 @@ class OptionsDetails extends ConsumerWidget {
           icon: const IconFavoritesButton(),
           label: const TextFavoritesButton(),
           style: ElevatedButton.styleFrom().copyWith(
-            minimumSize: const MaterialStatePropertyAll(
+            minimumSize: const WidgetStatePropertyAll(
               Size(300, 40),
             ),
           ),

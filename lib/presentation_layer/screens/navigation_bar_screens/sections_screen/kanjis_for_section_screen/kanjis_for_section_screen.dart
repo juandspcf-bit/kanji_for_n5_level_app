@@ -23,46 +23,6 @@ class KanjiForSectionScreen extends ConsumerWidget
     final mainScreenData = ref.watch(mainScreenProvider);
     final kanjiListData = ref.watch(kanjiListProvider);
 
-/*     if (ref.watch(errorDatabaseStatusProvider)) {
-      errorDialog(
-        context,
-        () {
-          ref
-              .read(errorDatabaseStatusProvider.notifier)
-              .setDeletingError(false);
-        },
-        'An issue happened when deleting this item, please go back to the section'
-        ' list and access the content again to see the updated content.',
-      );
-    }
-
-    ref.listen<KanjiListData>(kanjiListProvider, (previuos, current) {
-      if (current.errorDownload.status) {
-        ref.read(toastServiceProvider).dismiss(context);
-        ref.read(toastServiceProvider).showShortMessage(context,
-            'error downloading kanji ${current.errorDownload.kanjiCharacter}');
-        ref.read(kanjiListProvider.notifier).setErrorDownload(
-              ErrorDownload(
-                kanjiCharacter: '',
-                status: false,
-              ),
-            );
-      }
-
-      if (current.errorDeleting.status) {
-        ref.read(toastServiceProvider).dismiss(context);
-        ref.read(toastServiceProvider).showShortMessage(context,
-            'error removing stored kanji ${current.errorDeleting.kanjiCharacter}');
-
-        ref.read(kanjiListProvider.notifier).setErrorDelete(
-              ErrorDeleting(
-                kanjiCharacter: '',
-                status: false,
-              ),
-            );
-      }
-    }); */
-
     return Scaffold(
       appBar: AppBar(
         title: Text(AppLocalizations.of(context)!
@@ -108,7 +68,7 @@ class _AnimationFadeState extends ConsumerState<AnimatedOpacityIcon> {
   @override
   Widget build(BuildContext context) {
     return AnimatedOpacity(
-      curve: accelerateEasing,
+      curve: Easing.standardAccelerate,
       opacity: opacityLevel,
       duration: const Duration(milliseconds: 600),
       child: widget.child,

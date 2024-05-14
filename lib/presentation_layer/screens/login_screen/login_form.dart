@@ -85,7 +85,7 @@ class LoginForm extends ConsumerWidget {
                 },
                 style: TextButton.styleFrom(
                   foregroundColor:
-                      Theme.of(context).colorScheme.onBackground, //Text Color
+                      Theme.of(context).colorScheme.onSurface, //Text Color
                 ),
                 child: Text(
                   'Forgotten password?',
@@ -108,7 +108,7 @@ class LoginForm extends ConsumerWidget {
               onValidation(context, ref);
             },
             style: ElevatedButton.styleFrom().copyWith(
-              minimumSize: const MaterialStatePropertyAll(
+              minimumSize: const WidgetStatePropertyAll(
                 Size.fromHeight(40),
               ),
             ),
@@ -135,7 +135,7 @@ class LoginForm extends ConsumerWidget {
                     }));
                   },
             style: ElevatedButton.styleFrom().copyWith(
-              minimumSize: const MaterialStatePropertyAll(
+              minimumSize: const WidgetStatePropertyAll(
                 Size.fromHeight(40),
               ),
             ),
@@ -230,7 +230,7 @@ class ModalEmailResetPassword extends ConsumerWidget with MyDialogs {
               if (!onValidate(ref, context)) return;
             },
             style: ElevatedButton.styleFrom().copyWith(
-              minimumSize: const MaterialStatePropertyAll(
+              minimumSize: const WidgetStatePropertyAll(
                 Size.fromHeight(40),
               ),
             ),

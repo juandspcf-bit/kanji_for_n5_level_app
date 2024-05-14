@@ -122,7 +122,7 @@ class _VerifyEmailEstate extends ConsumerState<VerifyEmail> {
                       icon: const Icon(Icons.email),
                       label: const Text('resent email'),
                       style: ElevatedButton.styleFrom().copyWith(
-                        minimumSize: const MaterialStatePropertyAll(
+                        minimumSize: const WidgetStatePropertyAll(
                           Size.fromHeight(40),
                         ),
                       ),
@@ -148,7 +148,7 @@ class _VerifyEmailEstate extends ConsumerState<VerifyEmail> {
                         }
                       },
                       style: ElevatedButton.styleFrom().copyWith(
-                        minimumSize: const MaterialStatePropertyAll(
+                        minimumSize: const WidgetStatePropertyAll(
                           Size.fromHeight(40),
                         ),
                       ),

@@ -106,7 +106,7 @@ class WelcomeKanjiDetailsQuizScreenLandScape extends ConsumerWidget {
                     ref.read(quizDetailsProvider.notifier).setOption(2);
                   },
                   style: ElevatedButton.styleFrom().copyWith(
-                    minimumSize: const MaterialStatePropertyAll(
+                    minimumSize: const WidgetStatePropertyAll(
                       Size.fromHeight(40),
                     ),
                   ),

@@ -115,7 +115,7 @@ class SendFeedBackForm extends ConsumerWidget {
                           onValidation(context, ref);
                         },
                         style: ElevatedButton.styleFrom().copyWith(
-                          minimumSize: const MaterialStatePropertyAll(
+                          minimumSize: const WidgetStatePropertyAll(
                             Size.fromHeight(40),
                           ),
                         ),

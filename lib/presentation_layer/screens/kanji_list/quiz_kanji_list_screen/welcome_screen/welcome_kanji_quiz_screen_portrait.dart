@@ -37,7 +37,7 @@ class WelcomeKanjiListQuizScreenPortrait extends ConsumerWidget {
             ref.read(quizDataValuesProvider.notifier).setScreen(Screens.quiz);
           },
           style: ElevatedButton.styleFrom().copyWith(
-            minimumSize: const MaterialStatePropertyAll(
+            minimumSize: const WidgetStatePropertyAll(
               Size.fromHeight(40),
             ),
           ),

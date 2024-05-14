@@ -90,7 +90,7 @@ class CloseAccountScreen extends ConsumerWidget with MyDialogs {
                         });
                   },
                   style: ElevatedButton.styleFrom().copyWith(
-                    minimumSize: const MaterialStatePropertyAll(
+                    minimumSize: const WidgetStatePropertyAll(
                       Size.fromHeight(40),
                     ),
                   ),

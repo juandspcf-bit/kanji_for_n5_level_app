@@ -94,7 +94,7 @@ class QuestionScreenPortrait extends ConsumerWidget {
                 }
               },
               style: ElevatedButton.styleFrom().copyWith(
-                minimumSize: const MaterialStatePropertyAll(
+                minimumSize: const WidgetStatePropertyAll(
                   Size.fromHeight(40),
                 ),
               ),

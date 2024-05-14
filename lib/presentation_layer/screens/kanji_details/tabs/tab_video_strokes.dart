@@ -202,8 +202,8 @@ class VideoSection extends ConsumerWidget {
                 ),
                 child: IconButton(
                   style: ButtonStyle(
-                    overlayColor: MaterialStateProperty.all(Colors.black26),
-                    backgroundColor: MaterialStateProperty.all(
+                    overlayColor: WidgetStateProperty.all(Colors.black26),
+                    backgroundColor: WidgetStateProperty.all(
                         Theme.of(context).colorScheme.primary),
                   ),
                   onPressed: () async {
