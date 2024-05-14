@@ -95,17 +95,18 @@ class LoginForm extends ConsumerWidget {
             ),
           ),
           ElevatedButton(
-            onPressed: statusConnectionData == ConnectionStatus.noConnected
+            onPressed: /* statusConnectionData == ConnectionStatus.noConnected
                 ? null
-                : () {
-                    FocusScopeNode currentFocus = FocusScope.of(context);
+                : */
+                () {
+              FocusScopeNode currentFocus = FocusScope.of(context);
 
-                    if (!currentFocus.hasPrimaryFocus) {
-                      currentFocus.unfocus();
-                    }
+              if (!currentFocus.hasPrimaryFocus) {
+                currentFocus.unfocus();
+              }
 
-                    onValidation(context, ref);
-                  },
+              onValidation(context, ref);
+            },
             style: ElevatedButton.styleFrom().copyWith(
               minimumSize: const MaterialStatePropertyAll(
                 Size.fromHeight(40),

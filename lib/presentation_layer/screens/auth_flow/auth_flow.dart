@@ -49,11 +49,10 @@ class _AutFlowState extends ConsumerState<AuthFlow> {
     return StreamBuilder(
         stream: ref.read(authServiceProvider).authStream(),
         builder: (ctx, snapShot) {
-          logger.d(snapShot.connectionState);
-          logger.d(snapShot.hasData);
+          logger.d("stream auth: ${snapShot.connectionState}");
           if (snapShot.connectionState == ConnectionState.waiting) {
-            return const ProcessProgress(
-              message: 'Login to your account',
+            return ProcessProgress(
+              message: 'Login to your account ${snapShot.connectionState}',
             );
           }
           if ((snapShot.connectionState == ConnectionState.active ||
@@ -64,14 +63,16 @@ class _AutFlowState extends ConsumerState<AuthFlow> {
               ref.read(authServiceProvider).setLoggedUser();
               return const VerifyEmail();
             } else {
+              logger.d("active done");
               return LoginFormScreen();
             }
           }
 
-          if (snapShot.connectionState == ConnectionState.active &&
+/*           if (snapShot.connectionState == ConnectionState.active &&
               !snapShot.hasData) {
-            return LoginFormScreen();
-          }
+            logger.d("active no data");
+            return Placeholder(); //LoginFormScreen();
+          } */
 
           return LoginFormScreen();
         });

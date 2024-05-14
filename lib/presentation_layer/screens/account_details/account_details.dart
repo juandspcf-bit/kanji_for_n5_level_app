@@ -130,18 +130,17 @@ class AccountDetails extends ConsumerWidget {
                   ),
                   ListTile(
                     onTap: () async {
+                      ref.read(loginProvider.notifier).resetData();
+                      ref.read(loginProvider.notifier).setStatusLoggingFlow(
+                            StatusProcessingLoggingFlow.form,
+                          );
                       await ref.read(authServiceProvider).singOut();
                       ref
                           .read(mainScreenProvider.notifier)
                           .resetMainScreenState();
-                      ref.read(loginProvider.notifier).resetData();
-                      ref.read(loginProvider.notifier).setStatusLoggingFlow(
-                          StatusProcessingLoggingFlow.form);
+
                       if (context.mounted) {
-                        Navigator.of(context).pushAndRemoveUntil(
-                            MaterialPageRoute(
-                                builder: (context) => const AuthFlow()),
-                            (Route route) => false);
+                        Navigator.pop(context);
                       }
                     },
                     contentPadding:
