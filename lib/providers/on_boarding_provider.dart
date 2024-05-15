@@ -4,21 +4,23 @@ import 'package:shared_preferences/shared_preferences.dart';
 class OnBoardingProvider extends Notifier<OnBoardingData> {
   @override
   OnBoardingData build() {
-    SharedPreferences.getInstance().then((prefs) {
-      final bool? isOnBoardingDone = prefs.getBool('isOnBoardingDone');
-      state = OnBoardingData(prefs: prefs, isOnBoardingDone: isOnBoardingDone);
+    SharedPreferences.getInstance().then((preferences) {
+      final bool? isOnBoardingDone = preferences.getBool('isOnBoardingDone');
+      state = OnBoardingData(
+          preferences: preferences, isOnBoardingDone: isOnBoardingDone);
     }).onError((error, stackTrace) {
-      state = OnBoardingData(prefs: null, isOnBoardingDone: null);
+      state = OnBoardingData(preferences: null, isOnBoardingDone: null);
     });
 
-    return OnBoardingData(prefs: null, isOnBoardingDone: null);
+    return OnBoardingData(preferences: null, isOnBoardingDone: null);
   }
 
   void setOnBoardingDone() async {
-    final prefs = state.prefs;
-    if (prefs != null) {
-      await prefs.setBool('isOnBoardingDone', true);
-      state = OnBoardingData(prefs: state.prefs, isOnBoardingDone: true);
+    final preferences = state.preferences;
+    if (preferences != null) {
+      await preferences.setBool('isOnBoardingDone', true);
+      state = OnBoardingData(
+          preferences: state.preferences, isOnBoardingDone: true);
     }
   }
 }
@@ -27,8 +29,8 @@ final onBoardingProvider = NotifierProvider<OnBoardingProvider, OnBoardingData>(
     OnBoardingProvider.new);
 
 class OnBoardingData {
-  final SharedPreferences? prefs;
+  final SharedPreferences? preferences;
   final bool? isOnBoardingDone;
 
-  OnBoardingData({required this.prefs, required this.isOnBoardingDone});
+  OnBoardingData({required this.preferences, required this.isOnBoardingDone});
 }

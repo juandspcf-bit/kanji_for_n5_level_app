@@ -4,6 +4,7 @@ import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:kanji_for_n5_level_app/application_layer/services.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/auth_flow/auth_flow.dart';
 import 'package:kanji_for_n5_level_app/providers/on_boarding_provider.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/onBoarding_screen/my_page_viewer.dart';

@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kanji_for_n5_level_app/application_layer/services.dart';
@@ -17,7 +19,20 @@ class AuthFlow extends ConsumerStatefulWidget {
 class _AutFlowState extends ConsumerState<AuthFlow> {
   @override
   Widget build(BuildContext context) {
-    //localDBService.deleteUserQueue();
+    Timer(const Duration(milliseconds: 1000), () {
+      final current = ref.read(statusConnectionProvider);
+      if (current == ConnectionStatus.noConnected) {
+        ref.read(toastServiceProvider).dismiss(context);
+        ref.read(toastServiceProvider).showMessage(
+              context,
+              'No connected to internet',
+              Icons.wifi_off,
+              const Duration(days: 1),
+              '',
+              null,
+            );
+      }
+    });
 
     ref.listen<ConnectionStatus>(statusConnectionProvider, (previous, current) {
       ref.read(toastServiceProvider).dismiss(context);
@@ -46,35 +61,37 @@ class _AutFlowState extends ConsumerState<AuthFlow> {
       }
     });
 
-    return StreamBuilder(
-        stream: ref.read(authServiceProvider).authStream(),
-        builder: (ctx, snapShot) {
-          logger.d("stream auth: ${snapShot.connectionState}");
-          if (snapShot.connectionState == ConnectionState.waiting) {
-            return const ProcessProgress(
-              message: 'Login to your account',
-            );
-          }
-          if ((snapShot.connectionState == ConnectionState.active ||
-                  snapShot.connectionState == ConnectionState.done) &&
-              snapShot.hasData) {
-            final user = snapShot.data;
-            if (user != null) {
-              ref.read(authServiceProvider).setLoggedUser();
-              return const VerifyEmail();
-            } else {
-              logger.d("active done");
-              return LoginFormScreen();
+    return Scaffold(
+      body: StreamBuilder(
+          stream: ref.read(authServiceProvider).authStream(),
+          builder: (ctx, snapShot) {
+            logger.d("stream auth: ${snapShot.connectionState}");
+            if (snapShot.connectionState == ConnectionState.waiting) {
+              return const ProcessProgress(
+                message: 'Login to your account',
+              );
             }
-          }
+            if ((snapShot.connectionState == ConnectionState.active ||
+                    snapShot.connectionState == ConnectionState.done) &&
+                snapShot.hasData) {
+              final user = snapShot.data;
+              if (user != null) {
+                ref.read(authServiceProvider).setLoggedUser();
+                return const VerifyEmail();
+              } else {
+                logger.d("active done");
+                return LoginFormScreen();
+              }
+            }
 
-/*           if (snapShot.connectionState == ConnectionState.active &&
-              !snapShot.hasData) {
-            logger.d("active no data");
-            return Placeholder(); //LoginFormScreen();
-          } */
+            /*           if (snapShot.connectionState == ConnectionState.active &&
+                !snapShot.hasData) {
+              logger.d("active no data");
+              return Placeholder(); //LoginFormScreen();
+            } */
 
-          return LoginFormScreen();
-        });
+            return LoginFormScreen();
+          }),
+    );
   }
 }
