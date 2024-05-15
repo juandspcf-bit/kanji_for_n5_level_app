@@ -48,7 +48,6 @@ class DetailsQuizScreenAnimated extends ConsumerWidget {
         return GestureDetector(
           onTap: !accesToQuiz
               ? () {
-                  logger.e('called set data quiz');
                   ref
                       .read(quizDetailsProvider.notifier)
                       .setDataQuiz(kanjiFromApi);

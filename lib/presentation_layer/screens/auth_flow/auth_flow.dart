@@ -65,7 +65,6 @@ class _AutFlowState extends ConsumerState<AuthFlow> {
       body: StreamBuilder(
           stream: ref.read(authServiceProvider).authStream(),
           builder: (ctx, snapShot) {
-            logger.d("stream auth: ${snapShot.connectionState}");
             if (snapShot.connectionState == ConnectionState.waiting) {
               return const ProcessProgress(
                 message: 'Login to your account',

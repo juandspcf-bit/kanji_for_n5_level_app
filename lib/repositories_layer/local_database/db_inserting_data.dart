@@ -38,8 +38,6 @@ Future<void> insertUserDataToSQLite(Map<String, Object> data) async {
       ],
     );
   } else {
-    logger.d(data);
-    logger.d(listUserData);
     int value = await db.rawUpdate(
         'UPDATE user_data '
         'SET'

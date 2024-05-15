@@ -22,8 +22,6 @@ class LastScoreFlashCardProvider
     int section,
     String uuid,
   ) async {
-    logger.d(
-        'getttin flash card data input: kanji;$kanjiCharacter, section:$section, uuid:$uuid');
     state = const AsyncLoading();
     state = await AsyncValue.guard(
       () {
@@ -57,6 +55,15 @@ class LastScoreFlashCardProvider
             uuid,
             countUnWatched,
           );
+      state = await AsyncValue.guard(
+        () {
+          return ref.read(localDBServiceProvider).getSingleFlashCardDataDB(
+                kanjiCharacter,
+                section,
+                uuid,
+              );
+        },
+      );
       return;
     }
 
@@ -76,8 +83,6 @@ class LastScoreFlashCardProvider
             );
       },
     );
-
-    logger.d('set flash card score');
   }
 }
 

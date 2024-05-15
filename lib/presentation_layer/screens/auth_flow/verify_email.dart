@@ -27,7 +27,6 @@ class _VerifyEmailEstate extends ConsumerState<VerifyEmail> {
   @override
   void initState() {
     super.initState();
-    logger.d("verify email");
     isEmailVerified = FirebaseAuth.instance.currentUser!.emailVerified;
     if (!isEmailVerified) {
       sendEmailVerification();

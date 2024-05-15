@@ -197,6 +197,8 @@ Future<SingleQuizAudioExampleData> getSingleQuizSectionAudioExampleData(
     );
   }
 
+  //logger.d("audio example form database ${listQuery[0]}");
+
   return SingleQuizAudioExampleData(
     kanjiCharacter: listQuery[0]['kanjiCharacter'] as String,
     section: listQuery[0]['section'] as int,
@@ -204,7 +206,7 @@ Future<SingleQuizAudioExampleData> getSingleQuizSectionAudioExampleData(
     allCorrectAnswers: (listQuery[0]['allCorrectAnswers'] as int) == 1,
     isFinishedQuiz: (listQuery[0]['isFinishedQuiz'] as int) == 1,
     countCorrects: listQuery[0]['countCorrects'] as int,
-    countIncorrect: listQuery[0][''] as int,
+    countIncorrect: listQuery[0]['countIncorrect'] as int,
     countOmitted: listQuery[0]['countOmitted'] as int,
   );
 }
@@ -291,13 +293,18 @@ Future<SingleQuizFlashCardData> getSingleFlashCardData(
   int section,
   String uuid,
 ) async {
+  logger.d('getting flash card data');
+  logger.d('$kanjiCharacter , $section, $uuid');
   final db = await kanjiFromApiDatabase;
+
   final listQuery = await db.rawQuery(
       'SELECT * FROM kanji_flashcard_quiz '
       'WHERE'
       ' kanjiCharacter = ? AND uuid = ?',
       [kanjiCharacter, uuid]);
-  //logger.d('gettting flash card data out: $listQuery');
+  logger.d("fetching data");
+
+  logger.d('getting flash card data out: ${listQuery.length}');
 
   if (listQuery.isEmpty) {
     return SingleQuizFlashCardData(

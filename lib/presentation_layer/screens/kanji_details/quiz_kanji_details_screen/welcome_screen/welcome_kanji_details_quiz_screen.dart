@@ -29,7 +29,6 @@ class LastScoreAudioExampleScreen extends ConsumerWidget {
 
     return lastScoreData.when(
       data: (data) => Builder(builder: (context) {
-        logger.d(data);
         return data.isFinishedQuiz
             ? Text(
                 'Last score: ${data.countCorrects} questions correct out of '
@@ -43,7 +42,7 @@ class LastScoreAudioExampleScreen extends ConsumerWidget {
       }),
       error: (error, stack) => Text(
         'Oops, something unexpected happened',
-        style: Theme.of(context).textTheme.titleLarge,
+        style: Theme.of(context).textTheme.bodySmall,
       ),
       loading: () => const CircularProgressIndicator(),
     );
@@ -72,7 +71,7 @@ class LastFlashCardScore extends ConsumerWidget {
       }),
       error: (error, stack) => Text(
         'Oops, something unexpected happened',
-        style: Theme.of(context).textTheme.titleLarge,
+        style: Theme.of(context).textTheme.bodySmall,
       ),
       loading: () => const CircularProgressIndicator(),
     );
