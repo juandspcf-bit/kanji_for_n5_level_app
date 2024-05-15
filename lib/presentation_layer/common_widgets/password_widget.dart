@@ -27,7 +27,6 @@ class _PasswordTextField extends State<PasswordTextField> {
   @override
   void initState() {
     isPasswordVisible = false;
-    logger.d('in initState $isPasswordVisible');
     super.initState();
   }
 

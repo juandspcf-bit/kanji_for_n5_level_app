@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kanji_for_n5_level_app/application_layer/services.dart';
@@ -63,8 +64,10 @@ class _AutFlowState extends ConsumerState<AuthFlow> {
 
     return Scaffold(
       body: StreamBuilder(
-          stream: ref.read(authServiceProvider).authStream(),
+          stream: FirebaseAuth.instance
+              .userChanges(), //ref.read(authServiceProvider).authStream(),
           builder: (ctx, snapShot) {
+            logger.d(snapShot.connectionState);
             if (snapShot.connectionState == ConnectionState.waiting) {
               return const ProcessProgress(
                 message: 'Login to your account',
@@ -76,18 +79,13 @@ class _AutFlowState extends ConsumerState<AuthFlow> {
               final user = snapShot.data;
               if (user != null) {
                 ref.read(authServiceProvider).setLoggedUser();
+                logger.d("active user");
                 return const VerifyEmail();
               } else {
-                logger.d("active done");
+                logger.d("active null");
                 return LoginFormScreen();
               }
             }
-
-            /*           if (snapShot.connectionState == ConnectionState.active &&
-                !snapShot.hasData) {
-              logger.d("active no data");
-              return Placeholder(); //LoginFormScreen();
-            } */
 
             return LoginFormScreen();
           }),

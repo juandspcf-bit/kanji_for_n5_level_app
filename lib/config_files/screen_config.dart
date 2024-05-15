@@ -23,9 +23,8 @@ enum ScreenSizeHeight {
 
 ScreenSizeWidth getScreenSizeWidth(BuildContext context) {
   double deviceWidth = MediaQuery.sizeOf(context).shortestSide;
-  double deviceHeight = MediaQuery.sizeOf(context).longestSide;
-  logger.d(
-      'width:$deviceWidth , height:$deviceHeight'); // Gives us the shortest side of the device
+  //double deviceHeight = MediaQuery.sizeOf(context).longestSide;
+  // Gives us the shortest side of the device
   if (deviceWidth >= ScreenSizeWidth.extraLarge.size) {
     return ScreenSizeWidth.extraLarge;
   }
@@ -35,10 +34,9 @@ ScreenSizeWidth getScreenSizeWidth(BuildContext context) {
 }
 
 ScreenSizeHeight getScreenSizeHeight(BuildContext context) {
-  double deviceWidth = MediaQuery.sizeOf(context).shortestSide;
+//  double deviceWidth = MediaQuery.sizeOf(context).shortestSide;
   double deviceHeight = MediaQuery.sizeOf(context).longestSide;
-  logger.d(
-      'width:$deviceWidth , height:$deviceHeight'); // Gives us the shortest side of the device
+
   if (deviceHeight >= ScreenSizeHeight.normal.size) {
     return ScreenSizeHeight.normal;
   }

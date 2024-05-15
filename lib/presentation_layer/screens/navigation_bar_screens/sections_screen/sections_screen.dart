@@ -30,7 +30,6 @@ class Sections extends StatelessWidget {
         crossAxisCount = 2;
     }
 
-    logger.d(sizeScreen);
     return GridView(
       padding: const EdgeInsets.all(24),
       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(

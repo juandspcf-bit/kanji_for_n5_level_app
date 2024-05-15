@@ -13,6 +13,7 @@ class FirebaseAuthService implements AuthService {
   final transformer = StreamTransformer<User?, String?>.fromHandlers(
       handleData: (value, sink) {
         if (value == null) sink.add(null);
+
         sink.add(
           value!.uid,
         );
@@ -37,7 +38,6 @@ class FirebaseAuthService implements AuthService {
   Future<StatusLoginRequest> singInWithEmailAndPassword(
       {required String email, required String password}) async {
     try {
-      logger.d(password);
       await autServiceInstance
           .signInWithEmailAndPassword(email: email, password: password)
           .timeout(

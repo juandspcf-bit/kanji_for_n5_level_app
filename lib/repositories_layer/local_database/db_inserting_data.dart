@@ -38,7 +38,7 @@ Future<void> insertUserDataToSQLite(Map<String, Object> data) async {
       ],
     );
   } else {
-    int value = await db.rawUpdate(
+    await db.rawUpdate(
         'UPDATE user_data '
         'SET'
         ' firstName = ?,'
@@ -54,7 +54,6 @@ Future<void> insertUserDataToSQLite(Map<String, Object> data) async {
           data['linkAvatar'],
           data['pathAvatar'],
         ]);
-    logger.d(value);
   }
 }
 

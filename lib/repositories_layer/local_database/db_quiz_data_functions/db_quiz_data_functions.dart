@@ -55,8 +55,6 @@ Future<ProgressTimeLineDBData> getAllQuizSectionData(
     listKanjiQuizQuery,
   );
 
-  //logger.d(sectionKanjiQuizList);
-
   var (
     allKanjiQuizFinishedStatusList,
     allKanjiQuizCorrectStatusList,
@@ -94,12 +92,6 @@ Future<ProgressTimeLineDBData> getAllQuizSectionData(
 
   List<bool> allRevisedFlashCardsStatusList =
       getAllFlashCardStatus(sectionFlashCardData);
-
-/*   logger.d(allKanjiQuizFinishedStatusList);
-  logger.d(allKanjiQuizCorrectStatusList);
-  logger.d(allAudioQuizFinishedStatusList);
-  logger.d(allAudioQuizCorrectStatusList);
-  logger.d(allRevisedFlashCardsStatusList); */
 
   return ProgressTimeLineDBData(
     allKanjiQuizFinishedStatusList: allKanjiQuizFinishedStatusList,
@@ -257,8 +249,6 @@ Future<int> insertSingleAudioExampleQuizSectionDataDB(
   int countIncorrect,
   int countOmitted,
 ) async {
-  logger.d('uuid: $uuid, corrects: $countCorrects,'
-      ' countIncorrect: $countIncorrect, countOmitted: $countOmitted');
   final db = await kanjiFromApiDatabase;
   try {
     return await db.rawInsert(
@@ -293,8 +283,6 @@ Future<SingleQuizFlashCardData> getSingleFlashCardData(
   int section,
   String uuid,
 ) async {
-  logger.d('getting flash card data');
-  logger.d('$kanjiCharacter , $section, $uuid');
   final db = await kanjiFromApiDatabase;
 
   final listQuery = await db.rawQuery(
@@ -302,9 +290,6 @@ Future<SingleQuizFlashCardData> getSingleFlashCardData(
       'WHERE'
       ' kanjiCharacter = ? AND uuid = ?',
       [kanjiCharacter, uuid]);
-  logger.d("fetching data");
-
-  logger.d('getting flash card data out: ${listQuery.length}');
 
   if (listQuery.isEmpty) {
     return SingleQuizFlashCardData(
@@ -329,8 +314,6 @@ Future<int> insertSingleFlashCardData(
   String uuid,
   bool allRevisedFlashCards,
 ) async {
-  logger.d('inserting: kanji: $kanjiCharacter, section:$section, uuid:$uuid,'
-      ' revised?:$allRevisedFlashCards');
   final db = await kanjiFromApiDatabase;
   try {
     return await db.rawInsert(
