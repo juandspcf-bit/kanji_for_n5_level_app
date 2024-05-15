@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:kanji_for_n5_level_app/config_files/screen_config.dart';
 import 'package:kanji_for_n5_level_app/main.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_details/quiz_kanji_details_screen/flash_card/flash_card_quiz_provider.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_details/quiz_kanji_details_screen/flash_card/flash_card_widget.dart';
@@ -28,6 +29,11 @@ class _FlashCardScreenState extends ConsumerState<FlashCardScreenPortrait> {
 
   @override
   Widget build(BuildContext context) {
+    final sizeLevel = getScreenSizeHeight(context);
+
+    var height = 350;
+    if (sizeLevel == ScreenSizeHeight.normal) height = 500;
+
     final flashCardState = ref.watch(flashCardProvider);
     return SingleChildScrollView(
       child: Padding(
@@ -49,7 +55,7 @@ class _FlashCardScreenState extends ConsumerState<FlashCardScreenPortrait> {
             height: 20,
           ),
           SizedBox(
-            height: 500,
+            height: height.toDouble(),
             width: 300,
             child: PageView(
               controller: controller,
@@ -57,7 +63,6 @@ class _FlashCardScreenState extends ConsumerState<FlashCardScreenPortrait> {
                 ref.read(flashCardProvider.notifier).setIndex(indexPage);
               },
               children: [
-                //TODO change the size when the screen is big
                 for (int i = 0; i < flashCardState.japanese.length; i++)
                   Padding(
                     padding: const EdgeInsets.symmetric(
@@ -66,7 +71,7 @@ class _FlashCardScreenState extends ConsumerState<FlashCardScreenPortrait> {
                       japanese: flashCardState.japanese[i],
                       english: flashCardState.english[i],
                       width: 300 - 40,
-                      height: 500,
+                      height: height.toDouble(),
                       index: i,
                     ),
                   ),
