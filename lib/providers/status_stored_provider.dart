@@ -1,7 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kanji_for_n5_level_app/main.dart';
 import 'package:kanji_for_n5_level_app/models/kanji_from_api.dart';
-import 'package:kanji_for_n5_level_app/models/secction_model.dart';
+import 'package:kanji_for_n5_level_app/models/section_model.dart';
 
 class StoredkanjisProvider extends Notifier<Map<int, List<KanjiFromApi>>> {
   @override

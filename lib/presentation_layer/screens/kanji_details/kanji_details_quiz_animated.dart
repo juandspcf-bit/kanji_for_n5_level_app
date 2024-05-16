@@ -2,7 +2,6 @@ import 'package:animations/animations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kanji_for_n5_level_app/application_layer/services.dart';
-import 'package:kanji_for_n5_level_app/main.dart';
 import 'package:kanji_for_n5_level_app/models/kanji_from_api.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_details/quiz_kanji_details_screen/flash_card/flash_card_quiz_provider.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_details/quiz_kanji_details_screen/quiz_details_main_screen.dart';
@@ -41,12 +40,12 @@ class DetailsQuizScreenAnimated extends ConsumerWidget {
       closedBuilder: (context, openContainer) {
         final statusConnectionData = ref.watch(statusConnectionProvider);
 
-        final accesToQuiz =
+        final accessToQuiz =
             statusConnectionData == ConnectionStatus.noConnected &&
                 kanjiFromApi.statusStorage == StatusStorage.onlyOnline;
 
         return GestureDetector(
-          onTap: !accesToQuiz
+          onTap: !accessToQuiz
               ? () {
                   ref
                       .read(quizDetailsProvider.notifier)

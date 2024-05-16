@@ -11,14 +11,14 @@ class FirebaseAuthService implements AuthService {
   Stream<User?> streamAuth = FirebaseAuth.instance.userChanges();
 
   final transformer = StreamTransformer<User?, String?>.fromHandlers(
-      handleData: (value, sink) {
-        if (value == null) sink.add(null);
+    handleData: (value, sink) {
+      if (value == null) sink.add(null);
 
-        sink.add(
-          value!.uid,
-        );
-      },
-      handleDone: (sink) => sink.close());
+      sink.add(
+        value!.uid,
+      );
+    },
+  );
 
   @override
   Stream<String?> authStream() {

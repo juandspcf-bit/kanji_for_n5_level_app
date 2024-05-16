@@ -134,13 +134,13 @@ class LoginData {
 enum StatusProcessingLoggingFlow {
   logging,
   error,
-  succsess,
+  success,
   form,
 }
 
 enum StatusResetEmail {
   notStarted('no request started'),
-  success('The reset email link was succefully sent'),
+  success('The reset email link was successfully sent'),
   error('There is no corresponding user for this email');
 
   const StatusResetEmail(
