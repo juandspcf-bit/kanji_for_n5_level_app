@@ -17,7 +17,7 @@ class CustomNavigationRailKanjiDetails extends ConsumerWidget {
 
   Widget getSelection(int selection) {
     if (selection == 0) {
-      return const VideoStrolesLandScape();
+      return const VideoStrokesLandScape();
     } else if (selection == 1) {
       return const StrokesLandScape();
     } else if (selection == 2) {

@@ -8,8 +8,8 @@ import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_details/
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_details/tabs/meaning_definition.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_details/tabs/tab_video_strokes.dart';
 
-class VideoStrolesLandScape extends ConsumerWidget {
-  const VideoStrolesLandScape({super.key});
+class VideoStrokesLandScape extends ConsumerWidget {
+  const VideoStrokesLandScape({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -26,12 +26,18 @@ class VideoStrolesLandScape extends ConsumerWidget {
                 child: SingleChildScrollView(
                   child: Column(
                     children: [
+                      const SizedBox(
+                        height: 10,
+                      ),
                       MeaningAndDefinition(
                         englishMeaning: kanjiFromApi.englishMeaning,
                         hiraganaRomaji: kanjiFromApi.hiraganaRomaji,
                         hiraganaMeaning: kanjiFromApi.hiraganaMeaning,
                         katakanaRomaji: kanjiFromApi.katakanaRomaji,
                         katakanaMeaning: kanjiFromApi.katakanaMeaning,
+                      ),
+                      const SizedBox(
+                        height: 10,
                       ),
                       const ImageMeaningKanji(),
                     ],

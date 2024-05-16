@@ -141,6 +141,9 @@ class LoginForm extends ConsumerWidget {
             ),
             child: const Text('Sign Up'),
           ),
+          const SizedBox(
+            height: 20,
+          ),
         ],
       ),
     );
