@@ -22,6 +22,7 @@ class _MyPageViewerState extends ConsumerState {
     ListOnBoardScreen(),
     DetailsOnBoardScreen(),
     QuizOnBoardScreen(),
+    FinalBoardScreen(),
   ];
 
   @override
@@ -50,7 +51,7 @@ class _MyPageViewerState extends ConsumerState {
               },
             ),
             Container(
-              alignment: const Alignment(0, 0.75),
+              alignment: const Alignment(0, 0.9),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [

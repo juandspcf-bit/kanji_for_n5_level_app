@@ -71,7 +71,7 @@ class SectionOnBoardScreenLandscape extends ConsumerWidget {
         ),
         Container(
           margin: const EdgeInsets.symmetric(horizontal: 5),
-          height: MediaQuery.sizeOf(context).width * 0.4,
+          height: MediaQuery.sizeOf(context).height * 0.75,
           decoration: BoxDecoration(
             border: Border.all(color: Colors.white12),
             image: const DecorationImage(
@@ -115,7 +115,7 @@ class ListOnBoardScreenLandscape extends ConsumerWidget {
         ),
         Container(
           margin: const EdgeInsets.symmetric(horizontal: 5),
-          height: MediaQuery.sizeOf(context).width * 0.4,
+          height: MediaQuery.sizeOf(context).height * 0.75,
           decoration: BoxDecoration(
             border: Border.all(color: Colors.white12),
             image: const DecorationImage(
@@ -165,7 +165,7 @@ class DetailsOnBoardScreenLandscape extends ConsumerWidget {
                 Expanded(
                   child: Container(
                     margin: const EdgeInsets.symmetric(horizontal: 5),
-                    height: MediaQuery.sizeOf(context).width * 0.4,
+                    height: MediaQuery.sizeOf(context).height * 0.75,
                     decoration: BoxDecoration(
                       border: Border.all(color: Colors.white12),
                       image: const DecorationImage(
@@ -182,7 +182,7 @@ class DetailsOnBoardScreenLandscape extends ConsumerWidget {
                 Expanded(
                   child: Container(
                     margin: const EdgeInsets.symmetric(horizontal: 5),
-                    height: MediaQuery.sizeOf(context).width * 0.4,
+                    height: MediaQuery.sizeOf(context).height * 0.75,
                     decoration: BoxDecoration(
                       border: Border.all(color: Colors.white12),
                       image: const DecorationImage(
@@ -240,6 +240,51 @@ class QuizOnBoardScreenLandscape extends ConsumerWidget {
                     fit: BoxFit.scaleDown,
                     image: AssetImage('assets/images/question.png')),
                 borderRadius: BorderRadius.circular(20),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class FinalBoardLandscapeScreen extends ConsumerWidget {
+  const FinalBoardLandscapeScreen({super.key});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return SafeArea(
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 8),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Row(
+              children: [
+                Expanded(
+                  child: Text(
+                    'Enjoy your studying!',
+                    style: Theme.of(context).textTheme.titleLarge,
+                    softWrap: false,
+                    maxLines: 3,
+                    textAlign: TextAlign.center,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(
+              height: 20,
+            ),
+            Container(
+              margin: const EdgeInsets.symmetric(horizontal: 5),
+              height: MediaQuery.sizeOf(context).height * 0.75,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(30),
+                image: const DecorationImage(
+                    fit: BoxFit.cover,
+                    image: AssetImage('assets/images/kyoto.jpg')),
               ),
             ),
           ],

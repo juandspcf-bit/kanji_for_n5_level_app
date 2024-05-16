@@ -23,6 +23,7 @@ class _MyPageViewerLandscapeState extends ConsumerState {
     ListOnBoardScreenLandscape(),
     DetailsOnBoardScreenLandscape(),
     QuizOnBoardScreenLandscape(),
+    FinalBoardLandscapeScreen(),
   ];
 
   @override
