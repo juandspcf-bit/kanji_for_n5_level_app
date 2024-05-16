@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class WelcomeOnBoardScreenLandscape extends ConsumerWidget {
-  const WelcomeOnBoardScreenLandscape({super.key});
+class WelcomeOnBoardScreen extends ConsumerWidget {
+  const WelcomeOnBoardScreen({super.key});
 
   final welcomeMessage =
       'Welcome to kanji for N5, this is a walk through , introducing the features of the app.';
@@ -44,8 +44,8 @@ class WelcomeOnBoardScreenLandscape extends ConsumerWidget {
   }
 }
 
-class SectionOnBoardScreenLandscape extends ConsumerWidget {
-  const SectionOnBoardScreenLandscape({super.key});
+class SectionOnBoardScreen extends ConsumerWidget {
+  const SectionOnBoardScreen({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -71,11 +71,12 @@ class SectionOnBoardScreenLandscape extends ConsumerWidget {
         ),
         Container(
           margin: const EdgeInsets.symmetric(horizontal: 5),
-          height: MediaQuery.sizeOf(context).width * 0.4,
+          height: 380,
+          width: MediaQuery.sizeOf(context).width * 0.9,
           decoration: BoxDecoration(
             border: Border.all(color: Colors.white12),
             image: const DecorationImage(
-                fit: BoxFit.fitHeight,
+                fit: BoxFit.fitWidth,
                 image: AssetImage('assets/images/section.png')),
             borderRadius: BorderRadius.circular(20),
           ),
@@ -88,8 +89,8 @@ class SectionOnBoardScreenLandscape extends ConsumerWidget {
   }
 }
 
-class ListOnBoardScreenLandscape extends ConsumerWidget {
-  const ListOnBoardScreenLandscape({super.key});
+class ListOnBoardScreen extends ConsumerWidget {
+  const ListOnBoardScreen({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -115,11 +116,12 @@ class ListOnBoardScreenLandscape extends ConsumerWidget {
         ),
         Container(
           margin: const EdgeInsets.symmetric(horizontal: 5),
-          height: MediaQuery.sizeOf(context).width * 0.4,
+          height: 380,
+          width: MediaQuery.sizeOf(context).width * 0.9,
           decoration: BoxDecoration(
             border: Border.all(color: Colors.white12),
             image: const DecorationImage(
-                fit: BoxFit.fitHeight,
+                fit: BoxFit.fitWidth,
                 image: AssetImage('assets/images/list.png')),
             borderRadius: BorderRadius.circular(20),
           ),
@@ -132,8 +134,8 @@ class ListOnBoardScreenLandscape extends ConsumerWidget {
   }
 }
 
-class DetailsOnBoardScreenLandscape extends ConsumerWidget {
-  const DetailsOnBoardScreenLandscape({super.key});
+class DetailsOnBoardScreen extends ConsumerWidget {
+  const DetailsOnBoardScreen({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -160,40 +162,32 @@ class DetailsOnBoardScreenLandscape extends ConsumerWidget {
             const SizedBox(
               height: 20,
             ),
-            Row(
-              children: [
-                Expanded(
-                  child: Container(
-                    margin: const EdgeInsets.symmetric(horizontal: 5),
-                    height: MediaQuery.sizeOf(context).width * 0.4,
-                    decoration: BoxDecoration(
-                      border: Border.all(color: Colors.white12),
-                      image: const DecorationImage(
-                          fit: BoxFit.scaleDown,
-                          image:
-                              AssetImage('assets/images/list_details_1.png')),
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                  ),
-                ),
-                const SizedBox(
-                  height: 5,
-                ),
-                Expanded(
-                  child: Container(
-                    margin: const EdgeInsets.symmetric(horizontal: 5),
-                    height: MediaQuery.sizeOf(context).width * 0.4,
-                    decoration: BoxDecoration(
-                      border: Border.all(color: Colors.white12),
-                      image: const DecorationImage(
-                          fit: BoxFit.scaleDown,
-                          image:
-                              AssetImage('assets/images/list_details_3.png')),
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                  ),
-                ),
-              ],
+            Container(
+              margin: const EdgeInsets.symmetric(horizontal: 5),
+              height: 220,
+              width: MediaQuery.sizeOf(context).width * 0.9,
+              decoration: BoxDecoration(
+                border: Border.all(color: Colors.white12),
+                image: const DecorationImage(
+                    fit: BoxFit.scaleDown,
+                    image: AssetImage('assets/images/list_details_1.png')),
+                borderRadius: BorderRadius.circular(20),
+              ),
+            ),
+            const SizedBox(
+              height: 10,
+            ),
+            Container(
+              margin: const EdgeInsets.symmetric(horizontal: 5),
+              height: 220,
+              width: MediaQuery.sizeOf(context).width * 0.9,
+              decoration: BoxDecoration(
+                border: Border.all(color: Colors.white12),
+                image: const DecorationImage(
+                    fit: BoxFit.scaleDown,
+                    image: AssetImage('assets/images/list_details_3.png')),
+                borderRadius: BorderRadius.circular(20),
+              ),
             ),
           ],
         ),
@@ -202,8 +196,8 @@ class DetailsOnBoardScreenLandscape extends ConsumerWidget {
   }
 }
 
-class QuizOnBoardScreenLandscape extends ConsumerWidget {
-  const QuizOnBoardScreenLandscape({super.key});
+class QuizOnBoardScreen extends ConsumerWidget {
+  const QuizOnBoardScreen({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

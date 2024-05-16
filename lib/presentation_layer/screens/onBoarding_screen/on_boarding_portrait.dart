@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kanji_for_n5_level_app/providers/on_boarding_provider.dart';
-import 'package:kanji_for_n5_level_app/presentation_layer/screens/onBoarding_screen/pages_landscape.dart';
+import 'package:kanji_for_n5_level_app/presentation_layer/screens/onBoarding_screen/pages_portrait.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 class OnBoardingFlowPortrait extends ConsumerStatefulWidget {

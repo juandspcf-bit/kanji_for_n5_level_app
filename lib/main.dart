@@ -94,7 +94,7 @@ class MyApp extends ConsumerWidget {
       themeMode: ThemeMode.dark,
       home: (onBoardingData.isOnBoardingDone == null ||
               onBoardingData.isOnBoardingDone == false)
-          ? const OnBoardingFlowPortrait()
+          ? const OnBoardingScreen()
           : const AuthFlow(),
     );
   }
