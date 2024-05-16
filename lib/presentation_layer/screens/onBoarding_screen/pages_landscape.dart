@@ -69,19 +69,16 @@ class SectionOnBoardScreen extends ConsumerWidget {
         const SizedBox(
           height: 20,
         ),
-        SizedBox(
-          child: Image.asset(
-            'assets/images/section.png',
-            fit: BoxFit.fitWidth,
-          ),
-        ),
-        const SizedBox(
-          height: 20,
-        ),
-        SizedBox(
-          child: Image.asset(
-            'assets/images/section_nav.png',
-            fit: BoxFit.fitWidth,
+        Container(
+          margin: const EdgeInsets.symmetric(horizontal: 5),
+          height: 380,
+          width: MediaQuery.sizeOf(context).width * 0.9,
+          decoration: BoxDecoration(
+            border: Border.all(color: Colors.white12),
+            image: const DecorationImage(
+                fit: BoxFit.fitWidth,
+                image: AssetImage('assets/images/section.png')),
+            borderRadius: BorderRadius.circular(20),
           ),
         ),
         const SizedBox(
@@ -117,10 +114,16 @@ class ListOnBoardScreen extends ConsumerWidget {
         const SizedBox(
           height: 20,
         ),
-        SizedBox(
-          child: Image.asset(
-            'assets/images/list.png',
-            fit: BoxFit.fitWidth,
+        Container(
+          margin: const EdgeInsets.symmetric(horizontal: 5),
+          height: 380,
+          width: MediaQuery.sizeOf(context).width * 0.9,
+          decoration: BoxDecoration(
+            border: Border.all(color: Colors.white12),
+            image: const DecorationImage(
+                fit: BoxFit.fitWidth,
+                image: AssetImage('assets/images/list.png')),
+            borderRadius: BorderRadius.circular(20),
           ),
         ),
         const SizedBox(
@@ -156,21 +159,34 @@ class DetailsOnBoardScreen extends ConsumerWidget {
                 ),
               ],
             ),
-            SizedBox(
-              height: 200,
-              child: Image.asset(
-                'assets/images/list_details_1.png',
-                fit: BoxFit.fitHeight,
+            const SizedBox(
+              height: 20,
+            ),
+            Container(
+              margin: const EdgeInsets.symmetric(horizontal: 5),
+              height: 220,
+              width: MediaQuery.sizeOf(context).width * 0.9,
+              decoration: BoxDecoration(
+                border: Border.all(color: Colors.white12),
+                image: const DecorationImage(
+                    fit: BoxFit.scaleDown,
+                    image: AssetImage('assets/images/list_details_1.png')),
+                borderRadius: BorderRadius.circular(20),
               ),
             ),
             const SizedBox(
-              height: 40,
+              height: 10,
             ),
-            SizedBox(
-              height: 200,
-              child: Image.asset(
-                'assets/images/list_details_3.png',
-                fit: BoxFit.fitHeight,
+            Container(
+              margin: const EdgeInsets.symmetric(horizontal: 5),
+              height: 220,
+              width: MediaQuery.sizeOf(context).width * 0.9,
+              decoration: BoxDecoration(
+                border: Border.all(color: Colors.white12),
+                image: const DecorationImage(
+                    fit: BoxFit.scaleDown,
+                    image: AssetImage('assets/images/list_details_3.png')),
+                borderRadius: BorderRadius.circular(20),
               ),
             ),
           ],
@@ -195,7 +211,7 @@ class QuizOnBoardScreen extends ConsumerWidget {
               children: [
                 Expanded(
                   child: Text(
-                    'You can test your learning by doing different quizes around the app, ',
+                    'You can test your learning by doing different quizzes around the app, ',
                     style: Theme.of(context).textTheme.titleMedium,
                     softWrap: false,
                     maxLines: 3,
@@ -205,11 +221,19 @@ class QuizOnBoardScreen extends ConsumerWidget {
                 ),
               ],
             ),
-            SizedBox(
-              height: 300,
-              child: Image.asset(
-                'assets/images/question.png',
-                fit: BoxFit.fitHeight,
+            const SizedBox(
+              height: 20,
+            ),
+            Container(
+              margin: const EdgeInsets.symmetric(horizontal: 5),
+              height: 250,
+              width: MediaQuery.sizeOf(context).width * 0.9,
+              decoration: BoxDecoration(
+                border: Border.all(color: Colors.white12),
+                image: const DecorationImage(
+                    fit: BoxFit.scaleDown,
+                    image: AssetImage('assets/images/question.png')),
+                borderRadius: BorderRadius.circular(20),
               ),
             ),
           ],

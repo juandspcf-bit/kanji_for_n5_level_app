@@ -6,8 +6,9 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:kanji_for_n5_level_app/application_layer/services.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/auth_flow/auth_flow.dart';
+import 'package:kanji_for_n5_level_app/presentation_layer/screens/onBoarding_screen/on_boarding_screen.dart';
 import 'package:kanji_for_n5_level_app/providers/on_boarding_provider.dart';
-import 'package:kanji_for_n5_level_app/presentation_layer/screens/onBoarding_screen/my_page_viewer.dart';
+import 'package:kanji_for_n5_level_app/presentation_layer/screens/onBoarding_screen/on_boarding_portrait.dart';
 import 'package:kanji_for_n5_level_app/providers/score_kanji_list_provider.dart';
 import 'package:kanji_for_n5_level_app/providers/status_connection_provider.dart';
 import 'package:logger/logger.dart';
@@ -50,7 +51,12 @@ class MyApp extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     ref.read(lottieFilesProvider.notifier).initLottieFile();
+
     final onBoardingData = ref.watch(onBoardingProvider);
+    Future.delayed(const Duration(milliseconds: 200));
+
+    logger.d("the onboarding is ${onBoardingData.isOnBoardingDone}");
+
     ref.read(statusConnectionProvider);
     return MaterialApp(
       title: 'Flutter Demo',
@@ -88,7 +94,7 @@ class MyApp extends ConsumerWidget {
       themeMode: ThemeMode.dark,
       home: (onBoardingData.isOnBoardingDone == null ||
               onBoardingData.isOnBoardingDone == false)
-          ? const OnBoardingFlow()
+          ? const OnBoardingFlowPortrait()
           : const AuthFlow(),
     );
   }
