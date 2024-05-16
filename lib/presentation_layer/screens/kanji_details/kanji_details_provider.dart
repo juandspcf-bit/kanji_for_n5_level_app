@@ -45,7 +45,7 @@ class KanjiDetailsProvider extends Notifier<KanjiDetailsData?> {
   void storeToFavorites(KanjiFromApi kanjiFromApi) async {
     setStoringToFavoritesStatus(StoringToFavoritesStatus.processing);
     final queryKanji = ref
-        .read(favoriteskanjisProvider.notifier)
+        .read(favoritesKanjisProvider.notifier)
         .searchInFavorites(kanjiFromApi.kanjiCharacter);
 
     if (!queryKanji) {
@@ -61,7 +61,7 @@ class KanjiDetailsProvider extends Notifier<KanjiDetailsData?> {
             .insertFavorite(kanjiFromApi.kanjiCharacter, timeStamp);
         final storedItems =
             ref.read(storedKanjisProvider.notifier).getStoresItems();
-        ref.read(favoriteskanjisProvider.notifier).addItem(
+        ref.read(favoritesKanjisProvider.notifier).addItem(
             storedItems.values.fold(
               [],
               (previousValue, element) {
@@ -92,7 +92,7 @@ class KanjiDetailsProvider extends Notifier<KanjiDetailsData?> {
         await ref
             .read(localDBServiceProvider)
             .deleteFavorite(kanjiFromApi.kanjiCharacter);
-        ref.read(favoriteskanjisProvider.notifier).removeItem(kanjiFromApi);
+        ref.read(favoritesKanjisProvider.notifier).removeItem(kanjiFromApi);
         Future.delayed(
           const Duration(
             seconds: 1,

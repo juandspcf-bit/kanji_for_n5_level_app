@@ -6,7 +6,6 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/auth_flow/auth_flow.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/onBoarding_screen/on_boarding_screen.dart';
 import 'package:kanji_for_n5_level_app/providers/on_boarding_provider.dart';
-import 'package:kanji_for_n5_level_app/presentation_layer/screens/onBoarding_screen/on_boarding_portrait.dart';
 import 'package:kanji_for_n5_level_app/providers/score_kanji_list_provider.dart';
 import 'package:kanji_for_n5_level_app/providers/status_connection_provider.dart';
 import 'package:logger/logger.dart';

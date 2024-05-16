@@ -114,8 +114,8 @@ final storedKanjisProvider =
 enum StatusStorage {
   onlyOnline,
   stored,
-  proccessingStoring,
-  proccessingDeleting,
+  processingStoring,
+  processingDeleting,
   disableForDownload,
   errorDeleting
 }

@@ -28,9 +28,9 @@ class KanjisForFavoritesScreen extends ConsumerWidget with MyDialogs {
         ' list and access the content again to see the updated content.',
       );
     }
-    var kanjiFavoritesList = ref.watch(favoriteskanjisProvider);
+    var kanjiFavoritesList = ref.watch(favoritesKanjisProvider);
 
-    ref.listen<FavoritesKanjisData>(favoriteskanjisProvider, (prev, current) {
+    ref.listen<FavoritesKanjisData>(favoritesKanjisProvider, (prev, current) {
       logger.d(current.onDismissibleActionStatus.message);
       if (current.onDismissibleActionStatus ==
               OnDismissibleActionStatus.successAdded ||
@@ -52,22 +52,22 @@ class KanjisForFavoritesScreen extends ConsumerWidget with MyDialogs {
                 : () async {
                     logger.d('restoring kanji');
                     final dissmisedKanji =
-                        ref.read(favoriteskanjisProvider).dissmisedKanji;
+                        ref.read(favoritesKanjisProvider).dismissedKanji;
 
                     if (dissmisedKanji == null) {
                       return;
                     }
 
                     await ref
-                        .read(favoriteskanjisProvider.notifier)
+                        .read(favoritesKanjisProvider.notifier)
                         .restoreFavorite(
-                          dissmisedKanji.kanjiFromApiFromDismisibleAction,
+                          dissmisedKanji.kanjiFromApiFromDismissibleAction,
                           dissmisedKanji.index,
                         );
                   });
 
         ref
-            .read(favoriteskanjisProvider.notifier)
+            .read(favoritesKanjisProvider.notifier)
             .setOnDismissibleActionStatus(OnDismissibleActionStatus.noStarted);
       }
     });

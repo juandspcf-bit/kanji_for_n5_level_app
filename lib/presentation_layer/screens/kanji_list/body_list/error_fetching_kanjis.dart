@@ -21,7 +21,7 @@ class ErrorFetchingKanjisScreen extends ConsumerWidget {
           onRefresh: () async {
             if (mainScreenData.selection == ScreenSelection.favoritesKanjis) {
               await ref
-                  .read(favoriteskanjisProvider.notifier)
+                  .read(favoritesKanjisProvider.notifier)
                   .fetchFavoritesOnRefresh();
               return;
             }

@@ -28,8 +28,8 @@ class RefreshBodyList extends ConsumerWidget {
     try {
       kanjisFromApi.firstWhere(
         (element) =>
-            element.statusStorage == StatusStorage.proccessingStoring ||
-            element.statusStorage == StatusStorage.proccessingDeleting,
+            element.statusStorage == StatusStorage.processingStoring ||
+            element.statusStorage == StatusStorage.processingDeleting,
       );
 
       return true;
@@ -65,8 +65,8 @@ class RefreshBodyList extends ConsumerWidget {
           ),
           onDismissed: (direction) async {
             await ref
-                .read(favoriteskanjisProvider.notifier)
-                .dismissisFavorite(kanjisFromApi[index]);
+                .read(favoritesKanjisProvider.notifier)
+                .dismissFavorite(kanjisFromApi[index]);
           },
         ),
       );
@@ -78,7 +78,7 @@ class RefreshBodyList extends ConsumerWidget {
     List<KanjiFromApi> kanjisFromApi,
     MainScreenData mainScreenData,
     Orientation orientation,
-    ScreenSizeWidth widhtScreen,
+    ScreenSizeWidth widthScreen,
     WidgetRef ref,
   ) {
     if (statusResponse == 1 && kanjisFromApi.isEmpty) {
@@ -103,8 +103,8 @@ class RefreshBodyList extends ConsumerWidget {
         },
       );
     } else if (Orientation.landscape == orientation &&
-        (ScreenSizeWidth.large == widhtScreen ||
-            ScreenSizeWidth.extraLarge == widhtScreen)) {
+        (ScreenSizeWidth.large == widthScreen ||
+            ScreenSizeWidth.extraLarge == widthScreen)) {
       return SafeArea(
         child: GridView.builder(
           gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
@@ -128,8 +128,8 @@ class RefreshBodyList extends ConsumerWidget {
         ),
       );
     } else if (Orientation.landscape == orientation &&
-        (ScreenSizeWidth.large != widhtScreen ||
-            ScreenSizeWidth.extraLarge != widhtScreen)) {
+        (ScreenSizeWidth.large != widthScreen ||
+            ScreenSizeWidth.extraLarge != widthScreen)) {
       return SafeArea(
         child: GridView.builder(
           gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
@@ -170,7 +170,7 @@ class RefreshBodyList extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final orientation = MediaQuery.orientationOf(context);
-    final widhtScreen = getScreenSizeWidth(context);
+    final widthScreen = getScreenSizeWidth(context);
     final connectivityData = ref.watch(statusConnectionProvider);
 
     return RefreshIndicator(
@@ -181,7 +181,7 @@ class RefreshBodyList extends ConsumerWidget {
       onRefresh: () async {
         if (mainScreenData.selection == ScreenSelection.favoritesKanjis) {
           await ref
-              .read(favoriteskanjisProvider.notifier)
+              .read(favoritesKanjisProvider.notifier)
               .fetchFavoritesOnRefresh();
           return;
         }
@@ -198,7 +198,7 @@ class RefreshBodyList extends ConsumerWidget {
         kanjisFromApi,
         mainScreenData,
         orientation,
-        widhtScreen,
+        widthScreen,
         ref,
       ),
     );

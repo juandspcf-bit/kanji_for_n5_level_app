@@ -42,8 +42,8 @@ class KanjiItemAnimated extends ConsumerWidget {
         return GestureDetector(
           onTap: () {
             final isProcessingData = kanjiFromApi.statusStorage ==
-                    StatusStorage.proccessingStoring ||
-                kanjiFromApi.statusStorage == StatusStorage.proccessingDeleting;
+                    StatusStorage.processingStoring ||
+                kanjiFromApi.statusStorage == StatusStorage.processingDeleting;
 
             if (isProcessingData) return;
 
@@ -53,7 +53,7 @@ class KanjiItemAnimated extends ConsumerWidget {
             ref.read(videoStatusPlaying.notifier).setSpeed(1.0);
             ref.read(videoStatusPlaying.notifier).setIsPlaying(true);
             var queryKanji = ref
-                .read(favoriteskanjisProvider.notifier)
+                .read(favoritesKanjisProvider.notifier)
                 .searchInFavorites(kanjiFromApi.kanjiCharacter);
             final favoriteStatus = queryKanji;
             ref.read(kanjiDetailsProvider.notifier).setInitValues(

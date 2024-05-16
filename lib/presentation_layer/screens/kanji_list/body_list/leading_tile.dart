@@ -15,7 +15,7 @@ class LeadingTile extends StatelessWidget {
 
   Widget setSVGwidget(BuildContext context) {
     if (kanjiFromApi.statusStorage == StatusStorage.onlyOnline ||
-        kanjiFromApi.statusStorage == StatusStorage.proccessingStoring) {
+        kanjiFromApi.statusStorage == StatusStorage.processingStoring) {
       return SvgPicture.network(
         kanjiFromApi.kanjiImageLink,
         fit: BoxFit.contain,
@@ -29,7 +29,7 @@ class LeadingTile extends StatelessWidget {
             )),
       );
     } else if (kanjiFromApi.statusStorage == StatusStorage.stored ||
-        kanjiFromApi.statusStorage == StatusStorage.proccessingDeleting) {
+        kanjiFromApi.statusStorage == StatusStorage.processingDeleting) {
       return SvgPicture.file(
         File(kanjiFromApi.kanjiImageLink),
         fit: BoxFit.contain,

@@ -145,7 +145,7 @@ class MainScreenProvider extends Notifier<MainScreenData> {
     }
 
     ref
-        .read(favoriteskanjisProvider.notifier)
+        .read(favoritesKanjisProvider.notifier)
         .setInitialFavoritesWithInternetConnection(
             listOfValidStoredKanjis, favoritesKanjis, 10);
   }
@@ -158,7 +158,7 @@ class MainScreenProvider extends Notifier<MainScreenData> {
         listStoresKanjis.isEmpty ? await loadStoredKanjis() : listStoresKanjis;
 
     var kanjiFavoritesList =
-        ref.read(favoriteskanjisProvider.notifier).getFavorites();
+        ref.read(favoritesKanjisProvider.notifier).getFavorites();
 
     if (kanjiFavoritesList.isNotEmpty) return;
 
@@ -166,7 +166,7 @@ class MainScreenProvider extends Notifier<MainScreenData> {
         .read(localDBServiceProvider)
         .loadFavoritesDatabase(ref.read(authServiceProvider).userUuid ?? '');
     ref
-        .read(favoriteskanjisProvider.notifier)
+        .read(favoritesKanjisProvider.notifier)
         .setInitialFavoritesWithNoInternetConnection(
           listOfValidStoredKanjis,
           favoritesKanjis,

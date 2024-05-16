@@ -28,8 +28,8 @@ class TrailingTile extends ConsumerWidget {
         color: Theme.of(context).colorScheme.onSecondaryContainer,
         size: 50,
       );
-    } else if (kanjiFromApi.statusStorage == StatusStorage.proccessingStoring ||
-        kanjiFromApi.statusStorage == StatusStorage.proccessingDeleting) {
+    } else if (kanjiFromApi.statusStorage == StatusStorage.processingStoring ||
+        kanjiFromApi.statusStorage == StatusStorage.processingDeleting) {
       return const CircularProgressIndicator();
     } else {
       return Icon(
@@ -40,7 +40,7 @@ class TrailingTile extends ConsumerWidget {
     }
   }
 
-  void showSnackBarQuizz(
+  void showSnackBarQuiz(
     BuildContext context,
     String message,
     WidgetRef ref,
@@ -54,7 +54,7 @@ class TrailingTile extends ConsumerWidget {
   int countActiveDownloads(List<KanjiFromApi> kanjiList) {
     return kanjiList
         .where(
-            (kanji) => kanji.statusStorage == StatusStorage.proccessingStoring)
+            (kanji) => kanji.statusStorage == StatusStorage.processingStoring)
         .toList()
         .length;
   }
@@ -73,9 +73,9 @@ class TrailingTile extends ConsumerWidget {
 
         final resultStatus = ref.read(statusConnectionProvider);
         if (ConnectionStatus.noConnected == resultStatus) {
-          showSnackBarQuizz(
+          showSnackBarQuiz(
             context,
-            'you shoul be connected to perform this acction',
+            'you should be connected to perform this action',
             ref,
           );
           return;
@@ -99,13 +99,13 @@ class TrailingTile extends ConsumerWidget {
   }
 
   KanjiFromApi setCorrectSection(KanjiFromApi kanjiFromApi) {
-    var correcKanjiFromApi = kanjiFromApi;
+    var correctKanjiFromApi = kanjiFromApi;
     for (var key in sectionsKanjis.keys) {
       int index = sectionsKanjis[key]!
           .indexWhere((element) => element == kanjiFromApi.kanjiCharacter);
       if (index != -1) {
         int? section = int.tryParse(key.substring(7));
-        correcKanjiFromApi = KanjiFromApi(
+        correctKanjiFromApi = KanjiFromApi(
             kanjiCharacter: kanjiFromApi.kanjiCharacter,
             englishMeaning: kanjiFromApi.englishMeaning,
             kanjiImageLink: kanjiFromApi.kanjiImageLink,
@@ -123,7 +123,7 @@ class TrailingTile extends ConsumerWidget {
         break;
       }
     }
-    return correcKanjiFromApi;
+    return correctKanjiFromApi;
   }
 }
 

@@ -13,11 +13,11 @@ import 'package:kanji_for_n5_level_app/presentation_layer/screens/navigation_bar
 
 class QueueDownloadDelete extends Notifier<QueueData> {
   void removeDownload(String kanjiCharacter) {
-    final downloadKankiQueue = [...state.downloadKankiQueue];
-    downloadKankiQueue
+    final downloadKanjiQueue = [...state.downloadKanjiQueue];
+    downloadKanjiQueue
         .removeWhere((element) => element.kanjiCharacter == kanjiCharacter);
     state = QueueData(
-      downloadKankiQueue: downloadKankiQueue,
+      downloadKanjiQueue: downloadKanjiQueue,
       deleteKanjiQueue: state.deleteKanjiQueue,
     );
   }
@@ -27,20 +27,20 @@ class QueueDownloadDelete extends Notifier<QueueData> {
     deleteKanjiQueue
         .removeWhere((element) => element.kanjiCharacter == kanjiCharacter);
     state = QueueData(
-      downloadKankiQueue: state.downloadKankiQueue,
+      downloadKanjiQueue: state.downloadKanjiQueue,
       deleteKanjiQueue: deleteKanjiQueue,
     );
   }
 
   bool addDownload(String kanjiCharacter, DownloadKanji downloadKanji) {
-    final downloadKankiQueue = [...state.downloadKankiQueue];
-    int index = downloadKankiQueue
+    final downloadKanjiQueue = [...state.downloadKanjiQueue];
+    int index = downloadKanjiQueue
         .indexWhere((element) => element.kanjiCharacter == kanjiCharacter);
     if (index != -1) return false;
 
-    downloadKankiQueue.add(downloadKanji);
+    downloadKanjiQueue.add(downloadKanji);
     state = QueueData(
-      downloadKankiQueue: downloadKankiQueue,
+      downloadKanjiQueue: downloadKanjiQueue,
       deleteKanjiQueue: state.deleteKanjiQueue,
     );
     return true;
@@ -54,14 +54,14 @@ class QueueDownloadDelete extends Notifier<QueueData> {
 
     deleteKanjiQueue.add(deleteKanji);
     state = QueueData(
-      downloadKankiQueue: state.downloadKankiQueue,
+      downloadKanjiQueue: state.downloadKanjiQueue,
       deleteKanjiQueue: deleteKanjiQueue,
     );
     return true;
   }
 
   bool isInTheDownloadQueue(String kanjiCharacter) {
-    int index = state.downloadKankiQueue
+    int index = state.downloadKanjiQueue
         .indexWhere((element) => element.kanjiCharacter == kanjiCharacter);
     return index != -1;
   }
@@ -81,7 +81,7 @@ class QueueDownloadDelete extends Notifier<QueueData> {
 
       updateKanjisOnVisibleList(
         updateStatusKanji(
-          StatusStorage.proccessingStoring,
+          StatusStorage.processingStoring,
           false,
           kanjiFromApiOnline,
         ),
@@ -153,7 +153,7 @@ class QueueDownloadDelete extends Notifier<QueueData> {
 
       updateKanjisOnVisibleList(
         updateStatusKanji(
-          StatusStorage.proccessingDeleting,
+          StatusStorage.processingDeleting,
           false,
           kanjiFromApiStored,
         ),
@@ -201,7 +201,7 @@ class QueueDownloadDelete extends Notifier<QueueData> {
 
   void updateKanjisOnVisibleList(KanjiFromApi kanjiFromApi) {
     ref
-        .read(favoriteskanjisProvider.notifier)
+        .read(favoritesKanjisProvider.notifier)
         .updateKanjiStatusOnVisibleFavoritesList(
           kanjiFromApi,
         );
@@ -237,7 +237,7 @@ class QueueDownloadDelete extends Notifier<QueueData> {
   @override
   QueueData build() {
     return QueueData(
-      downloadKankiQueue: [],
+      downloadKanjiQueue: [],
       deleteKanjiQueue: [],
     );
   }
@@ -247,11 +247,11 @@ final queueDownloadDeleteProvider =
     NotifierProvider<QueueDownloadDelete, QueueData>(QueueDownloadDelete.new);
 
 class QueueData {
-  final List<DownloadKanji> downloadKankiQueue;
+  final List<DownloadKanji> downloadKanjiQueue;
   final List<DeleteKanji> deleteKanjiQueue;
 
   QueueData({
-    required this.downloadKankiQueue,
+    required this.downloadKanjiQueue,
     required this.deleteKanjiQueue,
   });
 }
