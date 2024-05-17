@@ -13,7 +13,7 @@ class WelcomeOnBoardScreenLandscape extends ConsumerWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         SizedBox(
-          height: 250,
+          height: MediaQuery.sizeOf(context).height * 0.65,
           child: Image.asset(
             'assets/images/learning.png',
             fit: BoxFit.fitHeight,
@@ -75,7 +75,7 @@ class SectionOnBoardScreenLandscape extends ConsumerWidget {
           decoration: BoxDecoration(
             border: Border.all(color: Colors.white12),
             image: const DecorationImage(
-                fit: BoxFit.fitHeight,
+                fit: BoxFit.contain,
                 image: AssetImage('assets/images/section.png')),
             borderRadius: BorderRadius.circular(20),
           ),
@@ -141,9 +141,10 @@ class DetailsOnBoardScreenLandscape extends ConsumerWidget {
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 8),
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Expanded(
                   child: Text(
@@ -232,7 +233,7 @@ class QuizOnBoardScreenLandscape extends ConsumerWidget {
             ),
             Container(
               margin: const EdgeInsets.symmetric(horizontal: 5),
-              height: 250,
+              height: MediaQuery.sizeOf(context).height * 0.75,
               width: MediaQuery.sizeOf(context).width * 0.9,
               decoration: BoxDecoration(
                 border: Border.all(color: Colors.white12),

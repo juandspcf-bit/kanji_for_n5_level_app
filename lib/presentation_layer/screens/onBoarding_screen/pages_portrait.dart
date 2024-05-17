@@ -13,7 +13,8 @@ class WelcomeOnBoardScreen extends ConsumerWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         SizedBox(
-          height: 250,
+          height: MediaQuery.sizeOf(context).height * 0.5,
+          width: MediaQuery.sizeOf(context).width * 0.9,
           child: Image.asset(
             'assets/images/learning.png',
             fit: BoxFit.fitHeight,
@@ -71,12 +72,12 @@ class SectionOnBoardScreen extends ConsumerWidget {
         ),
         Container(
           margin: const EdgeInsets.symmetric(horizontal: 5),
-          height: 340,
+          height: MediaQuery.sizeOf(context).height * 0.5,
           width: MediaQuery.sizeOf(context).width * 0.9,
           decoration: BoxDecoration(
             border: Border.all(color: Colors.white12),
             image: const DecorationImage(
-              fit: BoxFit.fitWidth,
+              fit: BoxFit.contain,
               image: AssetImage('assets/images/section.png'),
             ),
             borderRadius: BorderRadius.circular(20),
@@ -117,12 +118,12 @@ class ListOnBoardScreen extends ConsumerWidget {
         ),
         Container(
           margin: const EdgeInsets.symmetric(horizontal: 5),
-          height: 380,
+          height: MediaQuery.sizeOf(context).height * 0.5,
           width: MediaQuery.sizeOf(context).width * 0.9,
           decoration: BoxDecoration(
             border: Border.all(color: Colors.white12),
             image: const DecorationImage(
-                fit: BoxFit.fitWidth,
+                fit: BoxFit.contain,
                 image: AssetImage('assets/images/list.png')),
             borderRadius: BorderRadius.circular(20),
           ),
@@ -165,7 +166,7 @@ class DetailsOnBoardScreen extends ConsumerWidget {
             ),
             Container(
               margin: const EdgeInsets.symmetric(horizontal: 5),
-              height: 220,
+              height: MediaQuery.sizeOf(context).height * 0.3,
               width: MediaQuery.sizeOf(context).width * 0.9,
               decoration: BoxDecoration(
                 border: Border.all(color: Colors.white12),
@@ -180,7 +181,7 @@ class DetailsOnBoardScreen extends ConsumerWidget {
             ),
             Container(
               margin: const EdgeInsets.symmetric(horizontal: 5),
-              height: 220,
+              height: MediaQuery.sizeOf(context).height * 0.3,
               width: MediaQuery.sizeOf(context).width * 0.9,
               decoration: BoxDecoration(
                 border: Border.all(color: Colors.white12),
@@ -227,12 +228,12 @@ class QuizOnBoardScreen extends ConsumerWidget {
             ),
             Container(
               margin: const EdgeInsets.symmetric(horizontal: 5),
-              height: 250,
+              height: MediaQuery.sizeOf(context).height * 0.5,
               width: MediaQuery.sizeOf(context).width * 0.9,
               decoration: BoxDecoration(
                 border: Border.all(color: Colors.white12),
                 image: const DecorationImage(
-                    fit: BoxFit.scaleDown,
+                    fit: BoxFit.contain,
                     image: AssetImage('assets/images/question.png')),
                 borderRadius: BorderRadius.circular(20),
               ),
