@@ -71,7 +71,7 @@ class SectionOnBoardScreen extends ConsumerWidget {
         ),
         Container(
           margin: const EdgeInsets.symmetric(horizontal: 5),
-          height: 380,
+          height: 340,
           width: MediaQuery.sizeOf(context).width * 0.9,
           decoration: BoxDecoration(
             border: Border.all(color: Colors.white12),
