@@ -76,8 +76,9 @@ class SectionOnBoardScreen extends ConsumerWidget {
           decoration: BoxDecoration(
             border: Border.all(color: Colors.white12),
             image: const DecorationImage(
-                fit: BoxFit.fitWidth,
-                image: AssetImage('assets/images/section.png')),
+              fit: BoxFit.fitWidth,
+              image: AssetImage('assets/images/section.png'),
+            ),
             borderRadius: BorderRadius.circular(20),
           ),
         ),

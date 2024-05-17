@@ -121,12 +121,12 @@ class LoginForm extends ConsumerWidget {
             onPressed: statusConnectionData == ConnectionStatus.noConnected
                 ? null
                 : () {
-                    FocusScopeNode currentFocus = FocusScope.of(context);
+                    /*                  FocusScopeNode currentFocus = FocusScope.of(context);
 
                     if (!currentFocus.hasPrimaryFocus) {
                       currentFocus.unfocus();
-                    }
-
+                    } */
+                    FocusManager.instance.primaryFocus?.unfocus();
                     ref.read(singUpProvider.notifier).resetStatus();
 
                     Navigator.of(context)

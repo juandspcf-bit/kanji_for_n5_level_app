@@ -59,13 +59,10 @@ class Section extends ConsumerWidget {
       decoration: BoxDecoration(
         borderRadius: const BorderRadius.all(Radius.circular(20)),
         border: Border.all(color: Colors.white10),
-        gradient: const LinearGradient(
-          begin: Alignment.bottomLeft,
-          end: Alignment.topRight,
-          colors: [
-            Color.fromARGB(255, 101, 172, 207), //Colors.grey[900]!,
-            Color.fromARGB(255, 86, 169, 211), //Colors.grey[800]!,
-          ],
+        image: DecorationImage(
+          fit: BoxFit.cover,
+          opacity: 0.5,
+          image: AssetImage(sectionData.imagePath),
         ),
       ),
       child: Material(
