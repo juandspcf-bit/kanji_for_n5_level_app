@@ -141,6 +141,7 @@ class StrokesImages extends ConsumerWidget {
                       width: 80,
                       semanticsLabel: kanjiFromApi.kanjiCharacter,
                       placeholderBuilder: (BuildContext context) => Container(
+                          margin: const EdgeInsets.all(5),
                           color: Colors.transparent,
                           height: 40,
                           width: 40,
