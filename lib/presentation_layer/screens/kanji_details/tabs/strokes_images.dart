@@ -54,18 +54,15 @@ class StrokesImages extends ConsumerWidget {
               colorFilter:
                   const ColorFilter.mode(Colors.white, BlendMode.srcIn),
               semanticsLabel: kanjiFromApi.kanjiCharacter,
-              placeholderBuilder: (BuildContext context) => Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Container(
-                    color: Colors.transparent,
-                    height: 80,
-                    width: 80,
-                    child: const CircularProgressIndicator(
-                      backgroundColor: Color.fromARGB(179, 5, 16, 51),
-                    ),
-                  ),
-                ],
+              placeholderBuilder: (BuildContext context) => Container(
+                alignment: Alignment.center,
+                margin: const EdgeInsets.all(5),
+                color: Colors.transparent,
+                height: 80,
+                width: 80,
+                child: const CircularProgressIndicator(
+                  backgroundColor: Color.fromARGB(179, 5, 16, 51),
+                ),
               ),
             )
           : SvgPicture.file(
@@ -75,18 +72,15 @@ class StrokesImages extends ConsumerWidget {
               colorFilter:
                   const ColorFilter.mode(Colors.white, BlendMode.srcIn),
               semanticsLabel: kanjiFromApi.kanjiCharacter,
-              placeholderBuilder: (BuildContext context) => Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Container(
-                    color: Colors.transparent,
-                    height: 80,
-                    width: 80,
-                    child: const CircularProgressIndicator(
-                      backgroundColor: Color.fromARGB(179, 5, 16, 51),
-                    ),
-                  ),
-                ],
+              placeholderBuilder: (BuildContext context) => Container(
+                alignment: Alignment.center,
+                margin: const EdgeInsets.all(5),
+                color: Colors.transparent,
+                height: 80,
+                width: 80,
+                child: const CircularProgressIndicator(
+                  backgroundColor: Color.fromARGB(179, 5, 16, 51),
+                ),
               ),
             ),
       actions: <Widget>[
@@ -137,27 +131,20 @@ class StrokesImages extends ConsumerWidget {
               child: statusStorage == StatusStorage.onlyOnline
                   ? SvgPicture.network(
                       images[index],
-                      height: 80,
-                      width: 80,
                       semanticsLabel: kanjiFromApi.kanjiCharacter,
                       placeholderBuilder: (BuildContext context) => Container(
                           margin: const EdgeInsets.all(5),
                           color: Colors.transparent,
-                          height: 40,
-                          width: 40,
                           child: const CircularProgressIndicator(
                             backgroundColor: Color.fromARGB(179, 5, 16, 51),
                           )),
                     )
                   : SvgPicture.file(
                       File(images[index]),
-                      height: 80,
-                      width: 80,
                       semanticsLabel: kanjiFromApi.kanjiCharacter,
                       placeholderBuilder: (BuildContext context) => Container(
+                          margin: const EdgeInsets.all(5),
                           color: Colors.transparent,
-                          height: 40,
-                          width: 40,
                           child: const CircularProgressIndicator(
                             backgroundColor: Color.fromARGB(179, 5, 16, 51),
                           )),
