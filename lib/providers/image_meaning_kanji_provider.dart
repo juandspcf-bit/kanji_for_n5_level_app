@@ -44,7 +44,6 @@ class ImageMeaningKanjiProvider extends Notifier<ImageDetailsLinkData> {
           linkWidth: kanjiData['linkWidth'],
           storageImageDetailsStatus: StorageImageDetailsStatus.online,
         );
-        logger.d('In cloud');
       }
     } catch (e) {
       state = ImageDetailsLinkData(

@@ -11,22 +11,6 @@ class ImageMeaningKanji extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final imageData = ref.watch(imageMeaningKanjiProvider);
-    if (imageData.link == '') {
-      return LayoutBuilder(
-        builder: (context, constraints) {
-          final height = constraints.maxWidth * 427 / 640;
-          return SizedBox(
-            height: height,
-            width: height,
-            child: const Padding(
-              padding: EdgeInsets.all(20.0),
-              child: CircularProgressIndicator(),
-            ),
-          );
-        },
-      );
-    }
-
     final height = 800 * imageData.linkHeight / imageData.linkWidth;
 
     return imageData.storageImageDetailsStatus ==
@@ -38,9 +22,31 @@ class ImageMeaningKanji extends ConsumerWidget {
           )
         : CachedNetworkImage(
             memCacheWidth: 800,
-            memCacheHeight: height.ceil(),
+            memCacheHeight: imageData.linkWidth == 0 ? 100 : height.ceil(),
             imageUrl: imageData.link,
-            progressIndicatorBuilder: (ctx, text, porgress) {
+            errorWidget: (context, url, error) {
+              return LayoutBuilder(
+                builder: (context, constraints) {
+                  final height = constraints.maxWidth * 427 / 640;
+                  return Container(
+                    height: height,
+                    width: MediaQuery.sizeOf(context).width,
+                    decoration: BoxDecoration(
+                      border: Border.all(color: Colors.white24),
+                    ),
+                    child: const Padding(
+                      padding: EdgeInsets.all(20.0),
+                      child: Icon(
+                        Icons.error,
+                        color: Colors.amber,
+                        size: 50,
+                      ),
+                    ),
+                  );
+                },
+              );
+            },
+            progressIndicatorBuilder: (ctx, text, progress) {
               return LayoutBuilder(
                 builder: (context, constraints) {
                   final height = constraints.maxWidth * 427 / 640;

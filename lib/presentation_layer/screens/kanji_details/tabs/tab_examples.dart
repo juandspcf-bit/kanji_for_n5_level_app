@@ -14,35 +14,31 @@ class TabExamples extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final connectivityData = ref.watch(statusConnectionProvider);
     final kanjiDetailsData = ref.watch(kanjiDetailsProvider);
     final kanjiFromApi = kanjiDetailsData!.kanjiFromApi;
     final statusStorage = kanjiDetailsData.statusStorage;
-    return connectivityData == ConnectionStatus.noConnected &&
-            kanjiFromApi.statusStorage == StatusStorage.onlyOnline
-        ? const ErrorConnectionDetailsScreen()
-        : Column(
-            children: [
-              const SizedBox(
-                height: 10,
-              ),
-              Text(
-                context.l10n.examples,
-                style: Theme.of(context)
-                    .textTheme
-                    .titleLarge!
-                    .copyWith(fontWeight: FontWeight.bold),
-              ),
-              const SizedBox(
-                height: 10,
-              ),
-              Expanded(
-                child: ExampleAudios(
-                  examples: kanjiFromApi.example,
-                  statusStorage: statusStorage,
-                ),
-              ),
-            ],
-          );
+    return Column(
+      children: [
+        const SizedBox(
+          height: 10,
+        ),
+        Text(
+          context.l10n.examples,
+          style: Theme.of(context)
+              .textTheme
+              .titleLarge!
+              .copyWith(fontWeight: FontWeight.bold),
+        ),
+        const SizedBox(
+          height: 10,
+        ),
+        Expanded(
+          child: ExampleAudios(
+            examples: kanjiFromApi.example,
+            statusStorage: statusStorage,
+          ),
+        ),
+      ],
+    );
   }
 }

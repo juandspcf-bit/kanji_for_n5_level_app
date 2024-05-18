@@ -13,16 +13,12 @@ class TabStrokes extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final connectivityData = ref.watch(statusConnectionProvider);
     final kanjiDetailsData = ref.watch(kanjiDetailsProvider);
     final kanjiFromApi = kanjiDetailsData!.kanjiFromApi;
     final statusStorage = kanjiDetailsData.statusStorage;
-    return connectivityData == ConnectionStatus.noConnected &&
-            kanjiFromApi.statusStorage == StatusStorage.onlyOnline
-        ? const ErrorConnectionDetailsScreen()
-        : StrokesImages(
-            kanjiFromApi: kanjiFromApi,
-            statusStorage: statusStorage,
-          );
+    return StrokesImages(
+      kanjiFromApi: kanjiFromApi,
+      statusStorage: statusStorage,
+    );
   }
 }

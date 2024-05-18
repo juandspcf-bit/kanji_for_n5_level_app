@@ -1,21 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:kanji_for_n5_level_app/application_layer/services.dart';
-import 'package:kanji_for_n5_level_app/models/kanji_from_api.dart';
-import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_details/kaji_details_screen.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_details/kanji_details_provider.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_details/kanji_details_quiz_animated.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_details/tabs/icon_favorites.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_details/tabs/tab_examples.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_details/tabs/tab_strokes.dart';
-import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_details/tabs/tab_video_strokes.dart';
+import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_details/tabs/tab_video/video_strokes_landscape.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/navigation_bar_screens/sections_screen/kanjis_for_section_screen/kanjis_for_section_screen.dart';
 import 'package:kanji_for_n5_level_app/providers/examples_audios_track_list_provider.dart';
 import 'package:kanji_for_n5_level_app/providers/status_connection_provider.dart';
 import 'package:kanji_for_n5_level_app/providers/status_stored_provider.dart';
 
-class CustomTabController extends ConsumerWidget {
-  const CustomTabController({super.key});
+class CustomTabControllerKanjiDetails extends ConsumerWidget {
+  const CustomTabControllerKanjiDetails({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -53,7 +50,7 @@ class CustomTabController extends ConsumerWidget {
               ref
                   .read(examplesAudiosTrackListProvider.notifier)
                   .setIsPlaying(false);
-              ref.read(toastServiceProvider).dismiss(context);
+              //ref.read(toastServiceProvider).dismiss(context);
             },
             child: Scaffold(
               appBar: AppBar(
@@ -106,7 +103,7 @@ class CustomTabController extends ConsumerWidget {
               ),
               body: const TabBarView(
                 children: <Widget>[
-                  TabVideoStrokes(),
+                  VideoStrokesPortrait(),
                   TabStrokes(),
                   TabExamples(),
                 ],

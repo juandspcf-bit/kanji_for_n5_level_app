@@ -2,20 +2,21 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kanji_for_n5_level_app/models/kanji_from_api.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_details/custom_navigation_rails_details/custom_navigation_rails_details_provider.dart';
+import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_details/kanji_details_provider.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_details/quiz_kanji_details_screen/landscape_screens/examples_ladscape.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_details/quiz_kanji_details_screen/landscape_screens/options.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_details/quiz_kanji_details_screen/landscape_screens/strokes.dart';
-import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_details/quiz_kanji_details_screen/landscape_screens/video_strokes.dart';
+import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_details/quiz_kanji_details_screen/landscape_screens/video_strokes_landscape.dart';
 
 class CustomNavigationRailKanjiDetails extends ConsumerWidget {
   const CustomNavigationRailKanjiDetails({
-    required this.kanjiFromApi,
     super.key,
   });
 
-  final KanjiFromApi kanjiFromApi;
-
-  Widget getSelection(int selection) {
+  Widget getSelection(
+    int selection,
+    KanjiFromApi kanjiFromApi,
+  ) {
     if (selection == 0) {
       return const VideoStrokesLandScape();
     } else if (selection == 1) {
@@ -31,6 +32,7 @@ class CustomNavigationRailKanjiDetails extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final kanjiFromApi = ref.read(kanjiDetailsProvider)!.kanjiFromApi;
     final customNavigationRailsDetailsData =
         ref.watch(customNavigationRailsDetailsProvider);
     return Scaffold(
@@ -71,7 +73,10 @@ class CustomNavigationRailKanjiDetails extends ConsumerWidget {
             ],
           ),
           Expanded(
-              child: getSelection(customNavigationRailsDetailsData.selection)),
+              child: getSelection(
+            customNavigationRailsDetailsData.selection,
+            kanjiFromApi,
+          )),
         ],
       ),
     );
