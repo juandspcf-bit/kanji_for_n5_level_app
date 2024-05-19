@@ -40,6 +40,21 @@ class LastScoreFlashCardProvider
     required int countUnWatched,
   }) async {
     state = const AsyncLoading();
+    final flashCardDataLastScore =
+        await ref.read(localDBServiceProvider).getSingleFlashCardDataDB(
+              kanjiCharacter,
+              section,
+              uuid,
+            );
+    final allRevisedFlashCards = flashCardDataLastScore.allRevisedFlashCards;
+    if (allRevisedFlashCards) {
+      state = await AsyncValue.guard(
+        () {
+          return Future(() => flashCardDataLastScore);
+        },
+      );
+      return;
+    }
     await ref.read(cloudDBServiceProvider).updateQuizFlashCardScore(
           kanjiCharacter,
           countUnWatched == 0,

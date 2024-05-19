@@ -59,9 +59,7 @@ class ToQuizSelectorButton extends ConsumerWidget {
         if (kanjiFromApi == null) return;
         if (quizDetailsData.currentScreenType == Screen.flashCards &&
             flashCardState.indexQuestion != 0) {
-          await ref
-              .read(lastScoreFlashCardProvider.notifier)
-              .setFinishedFlashCard(
+          ref.read(lastScoreFlashCardProvider.notifier).setFinishedFlashCard(
                 kanjiCharacter: kanjiFromApi.kanjiCharacter,
                 section: kanjiFromApi.section,
                 uuid: ref.read(authServiceProvider).userUuid ?? '',
