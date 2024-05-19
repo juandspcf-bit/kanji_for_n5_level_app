@@ -2,8 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kanji_for_n5_level_app/models/kanji_from_api.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_details/custom_navigation_rails_details/custom_navigation_rails_details_provider.dart';
-import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_details/kanji_details_provider.dart';
-import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_details/quiz_kanji_details_screen/landscape_screens/examples_ladscape.dart';
+import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_details/quiz_kanji_details_screen/landscape_screens/examples_landscape.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_details/quiz_kanji_details_screen/landscape_screens/options.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_details/quiz_kanji_details_screen/landscape_screens/strokes.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_details/quiz_kanji_details_screen/landscape_screens/video_strokes_landscape.dart';
@@ -11,7 +10,10 @@ import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_details/
 class CustomNavigationRailKanjiDetails extends ConsumerWidget {
   const CustomNavigationRailKanjiDetails({
     super.key,
+    required this.kanjiFromApi,
   });
+
+  final KanjiFromApi kanjiFromApi;
 
   Widget getSelection(
     int selection,
@@ -32,7 +34,6 @@ class CustomNavigationRailKanjiDetails extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final kanjiFromApi = ref.read(kanjiDetailsProvider)!.kanjiFromApi;
     final customNavigationRailsDetailsData =
         ref.watch(customNavigationRailsDetailsProvider);
     return Scaffold(
