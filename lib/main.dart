@@ -51,8 +51,6 @@ class MyApp extends ConsumerWidget {
     final onBoardingData = ref.watch(onBoardingProvider);
     Future.delayed(const Duration(milliseconds: 200));
 
-    logger.d("the onboarding is ${onBoardingData.isOnBoardingDone}");
-
     ref.read(statusConnectionProvider);
     return MaterialApp(
       title: 'Flutter Demo',
