@@ -11,33 +11,6 @@ import 'package:kanji_for_n5_level_app/providers/status_stored_provider.dart';
 class StrokesImages extends ConsumerWidget {
   final KanjiFromApi kanjiFromApi;
 
-  static const _ordinals = [
-    "1st",
-    "2nd",
-    "3rd",
-    "4th",
-    "5th",
-    "6th",
-    "7th",
-    "8th",
-    "9th",
-    "10th",
-    "11th",
-    "12th",
-    "13th",
-    "14th",
-    "15th",
-    "16th",
-    "17th",
-    "18th",
-    "19th",
-    "20th",
-    "21st",
-    "22nd",
-    "23rd",
-    "24th",
-  ];
-
   const StrokesImages(
       {super.key, required this.kanjiFromApi, required this.statusStorage});
 
@@ -154,7 +127,8 @@ class StrokesImages extends ConsumerWidget {
           const SizedBox(
             height: 10,
           ),
-          Text('${_ordinals[index]} ${context.l10n.stroke}')
+          Text(
+              '${context.l10n.ordinal_numbers((index + 1).toString())} ${context.l10n.stroke}')
         ],
       );
       strokes.add(stroke);
