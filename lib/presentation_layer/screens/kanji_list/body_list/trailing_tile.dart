@@ -1,5 +1,8 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:kanji_for_n5_level_app/application_layer/services.dart';
 import 'package:kanji_for_n5_level_app/models/kanji_from_api.dart';
 import 'package:kanji_for_n5_level_app/models/section_model.dart';
@@ -17,10 +20,21 @@ class TrailingTile extends ConsumerWidget {
 
   Widget selectWidgetStatus(KanjiFromApi kanjiFromApi, BuildContext context) {
     if (kanjiFromApi.statusStorage == StatusStorage.onlyOnline) {
-      return Icon(
-        Icons.file_download_outlined,
-        color: Theme.of(context).colorScheme.onSecondaryContainer,
-        size: 50,
+      return SvgPicture.asset(
+        height: 60,
+        width: 60,
+        "assets/icons/download.svg",
+        colorFilter: const ColorFilter.mode(Colors.white, BlendMode.srcIn),
+        placeholderBuilder: (BuildContext context) => Container(
+          alignment: Alignment.center,
+          margin: const EdgeInsets.all(5),
+          color: Colors.transparent,
+          height: 80,
+          width: 80,
+          child: const CircularProgressIndicator(
+            backgroundColor: Color.fromARGB(179, 5, 16, 51),
+          ),
+        ),
       );
     } else if (kanjiFromApi.statusStorage == StatusStorage.stored) {
       return Icon(
