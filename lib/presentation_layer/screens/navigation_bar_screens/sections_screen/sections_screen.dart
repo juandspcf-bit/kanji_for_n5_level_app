@@ -125,7 +125,8 @@ class Section extends ConsumerWidget {
                   textAlign: TextAlign.center,
                 ),
                 Text(
-                  "${AppLocalizations.of(context)!.section} ${sectionData.sectionNumber}",
+                  "${context.l10n.ordinal_numbers((sectionData.sectionNumber).toString())}"
+                  " ${context.l10n.section}",
                   style: Theme.of(context).textTheme.titleMedium?.copyWith(
                         color: Colors.white,
                         fontFamily: GoogleFonts.roboto().fontFamily,
