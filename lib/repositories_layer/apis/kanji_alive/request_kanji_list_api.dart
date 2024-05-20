@@ -69,7 +69,7 @@ class KanjiAliveApi {
         }
 
         for (final body in bodies) {
-          kanjisFromApi.add(builKanjiInfoFromApi(body, section));
+          kanjisFromApi.add(buildKanjiInfoFromApi(body, section));
         }
         return kanjisFromApi;
       }
@@ -82,7 +82,7 @@ class KanjiAliveApi {
       }
 
       for (final body in bodies) {
-        kanjisFromApi.add(builKanjiInfoFromApi(body, section));
+        kanjisFromApi.add(buildKanjiInfoFromApi(body, section));
       }
       final fixedLengthList = List<KanjiFromApi>.filled(
           kanjisCharacteres.length, kanjisFromApi.first);

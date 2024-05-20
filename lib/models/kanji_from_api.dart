@@ -84,7 +84,7 @@ class Strokes {
   });
 }
 
-KanjiFromApi builKanjiInfoFromApi(Map<String, dynamic> body, int section) {
+KanjiFromApi buildKanjiInfoFromApi(Map<String, dynamic> body, int section) {
   final Map<String, dynamic> kanji = body['kanji'];
 
   final String kanjiCharacterFromAPI = kanji['character'];
