@@ -40,6 +40,17 @@
   "@examples": {},
   "playlist":"Playlist",
   "@playlist":{},
+
+  "kanji_quiz_finished":"Is kanji quiz finished?",
+  "@kanji_quiz_finished":{},
+  "kanji_quiz_all_correct":"All the answers are correct in kanji quiz?",
+  "@kanji_quiz_all_correct":{},
+  "audio_quiz_finished":"All the audio quiz are completed?",
+  "@audio_quiz_finished":{},
+  "audio_quiz_all_correct":"All the answers are correct for all audio quiz?",
+  "@audio_quiz_all_correct":{},
+  "flash_card_finished":"All the flash cards are revised?",
+  "@flash_card_finished":{},
   "erroConnectionDetailsMessage":"No internet connection, you will be able to access the info when the connection is restored",
   "@erroConnectionDetailsMessage":{}
 }

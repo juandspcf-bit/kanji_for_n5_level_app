@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:kanji_for_n5_level_app/l10n/localization.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/navigation_bar_screens/progress_screen/my_tile.dart';
 import 'package:timeline_tile/timeline_tile.dart';
 
@@ -50,11 +51,7 @@ class MyTimeLineTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final Color colorContainer;
-    final Color colorText;
-    final IconData iconData;
-
-    (colorContainer, colorText, iconData) = getColorsStatus();
+    final (colorContainer, colorText, iconData) = getColorsStatus();
     return TimelineTile(
       indicatorStyle: IndicatorStyle(
         iconStyle: IconStyle(
@@ -70,8 +67,8 @@ class MyTimeLineTile extends StatelessWidget {
       isFirst: isFirst,
       isLast: isLast,
       endChild: Container(
-        height: 260,
         margin: const EdgeInsets.all(15),
+        padding: const EdgeInsets.symmetric(vertical: 15),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(20),
           color: colorContainer,
@@ -81,11 +78,8 @@ class MyTimeLineTile extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const SizedBox(
-                height: 10,
-              ),
               Text(
-                'Section $section',
+                '${context.l10n.ordinal_numbers(section.toString())} ${context.l10n.section}',
                 textAlign: TextAlign.center,
                 style: Theme.of(context).textTheme.titleLarge!.copyWith(
                       color: colorText,
@@ -101,7 +95,7 @@ class MyTimeLineTile extends StatelessWidget {
                   color: colorText,
                 ),
                 text: Text(
-                  'is kanji quiz finished?',
+                  context.l10n.kanji_quiz_finished,
                   style: Theme.of(context).textTheme.bodyMedium!.copyWith(
                         color: colorText,
                       ),
@@ -115,7 +109,7 @@ class MyTimeLineTile extends StatelessWidget {
                   color: colorText,
                 ),
                 text: Text(
-                  'all the answers are correct in kanji quiz?',
+                  context.l10n.kanji_quiz_all_correct,
                   style: Theme.of(context).textTheme.bodyMedium!.copyWith(
                         color: colorText,
                       ),
@@ -130,7 +124,7 @@ class MyTimeLineTile extends StatelessWidget {
                   color: colorText,
                 ),
                 text: Text(
-                  'all audio quiz completed',
+                  context.l10n.audio_quiz_finished,
                   style: Theme.of(context).textTheme.bodyMedium!.copyWith(
                         color: colorText,
                       ),
@@ -144,7 +138,7 @@ class MyTimeLineTile extends StatelessWidget {
                   color: colorText,
                 ),
                 text: Text(
-                  'all answers correct in audio quiz?',
+                  context.l10n.audio_quiz_all_correct,
                   style: Theme.of(context).textTheme.bodyMedium!.copyWith(
                         color: colorText,
                       ),
@@ -159,7 +153,7 @@ class MyTimeLineTile extends StatelessWidget {
                   color: colorText,
                 ),
                 text: Text(
-                  'all flash cards revised',
+                  context.l10n.flash_card_finished,
                   style: Theme.of(context).textTheme.bodyMedium!.copyWith(
                         color: colorText,
                       ),

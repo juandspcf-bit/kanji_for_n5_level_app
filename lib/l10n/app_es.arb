@@ -40,6 +40,16 @@
   "@examples": {},
   "playlist":"Lista de reproducción",
   "@playlist":{},
+  "kanji_quiz_finished":"¿Esta completado el test sobre kanjis?",
+  "@kanji_quiz_finished":{},
+  "kanji_quiz_all_correct":"¿Todas las respuestas fueron correctas en el test sobre kanjis?",
+  "@kanji_quiz_all_correct":{},
+  "audio_quiz_finished":"¿Esta completado todos los tests con audio?",
+  "@audio_quiz_finished":{},
+  "audio_quiz_all_correct":"¿Todas las respuestas fueron correctas en los tests con audio?",
+  "@audio_quiz_all_correct":{},
+  "flash_card_finished":"¿Todas las tarjetas de memoria están revisadas?",
+  "@flash_card_finished":{},
   "erroConnectionDetailsMessage":"No tienes conexión a internet, podrás acceder los datos cuando se restablezca",
   "@erroConnectionDetailsMessage":{}
 }
