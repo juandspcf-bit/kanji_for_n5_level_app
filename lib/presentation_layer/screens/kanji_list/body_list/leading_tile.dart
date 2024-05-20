@@ -16,42 +16,30 @@ class LeadingTile extends StatelessWidget {
   Widget setSVGwidget(BuildContext context) {
     if (kanjiFromApi.statusStorage == StatusStorage.onlyOnline ||
         kanjiFromApi.statusStorage == StatusStorage.processingStoring) {
-      return SizedBox(
-        height: 80,
-        width: 80,
-        child: GestureDetector(
-          child: SvgPicture.network(
-            kanjiFromApi.kanjiImageLink,
-            semanticsLabel: kanjiFromApi.kanjiCharacter,
-            placeholderBuilder: (BuildContext context) => Container(
-              margin: const EdgeInsets.all(5),
-              alignment: Alignment.center,
-              color: Colors.transparent,
-              child: const CircularProgressIndicator(
-                backgroundColor: Color.fromARGB(179, 5, 16, 51),
-              ),
-            ),
+      return SvgPicture.network(
+        kanjiFromApi.kanjiImageLink,
+        semanticsLabel: kanjiFromApi.kanjiCharacter,
+        placeholderBuilder: (BuildContext context) => Container(
+          padding: const EdgeInsets.all(5),
+          alignment: Alignment.center,
+          color: Colors.transparent,
+          child: const CircularProgressIndicator(
+            backgroundColor: Color.fromARGB(179, 5, 16, 51),
           ),
         ),
       );
     } else if (kanjiFromApi.statusStorage == StatusStorage.stored ||
         kanjiFromApi.statusStorage == StatusStorage.processingDeleting) {
-      return SizedBox(
-        height: 80,
-        width: 80,
-        child: SvgPicture.file(
-          File(kanjiFromApi.kanjiImageLink),
-          semanticsLabel: kanjiFromApi.kanjiCharacter,
-          placeholderBuilder: (BuildContext context) => Container(
-              alignment: Alignment.center,
-              margin: const EdgeInsets.all(5),
-              color: Colors.transparent,
-              height: 80,
-              width: 80,
-              child: const CircularProgressIndicator(
-                backgroundColor: Color.fromARGB(179, 5, 16, 51),
-              )),
-        ),
+      return SvgPicture.file(
+        File(kanjiFromApi.kanjiImageLink),
+        semanticsLabel: kanjiFromApi.kanjiCharacter,
+        placeholderBuilder: (BuildContext context) => Container(
+            alignment: Alignment.center,
+            margin: const EdgeInsets.all(5),
+            color: Colors.transparent,
+            child: const CircularProgressIndicator(
+              backgroundColor: Color.fromARGB(179, 5, 16, 51),
+            )),
       );
     } else {
       return SvgPicture.asset(
@@ -72,6 +60,8 @@ class LeadingTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      height: 80,
+      width: 80,
       decoration: BoxDecoration(
         color: kanjiFromApi.accessToKanjiItemsButtons
             ? Theme.of(context)

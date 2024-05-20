@@ -94,8 +94,11 @@ class StrokesImages extends ConsumerWidget {
             height: containerSize.toDouble(),
             width: containerSize.toDouble(),
             decoration: BoxDecoration(
-                color: Theme.of(context).colorScheme.onPrimaryContainer,
-                borderRadius: const BorderRadius.all(Radius.circular(10))),
+              color: Theme.of(context).colorScheme.onPrimaryContainer,
+              borderRadius: const BorderRadius.all(
+                Radius.circular(10),
+              ),
+            ),
             child: GestureDetector(
               onTap: () {
                 _scaleDialogForShowingSingleStroke(
