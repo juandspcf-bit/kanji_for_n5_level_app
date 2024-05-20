@@ -20,6 +20,8 @@ class LeadingTile extends StatelessWidget {
         kanjiFromApi.kanjiImageLink,
         semanticsLabel: kanjiFromApi.kanjiCharacter,
         placeholderBuilder: (BuildContext context) => Container(
+          height: 80,
+          width: 80,
           padding: const EdgeInsets.all(5),
           alignment: Alignment.center,
           color: Colors.transparent,
@@ -31,6 +33,8 @@ class LeadingTile extends StatelessWidget {
     } else if (kanjiFromApi.statusStorage == StatusStorage.stored ||
         kanjiFromApi.statusStorage == StatusStorage.processingDeleting) {
       return SvgPicture.file(
+        height: 80,
+        width: 80,
         File(kanjiFromApi.kanjiImageLink),
         semanticsLabel: kanjiFromApi.kanjiCharacter,
         placeholderBuilder: (BuildContext context) => Container(
