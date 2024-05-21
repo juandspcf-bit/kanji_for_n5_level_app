@@ -17,57 +17,51 @@ class KanjiItem extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
-      child: Container(
-        decoration: BoxDecoration(
-          color: Theme.of(context).colorScheme.surface,
-        ),
-        child: Padding(
-          padding: const EdgeInsets.all(10.0),
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              LeadingTile(
-                kanjiFromApi: kanjiFromApi,
-              ),
-              const SizedBox(
-                width: 10,
-              ),
-              Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.all(10.0),
-                  child: Container(
-                    color: Colors.transparent,
-                    width: double.infinity,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        TitleTile(
-                          kanjiFromApi: kanjiFromApi,
-                        ),
-                        const SizedBox(
-                          height: 5,
-                        ),
-                        SubTitleTile(
-                          kanjiFromApi: kanjiFromApi,
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-              Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 5, vertical: 15),
-                child: TrailingTile(
-                  kanjiFromApi: kanjiFromApi,
-                ),
-              )
-            ],
+    return Container(
+      margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+      decoration: BoxDecoration(
+        color: Theme.of(context).colorScheme.surface,
+      ),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          LeadingTile(
+            kanjiFromApi: kanjiFromApi,
           ),
-        ),
+          const SizedBox(
+            width: 10,
+          ),
+          Expanded(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 10),
+              child: Container(
+                color: Colors.transparent,
+                width: double.infinity,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    TitleTile(
+                      kanjiFromApi: kanjiFromApi,
+                    ),
+                    const SizedBox(
+                      height: 5,
+                    ),
+                    SubTitleTile(
+                      kanjiFromApi: kanjiFromApi,
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 15),
+            child: TrailingTile(
+              kanjiFromApi: kanjiFromApi,
+            ),
+          )
+        ],
       ),
     );
   }

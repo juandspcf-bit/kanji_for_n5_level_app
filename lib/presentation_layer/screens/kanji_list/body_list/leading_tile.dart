@@ -20,8 +20,6 @@ class LeadingTile extends StatelessWidget {
         kanjiFromApi.kanjiImageLink,
         semanticsLabel: kanjiFromApi.kanjiCharacter,
         placeholderBuilder: (BuildContext context) => Container(
-          height: 80,
-          width: 80,
           padding: const EdgeInsets.all(5),
           alignment: Alignment.center,
           color: Colors.transparent,
@@ -33,8 +31,6 @@ class LeadingTile extends StatelessWidget {
     } else if (kanjiFromApi.statusStorage == StatusStorage.stored ||
         kanjiFromApi.statusStorage == StatusStorage.processingDeleting) {
       return SvgPicture.file(
-        height: 80,
-        width: 80,
         File(kanjiFromApi.kanjiImageLink),
         semanticsLabel: kanjiFromApi.kanjiCharacter,
         placeholderBuilder: (BuildContext context) => Container(
@@ -52,8 +48,6 @@ class LeadingTile extends StatelessWidget {
         semanticsLabel: kanjiFromApi.kanjiCharacter,
         placeholderBuilder: (BuildContext context) => Container(
             color: Colors.transparent,
-            height: 100,
-            width: 100,
             child: const CircularProgressIndicator(
               backgroundColor: Color.fromARGB(179, 5, 16, 51),
             )),
@@ -63,9 +57,10 @@ class LeadingTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    double size = 80;
     return Container(
-      height: 80,
-      width: 80,
+      height: size,
+      width: size,
       decoration: BoxDecoration(
         color: kanjiFromApi.accessToKanjiItemsButtons
             ? Theme.of(context)
