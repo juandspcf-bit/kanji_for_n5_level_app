@@ -190,9 +190,20 @@ class MainContent extends ConsumerWidget with StatusDBStoringDialogs {
     return Scaffold(
       appBar: bottomNavigationBar
           ? AppBar(
-              title: mainScreenData.selection == ScreenSelection.favoritesKanjis
-                  ? const Text("Favorites")
-                  : const TitleMainScreen(),
+              title: Builder(builder: (context) {
+                if (mainScreenData.selection ==
+                    ScreenSelection.favoritesKanjis) {
+                  return Text(context.l10n.favorites);
+                } else if (mainScreenData.selection ==
+                    ScreenSelection.progressTimeLine) {
+                  return Text(context.l10n.progress);
+                } else if (mainScreenData.selection ==
+                    ScreenSelection.searchKanji) {
+                  return Text(context.l10n.search_kanji);
+                } else {
+                  return const TitleMainScreen();
+                }
+              }),
               actions: [
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 10),

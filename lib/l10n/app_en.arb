@@ -2,6 +2,12 @@
   "@@locale": "en",
   "welcome": "Welcome",
   "@welcome": {},
+  "favorites":"My favorites",
+  "@favorites":{},
+  "search_kanji":"Search for any kanji",
+  "@search_kanji":{},
+  "progress":"Your progress",
+  "@progress":{},
   "sections": "{section, select, section_1{From pictures} section_2{Numbers} section_3{Numbers and directions} section_4{Human body and people} section_5{Days and kanjis for the school} section_6{Time} section_7{Adjectives} section_8{Verbs} section_9{Nouns} other{other}}",
   "@sections": {
     "placeholders": {
@@ -40,6 +46,9 @@
   "@examples": {},
   "playlist":"Playlist",
   "@playlist":{},
+
+
+
 
   "kanji_quiz_finished":"Is kanji quiz finished?",
   "@kanji_quiz_finished":{},
