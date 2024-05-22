@@ -12,6 +12,7 @@
         "riverpod",
         "roboto",
         "romaji",
+        "sqflite",
         "unfocus",
         "uuid"
     ]

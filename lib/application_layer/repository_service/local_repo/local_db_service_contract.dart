@@ -59,7 +59,7 @@ abstract class LocalDBService {
     int countOmitted,
   );
 
-  Future<SingleQuizAudioExampleData> getSingleAudioExampleQuizDataDB(
+  Future<SingleAudioExampleQuizData> getSingleAudioExampleQuizDataDB(
     String kanjiCharacter,
     int section,
     String uuid,
@@ -108,7 +108,7 @@ abstract class LocalDBService {
   );
 
   Future<void> getQuizSectionDataFromDB(
-    String kanjiCharacter,
+    String uuid,
     int section,
   );
 

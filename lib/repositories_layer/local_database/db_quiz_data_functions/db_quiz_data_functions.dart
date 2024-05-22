@@ -1,5 +1,6 @@
 import 'package:kanji_for_n5_level_app/main.dart';
 import 'package:kanji_for_n5_level_app/models/progress_time_line_d_b_data.dart';
+import 'package:kanji_for_n5_level_app/models/quiz_section_data.dart';
 import 'package:kanji_for_n5_level_app/models/section_model.dart';
 import 'package:kanji_for_n5_level_app/models/single_quiz_audio_example_data.dart';
 import 'package:kanji_for_n5_level_app/models/single_quiz_flash_card_data.dart';
@@ -78,7 +79,7 @@ Future<ProgressTimeLineDBData> getAllQuizSectionData(
     allAudioQuizCorrectStatusList,
   ) = getStatusAllAudioQuiz(sectionAudioQuizData);
 
-  final listFlahsCardQuery = await db.rawQuery(
+  final listFlashCardQuery = await db.rawQuery(
       'SELECT * FROM kanji_flashcard_quiz '
       'WHERE'
       ' uuid = ?',
@@ -86,7 +87,7 @@ Future<ProgressTimeLineDBData> getAllQuizSectionData(
 
   final sectionFlashCardData = getSectionFlashCardList(
     listSections,
-    listFlahsCardQuery,
+    listFlashCardQuery,
     uuid,
   );
 
@@ -104,13 +105,91 @@ Future<ProgressTimeLineDBData> getAllQuizSectionData(
 
 Future<void> getQuizSectionData(
   String uuid,
-  String section,
+  int section,
 ) async {
-  final db = await kanjiFromApiDatabase;
-  final listQuery = await db.rawQuery(
-    'SELECT * FROM kanji_quiz WHERE section = ? AND uuid = ?',
-    [section, uuid],
-  );
+  try {
+    final db = await kanjiFromApiDatabase;
+    final kanjisQuizDataFromDB = await db.rawQuery(
+      'SELECT * FROM kanji_quiz WHERE section = ? AND uuid = ?',
+      [section, uuid],
+    );
+
+    final SingleQuizSectionData kanjisQuizData;
+
+    if (kanjisQuizDataFromDB.isEmpty) {
+      kanjisQuizData = SingleQuizSectionData(
+        section: -1,
+        allCorrectAnswers: false,
+        isFinishedQuiz: false,
+        countCorrects: 0,
+        countIncorrect: 0,
+        countOmitted: 0,
+      );
+    } else {
+      kanjisQuizData = SingleQuizSectionData(
+        section: kanjisQuizDataFromDB[0]['section'] as int,
+        allCorrectAnswers:
+            (kanjisQuizDataFromDB[0]['allCorrectAnswersQuizKanji'] as int) == 1,
+        isFinishedQuiz:
+            (kanjisQuizDataFromDB[0]['isFinishedKanjiQuiz'] as int) == 1,
+        countCorrects: kanjisQuizDataFromDB[0]['countCorrects'] as int,
+        countIncorrect: kanjisQuizDataFromDB[0]['countIncorrect'] as int,
+        countOmitted: kanjisQuizDataFromDB[0]['countOmitted'] as int,
+      );
+    }
+
+    final audioExampleQuizDataFromDB = await db.rawQuery(
+        'SELECT * FROM kanji_audio_example_quiz'
+        ' WHERE section = ? AND uuid = ?',
+        [section, uuid]);
+
+    List<SingleAudioExampleQuizData> audioExampleQuizData = [];
+
+    for (int i = 0; i < audioExampleQuizDataFromDB.length; i++) {
+      final singleAudioExampleQuizData = SingleAudioExampleQuizData(
+        kanjiCharacter:
+            audioExampleQuizDataFromDB[i]['kanjiCharacter'] as String,
+        section: audioExampleQuizDataFromDB[i]['section'] as int,
+        uuid: audioExampleQuizDataFromDB[i]['uuid'] as String,
+        allCorrectAnswers:
+            (audioExampleQuizDataFromDB[i]['allCorrectAnswers'] as int) == 1,
+        isFinishedQuiz:
+            (audioExampleQuizDataFromDB[i]['isFinishedQuiz'] as int) == 1,
+        countCorrects: audioExampleQuizDataFromDB[i]['countCorrects'] as int,
+        countIncorrect: audioExampleQuizDataFromDB[i]['countIncorrect'] as int,
+        countOmitted: audioExampleQuizDataFromDB[i]['countOmitted'] as int,
+      );
+
+      audioExampleQuizData.add(singleAudioExampleQuizData);
+    }
+
+    final flashcardDataFromDB = await db.rawQuery(
+        'SELECT * FROM kanji_flashcard_quiz '
+        'WHERE'
+        ' section = ? AND uuid = ?',
+        [section, uuid]);
+
+    List<SingleQuizFlashCardData> flashcardData = [];
+
+    for (var i = 0; i < flashcardDataFromDB.length; i++) {
+      final singleQuizFlashCardData = SingleQuizFlashCardData(
+        kanjiCharacter: flashcardDataFromDB[i]['kanjiCharacter'] as String,
+        uuid: flashcardDataFromDB[i]['uuid'] as String,
+        section: flashcardDataFromDB[i]['section'] as int,
+        allRevisedFlashCards:
+            (flashcardDataFromDB[i]['allRevisedFlashCards'] as int) == 1,
+      );
+      flashcardData.add(singleQuizFlashCardData);
+    }
+
+    QuizSectionData(
+      singleQuizSectionData: kanjisQuizData,
+      singleQuizFlashCardData: flashcardData,
+      singleAudioExampleQuizData: audioExampleQuizData,
+    );
+  } catch (e) {
+    logger.e(e);
+  }
 }
 
 Future<void> updateSingleQuizSectionData(
@@ -176,7 +255,7 @@ Future<void> insertSingleQuizSectionDataDB(
   );
 }
 
-Future<SingleQuizAudioExampleData> getSingleQuizSectionAudioExampleData(
+Future<SingleAudioExampleQuizData> getSingleQuizSectionAudioExampleData(
   String kanjiCharacter,
   int section,
   String uuid,
@@ -188,7 +267,7 @@ Future<SingleQuizAudioExampleData> getSingleQuizSectionAudioExampleData(
       [kanjiCharacter, section, uuid]);
 
   if (listQuery.isEmpty) {
-    return SingleQuizAudioExampleData(
+    return SingleAudioExampleQuizData(
       kanjiCharacter: kanjiCharacter,
       section: -1,
       uuid: '',
@@ -202,7 +281,7 @@ Future<SingleQuizAudioExampleData> getSingleQuizSectionAudioExampleData(
 
   //logger.d("audio example form database ${listQuery[0]}");
 
-  return SingleQuizAudioExampleData(
+  return SingleAudioExampleQuizData(
     kanjiCharacter: listQuery[0]['kanjiCharacter'] as String,
     section: listQuery[0]['section'] as int,
     uuid: listQuery[0]['uuid'] as String,
@@ -225,8 +304,6 @@ Future<int> updateSingleAudioExampleQuizSectionData(
   int countOmitted,
 ) async {
   final db = await kanjiFromApiDatabase;
-  //logger.d('uuid: $uuid, allCorrectAnwers: $allCorrectAnswers,'
-  //   ' isFinishedQuiz: $isFinishedQuiz, corrects: $countCorrects');
   return db.rawUpdate(
       'UPDATE'
       ' kanji_audio_example_quiz '
@@ -460,8 +537,8 @@ Future<void> cacheQuizDetails(List<String> sections,
       final lisQuizData =
           quizScoreData['list_quiz_details_$section'] as Map<String, Object>;
 
-      FutureGroup<SingleQuizAudioExampleData> futureQuizDetailsGroup =
-          FutureGroup<SingleQuizAudioExampleData>();
+      FutureGroup<SingleAudioExampleQuizData> futureQuizDetailsGroup =
+          FutureGroup<SingleAudioExampleQuizData>();
 
       /// read current cached data
       for (var i = 0; i < sectionsKanjis['section$section']!.length; i++) {

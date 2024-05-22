@@ -36,7 +36,7 @@ List<SingleQuizSectionData> getSectionKanjiQuizList(
   }).toList();
 }
 
-List<List<SingleQuizAudioExampleData>> getSectionAudioQuizList(
+List<List<SingleAudioExampleQuizData>> getSectionAudioQuizList(
   List<SectionModel> listSections,
   List<Map<String, Object?>> listAudioQuizQuery,
   String uuid,
@@ -72,7 +72,7 @@ List<List<SingleQuizAudioExampleData>> getSectionAudioQuizList(
     (sectionListData) {
       return sectionListData.map(
         (mapData) {
-          return SingleQuizAudioExampleData(
+          return SingleAudioExampleQuizData(
             kanjiCharacter: mapData['kanjiCharacter'] as String,
             section: mapData['section'] as int,
             uuid: uuid,
@@ -160,7 +160,7 @@ List<List<SingleQuizFlashCardData>> getSectionFlashCardList(
 }
 
 (List<bool>, List<bool>) getStatusAllAudioQuiz(
-    List<List<SingleQuizAudioExampleData>> sectionAudioQuizData) {
+    List<List<SingleAudioExampleQuizData>> sectionAudioQuizData) {
   List<bool> allAudioQuizFinishedList = List.generate(
       sectionAudioQuizData.length, (index) => true,
       growable: false);

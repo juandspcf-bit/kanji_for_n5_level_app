@@ -113,7 +113,7 @@ class SQLiteDBService implements LocalDBService {
   }
 
   @override
-  Future<SingleQuizAudioExampleData> getSingleAudioExampleQuizDataDB(
+  Future<SingleAudioExampleQuizData> getSingleAudioExampleQuizDataDB(
     String kanjiCharacter,
     int section,
     String uuid,
@@ -219,11 +219,13 @@ class SQLiteDBService implements LocalDBService {
 
   @override
   Future<void> getQuizSectionDataFromDB(
-    String kanjiCharacter,
+    String uuid,
     int section,
-  ) {
-    // TODO: implement getQuizSectionDataFromDB
-    throw UnimplementedError();
+  ) async {
+    await getQuizSectionData(
+      uuid,
+      section,
+    );
   }
 
   @override

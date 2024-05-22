@@ -6,10 +6,10 @@ import 'package:kanji_for_n5_level_app/main.dart';
 import 'package:kanji_for_n5_level_app/models/single_quiz_audio_example_data.dart';
 
 class LastScoreDetailsProvider
-    extends AsyncNotifier<SingleQuizAudioExampleData> {
+    extends AsyncNotifier<SingleAudioExampleQuizData> {
   @override
-  FutureOr<SingleQuizAudioExampleData> build() {
-    return SingleQuizAudioExampleData(
+  FutureOr<SingleAudioExampleQuizData> build() {
+    return SingleAudioExampleQuizData(
       kanjiCharacter: '',
       section: -1,
       uuid: '',
@@ -75,7 +75,7 @@ class LastScoreDetailsProvider
         state = await AsyncValue.guard(
           () {
             return Future(
-              () => SingleQuizAudioExampleData(
+              () => SingleAudioExampleQuizData(
                 kanjiCharacter: kanjiCharacter,
                 section: section,
                 uuid: uuid,
@@ -106,7 +106,7 @@ class LastScoreDetailsProvider
       state = await AsyncValue.guard(
         () {
           return Future(
-            () => SingleQuizAudioExampleData(
+            () => SingleAudioExampleQuizData(
               kanjiCharacter: kanjiCharacter,
               section: section,
               uuid: uuid,
@@ -124,5 +124,5 @@ class LastScoreDetailsProvider
 }
 
 final lastScoreDetailsProvider =
-    AsyncNotifierProvider<LastScoreDetailsProvider, SingleQuizAudioExampleData>(
+    AsyncNotifierProvider<LastScoreDetailsProvider, SingleAudioExampleQuizData>(
         LastScoreDetailsProvider.new);
