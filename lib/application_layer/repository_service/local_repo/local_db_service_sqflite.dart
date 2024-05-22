@@ -218,6 +218,15 @@ class SQLiteDBService implements LocalDBService {
   }
 
   @override
+  Future<void> getQuizSectionDataFromDB(
+    String kanjiCharacter,
+    int section,
+  ) {
+    // TODO: implement getQuizSectionDataFromDB
+    throw UnimplementedError();
+  }
+
+  @override
   Future<void> cleanInvalidDBRecords(List<KanjiFromApi> listOfInvalidKanjis) {
     return cleanInvalidRecords(listOfInvalidKanjis);
   }

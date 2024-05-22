@@ -107,6 +107,11 @@ abstract class LocalDBService {
     String uuid,
   );
 
+  Future<void> getQuizSectionDataFromDB(
+    String kanjiCharacter,
+    int section,
+  );
+
   Future<void> cleanInvalidDBRecords(List<KanjiFromApi> listOfInvalidKanjis);
 
   Future<FirstTimeLogged> getAllFirstTimeLOggedDBData(

@@ -102,6 +102,17 @@ Future<ProgressTimeLineDBData> getAllQuizSectionData(
   );
 }
 
+Future<void> getQuizSectionData(
+  String uuid,
+  String section,
+) async {
+  final db = await kanjiFromApiDatabase;
+  final listQuery = await db.rawQuery(
+    'SELECT * FROM kanji_quiz WHERE section = ? AND uuid = ?',
+    [section, uuid],
+  );
+}
+
 Future<void> updateSingleQuizSectionData(
   int section,
   String uuid,
