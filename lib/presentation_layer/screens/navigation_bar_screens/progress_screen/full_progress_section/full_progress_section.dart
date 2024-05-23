@@ -13,7 +13,6 @@ class FullProgressSection extends ConsumerWidget {
           )
         : BodyFullProgressSection(
             quizSectionData: progressData.quizSectionData,
-            section: 0,
           );
   }
 
