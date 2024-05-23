@@ -11,7 +11,10 @@ class FullProgressSection extends ConsumerWidget {
         ? const Center(
             child: CircularProgressIndicator(),
           )
-        : const BodyFullProgressSection();
+        : BodyFullProgressSection(
+            quizSectionData: progressData.quizSectionData,
+            section: 0,
+          );
   }
 
   @override
