@@ -118,7 +118,7 @@ Future<QuizSectionData> getQuizSectionData(
 
     if (kanjisQuizDataFromDB.isEmpty) {
       kanjisQuizData = SingleQuizSectionData(
-        section: -1,
+        section: section,
         allCorrectAnswers: false,
         isFinishedQuiz: false,
         countCorrects: 0,
