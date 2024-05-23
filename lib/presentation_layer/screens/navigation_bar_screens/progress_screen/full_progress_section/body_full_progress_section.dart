@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:kanji_for_n5_level_app/models/quiz_section_data.dart';
 import 'package:kanji_for_n5_level_app/models/section_model.dart';
 import 'package:kanji_for_n5_level_app/models/single_quiz_audio_example_data.dart';
+import 'package:kanji_for_n5_level_app/models/single_quiz_flash_card_data.dart';
 import 'package:simple_circular_progress_bar/simple_circular_progress_bar.dart';
 
 class BodyFullProgressSection extends ConsumerWidget {
@@ -49,7 +51,7 @@ class BodyFullProgressSection extends ConsumerWidget {
     int countOmitted;
 
     try {
-      final data = quizSectionData.singleAudioExampleQuizData
+      final data = singleAudioExampleQuizData
           .firstWhere((data) => data.kanjiCharacter == kanjiCharacter);
       color = getColor(data);
       progress = getCount(data);
@@ -81,9 +83,49 @@ class BodyFullProgressSection extends ConsumerWidget {
           ),
         ),
       ),
-      title: const Text("audio progress"),
+      title: const Padding(
+        padding: EdgeInsets.only(bottom: 7),
+        child: Text("audio progress",
+            style: TextStyle(fontWeight: FontWeight.w600)),
+      ),
       subtitle: Text(
           "correct $countCorrects, incorrect $countIncorrect, omitted $countOmitted "),
+    );
+  }
+
+  Widget getFlashCardData(List<SingleQuizFlashCardData> singleQuizFlashCardData,
+      String kanjiCharacter) {
+    bool allRevisedFlashCards;
+    try {
+      final data = singleQuizFlashCardData
+          .firstWhere((data) => data.kanjiCharacter == kanjiCharacter);
+      allRevisedFlashCards = data.allRevisedFlashCards;
+    } catch (e) {
+      allRevisedFlashCards = false;
+    }
+
+    return ListTile(
+      leading: allRevisedFlashCards
+          ? SvgPicture.asset(
+              "assets/icons/done.svg",
+              width: 50,
+              height: 50,
+            )
+          : SvgPicture.asset(
+              "assets/icons/undone.svg",
+              width: 50,
+              height: 50,
+            ),
+      title: const Padding(
+        padding: EdgeInsets.only(bottom: 7.0),
+        child: Text(
+          "flash cards progress",
+          style: TextStyle(fontWeight: FontWeight.w600),
+        ),
+      ),
+      subtitle: Text(allRevisedFlashCards
+          ? "all revised flash cards"
+          : "no all the cards revised"),
     );
   }
 
@@ -118,8 +160,8 @@ class BodyFullProgressSection extends ConsumerWidget {
                               kanjisCharacters[i]),
                         ),
                         Expanded(
-                          child: getAudioData(
-                              quizSectionData.singleAudioExampleQuizData,
+                          child: getFlashCardData(
+                              quizSectionData.singleQuizFlashCardData,
                               kanjisCharacters[i]),
                         ),
                       ],
