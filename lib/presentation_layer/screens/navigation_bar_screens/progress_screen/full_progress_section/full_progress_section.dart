@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:kanji_for_n5_level_app/presentation_layer/screens/navigation_bar_screens/progress_screen/full_progress_section/body_full_progress_section.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/navigation_bar_screens/progress_screen/full_progress_section/full_progress_section_provider.dart';
 
 class FullProgressSection extends ConsumerWidget {
@@ -10,9 +11,7 @@ class FullProgressSection extends ConsumerWidget {
         ? const Center(
             child: CircularProgressIndicator(),
           )
-        : const Center(
-            child: Text("loaded data"),
-          );
+        : const BodyFullProgressSection();
   }
 
   @override

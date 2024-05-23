@@ -103,7 +103,7 @@ Future<ProgressTimeLineDBData> getAllQuizSectionData(
   );
 }
 
-Future<void> getQuizSectionData(
+Future<QuizSectionData> getQuizSectionData(
   String uuid,
   int section,
 ) async {
@@ -182,13 +182,26 @@ Future<void> getQuizSectionData(
       flashcardData.add(singleQuizFlashCardData);
     }
 
-    QuizSectionData(
+    return QuizSectionData(
       singleQuizSectionData: kanjisQuizData,
       singleQuizFlashCardData: flashcardData,
       singleAudioExampleQuizData: audioExampleQuizData,
     );
   } catch (e) {
     logger.e(e);
+    final kanjisQuizData = SingleQuizSectionData(
+      section: -1,
+      allCorrectAnswers: false,
+      isFinishedQuiz: false,
+      countCorrects: 0,
+      countIncorrect: 0,
+      countOmitted: 0,
+    );
+    return QuizSectionData(
+      singleQuizSectionData: kanjisQuizData,
+      singleQuizFlashCardData: [],
+      singleAudioExampleQuizData: [],
+    );
   }
 }
 
