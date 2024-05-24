@@ -66,30 +66,43 @@ class BodyFullProgressSection extends ConsumerWidget {
       countOmitted = 0;
     }
 
-    return ListTile(
-      contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-      leading: SizedBox(
-        height: 50,
-        width: 50,
-        child: SimpleCircularProgressBar(
-          size: 50,
-          progressStrokeWidth: 5,
-          backStrokeWidth: 5,
-          startAngle: 0,
-          animationDuration: 0,
-          progressColors: [color],
-          valueNotifier: ValueNotifier(
-            progress,
+    return SizedBox(
+      height: 100,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Text(
+            "audio progress",
+            style: TextStyle(fontWeight: FontWeight.w600),
+            textAlign: TextAlign.start,
           ),
-        ),
+          ListTile(
+            //contentPadding: const EdgeInsets.symmetric(vertical: 10),
+            leading: SizedBox(
+              height: 50,
+              width: 50,
+              child: SimpleCircularProgressBar(
+                size: 50,
+                progressStrokeWidth: 5,
+                backStrokeWidth: 5,
+                startAngle: 0,
+                animationDuration: 0,
+                progressColors: [color],
+                valueNotifier: ValueNotifier(
+                  progress,
+                ),
+              ),
+            ),
+            /*           title: const Padding(
+              padding: EdgeInsets.only(bottom: 7),
+              child: Text("audio progress",
+                  style: TextStyle(fontWeight: FontWeight.w600)),
+            ), */
+            subtitle: Text(
+                "correct $countCorrects, incorrect $countIncorrect, omitted $countOmitted "),
+          ),
+        ],
       ),
-      title: const Padding(
-        padding: EdgeInsets.only(bottom: 7),
-        child: Text("audio progress",
-            style: TextStyle(fontWeight: FontWeight.w600)),
-      ),
-      subtitle: Text(
-          "correct $countCorrects, incorrect $countIncorrect, omitted $countOmitted "),
     );
   }
 
@@ -104,28 +117,35 @@ class BodyFullProgressSection extends ConsumerWidget {
       allRevisedFlashCards = false;
     }
 
-    return ListTile(
-      leading: allRevisedFlashCards
-          ? SvgPicture.asset(
-              "assets/icons/done.svg",
-              width: 50,
-              height: 50,
-            )
-          : SvgPicture.asset(
-              "assets/icons/undone.svg",
-              width: 50,
-              height: 50,
-            ),
-      title: const Padding(
-        padding: EdgeInsets.only(bottom: 7.0),
-        child: Text(
-          "flash cards progress",
-          style: TextStyle(fontWeight: FontWeight.w600),
-        ),
+    return SizedBox(
+      height: 100,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Text(
+            "flash cards progress",
+            style: TextStyle(fontWeight: FontWeight.w600),
+          ),
+          ListTile(
+            //contentPadding: const EdgeInsets.symmetric(vertical: 10),
+            leading: allRevisedFlashCards
+                ? SvgPicture.asset(
+                    "assets/icons/done.svg",
+                    width: 50,
+                    height: 50,
+                  )
+                : SvgPicture.asset(
+                    "assets/icons/undone.svg",
+                    width: 50,
+                    height: 50,
+                  ),
+            subtitle: Text(allRevisedFlashCards
+                ? "all revised flash cards"
+                : "no all the cards revised"),
+          ),
+        ],
       ),
-      subtitle: Text(allRevisedFlashCards
-          ? "all revised flash cards"
-          : "no all the cards revised"),
     );
   }
 
@@ -151,6 +171,9 @@ class BodyFullProgressSection extends ConsumerWidget {
                         kanjisCharacters[i],
                         style: Theme.of(context).textTheme.titleLarge,
                       ),
+                    ),
+                    const SizedBox(
+                      height: 10,
                     ),
                     Row(
                       children: [
