@@ -90,8 +90,11 @@ class BodyFullProgressSection extends ConsumerWidget {
             style: TextStyle(fontWeight: FontWeight.w600),
             textAlign: TextAlign.start,
           ),
-          ListTile(
-            leading: SizedBox(
+          const SizedBox(
+            height: 10,
+          ),
+          Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+            SizedBox(
               height: 50,
               width: 50,
               child: SimpleCircularProgressBar(
@@ -110,7 +113,10 @@ class BodyFullProgressSection extends ConsumerWidget {
                 ),
               ),
             ),
-            subtitle: Column(
+            const SizedBox(
+              width: 30,
+            ),
+            Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text("correct: $countCorrects"),
@@ -118,7 +124,7 @@ class BodyFullProgressSection extends ConsumerWidget {
                 Text("omitted: $countOmitted"),
               ],
             ),
-          ),
+          ]),
         ],
       ),
     );
@@ -145,8 +151,14 @@ class BodyFullProgressSection extends ConsumerWidget {
             "flash cards progress",
             style: TextStyle(fontWeight: FontWeight.w600),
           ),
-          ListTile(
-            leading: allRevisedFlashCards
+          const SizedBox(
+            height: 10,
+          ),
+          Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+            const SizedBox(
+              width: 30,
+            ),
+            allRevisedFlashCards
                 ? SvgPicture.asset(
                     "assets/icons/done.svg",
                     width: 50,
@@ -157,10 +169,13 @@ class BodyFullProgressSection extends ConsumerWidget {
                     width: 50,
                     height: 50,
                   ),
-            subtitle: Text(allRevisedFlashCards
+            const SizedBox(
+              width: 10,
+            ),
+            Text(allRevisedFlashCards
                 ? "all revised flash cards"
                 : "no all the cards are revised"),
-          ),
+          ]),
         ],
       ),
     );
@@ -239,6 +254,7 @@ class BodyFullProgressSection extends ConsumerWidget {
                       height: 10,
                     ),
                     Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
                         Expanded(
                           child: getAudioData(
