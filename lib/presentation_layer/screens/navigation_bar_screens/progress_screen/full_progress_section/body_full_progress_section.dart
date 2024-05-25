@@ -87,7 +87,11 @@ class BodyFullProgressSection extends ConsumerWidget {
                 backStrokeWidth: 5,
                 startAngle: 0,
                 animationDuration: 0,
-                progressColors: [color],
+                progressColors: const [
+                  Colors.blueAccent,
+                  Colors.amber,
+                  Colors.red
+                ],
                 valueNotifier: ValueNotifier(
                   progress,
                 ),
