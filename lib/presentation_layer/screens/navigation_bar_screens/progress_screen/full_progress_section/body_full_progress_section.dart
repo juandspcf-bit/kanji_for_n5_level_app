@@ -172,9 +172,7 @@ class BodyFullProgressSection extends ConsumerWidget {
             const SizedBox(
               width: 10,
             ),
-            Text(allRevisedFlashCards
-                ? "all revised flash cards"
-                : "no all the cards are revised"),
+            Text(allRevisedFlashCards ? "all revised" : "not all revised"),
           ]),
         ],
       ),
