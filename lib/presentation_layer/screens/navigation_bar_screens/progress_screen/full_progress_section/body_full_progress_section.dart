@@ -5,6 +5,7 @@ import 'package:kanji_for_n5_level_app/models/quiz_section_data.dart';
 import 'package:kanji_for_n5_level_app/models/section_model.dart';
 import 'package:kanji_for_n5_level_app/models/single_quiz_audio_example_data.dart';
 import 'package:kanji_for_n5_level_app/models/single_quiz_flash_card_data.dart';
+import 'package:kanji_for_n5_level_app/models/single_quiz_section_data.dart';
 import 'package:simple_circular_progress_bar/simple_circular_progress_bar.dart';
 
 class BodyFullProgressSection extends ConsumerWidget {
@@ -15,7 +16,22 @@ class BodyFullProgressSection extends ConsumerWidget {
 
   final QuizSectionData quizSectionData;
 
-  double getCount(SingleAudioExampleQuizData data) {
+  double getCountAudioQuiz(SingleAudioExampleQuizData data) {
+    if (data.countCorrects == 0 &&
+        data.countIncorrect == 0 &&
+        data.countOmitted == 0) return 0;
+    return ((data.countCorrects /
+                (data.countCorrects +
+                    data.countIncorrect +
+                    data.countOmitted)) *
+            100)
+        .floorToDouble();
+  }
+
+  double getCountKanjiQuiz(SingleQuizSectionData data) {
+    if (data.countCorrects == 0 &&
+        data.countIncorrect == 0 &&
+        data.countOmitted == 0) return 0;
     return ((data.countCorrects /
                 (data.countCorrects +
                     data.countIncorrect +
@@ -44,7 +60,6 @@ class BodyFullProgressSection extends ConsumerWidget {
   Widget getAudioData(
       List<SingleAudioExampleQuizData> singleAudioExampleQuizData,
       String kanjiCharacter) {
-    Color color;
     double progress;
     int countCorrects;
     int countIncorrect;
@@ -53,13 +68,11 @@ class BodyFullProgressSection extends ConsumerWidget {
     try {
       final data = singleAudioExampleQuizData
           .firstWhere((data) => data.kanjiCharacter == kanjiCharacter);
-      color = getColor(data);
-      progress = getCount(data);
+      progress = getCountAudioQuiz(data);
       countCorrects = data.countCorrects;
       countIncorrect = data.countIncorrect;
       countOmitted = data.countOmitted;
     } catch (e) {
-      color = Colors.blueAccent;
       progress = 0;
       countCorrects = 0;
       countIncorrect = 0;
@@ -97,8 +110,14 @@ class BodyFullProgressSection extends ConsumerWidget {
                 ),
               ),
             ),
-            subtitle: Text(
-                "correct $countCorrects, incorrect $countIncorrect, omitted $countOmitted "),
+            subtitle: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text("correct: $countCorrects"),
+                Text("incorrect: $countIncorrect"),
+                Text("omitted: $countOmitted"),
+              ],
+            ),
           ),
         ],
       ),
@@ -155,9 +174,55 @@ class BodyFullProgressSection extends ConsumerWidget {
     return SafeArea(
       child: SingleChildScrollView(
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+          padding: const EdgeInsets.symmetric(horizontal: 20),
           child: Column(
             children: [
+              Container(
+                margin: const EdgeInsets.only(
+                  bottom: 40,
+                ),
+                child: Column(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 20),
+                      child: Text(
+                        "Kanji quiz progress",
+                        style: TextStyle(
+                            fontWeight: FontWeight.w600,
+                            fontSize: Theme.of(context)
+                                .textTheme
+                                .titleMedium!
+                                .fontSize),
+                      ),
+                    ),
+                    SizedBox(
+                      height: 100,
+                      width: 100,
+                      child: SimpleCircularProgressBar(
+                        size: 100,
+                        progressStrokeWidth: 10,
+                        backStrokeWidth: 10,
+                        startAngle: 0,
+                        animationDuration: 0,
+                        progressColors: const [
+                          Colors.blueAccent,
+                          Colors.amber,
+                          Colors.red
+                        ],
+                        valueNotifier: ValueNotifier(
+                          getCountKanjiQuiz(
+                              quizSectionData.singleQuizSectionData),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 15,
+                    ),
+                    Text(
+                        "correct: ${quizSectionData.singleQuizSectionData.countCorrects}, incorrect: ${quizSectionData.singleQuizSectionData.countIncorrect}, omitted: ${quizSectionData.singleQuizSectionData.countOmitted} "),
+                  ],
+                ),
+              ),
               for (int i = 0; i < kanjisCharacters.length; i++)
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
