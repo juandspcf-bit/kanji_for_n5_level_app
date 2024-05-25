@@ -69,7 +69,8 @@ class BodyFullProgressSection extends ConsumerWidget {
     return SizedBox(
       height: 100,
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           const Text(
             "audio progress",
@@ -77,7 +78,6 @@ class BodyFullProgressSection extends ConsumerWidget {
             textAlign: TextAlign.start,
           ),
           ListTile(
-            //contentPadding: const EdgeInsets.symmetric(vertical: 10),
             leading: SizedBox(
               height: 50,
               width: 50,
@@ -93,11 +93,6 @@ class BodyFullProgressSection extends ConsumerWidget {
                 ),
               ),
             ),
-            /*           title: const Padding(
-              padding: EdgeInsets.only(bottom: 7),
-              child: Text("audio progress",
-                  style: TextStyle(fontWeight: FontWeight.w600)),
-            ), */
             subtitle: Text(
                 "correct $countCorrects, incorrect $countIncorrect, omitted $countOmitted "),
           ),
@@ -121,14 +116,13 @@ class BodyFullProgressSection extends ConsumerWidget {
       height: 100,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           const Text(
             "flash cards progress",
             style: TextStyle(fontWeight: FontWeight.w600),
           ),
           ListTile(
-            //contentPadding: const EdgeInsets.symmetric(vertical: 10),
             leading: allRevisedFlashCards
                 ? SvgPicture.asset(
                     "assets/icons/done.svg",
@@ -136,13 +130,13 @@ class BodyFullProgressSection extends ConsumerWidget {
                     height: 50,
                   )
                 : SvgPicture.asset(
-                    "assets/icons/undone.svg",
+                    "assets/icons/undone_red.svg",
                     width: 50,
                     height: 50,
                   ),
             subtitle: Text(allRevisedFlashCards
                 ? "all revised flash cards"
-                : "no all the cards revised"),
+                : "no all the cards are revised"),
           ),
         ],
       ),
@@ -162,7 +156,7 @@ class BodyFullProgressSection extends ConsumerWidget {
             children: [
               for (int i = 0; i < kanjisCharacters.length; i++)
                 Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     Padding(
                       padding: const EdgeInsets.symmetric(
