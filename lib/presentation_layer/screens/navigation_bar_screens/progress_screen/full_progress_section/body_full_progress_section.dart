@@ -8,8 +8,8 @@ import 'package:kanji_for_n5_level_app/models/single_quiz_flash_card_data.dart';
 import 'package:kanji_for_n5_level_app/models/single_quiz_section_data.dart';
 import 'package:simple_circular_progress_bar/simple_circular_progress_bar.dart';
 
-class BodyFullProgressSection extends ConsumerWidget {
-  const BodyFullProgressSection({
+class BodyFullProgressSectionLandscape extends ConsumerWidget {
+  const BodyFullProgressSectionLandscape({
     super.key,
     required this.quizSectionData,
   });

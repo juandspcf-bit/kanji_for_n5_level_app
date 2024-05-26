@@ -6,12 +6,14 @@ import 'package:kanji_for_n5_level_app/presentation_layer/screens/navigation_bar
 class FullProgressSection extends ConsumerWidget {
   const FullProgressSection({super.key});
 
-  Widget getScreen(FullProgressSectionData progressData) {
+  Widget getScreen(BuildContext context, FullProgressSectionData progressData) {
+    final orientation = MediaQuery.orientationOf(context);
+    ;
     return progressData.fetchingDataStatus == FetchingDataStatus.fetching
         ? const Center(
             child: CircularProgressIndicator(),
           )
-        : BodyFullProgressSection(
+        : BodyFullProgressSectionLandscape(
             quizSectionData: progressData.quizSectionData,
           );
   }
@@ -21,7 +23,10 @@ class FullProgressSection extends ConsumerWidget {
     final progressData = ref.watch(fullProgressSectionProvider);
     return Scaffold(
       appBar: AppBar(),
-      body: getScreen(progressData),
+      body: getScreen(
+        context,
+        progressData,
+      ),
     );
   }
 }
