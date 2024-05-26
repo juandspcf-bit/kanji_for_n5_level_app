@@ -7,10 +7,12 @@ class FlashCardSectionData extends StatelessWidget {
     super.key,
     required this.singleQuizFlashCardData,
     required this.kanjiCharacter,
+    required this.leftPadding,
   });
 
   final List<SingleQuizFlashCardData> singleQuizFlashCardData;
   final String kanjiCharacter;
+  final int leftPadding;
 
   @override
   Widget build(BuildContext context) {
@@ -37,8 +39,8 @@ class FlashCardSectionData extends StatelessWidget {
             height: 10,
           ),
           Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-            const SizedBox(
-              width: 30,
+            SizedBox(
+              width: leftPadding.toDouble(),
             ),
             allRevisedFlashCards
                 ? SvgPicture.asset(
