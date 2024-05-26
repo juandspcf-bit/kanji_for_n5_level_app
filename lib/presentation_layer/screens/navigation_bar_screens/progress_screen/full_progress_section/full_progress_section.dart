@@ -9,7 +9,6 @@ class FullProgressSection extends ConsumerWidget {
 
   Widget getScreen(BuildContext context, FullProgressSectionData progressData) {
     final orientation = MediaQuery.orientationOf(context);
-    ;
     return progressData.fetchingDataStatus == FetchingDataStatus.fetching
         ? const Center(
             child: CircularProgressIndicator(),

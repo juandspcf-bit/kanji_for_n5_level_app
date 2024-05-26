@@ -6,6 +6,7 @@ import 'package:kanji_for_n5_level_app/models/section_model.dart';
 import 'package:kanji_for_n5_level_app/models/single_quiz_audio_example_data.dart';
 import 'package:kanji_for_n5_level_app/models/single_quiz_flash_card_data.dart';
 import 'package:kanji_for_n5_level_app/models/single_quiz_section_data.dart';
+import 'package:kanji_for_n5_level_app/presentation_layer/screens/navigation_bar_screens/progress_screen/full_progress_section/audio_data.dart';
 import 'package:simple_circular_progress_bar/simple_circular_progress_bar.dart';
 
 class BodyFullProgressSectionLandscape extends ConsumerWidget {
@@ -38,96 +39,6 @@ class BodyFullProgressSectionLandscape extends ConsumerWidget {
                     data.countOmitted)) *
             100)
         .floorToDouble();
-  }
-
-  Color getColor(SingleAudioExampleQuizData data) {
-    final count = ((data.countCorrects /
-                (data.countCorrects +
-                    data.countIncorrect +
-                    data.countOmitted)) *
-            100)
-        .floorToDouble();
-
-    if (count < 33) {
-      return Colors.blueAccent;
-    } else if (count < 66) {
-      return Colors.greenAccent;
-    } else {
-      return Colors.amber;
-    }
-  }
-
-  Widget getAudioData(
-      List<SingleAudioExampleQuizData> singleAudioExampleQuizData,
-      String kanjiCharacter) {
-    double progress;
-    int countCorrects;
-    int countIncorrect;
-    int countOmitted;
-
-    try {
-      final data = singleAudioExampleQuizData
-          .firstWhere((data) => data.kanjiCharacter == kanjiCharacter);
-      progress = getCountAudioQuiz(data);
-      countCorrects = data.countCorrects;
-      countIncorrect = data.countIncorrect;
-      countOmitted = data.countOmitted;
-    } catch (e) {
-      progress = 0;
-      countCorrects = 0;
-      countIncorrect = 0;
-      countOmitted = 0;
-    }
-
-    return SizedBox(
-      height: 100,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          const Text(
-            "audio progress",
-            style: TextStyle(fontWeight: FontWeight.w600),
-            textAlign: TextAlign.start,
-          ),
-          const SizedBox(
-            height: 10,
-          ),
-          Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-            SizedBox(
-              height: 50,
-              width: 50,
-              child: SimpleCircularProgressBar(
-                size: 50,
-                progressStrokeWidth: 5,
-                backStrokeWidth: 5,
-                startAngle: 0,
-                animationDuration: 0,
-                progressColors: const [
-                  Colors.blueAccent,
-                  Colors.amber,
-                  Colors.red
-                ],
-                valueNotifier: ValueNotifier(
-                  progress,
-                ),
-              ),
-            ),
-            const SizedBox(
-              width: 30,
-            ),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text("correct: $countCorrects"),
-                Text("incorrect: $countIncorrect"),
-                Text("omitted: $countOmitted"),
-              ],
-            ),
-          ]),
-        ],
-      ),
-    );
   }
 
   Widget getFlashCardData(List<SingleQuizFlashCardData> singleQuizFlashCardData,
@@ -263,9 +174,10 @@ class BodyFullProgressSectionLandscape extends ConsumerWidget {
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: [
                             Expanded(
-                              child: getAudioData(
-                                  quizSectionData.singleAudioExampleQuizData,
-                                  kanjisCharacters[i]),
+                              child: AudioData(
+                                  singleAudioExampleQuizData: quizSectionData
+                                      .singleAudioExampleQuizData,
+                                  kanjiCharacter: kanjisCharacters[i]),
                             ),
                             Expanded(
                               child: getFlashCardData(

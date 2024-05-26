@@ -4,6 +4,7 @@ import 'package:kanji_for_n5_level_app/l10n/localization.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/navigation_bar_screens/progress_screen/full_progress_section/full_progress_section.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/navigation_bar_screens/progress_screen/full_progress_section/full_progress_section_provider.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/navigation_bar_screens/progress_screen/my_tile.dart';
+import 'package:kanji_for_n5_level_app/presentation_layer/screens/navigation_bar_screens/progress_screen/utils.dart';
 import 'package:timeline_tile/timeline_tile.dart';
 
 class MyTimeLineTile extends ConsumerWidget {
@@ -28,33 +29,15 @@ class MyTimeLineTile extends ConsumerWidget {
   final bool isAllCorrectAudioQuizSection;
   final bool isFinishedFlashCardSection;
 
-  (Color, Color, IconData) getColorsStatus() {
-    if (isFinishedKanjiQuizSection &&
-        isAllCorrectKanjiQuizSection &&
-        isFinishedAudioQuizSection &&
-        isAllCorrectAudioQuizSection &&
-        isFinishedFlashCardSection) {
-      return (
-        Colors.amberAccent,
-        Colors.deepPurple,
-        Icons.military_tech_rounded
-      );
-    } else if (isFinishedKanjiQuizSection &&
-        isFinishedAudioQuizSection &&
-        isFinishedFlashCardSection) {
-      return (
-        const Color.fromARGB(255, 101, 172, 207),
-        Colors.white,
-        Icons.done
-      );
-    } else {
-      return (Colors.deepPurple, Colors.white, Icons.sentiment_dissatisfied);
-    }
-  }
-
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final (colorContainer, colorText, iconData) = getColorsStatus();
+    final (colorContainer, colorText, iconData) = getColorsStatus(
+      isFinishedKanjiQuizSection,
+      isAllCorrectKanjiQuizSection,
+      isFinishedAudioQuizSection,
+      isAllCorrectAudioQuizSection,
+      isFinishedFlashCardSection,
+    );
     return GestureDetector(
       onTap: () {
         ref.read(fullProgressSectionProvider.notifier).fetchData(section);
