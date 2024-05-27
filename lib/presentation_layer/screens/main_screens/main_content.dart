@@ -7,7 +7,7 @@ import 'package:kanji_for_n5_level_app/presentation_layer/screens/account_detail
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_list/body_list/providers/error_delete_providers.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_list/body_list/providers/error_download_provider.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/main_screens/navigation_rails/main_content_landscape.dart';
-import 'package:kanji_for_n5_level_app/presentation_layer/screens/main_screens/navigation_botton/main_content_portrait.dart';
+import 'package:kanji_for_n5_level_app/presentation_layer/screens/main_screens/navigation_bottom/main_content_portrait.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_list/body_list/status_operations_dialogs.dart';
 
 class MainContent extends ConsumerWidget with StatusDBStoringDialogs {

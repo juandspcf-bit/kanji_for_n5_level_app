@@ -6,7 +6,7 @@ import 'package:kanji_for_n5_level_app/presentation_layer/screens/main_screens/a
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/main_screens/title_main_screen.dart';
 import 'package:kanji_for_n5_level_app/providers/status_connection_provider.dart';
 import 'package:kanji_for_n5_level_app/repositories_layer/local_database/db_quiz_data_functions/db_quiz_data_functions.dart';
-import 'package:kanji_for_n5_level_app/presentation_layer/screens/main_screens/navigation_botton/bottom_navigation_bar.dart';
+import 'package:kanji_for_n5_level_app/presentation_layer/screens/main_screens/navigation_bottom/bottom_navigation_bar.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/main_screens/main_content_provider.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/navigation_bar_screens/favorite_screen/kanjis_for_favorites_screen.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/navigation_bar_screens/progress_screen/progress_screen.dart';
