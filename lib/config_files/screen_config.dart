@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 enum ScreenSizeWidth {
   small(300.0),
@@ -40,4 +41,48 @@ ScreenSizeHeight getScreenSizeHeight(BuildContext context) {
     return ScreenSizeHeight.normal;
   }
   return ScreenSizeHeight.small;
+}
+
+var kColorScheme = ColorScheme.fromSeed(
+  seedColor: const Color.fromARGB(255, 96, 59, 181),
+);
+
+var kDarkColorScheme = ColorScheme.fromSeed(
+  brightness: Brightness.dark,
+  seedColor: const Color(0xFF006687),
+);
+
+final darkTheme = ThemeData.dark();
+
+ThemeData getDarkTheme(BuildContext context) {
+  return darkTheme.copyWith(
+    colorScheme: kDarkColorScheme,
+    textTheme: GoogleFonts.latoTextTheme(darkTheme.textTheme),
+    elevatedButtonTheme: ElevatedButtonThemeData(
+      style: ElevatedButton.styleFrom(
+        backgroundColor: kDarkColorScheme.primary,
+        foregroundColor: kDarkColorScheme.onPrimary,
+        textStyle: Theme.of(context).textTheme.bodyLarge,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10),
+        ),
+      ),
+    ),
+    /*       cardTheme: const CardTheme().copyWith(
+          color: kDarkColorScheme.secondaryContainer,
+          margin: const EdgeInsets.symmetric(
+            horizontal: 16,
+            vertical: 8,
+          ),
+        ),
+
+         appBarTheme: const AppBarTheme()
+            .copyWith(backgroundColor: Color.fromARGB(255, 14, 46, 77)),*/
+  );
+}
+
+ThemeData getLightTheme() {
+  return ThemeData.light().copyWith(
+    colorScheme: kColorScheme,
+  );
 }

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:kanji_for_n5_level_app/config_files/screen_config.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/auth_flow/auth_flow.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/onBoarding_screen/on_boarding_screen.dart';
 import 'package:kanji_for_n5_level_app/providers/on_boarding_provider.dart';
@@ -13,17 +13,6 @@ import 'firebase_options.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 final logger = Logger();
-
-var kColorScheme = ColorScheme.fromSeed(
-  seedColor: const Color.fromARGB(255, 96, 59, 181),
-);
-
-var kDarkColorScheme = ColorScheme.fromSeed(
-  brightness: Brightness.dark,
-  seedColor: const Color(0xFF006687),
-);
-
-final darkTheme = ThemeData.dark();
 
 void main() async {
   WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
@@ -57,34 +46,8 @@ class MyApp extends ConsumerWidget {
       localizationsDelegates: AppLocalizations.localizationsDelegates,
       supportedLocales: AppLocalizations.supportedLocales,
       debugShowCheckedModeBanner: false,
-      darkTheme: darkTheme.copyWith(
-        colorScheme: kDarkColorScheme,
-        textTheme: GoogleFonts.latoTextTheme(darkTheme.textTheme),
-        elevatedButtonTheme: ElevatedButtonThemeData(
-          style: ElevatedButton.styleFrom(
-            backgroundColor: kDarkColorScheme.primary,
-            foregroundColor: kDarkColorScheme.onPrimary,
-            textStyle: Theme.of(context).textTheme.bodyLarge,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(10),
-            ),
-          ),
-        ),
-        /*       cardTheme: const CardTheme().copyWith(
-          color: kDarkColorScheme.secondaryContainer,
-          margin: const EdgeInsets.symmetric(
-            horizontal: 16,
-            vertical: 8,
-          ),
-        ),
-
-         appBarTheme: const AppBarTheme()
-            .copyWith(backgroundColor: Color.fromARGB(255, 14, 46, 77)),*/
-      ),
-      theme: ThemeData(
-        colorScheme: kColorScheme,
-        useMaterial3: true,
-      ),
+      darkTheme: getDarkTheme(context),
+      theme: getLightTheme(),
       themeMode: ThemeMode.dark,
       home: (onBoardingData.isOnBoardingDone == null ||
               onBoardingData.isOnBoardingDone == false)
