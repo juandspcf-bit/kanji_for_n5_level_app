@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/common_widgets/password_widget.dart';
-import 'package:kanji_for_n5_level_app/presentation_layer/screens/login_screen/email_widget.dart';
+import 'package:kanji_for_n5_level_app/presentation_layer/screens/sign_in_screen/email_widget.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/sign_up_screen/profile_picture_widget.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/sign_up_screen/sign_up_provider.dart';
 

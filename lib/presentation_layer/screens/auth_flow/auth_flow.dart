@@ -7,7 +7,7 @@ import 'package:kanji_for_n5_level_app/application_layer/services.dart';
 import 'package:kanji_for_n5_level_app/main.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/auth_flow/verify_email.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/common_screens/loading_screen.dart';
-import 'package:kanji_for_n5_level_app/presentation_layer/screens/login_screen/login_screen.dart';
+import 'package:kanji_for_n5_level_app/presentation_layer/screens/sign_in_screen/login_screen.dart';
 import 'package:kanji_for_n5_level_app/providers/status_connection_provider.dart';
 
 class AuthFlow extends ConsumerStatefulWidget {
