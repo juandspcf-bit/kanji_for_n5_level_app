@@ -6,20 +6,18 @@ import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kanji_for_n5_level_app/application_layer/services.dart';
 import 'package:kanji_for_n5_level_app/main.dart';
-import 'package:kanji_for_n5_level_app/presentation_layer/screens/common_screens/loading_screen.dart';
-import 'package:kanji_for_n5_level_app/providers/status_connection_provider.dart';
+import 'package:kanji_for_n5_level_app/presentation_layer/screens/main_screens/init_main_content.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/sign_in_screen/login_provider.dart';
-import 'package:kanji_for_n5_level_app/presentation_layer/screens/main_screens/main_content.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/main_screens/main_content_provider.dart';
 
 class VerifyEmail extends ConsumerStatefulWidget {
   const VerifyEmail({super.key});
 
   @override
-  ConsumerState<VerifyEmail> createState() => _VerifyEmailEstate();
+  ConsumerState<VerifyEmail> createState() => _VerifyEmailState();
 }
 
-class _VerifyEmailEstate extends ConsumerState<VerifyEmail> {
+class _VerifyEmailState extends ConsumerState<VerifyEmail> {
   bool isEmailVerified = false;
   bool canResendEmail = false;
   Timer? timer;
@@ -77,27 +75,7 @@ class _VerifyEmailEstate extends ConsumerState<VerifyEmail> {
   Widget build(BuildContext context) {
     FlutterNativeSplash.remove();
     return isEmailVerified
-        ? FutureBuilder(
-            future: ref.read(statusConnectionProvider) ==
-                    ConnectionStatus.noConnected
-                ? ref.read(mainScreenProvider.notifier).initAppOffline()
-                : ref.read(mainScreenProvider.notifier).initAppOnline(),
-            builder: (BuildContext context, AsyncSnapshot<void> snapShot) {
-              final connectionStatus = snapShot.connectionState;
-              if (connectionStatus == ConnectionState.waiting) {
-                return const Scaffold(
-                  body: ProcessProgress(
-                    message: 'Loading',
-                  ),
-                );
-              } else if (connectionStatus == ConnectionState.done ||
-                  connectionStatus == ConnectionState.active) {
-                return const MainContent();
-              } else {
-                return const Center(child: Text('error'));
-              }
-            },
-          )
+        ? const InitMainContent()
         : Scaffold(
             appBar: AppBar(
               title: const Text('Verify email'),
