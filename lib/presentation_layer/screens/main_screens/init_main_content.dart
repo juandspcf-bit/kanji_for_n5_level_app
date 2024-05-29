@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kanji_for_n5_level_app/application_layer/services.dart';
+import 'package:kanji_for_n5_level_app/main.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/account_details/password_change/password_change_flow_provider.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/account_details/personal_info_update/personal_info_provider.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/common_screens/loading_screen.dart';
@@ -8,6 +9,7 @@ import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_list/bod
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_list/body_list/providers/error_download_provider.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/main_screens/main_content.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/main_screens/main_content_provider.dart';
+import 'package:kanji_for_n5_level_app/presentation_layer/screens/navigation_bar_screens/favorite_screen/favorites_kanjis_provider.dart';
 import 'package:kanji_for_n5_level_app/providers/status_connection_provider.dart';
 
 class InitMainContent extends ConsumerWidget {
@@ -127,6 +129,52 @@ class InitMainContent extends ConsumerWidget {
             );
       }
     });
+
+    ref.listen<FavoritesKanjisData>(
+      favoritesKanjisProvider,
+      (prev, current) {
+        logger.d(current.onDismissibleActionStatus.message);
+        if (current.onDismissibleActionStatus ==
+                OnDismissibleActionStatus.successAdded ||
+            current.onDismissibleActionStatus ==
+                OnDismissibleActionStatus.successRemoved ||
+            current.onDismissibleActionStatus ==
+                OnDismissibleActionStatus.error) {
+          ref.read(toastServiceProvider).dismiss(context);
+
+          ref.read(toastServiceProvider).showMessage(
+              context,
+              current.onDismissibleActionStatus.message,
+              null,
+              const Duration(seconds: 7),
+              'Undo',
+              current.onDismissibleActionStatus ==
+                      OnDismissibleActionStatus.successAdded
+                  ? null
+                  : () async {
+                      logger.d('restoring kanji');
+                      final dismissedKanji =
+                          ref.read(favoritesKanjisProvider).dismissedKanji;
+
+                      if (dismissedKanji == null) {
+                        return;
+                      }
+
+                      await ref
+                          .read(favoritesKanjisProvider.notifier)
+                          .restoreFavorite(
+                            dismissedKanji.kanjiFromApiFromDismissibleAction,
+                            dismissedKanji.index,
+                          );
+                    });
+
+          ref
+              .read(favoritesKanjisProvider.notifier)
+              .setOnDismissibleActionStatus(
+                  OnDismissibleActionStatus.noStarted);
+        }
+      },
+    );
 
     return FutureBuilder(
       future: ref.read(statusConnectionProvider) == ConnectionStatus.noConnected
