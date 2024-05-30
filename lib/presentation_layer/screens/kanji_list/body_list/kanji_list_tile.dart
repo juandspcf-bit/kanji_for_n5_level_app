@@ -4,8 +4,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kanji_for_n5_level_app/models/kanji_from_api.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_list/body_list/kanji_list_tile_text/full_text_tile.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_list/body_list/leading_tile.dart';
-import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_list/body_list/kanji_list_tile_text/subtitle_tile.dart';
-import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_list/body_list/kanji_list_tile_text/title_tile.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_list/body_list/trailing_tile.dart';
 
 class KanjiListTile extends ConsumerWidget {
