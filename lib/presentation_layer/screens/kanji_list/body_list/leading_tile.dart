@@ -27,7 +27,6 @@ class LeadingTile extends StatelessWidget {
         File(kanjiFromApi.kanjiImageLink),
         semanticsLabel: kanjiFromApi.kanjiCharacter,
         placeholderBuilder: (BuildContext context) => Container(
-            alignment: Alignment.center,
             margin: const EdgeInsets.all(5),
             color: Colors.transparent,
             child: const CircularProgressIndicator(
