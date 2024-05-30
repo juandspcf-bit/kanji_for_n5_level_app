@@ -2,13 +2,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kanji_for_n5_level_app/models/kanji_from_api.dart';
+import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_list/body_list/kanji_list_tile_text/full_text_tile.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_list/body_list/leading_tile.dart';
-import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_list/body_list/subtitle_tile.dart';
-import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_list/body_list/title_tile.dart';
+import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_list/body_list/kanji_list_tile_text/subtitle_tile.dart';
+import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_list/body_list/kanji_list_tile_text/title_tile.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_list/body_list/trailing_tile.dart';
 
-class KanjiItem extends ConsumerWidget {
-  const KanjiItem({
+class KanjiListTile extends ConsumerWidget {
+  const KanjiListTile({
     super.key,
     required this.kanjiFromApi,
   });
@@ -34,25 +35,7 @@ class KanjiItem extends ConsumerWidget {
           Expanded(
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 10),
-              child: Container(
-                color: Colors.transparent,
-                width: double.infinity,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    TitleTile(
-                      kanjiFromApi: kanjiFromApi,
-                    ),
-                    const SizedBox(
-                      height: 5,
-                    ),
-                    SubTitleTile(
-                      kanjiFromApi: kanjiFromApi,
-                    ),
-                  ],
-                ),
-              ),
+              child: FullTextTile(kanjiFromApi: kanjiFromApi),
             ),
           ),
           Padding(

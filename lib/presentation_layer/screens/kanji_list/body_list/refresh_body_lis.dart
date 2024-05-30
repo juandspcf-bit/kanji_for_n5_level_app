@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kanji_for_n5_level_app/config_files/screen_config.dart';
 import 'package:kanji_for_n5_level_app/models/kanji_from_api.dart';
 import 'package:kanji_for_n5_level_app/models/section_model.dart';
-import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_list/body_list/kanji_item.dart';
+import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_list/body_list/kanji_list_tile.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_list/body_list/kanji_item_animated.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_list/body_list/kanjis_list_provider.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_list/body_list/no_data_to_shown_screen.dart';
@@ -48,7 +48,7 @@ class RefreshBodyList extends ConsumerWidget {
       return KanjiItemAnimated(
         statusStorage: kanjisFromApi[index].statusStorage,
         kanjiFromApi: kanjisFromApi[index],
-        closedChild: KanjiItem(
+        closedChild: KanjiListTile(
           key: Key(kanjisFromApi[index].kanjiCharacter),
           kanjiFromApi: kanjisFromApi[index],
         ),
@@ -59,7 +59,7 @@ class RefreshBodyList extends ConsumerWidget {
         kanjiFromApi: kanjisFromApi[index],
         closedChild: Dismissible(
           key: Key(kanjisFromApi[index].kanjiCharacter),
-          child: KanjiItem(
+          child: KanjiListTile(
             key: Key(kanjisFromApi[index].kanjiCharacter),
             kanjiFromApi: kanjisFromApi[index],
           ),
