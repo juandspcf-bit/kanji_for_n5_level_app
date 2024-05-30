@@ -109,11 +109,12 @@ class StrokesImages extends ConsumerWidget {
                       images[index],
                       semanticsLabel: kanjiFromApi.kanjiCharacter,
                       placeholderBuilder: (BuildContext context) => Container(
-                          margin: const EdgeInsets.all(5),
-                          color: Colors.transparent,
-                          child: const CircularProgressIndicator(
-                            backgroundColor: Color.fromARGB(179, 5, 16, 51),
-                          )),
+                        margin: const EdgeInsets.all(5),
+                        color: Colors.transparent,
+                        child: const CircularProgressIndicator(
+                          backgroundColor: Color.fromARGB(179, 5, 16, 51),
+                        ),
+                      ),
                     )
                   : SvgPicture.file(
                       File(images[index]),

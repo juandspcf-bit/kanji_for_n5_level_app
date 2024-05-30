@@ -21,7 +21,6 @@ class LeadingTile extends StatelessWidget {
         semanticsLabel: kanjiFromApi.kanjiCharacter,
         placeholderBuilder: (BuildContext context) => Container(
           padding: const EdgeInsets.all(5),
-          alignment: Alignment.center,
           color: Colors.transparent,
           child: const CircularProgressIndicator(
             backgroundColor: Color.fromARGB(179, 5, 16, 51),
