@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:kanji_for_n5_level_app/application_layer/services.dart';
-import 'package:kanji_for_n5_level_app/main.dart';
 import 'package:kanji_for_n5_level_app/providers/error_storing_database_status.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/navigation_bar_screens/favorite_screen/favorites_kanjis_provider.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/main_screens/main_content_provider.dart';
@@ -29,48 +27,6 @@ class KanjisForFavoritesScreen extends ConsumerWidget with MyDialogs {
       );
     }
     var kanjiFavoritesList = ref.watch(favoritesKanjisProvider);
-
-    ref.listen<FavoritesKanjisData>(favoritesKanjisProvider, (prev, current) {
-      logger.d(current.onDismissibleActionStatus.message);
-      if (current.onDismissibleActionStatus ==
-              OnDismissibleActionStatus.successAdded ||
-          current.onDismissibleActionStatus ==
-              OnDismissibleActionStatus.successRemoved ||
-          current.onDismissibleActionStatus ==
-              OnDismissibleActionStatus.error) {
-        ref.read(toastServiceProvider).dismiss(context);
-
-        ref.read(toastServiceProvider).showMessage(
-            context,
-            current.onDismissibleActionStatus.message,
-            null,
-            const Duration(seconds: 7),
-            'Undo',
-            current.onDismissibleActionStatus ==
-                    OnDismissibleActionStatus.successAdded
-                ? null
-                : () async {
-                    logger.d('restoring kanji');
-                    final dissmisedKanji =
-                        ref.read(favoritesKanjisProvider).dismissedKanji;
-
-                    if (dissmisedKanji == null) {
-                      return;
-                    }
-
-                    await ref
-                        .read(favoritesKanjisProvider.notifier)
-                        .restoreFavorite(
-                          dissmisedKanji.kanjiFromApiFromDismissibleAction,
-                          dissmisedKanji.index,
-                        );
-                  });
-
-        ref
-            .read(favoritesKanjisProvider.notifier)
-            .setOnDismissibleActionStatus(OnDismissibleActionStatus.noStarted);
-      }
-    });
 
     return BodyKanjisList(
       statusResponse: kanjiFavoritesList.favoritesFetchingStatus.index,
