@@ -6,6 +6,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:kanji_for_n5_level_app/config_files/screen_config.dart';
 import 'package:kanji_for_n5_level_app/l10n/localization.dart';
 import 'package:kanji_for_n5_level_app/models/kanji_from_api.dart';
+import 'package:kanji_for_n5_level_app/presentation_layer/common_widgets/svg_network.dart';
 import 'package:kanji_for_n5_level_app/providers/status_stored_provider.dart';
 
 class StrokesImages extends ConsumerWidget {
@@ -105,16 +106,9 @@ class StrokesImages extends ConsumerWidget {
                     context, images[index], index);
               },
               child: statusStorage == StatusStorage.onlyOnline
-                  ? SvgPicture.network(
-                      images[index],
-                      semanticsLabel: kanjiFromApi.kanjiCharacter,
-                      placeholderBuilder: (BuildContext context) => Container(
-                        margin: const EdgeInsets.all(5),
-                        color: Colors.transparent,
-                        child: const CircularProgressIndicator(
-                          backgroundColor: Color.fromARGB(179, 5, 16, 51),
-                        ),
-                      ),
+                  ? SvgNetwork(
+                      image: images[index],
+                      kanjiCharacter: kanjiFromApi.kanjiCharacter,
                     )
                   : SvgPicture.file(
                       File(images[index]),
