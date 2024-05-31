@@ -6,7 +6,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:kanji_for_n5_level_app/config_files/screen_config.dart';
 import 'package:kanji_for_n5_level_app/l10n/localization.dart';
 import 'package:kanji_for_n5_level_app/models/kanji_from_api.dart';
-import 'package:kanji_for_n5_level_app/presentation_layer/common_widgets/svg_network.dart';
+import 'package:kanji_for_n5_level_app/presentation_layer/common_widgets/svg_utils.dart';
 import 'package:kanji_for_n5_level_app/providers/status_stored_provider.dart';
 
 class StrokesImages extends ConsumerWidget {
@@ -21,41 +21,21 @@ class StrokesImages extends ConsumerWidget {
     return AlertDialog(
       title: Text("${context.l10n.stroke} ${context.l10n.number} ${index + 1}"),
       content: statusStorage == StatusStorage.onlyOnline
-          ? SvgPicture.network(
-              image,
-              height: 120,
-              width: 120,
+          ? SvgNetwork(
+              imageUrl: image,
+              semanticsLabel: kanjiFromApi.kanjiCharacter,
+              height: MediaQuery.sizeOf(context).width * 0.4,
+              width: MediaQuery.sizeOf(context).width * 0.4,
               colorFilter:
                   const ColorFilter.mode(Colors.white, BlendMode.srcIn),
-              semanticsLabel: kanjiFromApi.kanjiCharacter,
-              placeholderBuilder: (BuildContext context) => Container(
-                alignment: Alignment.center,
-                margin: const EdgeInsets.all(5),
-                color: Colors.transparent,
-                height: 80,
-                width: 80,
-                child: const CircularProgressIndicator(
-                  backgroundColor: Color.fromARGB(179, 5, 16, 51),
-                ),
-              ),
             )
-          : SvgPicture.file(
-              File(image),
-              height: 120,
-              width: 120,
+          : SvgFile(
+              imagePath: image,
+              height: MediaQuery.sizeOf(context).width * 0.4,
+              width: MediaQuery.sizeOf(context).width * 0.4,
               colorFilter:
                   const ColorFilter.mode(Colors.white, BlendMode.srcIn),
               semanticsLabel: kanjiFromApi.kanjiCharacter,
-              placeholderBuilder: (BuildContext context) => Container(
-                alignment: Alignment.center,
-                margin: const EdgeInsets.all(5),
-                color: Colors.transparent,
-                height: 80,
-                width: 80,
-                child: const CircularProgressIndicator(
-                  backgroundColor: Color.fromARGB(179, 5, 16, 51),
-                ),
-              ),
             ),
       actions: <Widget>[
         TextButton(
@@ -107,18 +87,12 @@ class StrokesImages extends ConsumerWidget {
               },
               child: statusStorage == StatusStorage.onlyOnline
                   ? SvgNetwork(
-                      image: images[index],
-                      kanjiCharacter: kanjiFromApi.kanjiCharacter,
-                    )
-                  : SvgPicture.file(
-                      File(images[index]),
+                      imageUrl: images[index],
                       semanticsLabel: kanjiFromApi.kanjiCharacter,
-                      placeholderBuilder: (BuildContext context) => Container(
-                          margin: const EdgeInsets.all(5),
-                          color: Colors.transparent,
-                          child: const CircularProgressIndicator(
-                            backgroundColor: Color.fromARGB(179, 5, 16, 51),
-                          )),
+                    )
+                  : SvgFile(
+                      imagePath: images[index],
+                      semanticsLabel: kanjiFromApi.kanjiCharacter,
                     ),
             ),
           ),
