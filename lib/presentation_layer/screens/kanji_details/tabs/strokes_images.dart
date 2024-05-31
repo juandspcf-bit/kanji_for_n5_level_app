@@ -19,6 +19,7 @@ class StrokesImages extends ConsumerWidget {
 
   Widget _dialog(BuildContext context, String image, int index) {
     return AlertDialog(
+      backgroundColor: Theme.of(context).colorScheme.primaryContainer,
       title: Text("${context.l10n.stroke} ${context.l10n.number} ${index + 1}"),
       content: statusStorage == StatusStorage.onlyOnline
           ? SvgNetwork(
@@ -26,8 +27,9 @@ class StrokesImages extends ConsumerWidget {
               semanticsLabel: kanjiFromApi.kanjiCharacter,
               height: MediaQuery.sizeOf(context).width * 0.4,
               width: MediaQuery.sizeOf(context).width * 0.4,
-              colorFilter:
-                  const ColorFilter.mode(Colors.white, BlendMode.srcIn),
+              colorFilter: ColorFilter.mode(
+                  Theme.of(context).colorScheme.onPrimaryContainer,
+                  BlendMode.srcIn),
             )
           : SvgFile(
               imagePath: image,
