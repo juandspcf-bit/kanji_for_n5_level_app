@@ -81,7 +81,6 @@ class StrokesImages extends ConsumerWidget {
             height: containerSize.toDouble(),
             width: containerSize.toDouble(),
             decoration: BoxDecoration(
-              backgroundBlendMode: BlendMode.dstATop,
               color: Theme.of(context).colorScheme.onPrimaryContainer,
               borderRadius: const BorderRadius.all(
                 Radius.circular(10),
