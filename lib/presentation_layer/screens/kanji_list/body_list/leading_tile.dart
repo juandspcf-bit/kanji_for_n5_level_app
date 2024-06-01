@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:kanji_for_n5_level_app/models/kanji_from_api.dart';
-import 'package:kanji_for_n5_level_app/presentation_layer/common_widgets/svg_utils.dart';
+import 'package:kanji_for_n5_level_app/presentation_layer/common_widgets/svg_utils/svg_utils.dart';
 import 'package:kanji_for_n5_level_app/providers/status_stored_provider.dart';
 
 class LeadingTile extends StatelessWidget {

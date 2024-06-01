@@ -6,7 +6,8 @@ import 'package:flutter_svg/svg.dart';
 import 'package:kanji_for_n5_level_app/config_files/screen_config.dart';
 import 'package:kanji_for_n5_level_app/l10n/localization.dart';
 import 'package:kanji_for_n5_level_app/models/kanji_from_api.dart';
-import 'package:kanji_for_n5_level_app/presentation_layer/common_widgets/svg_utils.dart';
+import 'package:kanji_for_n5_level_app/presentation_layer/common_widgets/svg_utils/default_container.dart';
+import 'package:kanji_for_n5_level_app/presentation_layer/common_widgets/svg_utils/svg_utils.dart';
 import 'package:kanji_for_n5_level_app/providers/status_stored_provider.dart';
 
 class StrokesImages extends ConsumerWidget {
@@ -22,14 +23,17 @@ class StrokesImages extends ConsumerWidget {
       backgroundColor: Theme.of(context).colorScheme.primaryContainer,
       title: Text("${context.l10n.stroke} ${context.l10n.number} ${index + 1}"),
       content: statusStorage == StatusStorage.onlyOnline
-          ? SvgNetwork(
-              imageUrl: image,
-              semanticsLabel: kanjiFromApi.kanjiCharacter,
-              height: MediaQuery.sizeOf(context).width * 0.4,
-              width: MediaQuery.sizeOf(context).width * 0.4,
-              colorFilter: ColorFilter.mode(
-                  Theme.of(context).colorScheme.onPrimaryContainer,
-                  BlendMode.srcIn),
+          ? CustomPaint(
+              painter: ShapePainter(),
+              child: SvgNetwork(
+                imageUrl: image,
+                semanticsLabel: kanjiFromApi.kanjiCharacter,
+                height: MediaQuery.sizeOf(context).width * 0.4,
+                width: MediaQuery.sizeOf(context).width * 0.4,
+                colorFilter: ColorFilter.mode(
+                    Theme.of(context).colorScheme.onPrimaryContainer,
+                    BlendMode.srcIn),
+              ),
             )
           : SvgFile(
               imagePath: image,
@@ -77,6 +81,7 @@ class StrokesImages extends ConsumerWidget {
             height: containerSize.toDouble(),
             width: containerSize.toDouble(),
             decoration: BoxDecoration(
+              backgroundBlendMode: BlendMode.dstATop,
               color: Theme.of(context).colorScheme.onPrimaryContainer,
               borderRadius: const BorderRadius.all(
                 Radius.circular(10),

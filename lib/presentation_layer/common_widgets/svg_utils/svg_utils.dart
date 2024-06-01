@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:kanji_for_n5_level_app/presentation_layer/common_widgets/svg_utils/default_container.dart';
 
 class SvgNetwork extends StatelessWidget {
   const SvgNetwork({
@@ -27,13 +28,7 @@ class SvgNetwork extends StatelessWidget {
       width: width,
       colorFilter: colorFilter,
       semanticsLabel: semanticsLabel,
-      placeholderBuilder: (BuildContext context) => Container(
-        margin: const EdgeInsets.all(5),
-        color: Colors.transparent,
-        child: const CircularProgressIndicator(
-          backgroundColor: Color.fromARGB(179, 5, 16, 51),
-        ),
-      ),
+      placeholderBuilder: (BuildContext context) => const DefaultPlaceHolder(),
     );
   }
 }
@@ -62,13 +57,7 @@ class SvgFile extends StatelessWidget {
       width: width,
       colorFilter: colorFilter,
       semanticsLabel: semanticsLabel,
-      placeholderBuilder: (BuildContext context) => Container(
-        margin: const EdgeInsets.all(5),
-        color: Colors.transparent,
-        child: const CircularProgressIndicator(
-          backgroundColor: Color.fromARGB(179, 5, 16, 51),
-        ),
-      ),
+      placeholderBuilder: (BuildContext context) => const DefaultPlaceHolder(),
     );
   }
 }
