@@ -154,6 +154,10 @@ class StrokesImages extends ConsumerWidget {
         const SizedBox(
           height: 20,
         ),
+        IconButton(onPressed: () {}, icon: const Icon(Icons.picture_as_pdf)),
+        const SizedBox(
+          height: 20,
+        ),
         Expanded(
           child: GridView(
             padding: const EdgeInsets.all(5),
