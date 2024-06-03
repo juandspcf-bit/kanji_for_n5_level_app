@@ -4,6 +4,7 @@
         "AUTOINCREMENT",
         "birthdate",
         "Birthdate",
+        "Firestore",
         "fuji",
         "japanese",
         "kanjialive",
