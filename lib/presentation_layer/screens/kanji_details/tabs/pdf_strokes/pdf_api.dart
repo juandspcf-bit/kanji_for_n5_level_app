@@ -17,7 +17,7 @@ class PdfApi {
           ..lineTo(size.x, 0)
           ..lineTo(0, 0)
           ..setColor(PdfColors.black)
-          ..setLineWidth(5)
+          ..setLineWidth(2)
           ..strokePath();
       },
       child: pw.SvgImage(svg: svgRaw, colorFilter: PdfColor.fromHex("#c7c7c7")),
@@ -37,7 +37,8 @@ class PdfApi {
 
     pdf.addPage(
       Page(
-        build: (_) => pw.Column(
+        pageFormat: PdfPageFormat.a4,
+        build: (_) => pw.Row(
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
