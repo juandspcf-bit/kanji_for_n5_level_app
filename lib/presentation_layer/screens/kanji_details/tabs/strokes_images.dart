@@ -2,17 +2,16 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:kanji_for_n5_level_app/application_layer/services.dart';
 import 'package:kanji_for_n5_level_app/config_files/screen_config.dart';
 import 'package:kanji_for_n5_level_app/l10n/localization.dart';
-import 'package:kanji_for_n5_level_app/main.dart';
 import 'package:kanji_for_n5_level_app/models/kanji_from_api.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/common_widgets/svg_utils/default_container.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/common_widgets/svg_utils/svg_utils.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_details/tabs/pdf_strokes/pdf_api.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_details/tabs/pdf_strokes/save_and_open_pdf.dart';
 import 'package:kanji_for_n5_level_app/providers/status_stored_provider.dart';
-import 'package:kanji_for_n5_level_app/repositories_layer/local_database/db_inserting_data.dart';
 import 'package:kanji_for_n5_level_app/repositories_layer/local_database/download_data_handlers.dart';
 
 class StrokesImages extends ConsumerWidget {
@@ -153,14 +152,14 @@ class StrokesImages extends ConsumerWidget {
           height: 10,
         ),
         Text(
-          "Strokes",
+          context.l10n.strokes,
           style: Theme.of(context)
               .textTheme
               .titleLarge!
               .copyWith(fontWeight: FontWeight.bold),
         ),
         const SizedBox(
-          height: 20,
+          height: 10,
         ),
         IconButton(
             onPressed: () async {
@@ -174,9 +173,15 @@ class StrokesImages extends ConsumerWidget {
               final pdfFile = await PdfApi.pdfGenerator(svgRaw);
               await SaveAndOpenPdf.openPdf(pdfFile);
             },
-            icon: const Icon(Icons.picture_as_pdf)),
+            icon: SvgPicture.asset(
+              "assets/icons/adobe.svg",
+              height: 30,
+              width: 30,
+              placeholderBuilder: (BuildContext context) =>
+                  const DefaultPlaceHolder(),
+            )),
         const SizedBox(
-          height: 20,
+          height: 10,
         ),
         Expanded(
           child: GridView(
