@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_details/kanji_details_provider.dart';
-import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_details/video_widget/video_wrapper.dart';
-import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_details/tabs/image_meaning_kanji.dart';
-import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_details/tabs/meaning_definition.dart';
+import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_details/tabs/tab_media/video_widget/video_wrapper.dart';
+import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_details/tabs/tab_media/image_meaning_kanji.dart';
+import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_details/tabs/tab_media/meaning_definition.dart';
 
 class VideoStrokesPortrait extends ConsumerWidget {
   const VideoStrokesPortrait({super.key});

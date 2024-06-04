@@ -9,8 +9,8 @@ import 'package:kanji_for_n5_level_app/l10n/localization.dart';
 import 'package:kanji_for_n5_level_app/models/kanji_from_api.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/common_widgets/svg_utils/default_container.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/common_widgets/svg_utils/svg_utils.dart';
-import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_details/tabs/pdf_strokes/pdf_api.dart';
-import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_details/tabs/pdf_strokes/save_and_open_pdf.dart';
+import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_details/tabs/tab_strokes/pdf_strokes/pdf_api.dart';
+import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_details/tabs/tab_strokes/pdf_strokes/save_and_open_pdf.dart';
 import 'package:kanji_for_n5_level_app/providers/status_stored_provider.dart';
 import 'package:kanji_for_n5_level_app/repositories_layer/local_database/download_data_handlers.dart';
 
