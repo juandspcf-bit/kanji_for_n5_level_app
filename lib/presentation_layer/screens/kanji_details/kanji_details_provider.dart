@@ -1,9 +1,14 @@
+import 'dart:io';
+
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kanji_for_n5_level_app/application_layer/services.dart';
 import 'package:kanji_for_n5_level_app/main.dart';
 import 'package:kanji_for_n5_level_app/models/kanji_from_api.dart';
+import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_details/tabs_details/tab_strokes/pdf_strokes/pdf_api.dart';
+import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_details/tabs_details/tab_strokes/pdf_strokes/save_and_open_pdf.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/navigation_bar_screens/favorite_screen/favorites_kanjis_provider.dart';
 import 'package:kanji_for_n5_level_app/providers/status_stored_provider.dart';
+import 'package:kanji_for_n5_level_app/repositories_layer/local_database/download_data_handlers.dart';
 
 class KanjiDetailsProvider extends Notifier<KanjiDetailsData?> {
   @override
@@ -108,6 +113,18 @@ class KanjiDetailsProvider extends Notifier<KanjiDetailsData?> {
         setStoringToFavoritesStatus(StoringToFavoritesStatus.noStarted);
       }
     }
+  }
+
+  void createPdfSheet(String strokeLink) async {
+    final temporalPath = await downloadStrokeData(
+      strokeLink,
+      ref.read(authServiceProvider).userUuid ?? '',
+    );
+
+    File file = File(temporalPath);
+    var svgRaw = file.readAsStringSync();
+    final pdfFile = await PdfApi.pdfGenerator(svgRaw);
+    await SaveAndOpenPdf.openPdf(pdfFile);
   }
 }
 

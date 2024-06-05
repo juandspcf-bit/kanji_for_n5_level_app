@@ -9,8 +9,9 @@ import 'package:kanji_for_n5_level_app/l10n/localization.dart';
 import 'package:kanji_for_n5_level_app/models/kanji_from_api.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/common_widgets/svg_utils/default_container.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/common_widgets/svg_utils/svg_utils.dart';
-import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_details/tabs/tab_strokes/pdf_strokes/pdf_api.dart';
-import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_details/tabs/tab_strokes/pdf_strokes/save_and_open_pdf.dart';
+import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_details/kanji_details_provider.dart';
+import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_details/tabs_details/tab_strokes/pdf_strokes/pdf_api.dart';
+import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_details/tabs_details/tab_strokes/pdf_strokes/save_and_open_pdf.dart';
 import 'package:kanji_for_n5_level_app/providers/status_stored_provider.dart';
 import 'package:kanji_for_n5_level_app/repositories_layer/local_database/download_data_handlers.dart';
 
@@ -162,24 +163,21 @@ class StrokesImages extends ConsumerWidget {
           height: 10,
         ),
         IconButton(
-            onPressed: () async {
-              final path = await downloadStrokeData(
-                kanjiFromApi.strokes.images.last,
-                ref.read(authServiceProvider).userUuid ?? '',
-              );
-
-              File file = File(path);
-              var svgRaw = file.readAsStringSync();
-              final pdfFile = await PdfApi.pdfGenerator(svgRaw);
-              await SaveAndOpenPdf.openPdf(pdfFile);
-            },
-            icon: SvgPicture.asset(
-              "assets/icons/adobe.svg",
-              height: 30,
-              width: 30,
-              placeholderBuilder: (BuildContext context) =>
-                  const DefaultPlaceHolder(),
-            )),
+          onPressed: () async {
+            ref
+                .read(kanjiDetailsProvider.notifier)
+                .createPdfSheet(kanjiFromApi.strokes.images.last);
+          },
+          icon: SvgPicture.asset(
+            "assets/icons/pdf-reference.svg",
+            colorFilter: ColorFilter.mode(
+                Theme.of(context).colorScheme.primary, BlendMode.srcIn),
+            height: 30,
+            width: 30,
+            placeholderBuilder: (BuildContext context) =>
+                const DefaultPlaceHolder(),
+          ),
+        ),
         const SizedBox(
           height: 10,
         ),

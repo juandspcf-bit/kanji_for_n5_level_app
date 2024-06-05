@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_details/tabs/tab_strokes/pdf_strokes/save_and_open_pdf.dart';
+import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_details/tabs_details/tab_strokes/pdf_strokes/save_and_open_pdf.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart';
 import 'package:pdf/widgets.dart' as pw;
