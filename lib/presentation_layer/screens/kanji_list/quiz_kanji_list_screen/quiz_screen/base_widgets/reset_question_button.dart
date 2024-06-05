@@ -14,11 +14,11 @@ class ResetQuestionButton extends ConsumerWidget {
           ref.read(quizDataValuesProvider.notifier).onResetQuestion();
         },
         style: ElevatedButton.styleFrom(
-          minimumSize: const Size.fromHeight(60),
+          minimumSize: const Size.fromHeight(40),
         ),
         icon: const Icon(Icons.restore_page_rounded),
         label: const Text(
-          "Reset question",
+          "Reset",
           textAlign: TextAlign.center,
         ),
       ),
