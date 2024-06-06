@@ -2,15 +2,9 @@ import 'package:animations/animations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kanji_for_n5_level_app/models/kanji_from_api.dart';
-import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_details/custom_navigation_rails_details/custom_navigation_rails_details_provider.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_details/kaji_details_screen.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_details/kanji_details_provider.dart';
-import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_details/tabs_details/tab_examples/examples_audios_status_playing_provider.dart';
-import 'package:kanji_for_n5_level_app/presentation_layer/screens/navigation_bar_screens/favorite_screen/favorites_kanjis_provider.dart';
-import 'package:kanji_for_n5_level_app/providers/examples_audios_track_list_provider.dart';
-import 'package:kanji_for_n5_level_app/providers/image_meaning_kanji_provider.dart';
 import 'package:kanji_for_n5_level_app/providers/status_stored_provider.dart';
-import 'package:kanji_for_n5_level_app/providers/video_status_playing.dart';
 
 class KanjiItemAnimated extends ConsumerWidget {
   const KanjiItemAnimated({
@@ -48,29 +42,9 @@ class KanjiItemAnimated extends ConsumerWidget {
             if (isProcessingData) return;
 
             ref
-                .read(customNavigationRailsDetailsProvider.notifier)
-                .setSelection(0);
-            ref.read(videoStatusPlaying.notifier).setSpeed(1.0);
-            ref.read(videoStatusPlaying.notifier).setIsPlaying(true);
-            var queryKanji = ref
-                .read(favoritesKanjisProvider.notifier)
-                .searchInFavorites(kanjiFromApi.kanjiCharacter);
-            final favoriteStatus = queryKanji;
-            ref.read(kanjiDetailsProvider.notifier).setInitValues(
-                kanjiFromApi, kanjiFromApi.statusStorage, favoriteStatus);
-            ref.read(examplesAudiosTrackListProvider).assetsAudioPlayer.stop();
-            ref
-                .read(examplesAudiosTrackListProvider.notifier)
-                .setIsPlaying(false);
+                .read(kanjiDetailsProvider.notifier)
+                .initKanjiDetails(kanjiFromApi);
 
-            ref.read(imageMeaningKanjiProvider.notifier).clearState();
-            ref
-                .read(imageMeaningKanjiProvider.notifier)
-                .fetchData(kanjiFromApi.kanjiCharacter);
-
-            ref
-                .read(examplesAudiosPlayingAudioProvider.notifier)
-                .setInitList(kanjiFromApi);
             openContainer();
           },
           child: closedChild,

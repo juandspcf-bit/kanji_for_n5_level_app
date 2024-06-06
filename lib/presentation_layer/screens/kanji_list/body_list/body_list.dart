@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kanji_for_n5_level_app/models/kanji_from_api.dart';
-import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_list/body_list/refresh_body_lis.dart';
-import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_list/body_list/error_fetching_kanjis.dart';
+import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_list/body_list/screens/refresh_body_lis.dart';
+import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_list/body_list/screens/error_fetching_kanjis.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/main_screens/main_content_provider.dart';
-import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_list/body_list/shimmer_list.dart';
+import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_list/body_list/screens/shimmer_list.dart';
 
 class BodyKanjisList extends ConsumerWidget {
   const BodyKanjisList({
