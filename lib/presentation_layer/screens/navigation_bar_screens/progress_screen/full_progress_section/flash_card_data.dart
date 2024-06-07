@@ -53,8 +53,8 @@ class FlashCardSectionData extends StatelessWidget {
                     width: 50,
                     height: 50,
                   ),
-            const SizedBox(
-              width: 10,
+            SizedBox(
+              width: allRevisedFlashCards ? 10 : 0,
             ),
             Text(allRevisedFlashCards ? "all revised" : "not all revised"),
           ]),
