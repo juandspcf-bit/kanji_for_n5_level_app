@@ -86,5 +86,6 @@ class AudioExampleBlock {
   void dispose() {
     _generatePlayEventController.close();
     _iconStatusController.close();
+    player.dispose();
   }
 }
