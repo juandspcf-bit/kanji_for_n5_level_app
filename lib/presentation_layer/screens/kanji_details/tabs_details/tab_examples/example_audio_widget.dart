@@ -71,7 +71,7 @@ class _ExampleAudioState extends State<ExampleAudio> {
               color: Theme.of(context).colorScheme.primary,
               child: InkWell(
                 splashColor: Colors.black38,
-                onTap: () async {
+                onTap: () {
                   isPlaying = false;
                   player.stop();
                   player
