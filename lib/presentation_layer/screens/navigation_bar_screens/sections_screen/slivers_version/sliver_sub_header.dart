@@ -3,7 +3,6 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kanji_for_n5_level_app/providers/search_screen_provider.dart';
-import 'package:kanji_for_n5_level_app/providers/status_connection_provider.dart';
 
 class SliverSubHeader extends ConsumerWidget {
   final String text;

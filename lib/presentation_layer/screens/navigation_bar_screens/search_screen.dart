@@ -31,19 +31,32 @@ class SearchScreen extends ConsumerWidget {
       BuildContext context) {
     switch (searchState) {
       case SearchState.errorForm:
-        return const InfoStatusSearch(message: 'type a valid word');
+        return const Padding(
+          padding: EdgeInsets.only(top: 90),
+          child: InfoStatusSearch(message: 'type a valid word'),
+        );
       case SearchState.notSearching:
-        return const InfoStatusSearch(
-            message: 'search a kanji by its english meaning');
+        return const Padding(
+          padding: EdgeInsets.only(top: 90),
+          child: InfoStatusSearch(
+              message: 'search a kanji by its english meaning'),
+        );
       case SearchState.searching:
         return const Center(
-          child: CircularProgressIndicator(),
+          child: Padding(
+            padding: EdgeInsets.only(top: 90),
+            child: CircularProgressIndicator(),
+          ),
         );
-      case SearchState.stoped:
+      case SearchState.stopped:
         {
           if (kanjiFromApi == null) {
-            return const InfoStatusSearch(
-                message: 'The corresponding kanji for this word was not found');
+            return const Padding(
+              padding: EdgeInsets.only(top: 90.0),
+              child: InfoStatusSearch(
+                  message:
+                      'The corresponding kanji for this word was not found'),
+            );
           }
           return Results(kanjiFromApi: kanjiFromApi);
         }
@@ -61,53 +74,56 @@ class SearchScreen extends ConsumerWidget {
           )
         : Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 30),
-            child: Column(
-              children: [
-                Form(
-                  key: _formKey,
-                  child: TextFormField(
-                    initialValue: searchScreenState.word,
-                    decoration: const InputDecoration().copyWith(
-                        border: const OutlineInputBorder(),
-                        suffixIcon: GestureDetector(
-                          child: const Icon(Icons.search),
-                          onTap: () {
-                            onValidate(ref);
-                            FocusScopeNode currentFocus =
-                                FocusScope.of(context);
-
-                            if (!currentFocus.hasPrimaryFocus) {
-                              currentFocus.unfocus();
-                            }
-                          },
-                        ),
-                        labelText: 'english word',
-                        hintText: 'english word'),
-                    keyboardType: TextInputType.text,
-                    validator: (text) {
-                      if (text != null &&
-                          text.isNotEmpty &&
-                          validCharacters.hasMatch(text.trim())) {
-                        return null;
-                      } else {
-                        return 'Not a valid word';
-                      }
-                    },
-                    onSaved: (value) {
-                      ref
-                          .read(searchScreenProvider.notifier)
-                          .setWord(value ?? '');
-                    },
+            child: SingleChildScrollView(
+              child: Column(
+                children: [
+                  const SizedBox(
+                    height: 5,
                   ),
-                ),
-                const SizedBox(
-                  height: 20,
-                ),
-                Expanded(
-                  child: getResult(searchScreenState.searchState,
-                      searchScreenState.kanjiFromApi, context),
-                )
-              ],
+                  Form(
+                    key: _formKey,
+                    child: TextFormField(
+                      initialValue: searchScreenState.word,
+                      decoration: const InputDecoration().copyWith(
+                          border: const OutlineInputBorder(),
+                          suffixIcon: GestureDetector(
+                            child: const Icon(Icons.search),
+                            onTap: () {
+                              onValidate(ref);
+                              FocusScopeNode currentFocus =
+                                  FocusScope.of(context);
+
+                              if (!currentFocus.hasPrimaryFocus) {
+                                currentFocus.unfocus();
+                              }
+                            },
+                          ),
+                          labelText: 'english word',
+                          hintText: 'english word'),
+                      keyboardType: TextInputType.text,
+                      validator: (text) {
+                        if (text != null &&
+                            text.isNotEmpty &&
+                            validCharacters.hasMatch(text.trim())) {
+                          return null;
+                        } else {
+                          return 'Not a valid word';
+                        }
+                      },
+                      onSaved: (value) {
+                        ref
+                            .read(searchScreenProvider.notifier)
+                            .setWord(value ?? '');
+                      },
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  getResult(searchScreenState.searchState,
+                      searchScreenState.kanjiFromApi, context)
+                ],
+              ),
             ),
           );
   }
@@ -119,41 +135,40 @@ class Results extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return Center(
-      child: SingleChildScrollView(
-        child: Column(
-          children: [
-            Container(
-              height: 100,
-              width: 100,
-              decoration: BoxDecoration(
-                  color: Theme.of(context).colorScheme.onPrimaryContainer,
-                  borderRadius: const BorderRadius.all(Radius.circular(10))),
-              child: SvgNetwork(
-                imageUrl: kanjiFromApi.strokes.images.last,
-                semanticsLabel: kanjiFromApi.kanjiCharacter,
-              ),
+    return SizedBox(
+      width: double.infinity,
+      child: Column(
+        children: [
+          Container(
+            height: 100,
+            width: 100,
+            decoration: BoxDecoration(
+                color: Theme.of(context).colorScheme.onPrimaryContainer,
+                borderRadius: const BorderRadius.all(Radius.circular(10))),
+            child: SvgNetwork(
+              imageUrl: kanjiFromApi.strokes.images.last,
+              semanticsLabel: kanjiFromApi.kanjiCharacter,
             ),
-            const SizedBox(
-              height: 20,
-            ),
-            MeaningAndDefinition(
-              englishMeaning: kanjiFromApi.englishMeaning,
-              hiraganaRomaji: kanjiFromApi.hiraganaRomaji,
-              hiraganaMeaning: kanjiFromApi.hiraganaMeaning,
-              katakanaRomaji: kanjiFromApi.katakanaRomaji,
-              katakanaMeaning: kanjiFromApi.katakanaMeaning,
-            ),
-            const SizedBox(
-              height: 20,
-            ),
-            ExampleAudiosSearch(
-              examples: kanjiFromApi.example,
-              statusStorage: StatusStorage.onlyOnline,
-              physics: const NeverScrollableScrollPhysics(),
-            )
-          ],
-        ),
+          ),
+          const SizedBox(
+            height: 20,
+          ),
+          MeaningAndDefinition(
+            englishMeaning: kanjiFromApi.englishMeaning,
+            hiraganaRomaji: kanjiFromApi.hiraganaRomaji,
+            hiraganaMeaning: kanjiFromApi.hiraganaMeaning,
+            katakanaRomaji: kanjiFromApi.katakanaRomaji,
+            katakanaMeaning: kanjiFromApi.katakanaMeaning,
+          ),
+          const SizedBox(
+            height: 20,
+          ),
+          ExampleAudiosSearch(
+            examples: kanjiFromApi.example,
+            statusStorage: StatusStorage.onlyOnline,
+            physics: const NeverScrollableScrollPhysics(),
+          ) /**/
+        ],
       ),
     );
   }

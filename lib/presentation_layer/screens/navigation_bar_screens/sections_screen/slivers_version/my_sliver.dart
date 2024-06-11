@@ -37,7 +37,7 @@ class MySliver extends ConsumerWidget {
         return const Center(
           child: CircularProgressIndicator(),
         );
-      case SearchState.stoped:
+      case SearchState.stopped:
         {
           if (kanjiFromApi == null) {
             return const InfoStatusSearch(
@@ -56,7 +56,7 @@ class MySliver extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final data = ref.watch(examplesAudiosTrackListProvider);
     final searchScreenState = ref.watch(searchScreenProvider);
-    final statusConnectionState = ref.watch(statusConnectionProvider);
+    ref.watch(statusConnectionProvider);
     return CustomScrollView(
       slivers: [
         const SliverPadding(padding: EdgeInsets.only(top: 20, bottom: 20)),
@@ -64,7 +64,7 @@ class MySliver extends ConsumerWidget {
           text: "heyyyy",
           backgroundColor: Colors.purple,
         ),
-        if (SearchState.stoped == searchScreenState.searchState &&
+        if (SearchState.stopped == searchScreenState.searchState &&
             kanjiFromApi != null)
           SliverToBoxAdapter(
             child: Container(
@@ -79,7 +79,7 @@ class MySliver extends ConsumerWidget {
               ),
             ),
           ),
-        if (SearchState.stoped == searchScreenState.searchState &&
+        if (SearchState.stopped == searchScreenState.searchState &&
             kanjiFromApi != null)
           SliverToBoxAdapter(
             child: MeaningAndDefinition(
@@ -90,7 +90,7 @@ class MySliver extends ConsumerWidget {
               katakanaMeaning: kanjiFromApi!.katakanaMeaning,
             ),
           ),
-        if (SearchState.stoped == searchScreenState.searchState &&
+        if (SearchState.stopped == searchScreenState.searchState &&
             examples != null &&
             statusStorage != null)
           SliverList(

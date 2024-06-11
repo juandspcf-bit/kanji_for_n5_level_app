@@ -27,7 +27,7 @@ class SearchScreenProvider extends Notifier<SearchScreenData> {
     state = SearchScreenData(
       word: state.word,
       kanjiFromApi: kanjiList[0],
-      searchState: SearchState.stoped,
+      searchState: SearchState.stopped,
     );
   }
 
@@ -35,7 +35,7 @@ class SearchScreenProvider extends Notifier<SearchScreenData> {
     state = SearchScreenData(
       word: '',
       kanjiFromApi: null,
-      searchState: SearchState.stoped,
+      searchState: SearchState.stopped,
     );
 
     logger.e('error getting kanji from english word');
@@ -67,7 +67,7 @@ class SearchScreenData {
 }
 
 enum SearchState {
-  stoped,
+  stopped,
   searching,
   notSearching,
   errorForm,
