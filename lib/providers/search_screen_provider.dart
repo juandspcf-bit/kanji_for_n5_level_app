@@ -23,6 +23,12 @@ class SearchScreenProvider extends Notifier<SearchScreenData> {
   }
 
   void onSuccess(List<KanjiFromApi> kanjiList) {
+    ref.read(translationApiServiceProvider).translateText(
+          kanjiList[0].englishMeaning,
+          "en",
+          "es",
+        );
+
     state = SearchScreenData(
       word: state.word,
       kanjiFromApi: kanjiList[0],

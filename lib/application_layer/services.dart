@@ -1,8 +1,10 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kanji_for_n5_level_app/application_layer/auth_service/auth_service_contract.dart';
 import 'package:kanji_for_n5_level_app/application_layer/auth_service/auth_service_firebase.dart';
+import 'package:kanji_for_n5_level_app/application_layer/repository_service/api_repo/deep_translate_translation_api_service.dart';
 import 'package:kanji_for_n5_level_app/application_layer/repository_service/api_repo/kanji_api_service_contract.dart';
 import 'package:kanji_for_n5_level_app/application_layer/repository_service/api_repo/kanji_kanji_alive_api_impl.dart';
+import 'package:kanji_for_n5_level_app/application_layer/repository_service/api_repo/translation_api_service_contract.dart';
 import 'package:kanji_for_n5_level_app/application_layer/repository_service/cloud_repo/cloud_db_service_contract.dart';
 import 'package:kanji_for_n5_level_app/application_layer/repository_service/cloud_repo/cloud_db_service_firebase.dart';
 import 'package:kanji_for_n5_level_app/application_layer/repository_service/local_repo/local_db_service_contract.dart';
@@ -18,6 +20,10 @@ final authServiceProvider = Provider<AuthService>((ref) {
 
 final kanjiApiServiceProvider = Provider<KanjiApiService>((ref) {
   return KanjiAliveApiService();
+});
+
+final translationApiServiceProvider = Provider<TranslationApiService>((ref) {
+  return DeepTranslateTranslationApiService();
 });
 
 final cloudDBServiceProvider = Provider<CloudDBService>((ref) {

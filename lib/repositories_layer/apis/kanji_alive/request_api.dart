@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:http/http.dart' as http;
 import 'package:http/http.dart';
 import 'package:kanji_for_n5_level_app/API_Files/key_file_api.dart';
@@ -49,6 +51,28 @@ class RequestsApi {
         'X-RapidAPI-Host': 'kanjialive-api.p.rapidapi.com',
         'uuid': uuid,
       },
+    );
+  }
+
+  static Future<Response> translateText(
+    String text,
+    String sourceLanguage,
+    String targetLanguage,
+  ) {
+    final url = Uri.https(
+      'deep-translate1.p.rapidapi.com',
+      "language/translate/v2",
+    );
+
+    return http.post(
+      url,
+      headers: {
+        'x-rapidapi-key': xRapidAPIKey,
+        'x-rapidapi-host': 'deep-translate1.p.rapidapi.com',
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode(
+          {"q": text, "source": sourceLanguage, "target": targetLanguage}),
     );
   }
 }
