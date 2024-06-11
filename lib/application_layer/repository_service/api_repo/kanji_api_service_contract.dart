@@ -13,4 +13,10 @@ abstract class KanjiApiService {
     int section,
     String uuid,
   );
+
+  Future<void> getKanjiFromEnglishWord(
+      String word,
+      void Function(List<KanjiFromApi>) onSuccess,
+      void Function() onError,
+      String uuid);
 }

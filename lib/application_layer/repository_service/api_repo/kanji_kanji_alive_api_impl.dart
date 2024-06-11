@@ -2,7 +2,7 @@ import 'package:kanji_for_n5_level_app/application_layer/repository_service/api_
 import 'package:kanji_for_n5_level_app/models/kanji_from_api.dart';
 import 'package:kanji_for_n5_level_app/repositories_layer/apis/kanji_alive/request_kanji_list_api.dart';
 
-class AppApplicationApiService implements KanjiApiService {
+class KanjiAliveApiService implements KanjiApiService {
   @override
   Future<List<KanjiFromApi>> requestKanjiListToApi(
       List<KanjiFromApi> storedKanjis,
@@ -30,5 +30,19 @@ class AppApplicationApiService implements KanjiApiService {
       uuid,
     );
     return kanjiList[0];
+  }
+
+  @override
+  Future<void> getKanjiFromEnglishWord(
+      String word,
+      void Function(List<KanjiFromApi>) onSuccess,
+      void Function() onError,
+      String uuid) async {
+    KanjiAliveApi.getKanjiFromEnglishWord(
+      word,
+      onSuccess,
+      onError,
+      uuid,
+    );
   }
 }

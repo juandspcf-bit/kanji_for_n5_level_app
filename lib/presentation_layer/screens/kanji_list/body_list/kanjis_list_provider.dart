@@ -216,7 +216,7 @@ class KanjiListProvider extends Notifier<KanjiListData> {
     final storedKanjis =
         ref.read(storedKanjisProvider.notifier).getStoresItems();
 
-    return ref.read(applicationApiServiceProvider).requestKanjiListToApi(
+    return ref.read(kanjiApiServiceProvider).requestKanjiListToApi(
           storedKanjis[section] ?? [],
           kanjisCharacters,
           section,

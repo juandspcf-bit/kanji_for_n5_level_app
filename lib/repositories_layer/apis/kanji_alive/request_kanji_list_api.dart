@@ -3,13 +3,14 @@ import 'dart:isolate';
 
 import 'package:async/async.dart';
 import 'package:http/http.dart';
+import 'package:kanji_for_n5_level_app/main.dart';
 import 'package:kanji_for_n5_level_app/models/kanji_from_api.dart';
 import 'package:kanji_for_n5_level_app/repositories_layer/apis/kanji_alive/request_api.dart';
 
 class KanjiAliveApi {
   static Future<List<KanjiFromApi>> getKanjiList(
     List<KanjiFromApi> storedKanjis,
-    List<String> kanjisCharacteres,
+    List<String> kanjisCharacters,
     int section,
     String uuid,
   ) async {
@@ -28,11 +29,11 @@ class KanjiAliveApi {
         listOfStoredKanjis,
       ) = getGroupedKanjisAccordingToItsStorageStatus(
         storedKanjis,
-        kanjisCharacteres,
+        kanjisCharacters,
       );
 
       //when all the kanjis are stored
-      if (kanjisCharacteres.length == listOfStoredKanjis.length) {
+      if (kanjisCharacters.length == listOfStoredKanjis.length) {
         final List<KanjiFromApi> fixedLengthList = [];
         for (int i = 0; i < listOfStoredKanjis.length; i++) {
           for (int j = 0; j < storedKanjis.length; j++) {
@@ -55,8 +56,8 @@ class KanjiAliveApi {
       List<KanjiFromApi> kanjisFromApi = [];
 
       //when all the kanjis are online
-      if (kanjisCharacteres.length == listOfKanjisToRequestToApi.length) {
-        //fecth all the kanjis with a http request
+      if (kanjisCharacters.length == listOfKanjisToRequestToApi.length) {
+        //fetch all the kanjis with a http request
         List<Response> kanjiInformationList = await group.future.timeout(
           const Duration(
             seconds: 25,
@@ -85,7 +86,7 @@ class KanjiAliveApi {
         kanjisFromApi.add(buildKanjiInfoFromApi(body, section));
       }
       final fixedLengthList = List<KanjiFromApi>.filled(
-          kanjisCharacteres.length, kanjisFromApi.first);
+          kanjisCharacters.length, kanjisFromApi.first);
       for (int i = 0; i < indexesFromKanjisToRequestToApi.length; i++) {
         fixedLengthList[indexesFromKanjisToRequestToApi[i]] = kanjisFromApi[i];
       }
@@ -105,15 +106,15 @@ class KanjiAliveApi {
   static (List<int>, List<int>, List<String>, List<String>)
       getGroupedKanjisAccordingToItsStorageStatus(
     List<KanjiFromApi> storedKanjis,
-    List<String> kanjisCharacteres,
+    List<String> kanjisCharacters,
   ) {
-    final copyKanjis = [...kanjisCharacteres];
+    final copyKanjis = [...kanjisCharacters];
     List<int> indexesFromStoredKanjis = [];
     List<int> indexesFromKanjisToRequestToApi = [];
-    for (int i = 0; i < kanjisCharacteres.length; i++) {
+    for (int i = 0; i < kanjisCharacters.length; i++) {
       bool toKeep = true;
       for (int j = 0; j < storedKanjis.length; j++) {
-        if (kanjisCharacteres[i] == storedKanjis[j].kanjiCharacter) {
+        if (kanjisCharacters[i] == storedKanjis[j].kanjiCharacter) {
           indexesFromStoredKanjis.add(i);
           toKeep = false;
           continue;
@@ -139,5 +140,30 @@ class KanjiAliveApi {
       listOfKanjisToRequestToApi,
       listOfStoredKanjis,
     );
+  }
+
+  static Future<void> getKanjiFromEnglishWord(
+      String word,
+      void Function(List<KanjiFromApi>) onSuccess,
+      void Function() onError,
+      String uuid) async {
+    try {
+      Response value = await RequestsApi.getKanjiFromEnglishWord(word);
+
+      final body = json.decode(value.body);
+      logger.d(body);
+      List<dynamic> data = body;
+
+      Map<String, dynamic> map = data.first;
+      Map<String, dynamic> kanjiMap = map['kanji'];
+
+      logger.d(kanjiMap['character']);
+      final kanjiList = await KanjiAliveApi.getKanjiList(
+          [], [kanjiMap['character']], 0, uuid);
+
+      onSuccess(kanjiList);
+    } catch (e) {
+      onError();
+    }
   }
 }

@@ -31,7 +31,7 @@ class FavoritesListProvider extends Notifier<FavoritesKanjisData> {
 
     try {
       var kanjiList =
-          await ref.read(applicationApiServiceProvider).requestKanjiListToApi(
+          await ref.read(kanjiApiServiceProvider).requestKanjiListToApi(
                 storedKanjis,
                 myFavorites.map((e) => e.kanji).toList(),
                 section,
@@ -107,7 +107,7 @@ class FavoritesListProvider extends Notifier<FavoritesKanjisData> {
 
     try {
       var kanjiListFromAPI =
-          await ref.read(applicationApiServiceProvider).requestKanjiListToApi(
+          await ref.read(kanjiApiServiceProvider).requestKanjiListToApi(
                 storedKanjis,
                 favoritesKanjisFromDB.map((e) => e.kanji).toList(),
                 10,

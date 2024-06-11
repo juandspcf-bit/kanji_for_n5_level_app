@@ -16,8 +16,8 @@ final authServiceProvider = Provider<AuthService>((ref) {
   return FirebaseAuthService();
 });
 
-final applicationApiServiceProvider = Provider<KanjiApiService>((ref) {
-  return AppApplicationApiService();
+final kanjiApiServiceProvider = Provider<KanjiApiService>((ref) {
+  return KanjiAliveApiService();
 });
 
 final cloudDBServiceProvider = Provider<CloudDBService>((ref) {
