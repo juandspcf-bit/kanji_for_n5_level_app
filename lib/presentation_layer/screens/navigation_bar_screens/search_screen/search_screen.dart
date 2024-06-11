@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kanji_for_n5_level_app/models/kanji_from_api.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/common_widgets/svg_utils/svg_utils.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_details/tabs_details/tab_examples/example_audio_widget_stream/example_audio_widget.dart';
+import 'package:kanji_for_n5_level_app/presentation_layer/screens/navigation_bar_screens/search_screen/slivers_version/my_sliver.dart';
 import 'package:kanji_for_n5_level_app/providers/examples_audios_track_list_provider.dart';
 import 'package:kanji_for_n5_level_app/providers/search_screen_provider.dart';
 import 'package:kanji_for_n5_level_app/providers/status_connection_provider.dart';
@@ -67,54 +68,64 @@ class SearchScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final searchScreenState = ref.watch(searchScreenProvider);
     final statusConnectionState = ref.watch(statusConnectionProvider);
+
+/*     return MySliver(
+      kanjiFromApi: searchScreenState.kanjiFromApi,
+      examples: searchScreenState.kanjiFromApi!.example,
+      statusStorage: searchScreenState.kanjiFromApi!.statusStorage,
+    ); */
+
     return statusConnectionState == ConnectionStatus.noConnected
         ? const ErrorConnectionScreen(
             message:
                 'No internet connection, you will be able to search when the connection is restored',
           )
         : Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 30),
+            padding: const EdgeInsets.symmetric(vertical: 30),
             child: SingleChildScrollView(
               child: Column(
                 children: [
                   const SizedBox(
                     height: 5,
                   ),
-                  Form(
-                    key: _formKey,
-                    child: TextFormField(
-                      initialValue: searchScreenState.word,
-                      decoration: const InputDecoration().copyWith(
-                          border: const OutlineInputBorder(),
-                          suffixIcon: GestureDetector(
-                            child: const Icon(Icons.search),
-                            onTap: () {
-                              onValidate(ref);
-                              FocusScopeNode currentFocus =
-                                  FocusScope.of(context);
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 20),
+                    child: Form(
+                      key: _formKey,
+                      child: TextFormField(
+                        initialValue: searchScreenState.word,
+                        decoration: const InputDecoration().copyWith(
+                            border: const OutlineInputBorder(),
+                            suffixIcon: GestureDetector(
+                              child: const Icon(Icons.search),
+                              onTap: () {
+                                onValidate(ref);
+                                FocusScopeNode currentFocus =
+                                    FocusScope.of(context);
 
-                              if (!currentFocus.hasPrimaryFocus) {
-                                currentFocus.unfocus();
-                              }
-                            },
-                          ),
-                          labelText: 'english word',
-                          hintText: 'english word'),
-                      keyboardType: TextInputType.text,
-                      validator: (text) {
-                        if (text != null &&
-                            text.isNotEmpty &&
-                            validCharacters.hasMatch(text.trim())) {
-                          return null;
-                        } else {
-                          return 'Not a valid word';
-                        }
-                      },
-                      onSaved: (value) {
-                        ref
-                            .read(searchScreenProvider.notifier)
-                            .setWord(value ?? '');
-                      },
+                                if (!currentFocus.hasPrimaryFocus) {
+                                  currentFocus.unfocus();
+                                }
+                              },
+                            ),
+                            labelText: 'english word',
+                            hintText: 'english word'),
+                        keyboardType: TextInputType.text,
+                        validator: (text) {
+                          if (text != null &&
+                              text.isNotEmpty &&
+                              validCharacters.hasMatch(text.trim())) {
+                            return null;
+                          } else {
+                            return 'Not a valid word';
+                          }
+                        },
+                        onSaved: (value) {
+                          ref
+                              .read(searchScreenProvider.notifier)
+                              .setWord(value ?? '');
+                        },
+                      ),
                     ),
                   ),
                   const SizedBox(

@@ -4,15 +4,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kanji_for_n5_level_app/providers/search_screen_provider.dart';
 
-class SliverSubHeader extends ConsumerWidget {
-  final String text;
-  final Color backgroundColor;
-
+class SliverTextField extends ConsumerWidget {
   final _formKey = GlobalKey<FormState>();
   final validCharacters = RegExp(r'^[a-zA-Z]+$');
 
-  SliverSubHeader(
-      {super.key, required this.text, required this.backgroundColor});
+  SliverTextField({
+    super.key,
+  });
 
   void onValidate(WidgetRef ref) async {
     final currenState = _formKey.currentState;
