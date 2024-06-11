@@ -23,7 +23,7 @@ class SearchScreenProvider extends Notifier<SearchScreenData> {
         word: '', kanjiFromApi: null, searchState: SearchState.errorForm);
   }
 
-  void onSucces(List<KanjiFromApi> kanjiList) {
+  void onSuccess(List<KanjiFromApi> kanjiList) {
     state = SearchScreenData(
       word: state.word,
       kanjiFromApi: kanjiList[0],
@@ -44,7 +44,7 @@ class SearchScreenProvider extends Notifier<SearchScreenData> {
   void _getKanjiFromEnglishWord(String word) {
     RequestEnglishWordToKanji.getKanjiFromEnglishWord(
       word,
-      onSucces,
+      onSuccess,
       onError,
       ref.read(authServiceProvider).userUuid ?? '',
     );
