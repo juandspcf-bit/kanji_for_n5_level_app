@@ -12,10 +12,12 @@ class ExampleAudios extends ConsumerWidget {
     super.key,
     required this.examples,
     required this.statusStorage,
+    this.physics,
   });
 
   final List<Example> examples;
   final StatusStorage statusStorage;
+  final ScrollPhysics? physics;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -28,6 +30,7 @@ class ExampleAudios extends ConsumerWidget {
         ),
         Expanded(
           child: ListView(
+            physics: physics,
             children: [
               for (int index = 0; index < examples.length; index++)
                 ListTile(

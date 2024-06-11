@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:kanji_for_n5_level_app/models/kanji_from_api.dart';
+import 'package:kanji_for_n5_level_app/presentation_layer/common_widgets/svg_utils/svg_utils.dart';
+import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_details/tabs_details/tab_examples/example_audio_widget_stream/example_audio_widget.dart';
+import 'package:kanji_for_n5_level_app/providers/examples_audios_track_list_provider.dart';
 import 'package:kanji_for_n5_level_app/providers/search_screen_provider.dart';
 import 'package:kanji_for_n5_level_app/providers/status_connection_provider.dart';
 import 'package:kanji_for_n5_level_app/providers/status_stored_provider.dart';
@@ -118,46 +120,102 @@ class Results extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Center(
-      child: Column(
-        children: [
-          Container(
-            height: 80,
-            width: 80,
-            decoration: BoxDecoration(
-                color: Theme.of(context).colorScheme.onPrimaryContainer,
-                borderRadius: const BorderRadius.all(Radius.circular(10))),
-            child: SvgPicture.network(
-              kanjiFromApi.strokes.images.last,
-              height: 80,
-              width: 80,
-              semanticsLabel: kanjiFromApi.kanjiCharacter,
-              placeholderBuilder: (BuildContext context) => Container(
-                  color: Colors.transparent,
-                  height: 40,
-                  width: 40,
-                  child: const CircularProgressIndicator(
-                    backgroundColor: Color.fromARGB(179, 5, 16, 51),
-                  )),
+      child: SingleChildScrollView(
+        child: Column(
+          children: [
+            Container(
+              height: 100,
+              width: 100,
+              decoration: BoxDecoration(
+                  color: Theme.of(context).colorScheme.onPrimaryContainer,
+                  borderRadius: const BorderRadius.all(Radius.circular(10))),
+              child: SvgNetwork(
+                imageUrl: kanjiFromApi.strokes.images.last,
+                semanticsLabel: kanjiFromApi.kanjiCharacter,
+              ),
             ),
-          ),
-          MeaningAndDefinition(
-            englishMeaning: kanjiFromApi.englishMeaning,
-            hiraganaRomaji: kanjiFromApi.hiraganaRomaji,
-            hiraganaMeaning: kanjiFromApi.hiraganaMeaning,
-            katakanaRomaji: kanjiFromApi.katakanaRomaji,
-            katakanaMeaning: kanjiFromApi.katakanaMeaning,
-          ),
-          const SizedBox(
-            height: 20,
-          ),
-          Expanded(
-            child: ExampleAudios(
+            const SizedBox(
+              height: 20,
+            ),
+            MeaningAndDefinition(
+              englishMeaning: kanjiFromApi.englishMeaning,
+              hiraganaRomaji: kanjiFromApi.hiraganaRomaji,
+              hiraganaMeaning: kanjiFromApi.hiraganaMeaning,
+              katakanaRomaji: kanjiFromApi.katakanaRomaji,
+              katakanaMeaning: kanjiFromApi.katakanaMeaning,
+            ),
+            const SizedBox(
+              height: 20,
+            ),
+            ExampleAudiosSearch(
               examples: kanjiFromApi.example,
               statusStorage: StatusStorage.onlyOnline,
-            ),
-          )
-        ],
+              physics: const NeverScrollableScrollPhysics(),
+            )
+          ],
+        ),
       ),
+    );
+  }
+}
+
+class ExampleAudiosSearch extends ConsumerWidget {
+  const ExampleAudiosSearch({
+    super.key,
+    required this.examples,
+    required this.statusStorage,
+    this.physics,
+  });
+
+  final List<Example> examples;
+  final StatusStorage statusStorage;
+  final ScrollPhysics? physics;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final data = ref.watch(examplesAudiosTrackListProvider);
+    return Column(
+      children: [
+        PlayListButton(
+          examples: examples,
+          statusStorage: statusStorage,
+        ),
+        ListView(
+          shrinkWrap: true,
+          physics: physics,
+          children: [
+            for (int index = 0; index < examples.length; index++)
+              ListTile(
+                selected: data.track == index && data.isPlaying,
+                selectedColor: Colors.amberAccent,
+                leading: Text(
+                  '${index + 1}._',
+                  style: Theme.of(context).textTheme.titleMedium,
+                ),
+                title: TitleListTileExample(
+                  examples: examples,
+                  index: index,
+                  data: data,
+                ),
+                subtitle: SubTitleListTileExample(
+                  examples: examples,
+                  index: index,
+                  data: data,
+                ),
+                trailing: ExampleAudioStream(
+                  audioQuestion: examples[index].audio.mp3,
+                  sizeOval: 50,
+                  sizeIcon: 30,
+                  trackPlaylist: data.track,
+                  indexPlaylist: index,
+                  isInPlaylistPlaying: data.isPlaying,
+                  statusStorage: statusStorage,
+                  onPrimaryColor: Theme.of(context).colorScheme.onPrimary,
+                ),
+              )
+          ],
+        )
+      ],
     );
   }
 }
