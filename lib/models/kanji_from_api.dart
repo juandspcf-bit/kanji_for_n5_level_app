@@ -1,3 +1,5 @@
+import 'package:flutter/foundation.dart';
+
 import 'package:kanji_for_n5_level_app/providers/status_stored_provider.dart';
 
 class KanjiFromApi {
@@ -30,10 +32,79 @@ class KanjiFromApi {
       required this.example,
       required this.strokes});
 
+  KanjiFromApi copyWith({
+    String? kanjiCharacter,
+    String? englishMeaning,
+    String? kanjiImageLink,
+    String? katakanaRomaji,
+    String? katakanaMeaning,
+    String? hiraganaRomaji,
+    String? hiraganaMeaning,
+    String? videoLink,
+    int? section,
+    StatusStorage? statusStorage,
+    bool? accessToKanjiItemsButtons,
+    List<Example>? example,
+    Strokes? strokes,
+  }) {
+    return KanjiFromApi(
+      kanjiCharacter: kanjiCharacter ?? this.kanjiCharacter,
+      englishMeaning: englishMeaning ?? this.englishMeaning,
+      kanjiImageLink: kanjiImageLink ?? this.kanjiImageLink,
+      katakanaRomaji: katakanaRomaji ?? this.katakanaRomaji,
+      katakanaMeaning: katakanaMeaning ?? this.katakanaMeaning,
+      hiraganaRomaji: hiraganaRomaji ?? this.hiraganaRomaji,
+      hiraganaMeaning: hiraganaMeaning ?? this.hiraganaMeaning,
+      videoLink: videoLink ?? this.videoLink,
+      section: section ?? this.section,
+      statusStorage: statusStorage ?? this.statusStorage,
+      accessToKanjiItemsButtons:
+          accessToKanjiItemsButtons ?? this.accessToKanjiItemsButtons,
+      example: example ?? this.example,
+      strokes: strokes ?? this.strokes,
+    );
+  }
+
   @override
   String toString() {
-    return 'kanji character $kanjiCharacter, : meaning: $englishMeaning,'
-        ' image link: $kanjiImageLink, statusStorage:$statusStorage ';
+    return 'KanjiFromApi(kanjiCharacter: $kanjiCharacter, englishMeaning: $englishMeaning, kanjiImageLink: $kanjiImageLink, katakanaRomaji: $katakanaRomaji, katakanaMeaning: $katakanaMeaning, hiraganaRomaji: $hiraganaRomaji, hiraganaMeaning: $hiraganaMeaning, videoLink: $videoLink, section: $section, statusStorage: $statusStorage, accessToKanjiItemsButtons: $accessToKanjiItemsButtons, example: $example, strokes: $strokes)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+
+    return other is KanjiFromApi &&
+        other.kanjiCharacter == kanjiCharacter &&
+        other.englishMeaning == englishMeaning &&
+        other.kanjiImageLink == kanjiImageLink &&
+        other.katakanaRomaji == katakanaRomaji &&
+        other.katakanaMeaning == katakanaMeaning &&
+        other.hiraganaRomaji == hiraganaRomaji &&
+        other.hiraganaMeaning == hiraganaMeaning &&
+        other.videoLink == videoLink &&
+        other.section == section &&
+        other.statusStorage == statusStorage &&
+        other.accessToKanjiItemsButtons == accessToKanjiItemsButtons &&
+        listEquals(other.example, example) &&
+        other.strokes == strokes;
+  }
+
+  @override
+  int get hashCode {
+    return kanjiCharacter.hashCode ^
+        englishMeaning.hashCode ^
+        kanjiImageLink.hashCode ^
+        katakanaRomaji.hashCode ^
+        katakanaMeaning.hashCode ^
+        hiraganaRomaji.hashCode ^
+        hiraganaMeaning.hashCode ^
+        videoLink.hashCode ^
+        section.hashCode ^
+        statusStorage.hashCode ^
+        accessToKanjiItemsButtons.hashCode ^
+        example.hashCode ^
+        strokes.hashCode;
   }
 }
 

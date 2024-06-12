@@ -24,19 +24,57 @@ class SearchScreenProvider extends Notifier<SearchScreenData> {
         word: '', kanjiFromApi: null, searchState: SearchState.errorForm);
   }
 
-  void onSuccess(List<KanjiFromApi> kanjiList) {
+  void onSuccess(List<KanjiFromApi> kanjiList) async {
     final defaultLocale = Platform.localeName;
     logger.d(defaultLocale);
     if (defaultLocale.contains("es_")) {
-      ref.read(translationApiServiceProvider).translateText(
-            kanjiList[0].englishMeaning,
-            "en",
-            "es",
-          );
+      final translatedMeaning =
+          await ref.read(translationApiServiceProvider).translateText(
+                kanjiList[0].englishMeaning,
+                "en",
+                "es",
+              );
       var words = "";
-      for (var exam in kanjiList[0].example) {
-        words += "${exam.meaning.english} , ";
+
+      final length = kanjiList[0].example.length;
+      for (var i = 0; i < length; i++) {
+        final exam = kanjiList[0].example[i];
+        if (i == length - 1) {
+          words += exam.meaning.english;
+          continue;
+        }
+        words += "${exam.meaning.english};";
       }
+
+      final translatedExamplesChain =
+          await ref.read(translationApiServiceProvider).translateText(
+                words,
+                "en",
+                "es",
+              );
+
+      final translatedExamplesList =
+          translatedExamplesChain.translatedText.split(";");
+
+      final List<Example> newListExamples = [];
+
+      for (int i = 0; i < translatedExamplesList.length; i++) {
+        newListExamples.add(Example(
+            japanese: kanjiList[0].example[i].japanese,
+            meaning: Meaning(english: translatedExamplesList[i]),
+            audio: kanjiList[0].example[i].audio));
+      }
+
+      final newKanji = kanjiList[0].copyWith(
+        englishMeaning: translatedMeaning.translatedText,
+        example: newListExamples,
+      );
+      state = SearchScreenData(
+        word: state.word,
+        kanjiFromApi: newKanji,
+        searchState: SearchState.stopped,
+      );
+      return;
     }
 
     state = SearchScreenData(
