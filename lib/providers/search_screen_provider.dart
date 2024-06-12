@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kanji_for_n5_level_app/application_layer/services.dart';
 import 'package:kanji_for_n5_level_app/main.dart';
@@ -23,11 +25,19 @@ class SearchScreenProvider extends Notifier<SearchScreenData> {
   }
 
   void onSuccess(List<KanjiFromApi> kanjiList) {
-    ref.read(translationApiServiceProvider).translateText(
-          kanjiList[0].englishMeaning,
-          "en",
-          "es",
-        );
+    final defaultLocale = Platform.localeName;
+    logger.d(defaultLocale);
+    if (defaultLocale.contains("es_")) {
+      ref.read(translationApiServiceProvider).translateText(
+            kanjiList[0].englishMeaning,
+            "en",
+            "es",
+          );
+      var words = "";
+      for (var exam in kanjiList[0].example) {
+        words += "${exam.meaning.english} , ";
+      }
+    }
 
     state = SearchScreenData(
       word: state.word,
