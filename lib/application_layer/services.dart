@@ -18,12 +18,14 @@ final authServiceProvider = Provider<AuthService>((ref) {
   return FirebaseAuthService();
 });
 
-final kanjiApiServiceProvider = Provider<KanjiApiService>((ref) {
-  return KanjiAliveApiService();
-});
-
 final translationApiServiceProvider = Provider<TranslationApiService>((ref) {
   return DeepTranslateTranslationApiService();
+});
+
+final kanjiApiServiceProvider = Provider<KanjiApiService>((ref) {
+  return KanjiAliveApiService(
+    translationApiService: ref.read(translationApiServiceProvider),
+  );
 });
 
 final cloudDBServiceProvider = Provider<CloudDBService>((ref) {

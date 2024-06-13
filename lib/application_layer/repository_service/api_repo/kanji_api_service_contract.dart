@@ -19,4 +19,12 @@ abstract class KanjiApiService {
       void Function(List<KanjiFromApi>) onSuccess,
       void Function() onError,
       String uuid);
+
+  Future<void> getTranslatedKanjiFromEnglishWord(
+    String word,
+    String sourceLanguage,
+    String targetLanguage,
+    String uuid,
+    void Function(KanjiFromApi kanjiFromApi) onSuccess,
+  );
 }

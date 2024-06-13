@@ -25,58 +25,6 @@ class SearchScreenProvider extends Notifier<SearchScreenData> {
   }
 
   void onSuccess(List<KanjiFromApi> kanjiList) async {
-    final defaultLocale = Platform.localeName;
-    logger.d(defaultLocale);
-    if (defaultLocale.contains("es_")) {
-      final translatedMeaning =
-          await ref.read(translationApiServiceProvider).translateText(
-                kanjiList[0].englishMeaning,
-                "en",
-                "es",
-              );
-      var words = "";
-
-      final length = kanjiList[0].example.length;
-      for (var i = 0; i < length; i++) {
-        final exam = kanjiList[0].example[i];
-        if (i == length - 1) {
-          words += exam.meaning.english;
-          continue;
-        }
-        words += "${exam.meaning.english};";
-      }
-
-      final translatedExamplesChain =
-          await ref.read(translationApiServiceProvider).translateText(
-                words,
-                "en",
-                "es",
-              );
-
-      final translatedExamplesList =
-          translatedExamplesChain.translatedText.split(";");
-
-      final List<Example> newListExamples = [];
-
-      for (int i = 0; i < translatedExamplesList.length; i++) {
-        newListExamples.add(Example(
-            japanese: kanjiList[0].example[i].japanese,
-            meaning: Meaning(english: translatedExamplesList[i]),
-            audio: kanjiList[0].example[i].audio));
-      }
-
-      final newKanji = kanjiList[0].copyWith(
-        englishMeaning: translatedMeaning.translatedText,
-        example: newListExamples,
-      );
-      state = SearchScreenData(
-        word: state.word,
-        kanjiFromApi: newKanji,
-        searchState: SearchState.stopped,
-      );
-      return;
-    }
-
     state = SearchScreenData(
       word: state.word,
       kanjiFromApi: kanjiList[0],
@@ -95,6 +43,24 @@ class SearchScreenProvider extends Notifier<SearchScreenData> {
   }
 
   void _getKanjiFromEnglishWord(String word) {
+    final defaultLocale = Platform.localeName;
+    if (defaultLocale.contains("es_")) {
+      ref.read(kanjiApiServiceProvider).getTranslatedKanjiFromEnglishWord(
+        word,
+        "en",
+        "es",
+        ref.read(authServiceProvider).userUuid ?? '',
+        (kanjiFromApi) {
+          state = SearchScreenData(
+            word: state.word,
+            kanjiFromApi: kanjiFromApi,
+            searchState: SearchState.stopped,
+          );
+        },
+      );
+      return;
+    }
+
     ref.read(kanjiApiServiceProvider).getKanjiFromEnglishWord(
           word,
           onSuccess,
