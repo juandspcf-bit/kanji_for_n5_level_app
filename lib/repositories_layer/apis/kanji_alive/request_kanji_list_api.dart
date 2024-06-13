@@ -3,6 +3,7 @@ import 'dart:isolate';
 
 import 'package:async/async.dart';
 import 'package:http/http.dart';
+import 'package:kanji_for_n5_level_app/application_layer/repository_service/api_repo/kanji_api_service_contract.dart';
 import 'package:kanji_for_n5_level_app/main.dart';
 import 'package:kanji_for_n5_level_app/models/kanji_from_api.dart';
 import 'package:kanji_for_n5_level_app/repositories_layer/apis/kanji_alive/request_api.dart';
@@ -142,11 +143,8 @@ class KanjiAliveApi {
     );
   }
 
-  static Future<void> getKanjiFromEnglishWord(
-      String word,
-      void Function(List<KanjiFromApi>) onSuccess,
-      void Function() onError,
-      String uuid) async {
+  static Future<KanjiFromApi> getKanjiFromEnglishWord(
+      String word, String uuid) async {
     try {
       Response value = await RequestsApi.getKanjiFromEnglishWord(word);
 
@@ -161,9 +159,9 @@ class KanjiAliveApi {
       final kanjiList = await KanjiAliveApi.getKanjiList(
           [], [kanjiMap['character']], 0, uuid);
 
-      onSuccess(kanjiList);
+      return kanjiList.first;
     } catch (e) {
-      onError();
+      throw KanjiFetchingException("error getting kanji data for $word");
     }
   }
 }

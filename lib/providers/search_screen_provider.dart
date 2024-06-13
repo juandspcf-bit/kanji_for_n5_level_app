@@ -24,47 +24,45 @@ class SearchScreenProvider extends Notifier<SearchScreenData> {
         word: '', kanjiFromApi: null, searchState: SearchState.errorForm);
   }
 
-  void onSuccess(List<KanjiFromApi> kanjiList) async {
-    state = SearchScreenData(
-      word: state.word,
-      kanjiFromApi: kanjiList[0],
-      searchState: SearchState.stopped,
-    );
-  }
+  void _getKanjiFromEnglishWord(String word) async {
+    try {
+      final defaultLocale = Platform.localeName;
+      if (defaultLocale.contains("es_")) {
+        final kanjiTranslated = await ref
+            .read(kanjiApiServiceProvider)
+            .getTranslatedKanjiFromSpanishWord(
+              word,
+              ref.read(authServiceProvider).userUuid ?? '',
+            );
 
-  void onError() {
-    state = SearchScreenData(
-      word: '',
-      kanjiFromApi: null,
-      searchState: SearchState.stopped,
-    );
-
-    logger.e('error getting kanji from english word');
-  }
-
-  void _getKanjiFromEnglishWord(String word) {
-    final defaultLocale = Platform.localeName;
-    if (defaultLocale.contains("es_")) {
-      ref.read(kanjiApiServiceProvider).getTranslatedKanjiFromSpanishWord(
-        word,
-        ref.read(authServiceProvider).userUuid ?? '',
-        (kanjiFromApi) {
-          state = SearchScreenData(
-            word: state.word,
-            kanjiFromApi: kanjiFromApi,
-            searchState: SearchState.stopped,
-          );
-        },
-      );
-      return;
-    }
-
-    ref.read(kanjiApiServiceProvider).getKanjiFromEnglishWord(
-          word,
-          onSuccess,
-          onError,
-          ref.read(authServiceProvider).userUuid ?? '',
+        state = SearchScreenData(
+          word: state.word,
+          kanjiFromApi: kanjiTranslated,
+          searchState: SearchState.stopped,
         );
+
+        return;
+      }
+
+      final kanjiFromApi =
+          await ref.read(kanjiApiServiceProvider).getKanjiFromEnglishWord(
+                word,
+                ref.read(authServiceProvider).userUuid ?? '',
+              );
+
+      state = SearchScreenData(
+        word: state.word,
+        kanjiFromApi: kanjiFromApi,
+        searchState: SearchState.stopped,
+      );
+    } catch (e) {
+      logger.e(e);
+      state = SearchScreenData(
+        word: '',
+        kanjiFromApi: null,
+        searchState: SearchState.stopped,
+      );
+    }
   }
 }
 

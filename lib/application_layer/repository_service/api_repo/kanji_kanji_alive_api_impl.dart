@@ -38,24 +38,17 @@ class KanjiAliveApiService implements KanjiApiService {
   }
 
   @override
-  Future<void> getKanjiFromEnglishWord(
-      String word,
-      void Function(List<KanjiFromApi>) onSuccess,
-      void Function() onError,
-      String uuid) async {
-    KanjiAliveApi.getKanjiFromEnglishWord(
+  Future<KanjiFromApi> getKanjiFromEnglishWord(String word, String uuid) async {
+    return KanjiAliveApi.getKanjiFromEnglishWord(
       word,
-      onSuccess,
-      onError,
       uuid,
     );
   }
 
   @override
-  Future<void> getTranslatedKanjiFromSpanishWord(
+  Future<KanjiFromApi> getTranslatedKanjiFromSpanishWord(
     String word,
     String uuid,
-    void Function(KanjiFromApi kanjiFromApi) onSuccess,
   ) async {
     final translatedQuery = await translationApiService.translateText(
       word,
@@ -63,54 +56,51 @@ class KanjiAliveApiService implements KanjiApiService {
       "en",
     );
 
-    KanjiAliveApi.getKanjiFromEnglishWord(
+    final kanjiList = await KanjiAliveApi.getKanjiFromEnglishWord(
       translatedQuery.translatedText,
-      (kanjiList) async {
-        final translatedMeaning = await translationApiService.translateText(
-          kanjiList[0].englishMeaning,
-          "en",
-          "es",
-        );
-        var words = "";
-
-        final length = kanjiList[0].example.length;
-        for (var i = 0; i < length; i++) {
-          final exam = kanjiList[0].example[i];
-          if (i == length - 1) {
-            words += exam.meaning.english;
-            continue;
-          }
-          words += "${exam.meaning.english};";
-        }
-
-        final translatedExamplesChain =
-            await translationApiService.translateText(
-          words,
-          "en",
-          "es",
-        );
-
-        final translatedExamplesList =
-            translatedExamplesChain.translatedText.split(";");
-
-        final List<Example> newListExamples = [];
-
-        for (int i = 0; i < translatedExamplesList.length; i++) {
-          newListExamples.add(Example(
-              japanese: kanjiList[0].example[i].japanese,
-              meaning: Meaning(english: translatedExamplesList[i]),
-              audio: kanjiList[0].example[i].audio));
-        }
-
-        final newKanji = kanjiList[0].copyWith(
-          englishMeaning: translatedMeaning.translatedText,
-          example: newListExamples,
-        );
-
-        onSuccess(newKanji);
-      },
-      () {},
       uuid,
     );
+
+    final translatedMeaning = await translationApiService.translateText(
+      kanjiList.englishMeaning,
+      "en",
+      "es",
+    );
+    var words = "";
+
+    final length = kanjiList.example.length;
+    for (var i = 0; i < length; i++) {
+      final exam = kanjiList.example[i];
+      if (i == length - 1) {
+        words += exam.meaning.english;
+        continue;
+      }
+      words += "${exam.meaning.english};";
+    }
+
+    final translatedExamplesChain = await translationApiService.translateText(
+      words,
+      "en",
+      "es",
+    );
+
+    final translatedExamplesList =
+        translatedExamplesChain.translatedText.split(";");
+
+    final List<Example> newListExamples = [];
+
+    for (int i = 0; i < translatedExamplesList.length; i++) {
+      newListExamples.add(Example(
+          japanese: kanjiList.example[i].japanese,
+          meaning: Meaning(english: translatedExamplesList[i]),
+          audio: kanjiList.example[i].audio));
+    }
+
+    final newKanji = kanjiList.copyWith(
+      englishMeaning: translatedMeaning.translatedText,
+      example: newListExamples,
+    );
+
+    return newKanji;
   }
 }

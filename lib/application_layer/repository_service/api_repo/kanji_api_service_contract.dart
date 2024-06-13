@@ -14,16 +14,11 @@ abstract class KanjiApiService {
     String uuid,
   );
 
-  Future<void> getKanjiFromEnglishWord(
-      String word,
-      void Function(List<KanjiFromApi>) onSuccess,
-      void Function() onError,
-      String uuid);
+  Future<KanjiFromApi> getKanjiFromEnglishWord(String word, String uuid);
 
-  Future<void> getTranslatedKanjiFromSpanishWord(
+  Future<KanjiFromApi> getTranslatedKanjiFromSpanishWord(
     String word,
     String uuid,
-    void Function(KanjiFromApi kanjiFromApi) onSuccess,
   );
 }
 
@@ -31,6 +26,15 @@ class TranslationException implements Exception {
   final String message;
 
   const TranslationException(this.message);
+
+  @override
+  String toString() => message;
+}
+
+class KanjiFetchingException implements Exception {
+  final String message;
+
+  const KanjiFetchingException(this.message);
 
   @override
   String toString() => message;
