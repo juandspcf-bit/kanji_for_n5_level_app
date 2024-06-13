@@ -45,10 +45,8 @@ class SearchScreenProvider extends Notifier<SearchScreenData> {
   void _getKanjiFromEnglishWord(String word) {
     final defaultLocale = Platform.localeName;
     if (defaultLocale.contains("es_")) {
-      ref.read(kanjiApiServiceProvider).getTranslatedKanjiFromEnglishWord(
+      ref.read(kanjiApiServiceProvider).getTranslatedKanjiFromSpanishWord(
         word,
-        "en",
-        "es",
         ref.read(authServiceProvider).userUuid ?? '',
         (kanjiFromApi) {
           state = SearchScreenData(

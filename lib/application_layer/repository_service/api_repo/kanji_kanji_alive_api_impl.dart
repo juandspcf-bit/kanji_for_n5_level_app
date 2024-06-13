@@ -52,20 +52,24 @@ class KanjiAliveApiService implements KanjiApiService {
   }
 
   @override
-  Future<void> getTranslatedKanjiFromEnglishWord(
+  Future<void> getTranslatedKanjiFromSpanishWord(
     String word,
-    String sourceLanguage,
-    String targetLanguage,
     String uuid,
     void Function(KanjiFromApi kanjiFromApi) onSuccess,
   ) async {
-    KanjiAliveApi.getKanjiFromEnglishWord(
+    final translatedQuery = await translationApiService.translateText(
       word,
+      "es",
+      "en",
+    );
+
+    KanjiAliveApi.getKanjiFromEnglishWord(
+      translatedQuery.translatedText,
       (kanjiList) async {
         final translatedMeaning = await translationApiService.translateText(
           kanjiList[0].englishMeaning,
-          sourceLanguage,
-          targetLanguage,
+          "en",
+          "es",
         );
         var words = "";
 

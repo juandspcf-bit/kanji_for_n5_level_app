@@ -20,11 +20,18 @@ abstract class KanjiApiService {
       void Function() onError,
       String uuid);
 
-  Future<void> getTranslatedKanjiFromEnglishWord(
+  Future<void> getTranslatedKanjiFromSpanishWord(
     String word,
-    String sourceLanguage,
-    String targetLanguage,
     String uuid,
     void Function(KanjiFromApi kanjiFromApi) onSuccess,
   );
+}
+
+class TranslationException implements Exception {
+  final String message;
+
+  const TranslationException(this.message);
+
+  @override
+  String toString() => message;
 }
