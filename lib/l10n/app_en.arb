@@ -16,6 +16,16 @@
       }
     }
   },
+  "searchEnglishWord":"english word",
+  "@searchEnglishWord":{},
+  "searchMessage":"search a kanji by its meaning in english",
+  "@searchMessage":{},
+  "searchInvalidWord":"type a valid word",
+  "@searchInvalidWord":{},
+  "searchMeaningWasNotFound":"The corresponding kanji for this word was not found",
+  "@searchMeaningWasNotFound":{},
+  "searchErrorConnectionMessage":"No internet connection, you will be able to search when the connection is restored",
+  "@searchErrorConnectionMessage":{},
   "section": "section",
   "@section": {},
   "sectionNavBar": "sections",

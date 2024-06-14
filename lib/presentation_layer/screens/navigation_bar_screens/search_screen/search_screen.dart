@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:kanji_for_n5_level_app/l10n/localization.dart';
 import 'package:kanji_for_n5_level_app/models/kanji_from_api.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/common_widgets/svg_utils/svg_utils.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_details/tabs_details/tab_examples/example_audio_widget_stream/example_audio_widget.dart';
@@ -31,15 +32,14 @@ class SearchScreen extends ConsumerWidget {
       BuildContext context) {
     switch (searchState) {
       case SearchState.errorForm:
-        return const Padding(
-          padding: EdgeInsets.only(top: 90),
-          child: InfoStatusSearch(message: 'type a valid word'),
+        return Padding(
+          padding: const EdgeInsets.only(top: 90),
+          child: InfoStatusSearch(message: context.l10n.searchInvalidWord),
         );
       case SearchState.notSearching:
-        return const Padding(
-          padding: EdgeInsets.only(top: 90),
-          child: InfoStatusSearch(
-              message: 'search a kanji by its english meaning'),
+        return Padding(
+          padding: const EdgeInsets.only(top: 90),
+          child: InfoStatusSearch(message: context.l10n.searchMessage),
         );
       case SearchState.searching:
         return const Center(
@@ -51,11 +51,10 @@ class SearchScreen extends ConsumerWidget {
       case SearchState.stopped:
         {
           if (kanjiFromApi == null) {
-            return const Padding(
-              padding: EdgeInsets.only(top: 90.0),
+            return Padding(
+              padding: const EdgeInsets.only(top: 90.0),
               child: InfoStatusSearch(
-                  message:
-                      'The corresponding kanji for this word was not found'),
+                  message: context.l10n.searchMeaningWasNotFound),
             );
           }
           return Results(kanjiFromApi: kanjiFromApi);
@@ -75,9 +74,8 @@ class SearchScreen extends ConsumerWidget {
     ); */
 
     return statusConnectionState == ConnectionStatus.noConnected
-        ? const ErrorConnectionScreen(
-            message:
-                'No internet connection, you will be able to search when the connection is restored',
+        ? ErrorConnectionScreen(
+            message: context.l10n.searchErrorConnectionMessage,
           )
         : Padding(
             padding: const EdgeInsets.symmetric(vertical: 30),
@@ -94,21 +92,23 @@ class SearchScreen extends ConsumerWidget {
                       child: TextFormField(
                         initialValue: searchScreenState.word,
                         decoration: const InputDecoration().copyWith(
-                            border: const OutlineInputBorder(),
-                            suffixIcon: GestureDetector(
-                              child: const Icon(Icons.search),
-                              onTap: () {
-                                onValidate(ref);
-                                FocusScopeNode currentFocus =
-                                    FocusScope.of(context);
+                          border: const OutlineInputBorder(),
+                          suffixIcon: GestureDetector(
+                            child: const Icon(Icons.search),
+                            onTap: () {
+                              onValidate(ref);
+                              FocusScopeNode currentFocus =
+                                  FocusScope.of(context);
 
-                                if (!currentFocus.hasPrimaryFocus) {
-                                  currentFocus.unfocus();
-                                }
-                              },
-                            ),
-                            labelText: 'english word',
-                            hintText: 'english word'),
+                              if (!currentFocus.hasPrimaryFocus) {
+                                currentFocus.unfocus();
+                              }
+                            },
+                          ),
+                          //labelText: context.l10n.searchEnglishWord,
+                          //floatingLabelBehavior: FloatingLabelBehavior.always
+                          hintText: context.l10n.searchEnglishWord,
+                        ),
                         keyboardType: TextInputType.text,
                         validator: (text) {
                           if (text != null &&
@@ -116,7 +116,7 @@ class SearchScreen extends ConsumerWidget {
                               validCharacters.hasMatch(text.trim())) {
                             return null;
                           } else {
-                            return 'Not a valid word';
+                            return context.l10n.searchInvalidWord;
                           }
                         },
                         onSaved: (value) {

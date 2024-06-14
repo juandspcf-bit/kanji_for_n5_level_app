@@ -16,6 +16,16 @@
       }
     }
   },
+  "searchEnglishWord":"introduce una palabra",
+  "@searchEnglishWord":{},
+  "searchMessage":"busca un kanji de acuerdo a su significado",
+  "@searchMessage":{},
+  "searchInvalidWord":"escribe una palabra correcta",
+  "@searchInvalidWord":{},
+  "searchMeaningWasNotFound":"No fue encontrado ningún kanji para esta palabra",
+  "@searchMeaningWasNotFound":{},
+  "searchErrorConnectionMessage":"No tienes conexión a internet, podrás hacer la búsqueda cuando sea restaurada",
+  "@searchErrorConnectionMessage":{},
   "section": "sección",
   "@section": {},
   "sectionNavBar": "secciones",
