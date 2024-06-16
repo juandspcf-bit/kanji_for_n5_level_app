@@ -42,12 +42,17 @@ class KanjiQuizSectionData extends StatelessWidget {
           height: 100,
           width: 100,
           child: SimpleCircularProgressBar(
+            mergeMode: true,
             size: 100,
             progressStrokeWidth: 10,
             backStrokeWidth: 10,
             startAngle: 0,
             animationDuration: 0,
-            progressColors: const [Colors.blueAccent, Colors.amber, Colors.red],
+            progressColors: const [
+              Colors.blueAccent,
+              Colors.green,
+              Colors.amber,
+            ],
             valueNotifier: ValueNotifier(
               getCountKanjiQuiz(quizSectionData.singleQuizSectionData),
             ),

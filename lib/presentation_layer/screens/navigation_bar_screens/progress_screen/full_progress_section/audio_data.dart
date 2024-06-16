@@ -64,6 +64,7 @@ class AudioData extends StatelessWidget {
               height: 50,
               width: 50,
               child: SimpleCircularProgressBar(
+                mergeMode: true,
                 size: 50,
                 progressStrokeWidth: 5,
                 backStrokeWidth: 5,
@@ -71,8 +72,8 @@ class AudioData extends StatelessWidget {
                 animationDuration: 0,
                 progressColors: const [
                   Colors.blueAccent,
+                  Colors.green,
                   Colors.amber,
-                  Colors.red
                 ],
                 valueNotifier: ValueNotifier(
                   progress,

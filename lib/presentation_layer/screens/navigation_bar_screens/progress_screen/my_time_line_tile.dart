@@ -42,9 +42,26 @@ class MyTimeLineTile extends ConsumerWidget {
       onTap: () {
         ref.read(fullProgressSectionProvider.notifier).fetchData(section);
         Navigator.of(context).push(
-          MaterialPageRoute(
-            builder: (context) {
-              return const FullProgressSection();
+          PageRouteBuilder(
+            transitionDuration: const Duration(seconds: 1),
+            reverseTransitionDuration: const Duration(seconds: 1),
+            pageBuilder: (context, animation, secondaryAnimation) =>
+                const FullProgressSection(),
+            transitionsBuilder:
+                (context, animation, secondaryAnimation, child) {
+              return SlideTransition(
+                position: Tween<Offset>(
+                  begin: const Offset(-1, 0),
+                  end: Offset.zero,
+                ).animate(
+                  animation.drive(
+                    CurveTween(
+                      curve: Curves.easeInOutBack,
+                    ),
+                  ),
+                ),
+                child: child,
+              );
             },
           ),
         );
