@@ -82,7 +82,6 @@ class Section extends ConsumerWidget {
                   kanjisCharacters: sectionData.kanjisCharacters,
                   sectionNumber: sectionData.sectionNumber,
                 );
-            logger.d("fetching again");
             ref
                 .read(sectionProvider.notifier)
                 .setSection(sectionData.sectionNumber);
