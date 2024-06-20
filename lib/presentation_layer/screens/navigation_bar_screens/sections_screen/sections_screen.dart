@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:kanji_for_n5_level_app/config_files/screen_config.dart';
 import 'package:kanji_for_n5_level_app/l10n/localization.dart';
+import 'package:kanji_for_n5_level_app/main.dart';
 import 'package:kanji_for_n5_level_app/models/section_model.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_list/body_list/kanjis_list_provider.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/navigation_bar_screens/sections_screen/kanjis_for_section_screen/kanjis_for_section_screen.dart';
@@ -72,6 +73,7 @@ class Section extends ConsumerWidget {
         child: InkWell(
           borderRadius: const BorderRadius.all(Radius.circular(20)),
           onTap: () {
+            logger.d("fetching");
             ref
                 .read(kanjiListProvider.notifier)
                 .clearKanjiList(sectionData.sectionNumber);
@@ -80,6 +82,7 @@ class Section extends ConsumerWidget {
                   kanjisCharacters: sectionData.kanjisCharacters,
                   sectionNumber: sectionData.sectionNumber,
                 );
+            logger.d("fetching again");
             ref
                 .read(sectionProvider.notifier)
                 .setSection(sectionData.sectionNumber);

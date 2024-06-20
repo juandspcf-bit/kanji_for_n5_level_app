@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:kanji_for_n5_level_app/main.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/navigation_bar_screens/sections_screen/kanjis_for_section_screen/connection_status_icon.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/navigation_bar_screens/sections_screen/kanjis_for_section_screen/quiz_icon_kanji_list.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_list/body_list/kanjis_list_provider.dart';
@@ -22,6 +23,7 @@ class KanjiForSectionScreen extends ConsumerWidget
   Widget build(BuildContext context, WidgetRef ref) {
     final mainScreenData = ref.watch(mainScreenProvider);
     final kanjiListData = ref.watch(kanjiListProvider);
+    logger.d(kanjiListData.status);
 
     return Scaffold(
       appBar: AppBar(

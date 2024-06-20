@@ -1,6 +1,7 @@
 import 'dart:async';
 
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
+
 import 'package:kanji_for_n5_level_app/application_layer/services.dart';
 import 'package:kanji_for_n5_level_app/main.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_list/body_list/providers/queue_download_delete_provider.dart';
@@ -9,12 +10,15 @@ import 'package:kanji_for_n5_level_app/providers/status_connection_provider.dart
 import 'package:kanji_for_n5_level_app/providers/status_stored_provider.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/navigation_bar_screens/sections_screen/cache_kanji_list_provider.dart';
 
-class KanjiListProvider extends Notifier<KanjiListData> {
+part 'kanjis_list_provider.g.dart';
+
+@Riverpod(keepAlive: true)
+class KanjiList extends _$KanjiList {
   @override
   KanjiListData build() {
     return KanjiListData(
       kanjiList: [],
-      status: 0,
+      status: 1,
       section: 1,
       errorDownload: ErrorDownload(
         kanjiCharacter: '',
@@ -48,6 +52,7 @@ class KanjiListProvider extends Notifier<KanjiListData> {
   }
 
   void onSuccessRequest(List<KanjiFromApi> kanjisFromApi) {
+    logger.d("succes");
     state = KanjiListData(
       kanjiList: kanjisFromApi,
       status: 1,
@@ -113,13 +118,14 @@ class KanjiListProvider extends Notifier<KanjiListData> {
       clearKanjiList(sectionNumber);
 
       if (ref.read(cacheKanjiListProvider.notifier).isInCache(sectionNumber)) {
+        logger.d("in cache");
         final kanjiList = ref
             .read(cacheKanjiListProvider.notifier)
             .getFromCache(sectionNumber);
         onSuccessRequest(kanjiList);
         return;
       }
-
+      logger.d("fetchKanjis");
       final connectivityData = ref.read(statusConnectionProvider);
       if (connectivityData == ConnectionStatus.noConnected) {
         final storedKanjisFromProvider = ref.read(storedKanjisProvider);
@@ -138,13 +144,11 @@ class KanjiListProvider extends Notifier<KanjiListData> {
         );
         return;
       }
-
-      List<KanjiFromApi> kanjiList = await ref
-          .read(kanjiListProvider.notifier)
-          .getKanjiListFromRepositories(
-            kanjisCharacters,
-            sectionNumber,
-          );
+      logger.d("fetching");
+      List<KanjiFromApi> kanjiList = await getKanjiListFromRepositories(
+        kanjisCharacters,
+        sectionNumber,
+      );
 
       kanjiList = kanjiList.map(
         (kanji) {
@@ -174,12 +178,10 @@ class KanjiListProvider extends Notifier<KanjiListData> {
     try {
       clearKanjiList(sectionNumber);
 
-      List<KanjiFromApi> kanjiList = await ref
-          .read(kanjiListProvider.notifier)
-          .getKanjiListFromRepositories(
-            kanjisCharacters,
-            sectionNumber,
-          );
+      List<KanjiFromApi> kanjiList = await getKanjiListFromRepositories(
+        kanjisCharacters,
+        sectionNumber,
+      );
 
       kanjiList = kanjiList.map(
         (kanji) {
@@ -300,8 +302,8 @@ class KanjiListProvider extends Notifier<KanjiListData> {
   }
 }
 
-final kanjiListProvider =
-    NotifierProvider<KanjiListProvider, KanjiListData>(KanjiListProvider.new);
+//final kanjiListProvider =
+//    NotifierProvider<KanjiList, KanjiListData>(KanjiList.new);
 
 class KanjiListData {
   final List<KanjiFromApi> kanjiList;
