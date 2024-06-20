@@ -18,7 +18,7 @@ class KanjiList extends _$KanjiList {
   KanjiListData build() {
     return KanjiListData(
       kanjiList: [],
-      status: 1,
+      status: 0,
       section: 1,
       errorDownload: ErrorDownload(
         kanjiCharacter: '',
@@ -52,7 +52,6 @@ class KanjiList extends _$KanjiList {
   }
 
   void onSuccessRequest(List<KanjiFromApi> kanjisFromApi) {
-    logger.d("succes");
     state = KanjiListData(
       kanjiList: kanjisFromApi,
       status: 1,
@@ -118,14 +117,25 @@ class KanjiList extends _$KanjiList {
       clearKanjiList(sectionNumber);
 
       if (ref.read(cacheKanjiListProvider.notifier).isInCache(sectionNumber)) {
-        logger.d("in cache");
-        final kanjiList = ref
+        List<KanjiFromApi> kanjiList = ref
             .read(cacheKanjiListProvider.notifier)
             .getFromCache(sectionNumber);
+        kanjiList = kanjiList.map(
+          (kanji) {
+            if (ref
+                .read(queueDownloadDeleteProvider.notifier)
+                .isInTheDownloadQueue(kanji.kanjiCharacter)) {
+              logger.d('isn in the download queue ${kanji.kanjiCharacter}');
+              return updateStatusKanji(
+                  StatusStorage.processingStoring, false, kanji);
+            }
+            return kanji;
+          },
+        ).toList();
         onSuccessRequest(kanjiList);
         return;
       }
-      logger.d("fetchKanjis");
+
       final connectivityData = ref.read(statusConnectionProvider);
       if (connectivityData == ConnectionStatus.noConnected) {
         final storedKanjisFromProvider = ref.read(storedKanjisProvider);
@@ -144,7 +154,7 @@ class KanjiList extends _$KanjiList {
         );
         return;
       }
-      logger.d("fetching");
+
       List<KanjiFromApi> kanjiList = await getKanjiListFromRepositories(
         kanjisCharacters,
         sectionNumber,
