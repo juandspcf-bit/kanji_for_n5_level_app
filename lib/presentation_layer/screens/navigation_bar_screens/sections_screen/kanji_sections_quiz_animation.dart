@@ -8,7 +8,7 @@ import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_list/qui
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_list/quiz_kanji_list_screen/quiz_kanji_list_provider.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_list/quiz_kanji_list_screen/welcome_screen/last_score_provider.dart';
 
-class KanjiSectionsQuizAnimated extends ConsumerWidget {
+/* class KanjiSectionsQuizAnimated extends ConsumerWidget {
   const KanjiSectionsQuizAnimated({
     super.key,
     required this.closedChild,
@@ -52,3 +52,4 @@ class KanjiSectionsQuizAnimated extends ConsumerWidget {
     );
   }
 }
+ */

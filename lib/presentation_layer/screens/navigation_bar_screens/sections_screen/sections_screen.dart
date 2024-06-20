@@ -74,14 +74,10 @@ class Section extends ConsumerWidget {
           borderRadius: const BorderRadius.all(Radius.circular(20)),
           onTap: () {
             logger.d("fetching");
-            ref
+/*             ref
                 .read(kanjiListProvider.notifier)
-                .clearKanjiList(sectionData.sectionNumber);
+                .clearKanjiList(sectionData.sectionNumber); */
 
-            ref.read(kanjiListProvider.notifier).fetchKanjis(
-                  kanjisCharacters: sectionData.kanjisCharacters,
-                  sectionNumber: sectionData.sectionNumber,
-                );
             ref
                 .read(sectionProvider.notifier)
                 .setSection(sectionData.sectionNumber);
@@ -91,7 +87,10 @@ class Section extends ConsumerWidget {
                 transitionDuration: const Duration(seconds: 1),
                 reverseTransitionDuration: const Duration(seconds: 1),
                 pageBuilder: (context, animation, secondaryAnimation) =>
-                    const KanjiForSectionScreen(),
+                    KanjiForSectionScreen(
+                  kanjiCharacters: sectionData.kanjisCharacters,
+                  sectionNumber: sectionData.sectionNumber,
+                ),
                 transitionsBuilder:
                     (context, animation, secondaryAnimation, child) {
                   return SlideTransition(

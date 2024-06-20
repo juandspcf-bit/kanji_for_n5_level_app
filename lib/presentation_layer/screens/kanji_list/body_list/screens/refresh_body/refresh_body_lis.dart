@@ -186,12 +186,12 @@ class RefreshBodyList extends ConsumerWidget {
           return;
         }
 
-        final kanjiListData = ref.read(kanjiListProvider);
+/*        final kanjiListData = ref.read(kanjiListProvider);
         final sectionModel = listSections[kanjiListData.section - 1];
-        ref.read(kanjiListProvider.notifier).fetchKanjisOnRefresh(
+         ref.read(kanjiListProvider.notifier).fetchKanjisOnRefresh(
               kanjisCharacters: sectionModel.kanjisCharacters,
               sectionNumber: kanjiListData.section,
-            );
+            ); */
       },
       child: _getListWidgets(
         context,

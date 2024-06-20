@@ -5,20 +5,21 @@ import 'package:kanji_for_n5_level_app/presentation_layer/screens/navigation_bar
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/navigation_bar_screens/sections_screen/kanjis_for_section_screen/kanjis_for_section_screen.dart';
 import 'package:kanji_for_n5_level_app/providers/status_connection_provider.dart';
 
-class QuizIconKanjiList extends ConsumerWidget {
+/* class QuizIconKanjiList extends ConsumerWidget {
   const QuizIconKanjiList({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final connectivityData = ref.watch(statusConnectionProvider);
-    var kanjiListData = ref.watch(kanjiListProvider);
+    var kanjiListData = ref.watch(kanjiListProvider(kanjisCharacters: []));
 
-    final isAnyProcessingDataFunc =
-        ref.read(kanjiListProvider.notifier).isAnyProcessingData;
+/*     final isAnyProcessingDataFunc =
+        ref.read(kanjiListProvider.notifier).isAnyProcessingData; */
 
-    final accesToQuiz = isAnyProcessingDataFunc() ||
+    final accesToQuiz =
+        false; /*isAnyProcessingDataFunc() ||
         connectivityData == ConnectionStatus.noConnected ||
-        kanjiListData.kanjiList.isEmpty;
+        kanjiListData.kanjiList.isEmpty; */
 
     return (kanjiListData.status == 1 && !accesToQuiz)
         ? const AnimatedOpacityIcon(
@@ -32,3 +33,4 @@ class QuizIconKanjiList extends ConsumerWidget {
         : Container();
   }
 }
+ */

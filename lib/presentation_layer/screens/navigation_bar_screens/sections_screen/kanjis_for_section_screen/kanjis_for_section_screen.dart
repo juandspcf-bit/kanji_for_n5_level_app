@@ -3,6 +3,9 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kanji_for_n5_level_app/main.dart';
+import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_list/body_list/screens/refresh_body/error_fetching_kanjis.dart';
+import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_list/body_list/screens/refresh_body/refresh_body_lis.dart';
+import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_list/body_list/screens/shimmer_list.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/navigation_bar_screens/sections_screen/kanjis_for_section_screen/connection_status_icon.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/navigation_bar_screens/sections_screen/kanjis_for_section_screen/quiz_icon_kanji_list.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_list/body_list/kanjis_list_provider.dart';
@@ -17,29 +20,45 @@ class KanjiForSectionScreen extends ConsumerWidget
     with MyDialogs, StatusDBStoringDialogs {
   const KanjiForSectionScreen({
     super.key,
+    required this.kanjiCharacters,
+    required this.sectionNumber,
   });
+
+  final List<String> kanjiCharacters;
+  final int sectionNumber;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final mainScreenData = ref.watch(mainScreenProvider);
-    final kanjiListData = ref.watch(kanjiListProvider);
-    logger.d(kanjiListData.status);
+    final kanjiListData = ref.watch(kanjiListProvider(
+        kanjisCharacters: kanjiCharacters, sectionNumber: sectionNumber));
 
     return Scaffold(
-      appBar: AppBar(
-        title: Text(AppLocalizations.of(context)!
-            .sections("section_${kanjiListData.section}")),
-        actions: const [
-          ConnectionStatusIcon(),
-          QuizIconKanjiList(),
-        ],
-      ),
-      body: BodyKanjisList(
-        kanjisFromApi: kanjiListData.kanjiList,
-        statusResponse: kanjiListData.status,
-        mainScreenData: mainScreenData,
-      ),
-    );
+        appBar: AppBar(
+          title: Text(AppLocalizations.of(context)!
+              .sections("section_${sectionNumber}")),
+          actions: const [
+            ConnectionStatusIcon(),
+            //QuizIconKanjiList(),
+          ],
+        ),
+        body: kanjiListData.when(
+          data: (data) {
+            return RefreshBodyList(
+              statusResponse: 1,
+              kanjisFromApi: data,
+              mainScreenData: mainScreenData,
+            );
+          },
+          error: (_, __) {
+            return ErrorFetchingKanjisScreen(mainScreenData: mainScreenData);
+          },
+          loading: () => SafeArea(
+            child: ShimmerList(
+              selection: mainScreenData.selection,
+            ),
+          ),
+        ));
   }
 }
 

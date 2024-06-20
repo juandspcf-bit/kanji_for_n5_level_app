@@ -12,65 +12,21 @@ import 'package:kanji_for_n5_level_app/presentation_layer/screens/navigation_bar
 
 part 'kanjis_list_provider.g.dart';
 
-@Riverpod(keepAlive: true)
+@riverpod
 class KanjiList extends _$KanjiList {
   @override
-  KanjiListData build() {
-    return KanjiListData(
-      kanjiList: [],
-      status: 0,
-      section: 1,
-      errorDownload: ErrorDownload(
-        kanjiCharacter: '',
-        status: false,
-      ),
-      errorDeleting: ErrorDeleting(
-        kanjiCharacter: '',
-        status: false,
-      ),
-    );
+  Future<List<KanjiFromApi>> build({
+    required List<String> kanjisCharacters,
+    required int sectionNumber,
+  }) async {
+    cache = await fetchKanjis(
+        kanjisCharacters: kanjisCharacters, sectionNumber: sectionNumber);
+    return cache;
   }
 
-  void setErrorDownload(ErrorDownload errorDownload) {
-    state = KanjiListData(
-      kanjiList: state.kanjiList,
-      section: state.section,
-      status: state.status,
-      errorDownload: errorDownload,
-      errorDeleting: state.errorDeleting,
-    );
-  }
+  List<KanjiFromApi> cache = [];
 
-  void setErrorDelete(ErrorDeleting errorDeleting) {
-    state = KanjiListData(
-      kanjiList: state.kanjiList,
-      section: state.section,
-      status: state.status,
-      errorDownload: state.errorDownload,
-      errorDeleting: errorDeleting,
-    );
-  }
-
-  void onSuccessRequest(List<KanjiFromApi> kanjisFromApi) {
-    state = KanjiListData(
-      kanjiList: kanjisFromApi,
-      status: 1,
-      section: kanjisFromApi.first.section,
-      errorDownload: state.errorDownload,
-      errorDeleting: state.errorDeleting,
-    );
-  }
-
-  void onErrorRequest() {
-    state = KanjiListData(
-      kanjiList: [],
-      status: 2,
-      section: state.section,
-      errorDownload: state.errorDownload,
-      errorDeleting: state.errorDeleting,
-    );
-  }
-
+/*
   bool isAnyProcessingData() {
     try {
       state.kanjiList.firstWhere(
@@ -107,81 +63,54 @@ class KanjiList extends _$KanjiList {
         errorDeleting: state.errorDeleting,
       );
     }
-  }
+  } */
 
-  Future<void> fetchKanjis({
+  Future<List<KanjiFromApi>> fetchKanjis({
     required List<String> kanjisCharacters,
     required int sectionNumber,
   }) async {
-    try {
-      clearKanjiList(sectionNumber);
+    if (ref.read(cacheKanjiListProvider.notifier).isInCache(sectionNumber)) {
+      List<KanjiFromApi> kanjiList =
+          ref.read(cacheKanjiListProvider.notifier).getFromCache(sectionNumber);
 
-      if (ref.read(cacheKanjiListProvider.notifier).isInCache(sectionNumber)) {
-        List<KanjiFromApi> kanjiList = ref
-            .read(cacheKanjiListProvider.notifier)
-            .getFromCache(sectionNumber);
-        kanjiList = kanjiList.map(
-          (kanji) {
-            if (ref
-                .read(queueDownloadDeleteProvider.notifier)
-                .isInTheDownloadQueue(kanji.kanjiCharacter)) {
-              logger.d('isn in the download queue ${kanji.kanjiCharacter}');
-              return updateStatusKanji(
-                  StatusStorage.processingStoring, false, kanji);
-            }
-            return kanji;
-          },
-        ).toList();
-        onSuccessRequest(kanjiList);
-        return;
-      }
+      return kanjiList;
+    }
 
-      final connectivityData = ref.read(statusConnectionProvider);
+    /* final connectivityData = ref.read(statusConnectionProvider);
       if (connectivityData == ConnectionStatus.noConnected) {
         final storedKanjisFromProvider = ref.read(storedKanjisProvider);
 
         if (storedKanjisFromProvider[state.section] != null &&
             storedKanjisFromProvider[state.section]!.isNotEmpty) {
-          onSuccessRequest(storedKanjisFromProvider[state.section]!);
-          return;
+          return storedKanjisFromProvider[state.section]!;
         }
-        state = KanjiListData(
-          kanjiList: <KanjiFromApi>[],
-          status: 1,
-          section: sectionNumber,
-          errorDownload: state.errorDownload,
-          errorDeleting: state.errorDeleting,
-        );
-        return;
-      }
 
-      List<KanjiFromApi> kanjiList = await getKanjiListFromRepositories(
-        kanjisCharacters,
-        sectionNumber,
-      );
+        return [];
+      } */
 
-      kanjiList = kanjiList.map(
-        (kanji) {
-          if (ref
-              .read(queueDownloadDeleteProvider.notifier)
-              .isInTheDownloadQueue(kanji.kanjiCharacter)) {
-            return updateStatusKanji(
-                StatusStorage.processingStoring, false, kanji);
-          }
-          return kanji;
-        },
-      ).toList();
+    List<KanjiFromApi> kanjiList = await getKanjiListFromRepositories(
+      kanjisCharacters,
+      sectionNumber,
+    );
 
-      ref.read(cacheKanjiListProvider.notifier).addToCache(kanjiList);
+    kanjiList = kanjiList.map(
+      (kanji) {
+        if (ref
+            .read(queueDownloadDeleteProvider.notifier)
+            .isInTheDownloadQueue(kanji.kanjiCharacter)) {
+          return updateStatusKanji(
+              StatusStorage.processingStoring, false, kanji);
+        }
+        return kanji;
+      },
+    ).toList();
 
-      onSuccessRequest(kanjiList);
-    } catch (e) {
-      logger.e(e);
-      onErrorRequest();
-    }
+    ref.read(cacheKanjiListProvider.notifier).addToCache(kanjiList);
+
+    return kanjiList;
   }
 
-  Future<void> fetchKanjisOnRefresh({
+  /* Future<void> fetchKanjisOnRefresh({
     required List<String> kanjisCharacters,
     required int sectionNumber,
   }) async {
@@ -219,7 +148,7 @@ class KanjiList extends _$KanjiList {
       logger.e(e);
       onErrorRequest();
     }
-  }
+  } */
 
   Future<List<KanjiFromApi>> getKanjiListFromRepositories(
     List<String> kanjisCharacters,
@@ -236,7 +165,7 @@ class KanjiList extends _$KanjiList {
         );
   }
 
-  void clearKanjiList(int section) {
+  /* void clearKanjiList(int section) {
     state = KanjiListData(
       kanjiList: [],
       status: 0,
@@ -250,7 +179,7 @@ class KanjiList extends _$KanjiList {
         status: false,
       ),
     );
-  }
+  } */
 
   KanjiFromApi updateStatusKanji(
     StatusStorage statusStorage,
@@ -273,7 +202,7 @@ class KanjiList extends _$KanjiList {
         strokes: kanjiFromApi.strokes);
   }
 
-  void updateKanjiStatusOnVisibleSectionList(
+/*   void updateKanjiStatusOnVisibleSectionList(
     KanjiFromApi kanji,
     ErrorDownload errorDownload,
     ErrorDeleting errorDeleting,
@@ -292,23 +221,25 @@ class KanjiList extends _$KanjiList {
       errorDeleting: errorDeleting,
     );
   }
-
+*/
   void updateKanjiStatusOnVisibleSectionListFromOthers(
     KanjiFromApi kanji,
   ) {
-    final copyState = [...state.kanjiList];
+    final copyState = [...cache];
 
     final kanjiIndex = copyState.indexWhere(
         (element) => element.kanjiCharacter == kanji.kanjiCharacter);
     if (kanjiIndex == -1) return;
     copyState[kanjiIndex] = kanji;
-    state = KanjiListData(
+    state = AsyncData(copyState);
+
+    /*   state = KanjiListData(
       kanjiList: copyState,
       status: state.status,
       section: state.section,
       errorDownload: state.errorDownload,
       errorDeleting: state.errorDeleting,
-    );
+    ); */
   }
 }
 

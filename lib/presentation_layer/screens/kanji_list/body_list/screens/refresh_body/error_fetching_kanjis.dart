@@ -25,13 +25,13 @@ class ErrorFetchingKanjisScreen extends ConsumerWidget {
                   .fetchFavoritesOnRefresh();
               return;
             }
-
+/* 
             final kanjiListData = ref.read(kanjiListProvider);
             final sectionModel = listSections[kanjiListData.section - 1];
             ref.read(kanjiListProvider.notifier).fetchKanjis(
                   kanjisCharacters: sectionModel.kanjisCharacters,
                   sectionNumber: kanjiListData.section,
-                );
+                ); */
           },
           child: ListView(
             children: [
