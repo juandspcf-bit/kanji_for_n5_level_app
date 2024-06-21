@@ -3,7 +3,7 @@ import 'package:kanji_for_n5_level_app/application_layer/services.dart';
 import 'package:kanji_for_n5_level_app/models/quiz_section_data.dart';
 import 'package:kanji_for_n5_level_app/models/single_quiz_section_data.dart';
 
-class FullProgressSectionProvider extends Notifier<FullProgressSectionData> {
+class FullProgressSection extends Notifier<FullProgressSectionData> {
   @override
   FullProgressSectionData build() {
     final kanjisQuizData = SingleQuizSectionData(
@@ -45,8 +45,8 @@ class FullProgressSectionProvider extends Notifier<FullProgressSectionData> {
 }
 
 final fullProgressSectionProvider =
-    NotifierProvider<FullProgressSectionProvider, FullProgressSectionData>(
-        FullProgressSectionProvider.new);
+    NotifierProvider<FullProgressSection, FullProgressSectionData>(
+        FullProgressSection.new);
 
 class FullProgressSectionData {
   final FetchingDataStatus fetchingDataStatus;
