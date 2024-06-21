@@ -46,7 +46,7 @@ class MyTimeLineTile extends ConsumerWidget {
             transitionDuration: const Duration(seconds: 1),
             reverseTransitionDuration: const Duration(seconds: 1),
             pageBuilder: (context, animation, secondaryAnimation) =>
-                const FullProgressSection(),
+                const FullProgressSectionScreen(),
             transitionsBuilder:
                 (context, animation, secondaryAnimation, child) {
               return SlideTransition(
