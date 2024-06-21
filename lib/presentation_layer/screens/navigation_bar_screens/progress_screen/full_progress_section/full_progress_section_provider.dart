@@ -1,9 +1,12 @@
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kanji_for_n5_level_app/application_layer/services.dart';
 import 'package:kanji_for_n5_level_app/models/quiz_section_data.dart';
 import 'package:kanji_for_n5_level_app/models/single_quiz_section_data.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-class FullProgressSection extends Notifier<FullProgressSectionData> {
+part "full_progress_section_provider.g.dart";
+
+@Riverpod(keepAlive: true)
+class FullProgressSection extends _$FullProgressSection {
   @override
   FullProgressSectionData build() {
     final kanjisQuizData = SingleQuizSectionData(
@@ -43,10 +46,10 @@ class FullProgressSection extends Notifier<FullProgressSectionData> {
     );
   }
 }
-
+/* 
 final fullProgressSectionProvider =
     NotifierProvider<FullProgressSection, FullProgressSectionData>(
-        FullProgressSection.new);
+        FullProgressSection.new); */
 
 class FullProgressSectionData {
   final FetchingDataStatus fetchingDataStatus;
