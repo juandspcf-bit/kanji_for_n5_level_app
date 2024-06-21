@@ -1,26 +1,26 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lottie/lottie.dart';
 
-class LottieFilesProvider extends Notifier<ScoreKnajiListData> {
+class LottieFilesProvider extends Notifier<ScoreKanjiListData> {
   @override
-  ScoreKnajiListData build() {
-    return ScoreKnajiListData(lottieComposition: null);
+  ScoreKanjiListData build() {
+    return ScoreKanjiListData(lottieComposition: null);
   }
 
   void initLottieFile() async {
     if (state.lottieComposition != null) return;
     final lottieComposition =
         await AssetLottie('assets/lottie_files/congrats.json').load();
-    state = ScoreKnajiListData(lottieComposition: lottieComposition);
+    state = ScoreKanjiListData(lottieComposition: lottieComposition);
   }
 }
 
 final lottieFilesProvider =
-    NotifierProvider<LottieFilesProvider, ScoreKnajiListData>(
+    NotifierProvider<LottieFilesProvider, ScoreKanjiListData>(
         LottieFilesProvider.new);
 
-class ScoreKnajiListData {
+class ScoreKanjiListData {
   final LottieComposition? lottieComposition;
 
-  ScoreKnajiListData({required this.lottieComposition});
+  ScoreKanjiListData({required this.lottieComposition});
 }
