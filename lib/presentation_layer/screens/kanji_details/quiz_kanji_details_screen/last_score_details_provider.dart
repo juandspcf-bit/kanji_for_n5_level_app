@@ -123,7 +123,3 @@ class LastScoreDetails extends _$LastScoreDetails {
     }
   }
 }
-
-/* final lastScoreDetailsProvider =
-    AsyncNotifierProvider<LastScoreDetails, SingleAudioExampleQuizData>(
-        LastScoreDetails.new); */
