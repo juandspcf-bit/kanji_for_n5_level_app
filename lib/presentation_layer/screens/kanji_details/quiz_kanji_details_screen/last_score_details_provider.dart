@@ -1,12 +1,13 @@
 import 'dart:async';
-
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:kanji_for_n5_level_app/application_layer/services.dart';
 import 'package:kanji_for_n5_level_app/main.dart';
 import 'package:kanji_for_n5_level_app/models/single_quiz_audio_example_data.dart';
 
-class LastScoreDetailsProvider
-    extends AsyncNotifier<SingleAudioExampleQuizData> {
+part 'last_score_details_provider.g.dart';
+
+@Riverpod(keepAlive: true)
+class LastScoreDetails extends _$LastScoreDetails {
   @override
   FutureOr<SingleAudioExampleQuizData> build() {
     return SingleAudioExampleQuizData(
@@ -123,6 +124,6 @@ class LastScoreDetailsProvider
   }
 }
 
-final lastScoreDetailsProvider =
-    AsyncNotifierProvider<LastScoreDetailsProvider, SingleAudioExampleQuizData>(
-        LastScoreDetailsProvider.new);
+/* final lastScoreDetailsProvider =
+    AsyncNotifierProvider<LastScoreDetails, SingleAudioExampleQuizData>(
+        LastScoreDetails.new); */

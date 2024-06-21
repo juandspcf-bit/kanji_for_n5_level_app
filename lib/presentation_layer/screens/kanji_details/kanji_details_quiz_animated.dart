@@ -63,6 +63,7 @@ class DetailsQuizScreenAnimated extends ConsumerWidget {
                         ref.read(sectionProvider),
                         ref.read(authServiceProvider).userUuid ?? '',
                       );
+
                   ref
                       .read(lastScoreFlashCardProvider.notifier)
                       .getSingleFlashCardDataDB(
