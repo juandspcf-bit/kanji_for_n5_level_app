@@ -4,6 +4,8 @@
         "AUTOINCREMENT",
         "birthdate",
         "Birthdate",
+        "cupertino",
+        "firestore",
         "Firestore",
         "fuji",
         "japanese",
@@ -17,6 +19,7 @@
         "riverpod",
         "roboto",
         "romaji",
+        "Schyler",
         "sqflite",
         "unfocus",
         "uuid"
