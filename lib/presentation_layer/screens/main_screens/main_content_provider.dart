@@ -11,7 +11,6 @@ import 'package:kanji_for_n5_level_app/presentation_layer/screens/main_screens/a
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/main_screens/title_main_screen_provider.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/navigation_bar_screens/favorite_screen/favorites_kanjis_provider.dart';
 import 'package:kanji_for_n5_level_app/providers/status_stored_provider.dart';
-import 'package:kanji_for_n5_level_app/presentation_layer/screens/navigation_bar_screens/progress_screen/progress_screen_provider.dart';
 import 'package:kanji_for_n5_level_app/utils/networking/networking.dart';
 
 class MainScreenProvider extends Notifier<MainScreenData> {
@@ -85,9 +84,6 @@ class MainScreenProvider extends Notifier<MainScreenData> {
           .read(mainScreenProvider.notifier)
           .setScreen(ScreenSelection.searchKanji);
     } else {
-      ref
-          .read(progressTimelineProvider.notifier)
-          .getAllQuizSectionData(ref.read(authServiceProvider).userUuid ?? '');
       ref
           .read(mainScreenProvider.notifier)
           .setScreen(ScreenSelection.progressTimeLine);
