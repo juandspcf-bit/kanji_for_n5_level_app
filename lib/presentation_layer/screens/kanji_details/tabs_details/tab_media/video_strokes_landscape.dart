@@ -32,7 +32,9 @@ class VideoStrokesPortrait extends ConsumerWidget {
           const SizedBox(
             height: 20,
           ),
-          const ImageMeaningKanji(),
+          ImageMeaningKanji(
+            kanjiCharacter: kanjiFromApi.kanjiCharacter,
+          ),
         ],
       ),
     );

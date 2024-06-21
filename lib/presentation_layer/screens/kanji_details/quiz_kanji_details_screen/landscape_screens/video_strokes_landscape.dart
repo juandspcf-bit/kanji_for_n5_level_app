@@ -31,7 +31,9 @@ class VideoStrokesLandScape extends ConsumerWidget {
                 const SizedBox(
                   height: 10,
                 ),
-                const ImageMeaningKanji(),
+                ImageMeaningKanji(
+                  kanjiCharacter: kanjiFromApi.kanjiCharacter,
+                ),
               ],
             ),
           ),
