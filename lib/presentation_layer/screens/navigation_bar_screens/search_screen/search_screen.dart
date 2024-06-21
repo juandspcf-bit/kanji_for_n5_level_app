@@ -8,7 +8,7 @@ import 'package:kanji_for_n5_level_app/providers/examples_audios_track_list_prov
 import 'package:kanji_for_n5_level_app/providers/search_screen_provider.dart';
 import 'package:kanji_for_n5_level_app/providers/status_connection_provider.dart';
 import 'package:kanji_for_n5_level_app/providers/status_stored_provider.dart';
-import 'package:kanji_for_n5_level_app/presentation_layer/screens/common_screens/error_connection_screen.dart';
+import 'package:kanji_for_n5_level_app/presentation_layer/screens/common_screens/error_screens.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_details/tabs_details/tab_examples/examples_audios.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_details/tabs_details/tab_media/meaning_definition.dart';
 

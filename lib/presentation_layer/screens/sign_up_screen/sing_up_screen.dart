@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kanji_for_n5_level_app/application_layer/auth_service/auth_service_contract.dart';
 import 'package:kanji_for_n5_level_app/providers/status_connection_provider.dart';
-import 'package:kanji_for_n5_level_app/presentation_layer/screens/common_screens/error_connection_screen.dart';
+import 'package:kanji_for_n5_level_app/presentation_layer/screens/common_screens/error_screens.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/sign_up_screen/sign_up_form.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/sign_up_screen/sign_up_provider.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/common_widgets/my_dialogs.dart';
