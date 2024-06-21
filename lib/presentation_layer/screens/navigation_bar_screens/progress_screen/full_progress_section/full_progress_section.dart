@@ -12,30 +12,27 @@ class FullProgressSectionScreen extends ConsumerWidget {
 
   final int section;
 
-  Widget getScreen(BuildContext context, FullProgressSectionData progressData) {
-    final orientation = MediaQuery.orientationOf(context);
-    return progressData.fetchingDataStatus == FetchingDataStatus.fetching
-        ? const Center(
-            child: CircularProgressIndicator(),
-          )
-        : orientation == Orientation.portrait
-            ? BodyFullProgressSectionPortrait(
-                quizSectionData: progressData.quizSectionData,
-              )
-            : BodyFullProgressSectionLandscape(
-                quizSectionData: progressData.quizSectionData,
-              );
-  }
-
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final orientation = MediaQuery.orientationOf(context);
     final progressData =
         ref.watch(fullProgressSectionProvider(section: section));
     return Scaffold(
       appBar: AppBar(),
-      body: getScreen(
-        context,
-        progressData,
+      body: progressData.when(
+        data: (data) {
+          return orientation == Orientation.portrait
+              ? BodyFullProgressSectionPortrait(
+                  quizSectionData: data.quizSectionData,
+                )
+              : BodyFullProgressSectionLandscape(
+                  quizSectionData: data.quizSectionData,
+                );
+        },
+        error: (_, __) => const Center(child: Text("Error loading")),
+        loading: () => const Center(
+          child: CircularProgressIndicator(),
+        ),
       ),
     );
   }

@@ -7,7 +7,7 @@ part of 'full_progress_section_provider.dart';
 // **************************************************************************
 
 String _$fullProgressSectionHash() =>
-    r'5df834f146033a50b22dd1cee4edce12d660a950';
+    r'fd02900511cb93a24a0b15dc5947540c5fcedc65';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -30,25 +30,17 @@ class _SystemHash {
   }
 }
 
-abstract class _$FullProgressSection
-    extends BuildlessAutoDisposeNotifier<FullProgressSectionData> {
-  late final int section;
-
-  FullProgressSectionData build({
-    required int section,
-  });
-}
-
-/// See also [FullProgressSection].
-@ProviderFor(FullProgressSection)
+/// See also [fullProgressSection].
+@ProviderFor(fullProgressSection)
 const fullProgressSectionProvider = FullProgressSectionFamily();
 
-/// See also [FullProgressSection].
-class FullProgressSectionFamily extends Family<FullProgressSectionData> {
-  /// See also [FullProgressSection].
+/// See also [fullProgressSection].
+class FullProgressSectionFamily
+    extends Family<AsyncValue<FullProgressSectionData>> {
+  /// See also [fullProgressSection].
   const FullProgressSectionFamily();
 
-  /// See also [FullProgressSection].
+  /// See also [fullProgressSection].
   FullProgressSectionProvider call({
     required int section,
   }) {
@@ -81,14 +73,17 @@ class FullProgressSectionFamily extends Family<FullProgressSectionData> {
   String? get name => r'fullProgressSectionProvider';
 }
 
-/// See also [FullProgressSection].
-class FullProgressSectionProvider extends AutoDisposeNotifierProviderImpl<
-    FullProgressSection, FullProgressSectionData> {
-  /// See also [FullProgressSection].
+/// See also [fullProgressSection].
+class FullProgressSectionProvider
+    extends AutoDisposeFutureProvider<FullProgressSectionData> {
+  /// See also [fullProgressSection].
   FullProgressSectionProvider({
     required int section,
   }) : this._internal(
-          () => FullProgressSection()..section = section,
+          (ref) => fullProgressSection(
+            ref as FullProgressSectionRef,
+            section: section,
+          ),
           from: fullProgressSectionProvider,
           name: r'fullProgressSectionProvider',
           debugGetCreateSourceHash:
@@ -114,20 +109,14 @@ class FullProgressSectionProvider extends AutoDisposeNotifierProviderImpl<
   final int section;
 
   @override
-  FullProgressSectionData runNotifierBuild(
-    covariant FullProgressSection notifier,
+  Override overrideWith(
+    FutureOr<FullProgressSectionData> Function(FullProgressSectionRef provider)
+        create,
   ) {
-    return notifier.build(
-      section: section,
-    );
-  }
-
-  @override
-  Override overrideWith(FullProgressSection Function() create) {
     return ProviderOverride(
       origin: this,
       override: FullProgressSectionProvider._internal(
-        () => create()..section = section,
+        (ref) => create(ref as FullProgressSectionRef),
         from: from,
         name: null,
         dependencies: null,
@@ -139,8 +128,7 @@ class FullProgressSectionProvider extends AutoDisposeNotifierProviderImpl<
   }
 
   @override
-  AutoDisposeNotifierProviderElement<FullProgressSection,
-      FullProgressSectionData> createElement() {
+  AutoDisposeFutureProviderElement<FullProgressSectionData> createElement() {
     return _FullProgressSectionProviderElement(this);
   }
 
@@ -159,14 +147,14 @@ class FullProgressSectionProvider extends AutoDisposeNotifierProviderImpl<
 }
 
 mixin FullProgressSectionRef
-    on AutoDisposeNotifierProviderRef<FullProgressSectionData> {
+    on AutoDisposeFutureProviderRef<FullProgressSectionData> {
   /// The parameter `section` of this provider.
   int get section;
 }
 
 class _FullProgressSectionProviderElement
-    extends AutoDisposeNotifierProviderElement<FullProgressSection,
-        FullProgressSectionData> with FullProgressSectionRef {
+    extends AutoDisposeFutureProviderElement<FullProgressSectionData>
+    with FullProgressSectionRef {
   _FullProgressSectionProviderElement(super.provider);
 
   @override
