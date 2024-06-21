@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kanji_for_n5_level_app/l10n/localization.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/navigation_bar_screens/progress_screen/full_progress_section/full_progress_section.dart';
-import 'package:kanji_for_n5_level_app/presentation_layer/screens/navigation_bar_screens/progress_screen/full_progress_section/full_progress_section_provider.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/navigation_bar_screens/progress_screen/my_tile.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/navigation_bar_screens/progress_screen/utils.dart';
 import 'package:timeline_tile/timeline_tile.dart';
@@ -40,13 +39,14 @@ class MyTimeLineTile extends ConsumerWidget {
     );
     return GestureDetector(
       onTap: () {
-        ref.read(fullProgressSectionProvider.notifier).fetchData(section);
         Navigator.of(context).push(
           PageRouteBuilder(
             transitionDuration: const Duration(seconds: 1),
             reverseTransitionDuration: const Duration(seconds: 1),
             pageBuilder: (context, animation, secondaryAnimation) =>
-                const FullProgressSectionScreen(),
+                FullProgressSectionScreen(
+              section: section,
+            ),
             transitionsBuilder:
                 (context, animation, secondaryAnimation, child) {
               return SlideTransition(

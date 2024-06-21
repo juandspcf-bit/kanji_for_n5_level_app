@@ -5,10 +5,23 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part "full_progress_section_provider.g.dart";
 
-@Riverpod(keepAlive: true)
+@Riverpod(keepAlive: false)
 class FullProgressSection extends _$FullProgressSection {
   @override
-  FullProgressSectionData build() {
+  FullProgressSectionData build({required int section}) {
+    ref
+        .read(localDBServiceProvider)
+        .getQuizSectionDataFromDB(
+          ref.read(authServiceProvider).userUuid ?? '',
+          section,
+        )
+        .then((quizSectionData) {
+      state = FullProgressSectionData(
+        fetchingDataStatus: FetchingDataStatus.notFetching,
+        quizSectionData: quizSectionData,
+      );
+    });
+
     final kanjisQuizData = SingleQuizSectionData(
       section: -1,
       allCorrectAnswers: false,
@@ -19,7 +32,7 @@ class FullProgressSection extends _$FullProgressSection {
     );
 
     return FullProgressSectionData(
-      fetchingDataStatus: FetchingDataStatus.notFetching,
+      fetchingDataStatus: FetchingDataStatus.fetching,
       quizSectionData: QuizSectionData(
         singleQuizSectionData: kanjisQuizData,
         singleQuizFlashCardData: [],
@@ -27,29 +40,7 @@ class FullProgressSection extends _$FullProgressSection {
       ),
     );
   }
-
-  void fetchData(int section) async {
-    state = FullProgressSectionData(
-      fetchingDataStatus: FetchingDataStatus.fetching,
-      quizSectionData: state.quizSectionData,
-    );
-
-    final quizSectionData =
-        await ref.read(localDBServiceProvider).getQuizSectionDataFromDB(
-              ref.read(authServiceProvider).userUuid ?? '',
-              section,
-            );
-
-    state = FullProgressSectionData(
-      fetchingDataStatus: FetchingDataStatus.notFetching,
-      quizSectionData: quizSectionData,
-    );
-  }
 }
-/* 
-final fullProgressSectionProvider =
-    NotifierProvider<FullProgressSection, FullProgressSectionData>(
-        FullProgressSection.new); */
 
 class FullProgressSectionData {
   final FetchingDataStatus fetchingDataStatus;
