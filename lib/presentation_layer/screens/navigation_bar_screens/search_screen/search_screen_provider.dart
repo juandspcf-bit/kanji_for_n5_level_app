@@ -1,11 +1,15 @@
 import 'dart:io';
 
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kanji_for_n5_level_app/application_layer/services.dart';
 import 'package:kanji_for_n5_level_app/main.dart';
 import 'package:kanji_for_n5_level_app/models/kanji_from_api.dart';
 
-class SearchScreenProvider extends Notifier<SearchScreenData> {
+import 'package:riverpod_annotation/riverpod_annotation.dart';
+
+part "search_screen_provider.g.dart";
+
+@Riverpod(keepAlive: true)
+class SearchScreen extends _$SearchScreen {
   @override
   SearchScreenData build() {
     return SearchScreenData(
@@ -65,10 +69,6 @@ class SearchScreenProvider extends Notifier<SearchScreenData> {
     }
   }
 }
-
-final searchScreenProvider =
-    NotifierProvider<SearchScreenProvider, SearchScreenData>(
-        SearchScreenProvider.new);
 
 class SearchScreenData {
   final String word;
