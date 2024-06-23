@@ -12,9 +12,6 @@ class ExampleAudio extends StatefulWidget {
     required this.sizeIcon,
     required this.statusStorage,
     required this.audioQuestion,
-    required this.trackPlaylist,
-    required this.indexPlaylist,
-    required this.isInPlaylistPlaying,
     required this.onPrimaryColor,
   });
 
@@ -22,9 +19,6 @@ class ExampleAudio extends StatefulWidget {
   final double sizeIcon;
   final StatusStorage statusStorage;
   final String audioQuestion;
-  final int trackPlaylist;
-  final int indexPlaylist;
-  final bool isInPlaylistPlaying;
 
   final Color onPrimaryColor;
 
@@ -114,14 +108,7 @@ class _ExampleAudioState extends State<ExampleAudio> {
                     );
                   });
                 },
-                child: widget.trackPlaylist == widget.indexPlaylist &&
-                        widget.isInPlaylistPlaying
-                    ? Icon(
-                        Icons.music_note,
-                        size: widget.sizeIcon,
-                        color: widget.onPrimaryColor,
-                      )
-                    : iconStatus,
+                child: iconStatus,
               ),
             ),
           ),
