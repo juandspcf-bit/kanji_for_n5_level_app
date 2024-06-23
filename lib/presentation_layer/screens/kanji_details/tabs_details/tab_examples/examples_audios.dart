@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kanji_for_n5_level_app/l10n/localization.dart';
 import 'package:kanji_for_n5_level_app/models/kanji_from_api.dart';
+import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_details/tabs_details/tab_examples/example_audio_widget.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_details/tabs_details/tab_examples/example_audio_widget_stream/example_audio_widget.dart';
 import 'package:kanji_for_n5_level_app/providers/examples_audios_track_list_provider.dart';
 import 'package:kanji_for_n5_level_app/providers/status_stored_provider.dart';
@@ -50,7 +51,7 @@ class ExampleAudios extends ConsumerWidget {
                     index: index,
                     data: data,
                   ),
-                  trailing: ExampleAudioStream(
+                  trailing: ExampleAudio(
                     audioQuestion: examples[index].audio.mp3,
                     sizeOval: 50,
                     sizeIcon: 30,

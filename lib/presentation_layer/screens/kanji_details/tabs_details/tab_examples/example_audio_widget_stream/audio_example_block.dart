@@ -12,7 +12,8 @@ class AudioExampleBlock {
   final _iconStatusController = StreamController<Widget>();
 
   Sink<void> get play => _generatePlayEventController.sink;
-  Stream<Widget> get statusIcon => _iconStatusController.stream;
+  Stream<Widget> get statusIcon =>
+      _iconStatusController.stream.asBroadcastStream();
 
   final StatusStorage statusStorage;
   final String audioQuestion;
@@ -36,7 +37,7 @@ class AudioExampleBlock {
         );
       }
     });
-    _generatePlayEventController.stream.listen((_) {
+    _generatePlayEventController.stream.asBroadcastStream().listen((_) {
       isPlaying = false;
       player.stop();
       player

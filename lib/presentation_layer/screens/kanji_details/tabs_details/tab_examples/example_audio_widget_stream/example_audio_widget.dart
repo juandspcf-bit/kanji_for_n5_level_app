@@ -61,18 +61,13 @@ class _ExampleAudioStreamState extends State<ExampleAudioStream> {
             child: Material(
               color: Theme.of(context).colorScheme.primary,
               child: InkWell(
-                splashColor: Colors.black38,
-                onTap: () {
-                  audioExampleBlock.play.add(null);
-                },
-                child: widget.trackPlaylist == widget.indexPlaylist &&
-                        widget.isInPlaylistPlaying
-                    ? Icon(
-                        Icons.music_note,
-                        size: widget.sizeIcon,
-                        color: widget.onPrimaryColor,
-                      )
-                    : StreamBuilder<Widget>(
+                  splashColor: Colors.black38,
+                  onTap: () {
+                    audioExampleBlock.play.add(null);
+                  },
+                  child: Builder(builder: (ctx) {
+                    if (!widget.isInPlaylistPlaying) {
+                      return StreamBuilder<Widget>(
                         stream: audioExampleBlock.statusIcon,
                         builder: (ctx, snapshot) {
                           if (snapshot.hasData) {
@@ -89,8 +84,23 @@ class _ExampleAudioStreamState extends State<ExampleAudioStream> {
                               color: widget.onPrimaryColor,
                             );
                           }
-                        }),
-              ),
+                        },
+                      );
+                    } else if (widget.isInPlaylistPlaying &&
+                        widget.trackPlaylist == widget.indexPlaylist) {
+                      return Icon(
+                        Icons.music_note,
+                        size: widget.sizeIcon,
+                        color: widget.onPrimaryColor,
+                      );
+                    } else {
+                      return Icon(
+                        Icons.play_arrow,
+                        size: widget.sizeIcon,
+                        color: widget.onPrimaryColor,
+                      );
+                    }
+                  })),
             ),
           ),
         );
