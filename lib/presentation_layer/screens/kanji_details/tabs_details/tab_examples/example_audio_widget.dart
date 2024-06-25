@@ -5,8 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:kanji_for_n5_level_app/main.dart';
 import 'package:kanji_for_n5_level_app/providers/status_stored_provider.dart';
 
-class ExampleAudio extends StatefulWidget {
-  const ExampleAudio({
+class AudioExampleButtonWidget extends StatefulWidget {
+  const AudioExampleButtonWidget({
     super.key,
     required this.sizeOval,
     required this.sizeIcon,
@@ -23,10 +23,11 @@ class ExampleAudio extends StatefulWidget {
   final Color onPrimaryColor;
 
   @override
-  State<ExampleAudio> createState() => _ExampleAudioState();
+  State<AudioExampleButtonWidget> createState() =>
+      _AudioExampleButtonWidgetState();
 }
 
-class _ExampleAudioState extends State<ExampleAudio> {
+class _AudioExampleButtonWidgetState extends State<AudioExampleButtonWidget> {
   final AssetsAudioPlayer player = AssetsAudioPlayer.newPlayer();
   bool isPlaying = false;
   late Widget iconStatus;

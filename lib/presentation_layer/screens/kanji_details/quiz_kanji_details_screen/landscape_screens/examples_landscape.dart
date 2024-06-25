@@ -15,10 +15,10 @@ class ExamplesLandscape extends ConsumerWidget {
     final kanjiFromApi = kanjiDetailsData!.kanjiFromApi;
     final statusStorage = kanjiDetailsData.statusStorage;
 
-    final List<ExampleAudio> listExampleAudio = [];
+    final List<AudioExampleButtonWidget> listExampleAudio = [];
     for (int index = 0; index < kanjiFromApi.example.length; index++) {
       listExampleAudio.add(
-        ExampleAudio(
+        AudioExampleButtonWidget(
           audioQuestion: kanjiFromApi.example[index].audio.mp3,
           sizeOval: 50,
           sizeIcon: 30,
@@ -48,7 +48,7 @@ class ExamplesLandscape extends ConsumerWidget {
             child: ExampleAudios(
               examples: kanjiFromApi.example,
               statusStorage: statusStorage,
-              listExampleAudio: listExampleAudio,
+              listAudioExampleButtonWidgets: listExampleAudio,
             ),
           ),
         ],

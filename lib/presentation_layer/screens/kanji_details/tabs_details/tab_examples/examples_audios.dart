@@ -13,18 +13,18 @@ class ExampleAudios extends ConsumerWidget {
     super.key,
     required this.examples,
     required this.statusStorage,
-    required this.listExampleAudio,
+    required this.listAudioExampleButtonWidgets,
     this.physics,
   });
 
   final List<Example> examples;
   final StatusStorage statusStorage;
   final ScrollPhysics? physics;
-  final List<ExampleAudio> listExampleAudio;
+  final List<AudioExampleButtonWidget> listAudioExampleButtonWidgets;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final data = ref.watch(examplesAudiosTrackListProvider);
+    final data = ref.watch(audioExamplesTrackListProvider);
     return Column(
       children: [
         PlayListButton(
@@ -54,14 +54,14 @@ class ExampleAudios extends ConsumerWidget {
                     data: data,
                   ),
                   trailing: data.isPlaying
-                      ? ExampleWidget(
+                      ? DummyButtonAudioExample(
                           sizeOval: 50,
                           sizeIcon: 30,
                           trackPlaylist: data.track,
                           indexPlaylist: index,
                           isInPlaylistPlaying: data.isPlaying,
                         )
-                      : listExampleAudio[index],
+                      : listAudioExampleButtonWidgets[index],
                 )
             ],
           ),
@@ -81,7 +81,7 @@ class SubTitleListTileExample extends StatelessWidget {
 
   final List<Example> examples;
   final int index;
-  final ExamplesAudiosTrackListData data;
+  final AudioExamplesTrackListData data;
 
   @override
   Widget build(BuildContext context) {
@@ -112,7 +112,7 @@ class TitleListTileExample extends StatelessWidget {
 
   final List<Example> examples;
   final int index;
-  final ExamplesAudiosTrackListData data;
+  final AudioExamplesTrackListData data;
 
   @override
   Widget build(BuildContext context) {
@@ -148,13 +148,13 @@ class PlayListButton extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final data = ref.watch(examplesAudiosTrackListProvider);
+    final data = ref.watch(audioExamplesTrackListProvider);
     return ElevatedButton.icon(
         onPressed: data.isPlaying
             ? null
             : () async {
                 ref
-                    .read(examplesAudiosTrackListProvider)
+                    .read(audioExamplesTrackListProvider)
                     .assetsAudioPlayer
                     .open(
                         Playlist(audios: [
@@ -167,7 +167,7 @@ class PlayListButton extends ConsumerWidget {
                         loopMode: LoopMode.none //loop the full playlist
                         )
                     .then((value) => ref
-                        .read(examplesAudiosTrackListProvider.notifier)
+                        .read(audioExamplesTrackListProvider.notifier)
                         .setIsPlaying(true));
               },
         style: ElevatedButton.styleFrom(

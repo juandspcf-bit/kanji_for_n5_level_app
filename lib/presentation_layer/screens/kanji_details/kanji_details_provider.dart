@@ -145,8 +145,8 @@ class KanjiDetailsProvider extends Notifier<KanjiDetailsData?> {
     ref.read(customNavigationRailsDetailsProvider.notifier).setSelection(0);
     ref.read(videoStatusPlaying.notifier).setSpeed(1.0);
     ref.read(videoStatusPlaying.notifier).setIsPlaying(true);
-    ref.read(examplesAudiosTrackListProvider).assetsAudioPlayer.stop();
-    ref.read(examplesAudiosTrackListProvider.notifier).setIsPlaying(false);
+    ref.read(audioExamplesTrackListProvider).assetsAudioPlayer.stop();
+    ref.read(audioExamplesTrackListProvider.notifier).setIsPlaying(false);
     ref
         .read(examplesAudiosPlayingAudioProvider.notifier)
         .setInitList(kanjiFromApi);

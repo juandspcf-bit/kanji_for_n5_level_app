@@ -198,7 +198,7 @@ class ExampleAudiosSearch extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final data = ref.watch(examplesAudiosTrackListProvider);
+    final data = ref.watch(audioExamplesTrackListProvider);
     return Column(
       children: [
         PlayListButton(

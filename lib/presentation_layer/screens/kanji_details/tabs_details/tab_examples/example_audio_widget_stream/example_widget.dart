@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-class ExampleWidget extends StatelessWidget {
+class DummyButtonAudioExample extends StatelessWidget {
   final double sizeOval;
   final double sizeIcon;
 
@@ -8,7 +8,7 @@ class ExampleWidget extends StatelessWidget {
   final int indexPlaylist;
   final bool isInPlaylistPlaying;
 
-  const ExampleWidget({
+  const DummyButtonAudioExample({
     super.key,
     required this.sizeOval,
     required this.sizeIcon,

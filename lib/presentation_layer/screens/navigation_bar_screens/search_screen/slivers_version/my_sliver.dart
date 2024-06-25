@@ -26,7 +26,7 @@ class MySliver extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final data = ref.watch(examplesAudiosTrackListProvider);
+    final data = ref.watch(audioExamplesTrackListProvider);
     final searchScreenState = ref.watch(searchScreenProvider);
     ref.watch(statusConnectionProvider);
     return CustomScrollView(

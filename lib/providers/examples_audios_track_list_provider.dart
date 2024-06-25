@@ -1,10 +1,9 @@
 import 'package:assets_audio_player/assets_audio_player.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class ExamplesAudiosTrackListProvider
-    extends Notifier<ExamplesAudiosTrackListData> {
+class AudioExamplesTrackList extends Notifier<AudioExamplesTrackListData> {
   @override
-  ExamplesAudiosTrackListData build() {
+  AudioExamplesTrackListData build() {
     final assetAudioPlayer = AssetsAudioPlayer();
 
     assetAudioPlayer.playlistFinished.listen((event) {
@@ -22,34 +21,34 @@ class ExamplesAudiosTrackListProvider
       }
 
       //logger.d(track);
-      state = ExamplesAudiosTrackListData(
+      state = AudioExamplesTrackListData(
           track: track,
           isPlaying: state.isPlaying,
           assetsAudioPlayer: state.assetsAudioPlayer);
     });
 
-    return ExamplesAudiosTrackListData(
+    return AudioExamplesTrackListData(
         track: 0, isPlaying: false, assetsAudioPlayer: assetAudioPlayer);
   }
 
   void setIsPlaying(bool value) {
-    state = ExamplesAudiosTrackListData(
+    state = AudioExamplesTrackListData(
         track: state.track,
         isPlaying: value,
         assetsAudioPlayer: state.assetsAudioPlayer);
   }
 }
 
-final examplesAudiosTrackListProvider = NotifierProvider<
-    ExamplesAudiosTrackListProvider,
-    ExamplesAudiosTrackListData>(ExamplesAudiosTrackListProvider.new);
+final audioExamplesTrackListProvider =
+    NotifierProvider<AudioExamplesTrackList, AudioExamplesTrackListData>(
+        AudioExamplesTrackList.new);
 
-class ExamplesAudiosTrackListData {
+class AudioExamplesTrackListData {
   final int track;
   final bool isPlaying;
   final AssetsAudioPlayer assetsAudioPlayer;
 
-  ExamplesAudiosTrackListData({
+  AudioExamplesTrackListData({
     required this.track,
     required this.isPlaying,
     required this.assetsAudioPlayer,

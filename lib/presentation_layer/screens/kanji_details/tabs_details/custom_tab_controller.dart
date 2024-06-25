@@ -31,12 +31,9 @@ class CustomTabControllerKanjiDetails extends ConsumerWidget {
           final TabController tabController = DefaultTabController.of(ctx);
           tabController.addListener(() {
             if (tabController.index != 3) {
+              ref.read(audioExamplesTrackListProvider).assetsAudioPlayer.stop();
               ref
-                  .read(examplesAudiosTrackListProvider)
-                  .assetsAudioPlayer
-                  .stop();
-              ref
-                  .read(examplesAudiosTrackListProvider.notifier)
+                  .read(audioExamplesTrackListProvider.notifier)
                   .setIsPlaying(false);
             }
             if (!tabController.indexIsChanging) {
@@ -48,12 +45,9 @@ class CustomTabControllerKanjiDetails extends ConsumerWidget {
           return PopScope(
             onPopInvoked: (didPop) {
               if (!didPop) return;
+              ref.read(audioExamplesTrackListProvider).assetsAudioPlayer.stop();
               ref
-                  .read(examplesAudiosTrackListProvider)
-                  .assetsAudioPlayer
-                  .stop();
-              ref
-                  .read(examplesAudiosTrackListProvider.notifier)
+                  .read(audioExamplesTrackListProvider.notifier)
                   .setIsPlaying(false);
               //ref.read(toastServiceProvider).dismiss(context);
             },
