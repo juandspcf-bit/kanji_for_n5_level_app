@@ -287,7 +287,6 @@ class PersonalInfoProvider extends Notifier<PersonalInfoData> {
             personalInfoData.pathProfileTemporal,
             ref.read(authServiceProvider).userUuid ?? '');
         setProfilePath(avatarLink);
-        ref.read(avatarMainScreenProvider.notifier).getLink();
         setUpdatingStatus(PersonalInfoUpdatingStatus.success);
         _isUpdating = false;
       } catch (e) {
