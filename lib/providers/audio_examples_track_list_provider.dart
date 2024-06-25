@@ -1,7 +1,10 @@
 import 'package:assets_audio_player/assets_audio_player.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-class AudioExamplesTrackList extends Notifier<AudioExamplesTrackListData> {
+part "audio_examples_track_list_provider.g.dart";
+
+@Riverpod(keepAlive: false)
+class AudioExamplesTrackList extends _$AudioExamplesTrackList {
   @override
   AudioExamplesTrackListData build() {
     final assetAudioPlayer = AssetsAudioPlayer();
@@ -38,10 +41,6 @@ class AudioExamplesTrackList extends Notifier<AudioExamplesTrackListData> {
         assetsAudioPlayer: state.assetsAudioPlayer);
   }
 }
-
-final audioExamplesTrackListProvider =
-    NotifierProvider<AudioExamplesTrackList, AudioExamplesTrackListData>(
-        AudioExamplesTrackList.new);
 
 class AudioExamplesTrackListData {
   final int track;
