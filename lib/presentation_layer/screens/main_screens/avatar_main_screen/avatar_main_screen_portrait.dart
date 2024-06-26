@@ -12,7 +12,6 @@ class AvatarMainScreenPortrait extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final avatarLink = ref.watch(avatarMainScreenProvider);
-
     return LayoutBuilder(
       builder: (context, constraints) {
         return avatarLink.when(

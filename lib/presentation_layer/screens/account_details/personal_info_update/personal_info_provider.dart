@@ -3,8 +3,6 @@ import 'dart:async';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kanji_for_n5_level_app/application_layer/services.dart';
 import 'package:kanji_for_n5_level_app/main.dart';
-import 'package:kanji_for_n5_level_app/presentation_layer/screens/main_screens/avatar_main_screen/avatar_main_screen_provider.dart';
-import 'package:kanji_for_n5_level_app/presentation_layer/screens/main_screens/title_main_screen_provider.dart';
 import 'package:kanji_for_n5_level_app/providers/status_connection_provider.dart';
 
 class PersonalInfoProvider extends Notifier<PersonalInfoData> {
@@ -273,8 +271,6 @@ class PersonalInfoProvider extends Notifier<PersonalInfoData> {
 
       firstName = state.firstName;
       lastName = state.lastName;
-
-      ref.read(titleMainScreenProvider.notifier).getTitle();
     } catch (e) {
       logger.e(e);
       setUpdatingStatus(PersonalInfoUpdatingStatus.error);
