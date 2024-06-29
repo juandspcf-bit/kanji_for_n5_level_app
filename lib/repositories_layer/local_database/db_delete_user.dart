@@ -17,7 +17,7 @@ Future<void> deleteUserDataSQLite(String uuid) async {
     final parametersDelete = ParametersDelete(
         listKanjiMapFromDb: listKanjiMapFromDb,
         listMapExamplesFromDb: listMapExamplesFromDb,
-        listMapStrokesImagesLisnkFromDb: listMapStrokesImagesLisnkFromDb);
+        listMapStrokesImagesLinksFromDb: listMapStrokesImagesLisnkFromDb);
 
     await compute(deleteKanjiFromApiComputeVersion, parametersDelete);
 

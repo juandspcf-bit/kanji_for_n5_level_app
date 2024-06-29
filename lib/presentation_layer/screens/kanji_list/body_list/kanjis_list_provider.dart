@@ -126,8 +126,9 @@ class KanjiList extends _$KanjiList {
                 .read(queueDownloadDeleteProvider.notifier)
                 .isInTheDownloadQueue(kanji.kanjiCharacter)) {
               logger.d('isn in the download queue ${kanji.kanjiCharacter}');
-              return updateStatusKanji(
-                  StatusStorage.processingStoring, false, kanji);
+              return kanji.copyWith(
+                  statusStorage: StatusStorage.processingStoring,
+                  accessToKanjiItemsButtons: false);
             }
             return kanji;
           },
@@ -165,8 +166,10 @@ class KanjiList extends _$KanjiList {
           if (ref
               .read(queueDownloadDeleteProvider.notifier)
               .isInTheDownloadQueue(kanji.kanjiCharacter)) {
-            return updateStatusKanji(
-                StatusStorage.processingStoring, false, kanji);
+            kanji.copyWith(
+              statusStorage: StatusStorage.processingStoring,
+              accessToKanjiItemsButtons: false,
+            );
           }
           return kanji;
         },
@@ -199,8 +202,9 @@ class KanjiList extends _$KanjiList {
               .read(queueDownloadDeleteProvider.notifier)
               .isInTheDownloadQueue(kanji.kanjiCharacter)) {
             logger.d('isn in the download queue ${kanji.kanjiCharacter}');
-            return updateStatusKanji(
-                StatusStorage.processingStoring, false, kanji);
+            kanji.copyWith(
+                statusStorage: StatusStorage.processingStoring,
+                accessToKanjiItemsButtons: false);
           }
           return kanji;
         },
@@ -250,27 +254,6 @@ class KanjiList extends _$KanjiList {
         status: false,
       ),
     );
-  }
-
-  KanjiFromApi updateStatusKanji(
-    StatusStorage statusStorage,
-    bool accessToKanjiItemsButtons,
-    KanjiFromApi kanjiFromApi,
-  ) {
-    return KanjiFromApi(
-        kanjiCharacter: kanjiFromApi.kanjiCharacter,
-        englishMeaning: kanjiFromApi.englishMeaning,
-        kanjiImageLink: kanjiFromApi.kanjiImageLink,
-        katakanaRomaji: kanjiFromApi.katakanaRomaji,
-        katakanaMeaning: kanjiFromApi.katakanaMeaning,
-        hiraganaRomaji: kanjiFromApi.hiraganaRomaji,
-        hiraganaMeaning: kanjiFromApi.hiraganaMeaning,
-        videoLink: kanjiFromApi.videoLink,
-        section: kanjiFromApi.section,
-        statusStorage: statusStorage,
-        accessToKanjiItemsButtons: accessToKanjiItemsButtons,
-        example: kanjiFromApi.example,
-        strokes: kanjiFromApi.strokes);
   }
 
   void updateKanjiStatusOnVisibleSectionList(

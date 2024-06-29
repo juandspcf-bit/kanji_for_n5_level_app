@@ -4,7 +4,6 @@ import 'package:async/async.dart';
 import 'package:flutter/foundation.dart';
 import 'package:kanji_for_n5_level_app/repositories_layer/local_database/db_definitions.dart';
 import 'package:kanji_for_n5_level_app/models/kanji_from_api.dart';
-import 'package:kanji_for_n5_level_app/providers/status_stored_provider.dart';
 
 Future<void> deleteKanjiFromSqlDB(
     KanjiFromApi kanjiFromApi, String uuid) async {
@@ -16,14 +15,14 @@ Future<void> deleteKanjiFromSqlDB(
   final listMapExamplesFromDb = await db.rawQuery(
       'SELECT * FROM examples WHERE kanjiCharacter = ? AND uuid = ?',
       [kanjiFromApi.kanjiCharacter, uuid]);
-  final listMapStrokesImagesLisnkFromDb = await db.rawQuery(
+  final listMapStrokesImagesLinksFromDb = await db.rawQuery(
       'SELECT * FROM strokes WHERE kanjiCharacter = ? AND uuid = ?',
       [kanjiFromApi.kanjiCharacter, uuid]);
 
   final parametersDelete = ParametersDelete(
       listKanjiMapFromDb: listKanjiMapFromDb,
       listMapExamplesFromDb: listMapExamplesFromDb,
-      listMapStrokesImagesLisnkFromDb: listMapStrokesImagesLisnkFromDb);
+      listMapStrokesImagesLinksFromDb: listMapStrokesImagesLinksFromDb);
 
   await compute(deleteKanjiFromApiComputeVersion, parametersDelete);
 
@@ -35,12 +34,12 @@ Future<void> deleteKanjiFromSqlDB(
 class ParametersDelete {
   final List<Map<String, Object?>> listKanjiMapFromDb;
   final List<Map<String, Object?>> listMapExamplesFromDb;
-  final List<Map<String, Object?>> listMapStrokesImagesLisnkFromDb;
+  final List<Map<String, Object?>> listMapStrokesImagesLinksFromDb;
 
   ParametersDelete({
     required this.listKanjiMapFromDb,
     required this.listMapExamplesFromDb,
-    required this.listMapStrokesImagesLisnkFromDb,
+    required this.listMapStrokesImagesLinksFromDb,
   });
 }
 
@@ -99,12 +98,12 @@ Future<void> deleteKanjiFromApiComputeVersion(
     }
   }
 
-  if (parametersDelete.listMapStrokesImagesLisnkFromDb.isNotEmpty) {
+  if (parametersDelete.listMapStrokesImagesLinksFromDb.isNotEmpty) {
     try {
       FutureGroup<FileSystemEntity> groupKanjiStrokesLinksFile =
           FutureGroup<FileSystemEntity>();
 
-      parametersDelete.listMapStrokesImagesLisnkFromDb
+      parametersDelete.listMapStrokesImagesLinksFromDb
           .map((imageLinkMap) => imageLinkMap['strokeImageLink'] as String)
           .map((e) {
         final strokeLinkFile = File(e);
@@ -117,27 +116,6 @@ Future<void> deleteKanjiFromApiComputeVersion(
       e.toString();
     }
   }
-}
-
-KanjiFromApi updateStatusKanjiComputeVersion(
-  StatusStorage statusStorage,
-  bool accessToKanjiItemsButtons,
-  KanjiFromApi kanjiFromApi,
-) {
-  return KanjiFromApi(
-      kanjiCharacter: kanjiFromApi.kanjiCharacter,
-      englishMeaning: kanjiFromApi.englishMeaning,
-      kanjiImageLink: kanjiFromApi.kanjiImageLink,
-      katakanaRomaji: kanjiFromApi.katakanaRomaji,
-      katakanaMeaning: kanjiFromApi.katakanaMeaning,
-      hiraganaRomaji: kanjiFromApi.hiraganaRomaji,
-      hiraganaMeaning: kanjiFromApi.hiraganaMeaning,
-      videoLink: kanjiFromApi.videoLink,
-      section: kanjiFromApi.section,
-      statusStorage: statusStorage,
-      accessToKanjiItemsButtons: accessToKanjiItemsButtons,
-      example: kanjiFromApi.example,
-      strokes: kanjiFromApi.strokes);
 }
 
 Future<void> cleanInvalidRecords(List<KanjiFromApi> listOfInvalidKanjis) async {

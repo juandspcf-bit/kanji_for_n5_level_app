@@ -69,20 +69,9 @@ class FavoritesListProvider extends Notifier<FavoritesKanjisData> {
 
       section = section.replaceAll('section', '').trim();
 
-      return KanjiFromApi(
-          kanjiCharacter: kanji.kanjiCharacter,
-          englishMeaning: kanji.englishMeaning,
-          kanjiImageLink: kanji.kanjiImageLink,
-          katakanaRomaji: kanji.katakanaRomaji,
-          katakanaMeaning: kanji.katakanaMeaning,
-          hiraganaRomaji: kanji.hiraganaRomaji,
-          hiraganaMeaning: kanji.hiraganaMeaning,
-          section: int.parse(section),
-          videoLink: kanji.videoLink,
-          statusStorage: kanji.statusStorage,
-          accessToKanjiItemsButtons: kanji.accessToKanjiItemsButtons,
-          example: kanji.example,
-          strokes: kanji.strokes);
+      return kanji.copyWith(
+        section: int.parse(section),
+      );
     }).toList();
     return kanjiList;
   }

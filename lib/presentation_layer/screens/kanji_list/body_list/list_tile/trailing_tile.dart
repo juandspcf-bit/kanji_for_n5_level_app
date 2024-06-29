@@ -117,45 +117,12 @@ class TrailingTile extends ConsumerWidget {
           .indexWhere((element) => element == kanjiFromApi.kanjiCharacter);
       if (index != -1) {
         int? section = int.tryParse(key.substring(7));
-        correctKanjiFromApi = KanjiFromApi(
-            kanjiCharacter: kanjiFromApi.kanjiCharacter,
-            englishMeaning: kanjiFromApi.englishMeaning,
-            kanjiImageLink: kanjiFromApi.kanjiImageLink,
-            katakanaRomaji: kanjiFromApi.katakanaRomaji,
-            katakanaMeaning: kanjiFromApi.katakanaMeaning,
-            hiraganaRomaji: kanjiFromApi.hiraganaRomaji,
-            hiraganaMeaning: kanjiFromApi.hiraganaMeaning,
-            videoLink: kanjiFromApi.videoLink,
-            section: section ?? 10,
-            statusStorage: kanjiFromApi.statusStorage,
-            accessToKanjiItemsButtons: kanjiFromApi.accessToKanjiItemsButtons,
-            example: kanjiFromApi.example,
-            strokes: kanjiFromApi.strokes);
-
+        correctKanjiFromApi = kanjiFromApi.copyWith(
+          section: section ?? 10,
+        );
         break;
       }
     }
     return correctKanjiFromApi;
   }
-}
-
-KanjiFromApi updateStatusKanji(
-  StatusStorage statusStorage,
-  bool accessToKanjiItemsButtons,
-  KanjiFromApi kanjiFromApi,
-) {
-  return KanjiFromApi(
-      kanjiCharacter: kanjiFromApi.kanjiCharacter,
-      englishMeaning: kanjiFromApi.englishMeaning,
-      kanjiImageLink: kanjiFromApi.kanjiImageLink,
-      katakanaRomaji: kanjiFromApi.katakanaRomaji,
-      katakanaMeaning: kanjiFromApi.katakanaMeaning,
-      hiraganaRomaji: kanjiFromApi.hiraganaRomaji,
-      hiraganaMeaning: kanjiFromApi.hiraganaMeaning,
-      videoLink: kanjiFromApi.videoLink,
-      section: kanjiFromApi.section,
-      statusStorage: statusStorage,
-      accessToKanjiItemsButtons: accessToKanjiItemsButtons,
-      example: kanjiFromApi.example,
-      strokes: kanjiFromApi.strokes);
 }

@@ -79,13 +79,10 @@ class QueueDownloadDelete extends Notifier<QueueData> {
         downloadKanji,
       );
 
-      updateKanjisOnVisibleList(
-        updateStatusKanji(
-          StatusStorage.processingStoring,
-          false,
-          kanjiFromApiOnline,
-        ),
-      );
+      updateKanjisOnVisibleList(kanjiFromApiOnline.copyWith(
+        statusStorage: StatusStorage.processingStoring,
+        accessToKanjiItemsButtons: false,
+      ));
 
       final kanjiData = await ref
           .read(cloudDBServiceProvider)
@@ -151,13 +148,10 @@ class QueueDownloadDelete extends Notifier<QueueData> {
         deleteKanji,
       );
 
-      updateKanjisOnVisibleList(
-        updateStatusKanji(
-          StatusStorage.processingDeleting,
-          false,
-          kanjiFromApiStored,
-        ),
-      );
+      updateKanjisOnVisibleList(kanjiFromApiStored.copyWith(
+        statusStorage: StatusStorage.processingDeleting,
+        accessToKanjiItemsButtons: false,
+      ));
 
       kanjiFromApiOnline =
           await ref.read(kanjiApiServiceProvider).requestSingleKanjiToApi(
@@ -211,27 +205,6 @@ class QueueDownloadDelete extends Notifier<QueueData> {
           kanjiFromApi,
         );
     ref.read(cacheKanjiListProvider.notifier).updateKanjiOnCache(kanjiFromApi);
-  }
-
-  KanjiFromApi updateStatusKanji(
-    StatusStorage statusStorage,
-    bool accessToKanjiItemsButtons,
-    KanjiFromApi kanjiFromApi,
-  ) {
-    return KanjiFromApi(
-        kanjiCharacter: kanjiFromApi.kanjiCharacter,
-        englishMeaning: kanjiFromApi.englishMeaning,
-        kanjiImageLink: kanjiFromApi.kanjiImageLink,
-        katakanaRomaji: kanjiFromApi.katakanaRomaji,
-        katakanaMeaning: kanjiFromApi.katakanaMeaning,
-        hiraganaRomaji: kanjiFromApi.hiraganaRomaji,
-        hiraganaMeaning: kanjiFromApi.hiraganaMeaning,
-        videoLink: kanjiFromApi.videoLink,
-        section: kanjiFromApi.section,
-        statusStorage: statusStorage,
-        accessToKanjiItemsButtons: accessToKanjiItemsButtons,
-        example: kanjiFromApi.example,
-        strokes: kanjiFromApi.strokes);
   }
 
   @override
