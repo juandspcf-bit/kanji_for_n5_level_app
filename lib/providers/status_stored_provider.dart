@@ -3,7 +3,7 @@ import 'package:kanji_for_n5_level_app/main.dart';
 import 'package:kanji_for_n5_level_app/models/kanji_from_api.dart';
 import 'package:kanji_for_n5_level_app/models/section_model.dart';
 
-class StoredkanjisProvider extends Notifier<Map<int, List<KanjiFromApi>>> {
+class StoredKanjisProvider extends Notifier<Map<int, List<KanjiFromApi>>> {
   @override
   Map<int, List<KanjiFromApi>> build() {
     return {};
@@ -108,8 +108,8 @@ class StoredkanjisProvider extends Notifier<Map<int, List<KanjiFromApi>>> {
 }
 
 final storedKanjisProvider =
-    NotifierProvider<StoredkanjisProvider, Map<int, List<KanjiFromApi>>>(
-        StoredkanjisProvider.new);
+    NotifierProvider<StoredKanjisProvider, Map<int, List<KanjiFromApi>>>(
+        StoredKanjisProvider.new);
 
 enum StatusStorage {
   onlyOnline,
