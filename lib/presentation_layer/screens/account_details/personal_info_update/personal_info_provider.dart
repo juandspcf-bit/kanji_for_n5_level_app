@@ -82,7 +82,6 @@ class PersonalInfo extends _$PersonalInfo {
     if (statusConnection == ConnectionStatus.noConnected) {
       final cachedUserDataList =
           await ref.read(localDBServiceProvider).readUserData(uuid ?? '');
-      logger.d(cachedUserDataList);
 
       String firstName = '';
       String lastName = '';
