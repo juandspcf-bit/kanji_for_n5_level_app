@@ -1,10 +1,14 @@
+<<<<<<< HEAD
 import 'dart:async';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/main_screens/avatar_main_screen/avatar_main_screen_provider.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
+=======
+>>>>>>> new_personal_info_update
 import 'package:kanji_for_n5_level_app/application_layer/services.dart';
 import 'package:kanji_for_n5_level_app/main.dart';
-import 'package:kanji_for_n5_level_app/providers/status_connection_provider.dart';
+import 'package:kanji_for_n5_level_app/presentation_layer/screens/main_screens/avatar_main_screen/avatar_main_screen_provider.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part "personal_info_provider.g.dart";
 
@@ -19,7 +23,6 @@ class PersonalInfo extends _$PersonalInfo {
         lastName: '',
         birthdate: '',
         updatingStatus: PersonalInfoUpdatingStatus.noStarted,
-        fetchingStatus: PersonalInfoFetchingStatus.noStarted,
         showPasswordRequest: false);
   }
 
@@ -55,6 +58,7 @@ class PersonalInfo extends _$PersonalInfo {
     state = state.copyWith(showPasswordRequest: status);
   }
 
+<<<<<<< HEAD
   void resetData() {
     state = PersonalInfoData(
         link: '',
@@ -160,20 +164,15 @@ class PersonalInfo extends _$PersonalInfo {
           fetchingStatus: PersonalInfoFetchingStatus.error,
           showPasswordRequest: state.showPasswordRequest);
     }
+=======
+  bool isUpdating() {
+    return _isUpdating;
+>>>>>>> new_personal_info_update
   }
 
   var _isUpdating = false;
 
   void updateUserData() async {
-    if (state.pathProfileTemporal == "" &&
-        _birthdate == state.birthdate &&
-        _firstName == state.firstName &&
-        _lastName == state.lastName) {
-      setUpdatingStatus(PersonalInfoUpdatingStatus.noUpdate);
-      _isUpdating = false;
-      return;
-    }
-
     final userUuid = ref.read(authServiceProvider).userUuid;
     if (userUuid == null) {
       setUpdatingStatus(PersonalInfoUpdatingStatus.error);
@@ -233,7 +232,10 @@ class PersonalInfo extends _$PersonalInfo {
       }
     } else {
       ref.read(avatarMainScreenProvider.notifier).updateAvatar();
+<<<<<<< HEAD
 
+=======
+>>>>>>> new_personal_info_update
       setUpdatingStatus(PersonalInfoUpdatingStatus.success);
       _isUpdating = false;
     }
@@ -248,6 +250,17 @@ class PersonalInfo extends _$PersonalInfo {
         'birthday': state.birthdate
       });
     } else {}
+  }
+
+  void reset() {
+    state = PersonalInfoData(
+        link: '',
+        pathProfileTemporal: '',
+        firstName: '',
+        lastName: '',
+        birthdate: '',
+        updatingStatus: PersonalInfoUpdatingStatus.noStarted,
+        showPasswordRequest: false);
   }
 }
 
@@ -280,7 +293,6 @@ class PersonalInfoData {
   final String lastName;
   final String birthdate;
   final PersonalInfoUpdatingStatus updatingStatus;
-  final PersonalInfoFetchingStatus fetchingStatus;
   final bool showPasswordRequest;
 
   PersonalInfoData(
@@ -290,7 +302,6 @@ class PersonalInfoData {
       required this.lastName,
       required this.birthdate,
       required this.updatingStatus,
-      required this.fetchingStatus,
       required this.showPasswordRequest});
 
   PersonalInfoData copyWith({
@@ -310,14 +321,13 @@ class PersonalInfoData {
       lastName: lastName ?? this.lastName,
       birthdate: birthdate ?? this.birthdate,
       updatingStatus: updatingStatus ?? this.updatingStatus,
-      fetchingStatus: fetchingStatus ?? this.fetchingStatus,
       showPasswordRequest: showPasswordRequest ?? this.showPasswordRequest,
     );
   }
 
   @override
   String toString() {
-    return 'PersonalInfoData(link: $link, pathProfileTemporal: $pathProfileTemporal, firstName: $firstName, lastName: $lastName, birthdate: $birthdate, updatingStatus: $updatingStatus, fetchingStatus: $fetchingStatus, showPasswordRequest: $showPasswordRequest)';
+    return 'PersonalInfoData(link: $link, pathProfileTemporal: $pathProfileTemporal, firstName: $firstName, lastName: $lastName, birthdate: $birthdate, updatingStatus: $updatingStatus, showPasswordRequest: $showPasswordRequest)';
   }
 
   @override
@@ -331,7 +341,6 @@ class PersonalInfoData {
         other.lastName == lastName &&
         other.birthdate == birthdate &&
         other.updatingStatus == updatingStatus &&
-        other.fetchingStatus == fetchingStatus &&
         other.showPasswordRequest == showPasswordRequest;
   }
 
@@ -343,7 +352,6 @@ class PersonalInfoData {
         lastName.hashCode ^
         birthdate.hashCode ^
         updatingStatus.hashCode ^
-        fetchingStatus.hashCode ^
         showPasswordRequest.hashCode;
   }
 }

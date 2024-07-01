@@ -1,17 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kanji_for_n5_level_app/config_files/assets_paths.dart';
+import 'package:kanji_for_n5_level_app/presentation_layer/screens/account_details/personal_info_update/persona_info_init_provider.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/account_details/personal_info_update/personal_info_provider.dart';
 import 'package:kanji_for_n5_level_app/providers/status_connection_provider.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/sign_up_screen/profile_picture_widget.dart';
 
-class UserForm extends ConsumerWidget {
-  UserForm({
+class UserForm2 extends ConsumerWidget {
+  UserForm2({
     super.key,
     required this.accountDetailsData,
   });
 
-  final PersonalInfoData accountDetailsData;
+  final PersonalInfoDataInit accountDetailsData;
 
   void _setDatePicker(BuildContext context, WidgetRef ref) async {
     final now = DateTime.now();
@@ -33,7 +34,11 @@ class UserForm extends ConsumerWidget {
     if (currentFormState == null) return;
     if (!currentFormState.validate()) return;
     currentFormState.save();
-
+    if (ref.read(personalInfoProvider).birthdate == "") {
+      ref
+          .read(personalInfoProvider.notifier)
+          .setBirthdate(accountDetailsData.birthdate);
+    }
     ref.read(personalInfoProvider.notifier).updateUserData();
   }
 
@@ -42,12 +47,38 @@ class UserForm extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final statusConnectionData = ref.watch(statusConnectionProvider);
+    final personalInfo = ref.watch(personalInfoProvider);
 
     return SingleChildScrollView(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
-          getImageProfileWidget(accountDetailsData, ref),
+          const SizedBox(
+            height: 10,
+          ),
+          if (personalInfo.pathProfileTemporal == "")
+            ProfilePictureWidget(
+              avatarWidget: CircularAvatarNetworkImage(
+                  pathProfileUser: accountDetailsData.link,
+                  pathErrorImage: pathAssetUser),
+              setPathProfileUser: (path) {
+                ref
+                    .read(personalInfoProvider.notifier)
+                    .setProfileTemporalPath(path);
+              },
+            )
+          else
+            ProfilePictureWidget(
+              avatarWidget: CircleAvatarImage(
+                pathProfileUser: personalInfo.pathProfileTemporal,
+                pathAssetUser: pathAssetUser,
+              ),
+              setPathProfileUser: (path) {
+                ref
+                    .read(personalInfoProvider.notifier)
+                    .setProfileTemporalPath(path);
+              },
+            ),
           const SizedBox(
             height: 20,
           ),
@@ -58,7 +89,9 @@ class UserForm extends ConsumerWidget {
               child: Column(
                 children: [
                   TextFormField(
-                    initialValue: accountDetailsData.firstName,
+                    initialValue: personalInfo.firstName != ""
+                        ? personalInfo.firstName
+                        : accountDetailsData.firstName,
                     decoration: const InputDecoration(
                       label: Text('First name'),
                       suffixIcon: Icon(Icons.person),
@@ -82,7 +115,9 @@ class UserForm extends ConsumerWidget {
                     height: 20,
                   ),
                   TextFormField(
-                    initialValue: accountDetailsData.lastName,
+                    initialValue: personalInfo.lastName != ""
+                        ? personalInfo.lastName
+                        : accountDetailsData.lastName,
                     decoration: const InputDecoration(
                       label: Text('Last name'),
                       suffixIcon: Icon(Icons.person),
@@ -114,7 +149,8 @@ class UserForm extends ConsumerWidget {
                       const SizedBox(
                         width: 10,
                       ),
-                      Text('Your Birthday: ${accountDetailsData.birthdate}'),
+                      Text(
+                          'Your Birthday: ${personalInfo.birthdate != "" ? personalInfo.birthdate : accountDetailsData.birthdate}'),
                     ],
                   ),
                   const SizedBox(
@@ -125,7 +161,7 @@ class UserForm extends ConsumerWidget {
                         statusConnectionData == ConnectionStatus.noConnected
                             ? null
                             : () {
-                                if (accountDetailsData.updatingStatus !=
+                                if (personalInfo.updatingStatus !=
                                     PersonalInfoUpdatingStatus.updating) {
                                   onValidate(ref);
                                 }
@@ -133,7 +169,7 @@ class UserForm extends ConsumerWidget {
                     style: ElevatedButton.styleFrom(
                       minimumSize: const Size.fromHeight(50),
                     ),
-                    child: accountDetailsData.updatingStatus ==
+                    child: personalInfo.updatingStatus ==
                             PersonalInfoUpdatingStatus.updating
                         ? SizedBox(
                             width: 30,
@@ -154,29 +190,5 @@ class UserForm extends ConsumerWidget {
         ],
       ),
     );
-  }
-
-  Widget getImageProfileWidget(
-      PersonalInfoData accountDetailsData, WidgetRef ref) {
-    if (accountDetailsData.pathProfileTemporal.isNotEmpty) {
-      return ProfilePictureWidget(
-        avatarWidget: CircleAvatarImage(
-          pathProfileUser: accountDetailsData.pathProfileTemporal,
-          pathAssetUser: pathAssetUser,
-        ),
-        setPathProfileUser: (path) {
-          ref.read(personalInfoProvider.notifier).setProfileTemporalPath(path);
-        },
-      );
-    } else {
-      return ProfilePictureWidget(
-        avatarWidget: CircularAvatarNetworkImage(
-            pathProfileUser: accountDetailsData.link,
-            pathErrorImage: pathAssetUser),
-        setPathProfileUser: (path) {
-          ref.read(personalInfoProvider.notifier).setProfileTemporalPath(path);
-        },
-      );
-    }
   }
 }
