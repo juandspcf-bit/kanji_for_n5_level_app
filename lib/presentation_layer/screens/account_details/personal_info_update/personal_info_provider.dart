@@ -1,9 +1,6 @@
-import 'dart:async';
-import 'package:riverpod_annotation/riverpod_annotation.dart';
-
 import 'package:kanji_for_n5_level_app/application_layer/services.dart';
 import 'package:kanji_for_n5_level_app/main.dart';
-import 'package:kanji_for_n5_level_app/providers/status_connection_provider.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part "personal_info_provider.g.dart";
 
@@ -18,7 +15,6 @@ class PersonalInfo extends _$PersonalInfo {
         lastName: '',
         birthdate: '',
         updatingStatus: PersonalInfoUpdatingStatus.noStarted,
-        fetchingStatus: PersonalInfoFetchingStatus.noStarted,
         showPasswordRequest: false);
   }
 
@@ -54,126 +50,13 @@ class PersonalInfo extends _$PersonalInfo {
     state = state.copyWith(showPasswordRequest: status);
   }
 
-  void resetData() {
-    state = PersonalInfoData(
-        link: '',
-        pathProfileTemporal: '',
-        firstName: '',
-        lastName: '',
-        birthdate: '',
-        updatingStatus: _isUpdating
-            ? PersonalInfoUpdatingStatus.updating
-            : PersonalInfoUpdatingStatus.noStarted,
-        fetchingStatus: PersonalInfoFetchingStatus.noStarted,
-        showPasswordRequest: state.showPasswordRequest);
-  }
-
-  String _firstName = "";
-  String _lastName = "";
-  String _birthdate = "";
-
-  Future<void> fetchUserData() async {
-    final uuid = ref.read(authServiceProvider).userUuid;
-
-    setFetchingStatus(PersonalInfoFetchingStatus.processing);
-
-    final statusConnection = ref.read(statusConnectionProvider);
-
-    if (statusConnection == ConnectionStatus.noConnected) {
-      final cachedUserDataList =
-          await ref.read(localDBServiceProvider).readUserData(uuid ?? '');
-      logger.d(cachedUserDataList);
-
-      String firstName = '';
-      String lastName = '';
-      String avatarLink = '';
-      String pathAvatar = '';
-      String birthday = '';
-
-      if (cachedUserDataList.isNotEmpty) {
-        final cachedUserData = cachedUserDataList.first;
-        firstName = cachedUserData['firstName'] as String;
-        lastName = cachedUserData['lastName'] as String;
-        avatarLink = cachedUserData['linkAvatar'] as String;
-        pathAvatar = cachedUserData['pathAvatar'] as String;
-        birthday = cachedUserData['birthday'] as String;
-      }
-
-      state = PersonalInfoData(
-        link: avatarLink,
-        pathProfileTemporal: pathAvatar,
-        firstName: firstName,
-        lastName: lastName,
-        birthdate: birthday,
-        updatingStatus: PersonalInfoUpdatingStatus.noStarted,
-        fetchingStatus: PersonalInfoFetchingStatus.success,
-        showPasswordRequest: state.showPasswordRequest,
-      );
-
-      return;
-    }
-
-    String photoLink = '';
-    try {
-      photoLink =
-          await ref.read(storageServiceProvider).getDownloadLink(uuid ?? '');
-    } catch (e) {
-      logger.e(e);
-    }
-
-    try {
-      final user =
-          await ref.read(cloudDBServiceProvider).readUserData(uuid ?? '');
-      _firstName = user.firstName;
-      _lastName = user.lastName;
-      _birthdate = user.birthday;
-
-      state = PersonalInfoData(
-          link: photoLink,
-          pathProfileTemporal: '',
-          firstName: user.firstName,
-          lastName: user.lastName,
-          birthdate: user.birthday,
-          updatingStatus: state.updatingStatus,
-          fetchingStatus: PersonalInfoFetchingStatus.success,
-          showPasswordRequest: state.showPasswordRequest);
-    } on TimeoutException {
-      state = PersonalInfoData(
-        link: '',
-        pathProfileTemporal: '',
-        firstName: '',
-        lastName: '',
-        birthdate: '',
-        updatingStatus: state.updatingStatus,
-        fetchingStatus: PersonalInfoFetchingStatus.error,
-        showPasswordRequest: state.showPasswordRequest,
-      );
-    } catch (e) {
-      logger.e('error reading profile photo');
-      state = PersonalInfoData(
-          link: '',
-          pathProfileTemporal: '',
-          firstName: '',
-          lastName: '',
-          birthdate: '',
-          updatingStatus: state.updatingStatus,
-          fetchingStatus: PersonalInfoFetchingStatus.error,
-          showPasswordRequest: state.showPasswordRequest);
-    }
+  bool isUpdating() {
+    return _isUpdating;
   }
 
   var _isUpdating = false;
 
   void updateUserData() async {
-    if (state.pathProfileTemporal == "" &&
-        _birthdate == state.birthdate &&
-        _firstName == state.firstName &&
-        _lastName == state.lastName) {
-      setUpdatingStatus(PersonalInfoUpdatingStatus.noUpdate);
-      _isUpdating = false;
-      return;
-    }
-
     final userUuid = ref.read(authServiceProvider).userUuid;
     if (userUuid == null) {
       setUpdatingStatus(PersonalInfoUpdatingStatus.error);
@@ -246,6 +129,17 @@ class PersonalInfo extends _$PersonalInfo {
       });
     } else {}
   }
+
+  void reset() {
+    state = PersonalInfoData(
+        link: '',
+        pathProfileTemporal: '',
+        firstName: '',
+        lastName: '',
+        birthdate: '',
+        updatingStatus: PersonalInfoUpdatingStatus.noStarted,
+        showPasswordRequest: false);
+  }
 }
 
 enum PersonalInfoFetchingStatus {
@@ -277,7 +171,6 @@ class PersonalInfoData {
   final String lastName;
   final String birthdate;
   final PersonalInfoUpdatingStatus updatingStatus;
-  final PersonalInfoFetchingStatus fetchingStatus;
   final bool showPasswordRequest;
 
   PersonalInfoData(
@@ -287,7 +180,6 @@ class PersonalInfoData {
       required this.lastName,
       required this.birthdate,
       required this.updatingStatus,
-      required this.fetchingStatus,
       required this.showPasswordRequest});
 
   PersonalInfoData copyWith({
@@ -307,14 +199,13 @@ class PersonalInfoData {
       lastName: lastName ?? this.lastName,
       birthdate: birthdate ?? this.birthdate,
       updatingStatus: updatingStatus ?? this.updatingStatus,
-      fetchingStatus: fetchingStatus ?? this.fetchingStatus,
       showPasswordRequest: showPasswordRequest ?? this.showPasswordRequest,
     );
   }
 
   @override
   String toString() {
-    return 'PersonalInfoData(link: $link, pathProfileTemporal: $pathProfileTemporal, firstName: $firstName, lastName: $lastName, birthdate: $birthdate, updatingStatus: $updatingStatus, fetchingStatus: $fetchingStatus, showPasswordRequest: $showPasswordRequest)';
+    return 'PersonalInfoData(link: $link, pathProfileTemporal: $pathProfileTemporal, firstName: $firstName, lastName: $lastName, birthdate: $birthdate, updatingStatus: $updatingStatus, showPasswordRequest: $showPasswordRequest)';
   }
 
   @override
@@ -328,7 +219,6 @@ class PersonalInfoData {
         other.lastName == lastName &&
         other.birthdate == birthdate &&
         other.updatingStatus == updatingStatus &&
-        other.fetchingStatus == fetchingStatus &&
         other.showPasswordRequest == showPasswordRequest;
   }
 
@@ -340,7 +230,6 @@ class PersonalInfoData {
         lastName.hashCode ^
         birthdate.hashCode ^
         updatingStatus.hashCode ^
-        fetchingStatus.hashCode ^
         showPasswordRequest.hashCode;
   }
 }

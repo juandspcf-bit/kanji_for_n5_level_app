@@ -43,12 +43,35 @@ class UserForm2 extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final statusConnectionData = ref.watch(statusConnectionProvider);
+    final personalInfo = ref.watch(personalInfoProvider);
 
     return SingleChildScrollView(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
-          getImageProfileWidget(accountDetailsData, ref),
+          if (personalInfo.pathProfileTemporal == "")
+            ProfilePictureWidget(
+              avatarWidget: CircularAvatarNetworkImage(
+                  pathProfileUser: accountDetailsData.link,
+                  pathErrorImage: pathAssetUser),
+              setPathProfileUser: (path) {
+                ref
+                    .read(personalInfoProvider.notifier)
+                    .setProfileTemporalPath(path);
+              },
+            )
+          else
+            ProfilePictureWidget(
+              avatarWidget: CircleAvatarImage(
+                pathProfileUser: personalInfo.pathProfileTemporal,
+                pathAssetUser: pathAssetUser,
+              ),
+              setPathProfileUser: (path) {
+                ref
+                    .read(personalInfoProvider.notifier)
+                    .setProfileTemporalPath(path);
+              },
+            ),
           const SizedBox(
             height: 20,
           ),
@@ -59,7 +82,9 @@ class UserForm2 extends ConsumerWidget {
               child: Column(
                 children: [
                   TextFormField(
-                    initialValue: accountDetailsData.firstName,
+                    initialValue: personalInfo.firstName != ""
+                        ? personalInfo.firstName
+                        : accountDetailsData.firstName,
                     decoration: const InputDecoration(
                       label: Text('First name'),
                       suffixIcon: Icon(Icons.person),
@@ -83,7 +108,9 @@ class UserForm2 extends ConsumerWidget {
                     height: 20,
                   ),
                   TextFormField(
-                    initialValue: accountDetailsData.lastName,
+                    initialValue: personalInfo.lastName != ""
+                        ? personalInfo.lastName
+                        : accountDetailsData.lastName,
                     decoration: const InputDecoration(
                       label: Text('Last name'),
                       suffixIcon: Icon(Icons.person),
@@ -115,7 +142,8 @@ class UserForm2 extends ConsumerWidget {
                       const SizedBox(
                         width: 10,
                       ),
-                      Text('Your Birthday: ${accountDetailsData.birthdate}'),
+                      Text(
+                          'Your Birthday: ${personalInfo.birthdate != "" ? personalInfo.birthdate : accountDetailsData.birthdate}'),
                     ],
                   ),
                   const SizedBox(
@@ -126,15 +154,15 @@ class UserForm2 extends ConsumerWidget {
                         statusConnectionData == ConnectionStatus.noConnected
                             ? null
                             : () {
-                                /* if (accountDetailsData.updatingStatus !=
+                                if (personalInfo.updatingStatus !=
                                     PersonalInfoUpdatingStatus.updating) {
                                   onValidate(ref);
-                                } */
+                                }
                               },
                     style: ElevatedButton.styleFrom(
                       minimumSize: const Size.fromHeight(50),
                     ),
-                    child: /* accountDetailsData.updatingStatus ==
+                    child: personalInfo.updatingStatus ==
                             PersonalInfoUpdatingStatus.updating
                         ? SizedBox(
                             width: 30,
@@ -143,8 +171,7 @@ class UserForm2 extends ConsumerWidget {
                               color: Theme.of(context).colorScheme.onPrimary,
                             ),
                           )
-                        :  */
-                        const Text('Update your info'),
+                        : const Text('Update your info'),
                   ),
                 ],
               ),
@@ -156,29 +183,5 @@ class UserForm2 extends ConsumerWidget {
         ],
       ),
     );
-  }
-
-  Widget getImageProfileWidget(
-      PersonalInfoData2 accountDetailsData, WidgetRef ref) {
-    if (accountDetailsData.pathProfileTemporal.isNotEmpty) {
-      return ProfilePictureWidget(
-        avatarWidget: CircleAvatarImage(
-          pathProfileUser: accountDetailsData.pathProfileTemporal,
-          pathAssetUser: pathAssetUser,
-        ),
-        setPathProfileUser: (path) {
-          ref.read(personalInfoProvider.notifier).setProfileTemporalPath(path);
-        },
-      );
-    } else {
-      return ProfilePictureWidget(
-        avatarWidget: CircularAvatarNetworkImage(
-            pathProfileUser: accountDetailsData.link,
-            pathErrorImage: pathAssetUser),
-        setPathProfileUser: (path) {
-          ref.read(personalInfoProvider.notifier).setProfileTemporalPath(path);
-        },
-      );
-    }
   }
 }

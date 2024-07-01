@@ -4,7 +4,6 @@ import 'package:kanji_for_n5_level_app/application_layer/services.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/account_details/change_email/change_email_flow.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/account_details/close_account/close_account_screen.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/account_details/close_account/close_account_provider.dart';
-import 'package:kanji_for_n5_level_app/presentation_layer/screens/account_details/personal_info_update/personal_info_provider.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/account_details/send_feedback/send_feedback_screen.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/sign_in_screen/login_provider.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/main_screens/main_content_provider.dart';
@@ -38,8 +37,6 @@ class AccountDetails extends ConsumerWidget {
                 children: [
                   ListTile(
                     onTap: () {
-                      ref.read(personalInfoProvider.notifier).resetData();
-                      ref.read(personalInfoProvider.notifier).fetchUserData();
                       Navigator.of(context).push(
                         MaterialPageRoute(builder: (ctx) {
                           return const PersonalInfoScreen();

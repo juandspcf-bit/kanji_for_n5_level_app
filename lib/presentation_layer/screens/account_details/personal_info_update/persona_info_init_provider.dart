@@ -7,7 +7,7 @@ import 'package:kanji_for_n5_level_app/providers/status_connection_provider.dart
 
 part 'persona_info_init_provider.g.dart';
 
-@Riverpod(keepAlive: true)
+@Riverpod(keepAlive: false)
 class PersonaInfoInit extends _$PersonaInfoInit {
   String _firstName = "";
   String _lastName = "";
