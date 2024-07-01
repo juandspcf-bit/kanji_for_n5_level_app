@@ -42,7 +42,7 @@ class AccountDetails extends ConsumerWidget {
                       ref.read(personalInfoProvider.notifier).fetchUserData();
                       Navigator.of(context).push(
                         MaterialPageRoute(builder: (ctx) {
-                          return const PersonalInfo();
+                          return const PersonalInfoScreen();
                         }),
                       );
                     },

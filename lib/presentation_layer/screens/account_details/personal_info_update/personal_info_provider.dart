@@ -1,12 +1,15 @@
 import 'dart:async';
-
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:kanji_for_n5_level_app/application_layer/services.dart';
 import 'package:kanji_for_n5_level_app/main.dart';
 import 'package:kanji_for_n5_level_app/providers/status_connection_provider.dart';
 
-class PersonalInfoProvider extends Notifier<PersonalInfoData> {
+part "personal_info_provider.g.dart";
+
+@Riverpod(keepAlive: true)
+class PersonalInfo extends _$PersonalInfo {
   @override
   PersonalInfoData build() {
     return PersonalInfoData(
@@ -245,10 +248,6 @@ class PersonalInfoProvider extends Notifier<PersonalInfoData> {
     } else {}
   }
 }
-
-final personalInfoProvider =
-    NotifierProvider<PersonalInfoProvider, PersonalInfoData>(
-        PersonalInfoProvider.new);
 
 enum PersonalInfoFetchingStatus {
   noStarted('no started'),

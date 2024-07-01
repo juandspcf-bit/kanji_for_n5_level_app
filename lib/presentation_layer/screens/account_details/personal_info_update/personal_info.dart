@@ -5,8 +5,8 @@ import 'package:kanji_for_n5_level_app/presentation_layer/screens/account_detail
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/common_screens/loading_screen.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/common_widgets/my_dialogs.dart';
 
-class PersonalInfo extends ConsumerWidget with MyDialogs {
-  const PersonalInfo({super.key});
+class PersonalInfoScreen extends ConsumerWidget with MyDialogs {
+  const PersonalInfoScreen({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
