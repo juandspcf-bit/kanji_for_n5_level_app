@@ -9,11 +9,8 @@ part 'persona_info_init_provider.g.dart';
 
 @Riverpod(keepAlive: false)
 class PersonaInfoInit extends _$PersonaInfoInit {
-  String _firstName = "";
-  String _lastName = "";
-  String _birthdate = "";
   @override
-  FutureOr<PersonalInfoData2> build() async {
+  FutureOr<PersonalInfoDataInit> build() async {
     final uuid = ref.read(authServiceProvider).userUuid;
 
     final statusConnection = ref.read(statusConnectionProvider);
@@ -38,7 +35,7 @@ class PersonaInfoInit extends _$PersonaInfoInit {
         birthday = cachedUserData['birthday'] as String;
       }
 
-      return PersonalInfoData2(
+      return PersonalInfoDataInit(
         link: avatarLink,
         pathProfileTemporal: pathAvatar,
         firstName: firstName,
@@ -58,11 +55,8 @@ class PersonaInfoInit extends _$PersonaInfoInit {
     try {
       final user =
           await ref.read(cloudDBServiceProvider).readUserData(uuid ?? '');
-      _firstName = user.firstName;
-      _lastName = user.lastName;
-      _birthdate = user.birthday;
 
-      return PersonalInfoData2(
+      return PersonalInfoDataInit(
         link: photoLink,
         pathProfileTemporal: '',
         firstName: user.firstName,
@@ -70,7 +64,7 @@ class PersonaInfoInit extends _$PersonaInfoInit {
         birthdate: user.birthday,
       );
     } on TimeoutException {
-      return PersonalInfoData2(
+      return PersonalInfoDataInit(
         link: '',
         pathProfileTemporal: '',
         firstName: '',
@@ -79,7 +73,7 @@ class PersonaInfoInit extends _$PersonaInfoInit {
       );
     } catch (e) {
       logger.e('error reading profile photo');
-      return PersonalInfoData2(
+      return PersonalInfoDataInit(
         link: '',
         pathProfileTemporal: '',
         firstName: '',
@@ -90,14 +84,14 @@ class PersonaInfoInit extends _$PersonaInfoInit {
   }
 }
 
-class PersonalInfoData2 {
+class PersonalInfoDataInit {
   final String link;
   final String pathProfileTemporal;
   final String firstName;
   final String lastName;
   final String birthdate;
 
-  PersonalInfoData2({
+  PersonalInfoDataInit({
     required this.link,
     required this.pathProfileTemporal,
     required this.firstName,
@@ -105,14 +99,14 @@ class PersonalInfoData2 {
     required this.birthdate,
   });
 
-  PersonalInfoData2 copyWith({
+  PersonalInfoDataInit copyWith({
     String? link,
     String? pathProfileTemporal,
     String? firstName,
     String? lastName,
     String? birthdate,
   }) {
-    return PersonalInfoData2(
+    return PersonalInfoDataInit(
       link: link ?? this.link,
       pathProfileTemporal: pathProfileTemporal ?? this.pathProfileTemporal,
       firstName: firstName ?? this.firstName,
@@ -130,7 +124,7 @@ class PersonalInfoData2 {
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
 
-    return other is PersonalInfoData2 &&
+    return other is PersonalInfoDataInit &&
         other.link == link &&
         other.pathProfileTemporal == pathProfileTemporal &&
         other.firstName == firstName &&

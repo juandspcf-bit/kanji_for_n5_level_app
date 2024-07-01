@@ -11,7 +11,7 @@ String _$personaInfoInitHash() => r'ab5f5a20872516a56912172c0a76bd148cd5e28c';
 /// See also [PersonaInfoInit].
 @ProviderFor(PersonaInfoInit)
 final personaInfoInitProvider = AutoDisposeAsyncNotifierProvider<
-    PersonaInfoInit, PersonalInfoData2>.internal(
+    PersonaInfoInit, PersonalInfoDataInit>.internal(
   PersonaInfoInit.new,
   name: r'personaInfoInitProvider',
   debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
@@ -21,6 +21,6 @@ final personaInfoInitProvider = AutoDisposeAsyncNotifierProvider<
   allTransitiveDependencies: null,
 );
 
-typedef _$PersonaInfoInit = AutoDisposeAsyncNotifier<PersonalInfoData2>;
+typedef _$PersonaInfoInit = AutoDisposeAsyncNotifier<PersonalInfoDataInit>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

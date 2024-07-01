@@ -1,5 +1,6 @@
 import 'package:kanji_for_n5_level_app/application_layer/services.dart';
 import 'package:kanji_for_n5_level_app/main.dart';
+import 'package:kanji_for_n5_level_app/presentation_layer/screens/main_screens/avatar_main_screen/avatar_main_screen_provider.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part "personal_info_provider.g.dart";
@@ -105,6 +106,7 @@ class PersonalInfo extends _$PersonalInfo {
             personalInfoData.pathProfileTemporal,
             ref.read(authServiceProvider).userUuid ?? '');
         setProfilePath(avatarLink);
+        ref.read(avatarMainScreenProvider.notifier).updateAvatar();
         setUpdatingStatus(PersonalInfoUpdatingStatus.success);
         _isUpdating = false;
       } catch (e) {
@@ -114,6 +116,7 @@ class PersonalInfo extends _$PersonalInfo {
         logger.e(e);
       }
     } else {
+      ref.read(avatarMainScreenProvider.notifier).updateAvatar();
       setUpdatingStatus(PersonalInfoUpdatingStatus.success);
       _isUpdating = false;
     }

@@ -12,7 +12,7 @@ class UserForm2 extends ConsumerWidget {
     required this.accountDetailsData,
   });
 
-  final PersonalInfoData2 accountDetailsData;
+  final PersonalInfoDataInit accountDetailsData;
 
   void _setDatePicker(BuildContext context, WidgetRef ref) async {
     final now = DateTime.now();
@@ -34,7 +34,11 @@ class UserForm2 extends ConsumerWidget {
     if (currentFormState == null) return;
     if (!currentFormState.validate()) return;
     currentFormState.save();
-
+    if (ref.read(personalInfoProvider).birthdate == "") {
+      ref
+          .read(personalInfoProvider.notifier)
+          .setBirthdate(accountDetailsData.birthdate);
+    }
     ref.read(personalInfoProvider.notifier).updateUserData();
   }
 
@@ -49,6 +53,9 @@ class UserForm2 extends ConsumerWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
+          const SizedBox(
+            height: 10,
+          ),
           if (personalInfo.pathProfileTemporal == "")
             ProfilePictureWidget(
               avatarWidget: CircularAvatarNetworkImage(
