@@ -58,7 +58,8 @@ class AvatarMainScreen extends _$AvatarMainScreen {
             await ref.read(storageServiceProvider).getDownloadLink(uuid ?? '');
 
         downloadAndCacheAvatar(uuid ?? '', avatarLink).then((value) => null);
-        await AsyncValue.guard(() => Future.value((connection, avatarLink)));
+        state = await AsyncValue.guard(
+            () => Future.value((connection, avatarLink)));
       } catch (e) {
         state = await AsyncValue.guard(() => Future.value((connection, "")));
       }
