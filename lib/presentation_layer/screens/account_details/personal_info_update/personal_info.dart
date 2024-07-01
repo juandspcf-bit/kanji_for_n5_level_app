@@ -22,7 +22,7 @@ class PersonalInfoScreen extends ConsumerWidget with MyDialogs {
       child: Scaffold(
         appBar: AppBar(),
         body: personalInfoData.when(
-          data: (data) => UserForm2(accountDetailsData: data),
+          data: (data) => UserForm(accountDetailsData: data),
           error: (_, __) => const Center(
             child: Text("Error fetching the data"),
           ),

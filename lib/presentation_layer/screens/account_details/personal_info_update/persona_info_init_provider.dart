@@ -128,7 +128,7 @@ class PersonalInfoDataInit {
 
   @override
   String toString() {
-    return 'PersonalInfoData2(link: $link, pathProfileTemporal: $pathProfileTemporal, firstName: $firstName, lastName: $lastName, birthdate: $birthdate, )';
+    return 'PersonalInfoDataInit(link: $link, pathProfileTemporal: $pathProfileTemporal, firstName: $firstName, lastName: $lastName, birthdate: $birthdate, )';
   }
 
   @override

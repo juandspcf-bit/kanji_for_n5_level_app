@@ -6,8 +6,8 @@ import 'package:kanji_for_n5_level_app/presentation_layer/screens/account_detail
 import 'package:kanji_for_n5_level_app/providers/status_connection_provider.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/sign_up_screen/profile_picture_widget.dart';
 
-class UserForm2 extends ConsumerWidget {
-  UserForm2({
+class UserForm extends ConsumerWidget {
+  UserForm({
     super.key,
     required this.accountDetailsData,
   });
