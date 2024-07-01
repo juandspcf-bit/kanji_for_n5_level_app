@@ -35,4 +35,33 @@ class AvatarMainScreen extends _$AvatarMainScreen {
       }
     }
   }
+
+  Future<void> updateAvatar() async {
+    state = const AsyncLoading();
+    final uuid = ref.read(authServiceProvider).userUuid;
+
+    final connection = ref.read(statusConnectionProvider);
+
+    if (connection == ConnectionStatus.noConnected) {
+      final listUser = await ref
+          .read(localDBServiceProvider)
+          .readUserData(ref.read(authServiceProvider).userUuid ?? '');
+      if (listUser.isNotEmpty) {
+        final user = listUser.first;
+        state = await AsyncValue.guard(
+            () => Future.value((connection, user['pathAvatar'] as String)));
+      }
+      state = await AsyncValue.guard(() => Future.value((connection, "")));
+    } else {
+      try {
+        final avatarLink =
+            await ref.read(storageServiceProvider).getDownloadLink(uuid ?? '');
+
+        downloadAndCacheAvatar(uuid ?? '', avatarLink).then((value) => null);
+        await AsyncValue.guard(() => Future.value((connection, avatarLink)));
+      } catch (e) {
+        state = await AsyncValue.guard(() => Future.value((connection, "")));
+      }
+    }
+  }
 }
