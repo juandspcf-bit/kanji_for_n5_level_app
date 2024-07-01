@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+
 import 'package:kanji_for_n5_level_app/application_layer/services.dart';
 import 'package:kanji_for_n5_level_app/main.dart';
 import 'package:kanji_for_n5_level_app/providers/status_connection_provider.dart';
@@ -20,99 +21,35 @@ class PersonalInfoProvider extends Notifier<PersonalInfoData> {
   }
 
   void setProfileTemporalPath(String path) async {
-    state = PersonalInfoData(
-        link: '',
-        pathProfileTemporal: path,
-        firstName: state.firstName,
-        lastName: state.lastName,
-        birthdate: state.birthdate,
-        updatingStatus: state.updatingStatus,
-        fetchingStatus: state.fetchingStatus,
-        showPasswordRequest: state.showPasswordRequest);
+    state = state.copyWith(link: "", pathProfileTemporal: path);
   }
 
-  void setProfilePath(String path) async {
-    state = PersonalInfoData(
-        link: path,
-        pathProfileTemporal: state.pathProfileTemporal,
-        firstName: state.firstName,
-        lastName: state.lastName,
-        birthdate: state.birthdate,
-        updatingStatus: state.updatingStatus,
-        fetchingStatus: state.fetchingStatus,
-        showPasswordRequest: state.showPasswordRequest);
+  void setProfilePath(String link) async {
+    state = state.copyWith(link: link);
   }
 
-  void setName(String name) async {
-    state = PersonalInfoData(
-        link: state.link,
-        pathProfileTemporal: state.pathProfileTemporal,
-        firstName: name,
-        lastName: state.lastName,
-        birthdate: state.birthdate,
-        updatingStatus: state.updatingStatus,
-        fetchingStatus: state.fetchingStatus,
-        showPasswordRequest: state.showPasswordRequest);
+  void setFirstName(String name) async {
+    state = state.copyWith(firstName: name);
   }
 
   void setLastName(String lastName) async {
-    state = PersonalInfoData(
-        link: state.link,
-        pathProfileTemporal: state.pathProfileTemporal,
-        firstName: state.firstName,
-        lastName: lastName,
-        birthdate: state.birthdate,
-        updatingStatus: state.updatingStatus,
-        fetchingStatus: state.fetchingStatus,
-        showPasswordRequest: state.showPasswordRequest);
+    state = state.copyWith(lastName: lastName);
   }
 
   void setBirthdate(String birthdate) async {
-    state = PersonalInfoData(
-        link: state.link,
-        pathProfileTemporal: state.pathProfileTemporal,
-        firstName: state.firstName,
-        lastName: state.lastName,
-        birthdate: birthdate,
-        updatingStatus: state.updatingStatus,
-        fetchingStatus: state.fetchingStatus,
-        showPasswordRequest: state.showPasswordRequest);
+    state = state.copyWith(birthdate: birthdate);
   }
 
   void setUpdatingStatus(PersonalInfoUpdatingStatus updatingStatus) async {
-    state = PersonalInfoData(
-        link: state.link,
-        pathProfileTemporal: state.pathProfileTemporal,
-        firstName: state.firstName,
-        lastName: state.lastName,
-        birthdate: state.birthdate,
-        updatingStatus: updatingStatus,
-        fetchingStatus: state.fetchingStatus,
-        showPasswordRequest: state.showPasswordRequest);
+    state = state.copyWith(updatingStatus: updatingStatus);
   }
 
   void setFetchingStatus(PersonalInfoFetchingStatus fetchingStatus) {
-    state = PersonalInfoData(
-        link: state.link,
-        pathProfileTemporal: state.pathProfileTemporal,
-        firstName: state.firstName,
-        lastName: state.lastName,
-        birthdate: state.birthdate,
-        updatingStatus: state.updatingStatus,
-        fetchingStatus: fetchingStatus,
-        showPasswordRequest: state.showPasswordRequest);
+    state = state.copyWith(fetchingStatus: fetchingStatus);
   }
 
   void setShowPasswordRequest(bool status) async {
-    state = PersonalInfoData(
-        link: state.link,
-        pathProfileTemporal: state.pathProfileTemporal,
-        firstName: state.firstName,
-        lastName: state.lastName,
-        birthdate: state.birthdate,
-        updatingStatus: state.updatingStatus,
-        fetchingStatus: state.fetchingStatus,
-        showPasswordRequest: status);
+    state = state.copyWith(showPasswordRequest: status);
   }
 
   void resetData() {
@@ -354,4 +291,58 @@ class PersonalInfoData {
       required this.updatingStatus,
       required this.fetchingStatus,
       required this.showPasswordRequest});
+
+  PersonalInfoData copyWith({
+    String? link,
+    String? pathProfileTemporal,
+    String? firstName,
+    String? lastName,
+    String? birthdate,
+    PersonalInfoUpdatingStatus? updatingStatus,
+    PersonalInfoFetchingStatus? fetchingStatus,
+    bool? showPasswordRequest,
+  }) {
+    return PersonalInfoData(
+      link: link ?? this.link,
+      pathProfileTemporal: pathProfileTemporal ?? this.pathProfileTemporal,
+      firstName: firstName ?? this.firstName,
+      lastName: lastName ?? this.lastName,
+      birthdate: birthdate ?? this.birthdate,
+      updatingStatus: updatingStatus ?? this.updatingStatus,
+      fetchingStatus: fetchingStatus ?? this.fetchingStatus,
+      showPasswordRequest: showPasswordRequest ?? this.showPasswordRequest,
+    );
+  }
+
+  @override
+  String toString() {
+    return 'PersonalInfoData(link: $link, pathProfileTemporal: $pathProfileTemporal, firstName: $firstName, lastName: $lastName, birthdate: $birthdate, updatingStatus: $updatingStatus, fetchingStatus: $fetchingStatus, showPasswordRequest: $showPasswordRequest)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+
+    return other is PersonalInfoData &&
+        other.link == link &&
+        other.pathProfileTemporal == pathProfileTemporal &&
+        other.firstName == firstName &&
+        other.lastName == lastName &&
+        other.birthdate == birthdate &&
+        other.updatingStatus == updatingStatus &&
+        other.fetchingStatus == fetchingStatus &&
+        other.showPasswordRequest == showPasswordRequest;
+  }
+
+  @override
+  int get hashCode {
+    return link.hashCode ^
+        pathProfileTemporal.hashCode ^
+        firstName.hashCode ^
+        lastName.hashCode ^
+        birthdate.hashCode ^
+        updatingStatus.hashCode ^
+        fetchingStatus.hashCode ^
+        showPasswordRequest.hashCode;
+  }
 }

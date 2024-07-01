@@ -73,7 +73,9 @@ class UserForm extends ConsumerWidget {
                     },
                     onSaved: (text) {
                       if (text == null) return;
-                      ref.read(personalInfoProvider.notifier).setName(text);
+                      ref
+                          .read(personalInfoProvider.notifier)
+                          .setFirstName(text);
                     },
                   ),
                   const SizedBox(
