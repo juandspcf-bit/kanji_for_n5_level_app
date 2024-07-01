@@ -1,10 +1,3 @@
-<<<<<<< HEAD
-import 'dart:async';
-import 'package:kanji_for_n5_level_app/presentation_layer/screens/main_screens/avatar_main_screen/avatar_main_screen_provider.dart';
-import 'package:riverpod_annotation/riverpod_annotation.dart';
-
-=======
->>>>>>> new_personal_info_update
 import 'package:kanji_for_n5_level_app/application_layer/services.dart';
 import 'package:kanji_for_n5_level_app/main.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/main_screens/avatar_main_screen/avatar_main_screen_provider.dart';
@@ -58,116 +51,8 @@ class PersonalInfo extends _$PersonalInfo {
     state = state.copyWith(showPasswordRequest: status);
   }
 
-<<<<<<< HEAD
-  void resetData() {
-    state = PersonalInfoData(
-        link: '',
-        pathProfileTemporal: '',
-        firstName: '',
-        lastName: '',
-        birthdate: '',
-        updatingStatus: _isUpdating
-            ? PersonalInfoUpdatingStatus.updating
-            : PersonalInfoUpdatingStatus.noStarted,
-        fetchingStatus: PersonalInfoFetchingStatus.noStarted,
-        showPasswordRequest: state.showPasswordRequest);
-  }
-
-  String _firstName = "";
-  String _lastName = "";
-  String _birthdate = "";
-
-  Future<void> fetchUserData() async {
-    final uuid = ref.read(authServiceProvider).userUuid;
-
-    setFetchingStatus(PersonalInfoFetchingStatus.processing);
-
-    final statusConnection = ref.read(statusConnectionProvider);
-
-    if (statusConnection == ConnectionStatus.noConnected) {
-      final cachedUserDataList =
-          await ref.read(localDBServiceProvider).readUserData(uuid ?? '');
-
-      String firstName = '';
-      String lastName = '';
-      String avatarLink = '';
-      String pathAvatar = '';
-      String birthday = '';
-
-      if (cachedUserDataList.isNotEmpty) {
-        final cachedUserData = cachedUserDataList.first;
-        firstName = cachedUserData['firstName'] as String;
-        lastName = cachedUserData['lastName'] as String;
-        avatarLink = cachedUserData['linkAvatar'] as String;
-        pathAvatar = cachedUserData['pathAvatar'] as String;
-        birthday = cachedUserData['birthday'] as String;
-      }
-
-      state = PersonalInfoData(
-        link: avatarLink,
-        pathProfileTemporal: pathAvatar,
-        firstName: firstName,
-        lastName: lastName,
-        birthdate: birthday,
-        updatingStatus: PersonalInfoUpdatingStatus.noStarted,
-        fetchingStatus: PersonalInfoFetchingStatus.success,
-        showPasswordRequest: state.showPasswordRequest,
-      );
-
-      return;
-    }
-
-    String photoLink = '';
-    try {
-      photoLink =
-          await ref.read(storageServiceProvider).getDownloadLink(uuid ?? '');
-    } catch (e) {
-      logger.e(e);
-    }
-
-    try {
-      final user =
-          await ref.read(cloudDBServiceProvider).readUserData(uuid ?? '');
-      _firstName = user.firstName;
-      _lastName = user.lastName;
-      _birthdate = user.birthday;
-
-      state = PersonalInfoData(
-          link: photoLink,
-          pathProfileTemporal: '',
-          firstName: user.firstName,
-          lastName: user.lastName,
-          birthdate: user.birthday,
-          updatingStatus: state.updatingStatus,
-          fetchingStatus: PersonalInfoFetchingStatus.success,
-          showPasswordRequest: state.showPasswordRequest);
-    } on TimeoutException {
-      state = PersonalInfoData(
-        link: '',
-        pathProfileTemporal: '',
-        firstName: '',
-        lastName: '',
-        birthdate: '',
-        updatingStatus: state.updatingStatus,
-        fetchingStatus: PersonalInfoFetchingStatus.error,
-        showPasswordRequest: state.showPasswordRequest,
-      );
-    } catch (e) {
-      logger.e('error reading profile photo');
-      state = PersonalInfoData(
-          link: '',
-          pathProfileTemporal: '',
-          firstName: '',
-          lastName: '',
-          birthdate: '',
-          updatingStatus: state.updatingStatus,
-          fetchingStatus: PersonalInfoFetchingStatus.error,
-          showPasswordRequest: state.showPasswordRequest);
-    }
-=======
   bool isUpdating() {
     return _isUpdating;
->>>>>>> new_personal_info_update
   }
 
   var _isUpdating = false;
@@ -232,10 +117,6 @@ class PersonalInfo extends _$PersonalInfo {
       }
     } else {
       ref.read(avatarMainScreenProvider.notifier).updateAvatar();
-<<<<<<< HEAD
-
-=======
->>>>>>> new_personal_info_update
       setUpdatingStatus(PersonalInfoUpdatingStatus.success);
       _isUpdating = false;
     }

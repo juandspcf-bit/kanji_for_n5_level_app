@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:kanji_for_n5_level_app/presentation_layer/screens/account_details/personal_info_update/personal_info_provider.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import 'package:kanji_for_n5_level_app/application_layer/services.dart';
@@ -11,6 +12,16 @@ part 'persona_info_init_provider.g.dart';
 class PersonaInfoInit extends _$PersonaInfoInit {
   @override
   FutureOr<PersonalInfoDataInit> build() async {
+    if (ref.read(personalInfoProvider.notifier).isUpdating()) {
+      final dataUpdate = ref.read(personalInfoProvider);
+      return PersonalInfoDataInit(
+        link: dataUpdate.link,
+        pathProfileTemporal: dataUpdate.pathProfileTemporal,
+        firstName: dataUpdate.firstName,
+        lastName: dataUpdate.lastName,
+        birthdate: dataUpdate.birthdate,
+      );
+    }
     final uuid = ref.read(authServiceProvider).userUuid;
 
     final statusConnection = ref.read(statusConnectionProvider);
