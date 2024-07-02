@@ -10,8 +10,7 @@ class VideoStrokesPortrait extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final kanjiFromApi = ref.watch(kanjiDetailsProvider)!.kanjiFromApi;
-
+    final kanjiFromApi = ref.read(kanjiDetailsProvider)!.kanjiFromApi;
     return SingleChildScrollView(
       child: Column(
         children: [

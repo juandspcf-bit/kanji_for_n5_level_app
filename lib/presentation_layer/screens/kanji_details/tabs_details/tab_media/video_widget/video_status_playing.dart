@@ -1,5 +1,4 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'package:video_player/video_player.dart';
 
 part 'video_status_playing.g.dart';
 
@@ -17,15 +16,4 @@ class VideoStatusPlaying extends _$VideoStatusPlaying {
   void setSpeed(double value) {
     state = (isPlaying: state.isPlaying, speed: value);
   }
-}
-
-class VideoStatus {
-  final VideoPlayerController videoController;
-  final bool isPlaying;
-  final double speed;
-
-  VideoStatus(
-      {required this.videoController,
-      required this.isPlaying,
-      required this.speed});
 }

@@ -1,3 +1,34 @@
+/* import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_details/tabs_details/tab_media/video_widget/video_player_provider.dart';
+import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_details/tabs_details/tab_media/video_widget/video_section.dart';
+
+class VideoWrapper extends ConsumerWidget {
+  const VideoWrapper({super.key});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final videoPlayer = ref.watch(videoPlayerObjectProvider);
+
+    return FutureBuilder(
+      future: videoPlayer.videoPlayerController.initialize(),
+      builder: (ctx, snapShot) {
+        if (snapShot.connectionState == ConnectionState.done &&
+            !snapShot.hasError) {
+          videoPlayer.videoPlayerController.setLooping(true);
+          videoPlayer.videoPlayerController.play();
+        }
+        return VideoSection(
+          videoController: videoPlayer.videoPlayerController,
+          connectionState: snapShot.connectionState,
+          hasError: snapShot.hasError,
+        );
+      },
+    );
+  }
+}
+ */
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_details/kanji_details_provider.dart';

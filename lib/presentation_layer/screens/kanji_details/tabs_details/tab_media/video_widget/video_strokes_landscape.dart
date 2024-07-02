@@ -11,6 +11,7 @@ class VideoStrokesLandScape extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final kanjiFromApi = ref.watch(kanjiDetailsProvider)!.kanjiFromApi;
+
     return SafeArea(
       child: Row(crossAxisAlignment: CrossAxisAlignment.center, children: [
         const Expanded(child: VideoWrapper()),

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:kanji_for_n5_level_app/providers/status_connection_provider.dart';
-import 'package:kanji_for_n5_level_app/providers/video_status_playing.dart';
+import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_details/tabs_details/tab_media/video_widget/video_status_playing.dart';
 import 'package:video_player/video_player.dart';
 
 class VideoSection extends ConsumerWidget {
