@@ -19,7 +19,7 @@ class VideoSection extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final videoStatus = ref.watch(videoStatusPlaying);
+    final videoStatus = ref.watch(videoStatusPlayingProvider);
     final statusConnectionData = ref.watch(statusConnectionProvider);
     videoController.setPlaybackSpeed(videoStatus.speed);
     var opacity = 1.0;
@@ -124,10 +124,10 @@ class VideoSection extends ConsumerWidget {
                               /*  */
                               videoController.value.isPlaying
                                   ? videoController.pause().then((value) => ref
-                                      .read(videoStatusPlaying.notifier)
+                                      .read(videoStatusPlayingProvider.notifier)
                                       .setIsPlaying(false))
                                   : videoController.play().then((value) => ref
-                                      .read(videoStatusPlaying.notifier)
+                                      .read(videoStatusPlayingProvider.notifier)
                                       .setIsPlaying(true));
                             },
                   icon: Padding(
@@ -142,7 +142,7 @@ class VideoSection extends ConsumerWidget {
               ),
               TextButton(
                 onPressed: () {
-                  ref.read(videoStatusPlaying.notifier).setSpeed(1.0);
+                  ref.read(videoStatusPlayingProvider.notifier).setSpeed(1.0);
                 },
                 child: Text(
                   '1.0X',
@@ -154,7 +154,7 @@ class VideoSection extends ConsumerWidget {
               ),
               TextButton(
                 onPressed: () {
-                  ref.read(videoStatusPlaying.notifier).setSpeed(0.5);
+                  ref.read(videoStatusPlayingProvider.notifier).setSpeed(0.5);
                 },
                 child: Text(
                   '0.5X',
@@ -166,7 +166,7 @@ class VideoSection extends ConsumerWidget {
               ),
               TextButton(
                 onPressed: () {
-                  ref.read(videoStatusPlaying.notifier).setSpeed(0.25);
+                  ref.read(videoStatusPlayingProvider.notifier).setSpeed(0.25);
                 },
                 child: Text(
                   '0.25X',

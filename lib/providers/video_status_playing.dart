@@ -1,6 +1,9 @@
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-class VideoStatusPlaying extends Notifier<({bool isPlaying, double speed})> {
+part 'video_status_playing.g.dart';
+
+@Riverpod(keepAlive: false)
+class VideoStatusPlaying extends _$VideoStatusPlaying {
   @override
   ({bool isPlaying, double speed}) build() {
     return (isPlaying: true, speed: 1.0);
@@ -14,7 +17,3 @@ class VideoStatusPlaying extends Notifier<({bool isPlaying, double speed})> {
     state = (isPlaying: state.isPlaying, speed: value);
   }
 }
-
-final videoStatusPlaying =
-    NotifierProvider<VideoStatusPlaying, ({bool isPlaying, double speed})>(
-        VideoStatusPlaying.new);
