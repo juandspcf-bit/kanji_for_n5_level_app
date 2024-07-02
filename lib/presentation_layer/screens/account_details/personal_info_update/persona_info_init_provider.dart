@@ -22,6 +22,7 @@ class PersonaInfoInit extends _$PersonaInfoInit {
         birthdate: dataUpdate.birthdate,
       );
     }
+    //ref.read(personalInfoProvider.notifier).reset();
     final uuid = ref.read(authServiceProvider).userUuid;
 
     final statusConnection = ref.read(statusConnectionProvider);

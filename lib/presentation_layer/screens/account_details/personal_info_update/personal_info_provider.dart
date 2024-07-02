@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:kanji_for_n5_level_app/application_layer/services.dart';
 import 'package:kanji_for_n5_level_app/main.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/main_screens/avatar_main_screen/avatar_main_screen_provider.dart';
@@ -134,14 +136,16 @@ class PersonalInfo extends _$PersonalInfo {
   }
 
   void reset() {
-    state = PersonalInfoData(
-        link: '',
-        pathProfileTemporal: '',
-        firstName: '',
-        lastName: '',
-        birthdate: '',
-        updatingStatus: PersonalInfoUpdatingStatus.noStarted,
-        showPasswordRequest: false);
+    Timer(const Duration(milliseconds: 500), () {
+      state = PersonalInfoData(
+          link: '',
+          pathProfileTemporal: '',
+          firstName: '',
+          lastName: '',
+          birthdate: '',
+          updatingStatus: PersonalInfoUpdatingStatus.noStarted,
+          showPasswordRequest: false);
+    });
   }
 }
 
