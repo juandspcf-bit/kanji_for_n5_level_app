@@ -1,10 +1,14 @@
+import 'dart:io';
+
 import 'package:animations/animations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kanji_for_n5_level_app/models/kanji_from_api.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_details/kanji_details_screen.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_details/kanji_details_provider.dart';
+import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_details/tabs_details/tab_media/video_widget/video_player_provider.dart';
 import 'package:kanji_for_n5_level_app/providers/status_stored_provider.dart';
+import 'package:video_player/video_player.dart';
 
 class KanjiItemAnimated extends ConsumerWidget {
   const KanjiItemAnimated({
@@ -44,6 +48,24 @@ class KanjiItemAnimated extends ConsumerWidget {
             ref
                 .read(kanjiDetailsProvider.notifier)
                 .initKanjiDetails(kanjiFromApi);
+
+            //video player init
+
+            VideoPlayerController videoController;
+
+            if (kanjiFromApi.statusStorage == StatusStorage.onlyOnline) {
+              videoController = VideoPlayerController.networkUrl(
+                  Uri.parse(kanjiFromApi.videoLink));
+            } else {
+              videoController =
+                  VideoPlayerController.file(File(kanjiFromApi.videoLink));
+            }
+
+            ref
+                .read(videoPlayerObjectProvider.notifier)
+                .setController(videoController);
+
+            //open other screen
 
             openContainer();
           },

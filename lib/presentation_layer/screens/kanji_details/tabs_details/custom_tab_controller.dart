@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kanji_for_n5_level_app/models/kanji_from_api.dart';
@@ -5,12 +7,14 @@ import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_details/
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_details/kanji_details_quiz_animated.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_details/tabs_details/icon_favorites.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_details/tabs_details/tab_examples/tab_examples.dart';
+import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_details/tabs_details/tab_media/video_widget/video_player_provider.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_details/tabs_details/tab_strokes/tab_strokes.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_details/tabs_details/tab_media/video_widget/video_strokes_portrait.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/navigation_bar_screens/sections_screen/kanjis_for_section_screen/kanjis_for_section_screen.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_details/tabs_details/tab_examples/audio_examples_track_list_provider.dart';
 import 'package:kanji_for_n5_level_app/providers/status_connection_provider.dart';
 import 'package:kanji_for_n5_level_app/providers/status_stored_provider.dart';
+import 'package:video_player/video_player.dart';
 
 class CustomTabControllerKanjiDetails extends ConsumerWidget {
   const CustomTabControllerKanjiDetails({
@@ -40,6 +44,21 @@ class CustomTabControllerKanjiDetails extends ConsumerWidget {
               // Your code goes here.
               // To get index of current tab use tabController.index
             }
+            if (tabController.index == 0) {
+              VideoPlayerController videoController;
+
+              if (kanjiFromApi.statusStorage == StatusStorage.onlyOnline) {
+                videoController = VideoPlayerController.networkUrl(
+                    Uri.parse(kanjiFromApi.videoLink));
+              } else {
+                videoController =
+                    VideoPlayerController.file(File(kanjiFromApi.videoLink));
+              }
+
+              ref
+                  .read(videoPlayerObjectProvider.notifier)
+                  .setController(videoController);
+            }
           });
 
           return PopScope(
@@ -49,7 +68,7 @@ class CustomTabControllerKanjiDetails extends ConsumerWidget {
               ref
                   .read(audioExamplesTrackListProvider.notifier)
                   .setIsPlaying(false);
-              //ref.read(toastServiceProvider).dismiss(context);
+              ref.read(videoPlayerObjectProvider.notifier).setController(null);
             },
             child: Scaffold(
               appBar: AppBar(
