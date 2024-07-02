@@ -3,20 +3,19 @@ import 'dart:io';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_details/kanji_details_provider.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_details/tabs_details/tab_media/image_meaning_kanji_provider.dart';
 
 class ImageMeaningKanji extends ConsumerWidget {
   const ImageMeaningKanji({
     super.key,
-    required this.kanjiCharacter,
   });
-
-  final String kanjiCharacter;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final imageData =
-        ref.watch(imageMeaningKanjiProvider(kanjiCharacter: kanjiCharacter));
+    final kanjiFromApi = ref.read(kanjiDetailsProvider)!.kanjiFromApi;
+    final imageData = ref.watch(
+        imageMeaningKanjiProvider(kanjiCharacter: kanjiFromApi.kanjiCharacter));
 
     return imageData.when(
         data: (imageData) {

@@ -10,31 +10,17 @@ class VideoStrokesLandScape extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final kanjiFromApi = ref.watch(kanjiDetailsProvider)!.kanjiFromApi;
-
-    return SafeArea(
+    return const SafeArea(
       child: Row(crossAxisAlignment: CrossAxisAlignment.center, children: [
-        const Expanded(child: VideoWrapper()),
+        Expanded(child: VideoWrapper()),
         Expanded(
           child: SingleChildScrollView(
             child: Column(
               children: [
-                const SizedBox(
-                  height: 10,
-                ),
-                MeaningAndDefinition(
-                  englishMeaning: kanjiFromApi.englishMeaning,
-                  hiraganaRomaji: kanjiFromApi.hiraganaRomaji,
-                  hiraganaMeaning: kanjiFromApi.hiraganaMeaning,
-                  katakanaRomaji: kanjiFromApi.katakanaRomaji,
-                  katakanaMeaning: kanjiFromApi.katakanaMeaning,
-                ),
-                const SizedBox(
-                  height: 10,
-                ),
-                ImageMeaningKanji(
-                  kanjiCharacter: kanjiFromApi.kanjiCharacter,
-                ),
+                SizedBox(height: 10),
+                MeaningAndDefinition(),
+                SizedBox(height: 10),
+                ImageMeaningKanji(),
               ],
             ),
           ),

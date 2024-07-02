@@ -1,10 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kanji_for_n5_level_app/l10n/localization.dart';
-import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_details/kanji_details_provider.dart';
 
-class MeaningAndDefinition extends ConsumerWidget {
-  const MeaningAndDefinition({
+class MeaningSearch extends ConsumerWidget {
+  final String englishMeaning;
+  final String hiraganaRomaji;
+  final String hiraganaMeaning;
+  final String katakanaRomaji;
+  final String katakanaMeaning;
+
+  const MeaningSearch({
+    required this.englishMeaning,
+    required this.hiraganaRomaji,
+    required this.hiraganaMeaning,
+    required this.katakanaRomaji,
+    required this.katakanaMeaning,
     super.key,
   });
 
@@ -16,7 +26,6 @@ class MeaningAndDefinition extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final kanjiFromApi = ref.read(kanjiDetailsProvider)!.kanjiFromApi;
     return SizedBox(
       width: double.infinity,
       child: Column(
@@ -48,26 +57,24 @@ class MeaningAndDefinition extends ConsumerWidget {
                   ),
                   SelectableText(
                     capitalizeString(
-                        '${context.l10n.meaning}: ${kanjiFromApi.englishMeaning}'),
+                        '${context.l10n.meaning}: ${englishMeaning}'),
                   ),
                   const SizedBox(
                     height: 20,
                   ),
-                  SelectableText(
-                      "Kunyomi(romaji): ${kanjiFromApi.hiraganaRomaji}"),
+                  SelectableText("Kunyomi(romaji): ${hiraganaRomaji}"),
                   const SizedBox(
                     height: 5,
                   ),
-                  SelectableText("Kunyomi: ${kanjiFromApi.hiraganaMeaning}"),
+                  SelectableText("Kunyomi: ${hiraganaMeaning}"),
                   const SizedBox(
                     height: 20,
                   ),
-                  SelectableText(
-                      "Onyomi(romaji): ${kanjiFromApi.katakanaRomaji}"),
+                  SelectableText("Onyomi(romaji): ${katakanaRomaji}"),
                   const SizedBox(
                     height: 5,
                   ),
-                  SelectableText("Onyomi: ${kanjiFromApi.katakanaMeaning}"),
+                  SelectableText("Onyomi: ${katakanaMeaning}"),
                   const SizedBox(
                     height: 5,
                   ),

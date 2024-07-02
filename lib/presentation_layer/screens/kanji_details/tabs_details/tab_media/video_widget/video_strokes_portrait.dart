@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_details/kanji_details_provider.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_details/tabs_details/tab_media/video_widget/video_wrapper.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_details/tabs_details/tab_media/image_meaning_kanji.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_details/tabs_details/tab_media/meaning_definition.dart';
@@ -10,30 +9,21 @@ class VideoStrokesPortrait extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final kanjiFromApi = ref.read(kanjiDetailsProvider)!.kanjiFromApi;
-    return SingleChildScrollView(
+    return const SingleChildScrollView(
       child: Column(
         children: [
-          const SizedBox(
+          SizedBox(
             height: 20,
           ),
-          const VideoWrapper(),
-          const SizedBox(
+          VideoWrapper(),
+          SizedBox(
             height: 20,
           ),
-          MeaningAndDefinition(
-            englishMeaning: kanjiFromApi.englishMeaning,
-            hiraganaRomaji: kanjiFromApi.hiraganaRomaji,
-            hiraganaMeaning: kanjiFromApi.hiraganaMeaning,
-            katakanaRomaji: kanjiFromApi.katakanaRomaji,
-            katakanaMeaning: kanjiFromApi.katakanaMeaning,
-          ),
-          const SizedBox(
+          MeaningAndDefinition(),
+          SizedBox(
             height: 20,
           ),
-          ImageMeaningKanji(
-            kanjiCharacter: kanjiFromApi.kanjiCharacter,
-          ),
+          ImageMeaningKanji(),
         ],
       ),
     );
