@@ -80,14 +80,21 @@ class DetailsQuizScreenAnimated extends ConsumerWidget {
                   ref.read(quizDetailsProvider.notifier).setOption(2);
                   ref.read(quizDetailsProvider.notifier).resetValues();
 
-/*                   //pause video player
-                  ref
-                      .read(videoPlayerObjectProvider)
-                      .videoPlayerController
-                      .pause();
-                  ref
-                      .read(videoStatusPlayingProvider.notifier)
-                      .setIsPlaying(false); */
+                  //pause video player
+
+                  if (ref
+                          .read(videoPlayerObjectProvider)
+                          .videoPlayerController !=
+                      null) {
+                    ref
+                        .read(videoPlayerObjectProvider)
+                        .videoPlayerController
+                        ?.pause();
+
+                    ref
+                        .read(videoStatusPlayingProvider.notifier)
+                        .setIsPlaying(false);
+                  }
 
                   openContainer();
                 }
