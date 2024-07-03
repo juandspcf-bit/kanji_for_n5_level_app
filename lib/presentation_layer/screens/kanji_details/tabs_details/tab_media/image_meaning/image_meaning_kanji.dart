@@ -64,7 +64,8 @@ class ImageMeaningKanji extends ConsumerWidget {
                           width: height,
                           child: const Padding(
                             padding: EdgeInsets.all(20.0),
-                            child: CircularProgressIndicator(),
+                            child: RepaintBoundary(
+                                child: CircularProgressIndicator()),
                           ),
                         );
                       },

@@ -73,8 +73,10 @@ class VideoSection extends ConsumerWidget {
                               height:
                                   widthCard * videoController.value.aspectRatio,
                               width: widthCard,
-                              child: const CircularProgressIndicator(
-                                strokeWidth: 8,
+                              child: const RepaintBoundary(
+                                child: CircularProgressIndicator(
+                                  strokeWidth: 8,
+                                ),
                               ),
                             ),
                           ),
