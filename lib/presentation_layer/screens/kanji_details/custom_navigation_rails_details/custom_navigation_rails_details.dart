@@ -5,6 +5,8 @@ import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_details/
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_details/quiz_kanji_details_screen/landscape_screens/examples_landscape.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_details/quiz_kanji_details_screen/landscape_screens/options.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_details/quiz_kanji_details_screen/landscape_screens/strokes.dart';
+import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_details/tabs_details/tab_examples/audio_examples_track_list_provider.dart';
+import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_details/tabs_details/tab_media/video_widget/video_player_provider.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_details/tabs_details/tab_media/video_widget/video_strokes_landscape.dart';
 
 class CustomNavigationRailKanjiDetails extends ConsumerWidget {
@@ -36,49 +38,57 @@ class CustomNavigationRailKanjiDetails extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final customNavigationRailsDetailsData =
         ref.watch(customNavigationRailsDetailsProvider);
-    return Scaffold(
-      body: Row(
-        children: [
-          NavigationRail(
-            selectedIndex: customNavigationRailsDetailsData.selection,
-            groupAlignment: 0.0,
-            onDestinationSelected: (int selection) {
-              ref
-                  .read(customNavigationRailsDetailsProvider.notifier)
-                  .setSelection(selection);
-            },
-            labelType: NavigationRailLabelType.none,
-            leading: IconButton(
-              icon: const Icon(Icons.arrow_back),
-              onPressed: () {
-                Navigator.of(context).pop();
+    return PopScope(
+      onPopInvoked: (didPop) {
+        if (!didPop) return;
+        ref.read(audioExamplesTrackListProvider).assetsAudioPlayer.stop();
+        ref.read(audioExamplesTrackListProvider.notifier).setIsPlaying(false);
+        ref.read(videoPlayerObjectProvider.notifier).setController(null);
+      },
+      child: Scaffold(
+        body: Row(
+          children: [
+            NavigationRail(
+              selectedIndex: customNavigationRailsDetailsData.selection,
+              groupAlignment: 0.0,
+              onDestinationSelected: (int selection) {
+                ref
+                    .read(customNavigationRailsDetailsProvider.notifier)
+                    .setSelection(selection);
               },
+              labelType: NavigationRailLabelType.none,
+              leading: IconButton(
+                icon: const Icon(Icons.arrow_back),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              ),
+              destinations: const <NavigationRailDestination>[
+                NavigationRailDestination(
+                  icon: Icon(Icons.movie),
+                  label: Text('movie'),
+                ),
+                NavigationRailDestination(
+                  icon: Icon(Icons.draw),
+                  label: Text('draw'),
+                ),
+                NavigationRailDestination(
+                  icon: Icon(Icons.play_lesson),
+                  label: Text('Play lesson'),
+                ),
+                NavigationRailDestination(
+                  icon: Icon(Icons.menu),
+                  label: Text('options'),
+                ),
+              ],
             ),
-            destinations: const <NavigationRailDestination>[
-              NavigationRailDestination(
-                icon: Icon(Icons.movie),
-                label: Text('movie'),
-              ),
-              NavigationRailDestination(
-                icon: Icon(Icons.draw),
-                label: Text('draw'),
-              ),
-              NavigationRailDestination(
-                icon: Icon(Icons.play_lesson),
-                label: Text('Play lesson'),
-              ),
-              NavigationRailDestination(
-                icon: Icon(Icons.menu),
-                label: Text('options'),
-              ),
-            ],
-          ),
-          Expanded(
-              child: getSelection(
-            customNavigationRailsDetailsData.selection,
-            kanjiFromApi,
-          )),
-        ],
+            Expanded(
+                child: getSelection(
+              customNavigationRailsDetailsData.selection,
+              kanjiFromApi,
+            )),
+          ],
+        ),
       ),
     );
   }

@@ -10,7 +10,7 @@ class VideoPlayerObject extends _$VideoPlayerObject {
     return (videoPlayerController: null);
   }
 
-  void setController(VideoPlayerController controller) {
+  void setController(VideoPlayerController? controller) {
     state = (videoPlayerController: controller);
   }
 }
