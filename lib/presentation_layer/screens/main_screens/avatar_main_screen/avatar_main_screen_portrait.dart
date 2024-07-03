@@ -90,7 +90,8 @@ class AvatarMainScreenPortrait extends ConsumerWidget {
                             height: constraints.maxHeight - 5,
                             child: const Padding(
                               padding: EdgeInsets.all(8),
-                              child: CircularProgressIndicator(),
+                              child: RepaintBoundary(
+                                  child: CircularProgressIndicator()),
                             ),
                           ),
                       errorWidget: (context, url, error) => SizedBox(
@@ -111,11 +112,11 @@ class AvatarMainScreenPortrait extends ConsumerWidget {
           },
           error: (error, stack) => Container(),
           loading: () => SizedBox(
-            width: constraints.maxHeight,
-            height: constraints.maxHeight,
+            width: constraints.maxHeight - 5,
+            height: constraints.maxHeight - 5,
             child: const Padding(
               padding: EdgeInsets.all(8.0),
-              child: CircularProgressIndicator(),
+              child: RepaintBoundary(child: CircularProgressIndicator()),
             ),
           ),
         );
