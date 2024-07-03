@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:kanji_for_n5_level_app/presentation_layer/common_widgets/animated_opacity_icon.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_list/body_list/kanjis_list_provider.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/navigation_bar_screens/sections_screen/kanji_sections_quiz_animation.dart';
-import 'package:kanji_for_n5_level_app/presentation_layer/screens/navigation_bar_screens/sections_screen/kanjis_for_section_screen/kanjis_for_section_screen.dart';
 import 'package:kanji_for_n5_level_app/providers/status_connection_provider.dart';
 
 class QuizIconKanjiList extends ConsumerWidget {
@@ -16,11 +16,11 @@ class QuizIconKanjiList extends ConsumerWidget {
     final isAnyProcessingDataFunc =
         ref.read(kanjiListProvider.notifier).isAnyProcessingData;
 
-    final accesToQuiz = isAnyProcessingDataFunc() ||
+    final accessToQuiz = isAnyProcessingDataFunc() ||
         connectivityData == ConnectionStatus.noConnected ||
         kanjiListData.kanjiList.isEmpty;
 
-    return (kanjiListData.status == 1 && !accesToQuiz)
+    return (kanjiListData.status == 1 && !accessToQuiz)
         ? const AnimatedOpacityIcon(
             child: Padding(
               padding: EdgeInsets.symmetric(horizontal: 10.0),
