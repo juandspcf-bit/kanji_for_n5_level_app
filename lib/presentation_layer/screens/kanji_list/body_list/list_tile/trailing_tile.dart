@@ -27,8 +27,8 @@ class TrailingTile extends ConsumerWidget {
           alignment: Alignment.center,
           margin: const EdgeInsets.all(5),
           color: Colors.transparent,
-          height: 80,
-          width: 80,
+          height: 60,
+          width: 60,
           child: const CircularProgressIndicator(
             backgroundColor: Color.fromARGB(179, 5, 16, 51),
           ),
@@ -38,16 +38,24 @@ class TrailingTile extends ConsumerWidget {
       return Icon(
         Icons.storage_outlined,
         color: Theme.of(context).colorScheme.onSecondaryContainer,
-        size: 50,
+        size: 60,
       );
     } else if (kanjiFromApi.statusStorage == StatusStorage.processingStoring ||
         kanjiFromApi.statusStorage == StatusStorage.processingDeleting) {
-      return const CircularProgressIndicator();
+      return Container(
+        alignment: Alignment.center,
+        color: Colors.transparent,
+        height: 60,
+        width: 60,
+        child: const CircularProgressIndicator(
+          backgroundColor: Color.fromARGB(179, 5, 16, 51),
+        ),
+      );
     } else {
       return Icon(
         Icons.question_mark_outlined,
         color: Theme.of(context).colorScheme.onSecondaryContainer,
-        size: 50,
+        size: 60,
       );
     }
   }
