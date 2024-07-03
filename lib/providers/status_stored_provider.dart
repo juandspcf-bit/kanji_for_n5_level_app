@@ -1,9 +1,12 @@
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:kanji_for_n5_level_app/main.dart';
 import 'package:kanji_for_n5_level_app/models/kanji_from_api.dart';
 import 'package:kanji_for_n5_level_app/models/section_model.dart';
 
-class StoredKanjisProvider extends Notifier<Map<int, List<KanjiFromApi>>> {
+part "status_stored_provider.g.dart";
+
+@Riverpod(keepAlive: true)
+class StoredKanjis extends _$StoredKanjis {
   @override
   Map<int, List<KanjiFromApi>> build() {
     return {};
@@ -106,10 +109,6 @@ class StoredKanjisProvider extends Notifier<Map<int, List<KanjiFromApi>>> {
         return previousValue;
       });
 }
-
-final storedKanjisProvider =
-    NotifierProvider<StoredKanjisProvider, Map<int, List<KanjiFromApi>>>(
-        StoredKanjisProvider.new);
 
 enum StatusStorage {
   onlyOnline,
