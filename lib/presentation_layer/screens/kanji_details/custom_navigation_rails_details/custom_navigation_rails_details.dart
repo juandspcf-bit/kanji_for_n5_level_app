@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:kanji_for_n5_level_app/models/kanji_from_api.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_details/custom_navigation_rails_details/custom_navigation_rails_details_provider.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_details/quiz_kanji_details_screen/landscape_screens/examples_landscape.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_details/quiz_kanji_details_screen/landscape_screens/options.dart';
@@ -12,14 +11,10 @@ import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_details/
 class CustomNavigationRailKanjiDetails extends ConsumerWidget {
   const CustomNavigationRailKanjiDetails({
     super.key,
-    required this.kanjiFromApi,
   });
-
-  final KanjiFromApi kanjiFromApi;
 
   Widget getSelection(
     int selection,
-    KanjiFromApi kanjiFromApi,
   ) {
     if (selection == 0) {
       return const VideoStrokesLandScape();
@@ -28,9 +23,7 @@ class CustomNavigationRailKanjiDetails extends ConsumerWidget {
     } else if (selection == 2) {
       return const ExamplesLandscape();
     } else {
-      return OptionsDetails(
-        kanjiFromApi: kanjiFromApi,
-      );
+      return const OptionsDetails();
     }
   }
 
@@ -85,7 +78,6 @@ class CustomNavigationRailKanjiDetails extends ConsumerWidget {
             Expanded(
                 child: getSelection(
               customNavigationRailsDetailsData.selection,
-              kanjiFromApi,
             )),
           ],
         ),

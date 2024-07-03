@@ -5,12 +5,11 @@ import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_details/
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_details/kanji_details_provider.dart';
 
 class OptionsDetails extends ConsumerWidget {
-  const OptionsDetails({super.key, required this.kanjiFromApi});
-
-  final KanjiFromApi kanjiFromApi;
+  const OptionsDetails({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final kanjiFromApi = ref.read(kanjiDetailsProvider)!.kanjiFromApi;
     return SafeArea(
         child: Column(
       mainAxisAlignment: MainAxisAlignment.center,

@@ -51,6 +51,7 @@ class _VideoWrapperState extends ConsumerState<VideoWrapper> {
 
   @override
   Widget build(BuildContext context) {
+    logger.d('build video widget');
     return FutureBuilder(
       future: initializedVideoPlayer,
       builder: (ctx, snapShot) {

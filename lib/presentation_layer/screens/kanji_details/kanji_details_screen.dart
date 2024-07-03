@@ -56,11 +56,7 @@ class KanjiDetails extends ConsumerWidget {
     });
 
     return tabScreen
-        ? CustomTabControllerKanjiDetails(
-            kanjiFromApi: kanjiFromApi,
-          )
-        : CustomNavigationRailKanjiDetails(
-            kanjiFromApi: kanjiFromApi,
-          );
+        ? const CustomTabControllerKanjiDetails()
+        : const CustomNavigationRailKanjiDetails();
   }
 }

@@ -16,14 +16,10 @@ import 'package:kanji_for_n5_level_app/providers/status_stored_provider.dart';
 class CustomTabControllerKanjiDetails extends ConsumerWidget {
   const CustomTabControllerKanjiDetails({
     super.key,
-    required this.kanjiFromApi,
   });
-
-  final KanjiFromApi kanjiFromApi;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final statusConnectionData = ref.watch(statusConnectionProvider);
     return DefaultTabController(
       initialIndex: 0,
       length: 3,
@@ -52,56 +48,9 @@ class CustomTabControllerKanjiDetails extends ConsumerWidget {
                   .setIsPlaying(false);
               ref.read(videoPlayerObjectProvider.notifier).setController(null);
             },
-            child: Scaffold(
-              appBar: AppBar(
-                title: SelectableText(
-                  kanjiFromApi.kanjiCharacter,
-                  style: Theme.of(context).textTheme.titleLarge,
-                ),
-                actions: [
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 10),
-                    child: statusConnectionData == ConnectionStatus.noConnected
-                        ? const Icon(Icons.cloud_off)
-                        : const Icon(Icons.cloud_done_rounded),
-                  ),
-                  if (statusConnectionData != ConnectionStatus.noConnected ||
-                      kanjiFromApi.statusStorage == StatusStorage.stored)
-                    AnimatedOpacityIcon(
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 5),
-                        child: DetailsQuizScreenAnimated(
-                            kanjiFromApi: kanjiFromApi,
-                            closedChild: const Icon(Icons.quiz)),
-                      ),
-                    ),
-                  if (statusConnectionData != ConnectionStatus.noConnected)
-                    AnimatedOpacityIcon(
-                      child: IconButton(
-                        onPressed: () {
-                          ref
-                              .read(kanjiDetailsProvider.notifier)
-                              .storeToFavorites(kanjiFromApi);
-                        },
-                        icon: const IconFavorites(),
-                      ),
-                    )
-                ],
-                bottom: const TabBar(
-                  tabs: <Widget>[
-                    Tab(
-                      icon: Icon(Icons.movie),
-                    ),
-                    Tab(
-                      icon: Icon(Icons.draw),
-                    ),
-                    Tab(
-                      icon: Icon(Icons.play_lesson),
-                    ),
-                  ],
-                ),
-              ),
-              body: const TabBarView(
+            child: const Scaffold(
+              appBar: AppBarPortrait(),
+              body: TabBarView(
                 children: <Widget>[
                   VideoStrokesPortrait(),
                   TabStrokes(),
@@ -111,6 +60,67 @@ class CustomTabControllerKanjiDetails extends ConsumerWidget {
             ),
           );
         },
+      ),
+    );
+  }
+}
+
+class AppBarPortrait extends ConsumerWidget implements PreferredSizeWidget {
+  const AppBarPortrait({super.key});
+
+  @override
+  Size get preferredSize => const Size.fromHeight(90);
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final kanjiFromApi = ref.read(kanjiDetailsProvider)!.kanjiFromApi;
+    final statusConnectionData = ref.watch(statusConnectionProvider);
+    return AppBar(
+      title: SelectableText(
+        kanjiFromApi.kanjiCharacter,
+        style: Theme.of(context).textTheme.titleLarge,
+      ),
+      actions: [
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 10),
+          child: statusConnectionData == ConnectionStatus.noConnected
+              ? const Icon(Icons.cloud_off)
+              : const Icon(Icons.cloud_done_rounded),
+        ),
+        if (statusConnectionData != ConnectionStatus.noConnected ||
+            kanjiFromApi.statusStorage == StatusStorage.stored)
+          AnimatedOpacityIcon(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 5),
+              child: DetailsQuizScreenAnimated(
+                  kanjiFromApi: kanjiFromApi,
+                  closedChild: const Icon(Icons.quiz)),
+            ),
+          ),
+        if (statusConnectionData != ConnectionStatus.noConnected)
+          AnimatedOpacityIcon(
+            child: IconButton(
+              onPressed: () {
+                ref
+                    .read(kanjiDetailsProvider.notifier)
+                    .storeToFavorites(kanjiFromApi);
+              },
+              icon: const IconFavorites(),
+            ),
+          )
+      ],
+      bottom: const TabBar(
+        tabs: <Widget>[
+          Tab(
+            icon: Icon(Icons.movie),
+          ),
+          Tab(
+            icon: Icon(Icons.draw),
+          ),
+          Tab(
+            icon: Icon(Icons.play_lesson),
+          ),
+        ],
       ),
     );
   }
