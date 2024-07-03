@@ -57,24 +57,24 @@ class MeaningSearch extends ConsumerWidget {
                   ),
                   SelectableText(
                     capitalizeString(
-                        '${context.l10n.meaning}: ${englishMeaning}'),
+                        '${context.l10n.meaning}: $englishMeaning'),
                   ),
                   const SizedBox(
                     height: 20,
                   ),
-                  SelectableText("Kunyomi(romaji): ${hiraganaRomaji}"),
+                  SelectableText("Kunyomi(romaji): $hiraganaRomaji"),
                   const SizedBox(
                     height: 5,
                   ),
-                  SelectableText("Kunyomi: ${hiraganaMeaning}"),
+                  SelectableText("Kunyomi: $hiraganaMeaning"),
                   const SizedBox(
                     height: 20,
                   ),
-                  SelectableText("Onyomi(romaji): ${katakanaRomaji}"),
+                  SelectableText("Onyomi(romaji): $katakanaRomaji"),
                   const SizedBox(
                     height: 5,
                   ),
-                  SelectableText("Onyomi: ${katakanaMeaning}"),
+                  SelectableText("Onyomi: $katakanaMeaning"),
                   const SizedBox(
                     height: 5,
                   ),

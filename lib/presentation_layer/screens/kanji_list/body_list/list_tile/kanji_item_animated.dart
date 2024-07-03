@@ -23,8 +23,7 @@ class KanjiItemAnimated extends ConsumerWidget {
     return OpenContainer(
       transitionDuration: const Duration(milliseconds: 900),
       openBuilder: (context, closedContainer) {
-        return KanjiDetails(
-            statusStorage: statusStorage, kanjiFromApi: kanjiFromApi);
+        return const KanjiDetails();
       },
       openColor: Theme.of(context).colorScheme.surface,
       closedShape: const RoundedRectangleBorder(

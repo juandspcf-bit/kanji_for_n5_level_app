@@ -2,18 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kanji_for_n5_level_app/application_layer/services.dart';
 import 'package:kanji_for_n5_level_app/config_files/screen_config.dart';
-import 'package:kanji_for_n5_level_app/models/kanji_from_api.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_details/tabs_details/custom_tab_controller.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_details/custom_navigation_rails_details/custom_navigation_rails_details.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_details/kanji_details_provider.dart';
-import 'package:kanji_for_n5_level_app/providers/status_stored_provider.dart';
 
 class KanjiDetails extends ConsumerWidget {
-  const KanjiDetails(
-      {super.key, required this.kanjiFromApi, required this.statusStorage});
-
-  final KanjiFromApi kanjiFromApi;
-  final StatusStorage statusStorage;
+  const KanjiDetails({
+    super.key,
+  });
 
   String capitalizeString(String text) {
     var firstLetter = text[0];
