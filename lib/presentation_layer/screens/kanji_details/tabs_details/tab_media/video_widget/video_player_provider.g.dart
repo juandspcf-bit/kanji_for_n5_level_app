@@ -6,11 +6,11 @@ part of 'video_player_provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$videoPlayerObjectHash() => r'789937687e56be5bc8ffc210b18eaa1fc855c390';
+String _$videoPlayerObjectHash() => r'2cbc4b1a1c39a87a64c93ecfb10819766d32e2c8';
 
 /// See also [VideoPlayerObject].
 @ProviderFor(VideoPlayerObject)
-final videoPlayerObjectProvider = AutoDisposeNotifierProvider<VideoPlayerObject,
+final videoPlayerObjectProvider = NotifierProvider<VideoPlayerObject,
     ({VideoPlayerController? videoPlayerController})>.internal(
   VideoPlayerObject.new,
   name: r'videoPlayerObjectProvider',
@@ -22,6 +22,6 @@ final videoPlayerObjectProvider = AutoDisposeNotifierProvider<VideoPlayerObject,
 );
 
 typedef _$VideoPlayerObject
-    = AutoDisposeNotifier<({VideoPlayerController? videoPlayerController})>;
+    = Notifier<({VideoPlayerController? videoPlayerController})>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

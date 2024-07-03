@@ -3,7 +3,7 @@ import 'package:video_player/video_player.dart';
 
 part 'video_player_provider.g.dart';
 
-@Riverpod(keepAlive: false)
+@Riverpod(keepAlive: true)
 class VideoPlayerObject extends _$VideoPlayerObject {
   @override
   ({VideoPlayerController? videoPlayerController}) build() {
