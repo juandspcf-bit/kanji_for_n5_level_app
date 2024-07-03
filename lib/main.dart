@@ -35,9 +35,9 @@ class MyApp extends ConsumerWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    ref.read(lottieFilesProvider.notifier).initLottieFile();
+    ref.read(lottieFilesObjectProvider.notifier).initLottieFile();
 
-    final onBoardingData = ref.watch(onBoardingProvider);
+    final onBoardingData = ref.watch(onBoardingFlowProvider);
     Future.delayed(const Duration(milliseconds: 200));
 
     ref.read(statusConnectionProvider);

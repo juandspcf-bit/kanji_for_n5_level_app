@@ -1,9 +1,12 @@
 import 'dart:async';
 
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:observe_internet_connectivity/observe_internet_connectivity.dart';
 
-class StatusConnectionProvider extends Notifier<ConnectionStatus> {
+part 'status_connection_provider.g.dart';
+
+@Riverpod(keepAlive: true)
+class StatusConnection extends _$StatusConnection {
   StreamSubscription<bool>? subscription;
   @override
   ConnectionStatus build() {
@@ -28,9 +31,5 @@ class StatusConnectionProvider extends Notifier<ConnectionStatus> {
     state = result;
   }
 }
-
-final statusConnectionProvider =
-    NotifierProvider<StatusConnectionProvider, ConnectionStatus>(
-        StatusConnectionProvider.new);
 
 enum ConnectionStatus { connected, noConnected }

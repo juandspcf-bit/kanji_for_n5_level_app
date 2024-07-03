@@ -1,7 +1,10 @@
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:lottie/lottie.dart';
 
-class LottieFilesProvider extends Notifier<ScoreKanjiListData> {
+part 'score_kanji_list_provider.g.dart';
+
+@Riverpod(keepAlive: true)
+class LottieFilesObject extends _$LottieFilesObject {
   @override
   ScoreKanjiListData build() {
     return ScoreKanjiListData(lottieComposition: null);
@@ -14,10 +17,6 @@ class LottieFilesProvider extends Notifier<ScoreKanjiListData> {
     state = ScoreKanjiListData(lottieComposition: lottieComposition);
   }
 }
-
-final lottieFilesProvider =
-    NotifierProvider<LottieFilesProvider, ScoreKanjiListData>(
-        LottieFilesProvider.new);
 
 class ScoreKanjiListData {
   final LottieComposition? lottieComposition;

@@ -76,7 +76,7 @@ class _MyPageViewerLandscapeState extends ConsumerState {
                       onPressed: () {
                         if (_controller.page == myScreens.length - 1) {
                           ref
-                              .read(onBoardingProvider.notifier)
+                              .read(onBoardingFlowProvider.notifier)
                               .setOnBoardingDone();
                           return;
                         }

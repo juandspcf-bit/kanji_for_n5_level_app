@@ -1,7 +1,10 @@
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class OnBoardingProvider extends Notifier<OnBoardingData> {
+part 'on_boarding_provider.g.dart';
+
+@riverpod
+class OnBoardingFlow extends _$OnBoardingFlow {
   @override
   OnBoardingData build() {
     SharedPreferences.getInstance().then((preferences) {
@@ -24,9 +27,6 @@ class OnBoardingProvider extends Notifier<OnBoardingData> {
     }
   }
 }
-
-final onBoardingProvider = NotifierProvider<OnBoardingProvider, OnBoardingData>(
-    OnBoardingProvider.new);
 
 class OnBoardingData {
   final SharedPreferences? preferences;

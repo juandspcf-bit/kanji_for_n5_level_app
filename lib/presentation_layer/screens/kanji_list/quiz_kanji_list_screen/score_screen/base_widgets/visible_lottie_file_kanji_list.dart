@@ -12,7 +12,7 @@ class VisibleLottieFileKanjiList extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final visibleLottieFileData = ref.watch(visibleLottieFileKanjiListProvider);
     final scores = ref.watch(kanjiListScoreProvider);
-    final lottieFilesState = ref.watch(lottieFilesProvider);
+    final lottieFilesState = ref.watch(lottieFilesObjectProvider);
     return Visibility(
       visible: (visibleLottieFileData.visibility &&
           scores.incorrectAnswers.isEmpty &&
