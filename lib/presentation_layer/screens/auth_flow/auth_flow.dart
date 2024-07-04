@@ -18,6 +18,15 @@ class AuthFlow extends ConsumerStatefulWidget {
 }
 
 class _AutFlowState extends ConsumerState<AuthFlow> {
+  late Stream<User?> streamUser;
+
+  @override
+  void initState() {
+    super.initState();
+
+    streamUser = FirebaseAuth.instance.userChanges();
+  }
+
   @override
   Widget build(BuildContext context) {
     Timer(const Duration(milliseconds: 1000), () {
@@ -64,8 +73,7 @@ class _AutFlowState extends ConsumerState<AuthFlow> {
 
     return Scaffold(
       body: StreamBuilder(
-          stream: FirebaseAuth.instance
-              .userChanges(), //ref.read(authServiceProvider).authStream(),
+          stream: streamUser, //ref.read(authServiceProvider).authStream(),
           builder: (ctx, snapShot) {
             logger.d(snapShot.connectionState);
             if (snapShot.connectionState == ConnectionState.waiting) {

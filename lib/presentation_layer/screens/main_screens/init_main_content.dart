@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kanji_for_n5_level_app/application_layer/services.dart';
+import 'package:kanji_for_n5_level_app/l10n/localization.dart';
 import 'package:kanji_for_n5_level_app/main.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/account_details/password_change/password_change_flow_provider.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/account_details/personal_info_update/personal_info_provider.dart';
@@ -36,7 +37,7 @@ class InitMainContentState extends ConsumerState<InitMainContent> {
     ref.listen<ErrorDownloadKanji>(errorDownloadProvider, (previous, current) {
       ref.read(toastServiceProvider).dismiss(context);
       ref.read(toastServiceProvider).showShortMessage(
-          context, "There was an error downloading ${current.kanjiCharacter}");
+          context, "${context.l10n.errorDownload} ${current.kanjiCharacter}");
     });
 
     ref.listen<ErrorDeleteKanji>(errorDeleteProvider, (previous, current) {
@@ -168,7 +169,6 @@ class InitMainContentState extends ConsumerState<InitMainContent> {
                       OnDismissibleActionStatus.successAdded
                   ? null
                   : () async {
-                      logger.d('restoring kanji');
                       final dismissedKanji =
                           ref.read(favoritesKanjisProvider).dismissedKanji;
 

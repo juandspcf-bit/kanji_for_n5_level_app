@@ -88,6 +88,10 @@
   "logout":"Logout",
   "@logout":{},
   "closeAccount":"Close Account",
-  "@closeAccount":{}
+  "@closeAccount":{},
+
+
+  "errorDownload":"There was an error downloading",
+  "@errorDownload":{}
 
 }

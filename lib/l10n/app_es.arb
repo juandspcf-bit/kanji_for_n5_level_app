@@ -84,6 +84,10 @@
   "logout":"Cerrar sesión",
   "@logout":{},
   "closeAccount":"Cerrar tu cuenta",
-  "@closeAccount":{}
+  "@closeAccount":{},
+
+
+  "errorDownload":"Hubo un error descargando",
+  "@errorDownload":{}
 
 }
