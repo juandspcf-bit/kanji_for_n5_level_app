@@ -79,10 +79,9 @@ class _AutFlowState extends ConsumerState<AuthFlow> {
               final user = snapShot.data;
               if (user != null) {
                 ref.read(authServiceProvider).setLoggedUser();
-                logger.d("active user");
+
                 return const VerifyEmail();
               } else {
-                logger.d("active null");
                 return LoginFormScreen();
               }
             }

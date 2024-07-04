@@ -12,11 +12,27 @@ import 'package:kanji_for_n5_level_app/presentation_layer/screens/main_screens/m
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/navigation_bar_screens/list_favorite_kanjis_screen/favorites_kanjis_provider.dart';
 import 'package:kanji_for_n5_level_app/providers/status_connection_provider.dart';
 
-class InitMainContent extends ConsumerWidget {
+class InitMainContent extends ConsumerStatefulWidget {
   const InitMainContent({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<InitMainContent> createState() => InitMainContentState();
+}
+
+class InitMainContentState extends ConsumerState<InitMainContent> {
+  late final Future<void> futureStored;
+
+  @override
+  void initState() {
+    futureStored =
+        ref.read(statusConnectionProvider) == ConnectionStatus.noConnected
+            ? ref.read(mainScreenProvider.notifier).initAppOffline()
+            : ref.read(mainScreenProvider.notifier).initAppOnline();
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     ref.listen<ErrorDownloadKanji>(errorDownloadProvider, (previous, current) {
       ref.read(toastServiceProvider).dismiss(context);
       ref.read(toastServiceProvider).showShortMessage(
@@ -177,9 +193,7 @@ class InitMainContent extends ConsumerWidget {
     );
 
     return FutureBuilder(
-      future: ref.read(statusConnectionProvider) == ConnectionStatus.noConnected
-          ? ref.read(mainScreenProvider.notifier).initAppOffline()
-          : ref.read(mainScreenProvider.notifier).initAppOnline(),
+      future: futureStored,
       builder: (BuildContext context, AsyncSnapshot<void> snapShot) {
         final connectionStatus = snapShot.connectionState;
         if (connectionStatus == ConnectionState.waiting) {
