@@ -43,7 +43,7 @@ class InitMainContentState extends ConsumerState<InitMainContent> {
     ref.listen<ErrorDeleteKanji>(errorDeleteProvider, (previous, current) {
       ref.read(toastServiceProvider).dismiss(context);
       ref.read(toastServiceProvider).showShortMessage(
-          context, "There was an error deleting ${current.kanjiCharacter}");
+          context, "${context.l10n.errorDeleting} ${current.kanjiCharacter}");
     });
 
     ref.listen<PasswordChangeFlowData>(
@@ -57,7 +57,7 @@ class InitMainContentState extends ConsumerState<InitMainContent> {
               .setStatusProcessing(StatusProcessingPasswordChangeFlow.form);
           ref.read(toastServiceProvider).showMessage(
                 context,
-                'passwords not match',
+                context.l10n.passwordNotMach,
                 Icons.error,
                 const Duration(seconds: 3),
                 "",
@@ -72,7 +72,7 @@ class InitMainContentState extends ConsumerState<InitMainContent> {
               .setStatusProcessing(StatusProcessingPasswordChangeFlow.form);
           ref.read(toastServiceProvider).showMessage(
                 context,
-                'an error happened during updating process',
+                context.l10n.updatingError,
                 Icons.error,
                 const Duration(seconds: 3),
                 "",
@@ -87,7 +87,7 @@ class InitMainContentState extends ConsumerState<InitMainContent> {
               .setStatusProcessing(StatusProcessingPasswordChangeFlow.form);
           ref.read(toastServiceProvider).showMessage(
                 context,
-                'successful updating process',
+                context.l10n.updatingSuccess,
                 Icons.done,
                 const Duration(seconds: 3),
                 "",
@@ -106,7 +106,7 @@ class InitMainContentState extends ConsumerState<InitMainContent> {
         ref.read(personalInfoProvider.notifier).setShowPasswordRequest(false);
         ref.read(toastServiceProvider).showMessage(
               context,
-              'an error happened during updating process',
+              context.l10n.updatingError,
               Icons.error,
               const Duration(seconds: 3),
               "",
@@ -122,7 +122,7 @@ class InitMainContentState extends ConsumerState<InitMainContent> {
         ref.read(personalInfoProvider.notifier).setShowPasswordRequest(false);
         ref.read(toastServiceProvider).showMessage(
               context,
-              'successful updating process',
+              context.l10n.updatingSuccess,
               Icons.done,
               const Duration(seconds: 3),
               "",
@@ -138,7 +138,7 @@ class InitMainContentState extends ConsumerState<InitMainContent> {
         ref.read(personalInfoProvider.notifier).setShowPasswordRequest(false);
         ref.read(toastServiceProvider).showMessage(
               context,
-              'nothing to update',
+              context.l10n.updatingNone,
               Icons.question_mark,
               const Duration(seconds: 3),
               "",
@@ -164,7 +164,7 @@ class InitMainContentState extends ConsumerState<InitMainContent> {
               current.onDismissibleActionStatus.message,
               null,
               const Duration(seconds: 7),
-              'Undo',
+              context.l10n.undo,
               current.onDismissibleActionStatus ==
                       OnDismissibleActionStatus.successAdded
                   ? null
@@ -197,16 +197,16 @@ class InitMainContentState extends ConsumerState<InitMainContent> {
       builder: (BuildContext context, AsyncSnapshot<void> snapShot) {
         final connectionStatus = snapShot.connectionState;
         if (connectionStatus == ConnectionState.waiting) {
-          return const Scaffold(
+          return Scaffold(
             body: ProcessProgress(
-              message: 'Loading',
+              message: context.l10n.loading,
             ),
           );
         } else if (connectionStatus == ConnectionState.done ||
             connectionStatus == ConnectionState.active) {
           return const MainContent();
         } else {
-          return const Center(child: Text('error'));
+          return Center(child: Text(context.l10n.errorLoading));
         }
       },
     );

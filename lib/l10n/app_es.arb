@@ -88,6 +88,23 @@
 
 
   "errorDownload":"Hubo un error descargando",
-  "@errorDownload":{}
+  "@errorDownload":{},
+  "errorDeleting":"Hubo un error eliminando",
+  "@errorDeleting":{},
+  "passwordNotMach":"Las contraseñas no son iguales",
+  "@passwordNotMach":{},
+  "updatingError":"Hubo un error en la actualización",
+  "@updatingError":{},
+  "updatingSuccess":"actualización completada",
+  "@updatingSuccess":{},
+  "updatingNone":"nada que actualizar",
+  "@updatingNone":{},
+  "undo":"Deshacer",
+  "@undo":{},
+
+  "loading":"Cargando",
+  "@loading":{},
+  "errorLoading":"Hubo un error cargando tu contenido",
+  "@errorLoading":{}
 
 }

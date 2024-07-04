@@ -92,6 +92,25 @@
 
 
   "errorDownload":"There was an error downloading",
-  "@errorDownload":{}
+  "@errorDownload":{},
+  "errorDeleting":"There was an error deleting",
+  "@errorDeleting":{},
+  "passwordNotMach":"passwords not match",
+  "@passwordNotMach":{},
+  "updatingError":"an error happened during updating process",
+  "@updatingError":{},
+  "updatingSuccess":"successful updating process",
+  "@updatingSuccess":{},
+  "updatingNone":"nothing to update",
+  "@updatingNone":{},
+  "undo":"Undo",
+  "@undo":{},
+
+
+  "loading":"Loading",
+  "@loading":{},
+  "errorLoading":"Error accessing your content",
+  "@errorLoading":{}
+
 
 }
