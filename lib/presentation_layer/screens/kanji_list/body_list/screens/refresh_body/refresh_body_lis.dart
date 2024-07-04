@@ -17,12 +17,10 @@ class RefreshBodyList extends ConsumerWidget {
     super.key,
     required this.statusResponse,
     required this.kanjisFromApi,
-    required this.mainScreenData,
   });
 
   final int statusResponse;
   final List<KanjiFromApi> kanjisFromApi;
-  final MainScreenData mainScreenData;
 
   bool isAnyProcessingData(List<KanjiFromApi> kanjisFromApi) {
     try {
@@ -172,6 +170,7 @@ class RefreshBodyList extends ConsumerWidget {
     final orientation = MediaQuery.orientationOf(context);
     final widthScreen = getScreenSizeWidth(context);
     final connectivityData = ref.watch(statusConnectionProvider);
+    final mainScreenData = ref.watch(mainScreenProvider);
 
     return RefreshIndicator(
       notificationPredicate: isAnyProcessingData(kanjisFromApi) ||

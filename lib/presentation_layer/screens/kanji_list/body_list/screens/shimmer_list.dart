@@ -7,14 +7,12 @@ import 'package:shimmer/shimmer.dart';
 class ShimmerList extends ConsumerWidget {
   const ShimmerList({
     super.key,
-    required this.selection,
   });
-
-  final ScreenSelection selection;
 
   Widget _getListWidgets(
     Orientation orientation,
-    ScreenSizeWidth widhtScreen,
+    ScreenSizeWidth widthScreen,
+    ScreenSelection selection,
     WidgetRef ref,
   ) {
     if (Orientation.portrait == orientation) {
@@ -25,8 +23,8 @@ class ShimmerList extends ConsumerWidget {
         },
       );
     } else if (Orientation.landscape == orientation &&
-        (ScreenSizeWidth.large == widhtScreen ||
-            ScreenSizeWidth.extraLarge == widhtScreen)) {
+        (ScreenSizeWidth.large == widthScreen ||
+            ScreenSizeWidth.extraLarge == widthScreen)) {
       return SafeArea(
         child: GridView.builder(
           gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
@@ -43,8 +41,8 @@ class ShimmerList extends ConsumerWidget {
         ),
       );
     } else if (Orientation.landscape == orientation &&
-        (ScreenSizeWidth.large != widhtScreen ||
-            ScreenSizeWidth.extraLarge != widhtScreen)) {
+        (ScreenSizeWidth.large != widthScreen ||
+            ScreenSizeWidth.extraLarge != widthScreen)) {
       return SafeArea(
         child: GridView.builder(
           gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
@@ -73,14 +71,16 @@ class ShimmerList extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final orientation = MediaQuery.orientationOf(context);
-    final widhtScreen = getScreenSizeWidth(context);
+    final widthScreen = getScreenSizeWidth(context);
+    final mainScreenData = ref.watch(mainScreenProvider);
     return Center(
       child: Shimmer.fromColors(
         baseColor: Colors.grey.shade700,
         highlightColor: Colors.white,
         child: _getListWidgets(
           orientation,
-          widhtScreen,
+          widthScreen,
+          mainScreenData.selection,
           ref,
         ),
       ),

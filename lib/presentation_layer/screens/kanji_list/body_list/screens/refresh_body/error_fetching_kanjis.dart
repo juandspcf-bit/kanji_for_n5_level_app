@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:kanji_for_n5_level_app/l10n/localization.dart';
 import 'package:kanji_for_n5_level_app/models/section_model.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_list/body_list/kanjis_list_provider.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/main_screens/main_content_provider.dart';
@@ -8,15 +9,13 @@ import 'package:kanji_for_n5_level_app/presentation_layer/screens/navigation_bar
 class ErrorFetchingKanjisScreen extends ConsumerWidget {
   const ErrorFetchingKanjisScreen({
     super.key,
-    required this.mainScreenData,
   });
-
-  final MainScreenData mainScreenData;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final mainScreenData = ref.watch(mainScreenProvider);
     return LayoutBuilder(
-      builder: (contx, viewportConstraints) {
+      builder: (ctx, viewportConstraints) {
         return RefreshIndicator(
           onRefresh: () async {
             if (mainScreenData.selection == ScreenSelection.favoritesKanjis) {
@@ -47,7 +46,7 @@ class ErrorFetchingKanjisScreen extends ConsumerWidget {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text(
-                          'An error has occurr',
+                          context.l10n.errorLoading,
                           style: Theme.of(context).textTheme.titleLarge,
                         ),
                       ],
