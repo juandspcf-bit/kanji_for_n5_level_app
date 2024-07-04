@@ -22,7 +22,6 @@ class KanjiAliveApi {
       );
       logger.d(localHostResult.body); */
 
-      FutureGroup<Response> group = FutureGroup<Response>();
       final (
         indexesFromKanjisToRequestToApi,
         indexesFromStoredKanjis,
@@ -35,73 +34,80 @@ class KanjiAliveApi {
 
       //when all the kanjis are stored
       if (kanjisCharacters.length == listOfStoredKanjis.length) {
-        final List<KanjiFromApi> fixedLengthList = [];
+        final List<KanjiFromApi> kanjisFromApiStored = [];
         for (int i = 0; i < listOfStoredKanjis.length; i++) {
           for (int j = 0; j < storedKanjis.length; j++) {
             if (listOfStoredKanjis[i] == storedKanjis[j].kanjiCharacter) {
-              fixedLengthList.add(storedKanjis[j]);
+              kanjisFromApiStored.add(storedKanjis[j]);
               break;
             }
           }
         }
-        return fixedLengthList;
+        return kanjisFromApiStored;
       }
-
-      for (final kanji in listOfKanjisToRequestToApi) {
-        group.add(RequestsApi.getKanjiData(kanji));
-      }
-
-      group.close();
-
-      List<Map<String, dynamic>> bodies = [];
-      List<KanjiFromApi> kanjisFromApi = [];
 
       //when all the kanjis are online
       if (kanjisCharacters.length == listOfKanjisToRequestToApi.length) {
-        //fetch all the kanjis with a http request
-        List<Response> kanjiInformationList = await group.future.timeout(
-          const Duration(
-            seconds: 25,
-          ),
+        return await fetchListOfKanjis(
+          listOfKanjisToRequestToApi: listOfKanjisToRequestToApi,
+          section: section,
         );
-
-        //processing the responses
-        for (final kanjiInformation in kanjiInformationList) {
-          bodies.add(json.decode(kanjiInformation.body));
-        }
-
-        for (final body in bodies) {
-          kanjisFromApi.add(buildKanjiInfoFromApi(body, section));
-        }
-        return kanjisFromApi;
       }
 
-      List<Response> kanjiInformationList = await group.future.timeout(
-        const Duration(seconds: 25),
+      //when there are kanjis which are online and stored
+      final kanjisFromApiOnline = await fetchListOfKanjis(
+        listOfKanjisToRequestToApi: listOfKanjisToRequestToApi,
+        section: section,
       );
-      for (final kanjiInformation in kanjiInformationList) {
-        bodies.add(json.decode(kanjiInformation.body));
-      }
 
-      for (final body in bodies) {
-        kanjisFromApi.add(buildKanjiInfoFromApi(body, section));
-      }
-      final fixedLengthList = List<KanjiFromApi>.filled(
-          kanjisCharacters.length, kanjisFromApi.first);
+      final kanjisFromApiOnlineStored = List<KanjiFromApi>.filled(
+          kanjisCharacters.length, kanjisFromApiOnline.first);
       for (int i = 0; i < indexesFromKanjisToRequestToApi.length; i++) {
-        fixedLengthList[indexesFromKanjisToRequestToApi[i]] = kanjisFromApi[i];
+        kanjisFromApiOnlineStored[indexesFromKanjisToRequestToApi[i]] =
+            kanjisFromApiOnline[i];
       }
       for (int i = 0; i < listOfStoredKanjis.length; i++) {
         for (int j = 0; j < storedKanjis.length; j++) {
           if (listOfStoredKanjis[i] == storedKanjis[j].kanjiCharacter) {
-            fixedLengthList[indexesFromStoredKanjis[i]] = storedKanjis[j];
+            kanjisFromApiOnlineStored[indexesFromStoredKanjis[i]] =
+                storedKanjis[j];
             break;
           }
         }
       }
 
-      return fixedLengthList;
+      return kanjisFromApiOnlineStored;
     });
+  }
+
+  static Future<List<KanjiFromApi>> fetchListOfKanjis({
+    required List<String> listOfKanjisToRequestToApi,
+    required int section,
+  }) async {
+    FutureGroup<Response> group = FutureGroup<Response>();
+
+    for (final kanji in listOfKanjisToRequestToApi) {
+      group.add(RequestsApi.getKanjiData(kanji));
+    }
+
+    group.close();
+
+    final kanjiInformationList = await group.future.timeout(
+      const Duration(seconds: 25),
+    );
+
+    List<Map<String, dynamic>> bodies = [];
+    List<KanjiFromApi> kanjisFromApi = [];
+
+    for (final kanjiInformation in kanjiInformationList) {
+      bodies.add(json.decode(kanjiInformation.body));
+    }
+
+    for (final body in bodies) {
+      kanjisFromApi.add(buildKanjiInfoFromApi(body, section));
+    }
+
+    return kanjisFromApi;
   }
 
   static (List<int>, List<int>, List<String>, List<String>)
