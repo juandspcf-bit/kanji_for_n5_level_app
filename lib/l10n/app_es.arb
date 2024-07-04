@@ -69,5 +69,21 @@
   "flash_card_finished":"¿Todas las tarjetas de memoria están revisadas?",
   "@flash_card_finished":{},
   "erroConnectionDetailsMessage":"No tienes conexión a internet, podrás acceder los datos cuando se restablezca",
-  "@erroConnectionDetailsMessage":{}
+  "@erroConnectionDetailsMessage":{},
+
+  "settings":"Configuración de la cuenta",
+  "@settings":{},
+  "yourData":"Tus datos",
+  "@yourData":{},
+  "changeEmail":"Cambiar email de registro",
+  "@changeEmail":{},
+  "changePassword":"Cambiar password",
+  "@changePassword":{},
+  "sendFeedback":"enviar comentarios",
+  "@sendFeedback":{},
+  "logout":"Cerrar sesión",
+  "@logout":{},
+  "closeAccount":"Cerrar tu cuenta",
+  "@closeAccount":{}
+
 }

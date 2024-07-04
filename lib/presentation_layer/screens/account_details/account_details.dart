@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kanji_for_n5_level_app/application_layer/services.dart';
+import 'package:kanji_for_n5_level_app/l10n/localization.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/account_details/change_email/change_email_flow.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/account_details/close_account/close_account_screen.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/account_details/close_account/close_account_provider.dart';
@@ -19,7 +20,7 @@ class AccountDetails extends ConsumerWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          'Account settings',
+          context.l10n.settings,
           style: Theme.of(context).textTheme.titleLarge,
         ),
         centerTitle: true,
@@ -51,7 +52,7 @@ class AccountDetails extends ConsumerWidget {
                       borderRadius:
                           const BorderRadius.all(Radius.circular(12.0)),
                     ),
-                    title: const Text('Your data'),
+                    title: Text(context.l10n.yourData),
                     trailing: const Icon(Icons.arrow_forward_ios),
                   ),
                   const SizedBox(
@@ -73,7 +74,7 @@ class AccountDetails extends ConsumerWidget {
                       borderRadius:
                           const BorderRadius.all(Radius.circular(12.0)),
                     ),
-                    title: const Text('Change Email'),
+                    title: Text(context.l10n.changeEmail),
                     trailing: const Icon(Icons.arrow_forward_ios),
                   ),
                   const SizedBox(
@@ -97,7 +98,7 @@ class AccountDetails extends ConsumerWidget {
                       borderRadius:
                           const BorderRadius.all(Radius.circular(12.0)),
                     ),
-                    title: const Text('Change password'),
+                    title: Text(context.l10n.changePassword),
                     trailing: const Icon(Icons.arrow_forward_ios),
                   ),
                   const SizedBox(
@@ -118,7 +119,7 @@ class AccountDetails extends ConsumerWidget {
                       borderRadius:
                           const BorderRadius.all(Radius.circular(12.0)),
                     ),
-                    title: const Text('Send Feedback'),
+                    title: Text(context.l10n.sendFeedback),
                     trailing: const Icon(Icons.arrow_forward_ios),
                   ),
                   const SizedBox(
@@ -148,7 +149,7 @@ class AccountDetails extends ConsumerWidget {
                       borderRadius:
                           const BorderRadius.all(Radius.circular(12.0)),
                     ),
-                    title: const Text('Logout'),
+                    title: Text(context.l10n.logout),
                     trailing: const Icon(Icons.arrow_forward_ios),
                   ),
                   const SizedBox(
@@ -171,7 +172,7 @@ class AccountDetails extends ConsumerWidget {
                       borderRadius:
                           const BorderRadius.all(Radius.circular(12.0)),
                     ),
-                    title: const Text('Close Account'),
+                    title: Text(context.l10n.closeAccount),
                     trailing: const Icon(Icons.arrow_forward_ios),
                   ),
                 ],

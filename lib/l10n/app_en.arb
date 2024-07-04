@@ -73,5 +73,21 @@
   "flash_card_finished":"All the flash cards are revised?",
   "@flash_card_finished":{},
   "erroConnectionDetailsMessage":"No internet connection, you will be able to access the info when the connection is restored",
-  "@erroConnectionDetailsMessage":{}
+  "@erroConnectionDetailsMessage":{},
+
+  "settings":"Settings",
+  "@settings":{},
+  "yourData":"Your data",
+  "@yourData":{},
+  "changeEmail":"Change registration email",
+  "@changeEmail":{},
+  "changePassword":"Change password",
+  "@changePassword":{},
+  "sendFeedback":"Send feedback",
+  "@sendFeedback":{},
+  "logout":"Logout",
+  "@logout":{},
+  "closeAccount":"Close Account",
+  "@closeAccount":{}
+
 }
