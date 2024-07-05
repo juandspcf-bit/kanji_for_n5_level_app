@@ -6,6 +6,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:kanji_for_n5_level_app/config_files/screen_config.dart';
+import 'package:kanji_for_n5_level_app/l10n/localization.dart';
 import 'package:kanji_for_n5_level_app/main.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/account_details/personal_info_update/personal_info_provider.dart';
 
@@ -122,7 +123,7 @@ void modalSelectionSourcePictureWidget(
     BuildContext context, void Function(String path) setPathProfileUser) {
   final ImagePicker picker = ImagePicker();
 
-  void selecImageSource(
+  void selectImageSource(
     ImageSource imageSource,
   ) async {
     Navigator.of(context).pop();
@@ -144,24 +145,24 @@ void modalSelectionSourcePictureWidget(
         children: [
           ListTile(
             onTap: () async {
-              selecImageSource(
+              selectImageSource(
                 ImageSource.camera,
               );
             },
             leading: const Icon(Icons.photo_camera),
-            title: const Text('Take a picture'),
+            title: Text(ctx.l10n.takeAPicture),
           ),
           const Divider(
             height: 2,
           ),
           ListTile(
             onTap: () async {
-              selecImageSource(
+              selectImageSource(
                 ImageSource.gallery,
               );
             },
             leading: const Icon(Icons.photo_size_select_actual),
-            title: const Text('Select a picture'),
+            title: Text(ctx.l10n.selectAPicture),
           ),
         ],
       );

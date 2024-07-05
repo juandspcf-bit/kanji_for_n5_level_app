@@ -105,6 +105,24 @@
   "loading":"Cargando",
   "@loading":{},
   "errorLoading":"Hubo un error cargando tu contenido",
-  "@errorLoading":{}
+  "@errorLoading":{},
+
+
+  "firstName":"Nombre",
+  "@firstName":{},
+  "errorFirstName":"El texto introducido es muy corto",
+  "@errorFirstName":{},
+  "lastName":"Apellido",
+  "@lastName":{},
+  "errorLastName":"El texto introducido es muy corto",
+  "@errorLastName":{},
+  "yourBirthday":"Fecha de nacimiento",
+  "@yourBirthday":{},
+  "updateYourInfo":"Actualizar tus datos",
+  "@updateYourInfo":{},
+  "takeAPicture":"Tomar una foto",
+  "@takeAPicture":{},
+  "selectAPicture":"Selecciona una imagen",
+  "@selectAPicture":{}
 
 }

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kanji_for_n5_level_app/config_files/assets_paths.dart';
+import 'package:kanji_for_n5_level_app/l10n/localization.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/account_details/personal_info_update/persona_info_init_provider.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/account_details/personal_info_update/personal_info_provider.dart';
 import 'package:kanji_for_n5_level_app/providers/status_connection_provider.dart';
@@ -92,16 +93,16 @@ class UserForm extends ConsumerWidget {
                     initialValue: personalInfo.firstName != ""
                         ? personalInfo.firstName
                         : accountDetailsData.firstName,
-                    decoration: const InputDecoration(
-                      label: Text('First name'),
-                      suffixIcon: Icon(Icons.person),
-                      border: OutlineInputBorder(),
+                    decoration: InputDecoration(
+                      label: Text(context.l10n.firstName),
+                      suffixIcon: const Icon(Icons.person),
+                      border: const OutlineInputBorder(),
                     ),
                     validator: (text) {
                       if (text != null && text.isNotEmpty && text.length > 2) {
                         return null;
                       } else {
-                        return 'Please provide a not to short name';
+                        return context.l10n.errorFirstName;
                       }
                     },
                     onSaved: (text) {
@@ -118,16 +119,16 @@ class UserForm extends ConsumerWidget {
                     initialValue: personalInfo.lastName != ""
                         ? personalInfo.lastName
                         : accountDetailsData.lastName,
-                    decoration: const InputDecoration(
-                      label: Text('Last name'),
-                      suffixIcon: Icon(Icons.person),
-                      border: OutlineInputBorder(),
+                    decoration: InputDecoration(
+                      label: Text(context.l10n.lastName),
+                      suffixIcon: const Icon(Icons.person),
+                      border: const OutlineInputBorder(),
                     ),
                     validator: (text) {
                       if (text != null && text.isNotEmpty && text.length > 2) {
                         return null;
                       } else {
-                        return 'Please provide a not to short name';
+                        return context.l10n.errorLastName;
                       }
                     },
                     onSaved: (text) {
@@ -150,7 +151,7 @@ class UserForm extends ConsumerWidget {
                         width: 10,
                       ),
                       Text(
-                          'Your Birthday: ${personalInfo.birthdate != "" ? personalInfo.birthdate : accountDetailsData.birthdate}'),
+                          '${context.l10n.yourBirthday}: ${personalInfo.birthdate != "" ? personalInfo.birthdate : accountDetailsData.birthdate}'),
                     ],
                   ),
                   const SizedBox(
@@ -178,7 +179,7 @@ class UserForm extends ConsumerWidget {
                               color: Theme.of(context).colorScheme.onPrimary,
                             ),
                           )
-                        : const Text('Update your info'),
+                        : Text(context.l10n.updateYourInfo),
                   ),
                 ],
               ),

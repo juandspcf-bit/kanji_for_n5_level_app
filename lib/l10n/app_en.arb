@@ -110,7 +110,24 @@
   "loading":"Loading",
   "@loading":{},
   "errorLoading":"Error accessing your content",
-  "@errorLoading":{}
+  "@errorLoading":{},
 
+
+  "firstName":"First name",
+  "@firstName":{},
+  "errorFirstName":"The text introduced is too short",
+  "@errorFirstName":{},
+  "lastName":"Last name",
+  "@lastName":{},
+  "errorLastName":"The text introduced is too short",
+  "@errorLastName":{},
+  "yourBirthday":"Your Birthday",
+  "@yourBirthday":{},
+  "updateYourInfo":"Update your info",
+  "@updateYourInfo":{},
+  "takeAPicture":"Take a picture",
+  "@takeAPicture":{},
+  "selectAPicture":"Select a picture",
+  "@selectAPicture":{}
 
 }
