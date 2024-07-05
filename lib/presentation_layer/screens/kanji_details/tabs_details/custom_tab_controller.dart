@@ -11,27 +11,13 @@ import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_details/
 import 'package:kanji_for_n5_level_app/providers/status_connection_provider.dart';
 import 'package:kanji_for_n5_level_app/providers/status_stored_provider.dart';
 
-class CustomTabControllerKanjiDetails extends ConsumerStatefulWidget {
+class CustomTabControllerKanjiDetails extends ConsumerWidget {
   const CustomTabControllerKanjiDetails({
     super.key,
   });
 
   @override
-  ConsumerState<CustomTabControllerKanjiDetails> createState() =>
-      CustomTabControllerKanjiDetailsState();
-}
-
-class CustomTabControllerKanjiDetailsState
-    extends ConsumerState<CustomTabControllerKanjiDetails> {
-  late TabController tabController;
-  @override
-  void dispose() {
-    tabController.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return DefaultTabController(
       initialIndex: 0,
       length: 3,
