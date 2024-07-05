@@ -1,13 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:kanji_for_n5_level_app/application_layer/services.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/common_widgets/animated_opacity_icon.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_details/kanji_details_provider.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_details/kanji_details_quiz_animated.dart';
+import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_details/quiz_kanji_details_screen/flash_card/flash_card_quiz_provider.dart';
+import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_details/quiz_kanji_details_screen/last_score_details_provider.dart';
+import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_details/quiz_kanji_details_screen/last_score_flash_card_provider.dart';
+import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_details/quiz_kanji_details_screen/quiz_details_main_screen.dart';
+import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_details/quiz_kanji_details_screen/quiz_details_provider.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_details/tabs_details/icon_favorites.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_details/tabs_details/tab_examples/tab_examples.dart';
+import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_details/tabs_details/tab_media/video_widget/video_player_provider.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_details/tabs_details/tab_strokes/tab_strokes.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_details/tabs_details/tab_media/video_widget/video_strokes_portrait.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_details/tabs_details/tab_examples/audio_examples_track_list_provider.dart';
+import 'package:kanji_for_n5_level_app/presentation_layer/screens/navigation_bar_screens/sections_screen/section_screen_provider.dart';
 import 'package:kanji_for_n5_level_app/providers/status_connection_provider.dart';
 import 'package:kanji_for_n5_level_app/providers/status_stored_provider.dart';
 
@@ -90,9 +98,64 @@ class AppBarPortrait extends ConsumerWidget implements PreferredSizeWidget {
           AnimatedOpacityIcon(
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 5),
-              child: DetailsQuizScreenAnimated(
-                  kanjiFromApi: kanjiFromApi,
-                  closedChild: const Icon(Icons.quiz)),
+              child: IconButton(
+                icon: const Icon(Icons.quiz),
+                onPressed: () {
+                  ref
+                      .read(quizDetailsProvider.notifier)
+                      .setDataQuiz(kanjiFromApi);
+                  ref.read(quizDetailsProvider.notifier).setQuizState(0);
+
+                  ref
+                      .read(flashCardProvider.notifier)
+                      .initTheQuiz(kanjiFromApi);
+
+                  ref
+                      .read(lastScoreDetailsProvider.notifier)
+                      .getSingleAudioExampleQuizDataDB(
+                        kanjiFromApi.kanjiCharacter,
+                        ref.read(sectionProvider),
+                        ref.read(authServiceProvider).userUuid ?? '',
+                      );
+
+                  ref
+                      .read(lastScoreFlashCardProvider.notifier)
+                      .getSingleFlashCardDataDB(
+                        kanjiFromApi.kanjiCharacter,
+                        ref.read(sectionProvider),
+                        ref.read(authServiceProvider).userUuid ?? '',
+                      );
+
+                  ref
+                      .read(quizDetailsProvider.notifier)
+                      .setScreen(Screen.welcome);
+                  ref.read(quizDetailsProvider.notifier).setOption(2);
+                  ref.read(quizDetailsProvider.notifier).resetValues();
+
+                  //pause video player
+
+                  if (ref
+                          .read(videoPlayerObjectProvider)
+                          .videoPlayerController !=
+                      null) {
+                    ref
+                        .read(videoPlayerObjectProvider)
+                        .videoPlayerController
+                        ?.pause();
+
+                    ref
+                        .read(videoPlayerObjectProvider.notifier)
+                        .setIsPlaying(false);
+                  }
+
+                  Navigator.of(context)
+                      .push(MaterialPageRoute(builder: (context) {
+                    return DetailsQuizScreen(
+                      kanjiFromApi: kanjiFromApi,
+                    );
+                  }));
+                },
+              ),
             ),
           ),
         if (statusConnectionData != ConnectionStatus.noConnected)

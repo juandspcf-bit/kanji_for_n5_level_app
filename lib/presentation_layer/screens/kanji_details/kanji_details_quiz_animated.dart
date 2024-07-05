@@ -2,6 +2,7 @@ import 'package:animations/animations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kanji_for_n5_level_app/application_layer/services.dart';
+import 'package:kanji_for_n5_level_app/main.dart';
 import 'package:kanji_for_n5_level_app/models/kanji_from_api.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_details/quiz_kanji_details_screen/flash_card/flash_card_quiz_provider.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_details/quiz_kanji_details_screen/quiz_details_main_screen.dart';
@@ -39,67 +40,72 @@ class DetailsQuizScreenAnimated extends ConsumerWidget {
       closedElevation: 0,
       closedColor: Colors.transparent,
       closedBuilder: (context, openContainer) {
-        final statusConnectionData = ref.watch(statusConnectionProvider);
+        try {
+          final statusConnectionData = ref.read(statusConnectionProvider);
 
-        final accessToQuiz =
-            statusConnectionData == ConnectionStatus.noConnected &&
-                kanjiFromApi.statusStorage == StatusStorage.onlyOnline;
+          final accessToQuiz =
+              statusConnectionData == ConnectionStatus.noConnected &&
+                  kanjiFromApi.statusStorage == StatusStorage.onlyOnline;
 
-        return GestureDetector(
-          onTap: !accessToQuiz
-              ? () {
-                  ref
-                      .read(quizDetailsProvider.notifier)
-                      .setDataQuiz(kanjiFromApi);
-                  ref.read(quizDetailsProvider.notifier).setQuizState(0);
+          return GestureDetector(
+            onTap: !accessToQuiz
+                ? () {
+                    ref
+                        .read(quizDetailsProvider.notifier)
+                        .setDataQuiz(kanjiFromApi);
+                    ref.read(quizDetailsProvider.notifier).setQuizState(0);
 
-                  ref
-                      .read(flashCardProvider.notifier)
-                      .initTheQuiz(kanjiFromApi);
+                    ref
+                        .read(flashCardProvider.notifier)
+                        .initTheQuiz(kanjiFromApi);
 
-                  ref
-                      .read(lastScoreDetailsProvider.notifier)
-                      .getSingleAudioExampleQuizDataDB(
-                        kanjiFromApi.kanjiCharacter,
-                        ref.read(sectionProvider),
-                        ref.read(authServiceProvider).userUuid ?? '',
-                      );
+                    ref
+                        .read(lastScoreDetailsProvider.notifier)
+                        .getSingleAudioExampleQuizDataDB(
+                          kanjiFromApi.kanjiCharacter,
+                          ref.read(sectionProvider),
+                          ref.read(authServiceProvider).userUuid ?? '',
+                        );
 
-                  ref
-                      .read(lastScoreFlashCardProvider.notifier)
-                      .getSingleFlashCardDataDB(
-                        kanjiFromApi.kanjiCharacter,
-                        ref.read(sectionProvider),
-                        ref.read(authServiceProvider).userUuid ?? '',
-                      );
+                    ref
+                        .read(lastScoreFlashCardProvider.notifier)
+                        .getSingleFlashCardDataDB(
+                          kanjiFromApi.kanjiCharacter,
+                          ref.read(sectionProvider),
+                          ref.read(authServiceProvider).userUuid ?? '',
+                        );
 
-                  ref
-                      .read(quizDetailsProvider.notifier)
-                      .setScreen(Screen.welcome);
-                  ref.read(quizDetailsProvider.notifier).setOption(2);
-                  ref.read(quizDetailsProvider.notifier).resetValues();
+                    ref
+                        .read(quizDetailsProvider.notifier)
+                        .setScreen(Screen.welcome);
+                    ref.read(quizDetailsProvider.notifier).setOption(2);
+                    ref.read(quizDetailsProvider.notifier).resetValues();
 
-                  //pause video player
+                    //pause video player
 
-                  if (ref
+                    if (ref
+                            .read(videoPlayerObjectProvider)
+                            .videoPlayerController !=
+                        null) {
+                      ref
                           .read(videoPlayerObjectProvider)
-                          .videoPlayerController !=
-                      null) {
-                    ref
-                        .read(videoPlayerObjectProvider)
-                        .videoPlayerController
-                        ?.pause();
+                          .videoPlayerController
+                          ?.pause();
 
-                    ref
-                        .read(videoPlayerObjectProvider.notifier)
-                        .setIsPlaying(false);
+                      ref
+                          .read(videoPlayerObjectProvider.notifier)
+                          .setIsPlaying(false);
+                    }
+
+                    openContainer();
                   }
-
-                  openContainer();
-                }
-              : null,
-          child: closedChild,
-        );
+                : null,
+            child: closedChild,
+          );
+        } catch (e) {
+          logger.e(e);
+          return Container();
+        }
       },
     );
   }
