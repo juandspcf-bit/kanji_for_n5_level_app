@@ -11,19 +11,33 @@ import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_details/
 import 'package:kanji_for_n5_level_app/providers/status_connection_provider.dart';
 import 'package:kanji_for_n5_level_app/providers/status_stored_provider.dart';
 
-class CustomTabControllerKanjiDetails extends ConsumerWidget {
+class CustomTabControllerKanjiDetails extends ConsumerStatefulWidget {
   const CustomTabControllerKanjiDetails({
     super.key,
   });
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<CustomTabControllerKanjiDetails> createState() =>
+      CustomTabControllerKanjiDetailsState();
+}
+
+class CustomTabControllerKanjiDetailsState
+    extends ConsumerState<CustomTabControllerKanjiDetails> {
+  late TabController tabController;
+  @override
+  void dispose() {
+    tabController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return DefaultTabController(
       initialIndex: 0,
       length: 3,
       child: Builder(
         builder: (BuildContext ctx) {
-          final TabController tabController = DefaultTabController.of(ctx);
+          final tabController = DefaultTabController.of(ctx);
           tabController.addListener(() {
             if (tabController.index != 3) {
               ref.read(audioExamplesTrackListProvider).assetsAudioPlayer.stop();

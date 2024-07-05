@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_details/tabs_details/tab_media/video_widget/video_player_provider.dart';
 import 'package:kanji_for_n5_level_app/providers/status_connection_provider.dart';
-import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_details/tabs_details/tab_media/video_widget/video_status_playing.dart';
 import 'package:video_player/video_player.dart';
 
 class VideoSection extends ConsumerWidget {
@@ -19,7 +19,7 @@ class VideoSection extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final videoStatus = ref.watch(videoStatusPlayingProvider);
+    final videoStatus = ref.watch(videoPlayerObjectProvider);
     final statusConnectionData = ref.watch(statusConnectionProvider);
     videoController.setPlaybackSpeed(videoStatus.speed);
     var opacity = 1.0;
@@ -126,10 +126,10 @@ class VideoSection extends ConsumerWidget {
                               /*  */
                               videoController.value.isPlaying
                                   ? videoController.pause().then((value) => ref
-                                      .read(videoStatusPlayingProvider.notifier)
+                                      .read(videoPlayerObjectProvider.notifier)
                                       .setIsPlaying(false))
                                   : videoController.play().then((value) => ref
-                                      .read(videoStatusPlayingProvider.notifier)
+                                      .read(videoPlayerObjectProvider.notifier)
                                       .setIsPlaying(true));
                             },
                   icon: Padding(
@@ -144,7 +144,7 @@ class VideoSection extends ConsumerWidget {
               ),
               TextButton(
                 onPressed: () {
-                  ref.read(videoStatusPlayingProvider.notifier).setSpeed(1.0);
+                  ref.read(videoPlayerObjectProvider.notifier).setSpeed(1.0);
                 },
                 child: Text(
                   '1.0X',
@@ -156,7 +156,7 @@ class VideoSection extends ConsumerWidget {
               ),
               TextButton(
                 onPressed: () {
-                  ref.read(videoStatusPlayingProvider.notifier).setSpeed(0.5);
+                  ref.read(videoPlayerObjectProvider.notifier).setSpeed(0.5);
                 },
                 child: Text(
                   '0.5X',
@@ -168,7 +168,7 @@ class VideoSection extends ConsumerWidget {
               ),
               TextButton(
                 onPressed: () {
-                  ref.read(videoStatusPlayingProvider.notifier).setSpeed(0.25);
+                  ref.read(videoPlayerObjectProvider.notifier).setSpeed(0.25);
                 },
                 child: Text(
                   '0.25X',

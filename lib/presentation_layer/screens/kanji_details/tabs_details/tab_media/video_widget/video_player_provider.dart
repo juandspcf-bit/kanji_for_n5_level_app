@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:kanji_for_n5_level_app/main.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_details/kanji_details_provider.dart';
 import 'package:kanji_for_n5_level_app/providers/status_stored_provider.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -12,7 +13,9 @@ class VideoPlayerObject extends _$VideoPlayerObject {
   @override
   ({
     VideoPlayerController? videoPlayerController,
-    Future<void> initializedVideoPlayer
+    Future<void> initializedVideoPlayer,
+    bool isPlaying,
+    double speed,
   }) build() {
     final kanjiDetailsData = ref.read(kanjiDetailsProvider);
 
@@ -36,9 +39,31 @@ class VideoPlayerObject extends _$VideoPlayerObject {
       },
     );
 
+    logger.d("reset build provider");
+
     return (
       videoPlayerController: videoController,
-      initializedVideoPlayer: initializedVideoPlayer
+      initializedVideoPlayer: initializedVideoPlayer,
+      isPlaying: true,
+      speed: 1.0,
+    );
+  }
+
+  void setIsPlaying(bool value) {
+    state = (
+      videoPlayerController: state.videoPlayerController,
+      initializedVideoPlayer: state.initializedVideoPlayer,
+      isPlaying: value,
+      speed: state.speed
+    );
+  }
+
+  void setSpeed(double value) {
+    state = (
+      videoPlayerController: state.videoPlayerController,
+      initializedVideoPlayer: state.initializedVideoPlayer,
+      isPlaying: state.isPlaying,
+      speed: value,
     );
   }
 }
