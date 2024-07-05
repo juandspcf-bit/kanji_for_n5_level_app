@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:kanji_for_n5_level_app/application_layer/services.dart';
+import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_details/quiz_kanji_details_screen/last_score_details_provider.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_details/quiz_kanji_details_screen/quiz_details_provider.dart';
+import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_details/quiz_kanji_details_screen/score_quiz_details/quiz_details_score_provider.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_details/quiz_kanji_details_screen/score_quiz_details/visible_lottie_file/buttons_reset_quiz.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_details/quiz_kanji_details_screen/score_quiz_details/visible_lottie_file/visible_lottie_file_provider.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_details/tabs_details/tab_examples/example_audio_widget_stream/example_audio_widget.dart';
+import 'package:kanji_for_n5_level_app/presentation_layer/screens/navigation_bar_screens/sections_screen/section_screen_provider.dart';
 
 class QuestionScreenPortrait extends ConsumerWidget {
   String formatText(String japanese) {
@@ -91,6 +95,18 @@ class QuestionScreenPortrait extends ConsumerWidget {
                   ref
                       .read(quizDetailsProvider.notifier)
                       .setScreen(Screen.score);
+                  final scores = ref.read(quizDetailsScoreProvider);
+
+                  ref.read(lastScoreDetailsProvider.notifier).setFinishedQuiz(
+                        section: ref.read(sectionProvider),
+                        uuid: ref.read(authServiceProvider).userUuid ?? '',
+                        kanjiCharacter:
+                            quizDetailData.kanjiFromApi!.kanjiCharacter,
+                        countCorrects: scores.correctAnswers.length,
+                        countIncorrect: scores.incorrectAnswers.length,
+                        countOmitted: scores.omitted.length,
+                      );
+                  ref.read(quizDetailsProvider.notifier).resetValues();
                 }
               },
               style: ElevatedButton.styleFrom().copyWith(

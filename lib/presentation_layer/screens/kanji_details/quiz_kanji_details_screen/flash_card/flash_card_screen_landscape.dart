@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:kanji_for_n5_level_app/application_layer/services.dart';
 import 'package:kanji_for_n5_level_app/main.dart';
+import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_details/kanji_details_provider.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_details/quiz_kanji_details_screen/flash_card/flash_card_quiz_provider.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_details/quiz_kanji_details_screen/flash_card/flash_card_widget.dart';
+import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_details/quiz_kanji_details_screen/last_score_flash_card_provider.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_details/quiz_kanji_details_screen/score_quiz_details/visible_lottie_file/buttons_reset_quiz.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
@@ -81,6 +84,22 @@ class _FlashCardScreenState extends ConsumerState<FlashCardScreenLandscape> {
                 controller: controller,
                 onPageChanged: (indexPage) {
                   ref.read(flashCardProvider.notifier).setIndex(indexPage);
+                  if (indexPage == flashCardState.japanese.length - 1) {
+                    final kanjiFromApi =
+                        ref.read(kanjiDetailsProvider)!.kanjiFromApi;
+                    ref
+                        .read(lastScoreFlashCardProvider.notifier)
+                        .setFinishedFlashCard(
+                          kanjiCharacter: kanjiFromApi.kanjiCharacter,
+                          section: kanjiFromApi.section,
+                          uuid: ref.read(authServiceProvider).userUuid ?? '',
+                          countUnWatched: ref
+                              .read(flashCardProvider.notifier)
+                              .answers
+                              .where((element) => !element)
+                              .length,
+                        );
+                  }
                 },
                 children: [
                   //TODO change the size when the screen is big

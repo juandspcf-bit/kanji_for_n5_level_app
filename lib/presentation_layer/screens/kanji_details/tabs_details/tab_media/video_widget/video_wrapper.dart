@@ -19,7 +19,6 @@ class VideoWrapper extends ConsumerWidget {
             !snapShot.hasError) {
           videoPlayerController.videoPlayerController!.setLooping(true);
           videoPlayerController.videoPlayerController!.play();
-          logger.d("reset");
           Future.delayed(const Duration(milliseconds: 100), () {
             ref.read(videoStatusPlayingProvider.notifier).setIsPlaying(true);
             ref.read(videoStatusPlayingProvider.notifier).setSpeed(1.0);
