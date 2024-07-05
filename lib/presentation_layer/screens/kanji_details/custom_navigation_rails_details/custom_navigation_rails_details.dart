@@ -36,7 +36,6 @@ class CustomNavigationRailKanjiDetails extends ConsumerWidget {
         if (!didPop) return;
         ref.read(audioExamplesTrackListProvider).assetsAudioPlayer.stop();
         ref.read(audioExamplesTrackListProvider.notifier).setIsPlaying(false);
-        ref.read(videoPlayerObjectProvider.notifier).setController(null);
       },
       child: Scaffold(
         body: Row(

@@ -2,7 +2,6 @@ import 'dart:io';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:kanji_for_n5_level_app/main.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/account_details/account_details.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/main_screens/avatar_main_screen/avatar_main_screen_provider.dart';
 import 'package:kanji_for_n5_level_app/providers/status_connection_provider.dart';
@@ -16,7 +15,6 @@ class AvatarMainScreenLandScape extends ConsumerWidget {
     const sizeAvatar = 60;
     return LayoutBuilder(
       builder: (context, constraints) {
-        logger.d(constraints.minWidth);
         return avatarLink.when(
           data: (data) {
             final (connection, url) = data;

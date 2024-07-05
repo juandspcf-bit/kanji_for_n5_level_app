@@ -5,7 +5,6 @@ import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_details/
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_details/kanji_details_quiz_animated.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_details/tabs_details/icon_favorites.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_details/tabs_details/tab_examples/tab_examples.dart';
-import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_details/tabs_details/tab_media/video_widget/video_player_provider.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_details/tabs_details/tab_strokes/tab_strokes.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_details/tabs_details/tab_media/video_widget/video_strokes_portrait.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_details/tabs_details/tab_examples/audio_examples_track_list_provider.dart';
@@ -45,7 +44,7 @@ class CustomTabControllerKanjiDetails extends ConsumerWidget {
               ref
                   .read(audioExamplesTrackListProvider.notifier)
                   .setIsPlaying(false);
-              ref.read(videoPlayerObjectProvider.notifier).setController(null);
+              //ref.read(videoPlayerObjectProvider.notifier).setController(null);
             },
             child: const Scaffold(
               appBar: AppBarPortrait(),
