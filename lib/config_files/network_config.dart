@@ -1,1 +1,0 @@
-const timeOutValue = 15;

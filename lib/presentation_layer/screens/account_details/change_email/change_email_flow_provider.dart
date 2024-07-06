@@ -1,10 +1,11 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:kanji_for_n5_level_app/config_files/consts.dart';
 import 'package:kanji_for_n5_level_app/main.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'change_email_flow_provider.g.dart';
 
-@Riverpod(keepAlive: true)
+@Riverpod(keepAlive: false)
 class EmailChange extends _$EmailChange {
   @override
   EmailChangeFlowData build() {
@@ -27,6 +28,10 @@ class EmailChange extends _$EmailChange {
     );
   }
 
+  bool isUpdating() {
+    return state.statusProcessing == StatusProcessingEmailChangeFlow.updating;
+  }
+
   void updateEmail(String currentPassword) async {
     try {
       final user = FirebaseAuth.instance.currentUser;
@@ -46,16 +51,15 @@ class EmailChange extends _$EmailChange {
         email: user.email!,
         password: currentPassword,
       );
-      await user.reauthenticateWithCredential(authCredential);
 
-      user
+      await user
+          .reauthenticateWithCredential(authCredential)
+          .timeout(const Duration(seconds: timeOutValue));
+      await user
           .verifyBeforeUpdateEmail(state.email)
-          .then((value) => updateState(
-              statusProcessing: StatusProcessingEmailChangeFlow.success))
-          .onError(
-            (error, stackTrace) => updateState(
-                statusProcessing: StatusProcessingEmailChangeFlow.error),
-          );
+          .timeout(const Duration(seconds: timeOutValue));
+
+      updateState(statusProcessing: StatusProcessingEmailChangeFlow.success);
     } catch (e) {
       logger.e(e);
       updateState(statusProcessing: StatusProcessingEmailChangeFlow.error);

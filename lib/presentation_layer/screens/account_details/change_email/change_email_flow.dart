@@ -149,11 +149,15 @@ class EmailChangeFlow extends ConsumerWidget {
       }
     });
 
-    return Scaffold(
-      appBar: AppBar(),
-      body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 20),
-        child: EmailChange(),
+    return PopScope(
+      canPop: !(ref.watch(emailChangeProvider).statusProcessing ==
+          StatusProcessingEmailChangeFlow.updating),
+      child: Scaffold(
+        appBar: AppBar(),
+        body: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 20),
+          child: EmailChange(),
+        ),
       ),
     );
   }
@@ -201,7 +205,7 @@ class EmailChange extends ConsumerWidget {
                 children: [
                   TextFormField(
                     keyboardType: TextInputType.emailAddress,
-                    initialValue: '',
+                    initialValue: stateEmailChange.email,
                     decoration: const InputDecoration(
                       label: Text('Your email'),
                       suffixIcon: Padding(
@@ -230,7 +234,7 @@ class EmailChange extends ConsumerWidget {
                   ),
                   TextFormField(
                     keyboardType: TextInputType.emailAddress,
-                    initialValue: '',
+                    initialValue: stateEmailChange.confirmEmail,
                     decoration: const InputDecoration(
                       label: Text('Confirm your email'),
                       suffixIcon: Padding(

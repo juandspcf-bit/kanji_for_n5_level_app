@@ -6,12 +6,12 @@ part of 'change_email_flow_provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$emailChangeHash() => r'8716ae126e5c907d7f5d0d29d05a350ac8f904bd';
+String _$emailChangeHash() => r'404cab5171359652958f6dea5f0eed606f9b5147';
 
 /// See also [EmailChange].
 @ProviderFor(EmailChange)
 final emailChangeProvider =
-    NotifierProvider<EmailChange, EmailChangeFlowData>.internal(
+    AutoDisposeNotifierProvider<EmailChange, EmailChangeFlowData>.internal(
   EmailChange.new,
   name: r'emailChangeProvider',
   debugGetCreateSourceHash:
@@ -20,6 +20,6 @@ final emailChangeProvider =
   allTransitiveDependencies: null,
 );
 
-typedef _$EmailChange = Notifier<EmailChangeFlowData>;
+typedef _$EmailChange = AutoDisposeNotifier<EmailChangeFlowData>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member
