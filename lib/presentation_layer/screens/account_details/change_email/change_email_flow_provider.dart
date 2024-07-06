@@ -1,7 +1,10 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-class EmailChange extends Notifier<EmailChangeFlowData> {
+part 'change_email_flow_provider.g.dart';
+
+@Riverpod(keepAlive: true)
+class EmailChange extends _$EmailChange {
   @override
   EmailChangeFlowData build() {
     return EmailChangeFlowData(
@@ -11,47 +14,31 @@ class EmailChange extends Notifier<EmailChangeFlowData> {
     );
   }
 
-  void setEmail(String email) {
+  void updateState({
+    String? email,
+    String? confirmEmail,
+    StatusProcessingEmailChangeFlow? statusProcessing,
+  }) {
     state = EmailChangeFlowData(
-      statusProcessing: state.statusProcessing,
-      email: email,
-      confirmEmail: state.confirmEmail,
-    );
-  }
-
-  void setConfirmEmail(
-    String confirmEmail,
-  ) {
-    state = EmailChangeFlowData(
-      statusProcessing: state.statusProcessing,
-      email: state.email,
-      confirmEmail: confirmEmail,
-    );
-  }
-
-  void setStatusProcessing(
-    StatusProcessingEmailChangeFlow statusProcessing,
-  ) {
-    state = EmailChangeFlowData(
-      statusProcessing: statusProcessing,
-      email: state.email,
-      confirmEmail: state.confirmEmail,
+      statusProcessing: statusProcessing ?? state.statusProcessing,
+      email: email ?? state.email,
+      confirmEmail: confirmEmail ?? state.confirmEmail,
     );
   }
 
   void updateEmail(String currentPassword) async {
     final user = FirebaseAuth.instance.currentUser;
     if (user == null) {
-      setStatusProcessing(StatusProcessingEmailChangeFlow.error);
+      updateState(statusProcessing: StatusProcessingEmailChangeFlow.error);
       return;
     }
     final email = user.email;
     if (email == null) {
-      setStatusProcessing(StatusProcessingEmailChangeFlow.error);
+      updateState(statusProcessing: StatusProcessingEmailChangeFlow.error);
       return;
     }
 
-    setStatusProcessing(StatusProcessingEmailChangeFlow.updating);
+    updateState(statusProcessing: StatusProcessingEmailChangeFlow.updating);
 
     final authCredential = EmailAuthProvider.credential(
       email: user.email!,
@@ -61,15 +48,12 @@ class EmailChange extends Notifier<EmailChangeFlowData> {
 
     user
         .verifyBeforeUpdateEmail(state.email)
-        .then((value) =>
-            setStatusProcessing(StatusProcessingEmailChangeFlow.success))
-        .onError((error, stackTrace) =>
-            setStatusProcessing(StatusProcessingEmailChangeFlow.error));
+        .then((value) => updateState(
+            statusProcessing: StatusProcessingEmailChangeFlow.success))
+        .onError((error, stackTrace) => updateState(
+            statusProcessing: StatusProcessingEmailChangeFlow.error));
   }
 }
-
-final emailChangeProvider =
-    NotifierProvider<EmailChange, EmailChangeFlowData>(EmailChange.new);
 
 class EmailChangeFlowData {
   final StatusProcessingEmailChangeFlow statusProcessing;

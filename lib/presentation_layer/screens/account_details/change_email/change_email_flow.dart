@@ -3,12 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kanji_for_n5_level_app/application_layer/services.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/account_details/change_email/change_email_flow_provider.dart';
-import 'package:kanji_for_n5_level_app/presentation_layer/common_widgets/my_dialogs.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/sign_in_screen/login_provider.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/main_screens/main_content_provider.dart';
 import 'package:kanji_for_n5_level_app/providers/status_connection_provider.dart';
 
-class EmailChangeFlow extends ConsumerWidget with MyDialogs {
+class EmailChangeFlow extends ConsumerWidget {
   const EmailChangeFlow({super.key});
 
   Widget _dialogPasswordRequest(BuildContext context, WidgetRef ref) {
@@ -20,9 +19,8 @@ class EmailChangeFlow extends ConsumerWidget with MyDialogs {
       if (currenState.validate()) {
         currenState.save();
         Navigator.of(context).pop();
-        ref
-            .read(emailChangeProvider.notifier)
-            .setStatusProcessing(StatusProcessingEmailChangeFlow.form);
+        ref.read(emailChangeProvider.notifier).updateState(
+            statusProcessing: StatusProcessingEmailChangeFlow.form);
         ref.read(emailChangeProvider.notifier).updateEmail(
               textPassword,
             );
@@ -57,9 +55,8 @@ class EmailChangeFlow extends ConsumerWidget with MyDialogs {
       actions: <Widget>[
         TextButton(
           onPressed: () {
-            ref
-                .read(emailChangeProvider.notifier)
-                .setStatusProcessing(StatusProcessingEmailChangeFlow.form);
+            ref.read(emailChangeProvider.notifier).updateState(
+                statusProcessing: StatusProcessingEmailChangeFlow.form);
             Navigator.of(context).pop();
           },
           child: const Text("Cancel"),
@@ -102,35 +99,53 @@ class EmailChangeFlow extends ConsumerWidget with MyDialogs {
       }
       if (current.statusProcessing ==
           StatusProcessingEmailChangeFlow.noMatchEmails) {
-        errorDialog(context, () {
-          ref
-              .read(emailChangeProvider.notifier)
-              .setStatusProcessing(StatusProcessingEmailChangeFlow.form);
-        }, 'emails not match');
+        ref.read(toastServiceProvider).showMessage(
+              context,
+              'emails not match',
+              Icons.error,
+              const Duration(seconds: 3),
+              "",
+              null,
+            );
+        ref.read(emailChangeProvider.notifier).updateState(
+            statusProcessing: StatusProcessingEmailChangeFlow.form);
       }
 
       if (current.statusProcessing == StatusProcessingEmailChangeFlow.error) {
-        errorDialog(context, () {
-          ref
-              .read(emailChangeProvider.notifier)
-              .setStatusProcessing(StatusProcessingEmailChangeFlow.form);
-        }, 'An error happened during changing your email');
+        ref.read(toastServiceProvider).showMessage(
+              context,
+              'An error happened during changing your email',
+              Icons.error,
+              const Duration(seconds: 3),
+              "",
+              null,
+            );
+        ref.read(emailChangeProvider.notifier).updateState(
+            statusProcessing: StatusProcessingEmailChangeFlow.form);
       }
+
       if (current.statusProcessing == StatusProcessingEmailChangeFlow.success) {
-        successDialog(context, () async {
-          ref
-              .read(emailChangeProvider.notifier)
-              .setStatusProcessing(StatusProcessingEmailChangeFlow.form);
-          await ref.read(authServiceProvider).singOut();
+        ref.read(toastServiceProvider).showMessage(
+              context,
+              'successful sent link to change your email',
+              Icons.check_circle,
+              const Duration(seconds: 5),
+              "",
+              null,
+            );
+        ref.read(emailChangeProvider.notifier).updateState(
+            statusProcessing: StatusProcessingEmailChangeFlow.form);
+        ref.read(authServiceProvider).singOut().then((data) {
+          if (context.mounted) {
+            Navigator.pop(context);
+            Navigator.pop(context);
+          }
           ref.read(mainScreenProvider.notifier).resetMainScreenState();
           ref.read(loginProvider.notifier).resetData();
           ref
               .read(loginProvider.notifier)
               .setStatusLoggingFlow(StatusProcessingLoggingFlow.form);
-          if (context.mounted) {
-            Navigator.pop(context);
-          }
-        }, 'successful sent link to change your email');
+        });
       }
     });
 
@@ -156,13 +171,11 @@ class EmailChange extends ConsumerWidget {
 
     if (ref.read(emailChangeProvider).email ==
         ref.read(emailChangeProvider).confirmEmail) {
-      ref
-          .read(emailChangeProvider.notifier)
-          .setStatusProcessing(StatusProcessingEmailChangeFlow.showEmailInput);
+      ref.read(emailChangeProvider.notifier).updateState(
+          statusProcessing: StatusProcessingEmailChangeFlow.showEmailInput);
     } else {
-      ref
-          .read(emailChangeProvider.notifier)
-          .setStatusProcessing(StatusProcessingEmailChangeFlow.noMatchEmails);
+      ref.read(emailChangeProvider.notifier).updateState(
+          statusProcessing: StatusProcessingEmailChangeFlow.noMatchEmails);
     }
   }
 
@@ -205,7 +218,9 @@ class EmailChange extends ConsumerWidget {
                     },
                     onSaved: (text) {
                       if (text != null) {
-                        ref.read(emailChangeProvider.notifier).setEmail(text);
+                        ref
+                            .read(emailChangeProvider.notifier)
+                            .updateState(email: text);
                       }
                     },
                   ),
@@ -234,7 +249,7 @@ class EmailChange extends ConsumerWidget {
                       if (text != null) {
                         ref
                             .read(emailChangeProvider.notifier)
-                            .setConfirmEmail(text);
+                            .updateState(confirmEmail: text);
                       }
                     },
                   ),
@@ -246,6 +261,7 @@ class EmailChange extends ConsumerWidget {
                         statusConnectionData == ConnectionStatus.noConnected
                             ? null
                             : () {
+                                FocusManager.instance.primaryFocus?.unfocus();
                                 onValidation(ref);
                               },
                     style: ElevatedButton.styleFrom(
