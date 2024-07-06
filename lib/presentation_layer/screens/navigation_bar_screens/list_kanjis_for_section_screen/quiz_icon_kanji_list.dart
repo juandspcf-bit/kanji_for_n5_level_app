@@ -1,9 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:kanji_for_n5_level_app/application_layer/services.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/common_widgets/animated_opacity_icon.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_list/body_list/kanjis_list_provider.dart';
-import 'package:kanji_for_n5_level_app/presentation_layer/screens/navigation_bar_screens/sections_screen/kanji_sections_quiz_animation.dart';
+import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_list/quiz_kanji_list_screen/kanji_quiz_screen.dart';
+import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_list/quiz_kanji_list_screen/quiz_kanji_list_provider.dart';
+import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_list/quiz_kanji_list_screen/welcome_screen/last_score_provider.dart';
+import 'package:kanji_for_n5_level_app/presentation_layer/screens/navigation_bar_screens/sections_screen/section_screen_provider.dart';
 import 'package:kanji_for_n5_level_app/providers/status_connection_provider.dart';
+import 'package:page_animation_transition/animations/fade_animation_transition.dart';
+import 'package:page_animation_transition/page_animation_transition.dart';
 
 class QuizIconKanjiList extends ConsumerWidget {
   const QuizIconKanjiList({super.key});
@@ -21,12 +27,29 @@ class QuizIconKanjiList extends ConsumerWidget {
         kanjiListData.kanjiList.isEmpty;
 
     return (kanjiListData.status == 1 && !accessToQuiz)
-        ? const AnimatedOpacityIcon(
+        ? AnimatedOpacityIcon(
             child: Padding(
-              padding: EdgeInsets.symmetric(horizontal: 10.0),
-              child: KanjiSectionsQuizAnimated(
-                closedChild: Icon(Icons.quiz),
-              ),
+              padding: const EdgeInsets.symmetric(horizontal: 10.0),
+              child: IconButton(
+                  onPressed: () {
+                    var kanjiListData = ref.read(kanjiListProvider);
+                    ref
+                        .read(quizDataValuesProvider.notifier)
+                        .initTheStateBeforeAccessingQuizScreen(
+                            kanjiListData.kanjiList.length,
+                            kanjiListData.kanjiList);
+                    ref
+                        .read(lastScoreKanjiQuizProvider.notifier)
+                        .getKanjiQuizLastScore(
+                          ref.read(sectionProvider),
+                          ref.read(authServiceProvider).userUuid ?? '',
+                        );
+
+                    Navigator.of(context).push(PageAnimationTransition(
+                        page: const KanjiQuizScreen(),
+                        pageAnimationType: FadeAnimationTransition()));
+                  },
+                  icon: const Icon(Icons.quiz)),
             ),
           )
         : Container();

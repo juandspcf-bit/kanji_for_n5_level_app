@@ -78,6 +78,7 @@ dependencies:
   pdf: ^3.10.8
   open_file: ^3.3.2
   riverpod_annotation: ^2.3.5
+  page_animation_transition: ^1.0.0
 
 
 dev_dependencies:

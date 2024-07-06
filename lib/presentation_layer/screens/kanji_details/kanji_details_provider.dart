@@ -5,10 +5,16 @@ import 'package:kanji_for_n5_level_app/application_layer/services.dart';
 import 'package:kanji_for_n5_level_app/main.dart';
 import 'package:kanji_for_n5_level_app/models/kanji_from_api.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_details/custom_navigation_rails_details/custom_navigation_rails_details_provider.dart';
+import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_details/quiz_kanji_details_screen/flash_card/flash_card_quiz_provider.dart';
+import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_details/quiz_kanji_details_screen/last_score_details_provider.dart';
+import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_details/quiz_kanji_details_screen/last_score_flash_card_provider.dart';
+import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_details/quiz_kanji_details_screen/quiz_details_provider.dart';
+import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_details/tabs_details/tab_media/video_widget/video_player_provider.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_details/tabs_details/tab_strokes/pdf_strokes/pdf_api.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_details/tabs_details/tab_strokes/pdf_strokes/save_and_open_pdf.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/navigation_bar_screens/list_favorite_kanjis_screen/favorites_kanjis_provider.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_details/tabs_details/tab_examples/audio_examples_track_list_provider.dart';
+import 'package:kanji_for_n5_level_app/presentation_layer/screens/navigation_bar_screens/sections_screen/section_screen_provider.dart';
 import 'package:kanji_for_n5_level_app/providers/status_stored_provider.dart';
 import 'package:kanji_for_n5_level_app/repositories_layer/local_database/download_data_handlers.dart';
 
@@ -114,6 +120,38 @@ class KanjiDetailsProvider extends Notifier<KanjiDetailsData?> {
         logger.e(e);
         setStoringToFavoritesStatus(StoringToFavoritesStatus.noStarted);
       }
+    }
+  }
+
+  void initQuiz() {
+    final kanjiFromApi = state!.kanjiFromApi;
+    ref.read(quizDetailsProvider.notifier).setDataQuiz(kanjiFromApi);
+    ref.read(quizDetailsProvider.notifier).setQuizState(0);
+
+    ref.read(flashCardProvider.notifier).initTheQuiz(kanjiFromApi);
+
+    ref.read(lastScoreDetailsProvider.notifier).getSingleAudioExampleQuizDataDB(
+          kanjiFromApi.kanjiCharacter,
+          ref.read(sectionProvider),
+          ref.read(authServiceProvider).userUuid ?? '',
+        );
+
+    ref.read(lastScoreFlashCardProvider.notifier).getSingleFlashCardDataDB(
+          kanjiFromApi.kanjiCharacter,
+          ref.read(sectionProvider),
+          ref.read(authServiceProvider).userUuid ?? '',
+        );
+
+    ref.read(quizDetailsProvider.notifier).setScreen(Screen.welcome);
+    ref.read(quizDetailsProvider.notifier).setOption(2);
+    ref.read(quizDetailsProvider.notifier).resetValues();
+
+    //pause video player
+
+    if (ref.read(videoPlayerObjectProvider).videoPlayerController != null) {
+      ref.read(videoPlayerObjectProvider).videoPlayerController?.pause();
+
+      ref.read(videoPlayerObjectProvider.notifier).setIsPlaying(false);
     }
   }
 

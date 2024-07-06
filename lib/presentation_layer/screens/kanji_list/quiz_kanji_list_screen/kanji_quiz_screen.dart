@@ -14,10 +14,7 @@ import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_list/qui
 class KanjiQuizScreen extends ConsumerWidget {
   const KanjiQuizScreen({
     super.key,
-    required this.kanjisFromApi,
   });
-
-  final List<KanjiFromApi> kanjisFromApi;
 
   Widget getScreen(
     BuildContext context,
