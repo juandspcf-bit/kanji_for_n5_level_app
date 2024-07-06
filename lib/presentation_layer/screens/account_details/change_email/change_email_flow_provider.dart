@@ -1,4 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:kanji_for_n5_level_app/main.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'change_email_flow_provider.g.dart';
@@ -27,31 +28,38 @@ class EmailChange extends _$EmailChange {
   }
 
   void updateEmail(String currentPassword) async {
-    final user = FirebaseAuth.instance.currentUser;
-    if (user == null) {
+    try {
+      final user = FirebaseAuth.instance.currentUser;
+      if (user == null) {
+        updateState(statusProcessing: StatusProcessingEmailChangeFlow.error);
+        return;
+      }
+      final email = user.email;
+      if (email == null) {
+        updateState(statusProcessing: StatusProcessingEmailChangeFlow.error);
+        return;
+      }
+
+      updateState(statusProcessing: StatusProcessingEmailChangeFlow.updating);
+
+      final authCredential = EmailAuthProvider.credential(
+        email: user.email!,
+        password: currentPassword,
+      );
+      await user.reauthenticateWithCredential(authCredential);
+
+      user
+          .verifyBeforeUpdateEmail(state.email)
+          .then((value) => updateState(
+              statusProcessing: StatusProcessingEmailChangeFlow.success))
+          .onError(
+            (error, stackTrace) => updateState(
+                statusProcessing: StatusProcessingEmailChangeFlow.error),
+          );
+    } catch (e) {
+      logger.e(e);
       updateState(statusProcessing: StatusProcessingEmailChangeFlow.error);
-      return;
     }
-    final email = user.email;
-    if (email == null) {
-      updateState(statusProcessing: StatusProcessingEmailChangeFlow.error);
-      return;
-    }
-
-    updateState(statusProcessing: StatusProcessingEmailChangeFlow.updating);
-
-    final authCredential = EmailAuthProvider.credential(
-      email: user.email!,
-      password: currentPassword,
-    );
-    await user.reauthenticateWithCredential(authCredential);
-
-    user
-        .verifyBeforeUpdateEmail(state.email)
-        .then((value) => updateState(
-            statusProcessing: StatusProcessingEmailChangeFlow.success))
-        .onError((error, stackTrace) => updateState(
-            statusProcessing: StatusProcessingEmailChangeFlow.error));
   }
 }
 

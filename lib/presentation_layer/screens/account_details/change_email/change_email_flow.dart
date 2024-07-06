@@ -183,6 +183,7 @@ class EmailChange extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final statusConnectionData = ref.watch(statusConnectionProvider);
+    final stateEmailChange = ref.watch(emailChangeProvider);
     return SingleChildScrollView(
       child: Column(
         children: [
@@ -265,9 +266,18 @@ class EmailChange extends ConsumerWidget {
                                 onValidation(ref);
                               },
                     style: ElevatedButton.styleFrom(
-                      minimumSize: const Size.fromHeight(40),
+                      minimumSize: const Size.fromHeight(50),
                     ),
-                    child: const Text('Change your email'),
+                    child: stateEmailChange.statusProcessing ==
+                            StatusProcessingEmailChangeFlow.updating
+                        ? SizedBox(
+                            width: 30,
+                            height: 30,
+                            child: CircularProgressIndicator(
+                              color: Theme.of(context).colorScheme.onPrimary,
+                            ),
+                          )
+                        : const Text("Change your email"),
                   ),
                   const SizedBox(
                     height: 20,
