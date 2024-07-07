@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:kanji_for_n5_level_app/config_files/consts.dart';
 import 'package:kanji_for_n5_level_app/main.dart';
 
 class PasswordChangeFlowProvider extends Notifier<PasswordChangeFlowData> {
@@ -80,8 +81,12 @@ class PasswordChangeFlowProvider extends Notifier<PasswordChangeFlowData> {
         email: user.email!,
         password: currentPassword,
       );
-      await user.reauthenticateWithCredential(authCredential);
-      await user.updatePassword(state.password);
+      await user
+          .reauthenticateWithCredential(authCredential)
+          .timeout(const Duration(seconds: timeOutValue));
+      await user
+          .updatePassword(state.password)
+          .timeout(const Duration(seconds: timeOutValue));
       setStatusProcessing(StatusProcessingPasswordChangeFlow.success);
       _isUpdating = false;
     } on FirebaseAuthException catch (e) {

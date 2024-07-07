@@ -46,57 +46,6 @@ class InitMainContentState extends ConsumerState<InitMainContent> {
           context, "${context.l10n.errorDeleting} ${current.kanjiCharacter}");
     });
 
-    ref.listen<PasswordChangeFlowData>(
-      passwordChangeFlowProvider,
-      (previous, current) {
-        ref.read(toastServiceProvider).dismiss(context);
-        if (current.statusProcessing ==
-            StatusProcessingPasswordChangeFlow.noMatchPasswords) {
-          ref
-              .read(passwordChangeFlowProvider.notifier)
-              .setStatusProcessing(StatusProcessingPasswordChangeFlow.form);
-          ref.read(toastServiceProvider).showMessage(
-                context,
-                context.l10n.passwordNotMach,
-                Icons.error,
-                const Duration(seconds: 3),
-                "",
-                null,
-              );
-        }
-
-        if (current.statusProcessing ==
-            StatusProcessingPasswordChangeFlow.error) {
-          ref
-              .read(passwordChangeFlowProvider.notifier)
-              .setStatusProcessing(StatusProcessingPasswordChangeFlow.form);
-          ref.read(toastServiceProvider).showMessage(
-                context,
-                context.l10n.updatingError,
-                Icons.error,
-                const Duration(seconds: 3),
-                "",
-                null,
-              );
-        }
-
-        if (current.statusProcessing ==
-            StatusProcessingPasswordChangeFlow.success) {
-          ref
-              .read(passwordChangeFlowProvider.notifier)
-              .setStatusProcessing(StatusProcessingPasswordChangeFlow.form);
-          ref.read(toastServiceProvider).showMessage(
-                context,
-                context.l10n.updatingSuccess,
-                Icons.done,
-                const Duration(seconds: 3),
-                "",
-                null,
-              );
-        }
-      },
-    );
-
     ref.listen<PersonalInfoData>(personalInfoProvider, (previous, current) {
       if (current.updatingStatus == PersonalInfoUpdatingStatus.error) {
         ref.read(toastServiceProvider).dismiss(context);
