@@ -2,6 +2,7 @@ import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kanji_for_n5_level_app/application_layer/services.dart';
+import 'package:kanji_for_n5_level_app/l10n/localization.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/account_details/change_email/change_email_flow_provider.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/sign_in_screen/login_provider.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/main_screens/main_content_provider.dart';
@@ -28,22 +29,22 @@ class EmailChangeFlow extends ConsumerWidget {
     }
 
     return AlertDialog(
-      title: const Text('Type your password'),
+      title: Text(context.l10n.typeYourPassword),
       content: Form(
         key: dialogFormKey,
         child: TextFormField(
           obscureText: true,
           keyboardType: TextInputType.text,
-          decoration: const InputDecoration(
-            label: Text('password'),
-            suffixIcon: Icon(Icons.key),
-            border: OutlineInputBorder(),
+          decoration: InputDecoration(
+            label: Text(context.l10n.password),
+            suffixIcon: const Icon(Icons.key),
+            border: const OutlineInputBorder(),
           ),
           validator: (text) {
             if (text != null && text.length >= 4 && text.length <= 20) {
               return null;
             } else {
-              return 'Invalid password';
+              return context.l10n.invalidPassword;
             }
           },
           onSaved: (value) {
@@ -59,13 +60,13 @@ class EmailChangeFlow extends ConsumerWidget {
                 statusProcessing: StatusProcessingEmailChangeFlow.form);
             Navigator.of(context).pop();
           },
-          child: const Text("Cancel"),
+          child: Text(context.l10n.cancel),
         ),
         TextButton(
           onPressed: () {
             onValidatePassword(context, ref);
           },
-          child: const Text("Okay"),
+          child: Text(context.l10n.okay),
         ),
       ],
     );
@@ -101,7 +102,7 @@ class EmailChangeFlow extends ConsumerWidget {
           StatusProcessingEmailChangeFlow.noMatchEmails) {
         ref.read(toastServiceProvider).showMessage(
               context,
-              'emails not match',
+              context.l10n.emailsNotMach,
               Icons.error,
               const Duration(seconds: 3),
               "",
@@ -114,7 +115,7 @@ class EmailChangeFlow extends ConsumerWidget {
       if (current.statusProcessing == StatusProcessingEmailChangeFlow.error) {
         ref.read(toastServiceProvider).showMessage(
               context,
-              'An error happened during changing your email',
+              context.l10n.errorChangingEmail,
               Icons.error,
               const Duration(seconds: 3),
               "",
@@ -127,7 +128,7 @@ class EmailChangeFlow extends ConsumerWidget {
       if (current.statusProcessing == StatusProcessingEmailChangeFlow.success) {
         ref.read(toastServiceProvider).showMessage(
               context,
-              'successful sent link to change your email',
+              context.l10n.successChangingEmail,
               Icons.check_circle,
               const Duration(seconds: 5),
               "",
@@ -206,19 +207,19 @@ class EmailChange extends ConsumerWidget {
                   TextFormField(
                     keyboardType: TextInputType.emailAddress,
                     initialValue: stateEmailChange.email,
-                    decoration: const InputDecoration(
-                      label: Text('Your email'),
-                      suffixIcon: Padding(
+                    decoration: InputDecoration(
+                      label: Text(context.l10n.yourNewEmail),
+                      suffixIcon: const Padding(
                         padding: EdgeInsets.all(8.0),
                         child: Icon(Icons.email_rounded),
                       ),
-                      border: OutlineInputBorder(),
+                      border: const OutlineInputBorder(),
                     ),
                     validator: (email) {
                       if (email != null && EmailValidator.validate(email)) {
                         return null;
                       } else {
-                        return 'Not a valid email';
+                        return context.l10n.invalidEmail;
                       }
                     },
                     onSaved: (text) {
@@ -235,19 +236,19 @@ class EmailChange extends ConsumerWidget {
                   TextFormField(
                     keyboardType: TextInputType.emailAddress,
                     initialValue: stateEmailChange.confirmEmail,
-                    decoration: const InputDecoration(
-                      label: Text('Confirm your email'),
-                      suffixIcon: Padding(
+                    decoration: InputDecoration(
+                      label: Text(context.l10n.yourNewConfirmEmail),
+                      suffixIcon: const Padding(
                         padding: EdgeInsets.all(8.0),
                         child: Icon(Icons.email_rounded),
                       ),
-                      border: OutlineInputBorder(),
+                      border: const OutlineInputBorder(),
                     ),
                     validator: (email) {
                       if (email != null && EmailValidator.validate(email)) {
                         return null;
                       } else {
-                        return 'Not a valid email';
+                        return context.l10n.invalidEmail;
                       }
                     },
                     onSaved: (text) {
@@ -281,7 +282,7 @@ class EmailChange extends ConsumerWidget {
                               color: Theme.of(context).colorScheme.onPrimary,
                             ),
                           )
-                        : const Text("Change your email"),
+                        : Text(context.l10n.changeEmail),
                   ),
                   const SizedBox(
                     height: 20,

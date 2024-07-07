@@ -31,22 +31,22 @@ class PasswordChangeFlowScreen extends ConsumerWidget with MyDialogs {
     }
 
     return AlertDialog(
-      title: const Text('Type your password'),
+      title: Text(context.l10n.typeYourPassword),
       content: Form(
         key: dialogFormKey,
         child: TextFormField(
           obscureText: true,
           keyboardType: TextInputType.text,
-          decoration: const InputDecoration(
-            label: Text('password'),
-            suffixIcon: Icon(Icons.key),
-            border: OutlineInputBorder(),
+          decoration: InputDecoration(
+            label: Text(context.l10n.password),
+            suffixIcon: const Icon(Icons.key),
+            border: const OutlineInputBorder(),
           ),
           validator: (text) {
             if (text != null && text.length >= 4 && text.length <= 20) {
               return null;
             } else {
-              return 'Invalid password';
+              return context.l10n.invalidPassword;
             }
           },
           onSaved: (value) {
@@ -63,13 +63,13 @@ class PasswordChangeFlowScreen extends ConsumerWidget with MyDialogs {
                 .setStatusProcessing(StatusProcessingPasswordChangeFlow.form);
             Navigator.of(context).pop();
           },
-          child: const Text("Cancel"),
+          child: Text(context.l10n.cancel),
         ),
         TextButton(
           onPressed: () {
             onValidatePassword(context, ref);
           },
-          child: const Text("Okay"),
+          child: Text(context.l10n.okay),
         ),
       ],
     );

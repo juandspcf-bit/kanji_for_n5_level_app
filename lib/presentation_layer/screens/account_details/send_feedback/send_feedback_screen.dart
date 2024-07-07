@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:kanji_for_n5_level_app/l10n/localization.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/account_details/send_feedback/send_feedback_provider.dart';
 
 class SendFeedBack extends ConsumerWidget {
@@ -9,7 +10,9 @@ class SendFeedBack extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Send your feedback'),
+        title: Text(
+          context.l10n.sendYourFeedback,
+        ),
       ),
       body: SendFeedBackForm(),
     );
@@ -57,14 +60,14 @@ class SendFeedBackForm extends ConsumerWidget {
                       TextFormField(
                         decoration: const InputDecoration().copyWith(
                           border: const OutlineInputBorder(),
-                          labelText: 'Subject',
+                          labelText: context.l10n.subject,
                           floatingLabelBehavior: FloatingLabelBehavior.always,
                         ),
                         validator: (text) {
                           if (text != null && text.length >= 4) {
                             return null;
                           } else {
-                            return 'Text should not be too short';
+                            return context.l10n.textTooShort;
                           }
                         },
                         onSaved: (value) {
@@ -83,14 +86,14 @@ class SendFeedBackForm extends ConsumerWidget {
                         maxLines: 6,
                         decoration: const InputDecoration().copyWith(
                             border: const OutlineInputBorder(),
-                            labelText: 'message',
+                            labelText: context.l10n.message,
                             floatingLabelBehavior:
                                 FloatingLabelBehavior.always),
                         validator: (text) {
                           if (text != null && text.length >= 4) {
                             return null;
                           } else {
-                            return 'Text should not be too short';
+                            return context.l10n.textTooShort;
                           }
                         },
                         onSaved: (value) {
@@ -119,7 +122,7 @@ class SendFeedBackForm extends ConsumerWidget {
                             Size.fromHeight(40),
                           ),
                         ),
-                        child: const Text('Send'),
+                        child: Text(context.l10n.send),
                       ),
                     ],
                   ))

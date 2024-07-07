@@ -54,13 +54,11 @@
       }
     }
   },
+
   "examples": "Examples",
   "@examples": {},
   "playlist":"Playlist",
   "@playlist":{},
-
-
-
 
   "kanji_quiz_finished":"Is kanji quiz finished?",
   "@kanji_quiz_finished":{},
@@ -90,6 +88,52 @@
   "closeAccount":"Close Account",
   "@closeAccount":{},
 
+  "yourNewEmail":"Your new email",
+  "@yourNewEmail":{},
+  "invalidEmail":"Invalid email",
+  "@invalidEmail":{},
+  "yourNewConfirmEmail":"Confirm your new email",
+  "@yourNewConfirmEmail":{},
+  "changeYourEmail":"Change your email",
+  "@changeYourEmail":{},
+  "emailsNotMach":"emails not match",
+  "@emailsNotMach":{},
+  "errorChangingEmail":"An error happened during changing your email",
+  "@errorChangingEmail":{},
+  "successChangingEmail":"Successful sent link to change your email",
+  "@successChangingEmail":{},
+
+  "yourNewPassword":"Your new password",
+  "@yourNewPassword":{},
+  "invalidNewPassword":"Password should be between 20 and 4 characters",
+  "@invalidNewPassword":{},
+  "yourNewConfirmPassword":"Confirm your new password",
+  "@yourNewConfirmPassword":{},
+  "changeYourPassword":"Change your password",
+  "@changeYourPassword":{},
+
+  "sendYourFeedback":"Send tour feedback",
+  "@sendYourFeedback":{},
+  "subject":"Subject",
+  "@subject":{},
+  "textTooShort":"Text should not be too short",
+  "@textTooShort":{},
+  "message":"Message",
+  "@message":{},
+  "send":"Send",
+  "@send":{},
+  
+
+  "typeYourPassword":"Type your password",
+  "@typeYourPassword":{},
+  "password":"password",
+  "@password":{},
+  "invalidPassword":"Invalid password",
+  "@invalidPassword":{},
+  "cancel":"Cancel",
+  "@cancel":{},
+  "okay":"Okay",
+  "@okay":{},
 
   "errorDownload":"There was an error downloading",
   "@errorDownload":{},
@@ -106,12 +150,10 @@
   "undo":"Undo",
   "@undo":{},
 
-
   "loading":"Loading",
   "@loading":{},
   "errorLoading":"Error accessing your content",
   "@errorLoading":{},
-
 
   "firstName":"First name",
   "@firstName":{},
@@ -129,5 +171,7 @@
   "@takeAPicture":{},
   "selectAPicture":"Select a picture",
   "@selectAPicture":{}
+
+
 
 }
