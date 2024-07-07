@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:kanji_for_n5_level_app/l10n/localization.dart';
 import 'package:kanji_for_n5_level_app/main.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_details/quiz_kanji_details_screen/last_score_details_provider.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_details/quiz_kanji_details_screen/last_score_flash_card_provider.dart';
@@ -31,17 +32,17 @@ class LastScoreAudioExampleScreen extends ConsumerWidget {
       data: (data) => Builder(builder: (context) {
         return data.isFinishedQuiz
             ? Text(
-                'Last score: ${data.countCorrects} questions correct out of '
+                '${context.l10n.lastScore} ${data.countCorrects} ${context.l10n.questionsCorrectOutOf} '
                 '${data.countCorrects + data.countIncorrect + data.countOmitted}',
                 style: Theme.of(context).textTheme.bodySmall,
               )
             : Text(
-                'Not started the audio quiz!!',
+                context.l10n.notStartedTheAudioQuiz,
                 style: Theme.of(context).textTheme.bodySmall,
               );
       }),
       error: (error, stack) => Text(
-        'Oops, something unexpected happened',
+        context.l10n.errorDetailsQuiz,
         style: Theme.of(context).textTheme.bodySmall,
       ),
       loading: () => const CircularProgressIndicator(),
@@ -61,16 +62,16 @@ class LastFlashCardScore extends ConsumerWidget {
         logger.d(data);
         return data.allRevisedFlashCards
             ? Text(
-                'You have revised all flash cards',
+                context.l10n.allRevisedFlashcards,
                 style: Theme.of(context).textTheme.bodySmall,
               )
             : Text(
-                'No revised the flash cards!!',
+                context.l10n.notRevisedFlashcards,
                 style: Theme.of(context).textTheme.bodySmall,
               );
       }),
       error: (error, stack) => Text(
-        'Oops, something unexpected happened',
+        context.l10n.errorDetailsQuiz,
         style: Theme.of(context).textTheme.bodySmall,
       ),
       loading: () => const CircularProgressIndicator(),

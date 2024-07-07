@@ -213,7 +213,32 @@
   "omitted":"Omitted",
   "@omitted":{},
   "restartQuiz":"Restart quiz",
-  "@restartQuiz":{}
+  "@restartQuiz":{},
+
+  "detailsKanjiQuizWelcomeMessage":"Select the type of quiz you would like to try.",
+  "@detailsKanjiQuizWelcomeMessage":{},
+  "multiOptionsAnswer":"Multi optional answers",
+  "@multiOptionsAnswer":{},
+  "flashCards":"Flash cards",
+  "@flashCards":{},
+  "lastScore":"Last score;",
+  "@lastScore":{},
+  "notStartedTheAudioQuiz":"Not started the audio quiz!!",
+  "@notStartedTheAudioQuiz":{},
+  "errorDetailsQuiz":"Oops, something unexpected happened",
+  "@errorDetailsQuiz":{},
+  "allRevisedFlashcards":"You have revised all flash cards",
+  "@allRevisedFlashcards":{},
+  "notRevisedFlashcards":"You have not revised all flash cards",
+  "@notRevisedFlashcards":{},
+  "guessTheRightMeaning":"Guess the right meaning",
+  "@guessTheRightMeaning":{},
+  "flashCardsTitle":"Review what you have learn",
+  "@flashCardsTitle":{},
+  "quizSelector":"To quiz type selector",
+  "@quizSelector":{}
+
+
 
 
 }

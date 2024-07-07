@@ -1,18 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kanji_for_n5_level_app/config_files/screen_config.dart';
-import 'package:kanji_for_n5_level_app/main.dart';
+import 'package:kanji_for_n5_level_app/l10n/localization.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_details/quiz_kanji_details_screen/quiz_details_provider.dart';
-import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_details/quiz_kanji_details_screen/last_score_details_provider.dart';
-import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_details/quiz_kanji_details_screen/last_score_flash_card_provider.dart';
+import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_details/quiz_kanji_details_screen/welcome_screen/welcome_kanji_details_quiz_screen.dart';
 
 class WelcomeKanjiDetailsQuizScreenLandScape extends ConsumerWidget {
   const WelcomeKanjiDetailsQuizScreenLandScape({
     super.key,
   });
-
-  final welcomeMessage = 'Select the quiz type '
-      'you would like to try.';
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -47,7 +43,7 @@ class WelcomeKanjiDetailsQuizScreenLandScape extends ConsumerWidget {
               Padding(
                 padding: const EdgeInsets.only(top: 20),
                 child: Text(
-                  welcomeMessage,
+                  context.l10n.detailsKanjiQuizWelcomeMessage,
                   style: Theme.of(context).textTheme.titleSmall,
                   softWrap: false,
                   maxLines: 3,
@@ -65,7 +61,7 @@ class WelcomeKanjiDetailsQuizScreenLandScape extends ConsumerWidget {
               RadioListTile(
                 value: 0,
                 title: Text(
-                  'Multi optional answers',
+                  context.l10n.multiOptionsAnswer,
                   style: Theme.of(context).textTheme.bodyLarge,
                 ),
                 groupValue: quizDetailsData.selectedOption,
@@ -79,7 +75,7 @@ class WelcomeKanjiDetailsQuizScreenLandScape extends ConsumerWidget {
               ),
               RadioListTile(
                 value: 1,
-                title: Text('Flash cards',
+                title: Text(context.l10n.flashCards,
                     style: Theme.of(context).textTheme.bodyLarge),
                 groupValue: quizDetailsData.selectedOption,
                 onChanged: ((value) {
@@ -110,72 +106,13 @@ class WelcomeKanjiDetailsQuizScreenLandScape extends ConsumerWidget {
                       Size.fromHeight(40),
                     ),
                   ),
-                  child: const Text('Start the quiz'),
+                  child: Text(context.l10n.startTheQuiz),
                 ),
               ),
             ],
           ),
         ) /**/
       ],
-    );
-  }
-}
-
-class LastScoreAudioExampleScreen extends ConsumerWidget {
-  const LastScoreAudioExampleScreen({super.key});
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final lastScoreData = ref.watch(lastScoreDetailsProvider);
-
-    return lastScoreData.when(
-      data: (data) => Builder(builder: (context) {
-        logger.d(data);
-        return data.isFinishedQuiz
-            ? Text(
-                'Last score: ${data.countCorrects} questions correct out of '
-                '${data.countCorrects + data.countIncorrect + data.countOmitted}',
-                style: Theme.of(context).textTheme.bodySmall,
-              )
-            : Text(
-                'Not started the audio quiz!!',
-                style: Theme.of(context).textTheme.bodySmall,
-              );
-      }),
-      error: (error, stack) => Text(
-        'Oops, something unexpected happened',
-        style: Theme.of(context).textTheme.titleLarge,
-      ),
-      loading: () => const CircularProgressIndicator(),
-    );
-  }
-}
-
-class LastFlashCardScore extends ConsumerWidget {
-  const LastFlashCardScore({super.key});
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final lastScoreData = ref.watch(lastScoreFlashCardProvider);
-
-    return lastScoreData.when(
-      data: (data) => Builder(builder: (context) {
-        logger.d(data);
-        return data.allRevisedFlashCards
-            ? Text(
-                'You have revised all flash cards',
-                style: Theme.of(context).textTheme.bodySmall,
-              )
-            : Text(
-                'No revised the flash cards!!',
-                style: Theme.of(context).textTheme.bodySmall,
-              );
-      }),
-      error: (error, stack) => Text(
-        'Oops, something unexpected happened',
-        style: Theme.of(context).textTheme.titleLarge,
-      ),
-      loading: () => const CircularProgressIndicator(),
     );
   }
 }

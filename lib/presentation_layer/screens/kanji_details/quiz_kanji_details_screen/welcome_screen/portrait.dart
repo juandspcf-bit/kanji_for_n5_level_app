@@ -1,13 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:kanji_for_n5_level_app/l10n/localization.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_details/quiz_kanji_details_screen/quiz_details_provider.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_details/quiz_kanji_details_screen/welcome_screen/welcome_kanji_details_quiz_screen.dart';
 
 class WelcomeKanjiDetailsQuizScreenPortrait extends ConsumerWidget {
   const WelcomeKanjiDetailsQuizScreenPortrait({super.key});
-
-  final welcomeMessage = 'Select the quiz type '
-      'you would like to try.';
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -31,7 +29,7 @@ class WelcomeKanjiDetailsQuizScreenPortrait extends ConsumerWidget {
             children: [
               Expanded(
                 child: Text(
-                  welcomeMessage,
+                  context.l10n.detailsKanjiQuizWelcomeMessage,
                   style: Theme.of(context).textTheme.titleLarge,
                   softWrap: false,
                   maxLines: 3,
@@ -47,7 +45,7 @@ class WelcomeKanjiDetailsQuizScreenPortrait extends ConsumerWidget {
           RadioListTile(
             value: 0,
             title: Text(
-              'Multi optional answers',
+              context.l10n.multiOptionsAnswer,
               style: Theme.of(context).textTheme.bodyLarge,
             ),
             groupValue: quizDetailsData.selectedOption,
@@ -61,7 +59,7 @@ class WelcomeKanjiDetailsQuizScreenPortrait extends ConsumerWidget {
           ),
           RadioListTile(
             value: 1,
-            title: Text('Flash cards',
+            title: Text(context.l10n.flashCards,
                 style: Theme.of(context).textTheme.bodyLarge),
             groupValue: quizDetailsData.selectedOption,
             onChanged: ((value) {
@@ -90,7 +88,7 @@ class WelcomeKanjiDetailsQuizScreenPortrait extends ConsumerWidget {
                 Size.fromHeight(40),
               ),
             ),
-            child: const Text('Start the quiz'),
+            child: Text(context.l10n.startTheQuiz),
           )
         ],
       ),

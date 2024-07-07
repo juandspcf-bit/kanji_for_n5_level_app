@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:kanji_for_n5_level_app/l10n/localization.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_details/quiz_kanji_details_screen/quiz_details_provider.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_details/quiz_kanji_details_screen/score_quiz_details/visible_lottie_file/visible_lottie_file_provider.dart';
 
@@ -54,7 +55,7 @@ class ToQuizSelectorButton extends ConsumerWidget {
         minimumSize: const Size.fromHeight(40),
       ),
       icon: const Icon(Icons.home),
-      label: const Text('To quiz type selector'),
+      label: Text(context.l10n.quizSelector),
     );
   }
 }

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kanji_for_n5_level_app/application_layer/services.dart';
+import 'package:kanji_for_n5_level_app/l10n/localization.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_details/quiz_kanji_details_screen/last_score_details_provider.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_details/quiz_kanji_details_screen/quiz_details_provider.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_details/quiz_kanji_details_screen/score_quiz_details/quiz_details_score_provider.dart';
@@ -38,7 +39,7 @@ class QuestionScreenPortrait extends ConsumerWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    'Question ${quizDetailData.indexQuestion + 1} of ${quizDetailData.kanjiFromApi!.example.length}',
+                    '${context.l10n.question} ${quizDetailData.indexQuestion + 1} ${context.l10n.isOfThe} ${quizDetailData.kanjiFromApi!.example.length}',
                     style: Theme.of(context).textTheme.titleLarge,
                   ),
                 ],
@@ -112,7 +113,7 @@ class QuestionScreenPortrait extends ConsumerWidget {
                 ),
               ),
               icon: const Icon(Icons.arrow_circle_right),
-              label: const Text('Next'),
+              label: Text(context.l10n.next),
             ),
             const ToQuizSelectorButton(),
           ],

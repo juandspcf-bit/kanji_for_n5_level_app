@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:kanji_for_n5_level_app/l10n/localization.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_details/quiz_kanji_details_screen/animated_quiz_flash_cards.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_details/quiz_kanji_details_screen/animated_quiz_question_details.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_details/quiz_kanji_details_screen/quiz_details_provider.dart';
@@ -11,16 +12,16 @@ class DetailsQuizScreen extends ConsumerWidget {
     super.key,
   });
 
-  String _getTitle(Screen screen) {
+  String _getTitle(Screen screen, BuildContext context) {
     switch (screen) {
       case Screen.flashCards:
-        return 'Review what you have learn';
+        return context.l10n.flashCardsTitle;
       case Screen.question:
-        return 'Guess the right meaning';
+        return context.l10n.guessTheRightMeaning;
       case Screen.score:
-        return 'Your score';
+        return context.l10n.quizScoreStatsTitle;
       default:
-        return 'Test your knowledge';
+        return context.l10n.testYourKnowledge;
     }
   }
 
@@ -32,7 +33,10 @@ class DetailsQuizScreen extends ConsumerWidget {
       child: Scaffold(
         appBar: AppBar(
           title: Text(
-            _getTitle(quizDetailsData.currentScreenType),
+            _getTitle(
+              quizDetailsData.currentScreenType,
+              context,
+            ),
           ),
         ),
         body: Builder(
