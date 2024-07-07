@@ -3,7 +3,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kanji_for_n5_level_app/l10n/localization.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_list/quiz_kanji_list_screen/quiz_kanji_list_provider.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_list/quiz_kanji_list_screen/welcome_screen/last_score_provider.dart';
-import 'package:kanji_for_n5_level_app/presentation_layer/text_asset/text_assets.dart';
 
 class WelcomeKanjiListQuizScreenPortrait extends ConsumerWidget {
   const WelcomeKanjiListQuizScreenPortrait({super.key});
@@ -69,7 +68,7 @@ class LastScoreKanjiQuiz extends ConsumerWidget {
               );
       }),
       error: (error, stack) => Text(
-        errorFinishedQuizMessage,
+        context.l10n.errorLoadingScore,
         style: Theme.of(context).textTheme.titleLarge,
       ),
       loading: () => const CircularProgressIndicator(),

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:kanji_for_n5_level_app/l10n/localization.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_list/quiz_kanji_list_screen/quiz_kanji_list_provider.dart';
 
 class ResetQuestionButton extends ConsumerWidget {
@@ -17,8 +18,8 @@ class ResetQuestionButton extends ConsumerWidget {
           minimumSize: const Size.fromHeight(40),
         ),
         icon: const Icon(Icons.restore_page_rounded),
-        label: const Text(
-          "Reset",
+        label: Text(
+          context.l10n.reset,
           textAlign: TextAlign.center,
         ),
       ),

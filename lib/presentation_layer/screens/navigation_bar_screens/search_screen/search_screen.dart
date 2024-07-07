@@ -67,12 +67,6 @@ class SearchScreen extends ConsumerWidget {
     final searchScreenState = ref.watch(searchScreenProvider);
     final statusConnectionState = ref.watch(statusConnectionProvider);
 
-/*     return MySliver(
-      kanjiFromApi: searchScreenState.kanjiFromApi,
-      examples: searchScreenState.kanjiFromApi!.example,
-      statusStorage: searchScreenState.kanjiFromApi!.statusStorage,
-    ); */
-
     return statusConnectionState == ConnectionStatus.noConnected
         ? ErrorConnectionScreen(
             message: context.l10n.searchErrorConnectionMessage,
@@ -105,8 +99,6 @@ class SearchScreen extends ConsumerWidget {
                               }
                             },
                           ),
-                          //labelText: context.l10n.searchEnglishWord,
-                          //floatingLabelBehavior: FloatingLabelBehavior.always
                           hintText: context.l10n.searchEnglishWord,
                         ),
                         keyboardType: TextInputType.text,

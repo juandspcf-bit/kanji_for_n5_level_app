@@ -1,60 +1,13 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:kanji_for_n5_level_app/l10n/localization.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_list/quiz_kanji_list_screen/score_screen/score_kanji_list_provider.dart';
 
 class ScreenChart extends ConsumerWidget {
   const ScreenChart({
     super.key,
   });
-
-  Widget getTitles(double value, TitleMeta meta) {
-    const style = TextStyle(
-      color: Colors.white,
-      fontWeight: FontWeight.bold,
-      fontSize: 14,
-    );
-    String text;
-    switch (value.toInt()) {
-      case 0:
-        text = 'Corrects';
-        break;
-      case 1:
-        text = 'Incorrect';
-        break;
-      case 2:
-        text = 'Omitted';
-        break;
-      default:
-        text = '';
-        break;
-    }
-    return SideTitleWidget(
-      axisSide: meta.axisSide,
-      space: 4,
-      child: Text(text, style: style),
-    );
-  }
-
-  FlTitlesData get titlesData => FlTitlesData(
-        show: true,
-        bottomTitles: AxisTitles(
-          sideTitles: SideTitles(
-            showTitles: true,
-            reservedSize: 30,
-            getTitlesWidget: getTitles,
-          ),
-        ),
-        leftTitles: const AxisTitles(
-          sideTitles: SideTitles(showTitles: false),
-        ),
-        topTitles: const AxisTitles(
-          sideTitles: SideTitles(showTitles: false),
-        ),
-        rightTitles: const AxisTitles(
-          sideTitles: SideTitles(showTitles: false),
-        ),
-      );
 
   FlBorderData get borderData => FlBorderData(
       show: true,
@@ -88,6 +41,9 @@ class ScreenChart extends ConsumerWidget {
         end: Alignment.topCenter,
       );
 
+  final defaultTitle =
+      const AxisTitles(sideTitles: SideTitles(showTitles: false));
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final kanjiListScoreData = ref.watch(kanjiListScoreProvider);
@@ -103,7 +59,49 @@ class ScreenChart extends ConsumerWidget {
             padding: const EdgeInsets.symmetric(horizontal: 20),
             child: BarChart(
               BarChartData(
-                  titlesData: titlesData,
+                  titlesData: FlTitlesData(
+                    show: true,
+                    bottomTitles: AxisTitles(
+                      sideTitles: SideTitles(
+                        showTitles: true,
+                        reservedSize: 30,
+                        getTitlesWidget: (
+                          double value,
+                          TitleMeta meta,
+                        ) {
+                          const style = TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 14,
+                          );
+
+                          String text;
+                          switch (value.toInt()) {
+                            case 0:
+                              text = context.l10n.correct;
+                              break;
+                            case 1:
+                              text = context.l10n.incorrect;
+                              break;
+                            case 2:
+                              text = context.l10n.omitted;
+                              break;
+                            default:
+                              text = '';
+                              break;
+                          }
+                          return SideTitleWidget(
+                            axisSide: meta.axisSide,
+                            space: 4,
+                            child: Text(text, style: style),
+                          );
+                        },
+                      ),
+                    ),
+                    leftTitles: defaultTitle,
+                    topTitles: defaultTitle,
+                    rightTitles: defaultTitle,
+                  ),
                   gridData: const FlGridData(show: false),
                   alignment: BarChartAlignment.spaceAround,
                   borderData: borderData,

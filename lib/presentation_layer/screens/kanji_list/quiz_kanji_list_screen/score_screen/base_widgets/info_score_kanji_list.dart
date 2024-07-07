@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:kanji_for_n5_level_app/l10n/localization.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_list/quiz_kanji_list_screen/score_screen/score_kanji_list_provider.dart';
 
 class InfoScoreKanjiList extends ConsumerWidget {
@@ -11,7 +12,7 @@ class InfoScoreKanjiList extends ConsumerWidget {
     return Column(
       children: [
         Text(
-          "This is the stats of your quiz",
+          context.l10n.quizScoreStatsTitle,
           style: Theme.of(context).textTheme.titleMedium,
         ),
         const SizedBox(
@@ -20,8 +21,6 @@ class InfoScoreKanjiList extends ConsumerWidget {
         Wrap(
           alignment: WrapAlignment.start,
           spacing: 30,
-
-          //mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
             Row(
               mainAxisSize: MainAxisSize.min,
@@ -31,7 +30,7 @@ class InfoScoreKanjiList extends ConsumerWidget {
                   color: Color.fromARGB(255, 229, 243, 33),
                 ),
                 Text(
-                  'Correct\n answers:\n ${kanjiListScoreData.correctAnswers.length}',
+                  '${context.l10n.correctAnswers} ${kanjiListScoreData.correctAnswers.length}',
                   textAlign: TextAlign.center,
                 ),
               ],
@@ -44,7 +43,7 @@ class InfoScoreKanjiList extends ConsumerWidget {
                   color: Color.fromARGB(255, 194, 88, 27),
                 ),
                 Text(
-                  'Incorrect\n answers:\n ${kanjiListScoreData.incorrectAnswers.length}',
+                  '${context.l10n.incorrectAnswers} ${kanjiListScoreData.incorrectAnswers.length}',
                   textAlign: TextAlign.center,
                 ),
               ],
@@ -57,7 +56,7 @@ class InfoScoreKanjiList extends ConsumerWidget {
                   color: Color.fromARGB(255, 33, 72, 243),
                 ),
                 Text(
-                  'Omitted\n answers:\n ${kanjiListScoreData.omitted.length}',
+                  '${context.l10n.omittedAnswers} ${kanjiListScoreData.omitted.length}',
                   textAlign: TextAlign.center,
                 ),
               ],

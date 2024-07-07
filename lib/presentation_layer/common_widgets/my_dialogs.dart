@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:kanji_for_n5_level_app/presentation_layer/text_asset/text_assets.dart';
+import 'package:kanji_for_n5_level_app/l10n/localization.dart';
 
 mixin MyDialogs {
   Widget _myBaseDialog(BuildContext buildContext, void Function() action,
@@ -96,7 +96,7 @@ void showPasswordRequestTextField({
       var curve = Curves.easeInOut.transform(a1.value);
       return Transform.scale(
         scale: curve,
-        child: _dialogPassworRequest(
+        child: _dialogPasswordRequest(
           context: context,
           ref: ref,
           okayAction: okayAction,
@@ -108,7 +108,7 @@ void showPasswordRequestTextField({
   );
 }
 
-Widget _dialogPassworRequest({
+Widget _dialogPasswordRequest({
   required BuildContext context,
   required WidgetRef ref,
   required Function(String password) okayAction,
@@ -125,22 +125,22 @@ Widget _dialogPassworRequest({
   }
 
   return AlertDialog(
-    title: const Text(typeYourPasswordText),
+    title: Text(context.l10n.typeYourPassword),
     content: Form(
       key: dialogFormKey,
       child: TextFormField(
         obscureText: true,
         keyboardType: TextInputType.text,
-        decoration: const InputDecoration(
-          label: Text(passwordText),
-          suffixIcon: Icon(Icons.key),
-          border: OutlineInputBorder(),
+        decoration: InputDecoration(
+          label: Text(context.l10n.password),
+          suffixIcon: const Icon(Icons.key),
+          border: const OutlineInputBorder(),
         ),
         validator: (text) {
           if (text != null && text.length >= 4 && text.length <= 20) {
             return null;
           } else {
-            return invalidPassword;
+            return context.l10n.invalidPassword;
           }
         },
         onSaved: (value) {
@@ -155,7 +155,7 @@ Widget _dialogPassworRequest({
           cancelAction();
           Navigator.of(context).pop();
         },
-        child: const Text(cancelText),
+        child: Text(context.l10n.cancel),
       ),
       TextButton(
         onPressed: () {
@@ -164,7 +164,7 @@ Widget _dialogPassworRequest({
             Navigator.of(context).pop();
           }
         },
-        child: const Text(okayText),
+        child: Text(context.l10n.okay),
       ),
     ],
   );

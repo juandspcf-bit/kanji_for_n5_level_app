@@ -4,7 +4,6 @@ import 'package:kanji_for_n5_level_app/application_layer/auth_service/auth_servi
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/auth_flow/auth_flow.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/account_details/close_account/close_account_provider.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/common_widgets/my_dialogs.dart';
-import 'package:kanji_for_n5_level_app/presentation_layer/text_asset/text_assets.dart';
 
 class CloseAccountScreen extends ConsumerWidget with MyDialogs {
   const CloseAccountScreen({super.key});
@@ -21,7 +20,7 @@ class CloseAccountScreen extends ConsumerWidget with MyDialogs {
               return const AuthFlow();
             },
           ), (Route<dynamic> route) => route.isFirst);
-        }, successfulCloseAccountMessage);
+        }, "successfully closed");
       } else if (current.deleteUserStatus == DeleteUserStatus.error ||
           current.deleteUserStatus == DeleteUserStatus.wrongPassword) {
         errorDialog(context, () {}, current.deleteUserStatus.message);
@@ -52,7 +51,7 @@ class CloseAccountScreen extends ConsumerWidget with MyDialogs {
                   children: [
                     Expanded(
                       child: Text(
-                        warningCloseAccountMessage,
+                        "warningCloseAccountMessage",
                         style: Theme.of(context).textTheme.titleLarge,
                         textAlign: TextAlign.justify,
                         maxLines: 3,
@@ -103,7 +102,7 @@ class CloseAccountScreen extends ConsumerWidget with MyDialogs {
                             color: Theme.of(context).colorScheme.onPrimary,
                           ),
                         )
-                      : const Text(buttonCloseAccountMessage),
+                      : const Text("buttonCloseAccountMessage"),
                 ),
                 const SizedBox(
                   height: 10,

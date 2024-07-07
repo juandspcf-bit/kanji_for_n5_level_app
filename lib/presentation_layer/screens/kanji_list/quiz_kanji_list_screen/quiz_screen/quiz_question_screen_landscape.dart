@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kanji_for_n5_level_app/config_files/screen_config.dart';
+import 'package:kanji_for_n5_level_app/l10n/localization.dart';
 import 'package:kanji_for_n5_level_app/models/kanji_from_api.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_list/quiz_kanji_list_screen/quiz_screen/base_widgets/draggable_kanji.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_list/quiz_kanji_list_screen/quiz_screen/base_widgets/next_question_button.dart';
@@ -52,10 +53,10 @@ class QuizQuestionScreenLandscape extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final heightScreen = getScreenSizeHeight(context);
-    final widhtScreen = getScreenSizeWidth(context);
+    final widthScreen = getScreenSizeWidth(context);
 
     int padding = 8;
-    switch (widhtScreen) {
+    switch (widthScreen) {
       case ScreenSizeWidth.extraLarge:
         padding = 50;
       case ScreenSizeWidth.large:
@@ -103,7 +104,7 @@ class QuizQuestionScreenLandscape extends ConsumerWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    'Question ${index + 1} of ${kanjisToAskMeaning.length}',
+                    '${context.l10n.question} ${index + 1} ${context.l10n.isOfThe} ${kanjisToAskMeaning.length}',
                     style: Theme.of(context).textTheme.titleLarge,
                   ),
                   const SizedBox(

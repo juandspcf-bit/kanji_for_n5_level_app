@@ -4,7 +4,6 @@ import 'package:kanji_for_n5_level_app/config_files/screen_config.dart';
 import 'package:kanji_for_n5_level_app/l10n/localization.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_list/quiz_kanji_list_screen/quiz_kanji_list_provider.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_list/quiz_kanji_list_screen/welcome_screen/last_score_provider.dart';
-import 'package:kanji_for_n5_level_app/presentation_layer/text_asset/text_assets.dart';
 
 class WelcomeKanjiListQuizScreenLandscape extends ConsumerWidget {
   const WelcomeKanjiListQuizScreenLandscape({super.key});
@@ -86,7 +85,6 @@ class LastScoreKanjiQuiz extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final orientation = MediaQuery.orientationOf(context);
     final textThemeParent = Theme.of(context).textTheme;
     final sizeScreen = getScreenSizeWidth(context);
     var textTheme = textThemeParent.titleMedium;
@@ -119,7 +117,7 @@ class LastScoreKanjiQuiz extends ConsumerWidget {
               );
       }),
       error: (error, stack) => Text(
-        errorFinishedQuizMessage,
+        context.l10n.errorLoadingScore,
         style: Theme.of(context).textTheme.titleLarge,
       ),
       loading: () => const CircularProgressIndicator(),
