@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:kanji_for_n5_level_app/application_layer/auth_service/auth_service_contract.dart';
 import 'package:kanji_for_n5_level_app/application_layer/auth_service/delete_user_exception.dart';
-import 'package:kanji_for_n5_level_app/config_files/consts.dart';
+import 'package:kanji_for_n5_level_app/config_files/constants.dart';
 import 'package:kanji_for_n5_level_app/main.dart';
 import 'package:kanji_for_n5_level_app/models/user.dart';
 

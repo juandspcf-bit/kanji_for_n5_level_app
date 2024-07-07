@@ -9,8 +9,8 @@ import 'package:kanji_for_n5_level_app/presentation_layer/common_widgets/my_dial
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/main_screens/main_content_provider.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/sign_in_screen/login_provider.dart';
 
-class PasswordChangeFlow extends ConsumerWidget with MyDialogs {
-  const PasswordChangeFlow({super.key});
+class PasswordChangeFlowScreen extends ConsumerWidget with MyDialogs {
+  const PasswordChangeFlowScreen({super.key});
 
   Widget _dialogPasswordRequest(BuildContext context, WidgetRef ref) {
     final dialogFormKey = GlobalKey<FormState>();

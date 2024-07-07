@@ -8,7 +8,6 @@ import 'package:kanji_for_n5_level_app/presentation_layer/screens/account_detail
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/account_details/send_feedback/send_feedback_screen.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/sign_in_screen/login_provider.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/main_screens/main_content_provider.dart';
-import 'package:kanji_for_n5_level_app/presentation_layer/screens/account_details/password_change/password_change_flow_provider.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/account_details/password_change/password_change_flow.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/account_details/personal_info_update/personal_info.dart';
 
@@ -82,12 +81,9 @@ class AccountDetails extends ConsumerWidget {
                   ),
                   ListTile(
                     onTap: () {
-                      ref
-                          .read(passwordChangeFlowProvider.notifier)
-                          .resetState();
                       Navigator.of(context)
                           .push(MaterialPageRoute(builder: (ctx) {
-                        return const PasswordChangeFlow();
+                        return const PasswordChangeFlowScreen();
                       }));
                     },
                     contentPadding:

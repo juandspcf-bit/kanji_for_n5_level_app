@@ -53,7 +53,7 @@ class PasswordChange extends ConsumerWidget {
                     initialValue: initPassword,
                     obscureText: !isVisiblePassword,
                     decoration: InputDecoration(
-                      label: const Text('password'),
+                      label: const Text('new password'),
                       suffixIcon: Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: GestureDetector(
@@ -94,7 +94,7 @@ class PasswordChange extends ConsumerWidget {
                     initialValue: initConfirmPassword,
                     obscureText: !isVisibleConfirmPassword,
                     decoration: InputDecoration(
-                      label: const Text('confirm your password'),
+                      label: const Text('confirm your new password'),
                       suffixIcon: Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: GestureDetector(

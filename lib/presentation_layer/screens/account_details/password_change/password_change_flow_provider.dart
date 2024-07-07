@@ -1,25 +1,17 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:kanji_for_n5_level_app/config_files/consts.dart';
+import 'package:kanji_for_n5_level_app/config_files/constants.dart';
 import 'package:kanji_for_n5_level_app/main.dart';
 
-class PasswordChangeFlowProvider extends Notifier<PasswordChangeFlowData> {
+import 'package:riverpod_annotation/riverpod_annotation.dart';
+
+part 'password_change_flow_provider.g.dart';
+
+@Riverpod(keepAlive: false)
+class PasswordChangeFlow extends _$PasswordChangeFlow {
   @override
   PasswordChangeFlowData build() {
     return PasswordChangeFlowData(
       statusProcessing: StatusProcessingPasswordChangeFlow.form,
-      password: '',
-      confirmPassword: '',
-      isVisiblePassword: false,
-      isVisibleConfirmPassword: false,
-    );
-  }
-
-  void resetState() {
-    state = PasswordChangeFlowData(
-      statusProcessing: _isUpdating
-          ? StatusProcessingPasswordChangeFlow.updating
-          : StatusProcessingPasswordChangeFlow.form,
       password: '',
       confirmPassword: '',
       isVisiblePassword: false,
@@ -57,24 +49,19 @@ class PasswordChangeFlowProvider extends Notifier<PasswordChangeFlowData> {
     );
   }
 
-  var _isUpdating = false;
-
   void updatePassword(String currentPassword) async {
     final user = FirebaseAuth.instance.currentUser;
     if (user == null) {
       setStatusProcessing(StatusProcessingPasswordChangeFlow.error);
-      _isUpdating = false;
       return;
     }
     final email = user.email;
     if (email == null) {
       setStatusProcessing(StatusProcessingPasswordChangeFlow.error);
-      _isUpdating = false;
       return;
     }
 
     setStatusProcessing(StatusProcessingPasswordChangeFlow.updating);
-    _isUpdating = true;
 
     try {
       final authCredential = EmailAuthProvider.credential(
@@ -88,11 +75,9 @@ class PasswordChangeFlowProvider extends Notifier<PasswordChangeFlowData> {
           .updatePassword(state.password)
           .timeout(const Duration(seconds: timeOutValue));
       setStatusProcessing(StatusProcessingPasswordChangeFlow.success);
-      _isUpdating = false;
     } on FirebaseAuthException catch (e) {
       logger.e('error changing email with ${e.code} and message $e');
       setStatusProcessing(StatusProcessingPasswordChangeFlow.error);
-      _isUpdating = false;
 
       return;
     }
@@ -134,10 +119,6 @@ class PasswordChangeFlowData {
     required this.isVisibleConfirmPassword,
   });
 }
-
-final passwordChangeFlowProvider =
-    NotifierProvider<PasswordChangeFlowProvider, PasswordChangeFlowData>(
-        PasswordChangeFlowProvider.new);
 
 enum StatusProcessingPasswordChangeFlow {
   updating,

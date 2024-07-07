@@ -1,5 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:kanji_for_n5_level_app/config_files/consts.dart';
+import 'package:kanji_for_n5_level_app/config_files/constants.dart';
 import 'package:kanji_for_n5_level_app/main.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 

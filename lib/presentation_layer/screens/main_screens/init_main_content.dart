@@ -3,7 +3,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kanji_for_n5_level_app/application_layer/services.dart';
 import 'package:kanji_for_n5_level_app/l10n/localization.dart';
 import 'package:kanji_for_n5_level_app/main.dart';
-import 'package:kanji_for_n5_level_app/presentation_layer/screens/account_details/password_change/password_change_flow_provider.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/account_details/personal_info_update/personal_info_provider.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/common_screens/loading_screen.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_list/body_list/providers/error_delete_providers.dart';
