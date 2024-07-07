@@ -235,5 +235,12 @@
   "flashCardsTitle":"Revisa lo que has aprendido",
   "@flashCardsTitle":{},
   "quizSelector":"Ir a selección de tipo de quiz",
-  "@quizSelector":{}
+  "@quizSelector":{},
+
+  "quizzes":"pruebas",
+  "@quizzes":{},
+  "removeFavorites":"quitar de favoritos",
+  "@removeFavorites":{},
+  "addFavorites":"agregar a favoritos",
+  "@addFavorites":{}
 }

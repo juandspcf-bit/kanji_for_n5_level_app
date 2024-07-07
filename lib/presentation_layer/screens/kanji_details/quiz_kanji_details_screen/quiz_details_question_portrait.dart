@@ -6,8 +6,8 @@ import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_details/
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_details/quiz_kanji_details_screen/quiz_details_provider.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_details/quiz_kanji_details_screen/score_quiz_details/quiz_details_score_provider.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_details/quiz_kanji_details_screen/score_quiz_details/visible_lottie_file/buttons_reset_quiz.dart';
-import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_details/quiz_kanji_details_screen/score_quiz_details/visible_lottie_file/visible_lottie_file_provider.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_details/tabs_details/tab_examples/example_audio_widget.dart';
+import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_list/quiz_kanji_list_screen/score_screen/base_widgets/visible_lottie_file_kanji_list_provider.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/navigation_bar_screens/sections_screen/section_screen_provider.dart';
 
 class QuestionScreenPortrait extends ConsumerWidget {
@@ -88,8 +88,9 @@ class QuestionScreenPortrait extends ConsumerWidget {
                     ref.read(quizDetailsProvider.notifier).onNext();
                 if (isReachedEnd) {
                   ref
-                      .read(visibleLottieFileProvider.notifier)
+                      .read(visibleLottieFileKanjiListProvider.notifier)
                       .setInitialDelay();
+                  ref.read(visibleLottieFileKanjiListProvider.notifier).reset();
                   ref
                       .read(quizDetailsProvider.notifier)
                       .setScreen(Screen.score);
@@ -104,6 +105,7 @@ class QuestionScreenPortrait extends ConsumerWidget {
                         countIncorrect: scores.incorrectAnswers.length,
                         countOmitted: scores.omitted.length,
                       );
+
                   ref.read(quizDetailsProvider.notifier).resetValues();
                 }
               },

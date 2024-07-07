@@ -36,7 +36,7 @@ class QuizDetailsScorePortrait extends ConsumerWidget {
               ButtonsResetQuiz(),
             ],
           ),
-          VisibleLottieFile(),
+          Align(alignment: Alignment.topCenter, child: VisibleLottieFile()),
         ],
       ),
     );

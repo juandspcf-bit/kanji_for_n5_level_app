@@ -19,7 +19,7 @@ class DetailsQuizScreen extends ConsumerWidget {
       case Screen.question:
         return context.l10n.guessTheRightMeaning;
       case Screen.score:
-        return context.l10n.quizScoreStatsTitle;
+        return context.l10n.testYourKnowledge;
       default:
         return context.l10n.testYourKnowledge;
     }

@@ -1,5 +1,7 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:kanji_for_n5_level_app/l10n/localization.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_details/kanji_details_provider.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_details/quiz_kanji_details_screen/quiz_details_main_screen.dart';
 import 'package:kanji_for_n5_level_app/providers/status_connection_provider.dart';
@@ -53,7 +55,7 @@ class OptionsDetails extends ConsumerWidget {
                   width: 10,
                 ),
                 Text(
-                  "quizzes!",
+                  "${context.l10n.quizzes}!",
                   style: TextStyle(
                     fontSize: Theme.of(context).textTheme.titleMedium!.fontSize,
                     color: Theme.of(context).colorScheme.onPrimary,
@@ -119,7 +121,7 @@ class TextFavoritesButton extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final kanjiDetailsData = ref.watch(kanjiDetailsProvider);
     return kanjiDetailsData!.favoriteStatus
-        ? const Text('remove from favorites')
-        : const Text('add to favorites');
+        ? Text(context.l10n.removeFavorites)
+        : Text(context.l10n.addFavorites);
   }
 }

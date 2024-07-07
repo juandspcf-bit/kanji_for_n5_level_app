@@ -236,8 +236,14 @@
   "flashCardsTitle":"Review what you have learn",
   "@flashCardsTitle":{},
   "quizSelector":"To quiz type selector",
-  "@quizSelector":{}
+  "@quizSelector":{},
 
+  "quizzes":"quizzes",
+  "@quizzes":{},
+  "removeFavorites":"remove from favorites",
+  "@removeFavorites":{},
+  "addFavorites":"add to favorites",
+  "@addFavorites":{}
 
 
 

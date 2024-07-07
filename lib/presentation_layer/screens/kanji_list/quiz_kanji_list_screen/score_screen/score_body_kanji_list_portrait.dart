@@ -31,7 +31,10 @@ class ScoreKanjiListQuizPortrait extends ConsumerWidget {
             ButtonScoreKanjiList(),
           ],
         ),
-        VisibleLottieFileKanjiList(),
+        Align(
+          alignment: Alignment.topCenter,
+          child: VisibleLottieFileKanjiList(),
+        )
       ],
     );
   }

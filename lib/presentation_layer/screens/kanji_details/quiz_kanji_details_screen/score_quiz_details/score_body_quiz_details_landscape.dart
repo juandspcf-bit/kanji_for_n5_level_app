@@ -10,35 +10,40 @@ class QuizDetailsScoreLandscape extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return const Padding(
-      padding: EdgeInsets.only(
-        top: 0,
-        bottom: 0,
-        right: 30,
-        left: 30,
-      ),
-      child: Stack(
-        alignment: Alignment.topCenter,
-        children: [
-          Row(
-            children: [
-              Expanded(
-                flex: 3,
-                child: Column(
-                  children: [
-                    InfoScore(),
-                    ButtonsResetQuiz(),
-                  ],
+    return const SafeArea(
+      child: Padding(
+        padding: EdgeInsets.only(
+          top: 0,
+          bottom: 0,
+          right: 30,
+          left: 30,
+        ),
+        child: Stack(
+          alignment: Alignment.topCenter,
+          children: [
+            Row(
+              children: [
+                Expanded(
+                  flex: 3,
+                  child: Column(
+                    children: [
+                      InfoScore(),
+                      ButtonsResetQuiz(),
+                    ],
+                  ),
                 ),
-              ),
-              Expanded(
-                flex: 3,
-                child: BarChartLandscape(),
-              ),
-            ],
-          ),
-          VisibleLottieFile(),
-        ],
+                Expanded(
+                  flex: 3,
+                  child: BarChartLandscape(),
+                ),
+              ],
+            ),
+            Align(
+              alignment: Alignment.center,
+              child: VisibleLottieFile(),
+            ),
+          ],
+        ),
       ),
     );
   }

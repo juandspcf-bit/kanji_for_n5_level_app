@@ -28,7 +28,7 @@ class ButtonsResetQuiz extends ConsumerWidget {
               minimumSize: const Size.fromHeight(40),
             ),
             icon: const Icon(Icons.arrow_circle_right),
-            label: const Text('Restart quiz'),
+            label: Text(context.l10n.restartQuiz),
           ),
         ),
         const Padding(

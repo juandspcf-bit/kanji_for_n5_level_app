@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:kanji_for_n5_level_app/l10n/localization.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_details/quiz_kanji_details_screen/score_quiz_details/quiz_details_score_provider.dart';
 
 class InfoScore extends ConsumerWidget {
@@ -13,7 +14,7 @@ class InfoScore extends ConsumerWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Text(
-          "This is the stats of your quiz",
+          context.l10n.quizScoreStatsTitle,
           style: Theme.of(context).textTheme.titleMedium,
         ),
         const SizedBox(
@@ -33,7 +34,7 @@ class InfoScore extends ConsumerWidget {
                   color: Color.fromARGB(255, 229, 243, 33),
                 ),
                 Text(
-                  'Correct\n answers:\n ${scores.correctAnswers.length}',
+                  '${context.l10n.correctAnswers} ${scores.correctAnswers.length}',
                   textAlign: TextAlign.center,
                 ),
               ],
@@ -46,7 +47,7 @@ class InfoScore extends ConsumerWidget {
                   color: Color.fromARGB(255, 194, 88, 27),
                 ),
                 Text(
-                  'Incorrect\n answers:\n ${scores.incorrectAnswers.length}',
+                  '${context.l10n.incorrectAnswers} ${scores.incorrectAnswers.length}',
                   textAlign: TextAlign.center,
                 ),
               ],
@@ -59,7 +60,7 @@ class InfoScore extends ConsumerWidget {
                   color: Color.fromARGB(255, 33, 72, 243),
                 ),
                 Text(
-                  'Omitted\n answers:\n ${scores.omitted.length}',
+                  '${context.l10n.omittedAnswers} ${scores.omitted.length}',
                   textAlign: TextAlign.center,
                 ),
               ],
