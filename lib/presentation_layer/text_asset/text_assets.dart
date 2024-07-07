@@ -1,6 +1,6 @@
 //close account screen
-const succefullCloseAccountMessage =
-    'You have succefully delete your account, tap to the okay button to go back'
+const successfulCloseAccountMessage =
+    'You have successfully delete your account, tap to the okay button to go back'
     ' to the login page.';
 
 const warningCloseAccountMessage = 'You are about to close your account.'
@@ -19,6 +19,4 @@ const typeYourPasswordText = 'Type your password';
 
 //welcome kanji quiz screen
 
-const noFinishedQuizMessage = 'Guess the correct meaning by dragging '
-    'the kanji to one of the empty boxes.';
 const errorFinishedQuizMessage = 'Oops, something unexpected happened';

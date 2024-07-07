@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:kanji_for_n5_level_app/l10n/localization.dart';
 
 class NoDataToShownScreen extends StatelessWidget {
   const NoDataToShownScreen({
@@ -14,7 +15,7 @@ class NoDataToShownScreen extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text(
-              'No data to show',
+              context.l10n.noData,
               style: Theme.of(context).textTheme.titleLarge,
             ),
           ],

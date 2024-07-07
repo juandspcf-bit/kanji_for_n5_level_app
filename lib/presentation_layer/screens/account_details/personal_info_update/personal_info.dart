@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:kanji_for_n5_level_app/l10n/localization.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/account_details/personal_info_update/persona_info_init_provider.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/account_details/personal_info_update/personal_info_provider.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/account_details/personal_info_update/user_form.dart';
@@ -20,7 +21,9 @@ class PersonalInfoScreen extends ConsumerWidget with MyDialogs {
         }
       },
       child: Scaffold(
-        appBar: AppBar(),
+        appBar: AppBar(
+          title: Text(context.l10n.yourData),
+        ),
         body: personalInfoData.when(
           data: (data) => UserForm(accountDetailsData: data),
           error: (_, __) => const Center(

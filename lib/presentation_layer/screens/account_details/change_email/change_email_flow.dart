@@ -154,7 +154,9 @@ class EmailChangeFlow extends ConsumerWidget {
       canPop: !(ref.watch(emailChangeProvider).statusProcessing ==
           StatusProcessingEmailChangeFlow.updating),
       child: Scaffold(
-        appBar: AppBar(),
+        appBar: AppBar(
+          title: Text(context.l10n.changeYourEmail),
+        ),
         body: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20),
           child: EmailChange(),
@@ -282,7 +284,7 @@ class EmailChange extends ConsumerWidget {
                               color: Theme.of(context).colorScheme.onPrimary,
                             ),
                           )
-                        : Text(context.l10n.changeEmail),
+                        : Text(context.l10n.change),
                   ),
                   const SizedBox(
                     height: 20,

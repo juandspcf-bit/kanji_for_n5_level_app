@@ -96,6 +96,8 @@
   "@yourNewConfirmEmail":{},
   "changeYourEmail":"Cambia tu email",
   "@changeYourEmail":{},
+  "change":"Cambiar",
+  "@change":{},
   "emailsNotMach":"Los emails no coinciden",
   "@emailsNotMach":{},
   "errorChangingEmail":"Hubo un error al cambiar tu email",
@@ -153,6 +155,8 @@
   "@loading": {},
   "errorLoading": "Hubo un error cargando tu contenido",
   "@errorLoading": {},
+  "noData":"Ningún contenido para mostrar",
+  "@noData":{},
   
   "firstName": "Nombre",
   "@firstName": {},
@@ -166,8 +170,21 @@
   "@yourBirthday": {},
   "updateYourInfo": "Actualizar tus datos",
   "@updateYourInfo": {},
+  "update":"Actualizar",
+  "@update":{},
   "takeAPicture": "Tomar una foto",
   "@takeAPicture": {},
   "selectAPicture": "Selecciona una imagen",
-  "@selectAPicture": {}
+  "@selectAPicture": {},
+
+  "kanjiQuizWelcomeMessage":"Adivina el significado correcto al colocar el kanji en uno de los contenedores vacíos",
+  "@kanjiQuizWelcomeMessage":{},
+  "testYourKnowledge":"Prueba tu conocimiento",
+  "@testYourKnowledge":{},
+  "startTheQuiz":"Inicia el quiz",
+  "@startTheQuiz":{},
+  "quizCompletedWith":"Completado el quiz con",
+  "@quizCompletedWith":{},
+  "questionsCorrectOutOf":"preguntas correctas de",
+  "@questionsCorrectOutOf":{}
 }

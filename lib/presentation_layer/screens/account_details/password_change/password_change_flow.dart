@@ -181,7 +181,9 @@ class PasswordChangeFlowScreen extends ConsumerWidget with MyDialogs {
       canPop: !(ref.watch(passwordChangeFlowProvider).statusProcessing ==
           StatusProcessingPasswordChangeFlow.updating),
       child: Scaffold(
-        appBar: AppBar(),
+        appBar: AppBar(
+          title: Text(context.l10n.changeYourPassword),
+        ),
         body: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20),
           child: PasswordChange(

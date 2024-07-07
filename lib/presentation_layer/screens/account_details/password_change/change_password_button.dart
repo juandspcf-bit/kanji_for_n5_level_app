@@ -35,7 +35,7 @@ class ChangePasswordButton extends ConsumerWidget {
                 color: Theme.of(context).colorScheme.onPrimary,
               ),
             )
-          : Text(context.l10n.changeYourPassword),
+          : Text(context.l10n.change),
     );
   }
 }

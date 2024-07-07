@@ -96,6 +96,8 @@
   "@yourNewConfirmEmail":{},
   "changeYourEmail":"Change your email",
   "@changeYourEmail":{},
+  "change":"Change",
+  "@change":{},
   "emailsNotMach":"emails not match",
   "@emailsNotMach":{},
   "errorChangingEmail":"An error happened during changing your email",
@@ -154,6 +156,8 @@
   "@loading":{},
   "errorLoading":"Error accessing your content",
   "@errorLoading":{},
+  "noData":"No content to show",
+  "@noData":{},
 
   "firstName":"First name",
   "@firstName":{},
@@ -167,11 +171,24 @@
   "@yourBirthday":{},
   "updateYourInfo":"Update your info",
   "@updateYourInfo":{},
+  "update":"Update",
+  "@update":{},
   "takeAPicture":"Take a picture",
   "@takeAPicture":{},
   "selectAPicture":"Select a picture",
-  "@selectAPicture":{}
+  "@selectAPicture":{},
 
+  "kanjiQuizWelcomeMessage":"Guess the correct meaning by dragging the kanji to one of the empty boxes.",
+  "@kanjiQuizWelcomeMessage":{},
+  "testYourKnowledge":"Test your knowledge",
+  "@testYourKnowledge":{},
+  "startTheQuiz":"Start the quiz",
+  "@startTheQuiz":{},
+  "quizCompletedWith":"Quiz completed with",
+  "@quizCompletedWith":{},
+  "questionsCorrectOutOf":"questions correct out of",
+  "@questionsCorrectOutOf":{}
+  
 
 
 }

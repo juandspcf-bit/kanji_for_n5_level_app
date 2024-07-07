@@ -1,14 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:kanji_for_n5_level_app/l10n/localization.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_list/quiz_kanji_list_screen/quiz_kanji_list_provider.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_list/quiz_kanji_list_screen/welcome_screen/last_score_provider.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/text_asset/text_assets.dart';
 
 class WelcomeKanjiListQuizScreenPortrait extends ConsumerWidget {
   const WelcomeKanjiListQuizScreenPortrait({super.key});
-
-  final welcomeMessage = 'Guess the correct meaning by dragging '
-      'the kanji to one of the empty boxes.';
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -41,7 +39,7 @@ class WelcomeKanjiListQuizScreenPortrait extends ConsumerWidget {
               Size.fromHeight(40),
             ),
           ),
-          child: const Text('Start the quiz'),
+          child: Text(context.l10n.startTheQuiz),
         )
       ],
     );
@@ -59,13 +57,13 @@ class LastScoreKanjiQuiz extends ConsumerWidget {
       data: (data) => Builder(builder: (context) {
         return data.isFinishedQuiz
             ? Text(
-                'You have completed this quiz with ${data.countCorrects}'
-                ' questions correct\nout of ${data.countCorrects + data.countIncorrect + data.countOmitted}',
+                '${context.l10n.quizCompletedWith} ${data.countCorrects}'
+                ' ${context.l10n.questionsCorrectOutOf} ${data.countCorrects + data.countIncorrect + data.countOmitted}',
                 style: Theme.of(context).textTheme.titleLarge,
                 textAlign: TextAlign.center,
               )
             : Text(
-                noFinishedQuizMessage,
+                context.l10n.kanjiQuizWelcomeMessage,
                 style: Theme.of(context).textTheme.titleLarge,
                 textAlign: TextAlign.center,
               );

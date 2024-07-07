@@ -179,7 +179,7 @@ class UserForm extends ConsumerWidget {
                               color: Theme.of(context).colorScheme.onPrimary,
                             ),
                           )
-                        : Text(context.l10n.updateYourInfo),
+                        : Text(context.l10n.update),
                   ),
                 ],
               ),

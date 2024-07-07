@@ -1,15 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kanji_for_n5_level_app/config_files/screen_config.dart';
+import 'package:kanji_for_n5_level_app/l10n/localization.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_list/quiz_kanji_list_screen/quiz_kanji_list_provider.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_list/quiz_kanji_list_screen/welcome_screen/last_score_provider.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/text_asset/text_assets.dart';
 
 class WelcomeKanjiListQuizScreenLandscape extends ConsumerWidget {
   const WelcomeKanjiListQuizScreenLandscape({super.key});
-
-  final welcomeMessage = 'Guess the correct meaning by dragging '
-      'the kanji to one of the empty boxes.';
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -72,7 +70,7 @@ class WelcomeKanjiListQuizScreenLandscape extends ConsumerWidget {
                       Size.fromHeight(40),
                     ),
                   ),
-                  child: const Text('Start the quiz'),
+                  child: Text(context.l10n.startTheQuiz),
                 ),
               ],
             ),
@@ -108,21 +106,14 @@ class LastScoreKanjiQuiz extends ConsumerWidget {
     return lastScoreData.when(
       data: (data) => Builder(builder: (context) {
         return data.isFinishedQuiz
-            ? Orientation.portrait == orientation
-                ? Text(
-                    'You have completed this quiz with ${data.countCorrects}'
-                    ' questions correct\nout of ${data.countCorrects + data.countIncorrect + data.countOmitted}',
-                    style: textTheme,
-                    textAlign: TextAlign.center,
-                  )
-                : Text(
-                    'You have completed this quiz with ${data.countCorrects}'
-                    ' questions correct out of ${data.countCorrects + data.countIncorrect + data.countOmitted}',
-                    style: textTheme,
-                    textAlign: TextAlign.center,
-                  )
+            ? Text(
+                '${context.l10n.quizCompletedWith} ${data.countCorrects}'
+                ' ${context.l10n.questionsCorrectOutOf} ${data.countCorrects + data.countIncorrect + data.countOmitted}',
+                style: textTheme,
+                textAlign: TextAlign.center,
+              )
             : Text(
-                noFinishedQuizMessage,
+                context.l10n.kanjiQuizWelcomeMessage,
                 style: textTheme,
                 textAlign: TextAlign.center,
               );

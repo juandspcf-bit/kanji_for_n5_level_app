@@ -21,7 +21,7 @@ class CloseAccountScreen extends ConsumerWidget with MyDialogs {
               return const AuthFlow();
             },
           ), (Route<dynamic> route) => route.isFirst);
-        }, succefullCloseAccountMessage);
+        }, successfulCloseAccountMessage);
       } else if (current.deleteUserStatus == DeleteUserStatus.error ||
           current.deleteUserStatus == DeleteUserStatus.wrongPassword) {
         errorDialog(context, () {}, current.deleteUserStatus.message);
