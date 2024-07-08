@@ -14,7 +14,7 @@ class SendFeedBack extends ConsumerWidget {
           context.l10n.sendYourFeedback,
         ),
       ),
-      body: SendFeedBackForm(),
+      body: SafeArea(child: SendFeedBackForm()),
     );
   }
 }
@@ -54,78 +54,81 @@ class SendFeedBackForm extends ConsumerWidget {
                 height: 20,
               ),
               Form(
-                  key: _formKey,
-                  child: Column(
-                    children: [
-                      TextFormField(
-                        decoration: const InputDecoration().copyWith(
+                key: _formKey,
+                child: Column(
+                  children: [
+                    TextFormField(
+                      decoration: const InputDecoration().copyWith(
+                        border: const OutlineInputBorder(),
+                        labelText: context.l10n.subject,
+                        floatingLabelBehavior: FloatingLabelBehavior.always,
+                      ),
+                      validator: (text) {
+                        if (text != null && text.length >= 4) {
+                          return null;
+                        } else {
+                          return context.l10n.textTooShort;
+                        }
+                      },
+                      onSaved: (value) {
+                        if (value != null) {
+                          ref
+                              .read(sendFeedbackNotifier.notifier)
+                              .setSubject(value);
+                        }
+                      },
+                    ),
+                    const SizedBox(
+                      height: 15,
+                    ),
+                    TextFormField(
+                      minLines: 6,
+                      maxLines: 6,
+                      decoration: const InputDecoration().copyWith(
                           border: const OutlineInputBorder(),
-                          labelText: context.l10n.subject,
-                          floatingLabelBehavior: FloatingLabelBehavior.always,
-                        ),
-                        validator: (text) {
-                          if (text != null && text.length >= 4) {
-                            return null;
-                          } else {
-                            return context.l10n.textTooShort;
-                          }
-                        },
-                        onSaved: (value) {
-                          if (value != null) {
-                            ref
-                                .read(sendFeedbackNotifier.notifier)
-                                .setSubject(value);
-                          }
-                        },
-                      ),
-                      const SizedBox(
-                        height: 15,
-                      ),
-                      TextFormField(
-                        minLines: 6,
-                        maxLines: 6,
-                        decoration: const InputDecoration().copyWith(
-                            border: const OutlineInputBorder(),
-                            labelText: context.l10n.message,
-                            floatingLabelBehavior:
-                                FloatingLabelBehavior.always),
-                        validator: (text) {
-                          if (text != null && text.length >= 4) {
-                            return null;
-                          } else {
-                            return context.l10n.textTooShort;
-                          }
-                        },
-                        onSaved: (value) {
-                          if (value != null) {
-                            ref
-                                .read(sendFeedbackNotifier.notifier)
-                                .setMessage(value);
-                          }
-                        },
-                      ),
-                      const SizedBox(
-                        height: 10,
-                      ),
-                      ElevatedButton(
-                        onPressed: () {
-                          FocusScopeNode currentFocus = FocusScope.of(context);
+                          labelText: context.l10n.message,
+                          floatingLabelBehavior: FloatingLabelBehavior.always),
+                      validator: (text) {
+                        if (text != null && text.length >= 4) {
+                          return null;
+                        } else {
+                          return context.l10n.textTooShort;
+                        }
+                      },
+                      onSaved: (value) {
+                        if (value != null) {
+                          ref
+                              .read(sendFeedbackNotifier.notifier)
+                              .setMessage(value);
+                        }
+                      },
+                    ),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    ElevatedButton(
+                      onPressed: () {
+                        FocusScopeNode currentFocus = FocusScope.of(context);
 
-                          if (!currentFocus.hasPrimaryFocus) {
-                            currentFocus.unfocus();
-                          }
+                        if (!currentFocus.hasPrimaryFocus) {
+                          currentFocus.unfocus();
+                        }
 
-                          onValidation(context, ref);
-                        },
-                        style: ElevatedButton.styleFrom().copyWith(
-                          minimumSize: const WidgetStatePropertyAll(
-                            Size.fromHeight(40),
-                          ),
+                        onValidation(context, ref);
+                      },
+                      style: ElevatedButton.styleFrom().copyWith(
+                        minimumSize: const WidgetStatePropertyAll(
+                          Size.fromHeight(40),
                         ),
-                        child: Text(context.l10n.send),
                       ),
-                    ],
-                  ))
+                      child: Text(context.l10n.send),
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(
+                height: 20,
+              )
             ],
           ),
         ),

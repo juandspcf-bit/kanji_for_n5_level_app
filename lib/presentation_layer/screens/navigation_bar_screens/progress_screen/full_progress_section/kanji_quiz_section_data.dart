@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:kanji_for_n5_level_app/l10n/localization.dart';
 import 'package:kanji_for_n5_level_app/models/quiz_section_data.dart';
 import 'package:kanji_for_n5_level_app/models/single_quiz_section_data.dart';
 import 'package:simple_circular_progress_bar/simple_circular_progress_bar.dart';
@@ -32,7 +33,7 @@ class KanjiQuizSectionData extends StatelessWidget {
         Padding(
           padding: const EdgeInsets.symmetric(vertical: 20),
           child: Text(
-            "Kanji quiz progress",
+            context.l10n.kanjiQuizProgress,
             style: TextStyle(
                 fontWeight: FontWeight.w600,
                 fontSize: Theme.of(context).textTheme.titleMedium!.fontSize),
@@ -62,7 +63,7 @@ class KanjiQuizSectionData extends StatelessWidget {
           height: 15,
         ),
         Text(
-            "correct: ${quizSectionData.singleQuizSectionData.countCorrects}, incorrect: ${quizSectionData.singleQuizSectionData.countIncorrect}, omitted: ${quizSectionData.singleQuizSectionData.countOmitted} "),
+            "${context.l10n.correctProgress}: ${quizSectionData.singleQuizSectionData.countCorrects}, ${context.l10n.incorrectProgress}: ${quizSectionData.singleQuizSectionData.countIncorrect}, ${context.l10n.omittedProgress}: ${quizSectionData.singleQuizSectionData.countOmitted} "),
       ],
     );
   }

@@ -24,7 +24,7 @@ class ChangePasswordButton extends ConsumerWidget {
               }
             },
       style: ElevatedButton.styleFrom(
-        minimumSize: const Size.fromHeight(40),
+        minimumSize: const Size.fromHeight(50),
       ),
       child: passwordChangeFlow.statusProcessing ==
               StatusProcessingPasswordChangeFlow.updating

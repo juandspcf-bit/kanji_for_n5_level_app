@@ -10,33 +10,35 @@ class ScoreKanjiListQuizLandscape extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return const Stack(
-      alignment: Alignment.center,
-      children: [
-        Row(
-          children: [
-            Expanded(
-              flex: 3,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  InfoScoreKanjiList(),
-                  SizedBox(
-                    height: 20,
-                  ),
-                  ButtonScoreKanjiList(),
-                ],
+    return const SafeArea(
+      child: Stack(
+        alignment: Alignment.center,
+        children: [
+          Row(
+            children: [
+              Expanded(
+                flex: 3,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    InfoScoreKanjiList(),
+                    SizedBox(
+                      height: 20,
+                    ),
+                    ButtonScoreKanjiList(),
+                  ],
+                ),
               ),
-            ),
-            Expanded(
-              flex: 3,
-              child: ScreenChart(),
-            ),
-          ],
-        ),
-        VisibleLottieFileKanjiList(),
-      ],
+              Expanded(
+                flex: 3,
+                child: ScreenChart(),
+              ),
+            ],
+          ),
+          VisibleLottieFileKanjiList(),
+        ],
+      ),
     );
   }
 }

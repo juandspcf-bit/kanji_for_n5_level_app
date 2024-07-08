@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kanji_for_n5_level_app/config_files/screen_config.dart';
+import 'package:kanji_for_n5_level_app/l10n/localization.dart';
 import 'package:kanji_for_n5_level_app/main.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_details/quiz_kanji_details_screen/flash_card/custom_flash_page_view.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_details/quiz_kanji_details_screen/flash_card/flash_card_quiz_provider.dart';
@@ -48,7 +49,7 @@ class _FlashCardScreenState extends ConsumerState<FlashCardScreenPortrait> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
-                  'Card ${flashCardState.indexQuestion + 1} of ${flashCardState.kanjiFromApi!.example.length}',
+                  '${context.l10n.card} ${flashCardState.indexQuestion + 1} of ${flashCardState.kanjiFromApi!.example.length}',
                   style: Theme.of(context).textTheme.titleLarge,
                 ),
               ],

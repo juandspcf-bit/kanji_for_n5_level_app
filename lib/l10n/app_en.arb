@@ -300,8 +300,31 @@
         "type": "String"
       }
     }
-  }
+  },
 
+  "correctProgress":"correct",
+  "@correctProgress":{},
+  "incorrectProgress":"incorrect",
+  "@incorrectProgress":{},
+  "omittedProgress":"omitted",
+  "@omittedProgress":{},
+  "kanjiQuizProgress":"Kanji quiz progress",
+  "@kanjiQuizProgress":{},
+  "audioQuizProgress":"audio quiz progress",
+  "@audioQuizProgress":{},
+  "flashCardsQuizProgress":"flash cards progress",
+  "@flashCardsQuizProgress":{},
+  "allRevised":"all revised",
+  "@allRevised":{},
+  "notAllRevised":"not all revised",
+  "@notAllRevised":{},
+
+  "card":"Card",
+  "@card":{},
+  "theMeaningIs":"The meaning is",
+  "@theMeaningIs":{},
+  "whatTheMeaningIs":"What is the meaning of?",
+  "@whatTheMeaningIs":{}
 
 
 }

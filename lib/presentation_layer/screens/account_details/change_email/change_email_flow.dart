@@ -159,7 +159,7 @@ class EmailChangeFlow extends ConsumerWidget {
         ),
         body: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20),
-          child: EmailChange(),
+          child: SafeArea(child: EmailChange()),
         ),
       ),
     );

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:kanji_for_n5_level_app/l10n/localization.dart';
 import 'package:kanji_for_n5_level_app/models/single_quiz_audio_example_data.dart';
 import 'package:simple_circular_progress_bar/simple_circular_progress_bar.dart';
 
@@ -51,9 +52,9 @@ class AudioData extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          const Text(
-            "audio progress",
-            style: TextStyle(fontWeight: FontWeight.w600),
+          Text(
+            context.l10n.audioQuizProgress,
+            style: const TextStyle(fontWeight: FontWeight.w600),
             textAlign: TextAlign.start,
           ),
           const SizedBox(
@@ -86,9 +87,9 @@ class AudioData extends StatelessWidget {
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text("correct: $countCorrects"),
-                Text("incorrect: $countIncorrect"),
-                Text("omitted: $countOmitted"),
+                Text("${context.l10n.correctProgress}: $countCorrects"),
+                Text("${context.l10n.incorrectProgress}: $countIncorrect"),
+                Text("${context.l10n.omittedProgress}: $countOmitted"),
               ],
             ),
           ]),

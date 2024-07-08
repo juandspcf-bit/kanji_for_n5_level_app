@@ -25,7 +25,7 @@ class PersonalInfoScreen extends ConsumerWidget with MyDialogs {
           title: Text(context.l10n.yourData),
         ),
         body: personalInfoData.when(
-          data: (data) => UserForm(accountDetailsData: data),
+          data: (data) => SafeArea(child: UserForm(accountDetailsData: data)),
           error: (_, __) => const Center(
             child: Text("Error fetching the data"),
           ),

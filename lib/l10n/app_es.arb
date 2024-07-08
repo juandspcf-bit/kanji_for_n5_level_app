@@ -79,7 +79,7 @@
   "@yourData": {},
   "changeEmail": "Cambiar email de registro",
   "@changeEmail": {},
-  "changePassword": "Cambiar password",
+  "changePassword": "Cambiar contraseña",
   "@changePassword": {},
   "sendFeedback": "Enviar comentarios",
   "@sendFeedback": {},
@@ -111,7 +111,7 @@
   "@invalidNewPassword":{},
   "yourNewConfirmPassword":"Confirma tu nueva contraseña",
   "@yourNewConfirmPassword":{},
-  "changeYourPassword":"Cambia tu password",
+  "changeYourPassword":"Cambia tu contraseña",
   "@changeYourPassword":{},
 
   "sendYourFeedback":"Envía tus comentarios",
@@ -234,7 +234,7 @@
   "@guessTheRightMeaning":{},
   "flashCardsTitle":"Revisa lo que has aprendido",
   "@flashCardsTitle":{},
-  "quizSelector":"Ir a selección de tipo de quiz",
+  "quizSelector":"Selección de quiz",
   "@quizSelector":{},
 
   "quizzes":"pruebas",
@@ -299,5 +299,31 @@
         "type": "String"
       }
     }
-  }
+  },
+
+  "correctProgress":"correctos",
+  "@correctProgress":{},
+  "incorrectProgress":"incorrectos",
+  "@incorrectProgress":{},
+  "omittedProgress":"omitidos",
+  "@omittedProgress":{},
+  "kanjiQuizProgress":"Tu progreso",
+  "@kanjiQuizProgress":{},
+  "audioQuizProgress":"prueba con audio",
+  "@audioQuizProgress":{},
+  "flashCardsQuizProgress":"tarjetas de memoria",
+  "@flashCardsQuizProgress":{},
+  "allRevised":"todas revisadas",
+  "@allRevised":{},
+  "notAllRevised":"no todas revisadas",
+  "@notAllRevised":{},
+
+  "card":"Tarjeta",
+  "@card":{},
+  "theMeaningIs":"El significado es",
+  "@theMeaningIs":{},
+  "whatTheMeaningIs":"¿Cual es el significado de?",
+  "@whatTheMeaningIs":{}
+
+
 }

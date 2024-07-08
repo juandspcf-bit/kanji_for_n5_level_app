@@ -184,14 +184,16 @@ class PasswordChangeFlowScreen extends ConsumerWidget with MyDialogs {
         appBar: AppBar(
           title: Text(context.l10n.changeYourPassword),
         ),
-        body: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20),
-          child: PasswordChange(
-            initPassword: passwordChangeFlowData.password,
-            initConfirmPassword: passwordChangeFlowData.confirmPassword,
-            isVisibleConfirmPassword:
-                passwordChangeFlowData.isVisibleConfirmPassword,
-            isVisiblePassword: passwordChangeFlowData.isVisiblePassword,
+        body: SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20),
+            child: PasswordChange(
+              initPassword: passwordChangeFlowData.password,
+              initConfirmPassword: passwordChangeFlowData.confirmPassword,
+              isVisibleConfirmPassword:
+                  passwordChangeFlowData.isVisibleConfirmPassword,
+              isVisiblePassword: passwordChangeFlowData.isVisiblePassword,
+            ),
           ),
         ),
       ),

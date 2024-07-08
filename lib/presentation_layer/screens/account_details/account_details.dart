@@ -25,156 +25,159 @@ class AccountDetails extends ConsumerWidget {
         centerTitle: true,
       ),
       body: SingleChildScrollView(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            const SizedBox(
-              height: 30,
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-              child: Column(
-                children: [
-                  ListTile(
-                    onTap: () {
-                      Navigator.of(context).push(
-                        MaterialPageRoute(builder: (ctx) {
-                          return const PersonalInfoScreen();
-                        }),
-                      );
-                    },
-                    contentPadding:
-                        const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-                    shape: OutlineInputBorder(
-                      borderSide:
-                          const BorderSide().copyWith(color: Colors.white30),
-                      borderRadius:
-                          const BorderRadius.all(Radius.circular(12.0)),
-                    ),
-                    title: Text(context.l10n.yourData),
-                    trailing: const Icon(Icons.arrow_forward_ios),
-                  ),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  ListTile(
-                    onTap: () {
-                      Navigator.of(context).push(
-                        MaterialPageRoute(builder: (ctx) {
-                          return const EmailChangeFlow();
-                        }),
-                      );
-                    },
-                    contentPadding:
-                        const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-                    shape: OutlineInputBorder(
-                      borderSide:
-                          const BorderSide().copyWith(color: Colors.white30),
-                      borderRadius:
-                          const BorderRadius.all(Radius.circular(12.0)),
-                    ),
-                    title: Text(context.l10n.changeEmail),
-                    trailing: const Icon(Icons.arrow_forward_ios),
-                  ),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  ListTile(
-                    onTap: () {
-                      Navigator.of(context)
-                          .push(MaterialPageRoute(builder: (ctx) {
-                        return const PasswordChangeFlowScreen();
-                      }));
-                    },
-                    contentPadding:
-                        const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-                    shape: OutlineInputBorder(
-                      borderSide:
-                          const BorderSide().copyWith(color: Colors.white30),
-                      borderRadius:
-                          const BorderRadius.all(Radius.circular(12.0)),
-                    ),
-                    title: Text(context.l10n.changePassword),
-                    trailing: const Icon(Icons.arrow_forward_ios),
-                  ),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  ListTile(
-                    onTap: () {
-                      Navigator.of(context)
-                          .push(MaterialPageRoute(builder: (ctx) {
-                        return const SendFeedBack();
-                      }));
-                    },
-                    contentPadding:
-                        const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-                    shape: OutlineInputBorder(
-                      borderSide:
-                          const BorderSide().copyWith(color: Colors.white30),
-                      borderRadius:
-                          const BorderRadius.all(Radius.circular(12.0)),
-                    ),
-                    title: Text(context.l10n.sendFeedback),
-                    trailing: const Icon(Icons.arrow_forward_ios),
-                  ),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  ListTile(
-                    onTap: () async {
-                      ref.read(loginProvider.notifier).resetData();
-                      ref.read(loginProvider.notifier).setStatusLoggingFlow(
-                            StatusProcessingLoggingFlow.form,
-                          );
-                      await ref.read(authServiceProvider).singOut();
-                      await Future.delayed(const Duration(milliseconds: 200));
-                      ref
-                          .read(mainScreenProvider.notifier)
-                          .resetMainScreenState();
-
-                      if (context.mounted) {
-                        Navigator.pop(context);
-                      }
-                    },
-                    contentPadding:
-                        const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-                    shape: OutlineInputBorder(
-                      borderSide:
-                          const BorderSide().copyWith(color: Colors.white30),
-                      borderRadius:
-                          const BorderRadius.all(Radius.circular(12.0)),
-                    ),
-                    title: Text(context.l10n.logout),
-                    trailing: const Icon(Icons.arrow_forward_ios),
-                  ),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  ListTile(
-                    onTap: () async {
-                      ref.read(closeAccountProvider.notifier).resetStatus();
-                      Navigator.of(context).push(
-                        MaterialPageRoute(builder: (ctx) {
-                          return const CloseAccountScreen();
-                        }),
-                      );
-                    },
-                    contentPadding:
-                        const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-                    shape: OutlineInputBorder(
-                      borderSide:
-                          const BorderSide().copyWith(color: Colors.white30),
-                      borderRadius:
-                          const BorderRadius.all(Radius.circular(12.0)),
-                    ),
-                    title: Text(context.l10n.closeAccount),
-                    trailing: const Icon(Icons.arrow_forward_ios),
-                  ),
-                ],
+        child: SafeArea(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              const SizedBox(
+                height: 30,
               ),
-            )
-          ],
+              Padding(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                child: Column(
+                  children: [
+                    ListTile(
+                      onTap: () {
+                        Navigator.of(context).push(
+                          MaterialPageRoute(builder: (ctx) {
+                            return const PersonalInfoScreen();
+                          }),
+                        );
+                      },
+                      contentPadding: const EdgeInsets.symmetric(
+                          horizontal: 10, vertical: 5),
+                      shape: OutlineInputBorder(
+                        borderSide:
+                            const BorderSide().copyWith(color: Colors.white30),
+                        borderRadius:
+                            const BorderRadius.all(Radius.circular(12.0)),
+                      ),
+                      title: Text(context.l10n.yourData),
+                      trailing: const Icon(Icons.arrow_forward_ios),
+                    ),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    ListTile(
+                      onTap: () {
+                        Navigator.of(context).push(
+                          MaterialPageRoute(builder: (ctx) {
+                            return const EmailChangeFlow();
+                          }),
+                        );
+                      },
+                      contentPadding: const EdgeInsets.symmetric(
+                          horizontal: 10, vertical: 5),
+                      shape: OutlineInputBorder(
+                        borderSide:
+                            const BorderSide().copyWith(color: Colors.white30),
+                        borderRadius:
+                            const BorderRadius.all(Radius.circular(12.0)),
+                      ),
+                      title: Text(context.l10n.changeEmail),
+                      trailing: const Icon(Icons.arrow_forward_ios),
+                    ),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    ListTile(
+                      onTap: () {
+                        Navigator.of(context)
+                            .push(MaterialPageRoute(builder: (ctx) {
+                          return const PasswordChangeFlowScreen();
+                        }));
+                      },
+                      contentPadding: const EdgeInsets.symmetric(
+                          horizontal: 10, vertical: 5),
+                      shape: OutlineInputBorder(
+                        borderSide:
+                            const BorderSide().copyWith(color: Colors.white30),
+                        borderRadius:
+                            const BorderRadius.all(Radius.circular(12.0)),
+                      ),
+                      title: Text(context.l10n.changePassword),
+                      trailing: const Icon(Icons.arrow_forward_ios),
+                    ),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    ListTile(
+                      onTap: () {
+                        Navigator.of(context)
+                            .push(MaterialPageRoute(builder: (ctx) {
+                          return const SendFeedBack();
+                        }));
+                      },
+                      contentPadding: const EdgeInsets.symmetric(
+                          horizontal: 10, vertical: 5),
+                      shape: OutlineInputBorder(
+                        borderSide:
+                            const BorderSide().copyWith(color: Colors.white30),
+                        borderRadius:
+                            const BorderRadius.all(Radius.circular(12.0)),
+                      ),
+                      title: Text(context.l10n.sendFeedback),
+                      trailing: const Icon(Icons.arrow_forward_ios),
+                    ),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    ListTile(
+                      onTap: () async {
+                        ref.read(loginProvider.notifier).resetData();
+                        ref.read(loginProvider.notifier).setStatusLoggingFlow(
+                              StatusProcessingLoggingFlow.form,
+                            );
+                        await ref.read(authServiceProvider).singOut();
+                        await Future.delayed(const Duration(milliseconds: 200));
+                        ref
+                            .read(mainScreenProvider.notifier)
+                            .resetMainScreenState();
+
+                        if (context.mounted) {
+                          Navigator.pop(context);
+                        }
+                      },
+                      contentPadding: const EdgeInsets.symmetric(
+                          horizontal: 10, vertical: 5),
+                      shape: OutlineInputBorder(
+                        borderSide:
+                            const BorderSide().copyWith(color: Colors.white30),
+                        borderRadius:
+                            const BorderRadius.all(Radius.circular(12.0)),
+                      ),
+                      title: Text(context.l10n.logout),
+                      trailing: const Icon(Icons.arrow_forward_ios),
+                    ),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    ListTile(
+                      onTap: () async {
+                        ref.read(closeAccountProvider.notifier).resetStatus();
+                        Navigator.of(context).push(
+                          MaterialPageRoute(builder: (ctx) {
+                            return const CloseAccountScreen();
+                          }),
+                        );
+                      },
+                      contentPadding: const EdgeInsets.symmetric(
+                          horizontal: 10, vertical: 5),
+                      shape: OutlineInputBorder(
+                        borderSide:
+                            const BorderSide().copyWith(color: Colors.white30),
+                        borderRadius:
+                            const BorderRadius.all(Radius.circular(12.0)),
+                      ),
+                      title: Text(context.l10n.closeAccount),
+                      trailing: const Icon(Icons.arrow_forward_ios),
+                    ),
+                  ],
+                ),
+              )
+            ],
+          ),
         ),
       ),
     );

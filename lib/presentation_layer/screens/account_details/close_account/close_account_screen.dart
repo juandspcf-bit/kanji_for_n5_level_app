@@ -64,80 +64,82 @@ class CloseAccountScreen extends ConsumerWidget with MyDialogs {
         appBar: AppBar(),
         body: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-          child: SingleChildScrollView(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                const Icon(
-                  Icons.warning,
-                  color: Colors.amber,
-                  size: 80,
-                ),
-                const SizedBox(
-                  height: 20,
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Expanded(
-                      child: Text(
-                        context.l10n.closeAccountTitle,
-                        style: Theme.of(context).textTheme.titleLarge,
-                        textAlign: TextAlign.justify,
-                        maxLines: 3,
+          child: SafeArea(
+            child: SingleChildScrollView(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  const Icon(
+                    Icons.warning,
+                    color: Colors.amber,
+                    size: 80,
+                  ),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Expanded(
+                        child: Text(
+                          context.l10n.closeAccountTitle,
+                          style: Theme.of(context).textTheme.titleLarge,
+                          textAlign: TextAlign.justify,
+                          maxLines: 3,
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  ElevatedButton(
+                    onPressed: () {
+                      FocusScopeNode currentFocus = FocusScope.of(context);
+
+                      if (!currentFocus.hasPrimaryFocus) {
+                        currentFocus.unfocus();
+                      }
+
+                      ref.read(closeAccountProvider.notifier).resetStatus();
+                      showPasswordRequestTextField(
+                          context: context,
+                          ref: ref,
+                          okayAction: (String password) {
+                            ref
+                                .read(closeAccountProvider.notifier)
+                                .setShowPasswordRequest(false);
+                            ref.read(closeAccountProvider.notifier).deleteUser(
+                                  password: password,
+                                );
+                          },
+                          cancelAction: () {
+                            ref
+                                .read(closeAccountProvider.notifier)
+                                .setShowPasswordRequest(false);
+                          });
+                    },
+                    style: ElevatedButton.styleFrom().copyWith(
+                      minimumSize: const WidgetStatePropertyAll(
+                        Size.fromHeight(50),
                       ),
                     ),
-                  ],
-                ),
-                const SizedBox(
-                  height: 10,
-                ),
-                ElevatedButton(
-                  onPressed: () {
-                    FocusScopeNode currentFocus = FocusScope.of(context);
-
-                    if (!currentFocus.hasPrimaryFocus) {
-                      currentFocus.unfocus();
-                    }
-
-                    ref.read(closeAccountProvider.notifier).resetStatus();
-                    showPasswordRequestTextField(
-                        context: context,
-                        ref: ref,
-                        okayAction: (String password) {
-                          ref
-                              .read(closeAccountProvider.notifier)
-                              .setShowPasswordRequest(false);
-                          ref.read(closeAccountProvider.notifier).deleteUser(
-                                password: password,
-                              );
-                        },
-                        cancelAction: () {
-                          ref
-                              .read(closeAccountProvider.notifier)
-                              .setShowPasswordRequest(false);
-                        });
-                  },
-                  style: ElevatedButton.styleFrom().copyWith(
-                    minimumSize: const WidgetStatePropertyAll(
-                      Size.fromHeight(40),
-                    ),
+                    child: closeAccountData.deleteRequestStatus ==
+                            DeleteRequestStatus.process
+                        ? SizedBox(
+                            height: 30,
+                            width: 30,
+                            child: CircularProgressIndicator(
+                              color: Theme.of(context).colorScheme.onPrimary,
+                            ),
+                          )
+                        : Text(context.l10n.closeAccount),
                   ),
-                  child: closeAccountData.deleteRequestStatus ==
-                          DeleteRequestStatus.process
-                      ? SizedBox(
-                          height: 25,
-                          width: 25,
-                          child: CircularProgressIndicator(
-                            color: Theme.of(context).colorScheme.onPrimary,
-                          ),
-                        )
-                      : Text(context.l10n.closeAccount),
-                ),
-                const SizedBox(
-                  height: 10,
-                ),
-              ],
+                  const SizedBox(
+                    height: 10,
+                  ),
+                ],
+              ),
             ),
           ),
         ),

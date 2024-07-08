@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:kanji_for_n5_level_app/l10n/localization.dart';
 import 'package:kanji_for_n5_level_app/models/single_quiz_flash_card_data.dart';
 
 class FlashCardSectionData extends StatelessWidget {
@@ -31,9 +32,9 @@ class FlashCardSectionData extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          const Text(
-            "flash cards progress",
-            style: TextStyle(fontWeight: FontWeight.w600),
+          Text(
+            context.l10n.flashCardsQuizProgress,
+            style: const TextStyle(fontWeight: FontWeight.w600),
           ),
           const SizedBox(
             height: 10,
@@ -56,7 +57,9 @@ class FlashCardSectionData extends StatelessWidget {
             SizedBox(
               width: allRevisedFlashCards ? 10 : 0,
             ),
-            Text(allRevisedFlashCards ? "all revised" : "not all revised"),
+            Text(allRevisedFlashCards
+                ? context.l10n.allRevised
+                : context.l10n.notAllRevised),
           ]),
         ],
       ),

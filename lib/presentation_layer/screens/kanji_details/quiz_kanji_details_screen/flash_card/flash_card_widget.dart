@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:kanji_for_n5_level_app/l10n/localization.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_details/quiz_kanji_details_screen/flash_card/flash_card_quiz_provider.dart';
 
 class FlashCardWidget extends ConsumerStatefulWidget {
@@ -31,9 +32,9 @@ class _FlashCardWidgetState extends ConsumerState<FlashCardWidget> {
     String japanese,
     BuildContext context,
   ) {
-    final firtsIndex = japanese.indexOf('（');
+    final firstIndex = japanese.indexOf('（');
     final lastIndex = japanese.indexOf('）');
-    final subString = japanese.substring(firtsIndex + 1, lastIndex).trim();
+    final subString = japanese.substring(firstIndex + 1, lastIndex).trim();
 
     return Container(
       key: const ValueKey(true),
@@ -49,7 +50,7 @@ class _FlashCardWidgetState extends ConsumerState<FlashCardWidget> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text(
-                'What is the meaning of?',
+                context.l10n.whatTheMeaningIs,
                 textAlign: TextAlign.center,
                 maxLines: 2,
                 style: Theme.of(context).textTheme.titleLarge!.copyWith(
@@ -96,7 +97,7 @@ class _FlashCardWidgetState extends ConsumerState<FlashCardWidget> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text(
-              'The meaning is:',
+              '${context.l10n.theMeaningIs}:',
               textAlign: TextAlign.center,
               maxLines: 2,
               style: Theme.of(context).textTheme.titleLarge!.copyWith(
