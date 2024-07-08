@@ -266,5 +266,11 @@
   "sendingLink":"Enviando link",
   "@sendingLink":{},
   "resetPasswordMessage":"Dale click arriba para restablecer tu contraseña y un email sera enviado en tu buzón con algunas instrucciones",
-  "@resetPasswordMessage":{}
+  "@resetPasswordMessage":{},
+  "confirmPassword":"confirmar contraseña",
+  "@confirmPassword":{},
+  "signUpToKanjiForN5":"Registrarse a kanjis para N5",
+  "@signUpToKanjiForN5":{},
+  "creatingUser":"Creando el usuario",
+  "@creatingUser":{}
 }

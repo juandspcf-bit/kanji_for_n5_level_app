@@ -267,7 +267,13 @@
   "sendingLink":"Sending link",
   "@sendingLink":{},
   "resetPasswordMessage":"Click above to reset your password and an email will be sent to your inbox with some instructions.",
-  "@resetPasswordMessage":{}
+  "@resetPasswordMessage":{},
+  "confirmPassword":"Confirm password",
+  "@confirmPassword":{},
+  "signUpToKanjiForN5":"Sign Up to Kanji for N5",
+  "@signUpToKanjiForN5":{},
+  "creatingUser":"Creating user",
+  "@creatingUser":{}
 
 
 

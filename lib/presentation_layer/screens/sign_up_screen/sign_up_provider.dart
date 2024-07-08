@@ -14,7 +14,7 @@ class SingUpProvider extends Notifier<SingUpData> {
       statusFlow: StatusProcessingSignUpFlow.form,
       statusCreatingUser: StatusCreatingUser.form,
       pathProfileUser: '',
-      firtsName: '',
+      firstName: '',
       lastName: '',
       emailAddress: '',
       password: '',
@@ -27,7 +27,7 @@ class SingUpProvider extends Notifier<SingUpData> {
       statusFlow: status,
       statusCreatingUser: state.statusCreatingUser,
       pathProfileUser: state.pathProfileUser,
-      firtsName: state.firtsName,
+      firstName: state.firstName,
       lastName: state.lastName,
       emailAddress: state.emailAddress,
       password: state.password,
@@ -40,7 +40,7 @@ class SingUpProvider extends Notifier<SingUpData> {
       statusFlow: state.statusFlow,
       statusCreatingUser: statusCreatingUser,
       pathProfileUser: state.pathProfileUser,
-      firtsName: state.firtsName,
+      firstName: state.firstName,
       lastName: state.lastName,
       emailAddress: state.emailAddress,
       password: state.password,
@@ -53,7 +53,7 @@ class SingUpProvider extends Notifier<SingUpData> {
       statusFlow: StatusProcessingSignUpFlow.form,
       statusCreatingUser: StatusCreatingUser.form,
       pathProfileUser: '',
-      firtsName: '',
+      firstName: '',
       lastName: '',
       emailAddress: '',
       password: '',
@@ -61,14 +61,14 @@ class SingUpProvider extends Notifier<SingUpData> {
     );
   }
 
-  void setFirtsName(
-    String firtsName,
+  void setFirstName(
+    String firstName,
   ) {
     state = SingUpData(
       statusFlow: state.statusFlow,
       statusCreatingUser: state.statusCreatingUser,
       pathProfileUser: state.pathProfileUser,
-      firtsName: firtsName,
+      firstName: firstName,
       lastName: state.lastName,
       emailAddress: state.emailAddress,
       password: state.password,
@@ -83,7 +83,7 @@ class SingUpProvider extends Notifier<SingUpData> {
       statusFlow: state.statusFlow,
       statusCreatingUser: state.statusCreatingUser,
       pathProfileUser: state.pathProfileUser,
-      firtsName: state.firtsName,
+      firstName: state.firstName,
       lastName: lastName,
       emailAddress: state.emailAddress,
       password: state.password,
@@ -98,7 +98,7 @@ class SingUpProvider extends Notifier<SingUpData> {
       statusFlow: state.statusFlow,
       statusCreatingUser: state.statusCreatingUser,
       pathProfileUser: state.pathProfileUser,
-      firtsName: state.firtsName,
+      firstName: state.firstName,
       lastName: state.lastName,
       emailAddress: email,
       password: state.password,
@@ -111,7 +111,7 @@ class SingUpProvider extends Notifier<SingUpData> {
       statusFlow: state.statusFlow,
       statusCreatingUser: state.statusCreatingUser,
       pathProfileUser: state.pathProfileUser,
-      firtsName: state.firtsName,
+      firstName: state.firstName,
       lastName: state.lastName,
       emailAddress: state.emailAddress,
       password: password,
@@ -124,7 +124,7 @@ class SingUpProvider extends Notifier<SingUpData> {
       statusFlow: state.statusFlow,
       statusCreatingUser: state.statusCreatingUser,
       pathProfileUser: state.pathProfileUser,
-      firtsName: state.firtsName,
+      firstName: state.firstName,
       lastName: state.lastName,
       emailAddress: state.emailAddress,
       password: state.password,
@@ -137,7 +137,7 @@ class SingUpProvider extends Notifier<SingUpData> {
       statusFlow: state.statusFlow,
       statusCreatingUser: state.statusCreatingUser,
       pathProfileUser: pathProfileUser,
-      firtsName: state.firtsName,
+      firstName: state.firstName,
       lastName: state.lastName,
       emailAddress: state.emailAddress,
       password: state.password,
@@ -147,11 +147,11 @@ class SingUpProvider extends Notifier<SingUpData> {
 
   Future<void> toCreateUser() async {
     if (state.password != state.confirmPassword) {
-      setStatusCreatingUser(StatusCreatingUser.passworfMisMatch);
+      setStatusCreatingUser(StatusCreatingUser.passwordMisMatch);
       return;
     }
 
-    setStatusFlow(StatusProcessingSignUpFlow.signUpProccessing);
+    setStatusFlow(StatusProcessingSignUpFlow.signUpProcessing);
 
     try {
       final userUuid =
@@ -165,7 +165,7 @@ class SingUpProvider extends Notifier<SingUpData> {
       final userData = {
         'birthday': '',
         'email': state.emailAddress,
-        'firstName': state.firtsName,
+        'firstName': state.firstName,
         'lastName': state.lastName,
         'uuid': userUuid,
       };
@@ -180,7 +180,7 @@ class SingUpProvider extends Notifier<SingUpData> {
 
           ref.read(mainScreenProvider.notifier).setAvatarLink(link);
 
-          logger.d('photo stored succefully');
+          logger.d('photo stored successfully');
         } catch (e) {
           logger.e('error');
           logger.e(e);
@@ -211,7 +211,7 @@ class SingUpData {
   final StatusProcessingSignUpFlow statusFlow;
   final StatusCreatingUser statusCreatingUser;
   final String pathProfileUser;
-  final String firtsName;
+  final String firstName;
   final String lastName;
   final String emailAddress;
   final String password;
@@ -221,7 +221,7 @@ class SingUpData {
     required this.statusFlow,
     required this.statusCreatingUser,
     required this.pathProfileUser,
-    required this.firtsName,
+    required this.firstName,
     required this.lastName,
     required this.emailAddress,
     required this.password,
@@ -236,8 +236,8 @@ class ErrorDataBaseException implements Exception {
 }
 
 enum StatusProcessingSignUpFlow {
-  signUpProccessing,
+  signUpProcessing,
   error,
-  succsess,
+  success,
   form,
 }

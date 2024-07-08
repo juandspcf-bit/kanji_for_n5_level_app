@@ -75,7 +75,7 @@ enum DeleteUserStatus {
 enum StatusCreatingUser {
   form('Not started'),
   success('Success'),
-  passworfMisMatch('the passwords are not the same'),
+  passwordMisMatch('the passwords are not the same'),
   invalidEmail('Your email address is not valid'),
   emailAlreadyInUse(
       'there already exists an account with the given email address'),

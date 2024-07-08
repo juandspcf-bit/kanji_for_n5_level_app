@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:kanji_for_n5_level_app/l10n/localization.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/common_widgets/password_widget.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/sign_in_screen/email_widget.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/sign_up_screen/profile_picture_widget.dart';
@@ -28,21 +29,21 @@ class SingUpForm extends ConsumerWidget {
 
     return PopScope(
       canPop:
-          singUpData.statusFlow != StatusProcessingSignUpFlow.signUpProccessing,
+          singUpData.statusFlow != StatusProcessingSignUpFlow.signUpProcessing,
       child: Scaffold(
-        appBar: singUpData.statusFlow ==
-                StatusProcessingSignUpFlow.signUpProccessing
-            ? null
-            : AppBar(),
+        appBar:
+            singUpData.statusFlow == StatusProcessingSignUpFlow.signUpProcessing
+                ? null
+                : AppBar(),
         body: SafeArea(
           child: singUpData.statusFlow ==
-                  StatusProcessingSignUpFlow.signUpProccessing
+                  StatusProcessingSignUpFlow.signUpProcessing
               ? Center(
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(
-                        'Creating user',
+                        context.l10n.creatingUser,
                         style: Theme.of(context).textTheme.titleLarge,
                       ),
                       const SizedBox(
@@ -64,7 +65,7 @@ class SingUpForm extends ConsumerWidget {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text(
-                          'Sign Up to Kanji for N5',
+                          context.l10n.signUpToKanjiForN5,
                           style: Theme.of(context).textTheme.titleLarge,
                         ),
                         const SizedBox(
@@ -89,11 +90,11 @@ class SingUpForm extends ConsumerWidget {
                           child: Column(
                             children: [
                               TextFormField(
-                                initialValue: singUpData.firtsName,
+                                initialValue: singUpData.firstName,
                                 decoration: const InputDecoration().copyWith(
                                   border: const OutlineInputBorder(),
                                   prefixIcon: const Icon(Icons.person),
-                                  labelText: 'First Name',
+                                  labelText: context.l10n.firstName,
                                 ),
                                 keyboardType: TextInputType.name,
                                 validator: (text) {
@@ -102,14 +103,14 @@ class SingUpForm extends ConsumerWidget {
                                       text.length > 2) {
                                     return null;
                                   } else {
-                                    return 'Please provide a not to short name';
+                                    return context.l10n.errorFirstName;
                                   }
                                 },
                                 onSaved: (value) {
                                   if (value == null) return;
                                   ref
                                       .read(singUpProvider.notifier)
-                                      .setFirtsName(value);
+                                      .setFirstName(value);
                                 },
                               ),
                               const SizedBox(
@@ -120,7 +121,7 @@ class SingUpForm extends ConsumerWidget {
                                 decoration: const InputDecoration().copyWith(
                                   border: const OutlineInputBorder(),
                                   prefixIcon: const Icon(Icons.person),
-                                  labelText: 'Last Name',
+                                  labelText: context.l10n.lastName,
                                 ),
                                 keyboardType: TextInputType.name,
                                 validator: (text) {
@@ -129,7 +130,7 @@ class SingUpForm extends ConsumerWidget {
                                       text.length > 2) {
                                     return null;
                                   } else {
-                                    return 'Please provide a not to short name';
+                                    return context.l10n.errorLastName;
                                   }
                                 },
                                 onSaved: (value) {
@@ -163,7 +164,7 @@ class SingUpForm extends ConsumerWidget {
                                       .read(singUpProvider.notifier)
                                       .setPassword(value);
                                 },
-                                labelText: 'password',
+                                labelText: context.l10n.passwordLogin,
                               ),
                               const SizedBox(
                                 height: 10,
@@ -177,7 +178,7 @@ class SingUpForm extends ConsumerWidget {
                                       .read(singUpProvider.notifier)
                                       .setConfirmPassword(value);
                                 },
-                                labelText: 'confirm password',
+                                labelText: context.l10n.confirmPassword,
                               ),
                             ],
                           ),
@@ -202,7 +203,7 @@ class SingUpForm extends ConsumerWidget {
                                 Theme.of(context).colorScheme.onPrimary,
                             minimumSize: const Size.fromHeight(40), // NEW
                           ),
-                          child: const Text('Sing Up'),
+                          child: Text(context.l10n.signUp),
                         ),
                       ],
                     ),
