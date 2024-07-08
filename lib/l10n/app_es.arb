@@ -245,5 +245,26 @@
   "@addFavorites":{},
 
   "closeAccountTitle":"Estas a punto de eliminar tu cuenta, esto significa que tus datos serán borrados permanentemente.",
-  "@closeAccountTitle":{}
+  "@closeAccountTitle":{},
+  "successDeleteAccount":"Tu cuenta ha sido eliminada",
+  "@successDeleteAccount":{},
+
+  "email":"Email",
+  "@email":{},
+  "passwordLogin":"Contraseña",
+  "@passwordLogin":{},
+  "login":"Iniciar sesión",
+  "@login":{},
+  "signUp":"Registrarse",
+  "@signUp":{},
+  "invalidLoginPassword":"La contraseña debe estar entre 20 y 4 caracteres",
+  "@invalidLoginPassword":{},
+  "forgottenPassword":"¿Contraseña olvidada?",
+  "@forgottenPassword":{},
+  "resetPassword":"Restablecer contraseña",
+  "@resetPassword":{},
+  "sendingLink":"Enviando link",
+  "@sendingLink":{},
+  "resetPasswordMessage":"Dale click arriba para restablecer tu contraseña y un email sera enviado en tu buzón con algunas instrucciones",
+  "@resetPasswordMessage":{}
 }

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kanji_for_n5_level_app/application_layer/auth_service/auth_service_contract.dart';
+import 'package:kanji_for_n5_level_app/l10n/localization.dart';
 import 'package:kanji_for_n5_level_app/main.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/sign_in_screen/login_provider.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/sign_in_screen/modal_email_reset_password_provider.dart';
@@ -60,7 +61,7 @@ class LoginForm extends ConsumerWidget {
                     if (value == null) return;
                     ref.read(loginProvider.notifier).setPassword(value);
                   },
-                  labelText: 'password',
+                  labelText: context.l10n.passwordLogin,
                 ),
                 const SizedBox(
                   height: 10,
@@ -88,17 +89,14 @@ class LoginForm extends ConsumerWidget {
                       Theme.of(context).colorScheme.onSurface, //Text Color
                 ),
                 child: Text(
-                  'Forgotten password?',
+                  context.l10n.forgottenPassword,
                   style: Theme.of(context).textTheme.bodyLarge,
                 ),
               ),
             ),
           ),
           ElevatedButton(
-            onPressed: /* statusConnectionData == ConnectionStatus.noConnected
-                ? null
-                : */
-                () {
+            onPressed: () {
               FocusScopeNode currentFocus = FocusScope.of(context);
 
               if (!currentFocus.hasPrimaryFocus) {
@@ -112,7 +110,7 @@ class LoginForm extends ConsumerWidget {
                 Size.fromHeight(40),
               ),
             ),
-            child: const Text('Login'),
+            child: Text(context.l10n.login),
           ),
           const SizedBox(
             height: 10,
@@ -121,11 +119,6 @@ class LoginForm extends ConsumerWidget {
             onPressed: statusConnectionData == ConnectionStatus.noConnected
                 ? null
                 : () {
-                    /*                  FocusScopeNode currentFocus = FocusScope.of(context);
-
-                    if (!currentFocus.hasPrimaryFocus) {
-                      currentFocus.unfocus();
-                    } */
                     FocusManager.instance.primaryFocus?.unfocus();
                     ref.read(singUpProvider.notifier).resetStatus();
 
@@ -139,7 +132,7 @@ class LoginForm extends ConsumerWidget {
                 Size.fromHeight(40),
               ),
             ),
-            child: const Text('Sign Up'),
+            child: Text(context.l10n.signUp),
           ),
           const SizedBox(
             height: 20,
@@ -246,7 +239,7 @@ class ModalEmailResetPassword extends ConsumerWidget with MyDialogs {
                       color: Theme.of(context).colorScheme.onPrimary,
                     ),
                   )
-                : const Text('Reset password'),
+                : Text(context.l10n.resetPassword),
           ),
           const SizedBox(
             height: 20,
@@ -255,13 +248,12 @@ class ModalEmailResetPassword extends ConsumerWidget with MyDialogs {
             child: modalEmailResetData.requestStatus ==
                     StatusSendingRequest.sending
                 ? Text(
-                    'sending link',
+                    context.l10n.sendingLink,
                     style: Theme.of(context).textTheme.bodyLarge,
                     textAlign: TextAlign.center,
                   )
                 : Text(
-                    'Click above to reset your password and an email will be sent to your inbox'
-                    ' with some instructions.',
+                    context.l10n.resetPasswordMessage,
                     style: Theme.of(context).textTheme.bodyLarge,
                     softWrap: false,
                     maxLines: 3,

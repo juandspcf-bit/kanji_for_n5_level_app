@@ -246,7 +246,30 @@
   "@addFavorites":{},
 
   "closeAccountTitle":"You are about to close your account. This means your stored data will be lost permanently",
-  "@closeAccountTitle":{}
+  "@closeAccountTitle":{},
+  "successDeleteAccount":"Your account was deleted",
+  "@successDeleteAccount":{},
+
+  "email":"Email",
+  "@email":{},
+  "passwordLogin":"Password",
+  "@passwordLogin":{},
+  "login":"Login",
+  "@login":{},
+  "signUp":"Sign Up",
+  "@signUp":{},
+  "invalidLoginPassword":"Password should be between 20 and 4 characters",
+  "@invalidLoginPassword":{},
+  "forgottenPassword":"Forgotten password",
+  "@forgottenPassword":{},
+  "resetPassword":"Reset password",
+  "@resetPassword":{},
+  "sendingLink":"Sending link",
+  "@sendingLink":{},
+  "resetPasswordMessage":"Click above to reset your password and an email will be sent to your inbox with some instructions.",
+  "@resetPasswordMessage":{}
+
+
 
 
 }

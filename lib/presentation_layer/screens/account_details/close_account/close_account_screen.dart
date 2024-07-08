@@ -19,9 +19,9 @@ class CloseAccountScreen extends ConsumerWidget with MyDialogs {
       if (current.deleteUserStatus == DeleteUserStatus.success) {
         ref.read(toastServiceProvider).showMessage(
               context,
-              context.l10n.emailsNotMach,
+              context.l10n.successDeleteAccount,
               Icons.check_circle,
-              const Duration(seconds: 3),
+              const Duration(seconds: 5),
               "",
               null,
             );
@@ -50,7 +50,7 @@ class CloseAccountScreen extends ConsumerWidget with MyDialogs {
               context,
               current.deleteUserStatus.message,
               Icons.error,
-              const Duration(seconds: 3),
+              const Duration(seconds: 5),
               "",
               null,
             );

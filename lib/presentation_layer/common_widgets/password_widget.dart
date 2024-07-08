@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:kanji_for_n5_level_app/l10n/localization.dart';
 import 'package:kanji_for_n5_level_app/main.dart';
 
 class PasswordTextField extends StatefulWidget {
@@ -65,7 +66,7 @@ class _PasswordTextField extends State<PasswordTextField> {
         if (text != null && text.length >= 4 && text.length <= 20) {
           return null;
         } else {
-          return 'Password should be between 20 and 4 characters';
+          return context.l10n.invalidLoginPassword;
         }
       },
       onSaved: (value) {

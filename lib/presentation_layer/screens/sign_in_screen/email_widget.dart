@@ -1,6 +1,7 @@
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:kanji_for_n5_level_app/l10n/localization.dart';
 
 class EmailTextField extends ConsumerWidget {
   const EmailTextField(
@@ -16,14 +17,14 @@ class EmailTextField extends ConsumerWidget {
       decoration: const InputDecoration().copyWith(
         border: const OutlineInputBorder(),
         prefixIcon: const Icon(Icons.email),
-        labelText: 'Email',
+        labelText: context.l10n.email,
       ),
       keyboardType: TextInputType.emailAddress,
       validator: (text) {
         if (text != null && EmailValidator.validate(text)) {
           return null;
         } else {
-          return 'Not a valid email';
+          return context.l10n.invalidEmail;
         }
       },
       onSaved: setEmail,
