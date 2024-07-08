@@ -1,4 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:kanji_for_n5_level_app/application_layer/services.dart';
 import 'package:kanji_for_n5_level_app/config_files/constants.dart';
 import 'package:kanji_for_n5_level_app/main.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -58,6 +59,12 @@ class EmailChange extends _$EmailChange {
       await user
           .verifyBeforeUpdateEmail(state.email)
           .timeout(const Duration(seconds: timeOutValue));
+
+      await ref
+          .read(cloudDBServiceProvider)
+          .updateUserData(ref.read(authServiceProvider).userUuid ?? '', {
+        "email": state.email,
+      }).timeout(const Duration(seconds: timeOutValue));
 
       updateState(statusProcessing: StatusProcessingEmailChangeFlow.success);
     } catch (e) {

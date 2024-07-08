@@ -64,7 +64,7 @@ class CloseAccountProvider extends Notifier<CloseAccountData> {
                 uuid: ref.read(authServiceProvider).userUuid ?? '',
                 userData: userData,
               );
-      logger.d("deleted user");
+
       if (deleteUserStatus == DeleteUserStatus.error) {
         setDeleteRequestStatus(DeleteRequestStatus.noStarted);
         setDeleteUserStatus(DeleteUserStatus.error);
