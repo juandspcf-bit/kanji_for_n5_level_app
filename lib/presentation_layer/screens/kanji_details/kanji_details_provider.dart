@@ -155,11 +155,16 @@ class KanjiDetailsProvider extends Notifier<KanjiDetailsData?> {
     }
   }
 
-  void createPdfSheet(String strokeLink) async {
-    final temporalPath = await downloadStrokeData(
-      strokeLink,
-      ref.read(authServiceProvider).userUuid ?? '',
-    );
+  void createPdfSheet(
+    String strokeLink,
+    StatusStorage storage,
+  ) async {
+    final temporalPath = storage == StatusStorage.onlyOnline
+        ? await downloadStrokeData(
+            strokeLink,
+            ref.read(authServiceProvider).userUuid ?? '',
+          )
+        : strokeLink;
 
     File file = File(temporalPath);
     var svgRaw = file.readAsStringSync();

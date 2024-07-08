@@ -34,13 +34,16 @@ class StrokesImages extends ConsumerWidget {
                     BlendMode.srcIn),
               ),
             )
-          : SvgFile(
-              imagePath: image,
-              height: MediaQuery.sizeOf(context).width * 0.4,
-              width: MediaQuery.sizeOf(context).width * 0.4,
-              colorFilter:
-                  const ColorFilter.mode(Colors.white, BlendMode.srcIn),
-              semanticsLabel: kanjiFromApi.kanjiCharacter,
+          : CustomPaint(
+              painter: ShapePainter(),
+              child: SvgFile(
+                imagePath: image,
+                height: MediaQuery.sizeOf(context).width * 0.4,
+                width: MediaQuery.sizeOf(context).width * 0.4,
+                colorFilter:
+                    const ColorFilter.mode(Colors.white, BlendMode.srcIn),
+                semanticsLabel: kanjiFromApi.kanjiCharacter,
+              ),
             ),
       actions: <Widget>[
         TextButton(
@@ -158,9 +161,10 @@ class StrokesImages extends ConsumerWidget {
         ),
         IconButton(
           onPressed: () async {
-            ref
-                .read(kanjiDetailsProvider.notifier)
-                .createPdfSheet(kanjiFromApi.strokes.images.last);
+            ref.read(kanjiDetailsProvider.notifier).createPdfSheet(
+                  kanjiFromApi.strokes.images.last,
+                  kanjiFromApi.statusStorage,
+                );
           },
           icon: SvgPicture.asset(
             "assets/icons/pdf-reference.svg",
