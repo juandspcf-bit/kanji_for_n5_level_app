@@ -165,7 +165,6 @@ class ModalEmailResetPassword extends ConsumerWidget with MyDialogs {
             .read(loginProvider.notifier)
             .setStatusResetEmail(StatusResetEmail.success);
       } else {
-        logger.e(result.message);
         ref
             .read(loginProvider.notifier)
             .setStatusResetEmail(StatusResetEmail.error);

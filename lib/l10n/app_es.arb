@@ -272,5 +272,32 @@
   "signUpToKanjiForN5":"Registrarse a kanjis para N5",
   "@signUpToKanjiForN5":{},
   "creatingUser":"Creando el usuario",
-  "@creatingUser":{}
+  "@creatingUser":{},
+
+  "loginMessages": "{messages, select, notStarted{no iniciado} success{Éxito} invalidCredentials{Error en tu email y contraseñas} userNotFound{No se encontró tu email} wrongPassword{Error en tu contraseña} tooManyRequest{El acceso a esta cuenta ha sido bloqueado temporalmente debido a muchos intentos de iniciar sesión. Inténtalo mas tarde o restablece tu contraseña.} error{Un error ha sucedido en el servidor} other{otro}}",
+  "@loginMessages": {
+    "placeholders": {
+      "messages": {
+        "type": "String"
+      }
+    }
+  },
+
+  "resetPasswordMessages": "{messages, select, success{Éxito} invalidCredentials{datos de usuario no validos} emailInvalid{El email no es valido} userNotFound{No se encontró tu email} error{Un error ha sucedido en el servidor} other{otro}}",
+  "@resetPasswordMessages": {
+    "placeholders": {
+      "messages": {
+        "type": "String"
+      }
+    }
+  },
+
+  "registerMessages": "{messages, select, notStarted{No iniciado} success{Éxito} passwordMisMatch{Las contraseñas no coinciden} invalidEmail{El email no es valido} emailAlreadyInUse{Ya existe un usuario con el mismo email}   operationNotAllowed{Un error ha sucedido en el servidor} weakPassword{Tu contraseña es insegura} error{Un error ha sucedido en el servidor} other{other}}",
+  "@registerMessages": {
+    "placeholders": {
+      "messages": {
+        "type": "String"
+      }
+    }
+  }
 }

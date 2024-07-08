@@ -273,8 +273,34 @@
   "signUpToKanjiForN5":"Sign Up to Kanji for N5",
   "@signUpToKanjiForN5":{},
   "creatingUser":"Creating user",
-  "@creatingUser":{}
+  "@creatingUser":{},
 
+  "loginMessages": "{messages, select, notStarted{Not started} success{Success} invalidCredentials{Your email and password are wrong} userNotFound{Your email was not found} wrongPassword{Your password is wrong} tooManyRequest{Access to this account has been temporarily disabled due to many failed login attempts. You can immediately restore it by resetting your password or you can try again later.} error{An unexpected error has happened.} other{other}}",
+  "@loginMessages": {
+    "placeholders": {
+      "messages": {
+        "type": "String"
+      }
+    }
+  },
+
+  "resetPasswordMessages": "{messages, select, success{Success} invalidCredentials{Invalid credentials} emailInvalid{The email is invalid} userNotFound{Your email was not found} error{There was an error in the server} other{other}}",
+  "@resetPasswordMessages": {
+    "placeholders": {
+      "messages": {
+        "type": "String"
+      }
+    }
+  },
+
+  "registerMessages": "{messages, select, notStarted{Not started} success{Success} passwordMisMatch{The passwords are not the same} invalidEmail{The email is invalid} emailAlreadyInUse{There already exists an account with the given email address}   operationNotAllowed{An unexpected error has happened} weakPassword{Your password is weak} error{An unexpected error has happened.} other{other}}",
+  "@registerMessages": {
+    "placeholders": {
+      "messages": {
+        "type": "String"
+      }
+    }
+  }
 
 
 
