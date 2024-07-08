@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kanji_for_n5_level_app/application_layer/services.dart';
+import 'package:kanji_for_n5_level_app/l10n/localization.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/main_screens/avatar_main_screen/avatar_main_screen_landscape.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/main_screens/main_content_provider.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_list/body_list/status_operations_dialogs.dart';
@@ -24,22 +25,22 @@ class CustomNavigationRail extends ConsumerWidget with StatusDBStoringDialogs {
       labelType: NavigationRailLabelType.all,
       leading: const AvatarMainScreenLandScape(),
       trailing: null,
-      destinations: const <NavigationRailDestination>[
+      destinations: <NavigationRailDestination>[
         NavigationRailDestination(
-          icon: Icon(Icons.book),
-          label: Text('Sections'),
+          icon: const Icon(Icons.book),
+          label: Text(context.l10n.sectionNavBar),
         ),
         NavigationRailDestination(
-          icon: Icon(Icons.favorite),
-          label: Text('Favorites'),
+          icon: const Icon(Icons.favorite),
+          label: Text(context.l10n.favoritesNavBar),
         ),
         NavigationRailDestination(
-          icon: Icon(Icons.search),
-          label: Text('Basic search'),
+          icon: const Icon(Icons.search),
+          label: Text(context.l10n.basicSearchNavBar),
         ),
         NavigationRailDestination(
-          icon: Icon(Icons.timeline),
-          label: Text('Progress'),
+          icon: const Icon(Icons.timeline),
+          label: Text(context.l10n.progressNavBar),
         ),
       ],
     );

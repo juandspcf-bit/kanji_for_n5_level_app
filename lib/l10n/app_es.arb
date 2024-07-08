@@ -242,5 +242,8 @@
   "removeFavorites":"quitar de favoritos",
   "@removeFavorites":{},
   "addFavorites":"agregar a favoritos",
-  "@addFavorites":{}
+  "@addFavorites":{},
+
+  "closeAccountTitle":"Estas a punto de eliminar tu cuenta, esto significa que tus datos serán borrados permanentemente.",
+  "@closeAccountTitle":{}
 }

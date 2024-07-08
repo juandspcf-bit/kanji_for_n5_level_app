@@ -64,7 +64,7 @@ class CloseAccountProvider extends Notifier<CloseAccountData> {
                 uuid: ref.read(authServiceProvider).userUuid ?? '',
                 userData: userData,
               );
-
+      logger.d("deleted user");
       if (deleteUserStatus == DeleteUserStatus.error) {
         setDeleteRequestStatus(DeleteRequestStatus.noStarted);
         setDeleteUserStatus(DeleteUserStatus.error);
@@ -108,8 +108,6 @@ class CloseAccountProvider extends Notifier<CloseAccountData> {
       } on DeleteUserException catch (e) {
         logger.e(e);
       }
-
-      ref.read(storageServiceProvider).deleteFile(uuid);
 
       await Future.delayed(
         const Duration(seconds: 2),

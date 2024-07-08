@@ -243,8 +243,10 @@
   "removeFavorites":"remove from favorites",
   "@removeFavorites":{},
   "addFavorites":"add to favorites",
-  "@addFavorites":{}
+  "@addFavorites":{},
 
+  "closeAccountTitle":"You are about to close your account. This means your stored data will be lost permanently",
+  "@closeAccountTitle":{}
 
 
 }

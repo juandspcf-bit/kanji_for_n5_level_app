@@ -103,21 +103,26 @@ class FirebaseAuthService implements AuthService {
           email: email,
           password: password,
         );
+        logger.d(authCredential);
         await user.reauthenticateWithCredential(authCredential);
+        logger.d("reauthenticateWithCredential");
         await user.delete();
         return (DeleteUserStatus.success, uuid);
       } else {
         return (DeleteUserStatus.error, uuid);
       }
     } on FirebaseAuthException catch (e) {
+      logger.e(e);
       throw DeleteUserException(
           message: e.code,
           deleteErrorUserCode: DeleteErrorUserCode.deleteErrorAuth);
     } on FirebaseException catch (e) {
+      logger.e(e);
       throw DeleteUserException(
           message: e.code,
           deleteErrorUserCode: DeleteErrorUserCode.deleteErrorAuth);
     } catch (e) {
+      logger.e(e);
       throw DeleteUserException(
           message: 'Error from the server: $e',
           deleteErrorUserCode: DeleteErrorUserCode.deleteErrorAuth);

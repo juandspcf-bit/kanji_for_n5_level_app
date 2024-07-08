@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kanji_for_n5_level_app/application_layer/auth_service/auth_service_contract.dart';
-import 'package:kanji_for_n5_level_app/presentation_layer/screens/auth_flow/auth_flow.dart';
+import 'package:kanji_for_n5_level_app/application_layer/services.dart';
+import 'package:kanji_for_n5_level_app/l10n/localization.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/account_details/close_account/close_account_provider.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/common_widgets/my_dialogs.dart';
+import 'package:kanji_for_n5_level_app/presentation_layer/screens/main_screens/main_content_provider.dart';
+import 'package:kanji_for_n5_level_app/presentation_layer/screens/sign_in_screen/login_provider.dart';
 
 class CloseAccountScreen extends ConsumerWidget with MyDialogs {
   const CloseAccountScreen({super.key});
@@ -14,16 +17,43 @@ class CloseAccountScreen extends ConsumerWidget with MyDialogs {
 
     ref.listen<CloseAccountData>(closeAccountProvider, (prev, current) {
       if (current.deleteUserStatus == DeleteUserStatus.success) {
-        successDialog(context, () {
+        ref.read(toastServiceProvider).showMessage(
+              context,
+              context.l10n.emailsNotMach,
+              Icons.check_circle,
+              const Duration(seconds: 3),
+              "",
+              null,
+            );
+
+        if (context.mounted) {
+          Navigator.pop(context);
+          Navigator.pop(context);
+        }
+        ref.read(mainScreenProvider.notifier).resetMainScreenState();
+        ref.read(loginProvider.notifier).resetData();
+        ref
+            .read(loginProvider.notifier)
+            .setStatusLoggingFlow(StatusProcessingLoggingFlow.form);
+
+/*         successDialog(context, () {
           Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(
             builder: (ctx) {
               return const AuthFlow();
             },
           ), (Route<dynamic> route) => route.isFirst);
-        }, "successfully closed");
+        }, "successfully closed"); */
       } else if (current.deleteUserStatus == DeleteUserStatus.error ||
           current.deleteUserStatus == DeleteUserStatus.wrongPassword) {
-        errorDialog(context, () {}, current.deleteUserStatus.message);
+        //errorDialog(context, () {}, current.deleteUserStatus.message);
+        ref.read(toastServiceProvider).showMessage(
+              context,
+              current.deleteUserStatus.message,
+              Icons.error,
+              const Duration(seconds: 3),
+              "",
+              null,
+            );
       }
     });
 
@@ -51,7 +81,7 @@ class CloseAccountScreen extends ConsumerWidget with MyDialogs {
                   children: [
                     Expanded(
                       child: Text(
-                        "warningCloseAccountMessage",
+                        context.l10n.closeAccountTitle,
                         style: Theme.of(context).textTheme.titleLarge,
                         textAlign: TextAlign.justify,
                         maxLines: 3,
@@ -102,7 +132,7 @@ class CloseAccountScreen extends ConsumerWidget with MyDialogs {
                             color: Theme.of(context).colorScheme.onPrimary,
                           ),
                         )
-                      : const Text("buttonCloseAccountMessage"),
+                      : Text(context.l10n.closeAccount),
                 ),
                 const SizedBox(
                   height: 10,
