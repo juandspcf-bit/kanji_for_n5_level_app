@@ -255,6 +255,8 @@
   "@passwordLogin":{},
   "login":"Iniciar sesión",
   "@login":{},
+  "loginProcess":"Iniciando sesión",
+  "@loginProcess":{},
   "signUp":"Registrarse",
   "@signUp":{},
   "invalidLoginPassword":"La contraseña debe estar entre 20 y 4 caracteres",
@@ -323,7 +325,30 @@
   "theMeaningIs":"El significado es",
   "@theMeaningIs":{},
   "whatTheMeaningIs":"¿Cual es el significado de?",
-  "@whatTheMeaningIs":{}
+  "@whatTheMeaningIs":{},
 
+  "noInternet":"No hay conexión a internet",
+  "@noInternet":{},
+  "restoredInternet":"La conexión ha sido restaurada",
+  "@restoredInternet":{},
+
+  "doneOnboarding":"terminado",
+  "@doneOnboarding":{},
+  "skipOnboarding":"saltar",
+  "@skipOnboarding":{},
+  "nextOnboarding":"siguiente",
+  "@nextOnboarding":{},
+  "welcomeOnboarding":"Bienvenido a kanji para N5, en esta guía te mostraremos las principales características de la app.",
+  "@welcomeOnboarding":{},
+  "kanjiListOnboarding":"Puedes acceder a una lista de kanjis agrupados en diferentes secciones",
+  "@kanjiListOnboarding":{},
+  "clickKanjiOnboarding":"Click en cualquier kanji para ver mas contenido",
+  "@clickKanjiOnboarding":{},
+  "detailsKanjiOnboarding":"El contenido acerca de un kanji contiene sus trazos, significado y sus ejemplos con audio",
+  "@detailsKanjiOnboarding":{},
+  "quizKanjiOnboarding":"Puedes hacer diferentes pruebas acerca de tu aprendizaje",
+  "@quizKanjiOnboarding":{},
+  "enjoyOnboarding":"Disfruta tu aprendizaje!",
+  "@enjoyOnboarding":{}
 
 }

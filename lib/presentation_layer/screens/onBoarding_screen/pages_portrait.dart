@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:kanji_for_n5_level_app/l10n/localization.dart';
 
 class WelcomeOnBoardScreen extends ConsumerWidget {
   const WelcomeOnBoardScreen({super.key});
-
-  final welcomeMessage =
-      'Welcome to kanji for N5, this is a walk through , introducing the features of the app.';
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -27,7 +25,7 @@ class WelcomeOnBoardScreen extends ConsumerWidget {
           children: [
             Expanded(
               child: Text(
-                welcomeMessage,
+                context.l10n.welcomeOnboarding,
                 style: Theme.of(context).textTheme.titleMedium,
                 softWrap: false,
                 maxLines: 3,
@@ -57,7 +55,7 @@ class SectionOnBoardScreen extends ConsumerWidget {
           children: [
             Expanded(
               child: Text(
-                'You can access a list of kanjis  grouped in different topics in the sections screen.',
+                context.l10n.kanjiListOnboarding,
                 style: Theme.of(context).textTheme.titleMedium,
                 softWrap: false,
                 maxLines: 3,
@@ -103,7 +101,7 @@ class ListOnBoardScreen extends ConsumerWidget {
           children: [
             Expanded(
               child: Text(
-                'Click on any kanji from the list to see more details',
+                context.l10n.clickKanjiOnboarding,
                 style: Theme.of(context).textTheme.titleMedium,
                 softWrap: false,
                 maxLines: 3,
@@ -151,7 +149,7 @@ class DetailsOnBoardScreen extends ConsumerWidget {
               children: [
                 Expanded(
                   child: Text(
-                    'The details about the kanji includes its strokes, meaning and audio examples',
+                    context.l10n.detailsKanjiOnboarding,
                     style: Theme.of(context).textTheme.titleMedium,
                     softWrap: false,
                     maxLines: 3,
@@ -213,7 +211,7 @@ class QuizOnBoardScreen extends ConsumerWidget {
               children: [
                 Expanded(
                   child: Text(
-                    'You can test your learning by doing different quizzes around the app ',
+                    context.l10n.quizKanjiOnboarding,
                     style: Theme.of(context).textTheme.titleMedium,
                     softWrap: false,
                     maxLines: 3,
@@ -260,7 +258,7 @@ class FinalBoardScreen extends ConsumerWidget {
               children: [
                 Expanded(
                   child: Text(
-                    'Enjoy your studying!',
+                    context.l10n.enjoyOnboarding,
                     style: Theme.of(context).textTheme.titleLarge,
                     softWrap: false,
                     maxLines: 3,
@@ -276,7 +274,6 @@ class FinalBoardScreen extends ConsumerWidget {
             Container(
               margin: const EdgeInsets.symmetric(horizontal: 5),
               height: 400,
-              //width: MediaQuery.sizeOf(context).width * 0.9,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(30),
                 image: const DecorationImage(

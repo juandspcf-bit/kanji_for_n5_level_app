@@ -42,7 +42,7 @@ class LastScoreAudioExampleScreen extends ConsumerWidget {
               );
       }),
       error: (error, stack) => Text(
-        context.l10n.errorDetailsQuiz,
+        context.l10n.errorLoading,
         style: Theme.of(context).textTheme.bodySmall,
       ),
       loading: () => const CircularProgressIndicator(),
@@ -71,7 +71,7 @@ class LastFlashCardScore extends ConsumerWidget {
               );
       }),
       error: (error, stack) => Text(
-        context.l10n.errorDetailsQuiz,
+        context.l10n.errorLoading,
         style: Theme.of(context).textTheme.bodySmall,
       ),
       loading: () => const CircularProgressIndicator(),

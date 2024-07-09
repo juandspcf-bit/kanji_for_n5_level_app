@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:kanji_for_n5_level_app/l10n/localization.dart';
 import 'package:kanji_for_n5_level_app/providers/on_boarding_provider.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/onBoarding_screen/pages_portrait.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
@@ -39,13 +40,14 @@ class _MyPageViewerState extends ConsumerState {
               controller: _controller,
               children: [...myScreens],
               onPageChanged: (index) {
-                if (index != (myScreens.length - 1) && texNext == 'done') {
+                if (index != (myScreens.length - 1) &&
+                    texNext == context.l10n.doneOnboarding) {
                   setState(() {
-                    texNext = 'next';
+                    texNext = context.l10n.nextOnboarding;
                   });
                 } else if (index == myScreens.length - 1) {
                   setState(() {
-                    texNext = 'done';
+                    texNext = context.l10n.doneOnboarding;
                   });
                 }
               },
@@ -59,7 +61,7 @@ class _MyPageViewerState extends ConsumerState {
                     onPressed: () {
                       _controller.jumpToPage(myScreens.length - 1);
                     },
-                    child: const Text('skip'),
+                    child: Text(context.l10n.skipOnboarding),
                   ),
                   SmoothPageIndicator(
                     controller: _controller,
@@ -75,7 +77,7 @@ class _MyPageViewerState extends ConsumerState {
                       }
                       if (_controller.page == myScreens.length - 2) {
                         setState(() {
-                          texNext = 'done';
+                          texNext = context.l10n.doneOnboarding;
                         });
                       }
                       _controller.nextPage(
