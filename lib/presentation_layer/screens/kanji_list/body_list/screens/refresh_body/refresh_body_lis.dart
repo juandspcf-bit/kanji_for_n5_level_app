@@ -3,6 +3,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kanji_for_n5_level_app/config_files/screen_config.dart';
 import 'package:kanji_for_n5_level_app/models/kanji_from_api.dart';
 import 'package:kanji_for_n5_level_app/models/section_model.dart';
+import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_details/kanji_details_provider.dart';
+import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_details/kanji_details_screen.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_list/body_list/list_tile/kanji_list_tile.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_list/body_list/list_tile/kanji_item_animated.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_list/body_list/kanjis_list_provider.dart';
@@ -41,21 +43,92 @@ class RefreshBodyList extends ConsumerWidget {
     MainScreenData mainScreenData,
     int index,
     WidgetRef ref,
+    BuildContext context,
   ) {
     if (mainScreenData.selection == ScreenSelection.kanjiSections) {
-      return KanjiItemAnimated(
-        statusStorage: kanjisFromApi[index].statusStorage,
-        kanjiFromApi: kanjisFromApi[index],
-        closedChild: KanjiListTile(
+      return GestureDetector(
+        onTap: () {
+          final isProcessingData = kanjisFromApi[index].statusStorage ==
+                  StatusStorage.processingStoring ||
+              kanjisFromApi[index].statusStorage ==
+                  StatusStorage.processingDeleting;
+
+          if (isProcessingData) return;
+
+          ref
+              .read(kanjiDetailsProvider.notifier)
+              .initKanjiDetails(kanjisFromApi[index]);
+
+          Navigator.of(context).push(
+            PageRouteBuilder(
+              transitionDuration: const Duration(seconds: 1),
+              reverseTransitionDuration: const Duration(seconds: 1),
+              pageBuilder: (context, animation, secondaryAnimation) =>
+                  const KanjiDetails(),
+              transitionsBuilder:
+                  (context, animation, secondaryAnimation, child) {
+                return FadeTransition(
+                  opacity: Tween<double>(
+                    begin: 0,
+                    end: 1,
+                  ).animate(
+                    animation.drive(
+                      CurveTween(
+                        curve: Curves.easeInOutBack,
+                      ),
+                    ),
+                  ),
+                  child: child,
+                );
+              },
+            ),
+          );
+        },
+        child: KanjiListTile(
           key: Key(kanjisFromApi[index].kanjiCharacter),
           kanjiFromApi: kanjisFromApi[index],
         ),
       );
     } else {
-      return KanjiItemAnimated(
-        statusStorage: kanjisFromApi[index].statusStorage,
-        kanjiFromApi: kanjisFromApi[index],
-        closedChild: Dismissible(
+      return GestureDetector(
+        onTap: () {
+          final isProcessingData = kanjisFromApi[index].statusStorage ==
+                  StatusStorage.processingStoring ||
+              kanjisFromApi[index].statusStorage ==
+                  StatusStorage.processingDeleting;
+
+          if (isProcessingData) return;
+
+          ref
+              .read(kanjiDetailsProvider.notifier)
+              .initKanjiDetails(kanjisFromApi[index]);
+
+          Navigator.of(context).push(
+            PageRouteBuilder(
+              transitionDuration: const Duration(seconds: 1),
+              reverseTransitionDuration: const Duration(seconds: 1),
+              pageBuilder: (context, animation, secondaryAnimation) =>
+                  const KanjiDetails(),
+              transitionsBuilder:
+                  (context, animation, secondaryAnimation, child) {
+                return FadeTransition(
+                  opacity: Tween<double>(
+                    begin: 0,
+                    end: 1,
+                  ).animate(
+                    animation.drive(
+                      CurveTween(
+                        curve: Curves.easeInOutBack,
+                      ),
+                    ),
+                  ),
+                  child: child,
+                );
+              },
+            ),
+          );
+        },
+        child: Dismissible(
           key: Key(kanjisFromApi[index].kanjiCharacter),
           child: KanjiListTile(
             key: Key(kanjisFromApi[index].kanjiCharacter),
@@ -93,11 +166,7 @@ class RefreshBodyList extends ConsumerWidget {
         itemCount: kanjisFromApi.length,
         itemBuilder: (ctx, index) {
           return getKanjiItem(
-            kanjisFromApi,
-            mainScreenData,
-            index,
-            ref,
-          );
+              kanjisFromApi, mainScreenData, index, ref, context);
         },
       );
     } else if (Orientation.landscape == orientation &&
@@ -117,11 +186,7 @@ class RefreshBodyList extends ConsumerWidget {
           itemCount: kanjisFromApi.length,
           itemBuilder: (ctx, index) {
             return getKanjiItem(
-              kanjisFromApi,
-              mainScreenData,
-              index,
-              ref,
-            );
+                kanjisFromApi, mainScreenData, index, ref, context);
           },
         ),
       );
@@ -142,11 +207,7 @@ class RefreshBodyList extends ConsumerWidget {
           itemCount: kanjisFromApi.length,
           itemBuilder: (ctx, index) {
             return getKanjiItem(
-              kanjisFromApi,
-              mainScreenData,
-              index,
-              ref,
-            );
+                kanjisFromApi, mainScreenData, index, ref, context);
           },
         ),
       );
@@ -155,11 +216,7 @@ class RefreshBodyList extends ConsumerWidget {
         itemCount: kanjisFromApi.length,
         itemBuilder: (ctx, index) {
           return getKanjiItem(
-            kanjisFromApi,
-            mainScreenData,
-            index,
-            ref,
-          );
+              kanjisFromApi, mainScreenData, index, ref, context);
         },
       );
     }
