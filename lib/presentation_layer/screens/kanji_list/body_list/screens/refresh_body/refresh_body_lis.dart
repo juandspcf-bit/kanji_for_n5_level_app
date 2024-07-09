@@ -6,7 +6,6 @@ import 'package:kanji_for_n5_level_app/models/section_model.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_details/kanji_details_provider.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_details/kanji_details_screen.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_list/body_list/list_tile/kanji_list_tile.dart';
-import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_list/body_list/list_tile/kanji_item_animated.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_list/body_list/kanjis_list_provider.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_list/body_list/screens/refresh_body/no_data_to_shown_screen.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/main_screens/main_content_provider.dart';
