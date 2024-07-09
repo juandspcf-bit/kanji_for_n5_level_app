@@ -169,8 +169,27 @@ class RefreshBodyList extends ConsumerWidget {
         },
       );
     } else if (Orientation.landscape == orientation &&
-        (ScreenSizeWidth.large == widthScreen ||
-            ScreenSizeWidth.extraLarge == widthScreen)) {
+        ScreenSizeWidth.extraLarge == widthScreen) {
+      return SafeArea(
+        child: GridView.builder(
+          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 3,
+            childAspectRatio:
+                mainScreenData.selection == ScreenSelection.favoritesKanjis
+                    ? 9 / 3
+                    : 10 / 3,
+            crossAxisSpacing: 5,
+            mainAxisSpacing: 5,
+          ),
+          itemCount: kanjisFromApi.length,
+          itemBuilder: (ctx, index) {
+            return getKanjiItem(
+                kanjisFromApi, mainScreenData, index, ref, context);
+          },
+        ),
+      );
+    } else if (Orientation.landscape == orientation &&
+        ScreenSizeWidth.large == widthScreen) {
       return SafeArea(
         child: GridView.builder(
           gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(

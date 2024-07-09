@@ -123,6 +123,11 @@ class StrokesImages extends ConsumerWidget {
     int crossAxisCount;
     int containerSize;
     switch ((orientation, sizeScreen)) {
+      case (Orientation.landscape, ScreenSizeWidth.extraLarge):
+        {
+          crossAxisCount = 4;
+          containerSize = 150;
+        }
       case (Orientation.landscape, _):
         {
           crossAxisCount = 4;
@@ -131,7 +136,7 @@ class StrokesImages extends ConsumerWidget {
       case (_, ScreenSizeWidth.extraLarge):
         {
           crossAxisCount = 6;
-          containerSize = 140;
+          containerSize = 150;
         }
       case (_, ScreenSizeWidth.large):
         {

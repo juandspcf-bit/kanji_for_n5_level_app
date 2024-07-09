@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:kanji_for_n5_level_app/main.dart';
 
 enum ScreenSizeWidth {
   small(300.0),
@@ -22,7 +23,8 @@ enum ScreenSizeHeight {
 }
 
 ScreenSizeWidth getScreenSizeWidth(BuildContext context) {
-  double deviceWidth = MediaQuery.sizeOf(context).shortestSide;
+  double deviceWidth = MediaQuery.sizeOf(context).width;
+  logger.d("width $deviceWidth");
   //double deviceHeight = MediaQuery.sizeOf(context).longestSide;
   // Gives us the shortest side of the device
   if (deviceWidth >= ScreenSizeWidth.extraLarge.size) {
@@ -35,7 +37,8 @@ ScreenSizeWidth getScreenSizeWidth(BuildContext context) {
 
 ScreenSizeHeight getScreenSizeHeight(BuildContext context) {
 //  double deviceWidth = MediaQuery.sizeOf(context).shortestSide;
-  double deviceHeight = MediaQuery.sizeOf(context).longestSide;
+  double deviceHeight = MediaQuery.sizeOf(context).height;
+  logger.d("height $deviceHeight");
 
   if (deviceHeight >= ScreenSizeHeight.normal.size) {
     return ScreenSizeHeight.normal;
