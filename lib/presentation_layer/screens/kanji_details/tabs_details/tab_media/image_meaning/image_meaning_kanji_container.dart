@@ -6,8 +6,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_details/kanji_details_provider.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_details/tabs_details/tab_media/image_meaning/image_meaning_kanji_provider.dart';
 
-class ImageMeaningKanji extends ConsumerWidget {
-  const ImageMeaningKanji({
+class ImageMeaningKanjiContainer extends ConsumerWidget {
+  const ImageMeaningKanjiContainer({
     super.key,
   });
 
@@ -20,19 +20,50 @@ class ImageMeaningKanji extends ConsumerWidget {
     return imageData.when(
         data: (imageData) {
           final height = 800 * imageData.linkHeight / imageData.linkWidth;
-
           return imageData.storageImageDetailsStatus ==
                   StorageImageDetailsStatus.stored
-              ? Image.file(
-                  File(imageData.link),
-                  cacheWidth: 800,
-                  cacheHeight: height.ceil(),
+              ? LayoutBuilder(
+                  builder: (context, constraints) {
+                    final height = constraints.maxWidth * 427 / 640;
+                    return Container(
+                      height: height,
+                      width: MediaQuery.sizeOf(context).width,
+                      decoration: BoxDecoration(
+                        color: Colors.red,
+                        borderRadius: BorderRadius.circular(
+                            MediaQuery.sizeOf(context).width * 0.03),
+                        image: DecorationImage(
+                          image: FileImage(File(imageData.link)),
+                          fit: BoxFit.fitWidth,
+                        ),
+                      ),
+                    );
+                  },
                 )
               : CachedNetworkImage(
                   memCacheWidth: 800,
                   memCacheHeight:
                       imageData.linkWidth == 0 ? 100 : height.ceil(),
                   imageUrl: imageData.link,
+                  imageBuilder: (context, imageProvider) {
+                    return LayoutBuilder(
+                      builder: (context, constraints) {
+                        final height = constraints.maxWidth * 427 / 640;
+                        return Container(
+                          height: height,
+                          width: MediaQuery.sizeOf(context).width,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(
+                                MediaQuery.sizeOf(context).width * 0.03),
+                            image: DecorationImage(
+                              image: imageProvider,
+                              fit: BoxFit.fitWidth,
+                            ),
+                          ),
+                        );
+                      },
+                    );
+                  },
                   errorWidget: (context, url, error) {
                     return LayoutBuilder(
                       builder: (context, constraints) {

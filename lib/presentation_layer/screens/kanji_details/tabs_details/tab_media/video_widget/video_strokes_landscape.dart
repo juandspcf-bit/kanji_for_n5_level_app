@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_details/tabs_details/tab_media/image_meaning/image_meaning_kanji_container.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_details/tabs_details/tab_media/video_widget/video_wrapper.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_details/tabs_details/tab_media/image_meaning/image_meaning_kanji.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_details/tabs_details/tab_media/meaning_definition.dart';
@@ -19,7 +20,10 @@ class VideoStrokesLandScape extends ConsumerWidget {
                 SizedBox(height: 10),
                 MeaningAndDefinition(),
                 SizedBox(height: 10),
-                ImageMeaningKanji(),
+                ImageMeaningKanjiContainer(),
+                SizedBox(
+                  height: 20,
+                ),
               ],
             ),
           ),
