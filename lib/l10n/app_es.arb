@@ -344,7 +344,7 @@
   "@kanjiListOnboarding":{},
   "clickKanjiOnboarding":"Click en cualquier kanji para ver mas contenido",
   "@clickKanjiOnboarding":{},
-  "detailsKanjiOnboarding":"El contenido acerca de un kanji contiene sus trazos, significado y sus ejemplos con audio",
+  "detailsKanjiOnboarding":"El contenido acerca de un kanji contiene sus trazos, significado y ejemplos con audio",
   "@detailsKanjiOnboarding":{},
   "quizKanjiOnboarding":"Puedes hacer diferentes pruebas acerca de tu aprendizaje",
   "@quizKanjiOnboarding":{},
