@@ -76,7 +76,6 @@ class _AutFlowState extends ConsumerState<AuthFlow> {
       body: StreamBuilder(
           stream: streamUser, //ref.read(authServiceProvider).authStream(),
           builder: (ctx, snapShot) {
-            logger.d(snapShot.connectionState);
             if (snapShot.connectionState == ConnectionState.waiting) {
               return ProcessProgress(
                 message: context.l10n.loginProcess,
