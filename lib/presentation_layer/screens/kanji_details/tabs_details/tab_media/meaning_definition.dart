@@ -20,59 +20,56 @@ class MeaningAndDefinition extends ConsumerWidget {
     return SizedBox(
       width: double.infinity,
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20),
-            child: Container(
-              width: double.infinity,
-              padding: const EdgeInsets.all(10),
-              decoration: BoxDecoration(
-                color: const Color.fromARGB(221, 62, 61, 64),
-                borderRadius: BorderRadius.circular(20),
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Center(
-                    child: Text(
-                      context.l10n.meaningAndDefinition,
-                      style: Theme.of(context)
-                          .textTheme
-                          .titleLarge!
-                          .copyWith(fontWeight: FontWeight.bold),
-                    ),
+          Container(
+            width: double.infinity,
+            padding: const EdgeInsets.all(10),
+            decoration: BoxDecoration(
+              color: const Color.fromARGB(221, 62, 61, 64),
+              borderRadius: BorderRadius.circular(20),
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Center(
+                  child: Text(
+                    context.l10n.meaningAndDefinition,
+                    style: Theme.of(context)
+                        .textTheme
+                        .titleLarge!
+                        .copyWith(fontWeight: FontWeight.bold),
                   ),
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  SelectableText(
-                    capitalizeString(
-                        '${context.l10n.meaning}: ${kanjiFromApi.englishMeaning}'),
-                  ),
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  SelectableText(
-                      "Kunyomi(romaji): ${kanjiFromApi.hiraganaRomaji}"),
-                  const SizedBox(
-                    height: 5,
-                  ),
-                  SelectableText("Kunyomi: ${kanjiFromApi.hiraganaMeaning}"),
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  SelectableText(
-                      "Onyomi(romaji): ${kanjiFromApi.katakanaRomaji}"),
-                  const SizedBox(
-                    height: 5,
-                  ),
-                  SelectableText("Onyomi: ${kanjiFromApi.katakanaMeaning}"),
-                  const SizedBox(
-                    height: 5,
-                  ),
-                ],
-              ),
+                ),
+                const SizedBox(
+                  height: 20,
+                ),
+                SelectableText(
+                  capitalizeString(
+                      '${context.l10n.meaning}: ${kanjiFromApi.englishMeaning}'),
+                ),
+                const SizedBox(
+                  height: 20,
+                ),
+                SelectableText(
+                    "Kunyomi(romaji): ${kanjiFromApi.hiraganaRomaji}"),
+                const SizedBox(
+                  height: 5,
+                ),
+                SelectableText("Kunyomi: ${kanjiFromApi.hiraganaMeaning}"),
+                const SizedBox(
+                  height: 20,
+                ),
+                SelectableText(
+                    "Onyomi(romaji): ${kanjiFromApi.katakanaRomaji}"),
+                const SizedBox(
+                  height: 5,
+                ),
+                SelectableText("Onyomi: ${kanjiFromApi.katakanaMeaning}"),
+                const SizedBox(
+                  height: 5,
+                ),
+              ],
             ),
           ),
         ],
