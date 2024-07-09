@@ -22,7 +22,7 @@ class LoginFormScreen extends ConsumerWidget with MyDialogs {
         ref
             .read(loginProvider.notifier)
             .setStatusResetEmail(StatusResetEmail.notStarted);
-      }, context.l10n.loginMessages("tooManyRequest"));
+      }, context.l10n.loginMessages(result.name));
     }
   }
 
