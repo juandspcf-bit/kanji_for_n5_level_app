@@ -67,16 +67,9 @@ class RefreshBodyList extends ConsumerWidget {
               transitionsBuilder:
                   (context, animation, secondaryAnimation, child) {
                 return FadeTransition(
-                  opacity: Tween<double>(
-                    begin: 0,
-                    end: 1,
-                  ).animate(
-                    animation.drive(
-                      CurveTween(
-                        curve: Curves.easeInOutBack,
-                      ),
-                    ),
-                  ),
+                  opacity: CurveTween(
+                    curve: Curves.easeInOutBack,
+                  ).animate(animation),
                   child: child,
                 );
               },
