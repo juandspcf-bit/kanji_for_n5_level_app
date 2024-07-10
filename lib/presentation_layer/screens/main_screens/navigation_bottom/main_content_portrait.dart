@@ -4,9 +4,10 @@ import 'package:kanji_for_n5_level_app/application_layer/services.dart';
 import 'package:kanji_for_n5_level_app/l10n/localization.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/main_screens/avatar_main_screen/avatar_main_screen_portrait.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/main_screens/title_main_screen.dart';
+import 'package:kanji_for_n5_level_app/presentation_layer/screens/navigation_bar_screens/search_screen/search_options_portrait.dart';
 import 'package:kanji_for_n5_level_app/providers/status_connection_provider.dart';
 import 'package:kanji_for_n5_level_app/repositories_layer/local_database/db_quiz_data_functions/db_quiz_data_functions.dart';
-import 'package:kanji_for_n5_level_app/presentation_layer/screens/main_screens/navigation_bottom/bottom_navigation_bar.dart';
+import 'package:kanji_for_n5_level_app/presentation_layer/screens/main_screens/navigation_bottom/custom_bottom_navigation_bar.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/main_screens/main_content_provider.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/navigation_bar_screens/list_favorite_kanjis_screen/kanjis_for_favorites_screen.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/navigation_bar_screens/progress_screen/progress_screen.dart';
@@ -31,7 +32,7 @@ class MainContentPortrait extends ConsumerWidget {
       case ScreenSelection.favoritesKanjis:
         return const KanjisForFavoritesScreen();
       case ScreenSelection.searchKanji:
-        return SearchScreen();
+        return const SearchOptionsPortrait();
 
       case ScreenSelection.progressTimeLine:
         return const ProgressScreen();

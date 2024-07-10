@@ -16,7 +16,6 @@ class SearchScreen extends ConsumerWidget {
   SearchScreen({super.key});
 
   final _formKey = GlobalKey<FormState>();
-  final validCharacters = RegExp(r'^[a-zA-Z]+$');
 
   void onValidate(WidgetRef ref) async {
     final currenState = _formKey.currentState;
@@ -67,67 +66,71 @@ class SearchScreen extends ConsumerWidget {
     final searchScreenState = ref.watch(searchScreenProvider);
     final statusConnectionState = ref.watch(statusConnectionProvider);
 
-    return statusConnectionState == ConnectionStatus.noConnected
-        ? ErrorConnectionScreen(
-            message: context.l10n.searchErrorConnectionMessage,
-          )
-        : Padding(
-            padding: const EdgeInsets.symmetric(vertical: 30),
-            child: SingleChildScrollView(
-              child: Column(
-                children: [
-                  const SizedBox(
-                    height: 5,
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 20),
-                    child: Form(
-                      key: _formKey,
-                      child: TextFormField(
-                        initialValue: searchScreenState.word,
-                        decoration: const InputDecoration().copyWith(
-                          border: const OutlineInputBorder(),
-                          suffixIcon: GestureDetector(
-                            child: const Icon(Icons.search),
-                            onTap: () {
-                              onValidate(ref);
-                              FocusScopeNode currentFocus =
-                                  FocusScope.of(context);
+    return Scaffold(
+      appBar: AppBar(),
+      body: statusConnectionState == ConnectionStatus.noConnected
+          ? ErrorConnectionScreen(
+              message: context.l10n.searchErrorConnectionMessage,
+            )
+          : Padding(
+              padding: const EdgeInsets.symmetric(vertical: 30),
+              child: SingleChildScrollView(
+                child: Column(
+                  children: [
+                    const SizedBox(
+                      height: 5,
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 20),
+                      child: Form(
+                        key: _formKey,
+                        child: TextFormField(
+                          initialValue: searchScreenState.word,
+                          decoration: const InputDecoration().copyWith(
+                            border: const OutlineInputBorder(),
+                            suffixIcon: GestureDetector(
+                              child: const Icon(Icons.search),
+                              onTap: () {
+                                onValidate(ref);
+                                FocusScopeNode currentFocus =
+                                    FocusScope.of(context);
 
-                              if (!currentFocus.hasPrimaryFocus) {
-                                currentFocus.unfocus();
-                              }
-                            },
+                                if (!currentFocus.hasPrimaryFocus) {
+                                  currentFocus.unfocus();
+                                }
+                              },
+                            ),
+                            hintText: context.l10n.searchEnglishWord,
                           ),
-                          hintText: context.l10n.searchEnglishWord,
+                          keyboardType: TextInputType.text,
+                          validator: (text) {
+                            final validCharacters = RegExp(r'^[a-zA-Z]+$');
+                            if (text != null &&
+                                text.isNotEmpty &&
+                                validCharacters.hasMatch(text.trim())) {
+                              return null;
+                            } else {
+                              return context.l10n.searchInvalidWord;
+                            }
+                          },
+                          onSaved: (value) {
+                            ref
+                                .read(searchScreenProvider.notifier)
+                                .setWord(value ?? '');
+                          },
                         ),
-                        keyboardType: TextInputType.text,
-                        validator: (text) {
-                          if (text != null &&
-                              text.isNotEmpty &&
-                              validCharacters.hasMatch(text.trim())) {
-                            return null;
-                          } else {
-                            return context.l10n.searchInvalidWord;
-                          }
-                        },
-                        onSaved: (value) {
-                          ref
-                              .read(searchScreenProvider.notifier)
-                              .setWord(value ?? '');
-                        },
                       ),
                     ),
-                  ),
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  getResult(searchScreenState.searchState,
-                      searchScreenState.kanjiFromApi, context)
-                ],
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    getResult(searchScreenState.searchState,
+                        searchScreenState.kanjiFromApi, context)
+                  ],
+                ),
               ),
             ),
-          );
+    );
   }
 }
 
