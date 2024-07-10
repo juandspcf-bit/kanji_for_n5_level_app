@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/common_widgets/animated_opacity_icon.dart';
+import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_details/custom_navigation_rails_details/custom_navigation_rails_details_provider.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_details/kanji_details_provider.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_details/quiz_kanji_details_screen/quiz_details_main_screen.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_details/tabs_details/icon_favorites.dart';
@@ -20,12 +21,15 @@ class CustomTabControllerKanjiDetails extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final initialSelection =
+        ref.read(customNavigationRailsDetailsProvider.notifier).getSelection();
     return DefaultTabController(
-      initialIndex: 0,
+      initialIndex: initialSelection != 3 ? initialSelection : 0,
       length: 3,
       child: Builder(
         builder: (BuildContext ctx) {
           final tabController = DefaultTabController.of(ctx);
+
           tabController.addListener(() {
             if (tabController.index != 3) {
               ref.read(audioExamplesTrackListProvider).assetsAudioPlayer.stop();
@@ -33,6 +37,9 @@ class CustomTabControllerKanjiDetails extends ConsumerWidget {
                   .read(audioExamplesTrackListProvider.notifier)
                   .setIsPlaying(false);
             }
+            ref
+                .read(customNavigationRailsDetailsProvider.notifier)
+                .setSelection(tabController.index);
             if (!tabController.indexIsChanging) {
               // Your code goes here.
               // To get index of current tab use tabController.index

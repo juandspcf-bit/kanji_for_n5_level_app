@@ -45,7 +45,6 @@ class MainContentLandScape extends ConsumerWidget {
     final mainScreenData = ref.watch(mainScreenProvider);
 
     return Scaffold(
-      resizeToAvoidBottomInset: true,
       body: Row(
         children: [
           const CustomNavigationRail(),

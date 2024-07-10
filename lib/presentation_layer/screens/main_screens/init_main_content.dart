@@ -152,9 +152,9 @@ class InitMainContentState extends ConsumerState<InitMainContent> {
           );
         } else if (connectionStatus == ConnectionState.done ||
             connectionStatus == ConnectionState.active) {
-          return const MainContent();
+          return const SafeArea(child: MainContent());
         } else {
-          return Center(child: Text(context.l10n.errorLoading));
+          return Scaffold(body: Center(child: Text(context.l10n.errorLoading)));
         }
       },
     );

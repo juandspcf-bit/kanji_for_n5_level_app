@@ -18,7 +18,7 @@ class WelcomeKanjiDetailsQuizScreenLandScape extends ConsumerWidget {
       case ScreenSizeWidth.extraLarge:
         imageSize = 512;
       case ScreenSizeWidth.large:
-        imageSize = 512;
+        imageSize = 256;
       case ScreenSizeWidth.normal:
         imageSize = 256;
       case (_):

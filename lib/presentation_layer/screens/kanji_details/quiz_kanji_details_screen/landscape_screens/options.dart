@@ -41,7 +41,7 @@ class OptionsDetails extends ConsumerWidget {
             height: 40,
             decoration: BoxDecoration(
                 color: Theme.of(context).colorScheme.primary,
-                borderRadius: BorderRadius.circular(30)),
+                borderRadius: BorderRadius.circular(10)),
             child: Row(
               mainAxisSize: MainAxisSize.min,
               mainAxisAlignment: MainAxisAlignment.center,
