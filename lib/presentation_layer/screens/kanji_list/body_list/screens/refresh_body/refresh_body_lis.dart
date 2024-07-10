@@ -217,9 +217,12 @@ class RefreshBodyList extends ConsumerWidget {
             crossAxisCount: 2,
             childAspectRatio:
                 mainScreenData.selection == ScreenSelection.favoritesKanjis
-                    ? 6 / 4
+                    ? 7 / 3
                     : 8 / 3,
-            crossAxisSpacing: 5,
+            crossAxisSpacing:
+                mainScreenData.selection == ScreenSelection.favoritesKanjis
+                    ? 3
+                    : 5,
             mainAxisSpacing: 5,
           ),
           itemCount: kanjisFromApi.length,
