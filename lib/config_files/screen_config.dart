@@ -2,20 +2,40 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:kanji_for_n5_level_app/main.dart';
 
-enum ScreenSizeWidth {
+enum ScreenSizeWidthPortrait {
   small(300.0),
+  normal(400.0),
+  large(450.0),
+  extraLarge(700.0);
+
+  final double size;
+
+  const ScreenSizeWidthPortrait(this.size);
+}
+
+enum ScreenSizeWidthLandscape {
+  small(700),
   normal(400.0),
   large(600.0),
   extraLarge(1000.0);
 
   final double size;
 
-  const ScreenSizeWidth(this.size);
+  const ScreenSizeWidthLandscape(this.size);
+}
+
+enum ScreenSizeWidth {
+  small,
+  normal,
+  large,
+  extraLarge;
 }
 
 enum ScreenSizeHeight {
-  small(700.0),
-  normal(800.0);
+  small(700),
+  normal(800),
+  large(900.0),
+  extraLarge(1280.0);
 
   final double size;
 
@@ -24,15 +44,37 @@ enum ScreenSizeHeight {
 
 ScreenSizeWidth getScreenSizeWidth(BuildContext context) {
   double deviceWidth = MediaQuery.sizeOf(context).width;
-  logger.d("width $deviceWidth");
+  double deviceHeight = MediaQuery.sizeOf(context).height;
+  final orientation = MediaQuery.orientationOf(context);
+  logger.d("width $deviceWidth height $deviceHeight");
   //double deviceHeight = MediaQuery.sizeOf(context).longestSide;
   // Gives us the shortest side of the device
-  if (deviceWidth >= ScreenSizeWidth.extraLarge.size) {
-    return ScreenSizeWidth.extraLarge;
+
+  if (orientation == Orientation.portrait) {
+    if (deviceHeight >= ScreenSizeHeight.extraLarge.size) {
+      return ScreenSizeWidth.extraLarge;
+    }
+    if (deviceHeight >= ScreenSizeHeight.large.size) {
+      return ScreenSizeWidth.large;
+    }
+    if (deviceHeight >= ScreenSizeHeight.normal.size) {
+      return ScreenSizeWidth.normal;
+    }
+
+    return ScreenSizeWidth.small;
+  } else {
+    if (deviceWidth >= ScreenSizeHeight.extraLarge.size) {
+      return ScreenSizeWidth.extraLarge;
+    }
+    if (deviceWidth >= ScreenSizeHeight.large.size) {
+      return ScreenSizeWidth.large;
+    }
+    if (deviceWidth >= ScreenSizeHeight.normal.size) {
+      return ScreenSizeWidth.normal;
+    }
+
+    return ScreenSizeWidth.small;
   }
-  if (deviceWidth >= ScreenSizeWidth.large.size) return ScreenSizeWidth.large;
-  if (deviceWidth >= ScreenSizeWidth.normal.size) return ScreenSizeWidth.normal;
-  return ScreenSizeWidth.small;
 }
 
 ScreenSizeHeight getScreenSizeHeight(BuildContext context) {

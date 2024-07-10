@@ -16,6 +16,7 @@ class Sections extends StatelessWidget {
   Widget build(BuildContext context) {
     final orientation = MediaQuery.orientationOf(context);
     final sizeScreen = getScreenSizeWidth(context);
+    logger.d(sizeScreen);
     int crossAxisCount;
     switch ((orientation, sizeScreen)) {
       case (Orientation.landscape, _):
@@ -24,8 +25,6 @@ class Sections extends StatelessWidget {
         }
       case (_, ScreenSizeWidth.extraLarge):
         crossAxisCount = 4;
-      case (_, ScreenSizeWidth.large):
-        crossAxisCount = 3;
       case (_, _):
         crossAxisCount = 2;
     }

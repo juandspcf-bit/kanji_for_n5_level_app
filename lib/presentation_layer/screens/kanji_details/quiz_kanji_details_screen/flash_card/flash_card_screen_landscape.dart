@@ -104,7 +104,6 @@ class _FlashCardScreenState extends ConsumerState<FlashCardScreenLandscape> {
                     }
                   },
                   children: [
-                    //TODO change the size when the screen is big
                     for (int i = 0; i < flashCardState.japanese.length; i++)
                       Padding(
                         padding: const EdgeInsets.symmetric(
