@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kanji_for_n5_level_app/application_layer/services.dart';
+import 'package:kanji_for_n5_level_app/presentation_layer/screens/navigation_bar_screens/search_screen/search_options_portrait.dart';
 import 'package:kanji_for_n5_level_app/repositories_layer/local_database/db_quiz_data_functions/db_quiz_data_functions.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/main_screens/navigation_rails/custom_navigation_rail.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/main_screens/main_content_provider.dart';
@@ -26,8 +27,9 @@ class MainContentLandScape extends ConsumerWidget {
         );
       case ScreenSelection.favoritesKanjis:
         return const KanjisForFavoritesScreen();
+
       case ScreenSelection.searchKanji:
-        return SearchScreen();
+        return const SearchOptionsPortrait();
 
       case ScreenSelection.progressTimeLine:
         return const ProgressScreen();

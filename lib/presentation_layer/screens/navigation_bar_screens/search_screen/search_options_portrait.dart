@@ -18,7 +18,10 @@ class SearchOptionsPortrait extends ConsumerWidget {
             children: [
               ElevatedButton.icon(
                 style: ElevatedButton.styleFrom(
-                  minimumSize: const Size.fromHeight(50),
+                  minimumSize:
+                      MediaQuery.orientationOf(context) == Orientation.portrait
+                          ? const Size.fromHeight(50)
+                          : const Size(300, 50),
                 ),
                 onPressed: () {
                   Navigator.of(context).push(
