@@ -3,8 +3,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kanji_for_n5_level_app/l10n/localization.dart';
 import 'package:kanji_for_n5_level_app/models/kanji_from_api.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/common_widgets/svg_utils/svg_utils.dart';
+import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_details/tabs_details/tab_examples/example_audio_widget.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_details/tabs_details/tab_examples/example_audio_widget_stream/example_audio_widget.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_details/tabs_details/tab_examples/audio_examples_track_list_provider.dart';
+import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_details/tabs_details/tab_examples/example_audio_widget_stream/example_widget.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/navigation_bar_screens/search_screen/meaning_search.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/navigation_bar_screens/search_screen/search_screen_provider.dart';
 import 'package:kanji_for_n5_level_app/providers/status_connection_provider.dart';
@@ -222,16 +224,21 @@ class ExampleAudiosSearch extends ConsumerWidget {
                   index: index,
                   data: data,
                 ),
-                trailing: ExampleAudioStream(
-                  audioQuestion: examples[index].audio.mp3,
-                  sizeOval: 50,
-                  sizeIcon: 30,
-                  trackPlaylist: data.track,
-                  indexPlaylist: index,
-                  isInPlaylistPlaying: data.isPlaying,
-                  statusStorage: statusStorage,
-                  onPrimaryColor: Theme.of(context).colorScheme.onPrimary,
-                ),
+                trailing: data.isPlaying
+                    ? DummyButtonAudioExample(
+                        sizeOval: 50,
+                        sizeIcon: 30,
+                        trackPlaylist: data.track,
+                        indexPlaylist: index,
+                        isInPlaylistPlaying: data.isPlaying,
+                      )
+                    : AudioExampleButtonWidget(
+                        audioQuestion: examples[index].audio.mp3,
+                        sizeOval: 50,
+                        sizeIcon: 30,
+                        statusStorage: statusStorage,
+                        onPrimaryColor: Theme.of(context).colorScheme.onPrimary,
+                      ),
               )
           ],
         )
