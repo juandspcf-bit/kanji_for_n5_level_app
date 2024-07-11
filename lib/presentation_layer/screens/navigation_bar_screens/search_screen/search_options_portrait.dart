@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:kanji_for_n5_level_app/presentation_layer/screens/navigation_bar_screens/search_screen/search_kanjis_by_grade.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/navigation_bar_screens/search_screen/search_screen.dart';
 
 class SearchOptionsPortrait extends ConsumerWidget {
@@ -58,6 +59,39 @@ class SearchOptionsPortrait extends ConsumerWidget {
                   );
                 },
                 label: const Text("search for a kanji"),
+                icon: const Icon(Icons.search),
+              ),
+              const SizedBox(
+                height: 15,
+              ),
+              ElevatedButton.icon(
+                style: ElevatedButton.styleFrom(
+                  minimumSize:
+                      MediaQuery.orientationOf(context) == Orientation.portrait
+                          ? const Size.fromHeight(50)
+                          : const Size(300, 50),
+                ),
+                onPressed: () {
+                  Navigator.of(context).push(
+                    PageRouteBuilder(
+                      transitionDuration: const Duration(seconds: 1),
+                      reverseTransitionDuration: const Duration(seconds: 1),
+                      pageBuilder: (context, animation, secondaryAnimation) {
+                        return const SearchKanjisByGrade();
+                      },
+                      transitionsBuilder:
+                          (context, animation, secondaryAnimation, child) {
+                        return FadeTransition(
+                          opacity: CurveTween(
+                            curve: Curves.easeInOutBack,
+                          ).animate(animation),
+                          child: child,
+                        );
+                      },
+                    ),
+                  );
+                },
+                label: const Text("search kanjis by grade"),
                 icon: const Icon(Icons.search),
               )
             ],

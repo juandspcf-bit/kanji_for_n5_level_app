@@ -6,7 +6,7 @@ part of 'change_email_flow_provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$emailChangeHash() => r'def5d24a9e94d67f919e1be86b33efa2e66c082b';
+String _$emailChangeHash() => r'2679e5690a0ba24bbe51f1e5bd6f58c3c33d29d0';
 
 /// See also [EmailChange].
 @ProviderFor(EmailChange)
