@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/navigation_bar_screens/search_screen/custom_dropdown_menu.dart';
+import 'package:kanji_for_n5_level_app/presentation_layer/screens/navigation_bar_screens/search_screen/list_kanjis_widget.dart';
 
 class SearchKanjisByGrade extends ConsumerStatefulWidget {
   const SearchKanjisByGrade({super.key});
@@ -27,7 +28,10 @@ class _SearchKanjisByGradeState extends ConsumerState<SearchKanjisByGrade> {
         child: SizedBox(
           width: double.infinity,
           child: Column(
-            children: [CustomDropdownMenu()],
+            children: [
+              CustomDropdownMenu(),
+              Expanded(child: ListKanjisWidget()),
+            ],
           ),
         ),
       ),

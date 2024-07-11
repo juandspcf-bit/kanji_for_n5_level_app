@@ -46,6 +46,11 @@ class KanjiAliveApiService implements KanjiApiService {
   }
 
   @override
+  Future<List<String>> getKanjisByGrade(int grade) {
+    return KanjiAliveApi.getKanjisByGrade(grade);
+  }
+
+  @override
   Future<KanjiFromApi> getTranslatedKanjiFromSpanishWord(
     String word,
     String uuid,

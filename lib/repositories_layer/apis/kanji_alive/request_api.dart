@@ -35,6 +35,19 @@ class RequestsApi {
     );
   }
 
+  static Future<Response> getKanjisByGrade(int grade) async {
+    final url = Uri.https("kanjialive-api.p.rapidapi.com",
+        "api/public/search/advanced", {'grade': grade.toString()});
+
+    return http.get(
+      url,
+      headers: {
+        'X-RapidAPI-Key': xRapidAPIKey,
+        'X-RapidAPI-Host': 'kanjialive-api.p.rapidapi.com'
+      },
+    );
+  }
+
   static Future<Response> getKanjiDataLocalHost(
     String kanji,
     String uuid,

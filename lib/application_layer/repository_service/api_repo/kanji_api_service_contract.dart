@@ -16,6 +16,8 @@ abstract class KanjiApiService {
 
   Future<KanjiFromApi> getKanjiFromEnglishWord(String word, String uuid);
 
+  Future<List<String>> getKanjisByGrade(int grade);
+
   Future<KanjiFromApi> getTranslatedKanjiFromSpanishWord(
     String word,
     String uuid,
