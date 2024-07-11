@@ -19,7 +19,10 @@ class VideoStrokesPortrait extends ConsumerWidget {
           SizedBox(
             height: 20,
           ),
-          MeaningAndDefinition(),
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: 20),
+            child: MeaningAndDefinition(),
+          ),
           SizedBox(
             height: 20,
           ),

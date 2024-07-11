@@ -103,6 +103,9 @@ class VideoSection extends ConsumerWidget {
             );
           },
         ),
+        const SizedBox(
+          height: 10,
+        ),
         Opacity(
           opacity: opacity,
           child: Row(

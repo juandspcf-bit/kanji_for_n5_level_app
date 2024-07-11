@@ -24,7 +24,7 @@ class MeaningAndDefinition extends ConsumerWidget {
         children: [
           Container(
             width: double.infinity,
-            padding: const EdgeInsets.all(10),
+            padding: const EdgeInsets.all(15),
             decoration: BoxDecoration(
               color: const Color.fromARGB(221, 62, 61, 64),
               borderRadius: BorderRadius.circular(20),
