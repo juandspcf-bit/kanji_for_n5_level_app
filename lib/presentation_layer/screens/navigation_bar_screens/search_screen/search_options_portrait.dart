@@ -28,8 +28,23 @@ class SearchOptionsPortrait extends ConsumerWidget {
                     PageRouteBuilder(
                       transitionDuration: const Duration(seconds: 1),
                       reverseTransitionDuration: const Duration(seconds: 1),
-                      pageBuilder: (context, animation, secondaryAnimation) =>
-                          SearchScreen(),
+                      pageBuilder: (context, animation, secondaryAnimation) {
+                        return SearchScreen();
+                        /* final modifiedAnimation = CurveTween(
+                          curve: Curves.easeInOutBack,
+                        ).animate(animation);
+
+                        return AnimatedBuilder(
+                          animation: modifiedAnimation,
+                          builder: (context, child) {
+                            return Transform.rotate(
+                              angle: modifiedAnimation.value * 2.0 * 3.141618,
+                              child: child,
+                            );
+                          },
+                          child: SearchScreen(),
+                        ); */
+                      },
                       transitionsBuilder:
                           (context, animation, secondaryAnimation, child) {
                         return FadeTransition(

@@ -25,6 +25,15 @@ class Sections extends StatelessWidget {
         }
       case (_, ScreenSizeWidth.extraLarge):
         crossAxisCount = 4;
+      case (_, ScreenSizeWidth.large):
+        {
+          if (MediaQuery.sizeOf(context).width > 500) {
+            crossAxisCount = 3;
+            break;
+          }
+          crossAxisCount = 2;
+        }
+
       case (_, _):
         crossAxisCount = 2;
     }
