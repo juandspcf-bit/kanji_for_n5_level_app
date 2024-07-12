@@ -13,7 +13,6 @@ class KanjiAliveApi {
     List<KanjiFromApi> storedKanjis,
     List<String> kanjisCharacters,
     int section,
-    String uuid,
   ) async {
     return await Isolate.run<List<KanjiFromApi>>(() async {
 /*       final localHostResult = await RequestsApi.getKanjiDataLocalHost(
@@ -163,7 +162,10 @@ class KanjiAliveApi {
 
       logger.d(kanjiMap['character']);
       final kanjiList = await KanjiAliveApi.getKanjiList(
-          [], [kanjiMap['character']], 0, uuid);
+        [],
+        [kanjiMap['character']],
+        0,
+      );
 
       return kanjiList.first;
     } catch (e) {

@@ -18,7 +18,6 @@ class KanjiAliveApiService implements KanjiApiService {
       storedKanjis,
       kanjisCharacters,
       section,
-      uuid,
     );
   }
 
@@ -26,13 +25,11 @@ class KanjiAliveApiService implements KanjiApiService {
   Future<KanjiFromApi> requestSingleKanjiToApi(
     String kanjiCharacter,
     int section,
-    String uuid,
   ) async {
     final kanjiList = await KanjiAliveApi.getKanjiList(
       [],
       [kanjiCharacter],
       section,
-      uuid,
     );
     return kanjiList[0];
   }

@@ -6,7 +6,7 @@ part of 'list_kanjis_provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$listKanjisStateHash() => r'1ff5b6c7dd43556de52fb0ca22398c39993b7f93';
+String _$listKanjisStateHash() => r'18d3d1e03057927e08e2608c5c69ce826ae0c7cd';
 
 /// See also [ListKanjisState].
 @ProviderFor(ListKanjisState)

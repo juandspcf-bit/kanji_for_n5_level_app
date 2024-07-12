@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kanji_for_n5_level_app/main.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/navigation_bar_screens/search_screen/custom_dropdown_menu_provider.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/navigation_bar_screens/search_screen/list_kanjis_provider.dart';
+import 'package:kanji_for_n5_level_app/presentation_layer/screens/navigation_bar_screens/search_screen/title_grade_provider.dart';
 
 class CustomDropdownMenu extends ConsumerWidget {
   const CustomDropdownMenu({super.key});
@@ -13,7 +14,6 @@ class CustomDropdownMenu extends ConsumerWidget {
     return Column(
       children: [
         DropdownMenu<GradeKanji>(
-          initialSelection: dropdownMenuState.grade,
           controller: dropdownMenuState.controller,
           requestFocusOnTap: false,
           label: const Text('Grade'),
@@ -51,6 +51,9 @@ class CustomDropdownMenu extends ConsumerWidget {
             ref
                 .read(listKanjisStateProvider.notifier)
                 .searchKanjisByGrade(dropdownMenuState.grade.grade);
+            ref
+                .read(titleGradeProvider.notifier)
+                .setTitle(dropdownMenuState.grade.grade);
           },
           label: const Text("search"),
           icon: const Icon(Icons.search),

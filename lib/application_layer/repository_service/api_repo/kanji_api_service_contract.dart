@@ -11,7 +11,6 @@ abstract class KanjiApiService {
   Future<KanjiFromApi> requestSingleKanjiToApi(
     String kanjisCharacters,
     int section,
-    String uuid,
   );
 
   Future<KanjiFromApi> getKanjiFromEnglishWord(String word, String uuid);
