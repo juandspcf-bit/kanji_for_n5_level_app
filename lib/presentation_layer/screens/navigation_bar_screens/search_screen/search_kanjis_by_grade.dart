@@ -30,6 +30,9 @@ class _SearchKanjisByGradeState extends ConsumerState<SearchKanjisByGrade> {
           child: Column(
             children: [
               CustomDropdownMenu(),
+              SizedBox(
+                height: 20,
+              ),
               Expanded(child: ListKanjisWidget()),
             ],
           ),

@@ -12,15 +12,9 @@ class ListKanjisState extends _$ListKanjisState {
   }
 
   void searchKanjisByGrade(int grade) async {
-    try {
-      state = const AsyncLoading();
-      logger.d("loading");
-      final result =
-          await ref.read(kanjiApiServiceProvider).getKanjisByGrade(grade);
-      state = AsyncValue.data((kanjisCharacters: result));
-      logger.d("finishd");
-    } catch (e) {
-      logger.e(e);
-    }
+    state = const AsyncLoading();
+    final result =
+        await ref.read(kanjiApiServiceProvider).getKanjisByGrade(grade);
+    state = AsyncValue.data((kanjisCharacters: result));
   }
 }

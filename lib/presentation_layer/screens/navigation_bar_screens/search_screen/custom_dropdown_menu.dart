@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:kanji_for_n5_level_app/main.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/navigation_bar_screens/search_screen/custom_dropdown_menu_provider.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/navigation_bar_screens/search_screen/list_kanjis_provider.dart';
 
@@ -8,7 +9,7 @@ class CustomDropdownMenu extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final dropdownMenuState = ref.read(customDropdownMenuStateProvider);
+    final dropdownMenuState = ref.watch(customDropdownMenuStateProvider);
     return Column(
       children: [
         DropdownMenu<GradeKanji>(
@@ -16,7 +17,14 @@ class CustomDropdownMenu extends ConsumerWidget {
           controller: dropdownMenuState.controller,
           requestFocusOnTap: false,
           label: const Text('Grade'),
-          onSelected: (GradeKanji? grade) {},
+          onSelected: (GradeKanji? grade) {
+            logger.d("selected grade $grade");
+            if (grade != null) {
+              ref
+                  .read(customDropdownMenuStateProvider.notifier)
+                  .setGrade(grade);
+            }
+          },
           dropdownMenuEntries: GradeKanji.values
               .map<DropdownMenuEntry<GradeKanji>>((GradeKanji grade) {
             return DropdownMenuEntry<GradeKanji>(
@@ -39,6 +47,7 @@ class CustomDropdownMenu extends ConsumerWidget {
                     : const Size(300, 50),
           ),
           onPressed: () {
+            logger.d(dropdownMenuState.grade.grade);
             ref
                 .read(listKanjisStateProvider.notifier)
                 .searchKanjisByGrade(dropdownMenuState.grade.grade);

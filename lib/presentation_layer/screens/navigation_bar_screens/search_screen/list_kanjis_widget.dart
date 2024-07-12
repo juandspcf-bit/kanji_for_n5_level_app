@@ -12,8 +12,17 @@ class ListKanjisWidget extends ConsumerWidget {
 
     return listKanjiState.when(
       data: (data) => ListView.builder(
-          itemCount: data.kanjisCharacters.length,
-          itemBuilder: (context, index) => Text(data.kanjisCharacters[index])),
+        itemCount: data.kanjisCharacters.length,
+        itemBuilder: (context, index) => Column(
+          children: [
+            Text(
+              data.kanjisCharacters[index],
+              style: Theme.of(context).textTheme.headlineLarge,
+            ),
+            const Divider()
+          ],
+        ),
+      ),
       error: (_, e) {
         logger.e(e);
         return const Center(

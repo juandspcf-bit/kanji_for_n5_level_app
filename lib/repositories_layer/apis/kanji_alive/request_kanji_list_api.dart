@@ -174,9 +174,7 @@ class KanjiAliveApi {
   static Future<List<String>> getKanjisByGrade(int grade) async {
     try {
       Response value = await RequestsApi.getKanjisByGrade(grade);
-      logger.d(value);
       final body = json.decode(value.body);
-      logger.d(body);
       List<dynamic> data = body;
 
       final List<String> kanjiCharacters = [];
