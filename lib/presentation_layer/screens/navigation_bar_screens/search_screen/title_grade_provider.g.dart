@@ -6,7 +6,7 @@ part of 'title_grade_provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$titleGradeHash() => r'1d317a030b60bd754e47c75f3de8bfa61e5c6d77';
+String _$titleGradeHash() => r'5daedad3a3206132e234914914c173a8082b5b26';
 
 /// See also [TitleGrade].
 @ProviderFor(TitleGrade)

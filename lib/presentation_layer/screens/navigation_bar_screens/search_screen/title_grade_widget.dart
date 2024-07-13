@@ -8,6 +8,9 @@ class TitleGradeWidget extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final titleState = ref.watch(titleGradeProvider);
-    return Text(titleState);
+    return Text(
+      titleState,
+      style: Theme.of(context).textTheme.bodyLarge,
+    );
   }
 }

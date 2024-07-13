@@ -17,7 +17,7 @@ class SearchOptionsPortrait extends ConsumerWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              ElevatedButton.icon(
+              ElevatedButton(
                 style: ElevatedButton.styleFrom(
                   minimumSize:
                       MediaQuery.orientationOf(context) == Orientation.portrait
@@ -58,13 +58,12 @@ class SearchOptionsPortrait extends ConsumerWidget {
                     ),
                   );
                 },
-                label: const Text("search for a kanji"),
-                icon: const Icon(Icons.search),
+                child: const Text("search for a kanji"),
               ),
               const SizedBox(
                 height: 15,
               ),
-              ElevatedButton.icon(
+              ElevatedButton(
                 style: ElevatedButton.styleFrom(
                   minimumSize:
                       MediaQuery.orientationOf(context) == Orientation.portrait
@@ -91,8 +90,7 @@ class SearchOptionsPortrait extends ConsumerWidget {
                     ),
                   );
                 },
-                label: const Text("search kanjis by grade"),
-                icon: const Icon(Icons.search),
+                child: const Text("search kanjis by grade"),
               )
             ],
           ),

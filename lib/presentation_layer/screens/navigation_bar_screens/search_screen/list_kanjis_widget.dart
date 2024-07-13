@@ -36,9 +36,14 @@ class ListKanjisWidget extends ConsumerWidget {
                   },
                 ),
               ),
-              child: Text(
-                data.kanjisCharacters[index],
-                style: Theme.of(context).textTheme.headlineLarge,
+              child: Container(
+                color: Colors.transparent,
+                alignment: Alignment.center,
+                width: double.infinity,
+                child: Text(
+                  data.kanjisCharacters[index],
+                  style: Theme.of(context).textTheme.headlineLarge,
+                ),
               ),
             ),
             const Divider()

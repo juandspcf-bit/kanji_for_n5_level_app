@@ -6,11 +6,11 @@ part 'custom_dropdown_menu_provider.g.dart';
 @riverpod
 class CustomDropdownMenuState extends _$CustomDropdownMenuState {
   @override
-  ({GradeKanji grade, TextEditingController controller}) build() {
-    return (grade: GradeKanji.grade1, controller: TextEditingController());
+  ({GradeKanji? grade, TextEditingController controller}) build() {
+    return (grade: null, controller: TextEditingController());
   }
 
-  void setGrade(GradeKanji grade) {
+  void setGrade(GradeKanji? grade) {
     state = (grade: grade, controller: state.controller);
   }
 }

@@ -7,7 +7,7 @@ part 'list_kanjis_provider.g.dart';
 class ListKanjisState extends _$ListKanjisState {
   @override
   FutureOr<({List<String> kanjisCharacters})> build() async {
-    return (kanjisCharacters: <String>[]);
+    return (kanjisCharacters: <String>[],);
   }
 
   void searchKanjisByGrade(int grade) async {
@@ -17,3 +17,5 @@ class ListKanjisState extends _$ListKanjisState {
     state = AsyncValue.data((kanjisCharacters: result));
   }
 }
+
+enum SearchingGradeState { searching, noStarted, data, error }
