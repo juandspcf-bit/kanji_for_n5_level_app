@@ -350,6 +350,18 @@
   "quizKanjiOnboarding":"You can test your learning by doing different quizzes around the app",
   "@quizKanjiOnboarding":{},
   "enjoyOnboarding":"Enjoy your studying!",
-  "@enjoyOnboarding":{}
+  "@enjoyOnboarding":{},
+
+  "searchKanji":"search for a kanji",
+  "@searchKanji":{},
+  "searchKanjiByGrade":"search kanjis by grade",
+  "@searchKanjiByGrade":{},
+  "grade":"Grade",
+  "@grade":{},
+  "selectAGrade":"Select a grade",
+  "@selectAGrade":{},
+  "search":"search",
+  "@search":{}
+
 
 }

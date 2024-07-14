@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:kanji_for_n5_level_app/l10n/localization.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/navigation_bar_screens/search_screen/search_kanjis_by_grade.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/navigation_bar_screens/search_screen/search_screen.dart';
 
@@ -31,20 +32,6 @@ class SearchOptionsPortrait extends ConsumerWidget {
                       reverseTransitionDuration: const Duration(seconds: 1),
                       pageBuilder: (context, animation, secondaryAnimation) {
                         return SearchScreen();
-                        /* final modifiedAnimation = CurveTween(
-                          curve: Curves.easeInOutBack,
-                        ).animate(animation);
-
-                        return AnimatedBuilder(
-                          animation: modifiedAnimation,
-                          builder: (context, child) {
-                            return Transform.rotate(
-                              angle: modifiedAnimation.value * 2.0 * 3.141618,
-                              child: child,
-                            );
-                          },
-                          child: SearchScreen(),
-                        ); */
                       },
                       transitionsBuilder:
                           (context, animation, secondaryAnimation, child) {
@@ -58,7 +45,7 @@ class SearchOptionsPortrait extends ConsumerWidget {
                     ),
                   );
                 },
-                child: const Text("search for a kanji"),
+                child: Text(context.l10n.searchKanji),
               ),
               const SizedBox(
                 height: 15,
@@ -90,7 +77,7 @@ class SearchOptionsPortrait extends ConsumerWidget {
                     ),
                   );
                 },
-                child: const Text("search kanjis by grade"),
+                child: Text(context.l10n.searchKanjiByGrade),
               )
             ],
           ),

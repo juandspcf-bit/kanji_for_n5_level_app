@@ -349,6 +349,17 @@
   "quizKanjiOnboarding":"Puedes hacer diferentes pruebas acerca de tu aprendizaje",
   "@quizKanjiOnboarding":{},
   "enjoyOnboarding":"Disfruta tu aprendizaje!",
-  "@enjoyOnboarding":{}
+  "@enjoyOnboarding":{},
+
+  "searchKanji":"busca algún kanji",
+  "@searchKanji":{},
+  "searchKanjiByGrade":"busca kanjis por grado",
+  "@searchKanjiByGrade":{},
+  "grade":"Grado",
+  "@grade":{},
+  "selectAGrade":"Selecciona un grado",
+  "@selectAGrade":{},
+  "search":"búsqueda",
+  "@search":{}
 
 }

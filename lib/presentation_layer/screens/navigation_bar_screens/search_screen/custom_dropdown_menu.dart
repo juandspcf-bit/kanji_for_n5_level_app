@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kanji_for_n5_level_app/application_layer/services.dart';
-import 'package:kanji_for_n5_level_app/main.dart';
+import 'package:kanji_for_n5_level_app/l10n/localization.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/navigation_bar_screens/search_screen/custom_dropdown_menu_provider.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/navigation_bar_screens/search_screen/list_kanjis_provider.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/navigation_bar_screens/search_screen/title_grade_provider.dart';
@@ -17,9 +17,8 @@ class CustomDropdownMenu extends ConsumerWidget {
         DropdownMenu<GradeKanji>(
           controller: dropdownMenuState.controller,
           requestFocusOnTap: false,
-          label: const Text('Grade'),
+          label: Text(context.l10n.grade),
           onSelected: (GradeKanji? grade) {
-            logger.d("selected grade $grade");
             if (grade != null) {
               ref
                   .read(customDropdownMenuStateProvider.notifier)
@@ -30,7 +29,7 @@ class CustomDropdownMenu extends ConsumerWidget {
               .map<DropdownMenuEntry<GradeKanji>>((GradeKanji grade) {
             return DropdownMenuEntry<GradeKanji>(
               value: grade,
-              label: "Grade ${grade.grade}",
+              label: "${context.l10n.grade} ${grade.grade}",
               style: MenuItemButton.styleFrom(
                 foregroundColor: Theme.of(context).colorScheme.primary,
               ),
@@ -60,7 +59,7 @@ class CustomDropdownMenu extends ConsumerWidget {
             } else {
               ref.read(toastServiceProvider).showMessage(
                     context,
-                    "select a grade",
+                    context.l10n.selectAGrade,
                     Icons.error,
                     const Duration(seconds: 5),
                     "",
@@ -68,7 +67,7 @@ class CustomDropdownMenu extends ConsumerWidget {
                   );
             }
           },
-          label: const Text("search"),
+          label: Text(context.l10n.search),
           icon: const Icon(Icons.search),
         )
       ],
