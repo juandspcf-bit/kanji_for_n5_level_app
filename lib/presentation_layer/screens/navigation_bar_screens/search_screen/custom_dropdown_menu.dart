@@ -13,6 +13,7 @@ class CustomDropdownMenu extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final dropdownMenuState = ref.watch(customDropdownMenuStateProvider);
     return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
       children: [
         DropdownMenu<GradeKanji>(
           controller: dropdownMenuState.controller,
@@ -55,7 +56,11 @@ class CustomDropdownMenu extends ConsumerWidget {
               ref
                   .read(listKanjisStateProvider.notifier)
                   .searchKanjisByGrade(grade.grade);
-              ref.read(titleGradeProvider.notifier).setTitle(grade.grade);
+              ref
+                  .read(titleGradeProvider(
+                          initText: context.l10n.initMessageSearchGrade)
+                      .notifier)
+                  .setTitle("${context.l10n.kanjisForGrade} ${grade.grade}");
             } else {
               ref.read(toastServiceProvider).showMessage(
                     context,

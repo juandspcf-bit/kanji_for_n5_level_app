@@ -7,6 +7,7 @@ import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_details/
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_details/tabs_details/tab_examples/audio_examples_track_list_provider.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_details/tabs_details/tab_examples/example_audio_widget_stream/example_widget.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/navigation_bar_screens/search_screen/meaning_search.dart';
+import 'package:kanji_for_n5_level_app/presentation_layer/screens/navigation_bar_screens/search_screen/results_portrait.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/navigation_bar_screens/search_screen/search_screen_provider.dart';
 import 'package:kanji_for_n5_level_app/providers/status_connection_provider.dart';
 import 'package:kanji_for_n5_level_app/providers/status_stored_provider.dart';
@@ -57,7 +58,7 @@ class SearchScreen extends ConsumerWidget {
                   message: context.l10n.searchMeaningWasNotFound),
             );
           }
-          return Results(kanjiFromApi: kanjiFromApi);
+          return ResultsPortrait(kanjiFromApi: kanjiFromApi);
         }
     }
   }
@@ -131,51 +132,6 @@ class SearchScreen extends ConsumerWidget {
                 ),
               ),
             ),
-    );
-  }
-}
-
-class Results extends ConsumerWidget {
-  const Results({super.key, required this.kanjiFromApi});
-  final KanjiFromApi kanjiFromApi;
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    return SizedBox(
-      width: double.infinity,
-      child: Column(
-        children: [
-          Container(
-            height: 100,
-            width: 100,
-            decoration: BoxDecoration(
-                color: Theme.of(context).colorScheme.onPrimaryContainer,
-                borderRadius: const BorderRadius.all(Radius.circular(10))),
-            child: SvgNetwork(
-              imageUrl: kanjiFromApi.strokes.images.last,
-              semanticsLabel: kanjiFromApi.kanjiCharacter,
-            ),
-          ),
-          const SizedBox(
-            height: 20,
-          ),
-          MeaningSearch(
-            englishMeaning: kanjiFromApi.englishMeaning,
-            hiraganaRomaji: kanjiFromApi.hiraganaRomaji,
-            hiraganaMeaning: kanjiFromApi.hiraganaMeaning,
-            katakanaRomaji: kanjiFromApi.katakanaRomaji,
-            katakanaMeaning: kanjiFromApi.katakanaMeaning,
-          ),
-          const SizedBox(
-            height: 20,
-          ),
-          ExampleAudiosSearch(
-            examples: kanjiFromApi.example,
-            statusStorage: StatusStorage.onlyOnline,
-            physics: const NeverScrollableScrollPhysics(),
-          ) /**/
-        ],
-      ),
     );
   }
 }
