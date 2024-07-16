@@ -5,8 +5,8 @@ part "title_grade_provider.g.dart";
 @riverpod
 class TitleGrade extends _$TitleGrade {
   @override
-  String build({required String initText}) {
-    return initText;
+  String build() {
+    return "";
   }
 
   void setTitle(String newTitle) {

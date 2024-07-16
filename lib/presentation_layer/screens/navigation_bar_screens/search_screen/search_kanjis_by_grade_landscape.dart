@@ -24,7 +24,7 @@ class SearchKanjisByGradeLandscape extends ConsumerWidget {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Center(child: TitleGradeWidget()),
+                  TitleGradeWidget(),
                   SizedBox(
                     height: 20,
                   ),

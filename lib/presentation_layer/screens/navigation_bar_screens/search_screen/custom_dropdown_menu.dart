@@ -57,9 +57,7 @@ class CustomDropdownMenu extends ConsumerWidget {
                   .read(listKanjisStateProvider.notifier)
                   .searchKanjisByGrade(grade.grade);
               ref
-                  .read(titleGradeProvider(
-                          initText: context.l10n.initMessageSearchGrade)
-                      .notifier)
+                  .read(titleGradeProvider.notifier)
                   .setTitle("${context.l10n.kanjisForGrade} ${grade.grade}");
             } else {
               ref.read(toastServiceProvider).showMessage(

@@ -7,7 +7,7 @@ part of 'search_screen_result_provider.dart';
 // **************************************************************************
 
 String _$searchScreenResultHash() =>
-    r'57a0513de30312704881972b1ff71a72e48bccc2';
+    r'bebceeb45611969b7f42e1b330e5c1dfa67329fa';
 
 /// Copied from Dart SDK
 class _SystemHash {
