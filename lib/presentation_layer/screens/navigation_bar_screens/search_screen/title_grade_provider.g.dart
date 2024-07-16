@@ -6,7 +6,7 @@ part of 'title_grade_provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$titleGradeHash() => r'767c0f5ea19a5ced1de3567d83589bad9b850114';
+String _$titleGradeHash() => r'9b834edf5902c2e843946453e83512cd08e16c16';
 
 /// Copied from Dart SDK
 class _SystemHash {
