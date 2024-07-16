@@ -12,7 +12,7 @@ part "search_screen_result_provider.g.dart";
 class SearchScreenResult extends _$SearchScreenResult {
   @override
   FutureOr<KanjiFromApi?> build({required String word}) async {
-    return setWord(word);
+    return await setWord(word);
   }
 
   FutureOr<KanjiFromApi?> setWord(String word) {
@@ -29,16 +29,19 @@ class SearchScreenResult extends _$SearchScreenResult {
             .getTranslatedKanjiFromSpanishWord(
               word,
               ref.read(authServiceProvider).userUuid ?? '',
-            );
+            )
+            .timeout(const Duration(seconds: 50));
 
         return kanjiTranslated;
       }
 
-      final kanjiFromApi =
-          await ref.read(kanjiApiServiceProvider).getKanjiFromEnglishWord(
-                word,
-                ref.read(authServiceProvider).userUuid ?? '',
-              );
+      final kanjiFromApi = await ref
+          .read(kanjiApiServiceProvider)
+          .getKanjiFromEnglishWord(
+            word,
+            ref.read(authServiceProvider).userUuid ?? '',
+          )
+          .timeout(const Duration(seconds: 50));
 
       return kanjiFromApi;
     } catch (e) {

@@ -1,5 +1,6 @@
 import 'package:kanji_for_n5_level_app/application_layer/repository_service/api_repo/kanji_api_service_contract.dart';
 import 'package:kanji_for_n5_level_app/application_layer/repository_service/api_repo/translation_api_service_contract.dart';
+import 'package:kanji_for_n5_level_app/main.dart';
 import 'package:kanji_for_n5_level_app/models/kanji_from_api.dart';
 import 'package:kanji_for_n5_level_app/repositories_layer/apis/kanji_alive/request_kanji_list_api.dart';
 
@@ -58,10 +59,14 @@ class KanjiAliveApiService implements KanjiApiService {
       "en",
     );
 
+    logger.d("translated text");
+
     final kanjiList = await KanjiAliveApi.getKanjiFromEnglishWord(
       translatedQuery.translatedText,
       uuid,
     );
+
+    logger.d("kanji obtained");
 
     final translatedMeaning = await translationApiService.translateText(
       kanjiList.englishMeaning,

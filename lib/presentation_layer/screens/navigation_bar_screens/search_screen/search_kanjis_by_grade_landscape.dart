@@ -17,12 +17,14 @@ class SearchKanjisByGradeLandscape extends ConsumerWidget {
           vertical: 20,
         ),
         child: Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Expanded(child: CustomDropdownMenu()),
             Expanded(
               child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  TitleGradeWidget(),
+                  Center(child: TitleGradeWidget()),
                   SizedBox(
                     height: 20,
                   ),

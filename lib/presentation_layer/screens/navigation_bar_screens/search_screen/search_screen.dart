@@ -7,6 +7,7 @@ import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_details/
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/kanji_details/tabs_details/tab_examples/example_audio_widget_stream/example_widget.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/navigation_bar_screens/search_screen/results_portrait.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/navigation_bar_screens/search_screen/search_screen_provider.dart';
+import 'package:kanji_for_n5_level_app/presentation_layer/screens/navigation_bar_screens/search_screen/search_screen_result.dart';
 import 'package:kanji_for_n5_level_app/providers/status_connection_provider.dart';
 import 'package:kanji_for_n5_level_app/providers/status_stored_provider.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/common_screens/error_screens.dart';
@@ -25,40 +26,6 @@ class SearchScreen extends ConsumerWidget {
       return;
     }
     ref.read(searchScreenProvider.notifier).setOnErrorTextField();
-  }
-
-  Widget getResult(SearchState searchState, KanjiFromApi? kanjiFromApi,
-      BuildContext context) {
-    switch (searchState) {
-      case SearchState.errorForm:
-        return Padding(
-          padding: const EdgeInsets.only(top: 90),
-          child: InfoStatusSearch(message: context.l10n.searchInvalidWord),
-        );
-      case SearchState.notSearching:
-        return Padding(
-          padding: const EdgeInsets.only(top: 90),
-          child: InfoStatusSearch(message: context.l10n.searchMessage),
-        );
-      case SearchState.searching:
-        return const Center(
-          child: Padding(
-            padding: EdgeInsets.only(top: 90),
-            child: CircularProgressIndicator(),
-          ),
-        );
-      case SearchState.stopped:
-        {
-          if (kanjiFromApi == null) {
-            return Padding(
-              padding: const EdgeInsets.only(top: 90.0),
-              child: InfoStatusSearch(
-                  message: context.l10n.searchMeaningWasNotFound),
-            );
-          }
-          return ResultsPortrait(kanjiFromApi: kanjiFromApi);
-        }
-    }
   }
 
   @override
@@ -80,6 +47,15 @@ class SearchScreen extends ConsumerWidget {
                     children: [
                       const SizedBox(
                         height: 5,
+                      ),
+                      Text(
+                        context.l10n.searchMessage,
+                        style: Theme.of(context).textTheme.titleLarge,
+                        maxLines: 3,
+                        textAlign: TextAlign.center,
+                      ),
+                      const SizedBox(
+                        height: 20,
                       ),
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -103,11 +79,15 @@ class SearchScreen extends ConsumerWidget {
                                 return context.l10n.searchInvalidWord;
                               }
                             },
-/*                             onSaved: (value) {
-                              ref
-                                  .read(searchScreenProvider.notifier)
-                                  .setWord(value ?? '');
-                            } ,*/
+                            onSaved: (value) {
+                              Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder: (ctx) => SearchScreenResult(
+                                    word: value ?? "",
+                                  ),
+                                ),
+                              );
+                            },
                           ),
                         ),
                       ),
@@ -123,22 +103,14 @@ class SearchScreen extends ConsumerWidget {
                         ),
                         onPressed: () {
                           onValidate(ref);
-                          FocusScopeNode currentFocus = FocusScope.of(context);
-
-                          if (!currentFocus.hasPrimaryFocus) {
-                            currentFocus.unfocus();
-                          }
+                          FocusManager.instance.primaryFocus?.unfocus();
                         },
                         label: Text(context.l10n.search),
                         icon: const Icon(Icons.search),
                       ),
-                      Padding(
-                        padding: const EdgeInsets.only(top: 90),
-                        child: InfoStatusSearch(
-                            message: context.l10n.searchMessage),
+                      const SizedBox(
+                        height: 20,
                       ),
-                      /* getResult(searchScreenState.searchState,
-                          searchScreenState.kanjiFromApi, context) */
                     ],
                   ),
                 ),
@@ -215,26 +187,29 @@ class ExampleAudiosSearch extends ConsumerWidget {
 }
 
 class InfoStatusSearch extends StatelessWidget {
-  const InfoStatusSearch({super.key, required this.message});
+  const InfoStatusSearch({
+    super.key,
+    required this.message,
+    this.mainAxisAlignment = MainAxisAlignment.center,
+  });
 
   final String message;
+  final MainAxisAlignment mainAxisAlignment;
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Expanded(
-            child: Text(
-              message,
-              style: Theme.of(context).textTheme.titleLarge,
-              maxLines: 3,
-              textAlign: TextAlign.center,
-            ),
+    return Row(
+      mainAxisAlignment: mainAxisAlignment,
+      children: [
+        Expanded(
+          child: Text(
+            message,
+            style: Theme.of(context).textTheme.titleLarge,
+            maxLines: 3,
+            textAlign: TextAlign.center,
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }

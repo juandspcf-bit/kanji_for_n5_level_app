@@ -160,7 +160,7 @@ class KanjiAliveApi {
       Map<String, dynamic> map = data.first;
       Map<String, dynamic> kanjiMap = map['kanji'];
 
-      logger.d(kanjiMap['character']);
+      logger.d("the caracter is ${kanjiMap['character']}");
       final kanjiList = await KanjiAliveApi.getKanjiList(
         [],
         [kanjiMap['character']],

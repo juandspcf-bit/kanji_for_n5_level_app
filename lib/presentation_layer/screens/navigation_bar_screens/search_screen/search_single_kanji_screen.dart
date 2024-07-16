@@ -28,8 +28,8 @@ class SearchSingleKanjiScreen extends ConsumerWidget {
               : ResultsLandscape(kanjiFromApi: data);
         },
         error: (_, e) {
-          return const Center(
-            child: Text("error"),
+          return Center(
+            child: Text("error", style: Theme.of(context).textTheme.titleLarge),
           );
         },
         loading: () => const Center(
