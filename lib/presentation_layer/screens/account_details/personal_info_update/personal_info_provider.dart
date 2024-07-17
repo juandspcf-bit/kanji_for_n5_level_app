@@ -82,13 +82,11 @@ class PersonalInfo extends _$PersonalInfo {
 
     if (cachedUserDataList.isNotEmpty) {
       final cachedUserData = cachedUserDataList.first;
+
       firstName = cachedUserData['firstName'] as String;
       lastName = cachedUserData['lastName'] as String;
       birthday = cachedUserData['birthday'] as String;
       pathAvatar = cachedUserData['pathAvatar'] as String;
-
-      logger.d("cache reading");
-      logger.d(cachedUserData);
 
       if (firstName == state.firstName &&
           lastName == state.lastName &&
@@ -122,6 +120,15 @@ class PersonalInfo extends _$PersonalInfo {
         ref.read(avatarMainScreenProvider.notifier).updateAvatar();
         setUpdatingStatus(PersonalInfoUpdatingStatus.success);
         _isUpdating = false;
+
+        await ref.read(localDBServiceProvider).insertUserData({
+          'uuid': userUuid,
+          'firstName': state.firstName,
+          'lastName': state.lastName,
+          'linkAvatar': avatarLink,
+          'pathAvatar': pathAvatar,
+          'birthday': state.birthdate
+        });
       } catch (e) {
         setUpdatingStatus(PersonalInfoUpdatingStatus.error);
         _isUpdating = false;
@@ -129,12 +136,6 @@ class PersonalInfo extends _$PersonalInfo {
         logger.e(e);
       }
     } else {
-      ref.read(avatarMainScreenProvider.notifier).updateAvatar();
-      setUpdatingStatus(PersonalInfoUpdatingStatus.success);
-      _isUpdating = false;
-    }
-
-    if (personalInfoData.pathProfileTemporal.isNotEmpty) {
       await ref.read(localDBServiceProvider).insertUserData({
         'uuid': userUuid,
         'firstName': state.firstName,
@@ -143,7 +144,12 @@ class PersonalInfo extends _$PersonalInfo {
         'pathAvatar': pathAvatar,
         'birthday': state.birthdate
       });
-    } else {}
+      ref.read(avatarMainScreenProvider.notifier).updateAvatar();
+      setUpdatingStatus(PersonalInfoUpdatingStatus.success);
+      _isUpdating = false;
+
+      return;
+    }
   }
 
   void reset() {
