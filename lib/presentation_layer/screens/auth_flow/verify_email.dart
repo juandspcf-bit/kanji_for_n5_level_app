@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kanji_for_n5_level_app/application_layer/services.dart';
+import 'package:kanji_for_n5_level_app/l10n/localization.dart';
 import 'package:kanji_for_n5_level_app/main.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/main_screens/init_main_content.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/sign_in_screen/login_provider.dart';
@@ -78,7 +79,7 @@ class _VerifyEmailState extends ConsumerState<VerifyEmail> {
         ? const InitMainContent()
         : Scaffold(
             appBar: AppBar(
-              title: const Text('Verify email'),
+              title: Text(context.l10n.verifyEmail),
             ),
             body: Center(
               child: Padding(
@@ -88,7 +89,7 @@ class _VerifyEmailState extends ConsumerState<VerifyEmail> {
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
                     Text(
-                      'A notification email has been sent',
+                      context.l10n.notificationEmailSent,
                       style: Theme.of(context).textTheme.titleLarge,
                     ),
                     const SizedBox(
@@ -97,7 +98,7 @@ class _VerifyEmailState extends ConsumerState<VerifyEmail> {
                     ElevatedButton.icon(
                       onPressed: canResendEmail ? sendEmailVerification : null,
                       icon: const Icon(Icons.email),
-                      label: const Text('resent email'),
+                      label: Text(context.l10n.resentEmail),
                       style: ElevatedButton.styleFrom().copyWith(
                         minimumSize: const WidgetStatePropertyAll(
                           Size.fromHeight(40),
@@ -129,7 +130,7 @@ class _VerifyEmailState extends ConsumerState<VerifyEmail> {
                           Size.fromHeight(40),
                         ),
                       ),
-                      child: const Text('Cancel'),
+                      child: Text(context.l10n.cancel),
                     ),
                   ],
                 ),

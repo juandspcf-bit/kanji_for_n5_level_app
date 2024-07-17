@@ -365,7 +365,15 @@
   "initMessageSearchGrade":"The kyōiku kanji (教育漢字, literally 'education kanji'),are those kanji listed on the Gakunenbetsu kanji haitō hyō, a list of 1,026 kanji and associated readings developed and maintained by the Japanese Ministry of Education that prescribes which kanji, and which readings of kanji, Japanese students should learn from first grade to the sixth grade of elementary school.",
   "@initMessageSearchGrade":{},
   "kanjisForGrade":"Kanjis for grade",
-  "@kanjisForGrade":{}
+  "@kanjisForGrade":{},
+
+  "verifyEmail":"Verify email",
+  "@verifyEmail":{},
+  "notificationEmailSent":"A notification email has been sent",
+  "@notificationEmailSent":{},
+  "resentEmail":"Resent email",
+  "@resentEmail":{}
+  
 
 
 
