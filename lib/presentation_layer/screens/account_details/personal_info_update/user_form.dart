@@ -26,8 +26,8 @@ class UserForm extends ConsumerWidget {
     );
 
     if (pickedDate == null) return;
-    ref.read(personalInfoProvider.notifier).setBirthdate(
-        '${pickedDate.year}/${pickedDate.month}/${pickedDate.day}');
+    ref.read(personalInfoProvider.notifier).updateState(
+        birthdate: '${pickedDate.year}/${pickedDate.month}/${pickedDate.day}');
   }
 
   void onValidate(WidgetRef ref) async {
@@ -38,7 +38,7 @@ class UserForm extends ConsumerWidget {
     if (ref.read(personalInfoProvider).birthdate == "") {
       ref
           .read(personalInfoProvider.notifier)
-          .setBirthdate(accountDetailsData.birthdate);
+          .updateState(birthdate: accountDetailsData.birthdate);
     }
     ref.read(personalInfoProvider.notifier).updateUserData();
   }
@@ -65,7 +65,7 @@ class UserForm extends ConsumerWidget {
               setPathProfileUser: (path) {
                 ref
                     .read(personalInfoProvider.notifier)
-                    .setProfileTemporalPath(path);
+                    .updateState(pathProfileTemporal: path);
               },
             )
           else
@@ -77,7 +77,7 @@ class UserForm extends ConsumerWidget {
               setPathProfileUser: (path) {
                 ref
                     .read(personalInfoProvider.notifier)
-                    .setProfileTemporalPath(path);
+                    .updateState(pathProfileTemporal: path);
               },
             ),
           const SizedBox(
@@ -109,7 +109,7 @@ class UserForm extends ConsumerWidget {
                       if (text == null) return;
                       ref
                           .read(personalInfoProvider.notifier)
-                          .setFirstName(text);
+                          .updateState(firstName: text);
                     },
                   ),
                   const SizedBox(
@@ -133,7 +133,9 @@ class UserForm extends ConsumerWidget {
                     },
                     onSaved: (text) {
                       if (text == null) return;
-                      ref.read(personalInfoProvider.notifier).setLastName(text);
+                      ref
+                          .read(personalInfoProvider.notifier)
+                          .updateState(lastName: text);
                     },
                   ),
                   const SizedBox(

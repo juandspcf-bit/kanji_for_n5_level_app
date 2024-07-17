@@ -148,6 +148,8 @@
   "@updatingSuccess": {},
   "updatingNone": "Nada que actualizar",
   "@updatingNone": {},
+  "partialUpdateError":"No se actualizo todos los datos correctamente",
+  "@partialUpdateError":{},
   "undo": "Deshacer",
   "@undo": {},
 

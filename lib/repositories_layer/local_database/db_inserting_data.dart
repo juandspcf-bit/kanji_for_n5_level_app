@@ -169,7 +169,7 @@ Future<(KanjiFromApi, String)> downloadKanjiDataFromApiComputeVersion(
 
   final imageMeaning = await downloadImageDetails(parametersCompute);
 
-  final kanjiMap = await downloadKanjidata(parametersCompute);
+  final kanjiMap = await downloadKanjiData(parametersCompute);
 
   final List<Example> examples = [];
   for (var exampleMap in examplesMap) {
@@ -229,7 +229,7 @@ Future<String> downloadImageDetails(
     path,
     onReceiveProgress: (received, total) {},
   );
-  logger.d('download images succefull');
+  logger.d('download images successful');
   return path;
 }
 
@@ -252,13 +252,13 @@ Future<Map<String, String>> downloadExample(
       onReceiveProgress: (received, total) {
 /*       if (total != -1) {
         print((received / total * 100).toStringAsFixed(0) + "%");
-        //you can build progressbar feature too
+        //you can build progress bar feature too
       } */
       },
     ).timeout(
       const Duration(milliseconds: durationTimeOutMili),
     );
-    logger.d("download example succefull");
+    logger.d("download example successful");
   } catch (e) {
     logger.e('error in examples download');
     logger.e(e);
@@ -305,7 +305,7 @@ Future<List<String>> downloadStrokesData(
   return pathsToDocuments;
 }
 
-Future<Map<String, String>> downloadKanjidata(
+Future<Map<String, String>> downloadKanjiData(
   ParametersCompute parametersCompute,
 ) async {
   FutureGroup<Response<dynamic>> group = FutureGroup<Response<dynamic>>();
@@ -351,27 +351,27 @@ Future<Map<String, String>> downloadKanjidata(
 }
 
 Future<int> insertDataInDB(
-  KanjiFromApi kanjifromApi,
+  KanjiFromApi kanjiFromApi,
   ImageDetailsLink imageMeaningDownloaded,
   String uuid,
 ) async {
   final kanjiMap = {
-    'kanjiCharacter': kanjifromApi.kanjiCharacter,
-    'englishMeaning': kanjifromApi.englishMeaning,
-    'kanjiImageLink': kanjifromApi.kanjiImageLink,
-    'katakanaRomaji': kanjifromApi.katakanaRomaji,
-    'katakanaMeaning': kanjifromApi.katakanaMeaning,
-    'hiraganaRomaji': kanjifromApi.hiraganaRomaji,
-    'hiraganaMeaning': kanjifromApi.hiraganaMeaning,
-    'videoLink': kanjifromApi.videoLink,
-    'section': kanjifromApi.section,
+    'kanjiCharacter': kanjiFromApi.kanjiCharacter,
+    'englishMeaning': kanjiFromApi.englishMeaning,
+    'kanjiImageLink': kanjiFromApi.kanjiImageLink,
+    'katakanaRomaji': kanjiFromApi.katakanaRomaji,
+    'katakanaMeaning': kanjiFromApi.katakanaMeaning,
+    'hiraganaRomaji': kanjiFromApi.hiraganaRomaji,
+    'hiraganaMeaning': kanjiFromApi.hiraganaMeaning,
+    'videoLink': kanjiFromApi.videoLink,
+    'section': kanjiFromApi.section,
     'uuid': uuid,
   };
   final dbKanjiFromApi = await kanjiFromApiDatabase;
   int id = await dbKanjiFromApi.insert("kanji_FromApi", kanjiMap);
 
   await dbKanjiFromApi.insert("image_meaning", {
-    'kanjiCharacter': kanjifromApi.kanjiCharacter,
+    'kanjiCharacter': kanjiFromApi.kanjiCharacter,
     'link': imageMeaningDownloaded.link,
     'linkHeight': imageMeaningDownloaded.linkHeight,
     'linkWidth': imageMeaningDownloaded.linkWidth,
@@ -380,10 +380,10 @@ Future<int> insertDataInDB(
   });
 
   FutureGroup<int> groupStrokesDb = FutureGroup<int>();
-  final strokes = kanjifromApi.strokes.images.map((e) {
+  final strokes = kanjiFromApi.strokes.images.map((e) {
     return {
       'strokeImageLink': e,
-      'kanjiCharacter': kanjifromApi.kanjiCharacter,
+      'kanjiCharacter': kanjiFromApi.kanjiCharacter,
       'uuid': uuid,
       'kanji_id': id,
     };
@@ -397,12 +397,12 @@ Future<int> insertDataInDB(
 
   await groupStrokesDb.future;
 
-  final exampleMaps = kanjifromApi.example.map((e) {
+  final exampleMaps = kanjiFromApi.example.map((e) {
     Map<String, Object> mapAudios = {};
     mapAudios['mp3'] = e.audio.mp3;
     mapAudios['japanese'] = e.japanese;
     mapAudios['meaning'] = e.meaning.english;
-    mapAudios['kanjiCharacter'] = kanjifromApi.kanjiCharacter;
+    mapAudios['kanjiCharacter'] = kanjiFromApi.kanjiCharacter;
     mapAudios['uuid'] = uuid;
     mapAudios['kanji_id'] = id;
     return mapAudios;

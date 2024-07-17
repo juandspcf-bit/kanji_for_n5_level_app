@@ -36,7 +36,7 @@ class AvatarMainScreen extends _$AvatarMainScreen {
     }
   }
 
-  Future<void> updateAvatar() async {
+  Future<void> refreshAvatar() async {
     state = const AsyncLoading();
     final uuid = ref.read(authServiceProvider).userUuid;
 

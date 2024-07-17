@@ -50,8 +50,10 @@ class InitMainContentState extends ConsumerState<InitMainContent> {
         ref.read(toastServiceProvider).dismiss(context);
         ref
             .read(personalInfoProvider.notifier)
-            .setUpdatingStatus(PersonalInfoUpdatingStatus.noStarted);
-        ref.read(personalInfoProvider.notifier).setShowPasswordRequest(false);
+            .updateState(updatingStatus: PersonalInfoUpdatingStatus.noStarted);
+        ref
+            .read(personalInfoProvider.notifier)
+            .updateState(showPasswordRequest: false);
         ref.read(toastServiceProvider).showMessage(
               context,
               context.l10n.updatingError,
@@ -66,8 +68,10 @@ class InitMainContentState extends ConsumerState<InitMainContent> {
         ref.read(toastServiceProvider).dismiss(context);
         ref
             .read(personalInfoProvider.notifier)
-            .setUpdatingStatus(PersonalInfoUpdatingStatus.noStarted);
-        ref.read(personalInfoProvider.notifier).setShowPasswordRequest(false);
+            .updateState(updatingStatus: PersonalInfoUpdatingStatus.noStarted);
+        ref
+            .read(personalInfoProvider.notifier)
+            .updateState(showPasswordRequest: false);
         ref.read(toastServiceProvider).showMessage(
               context,
               context.l10n.updatingSuccess,
@@ -82,11 +86,32 @@ class InitMainContentState extends ConsumerState<InitMainContent> {
         ref.read(toastServiceProvider).dismiss(context);
         ref
             .read(personalInfoProvider.notifier)
-            .setUpdatingStatus(PersonalInfoUpdatingStatus.noStarted);
-        ref.read(personalInfoProvider.notifier).setShowPasswordRequest(false);
+            .updateState(updatingStatus: PersonalInfoUpdatingStatus.noStarted);
+        ref
+            .read(personalInfoProvider.notifier)
+            .updateState(showPasswordRequest: false);
         ref.read(toastServiceProvider).showMessage(
               context,
               context.l10n.updatingNone,
+              Icons.question_mark,
+              const Duration(seconds: 3),
+              "",
+              null,
+            );
+      }
+
+      if (current.updatingStatus ==
+          PersonalInfoUpdatingStatus.partialUpdateError) {
+        ref.read(toastServiceProvider).dismiss(context);
+        ref
+            .read(personalInfoProvider.notifier)
+            .updateState(updatingStatus: PersonalInfoUpdatingStatus.noStarted);
+        ref
+            .read(personalInfoProvider.notifier)
+            .updateState(showPasswordRequest: false);
+        ref.read(toastServiceProvider).showMessage(
+              context,
+              context.l10n.partialUpdateError,
               Icons.question_mark,
               const Duration(seconds: 3),
               "",

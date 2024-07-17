@@ -21,36 +21,25 @@ class PersonalInfo extends _$PersonalInfo {
         showPasswordRequest: false);
   }
 
-  void setProfileTemporalPath(String path) async {
-    state = state.copyWith(link: "", pathProfileTemporal: path);
-  }
-
-  void setProfilePath(String link) async {
-    state = state.copyWith(link: link);
-  }
-
-  void setFirstName(String name) async {
-    state = state.copyWith(firstName: name);
-  }
-
-  void setLastName(String lastName) async {
-    state = state.copyWith(lastName: lastName);
-  }
-
-  void setBirthdate(String birthdate) async {
-    state = state.copyWith(birthdate: birthdate);
-  }
-
-  void setUpdatingStatus(PersonalInfoUpdatingStatus updatingStatus) async {
-    state = state.copyWith(updatingStatus: updatingStatus);
-  }
-
-  void setFetchingStatus(PersonalInfoFetchingStatus fetchingStatus) {
-    state = state.copyWith(fetchingStatus: fetchingStatus);
-  }
-
-  void setShowPasswordRequest(bool status) async {
-    state = state.copyWith(showPasswordRequest: status);
+  void updateState({
+    String? link,
+    String? pathProfileTemporal,
+    String? firstName,
+    String? lastName,
+    String? birthdate,
+    PersonalInfoUpdatingStatus? updatingStatus,
+    PersonalInfoFetchingStatus? fetchingStatus,
+    bool? showPasswordRequest,
+  }) {
+    state = PersonalInfoData(
+      link: link ?? state.link,
+      pathProfileTemporal: pathProfileTemporal ?? state.pathProfileTemporal,
+      firstName: firstName ?? state.firstName,
+      lastName: lastName ?? state.lastName,
+      birthdate: birthdate ?? state.birthdate,
+      updatingStatus: updatingStatus ?? state.updatingStatus,
+      showPasswordRequest: showPasswordRequest ?? state.showPasswordRequest,
+    );
   }
 
   bool isUpdating() {
@@ -62,13 +51,13 @@ class PersonalInfo extends _$PersonalInfo {
   void updateUserData() async {
     final userUuid = ref.read(authServiceProvider).userUuid;
     if (userUuid == null) {
-      setUpdatingStatus(PersonalInfoUpdatingStatus.error);
+      updateState(updatingStatus: PersonalInfoUpdatingStatus.error);
       _isUpdating = false;
       return;
     }
     final personalInfoData = state;
 
-    setUpdatingStatus(PersonalInfoUpdatingStatus.updating);
+    updateState(updatingStatus: PersonalInfoUpdatingStatus.updating);
     _isUpdating = true;
 
     final cachedUserDataList =
@@ -94,11 +83,13 @@ class PersonalInfo extends _$PersonalInfo {
           birthday == state.birthdate &&
           personalInfoData.pathProfileTemporal.isEmpty) {
         logger.d("no update");
-        setUpdatingStatus(PersonalInfoUpdatingStatus.noUpdate);
+        updateState(updatingStatus: PersonalInfoUpdatingStatus.noUpdate);
         _isUpdating = false;
         return;
       }
     }
+
+    bool errorUpdatingBasicData = false;
 
     try {
       await ref.read(cloudDBServiceProvider).updateUserData(userUuid, {
@@ -112,7 +103,8 @@ class PersonalInfo extends _$PersonalInfo {
       birthday = state.birthdate;
     } catch (e) {
       logger.e(e);
-      setUpdatingStatus(PersonalInfoUpdatingStatus.error);
+      errorUpdatingBasicData = true;
+      updateState(updatingStatus: PersonalInfoUpdatingStatus.error);
     }
 
     if (personalInfoData.pathProfileTemporal.isNotEmpty) {
@@ -120,9 +112,14 @@ class PersonalInfo extends _$PersonalInfo {
         avatarLink = await ref.read(storageServiceProvider).updateFile(
             personalInfoData.pathProfileTemporal,
             ref.read(authServiceProvider).userUuid ?? '');
-        setProfilePath(avatarLink);
-        ref.read(avatarMainScreenProvider.notifier).updateAvatar();
-        setUpdatingStatus(PersonalInfoUpdatingStatus.success);
+        updateState(pathProfileTemporal: avatarLink);
+        ref.read(avatarMainScreenProvider.notifier).refreshAvatar();
+        if (errorUpdatingBasicData) {
+          updateState(
+              updatingStatus: PersonalInfoUpdatingStatus.partialUpdateError);
+        } else {
+          updateState(updatingStatus: PersonalInfoUpdatingStatus.success);
+        }
         _isUpdating = false;
 
         await ref.read(localDBServiceProvider).insertUserData({
@@ -143,7 +140,12 @@ class PersonalInfo extends _$PersonalInfo {
           'pathAvatar': pathAvatar,
           'birthday': birthday
         });
-        setUpdatingStatus(PersonalInfoUpdatingStatus.error);
+        if (errorUpdatingBasicData) {
+          updateState(
+              updatingStatus: PersonalInfoUpdatingStatus.partialUpdateError);
+        } else {
+          updateState(updatingStatus: PersonalInfoUpdatingStatus.success);
+        }
         _isUpdating = false;
 
         logger.e('error');
@@ -159,8 +161,12 @@ class PersonalInfo extends _$PersonalInfo {
         'pathAvatar': pathAvatar,
         'birthday': birthday
       });
-      ref.read(avatarMainScreenProvider.notifier).updateAvatar();
-      setUpdatingStatus(PersonalInfoUpdatingStatus.success);
+      if (errorUpdatingBasicData) {
+        updateState(
+            updatingStatus: PersonalInfoUpdatingStatus.partialUpdateError);
+      } else {
+        updateState(updatingStatus: PersonalInfoUpdatingStatus.success);
+      }
       _isUpdating = false;
 
       return;
@@ -196,7 +202,8 @@ enum PersonalInfoUpdatingStatus {
   updating('updating'),
   noUpdate('nothing to update'),
   success('successful updating process'),
-  error('an error happened during updating process');
+  error('an error happened during updating process'),
+  partialUpdateError("part of the data was not updated correctly");
 
   const PersonalInfoUpdatingStatus(this.message);
 
