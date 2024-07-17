@@ -93,19 +93,22 @@ class SearchScreen extends ConsumerWidget {
                       const SizedBox(
                         height: 20,
                       ),
-                      ElevatedButton.icon(
-                        style: ElevatedButton.styleFrom(
-                          minimumSize: MediaQuery.orientationOf(context) ==
-                                  Orientation.portrait
-                              ? const Size.fromHeight(50)
-                              : const Size(300, 50),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 20),
+                        child: ElevatedButton.icon(
+                          style: ElevatedButton.styleFrom(
+                            minimumSize: MediaQuery.orientationOf(context) ==
+                                    Orientation.portrait
+                                ? const Size.fromHeight(50)
+                                : const Size(300, 50),
+                          ),
+                          onPressed: () {
+                            onValidate(ref);
+                            FocusManager.instance.primaryFocus?.unfocus();
+                          },
+                          label: Text(context.l10n.search),
+                          icon: const Icon(Icons.search),
                         ),
-                        onPressed: () {
-                          onValidate(ref);
-                          FocusManager.instance.primaryFocus?.unfocus();
-                        },
-                        label: Text(context.l10n.search),
-                        icon: const Icon(Icons.search),
                       ),
                       const SizedBox(
                         height: 20,

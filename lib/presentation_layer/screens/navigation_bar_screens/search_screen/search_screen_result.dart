@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kanji_for_n5_level_app/l10n/localization.dart';
+import 'package:kanji_for_n5_level_app/presentation_layer/screens/common_screens/error_screen.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/navigation_bar_screens/search_screen/results_landscape.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/navigation_bar_screens/search_screen/results_portrait.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/navigation_bar_screens/search_screen/search_screen.dart';
@@ -33,11 +34,9 @@ class SearchScreenResult extends ConsumerWidget {
               : ResultsLandscape(kanjiFromApi: data);
         },
         error: (_, e) {
-          return Center(
-            child: Text(
-              "error",
-              style: Theme.of(context).textTheme.titleLarge,
-            ),
+          return ErrorScreen(
+            message: context.l10n.errorLoading,
+            icon: Icons.error,
           );
         },
         loading: () => const Center(

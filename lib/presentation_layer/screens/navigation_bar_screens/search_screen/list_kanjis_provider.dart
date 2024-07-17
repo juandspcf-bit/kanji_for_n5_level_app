@@ -12,8 +12,10 @@ class ListKanjisState extends _$ListKanjisState {
 
   void searchKanjisByGrade(int grade) async {
     state = const AsyncLoading();
-    final result =
-        await ref.read(kanjiApiServiceProvider).getKanjisByGrade(grade);
+    final result = await ref
+        .read(kanjiApiServiceProvider)
+        .getKanjisByGrade(grade)
+        .timeout(const Duration(seconds: 50));
     state = AsyncValue.data((kanjisCharacters: result));
   }
 }
