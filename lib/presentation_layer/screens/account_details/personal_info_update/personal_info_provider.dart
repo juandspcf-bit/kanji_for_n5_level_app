@@ -87,6 +87,7 @@ class PersonalInfo extends _$PersonalInfo {
       lastName = cachedUserData['lastName'] as String;
       birthday = cachedUserData['birthday'] as String;
       pathAvatar = cachedUserData['pathAvatar'] as String;
+      avatarLink = cachedUserData['linkAvatar'] as String;
 
       if (firstName == state.firstName &&
           lastName == state.lastName &&
@@ -105,10 +106,13 @@ class PersonalInfo extends _$PersonalInfo {
         'firstName': state.firstName,
         'lastName': state.lastName,
       });
+
+      firstName = state.firstName;
+      lastName = state.lastName;
+      birthday = state.birthdate;
     } catch (e) {
       logger.e(e);
       setUpdatingStatus(PersonalInfoUpdatingStatus.error);
-      _isUpdating = false;
     }
 
     if (personalInfoData.pathProfileTemporal.isNotEmpty) {
@@ -123,26 +127,37 @@ class PersonalInfo extends _$PersonalInfo {
 
         await ref.read(localDBServiceProvider).insertUserData({
           'uuid': userUuid,
-          'firstName': state.firstName,
-          'lastName': state.lastName,
+          'firstName': firstName,
+          'lastName': lastName,
           'linkAvatar': avatarLink,
           'pathAvatar': pathAvatar,
-          'birthday': state.birthdate
+          'birthday': birthday
         });
+        return;
       } catch (e) {
+        await ref.read(localDBServiceProvider).insertUserData({
+          'uuid': userUuid,
+          'firstName': firstName,
+          'lastName': lastName,
+          'linkAvatar': avatarLink,
+          'pathAvatar': pathAvatar,
+          'birthday': birthday
+        });
         setUpdatingStatus(PersonalInfoUpdatingStatus.error);
         _isUpdating = false;
+
         logger.e('error');
         logger.e(e);
+        return;
       }
     } else {
       await ref.read(localDBServiceProvider).insertUserData({
         'uuid': userUuid,
-        'firstName': state.firstName,
-        'lastName': state.lastName,
+        'firstName': firstName,
+        'lastName': lastName,
         'linkAvatar': avatarLink,
         'pathAvatar': pathAvatar,
-        'birthday': state.birthdate
+        'birthday': birthday
       });
       ref.read(avatarMainScreenProvider.notifier).updateAvatar();
       setUpdatingStatus(PersonalInfoUpdatingStatus.success);
