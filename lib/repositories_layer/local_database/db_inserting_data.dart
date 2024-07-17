@@ -57,6 +57,51 @@ Future<void> insertUserDataToSQLite(Map<String, Object> data) async {
   }
 }
 
+Future<void> insertAvatarToSQLite(Map<String, Object> data) async {
+  final db = await kanjiFromApiDatabase;
+
+  final listUserData = await readUserDataFromSQLite(data['uuid'] as String);
+
+  if (listUserData.isEmpty) {
+    await db.rawInsert(
+      'INSERT INTO user_data('
+      ' uuid,'
+      ' firstName,'
+      ' lastName,'
+      ' birthday,'
+      ' linkAvatar,'
+      ' pathAvatar'
+      ') '
+      'VALUES(?,?,?,?,?,?)',
+      [
+        data['uuid'],
+        data['firstName'],
+        data['lastName'],
+        data['birthday'],
+        data['linkAvatar'],
+        data['pathAvatar'],
+      ],
+    );
+  } else {
+    await db.rawUpdate(
+        'UPDATE user_data '
+        'SET'
+        ' firstName = ?,'
+        ' lastName = ?,'
+        ' birthday = ?,'
+        ' linkAvatar = ?,'
+        ' pathAvatar = ?'
+        ' WHERE uuid = ?',
+        [
+          data['firstName'],
+          data['lastName'],
+          data['birthday'],
+          data['linkAvatar'],
+          data['pathAvatar'],
+        ]);
+  }
+}
+
 Future<List<Map<String, Object?>>> readUserDataFromSQLite(String uuid) async {
   final db = await kanjiFromApiDatabase;
   return await db.rawQuery(

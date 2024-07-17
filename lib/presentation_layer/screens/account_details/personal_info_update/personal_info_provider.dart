@@ -76,6 +76,7 @@ class PersonalInfo extends _$PersonalInfo {
 
     String firstName = '';
     String lastName = '';
+    String birthday = "";
     String avatarLink = '';
     String pathAvatar = '';
 
@@ -83,8 +84,21 @@ class PersonalInfo extends _$PersonalInfo {
       final cachedUserData = cachedUserDataList.first;
       firstName = cachedUserData['firstName'] as String;
       lastName = cachedUserData['lastName'] as String;
-      avatarLink = cachedUserData['linkAvatar'] as String;
+      birthday = cachedUserData['birthday'] as String;
       pathAvatar = cachedUserData['pathAvatar'] as String;
+
+      logger.d("cache reading");
+      logger.d(cachedUserData);
+
+      if (firstName == state.firstName &&
+          lastName == state.lastName &&
+          birthday == state.birthdate &&
+          personalInfoData.pathProfileTemporal.isEmpty) {
+        logger.d("no update");
+        setUpdatingStatus(PersonalInfoUpdatingStatus.noUpdate);
+        _isUpdating = false;
+        return;
+      }
     }
 
     try {
@@ -93,9 +107,6 @@ class PersonalInfo extends _$PersonalInfo {
         'firstName': state.firstName,
         'lastName': state.lastName,
       });
-
-      firstName = state.firstName;
-      lastName = state.lastName;
     } catch (e) {
       logger.e(e);
       setUpdatingStatus(PersonalInfoUpdatingStatus.error);
@@ -126,8 +137,8 @@ class PersonalInfo extends _$PersonalInfo {
     if (personalInfoData.pathProfileTemporal.isNotEmpty) {
       await ref.read(localDBServiceProvider).insertUserData({
         'uuid': userUuid,
-        'firstName': firstName,
-        'lastName': lastName,
+        'firstName': state.firstName,
+        'lastName': state.lastName,
         'linkAvatar': avatarLink,
         'pathAvatar': pathAvatar,
         'birthday': state.birthdate

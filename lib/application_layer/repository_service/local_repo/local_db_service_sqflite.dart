@@ -23,6 +23,12 @@ class SQLiteDBService implements LocalDBService {
   }
 
   @override
+  Future<void> insertAvatar(Map<String, Object> data) {
+    // TODO: implement insertAvatar
+    throw UnimplementedError();
+  }
+
+  @override
   Future<List<Map<String, Object?>>> readUserData(String uuid) async {
     return readUserDataFromSQLite(uuid);
   }

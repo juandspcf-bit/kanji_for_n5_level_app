@@ -28,7 +28,7 @@ class AvatarMainScreen extends _$AvatarMainScreen {
         final avatarLink =
             await ref.read(storageServiceProvider).getDownloadLink(uuid ?? '');
 
-        downloadAndCacheAvatar(uuid ?? '', avatarLink).then((value) => null);
+        //downloadAndCacheAvatar(uuid ?? '', avatarLink).then((value) => null);
         return (connection, avatarLink);
       } catch (e) {
         return (connection, "");
