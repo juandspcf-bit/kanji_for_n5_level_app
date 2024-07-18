@@ -14,7 +14,6 @@ class VideoStrokesLandScape extends ConsumerWidget {
         Expanded(child: VideoWrapper()),
         Expanded(
           child: SingleChildScrollView(
-            clipBehavior: Clip.none,
             child: Padding(
               padding: EdgeInsets.symmetric(horizontal: 20),
               child: Column(

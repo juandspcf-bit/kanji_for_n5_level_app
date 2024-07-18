@@ -25,6 +25,7 @@ class AccountDetails extends ConsumerWidget {
         centerTitle: true,
       ),
       body: SingleChildScrollView(
+        clipBehavior: Clip.none,
         child: SafeArea(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
