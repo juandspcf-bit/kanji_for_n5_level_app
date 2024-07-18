@@ -91,22 +91,11 @@ class PersonalInfo extends _$PersonalInfo {
       }
     }
 
-    bool errorUpdatingBasicData = false;
-
-    try {
-      await ref.read(cloudDBServiceProvider).updateUserData(uuid, {
-        'birthday': state.birthdate,
-        'firstName': state.firstName,
-        'lastName': state.lastName,
-      });
-
+    final errorUpdatingBasicData = await updateBasicUserData(uuid);
+    if (!errorUpdatingBasicData) {
       firstName = state.firstName;
       lastName = state.lastName;
       birthday = state.birthdate;
-    } catch (e) {
-      logger.e(e);
-      errorUpdatingBasicData = true;
-      updateState(updatingStatus: PersonalInfoUpdatingStatus.error);
     }
 
     if (personalInfoData.pathProfileTemporal.isNotEmpty &&
@@ -187,11 +176,9 @@ class PersonalInfo extends _$PersonalInfo {
         'firstName': state.firstName,
         'lastName': state.lastName,
       });
-
       return false;
     } catch (e) {
       logger.e(e);
-      updateState(updatingStatus: PersonalInfoUpdatingStatus.error);
       return true;
     }
   }
