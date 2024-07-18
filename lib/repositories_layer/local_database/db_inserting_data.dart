@@ -15,8 +15,6 @@ const durationTimeOutMili = 1000 * 60 * 5;
 Future<void> insertUserDataToSQLite(Map<String, Object> data) async {
   final db = await kanjiFromApiDatabase;
 
-  logger.d(data);
-
   final listUserData = await readUserDataFromSQLite(data['uuid'] as String);
 
   if (listUserData.isEmpty) {

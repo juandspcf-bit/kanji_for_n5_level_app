@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:kanji_for_n5_level_app/application_layer/services.dart';
 import 'package:kanji_for_n5_level_app/main.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/main_screens/avatar_main_screen/avatar_main_screen_provider.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part "personal_info_provider.g.dart";
@@ -47,10 +48,11 @@ class PersonalInfo extends _$PersonalInfo {
   }
 
   var _isUpdating = false;
+  String _pathProfileTemporal = "";
 
   void updateUserData() async {
-    final userUuid = ref.read(authServiceProvider).userUuid;
-    if (userUuid == null) {
+    final uuid = ref.read(authServiceProvider).userUuid;
+    if (uuid == null) {
       updateState(updatingStatus: PersonalInfoUpdatingStatus.error);
       _isUpdating = false;
       return;
@@ -61,7 +63,7 @@ class PersonalInfo extends _$PersonalInfo {
     _isUpdating = true;
 
     final cachedUserDataList =
-        await ref.read(localDBServiceProvider).readUserData(userUuid);
+        await ref.read(localDBServiceProvider).readUserData(uuid);
 
     String firstName = '';
     String lastName = '';
@@ -81,8 +83,8 @@ class PersonalInfo extends _$PersonalInfo {
       if (firstName == state.firstName &&
           lastName == state.lastName &&
           birthday == state.birthdate &&
-          personalInfoData.pathProfileTemporal.isEmpty) {
-        logger.d("no update");
+          (personalInfoData.pathProfileTemporal.isEmpty ||
+              personalInfoData.pathProfileTemporal == _pathProfileTemporal)) {
         updateState(updatingStatus: PersonalInfoUpdatingStatus.noUpdate);
         _isUpdating = false;
         return;
@@ -92,7 +94,7 @@ class PersonalInfo extends _$PersonalInfo {
     bool errorUpdatingBasicData = false;
 
     try {
-      await ref.read(cloudDBServiceProvider).updateUserData(userUuid, {
+      await ref.read(cloudDBServiceProvider).updateUserData(uuid, {
         'birthday': state.birthdate,
         'firstName': state.firstName,
         'lastName': state.lastName,
@@ -107,13 +109,15 @@ class PersonalInfo extends _$PersonalInfo {
       updateState(updatingStatus: PersonalInfoUpdatingStatus.error);
     }
 
-    if (personalInfoData.pathProfileTemporal.isNotEmpty) {
+    if (personalInfoData.pathProfileTemporal.isNotEmpty &&
+        personalInfoData.pathProfileTemporal != _pathProfileTemporal) {
+      _pathProfileTemporal = personalInfoData.pathProfileTemporal;
       try {
         avatarLink = await ref.read(storageServiceProvider).updateFile(
             personalInfoData.pathProfileTemporal,
             ref.read(authServiceProvider).userUuid ?? '');
-        updateState(pathProfileTemporal: avatarLink);
         ref.read(avatarMainScreenProvider.notifier).refreshAvatar();
+
         if (errorUpdatingBasicData) {
           updateState(
               updatingStatus: PersonalInfoUpdatingStatus.partialUpdateError);
@@ -122,8 +126,11 @@ class PersonalInfo extends _$PersonalInfo {
         }
         _isUpdating = false;
 
+        final pathBase = (await getApplicationDocumentsDirectory()).path;
+        final pathAvatar = '$pathBase/$uuid.jpg';
+
         await ref.read(localDBServiceProvider).insertUserData({
-          'uuid': userUuid,
+          'uuid': uuid,
           'firstName': firstName,
           'lastName': lastName,
           'linkAvatar': avatarLink,
@@ -133,7 +140,7 @@ class PersonalInfo extends _$PersonalInfo {
         return;
       } catch (e) {
         await ref.read(localDBServiceProvider).insertUserData({
-          'uuid': userUuid,
+          'uuid': uuid,
           'firstName': firstName,
           'lastName': lastName,
           'linkAvatar': avatarLink,
@@ -154,7 +161,7 @@ class PersonalInfo extends _$PersonalInfo {
       }
     } else {
       await ref.read(localDBServiceProvider).insertUserData({
-        'uuid': userUuid,
+        'uuid': uuid,
         'firstName': firstName,
         'lastName': lastName,
         'linkAvatar': avatarLink,
@@ -170,6 +177,22 @@ class PersonalInfo extends _$PersonalInfo {
       _isUpdating = false;
 
       return;
+    }
+  }
+
+  Future<bool> updateBasicUserData(String uuid) async {
+    try {
+      await ref.read(cloudDBServiceProvider).updateUserData(uuid, {
+        'birthday': state.birthdate,
+        'firstName': state.firstName,
+        'lastName': state.lastName,
+      });
+
+      return false;
+    } catch (e) {
+      logger.e(e);
+      updateState(updatingStatus: PersonalInfoUpdatingStatus.error);
+      return true;
     }
   }
 
