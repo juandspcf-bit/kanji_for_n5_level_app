@@ -1,4 +1,6 @@
 import 'dart:async';
+import 'dart:io';
+import 'dart:isolate';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -6,6 +8,8 @@ import 'package:kanji_for_n5_level_app/application_layer/auth_service/auth_servi
 import 'package:kanji_for_n5_level_app/application_layer/services.dart';
 import 'package:kanji_for_n5_level_app/main.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/main_screens/main_content_provider.dart';
+
+import 'package:image/image.dart' as image_lib;
 
 class SingUpProvider extends Notifier<SingUpData> {
   @override
@@ -173,6 +177,24 @@ class SingUpProvider extends Notifier<SingUpData> {
       await ref.read(cloudDBServiceProvider).createQuizScoreMap(userUuid);
 
       if (state.pathProfileUser.isNotEmpty) {
+        await Isolate.run(() {
+          final image = image_lib
+              .decodeImage(File(state.pathProfileUser).readAsBytesSync());
+
+          if (image != null) {
+            final width = image.width;
+            final height = image.height;
+
+            final aspectRatio = height / width;
+
+            final thumbnail = image_lib.copyResize(image,
+                width: 1024, height: (1024 * aspectRatio).toInt());
+
+            final file = File(state.pathProfileUser);
+            file.writeAsBytesSync(image_lib.encodeJpg(thumbnail, quality: 50));
+          }
+        });
+
         try {
           final link = await ref
               .read(storageServiceProvider)

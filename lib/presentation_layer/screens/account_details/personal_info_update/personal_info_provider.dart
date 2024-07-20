@@ -1,12 +1,14 @@
 import 'dart:async';
+import 'dart:io' as io;
+import 'dart:isolate';
+
+import 'package:image/image.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import 'package:kanji_for_n5_level_app/application_layer/services.dart';
 import 'package:kanji_for_n5_level_app/main.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/main_screens/avatar_main_screen/avatar_main_screen_provider.dart';
-import 'package:path_provider/path_provider.dart';
-import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'dart:io' as Io;
-import 'package:image/image.dart';
 
 part "personal_info_provider.g.dart";
 
@@ -104,21 +106,26 @@ class PersonalInfo extends _$PersonalInfo {
         personalInfoData.pathProfileTemporal != _pathProfileTemporal) {
       _pathProfileTemporal = personalInfoData.pathProfileTemporal;
       try {
-        Image? image = decodeImage(
-            Io.File(personalInfoData.pathProfileTemporal).readAsBytesSync());
-        final width = image?.width;
-        final height = image?.height;
+        await Isolate.run(
+          () {
+            Image? image = decodeImage(
+                io.File(personalInfoData.pathProfileTemporal)
+                    .readAsBytesSync());
 
-        final aspectRatio = height! / width!;
+            if (image != null) {
+              final width = image.width;
+              final height = image.height;
 
-        Image thumbnail =
-            copyResize(image!, width: 120, height: (120 * aspectRatio).toInt());
+              final aspectRatio = height / width;
 
-        final file = Io.File(personalInfoData.pathProfileTemporal);
-        file.writeAsBytesSync(encodePng(thumbnail));
-        final path = file.path;
+              Image thumbnail = copyResize(image,
+                  width: 1024, height: (1024 * aspectRatio).toInt());
 
-        logger.d(path);
+              final file = io.File(personalInfoData.pathProfileTemporal);
+              file.writeAsBytesSync(encodeJpg(thumbnail, quality: 50));
+            }
+          },
+        );
 
         avatarLink = await ref.read(storageServiceProvider).updateFile(
             personalInfoData.pathProfileTemporal,
