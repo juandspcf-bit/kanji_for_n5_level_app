@@ -5,6 +5,8 @@ import 'package:kanji_for_n5_level_app/main.dart';
 import 'package:kanji_for_n5_level_app/presentation_layer/screens/main_screens/avatar_main_screen/avatar_main_screen_provider.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'dart:io' as Io;
+import 'package:image/image.dart';
 
 part "personal_info_provider.g.dart";
 
@@ -102,6 +104,22 @@ class PersonalInfo extends _$PersonalInfo {
         personalInfoData.pathProfileTemporal != _pathProfileTemporal) {
       _pathProfileTemporal = personalInfoData.pathProfileTemporal;
       try {
+        Image? image = decodeImage(
+            Io.File(personalInfoData.pathProfileTemporal).readAsBytesSync());
+        final width = image?.width;
+        final height = image?.height;
+
+        final aspectRatio = height! / width!;
+
+        Image thumbnail =
+            copyResize(image!, width: 120, height: (120 * aspectRatio).toInt());
+
+        final file = Io.File(personalInfoData.pathProfileTemporal);
+        file.writeAsBytesSync(encodePng(thumbnail));
+        final path = file.path;
+
+        logger.d(path);
+
         avatarLink = await ref.read(storageServiceProvider).updateFile(
             personalInfoData.pathProfileTemporal,
             ref.read(authServiceProvider).userUuid ?? '');
